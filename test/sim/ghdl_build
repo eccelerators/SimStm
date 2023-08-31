@@ -1,2 +1,0 @@
-rm -fr work-obj08.cf
-ghdl -a --std=08 -fsynopsys @glist.lst

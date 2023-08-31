@@ -1,1 +1,0 @@
-ghdl -r --std=08 example_dut_ttb   >  grun.log
