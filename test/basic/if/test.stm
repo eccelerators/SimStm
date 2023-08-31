@@ -1,0 +1,365 @@
+var zero 0
+var one  1
+
+------------------------------------------
+-- eual
+if 0 = 0
+    log 0 "enter if"
+end if
+
+if 0 = 2
+    log 0 "no enter if"
+end if
+
+if 2 = 0
+    log 0 "no enter if"
+end if
+
+if $zero = 0
+    log 0 "enter if"
+end if
+
+if $zero = $zero
+    log 0 "enter if"
+end if
+
+if $zero = $one
+    log 0 "no enter if"
+end if
+
+if $zero = $one
+    log 0 "no enter if"
+else
+    log 0 "enter else"
+end if
+
+if 0 = 1
+    log 0 "no enter if"
+elsif 1 = 0
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 0 = 1
+    log 0 "no enter if"
+elsif 0 = 0
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- not eual
+if 0 != 0
+    log 0 "no enter if"
+end if
+
+if 0 != 2
+    log 0 "enter if"
+end if
+
+if 2 != 0
+    log 0 "enter if"
+end if
+
+if $zero != 0
+    log 0 "no enter if"
+end if
+
+if $zero != $zero
+    log 0 "no enter if"
+end if
+
+if $zero != $one
+    log 0 "enter if"
+end if
+
+if 0 != 0
+    log 0 "no enter if"
+elsif 1 != 1
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 0 != 0
+    log 0 "no enter if"
+elsif 0 != 1
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- grater
+if 0 > 0
+    log 0 "no enter if"
+end if
+
+if 0 > 2
+    log 0 "no enter if"
+end if
+
+if 2 > 0
+    log 0 "enter if"
+end if
+
+if $zero > 0
+    log 0 "no enter if"
+end if
+
+if $zero > $zero
+    log 0 "no enter if"
+end if
+
+if $zero > $one
+    log 0 "no enter if"
+end if
+
+if 0 > 0
+    log 0 "no enter if"
+elsif 1 > 1
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 0 > 0
+    log 0 "no enter if"
+elsif 1 > 0
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- grater or equal
+if 0 >= 0
+    log 0 "enter if"
+end if
+
+if 0 >= 2
+    log 0 "no enter if"
+end if
+
+if 2 >= 0
+    log 0 "enter if"
+end if
+
+if $zero >= 0
+    log 0 "enter if"
+end if
+
+if $zero >= $zero
+    log 0 "enter if"
+end if
+
+if $zero >= $one
+    log 0 "no enter if"
+end if
+
+if 0 >= 1
+    log 0 "no enter if"
+elsif 1 >= 2
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 0 >= 1
+    log 0 "no enter if"
+elsif 1 >= 1
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- smaller
+if 0 < 0
+    log 0 "no enter if"
+end if
+
+if 0 < 2
+    log 0 "enter if"
+end if
+
+if 2 < 0
+    log 0 "no enter if"
+end if
+
+if $zero < 0
+    log 0 "no enter if"
+end if
+
+if $zero < $zero
+    log 0 "no enter if"
+end if
+
+if $zero < $one
+    log 0 "enter if"
+end if
+
+if 0 < 0
+    log 0 "no enter if"
+elsif 1 < 1
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 0 < 0
+    log 0 "no enter if"
+elsif 0 < 1
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- smaller or equal
+if 0 <= 0
+    log 0 "enter if"
+end if
+
+if 0 <= 2
+    log 0 "enter if"
+end if
+
+if 2 <= 0
+    log 0 "no enter if"
+end if
+
+if $zero <= 0
+    log 0 "enter if"
+end if
+
+if $zero <= $zero
+    log 0 "enter if"
+end if
+
+if $zero <= $one
+    log 0 "enter if"
+end if
+
+if 1 <= 0
+    log 0 "no enter if"
+elsif 2 <= 1
+    log 0 "no enter elsif"
+else
+    log 0 "enter else"
+end if
+
+if 1 <= 0
+    log 0 "no enter if"
+elsif 1 <= 1
+    log 0 "enter elsif"
+else
+    log 0 "no enter else"
+end if
+
+------------------------------------------
+-- multi if
+
+log 0 "test multi if (1)"
+if 0 = 0
+    if 0 = 0
+        if 0 = 0
+            if 0 = 0
+                log 0 "enter multi if 1"
+            end if
+            log 0 "enter multi if 2"
+        end if
+        log 0 "enter multi if 3"
+    end if
+    log 0 "enter multi if 4"
+end if
+
+log 0 "test multi if (2)"
+if 0 = 0
+    if 0 = 0
+        if 0 = 0
+            if 0 = 0
+                log 0 "enter multi if 1"
+            elsif 1 = 1
+                log 0 "no enter multi elsif"
+            else
+                log 0 "no enter multi else"
+            end if
+        elsif 1 = 1
+            log 0 "no enter multi elsif"
+        else
+            log 0 "no enter multi else"
+        end if
+    elsif 1 = 1
+        log 0 "no enter multi elsif"
+    else
+        log 0 "no enter multi else"
+    end if
+elsif 1 = 1
+    log 0 "no enter multi elsif"
+else
+    log 0 "no enter multi else"
+end if
+
+log 0 "test multi if (3)"
+if 0 = 0
+    if 0 = 0
+        if 0 = 0
+            if 0 = 0
+                log 0 "enter multi if 1"
+            else
+                log 0 "no enter multi else"
+            end if
+        else
+            log 0 "no enter multi else"
+        end if
+    else
+        log 0 "no enter multi else"
+    end if
+else
+    log 0 "no enter multi else"
+end if
+
+log 0 "test multi if (4)"
+if 0 = 0
+    if 0 = 1
+        if 0 = 0
+            if 0 = 0
+                log 0 "no enter multi if"
+            else
+                log 0 "no enter multi else"
+            end if
+        else
+            log 0 "no enter multi else"
+        end if
+    else
+        log 0 "enter multi else 1"
+    end if
+else
+    log 0 "no enter multi else"
+end if
+
+log 0 "test multi if (5)"
+if 0 = 0
+    if 1 = 1
+        if 0 = 1
+            log 0 "no enter multi if"
+        else
+            log 0 "enter multi else 1"
+        end if
+    else
+        if 1 = 1
+            if 0 = 1
+                log 0 "no enter multi if"
+            else
+                log 0 "enter multi else 2"
+            end if
+        else
+            log 0 "no enter multi else"
+        end if
+    end if
+end if
+
+finish

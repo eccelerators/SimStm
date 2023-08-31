@@ -1,0 +1,59 @@
+var wb_value 0
+
+wait 1000
+bus write 0  32 0 #x55555555
+bus write 0  32 4 #xaaaaaaaa
+bus write 0  32 8 #xffffffff
+bus verify 0 32 0 wb_value #x55555555 #x55555555
+log 0 "wb addr:0 32bit: $wb_value"
+bus verify 0 32 4 wb_value #xaaaaaaaa #xaaaaaaaa
+log 0 "wb addr:4 32bit: $wb_value"
+bus verify 0 32 8 wb_value #xffffffff #xffffffff
+log 0 "wb addr:5 32bit: $wb_value"
+
+wait 1000
+bus write 0 32 0 #x0
+bus write 0  8 0 #x12
+bus write 0  8 1 #x34
+bus write 0  8 2 #x56
+bus verify 0 8 0 wb_value #x12 #xff
+log 0 "wb addr:0 8bit: $wb_value"
+bus verify 0 8 1 wb_value #x34 #xff
+log 0 "wb addr:1 8bit: $wb_value"
+bus verify 0 8 2 wb_value #x56 #xff
+log 0 "wb addr:1 8bit: $wb_value"
+bus verify 0 32 0 wb_value #x563412 #xffffffff
+log 0 "wb addr:0 32bit: $wb_value"
+
+wait 1000
+bus write 0  32 0 #x0
+bus write 0  16 0 #x1234
+bus write 0  16 2 #x4567
+bus verify 0 16 0 wb_value #x1234 #xffff
+log 0 "wb addr:0 16bit: $wb_value"
+bus verify 0 16 2 wb_value #x4567 #xffff
+log 0 "wb addr:2 16bit: $wb_value"
+bus verify 0 32 0 wb_value #x45671234 #xffffffff
+log 0 "wb addr:0 32bit: $wb_value"
+bus write 0  32 4 #x0
+bus write 0  16 5 #x1234
+bus verify 0 16 5 wb_value #x1234 #xffff
+log 0 "wb addr:5 16bit: $wb_value"
+bus verify 0 32 4 wb_value #x00123400 #xffffffff
+log 0 "wb addr:4 32bit: $wb_value"
+
+wait 1000
+bus write 0  32 0 #x80000000
+bus verify 0 32 0 wb_value #x80000000 #x00000000
+bus verify 0 32 0 wb_value #x00000000 #x00000000
+bus verify 0 32 0 wb_value #x80000000 #x80000000
+bus verify 0 32 0 wb_value #x80000000 #xffffffff
+
+wait 100
+bus write 0  32 0 #x00000000
+bus verify 0 32 0 wb_value #x80000000 #x00000000
+bus verify 0 32 0 wb_value #x00000000 #x00000000
+bus verify 0 32 0 wb_value #x00000000 #x80000000
+bus verify 0 32 0 wb_value #x00000000 #xffffffff
+
+finish

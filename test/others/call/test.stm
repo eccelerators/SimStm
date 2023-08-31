@@ -1,0 +1,48 @@
+
+call $var1
+call $var2
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+log 0 "test_variable_3: $test_variable_3"
+log 0 "test_variable_4: $test_variable_4"
+log 0 "test_variable_5: $test_variable_5"
+
+finish
+
+var5:
+proc
+    var test_variable_5 5
+    return
+end_proc
+
+var1:
+proc
+    var test_variable_1 1
+    return
+end_proc
+
+var2:
+proc
+    var test_variable_2 2
+    call $var3
+    return
+end_proc
+
+var3:
+proc
+    var test_variable_3 3
+    call $var4
+    log 0 "test_variable_3: $test_variable_3"
+    log 0 "test_variable_4: $test_variable_4"
+    log 0 "test_variable_5: $test_variable_5"
+    return
+end_proc
+
+var4:
+proc
+    call $var5
+    log 0 "test_variable_5: $test_variable_5"
+    var test_variable_4 4
+    return
+end_proc

@@ -1,0 +1,8 @@
+var randum_number 0
+
+loop 20
+    random randum_number 0 10
+    log 0 "$randum_number"
+end loop
+
+finish

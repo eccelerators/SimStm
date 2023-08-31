@@ -1,0 +1,2 @@
+log 0 "load file lib2.stm"
+include lib3.stm

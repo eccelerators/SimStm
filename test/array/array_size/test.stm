@@ -1,0 +1,12 @@
+array array_name 5544
+
+var var_name 10
+
+array size array_name var_name
+log 0 "var_name: $var_name"
+
+if $var_name != 5544
+    abort
+end if
+
+finish

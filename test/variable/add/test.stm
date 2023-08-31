@@ -1,0 +1,19 @@
+var test_variable_1 1
+var test_variable_2 2
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+add test_variable_1 10
+add test_variable_2 20
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+add test_variable_1 12345
+add test_variable_2 88
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+finish

@@ -1,0 +1,16 @@
+var randum_number 0
+
+seeds 1 2
+loop 5
+    random randum_number 0 10
+    log 0 "$randum_number"
+end loop
+
+seeds 1 2
+loop 5
+    random randum_number 0 10
+    log 0 "$randum_number"
+end loop
+
+
+finish

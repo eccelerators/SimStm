@@ -1,0 +1,16 @@
+var wb_value 0
+
+wait 1000
+bus write 0  32 0 #x55555555
+bus write 0  32 4 #xaaaaaaaa
+bus write 0  32 8 #xffffffff
+bus verify 0 32 0 wb_value #x55555555 #xffffffff
+log 0 "wb addr:0 32bit: $wb_value"
+
+bus verify 0 32 0 wb_value #x00000000 #xaaaaaaaa
+log 0 "wb addr:0 32bit: $wb_value"
+
+bus verify 0 32 0 wb_value #x55555555 #x55555555
+log 0 "wb addr:0 32bit: $wb_value"
+
+finish

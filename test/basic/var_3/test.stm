@@ -1,0 +1,13 @@
+var aab 1
+var abb 2
+var bba 3
+var cbb 4
+var aba 5
+
+log 0 "aab: $aab"
+log 0 "abb: $abb"
+log 0 "bba: $bba"
+log 0 "cbb: $cbb"
+log 0 "aba: $aba"
+
+finish

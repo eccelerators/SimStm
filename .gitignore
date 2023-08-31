@@ -1,0 +1,14 @@
+
+# Modelsim / Questa
+*.bak
+*.mti
+*.vstf
+transcript
+vsim.wlf
+work
+
+# GHDL
+*.cf
+*.log
+*.o
+test/**/tb_top

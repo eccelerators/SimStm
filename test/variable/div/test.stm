@@ -1,0 +1,19 @@
+var test_variable_1 500
+var test_variable_2 5000
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+div test_variable_1 10
+div test_variable_2 20
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+div test_variable_1 5
+div test_variable_2 100
+
+log 0 "test_variable_1: $test_variable_1"
+log 0 "test_variable_2: $test_variable_2"
+
+finish
