@@ -41,13 +41,25 @@ architecture behavioural of tb_simstm is
                 return n;
             end if;
         end loop;
-    end function ld;
+    end function;
+    
+    procedure line_to_text_field(variable l : in line; variable tf : out text_field) is
+    begin
+        for i in 1 to tf'length loop
+            tf(i) := nul;
+        end loop;
+        assert tf'length > l'length;
+        if l'length > 0 then
+            for i in 1 to l'length loop
+                tf(i) := l.all(i);
+            end loop;
+        end if;
+    end procedure;
 
 begin
     rstneg <= not rst;
     --------------------------------------------------------------------------------
     --! Read_file Process:
-
     --! This process is the main process of the testbench.  This process reads
     --! the stimulus file, parses it, creates lists of records, then uses these
     --! lists to execute user instructions.  There are two passes through the
@@ -96,8 +108,10 @@ begin
         variable if_state : boolean_array := (others => false);
         variable num_of_if_in_false_if_leave : int_array := (others => 0);
         variable valid : integer;
-        variable interrupt_entered : boolean := false;
-        variable interrupt_entry_call_stack_ptr : integer := 0;
+        variable interrupt_number_entered_stack_pointer : integer := -1;
+        variable interrupt_number_entered_stack : int_array := (others => 0);
+        variable interrupt_entry_call_stack_ptr_stack : int_array := (others => 0);
+
         variable successfull : boolean := false;
 
         -- random generator seed variables
@@ -112,11 +126,8 @@ begin
         variable temp_stdvec_a : std_logic_vector(31 downto 0);
         variable temp_stdvec_b : std_logic_vector(31 downto 0);
         variable temp_stdvec_c : std_logic_vector(31 downto 0);
-
-        variable interrupt_in_service : boolean := false;
-
+        
         variable trc_on : boolean := false;
-        variable trc_temp_str : string(1 to file_name'length);
 
         file stimulus : text; -- file main file
         variable v_stat : file_open_status;
@@ -137,6 +148,15 @@ begin
         variable main_label_string : string(1 to 5) := "$Main";
         variable main_line : integer := 0;
         variable main_entered : integer := 0;
+        
+        variable interrupt_requests : unsigned(number_of_interrupts-1 downto 0) := (others => '0');
+        variable interrupt_in_service : unsigned(number_of_interrupts-1 downto 0) := (others => '0');
+        
+        variable interrupt_number : integer := 0;
+        variable branch_to_interrupt : boolean := false; 
+        variable branch_to_interrupt_label : text_field;
+        variable branch_to_interrupt_label_std_txt_io_line : line;
+        variable branch_to_interrupt_v_line : integer := 0;
 
     begin -- process read_file
         simdone <= '0';
@@ -216,7 +236,7 @@ begin
         -- others
         define_instruction(inst_list, "proc", 0);
         define_instruction(inst_list, "call", 1);
-        define_instruction(inst_list, "interrupt", 1);
+        define_instruction(inst_list, "interrupt", 0);
         define_instruction(inst_list, "end_proc", 0);
         define_instruction(inst_list, "end_interrupt", 0);
         define_instruction(inst_list, "random", 3);
@@ -250,6 +270,8 @@ begin
         -- it as per the statements in the elsif tree.
         while (v_line < inst_sequ.num_of_lines) loop
         
+            get_interrupt_requests(signals_in, interrupt_requests);
+        
             if main_entered = 0 then
             
                 access_variable(defined_vars, main_label_text_field, main_line, valid);
@@ -258,6 +280,42 @@ begin
                 severity failure;
                 v_line := main_line;
                 main_entered := 1;
+                
+            elsif interrupt_requests > 0 then
+            
+                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
+
+                if branch_to_interrupt then
+                    if (stack_ptr >= 31) then
+                        assert (false)
+                        report " line " & (integer'image(file_line)) & " interrupt enter error: stack over run, calls to deeply nested!!"
+                        severity failure;
+                    end if;
+                   
+                    if (stack_ptr >= 31) then
+                        assert (false)
+                        report " line " & (integer'image(file_line)) & " interrupt enter error: interrupt number stack over run, interrupts to deeply nested!!"
+                        severity failure;
+                    end if;
+                    
+                    interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
+                    interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
+                    interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := stack_ptr;
+                    
+                    set_interrupt_in_service(interrupt_in_service, interrupt_number);
+
+                    stack(stack_ptr) := v_line;
+                    stack_ptr := stack_ptr + 1;
+                    -- report " line " & (integer'image(file_line)) & "call stack_ptr incremented to = " & integer'image(stack_ptr);
+                    line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
+                    access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
+                    assert (valid = 1)
+                    report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !" 
+                    severity failure;
+                    v_line := branch_to_interrupt_v_line;
+                                      
+                end if;
+            
                 
             else
             
@@ -271,15 +329,6 @@ begin
                 wait for 100 ps;
     
                 if (trc_on) then
-                    for i in 1 to file_name'length loop
-                        trc_temp_str(i) := nul;
-                    end loop;
-                    for i in 1 to file_name'length loop
-                        if (file_name(i) = nul) then
-                            exit;
-                        end if;
-                        trc_temp_str(i) := file_name(i);
-                    end loop;
                     report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & file_name;
                 end if;
     
@@ -355,15 +404,11 @@ begin
                     end if;
     
                 --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "call") or (instruction(1 to len) = "interrupt") then
+                elsif (instruction(1 to len) = "call") then
                     if (stack_ptr >= 31) then
                         assert (false)
                         report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                         severity failure;
-                    end if;
-                    if (instruction(1 to len) = "interrupt") then
-                        interrupt_entered := true;
-                        interrupt_entry_call_stack_ptr := stack_ptr;
                     end if;
                     stack(stack_ptr) := v_line;
                     stack_ptr := stack_ptr + 1;
@@ -376,22 +421,28 @@ begin
                     if act_loop_num > 0 then
                         if_level := stack_loop_if_enter_level(stack_ptr);
                     end if;
+                    if (stack_ptr = 0) then
+                        report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & file_name;   
+                        wait;               
+                    end if;                   
                     if (stack_ptr <= 0) then
                         assert (false)
                         report " line " & (integer'image(file_line)) & " call error: stack under run??"
                         severity failure;
                     end if;
                     stack_ptr := stack_ptr - 1;
-                    if interrupt_entered then
-                        if interrupt_entry_call_stack_ptr = stack_ptr then
-                            interrupt_in_service := false; -- no nested interrupts are supported!
+                    if interrupt_in_service > 0 then                                      
+                        interrupt_number :=  interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);       
+                        if interrupt_entry_call_stack_ptr_stack(interrupt_number) = stack_ptr then
+                            reset_interrupt_in_service(interrupt_in_service, interrupt_number);
+                            interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
                     end if;
                     -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
     
                 --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "proc") then
+                elsif (instruction(1 to len) = "proc" or instruction(1 to len) = "interrupt") then
                 -- no action necessary
     
                 --------------------------------------------------------------------------
