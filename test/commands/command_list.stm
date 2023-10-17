@@ -1,0 +1,223 @@
+include "an_include.stm"
+
+const a_const 0
+
+var a_var #x05
+
+array an_array 16
+
+file a_file "file_name"
+
+lines a_lines
+
+
+a_proc:
+proc 
+
+end proc
+
+
+
+a_interrupt:
+interrupt 
+
+end interrupt
+
+ 
+
+var operand1_and_target 0
+var operand2 0
+
+arith_proc:
+proc 
+	
+	add operand1_and_target $operand2
+	and operand1_and_target $operand2
+	div operand1_and_target $operand2
+	equ operand1_and_target $operand2
+	mul operand1_and_target $operand2
+	shl operand1_and_target $operand2
+	shr operand1_and_target $operand2
+	inv operand1_and_target
+	or operand1_and_target $operand2
+	sub operand1_and_target $operand2
+	xor operand1_and_target $operand2
+	ld operand1_and_target
+
+end proc
+
+
+
+var a_signal 10
+var signal_source 0
+var signal_target 0
+var signal_expected 0
+var signal_mask 0
+
+signal_proc: 
+proc 
+	
+	signal write $a_signal $signal_source
+	signal read $a_signal signal_target
+	signal verify $a_signal signal_target $signal_expected $signal_mask
+
+end proc
+
+
+
+var a_bus 10
+var bus_width 32
+var bus_address 0
+var bus_source 0
+var bus_target 0
+var bus_expected 0
+var bus_mask 0
+
+bus_proc:
+proc 
+	
+	bus write $a_bus $bus_width  $bus_address $bus_source
+	bus read  $a_bus $bus_width  $bus_address  bus_target
+	bus verify $a_bus $bus_width  $bus_address bus_target $bus_expected $bus_mask
+
+end proc
+
+
+
+file_proc:
+proc 
+	
+	file write a_file a_lines
+	file append a_file  a_lines
+	file read a_file a_lines
+	
+end proc
+
+
+
+var lines_position  0
+var lines_width  4
+lines another_lines
+var lines_size 0
+
+lines_proc:
+proc 
+	
+	lines set a_lines $lines_position "abc"	
+	lines set a_lines $lines_position $lines_width an_array
+		
+	lines append a_lines "abc"	
+	lines append a_lines $lines_width an_array
+	
+	lines insert a_lines $lines_position "abc"	
+	lines insert a_lines $lines_position $lines_width an_array
+	
+	lines delete a_lines $lines_position
+	
+	lines get a_lines $lines_position an_array
+	
+	lines pointer a_lines another_lines
+	
+	lines size a_lines lines_size	
+	
+end proc
+
+
+var array_position  0
+var array_size 0
+array another_array 16
+
+array_proc:
+proc 
+	
+	array set an_array $array_position $a_var
+	
+	array get an_array $array_position a_var
+			
+	array pointer an_array another_array
+	
+	array size an_array array_size
+		
+end proc
+
+
+var another_var 1
+
+if_proc:
+proc 
+	
+	if $a_var = $another_var
+		equ a_var 5
+	elsif $a_var > $another_var
+		equ a_var 6
+	else
+		equ a_var $a_const
+	end if	
+		
+end proc
+
+
+var loop_var 1
+
+loop_return_proc:
+proc 
+
+	loop $loop_var
+		if $a_var = $another_var
+			return
+		end if	
+	end loop
+		
+end proc
+
+
+abort_proc:
+proc 
+	abort
+end proc
+
+finish_proc:
+proc 
+	finish
+end proc
+
+
+call_proc:
+proc 
+	call $finish_proc
+end proc
+
+
+const INFO 5
+var seed_var 589043
+var rand_var 0
+var rand_min_var 0
+var rand_max_var 1000
+const RESUME_ON_VERIFY_ERROR 1
+const EXIT_ON_VERIFY_ERROR 0
+
+var time_to_wait 5000
+
+misc_proc:
+proc
+
+	log $INFO "misc_proc severity: $INFO"
+	seed $seed_var
+	random rand_var $rand_min_var $rand_max_var
+	resume $RESUME_ON_VERIFY_ERROR
+	resume $EXIT_ON_VERIFY_ERROR
+	marker 5 1
+	trace 1
+	verbosity $INFO
+	
+	wait $time_to_wait
+	
+end proc
+
+
+
+
+
+
+
+

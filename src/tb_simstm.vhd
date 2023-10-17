@@ -12,7 +12,8 @@ use work.tb_pkg_signals.all;
 entity tb_simstm is
     generic(
         stimulus_path : in string;
-        stimulus_file : in string
+        stimulus_file : in string;
+        user_file_folder_path : in string := ""
     );
     port(
         clk : in std_logic;
@@ -140,9 +141,12 @@ begin
         variable var_array : array_ptr;
 
         -- File
-        variable var_file_ptr : file_ptr;
-        file var_file : text; -- file main file
-        variable var_file_line : LINE;
+        file user_file : text;
+        variable var_line : line;
+        
+        -- Lines
+        variable var_lines_object_ptr : lines_object_ptr;
+        variable var_line_object_ptr : line_object_ptr;
         
         variable main_label_text_field : text_field;
         variable main_label_string : string(1 to 5) := "$Main";
@@ -219,12 +223,20 @@ begin
         define_instruction(inst_list, "bus_timeout", 2);
 
         -- file
-        define_instruction(inst_list, "file", 2);
-        define_instruction(inst_list, "line_pos", 2);
-        define_instruction(inst_list, "line_read", 2); -- read to an variable or array
-        define_instruction(inst_list, "line_seek", 2);
-        define_instruction(inst_list, "line_write", 2); -- write an variable, array, const or string
-        define_instruction(inst_list, "line_size", 2);
+        define_instruction(inst_list, "file", 2); 
+        define_instruction(inst_list, "file_read", 2); 
+        define_instruction(inst_list, "file_write", 2); 
+        define_instruction(inst_list, "file_append", 2);
+        
+        -- lines
+        define_instruction(inst_list, "lines", 1);
+        define_instruction(inst_list, "lines_get", 3);
+        define_instruction(inst_list, "lines_set", 3);
+        define_instruction(inst_list, "lines_delete", 2);
+        define_instruction(inst_list, "lines_insert", 3);
+        define_instruction(inst_list, "lines_append", 3);
+        define_instruction(inst_list, "lines_size", 2);
+        define_instruction(inst_list, "lines_pointer", 2);
 
         -- array
         define_instruction(inst_list, "array", 2);
@@ -240,14 +252,12 @@ begin
         define_instruction(inst_list, "end_proc", 0);
         define_instruction(inst_list, "end_interrupt", 0);
         define_instruction(inst_list, "random", 3);
-        define_instruction(inst_list, "jump", 1);
-        define_instruction(inst_list, "label", 1);
         define_instruction(inst_list, "log", 1);
         define_instruction(inst_list, "return", 0);
         define_instruction(inst_list, "resume", 1);
         define_instruction(inst_list, "marker", 2);
         define_instruction(inst_list, "verbosity", 1);
-        define_instruction(inst_list, "seeds", 2);
+        define_instruction(inst_list, "seed", 1);
         define_instruction(inst_list, "trace", 1);
         define_instruction(inst_list, "wait", 1);
 
@@ -335,11 +345,7 @@ begin
                 --------------------------------------------------------------------------
                 if (instruction(1 to len) = "var" or instruction(1 to len) = "const") then
                     null; -- This instruction was implemented while reading the file
-    
-                --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "label") then
-                    null; -- Not used
-    
+       
                 --------------------------------------------------------------------------
                 elsif (instruction(1 to len) = "include") then
                     null; -- This instruction was implemented while reading the file
@@ -444,13 +450,7 @@ begin
                 --------------------------------------------------------------------------
                 elsif (instruction(1 to len) = "proc" or instruction(1 to len) = "interrupt") then
                 -- no action necessary
-    
-                --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "jump") then
-                    v_line := par1 - 1;
-                    stack := (others => 0);
-                    stack_ptr := 0;
-    
+        
                 --------------------------------------------------------------------------------
                 elsif (instruction(1 to len) = "loop") then
                     stack_loop_if_enter_level(stack_ptr + 1) := if_level;
@@ -666,11 +666,11 @@ begin
                     end if;
     
                 --------------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "seeds") then
-                    if (par1 > 0 and par2 > 0) then
+                elsif (instruction(1 to len) = "seed") then
+                    if (par1 > 0) then
                         temp_int := 0;
                         seed1 := par1;
-                        seed2 := par2;
+                        seed2 := 1;
                         update_variable(defined_vars, par1, temp_int, valid);
                         assert (valid /= 0)
                         report " line " & (integer'image(file_line)) & " random_seed error: vabiable are constant??"
@@ -949,7 +949,7 @@ begin
                 --   par1  num    bus number
                 --   par2  num    width
                 --   par3  adr    address
-                --   par4  var    variale to store read data
+                --   par4  var    variable to store read data
                 --  (par5  data ) expected data for verify
                 --  (par6  mask ) mask data for verify
                 elsif (instruction(1 to len) = "bus_read" or instruction(1 to len) = "bus_verify") then
@@ -1033,17 +1033,7 @@ begin
                 --  par2  num   timeout
                 elsif (instruction(1 to len) = "bus_timeout") then
                     bus_timeouts(par1) := par2 * 1 ns;
-    
-                --------------------------------------------------------------------------------
-                --         #     ######   ######      #     #     #
-                --        # #    #     #  #     #    # #     #   #
-                --       #   #   #     #  #     #   #   #     # #
-                --      #     #  ######   ######   #     #     #
-                --      #######  #   #    #   #    #######     #
-                --      #     #  #    #   #    #   #     #     #
-                --      #     #  #     #  #     #  #     #     #
-                --------------------------------------------------------------------------------
-    
+      
                 --------------------------------------------------------------------------------
                 --  array
                 --  set value from array
@@ -1127,7 +1117,7 @@ begin
                     update_variable(defined_vars, par2, temp_int, valid);
                     if (valid = 0) then
                         assert (false)
-                        report "array_get error: not a valid variable??"
+                        report "array_size error: not a valid variable??"
                         severity failure;
                     end if;
     
@@ -1155,95 +1145,150 @@ begin
                     end if;
     
                 --------------------------------------------------------------------------------
-                --     FILE
-                --------------------------------------------------------------------------------
     
                 elsif (instruction(1 to len) = "file") then
                     null; -- This instruction was implemented while reading the file
-    
+                    
                 --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "line_pos") then
+                elsif (instruction(1 to len) = "file_read") then
+                    temp_int := 0;
+                    index_file(defined_vars, par1, var_file, valid);
+                    if valid  = 0 then
+                        assert (false)
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                        severity failure;
+                    else 
+                        index_lines(defined_vars, par2, var_lines_ptr, valid);     
+                        if (valid = 1) then
+                            file_open(v_stat, user_file, user_file_folder_path & var_file_ptr.name, read_mode);
+                            assert (v_stat = open_ok)
+                            report lf & "error: unable to open file " & user_file_folder_path & var_file_ptr.name
+                            severity failure;
+        
+                            while not endfile(user_file) loop
+                                readline(user_file, var_line);
+                                temp_int := temp_int + 1;
+                                lines_add_line(var_lines_ptr, var_line);                         
+                            end loop;
+                            file_close(user_file);
+                        else
+                            assert (false)
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                            severity failure;
+                        end if;
+                    end if;
+          
+                --------------------------------------------------------------------------
+                elsif (instruction(1 to len) = "file_write") then
                     temp_int := 0;
                     index_file(defined_vars, par1, var_file_ptr, valid);
-    
-                    if (valid = 1) then
-                        temp_int := var_file_ptr.pos;
-                    else
+                    if valid  = 0 then
                         assert (false)
-                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                         severity failure;
+                    else 
+                        index_lines(defined_vars, par2, var_lines_ptr, valid);                    
+                        if (valid = 1) then
+                            file_open(v_stat, user_file, user_file_folder_path & var_file_ptr.name, write_mode);
+                            assert (v_stat = open_ok)
+                            report lf & "error: unable to open file " & user_file_folder_path & var_file_ptr.name
+                            severity failure;
+        
+                            for i in 0 to var_lines_ptr.size - 1 loop                            
+                                lines_get_line(var_lines_ptr, i, var_line);  
+                                writeline(user_file, var_line);                                             
+                            end loop;
+                            file_close(user_file);
+                        else
+                            assert (false)
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                            severity failure;
+                        end if;
                     end if;
-    
-                    update_variable(defined_vars, par2, temp_int, valid);
-                    if (valid = 0) then
-                        assert (false)
-                        report "line_pos error: not a valid variable??"
-                        severity failure;
-                    end if;
-    
-                --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "line_read") then
+                    
+                --------------------------------------------------------------------------                    
+                elsif (instruction(1 to len) = "file_append") then
                     temp_int := 0;
                     index_file(defined_vars, par1, var_file_ptr, valid);
-    
-                    if (valid = 1) then
-                        file_open(v_stat, var_file, stimulus_path & var_file_ptr.name, read_mode);
-                        assert (v_stat = open_ok)
-                        report lf & "error: unable to open file " & stimulus_path & var_file_ptr.name
-                        severity failure;
-    
-                        while not endfile(var_file) loop
-                            readline(var_file, var_file_line);
-                            temp_int := temp_int + 1;
-    
-                            if temp_int = var_file_ptr.pos then
-                                read(var_file_line, temp_int);
-                                exit; -- Exit the loop after reading the target line
-                            end if;
-    
-                        end loop;
-                        file_close(stimulus);
-                    else
+                    if valid  = 0 then
                         assert (false)
-                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                         severity failure;
+                    else 
+                        index_lines(defined_vars, par2, var_lines_ptr, valid);                    
+                        if (valid = 1) then
+                            file_open(v_stat, user_file, user_file_folder_path & var_file_ptr.name, append_mode);
+                            assert (v_stat = open_ok)
+                            report lf & "error: unable to open file " & user_file_folder_path & var_file_ptr.name
+                            severity failure;
+        
+                            for i in 0 to var_lines_ptr.size - 1 loop                            
+                                lines_get_line(var_lines_ptr, i, var_line);  
+                                writeline(user_file, var_line);                                             
+                            end loop;
+                            file_close(user_file);
+                        else
+                            assert (false)
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                            severity failure;
+                        end if;
                     end if;
+                           
+                --------------------------------------------------------------------------------
     
-                    update_variable(defined_vars, par2, temp_int, valid);
-                    if (valid = 0) then
+                elsif (instruction(1 to len) = "lines") then
+                    null; -- This instruction was implemented while reading the file
+                    
+                --------------------------------------------------------------------------                    
+                elsif (instruction(1 to len) = "lines_get") then
+                    temp_int := 0;
+                    index_lines(defined_vars, par1, var_line_ptr, valid);
+                    if valid  = 0 then
                         assert (false)
-                        report "line_read error: not a valid variable??"
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                         severity failure;
-                    end if;
+                    else 
+                        index_lines(defined_vars, par3, var_array_ptr, valid);                    
+                        if (valid = 1) then
+       
+                            for i in 0 to var_lines_ptr.size - 1 loop                            
+                                lines_line_get(var_lines_ptr, i, var_line);  
+                                writeline(var_file, var_line);                                             
+                            end loop;
+                            file_close(var_file);
+                        else
+                            assert (false)
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                            severity failure;
+                        end if;
+                    end if; 
     
                 --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "line_seek") then
+                elsif (instruction(1 to len) = "lines_set") then
                 -- TODO: implement
     
                 --------------------------------------------------------------------------
-                elsif (instruction(1 to len) = "line_write") then
+                elsif (instruction(1 to len) = "lines_delete") then
+                -- TODO: implement
+                 
+                --------------------------------------------------------------------------
+                elsif (instruction(1 to len) = "lines_insert") then
                 -- TODO: implement
     
                 --------------------------------------------------------------------------
+                --  line_size
+                --  get the size from array
+                --  par1  num  lines number
+                --  par2  num  variable name
                 elsif (instruction(1 to len) = "line_size") then
                     temp_int := 0;
-                    index_file(defined_vars, par1, var_file_ptr, valid);
+                    index_lines(defined_vars, par1, var_lines, valid);
     
                     if (valid = 1) then
-                        file_open(v_stat, var_file, stimulus_path & var_file_ptr.name, read_mode);
-                        assert (v_stat = open_ok)
-                        report lf & "error: unable to open file " & stimulus_path & var_file_ptr.name
-                        severity failure;
-    
-                        while not endfile(var_file) loop
-                            readline(var_file, var_file_line);
-                            temp_int := temp_int + 1;
-                        end loop;
-    
-                        file_close(stimulus);
+                        temp_int := var_lines.size;
                     else
                         assert (false)
-                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                         severity failure;
                     end if;
     
@@ -1253,17 +1298,27 @@ begin
                         report "line_size error: not a valid variable??"
                         severity failure;
                     end if;
+
+                --------------------------------------------------------------------------
+                --  lines_pointer
+                --  create an pointer from src to destination lines object
+                --  par1  num  destination lines object
+                --  par2  num  source lines object
+                elsif (instruction(1 to len) = "lines_pointer") then
+                    temp_int := 0;
+                    index_array(defined_vars, par2, var_lines, valid);
+                    if (valid = 0) then
+                        assert (false)
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                        severity failure;
+                    end if;
     
-    
-                --------------------------------------------------------------------------------
-                --      #######  #     #  ######
-                --      #        ##    #  #     #
-                --      #        # #   #  #     #
-                --      #####    #  #  #  #     #
-                --      #        #   # #  #     #
-                --      #        #    ##  #     #
-                --      #######  #     #  ######
-                --------------------------------------------------------------------------------
+                    update_lines(defined_vars, par1, var_lines, valid);
+                    if (valid = 0) then
+                        assert (false)
+                        report "lines_pointer error: not a lines object name??"
+                        severity failure;
+                    end if;
     
                 --------------------------------------------------------------------------
                 -- catch those little mistakes

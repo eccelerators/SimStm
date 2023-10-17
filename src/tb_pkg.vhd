@@ -94,14 +94,21 @@ package tb_pkg is
         next_rec : stim_line_ptr;
     end record;
     -- define the array field and pointer
-    type arr_int is array (natural range <>) of integer;
-    type array_ptr is access arr_int;
-
-    type file_field is record
-        name : text_field;
-        pos : integer;
+    type t_array_object is array (natural range <>) of integer;
+    type t_array_object_ptr is access t_array_object;
+    
+    type t_lines_object is record
+        lines : t_line_object;
+        size : integer;
     end record;
-    type file_ptr is access file_field;
+    type t_lines_object_ptr is access t_lines_object;
+    
+    type t_line_object is record
+        line_content : line;
+        line_number : integer;
+        next_line_object_ptr : t_line_object_ptr;
+    end record;
+    type t_line_object_ptr is access t_line_object;
 
     -- define the variables field and pointer
     type var_field;
@@ -110,8 +117,9 @@ package tb_pkg is
         var_name : text_field;
         var_index : integer;
         var_value : integer;
-        var_array : array_ptr;
-        var_file : file_ptr;
+        var_array : t_array_object_ptr;
+        var_file : text_field;
+        var_lines : t_lines_object_ptr;
         const : boolean;
         next_rec : var_field_ptr;
     end record;
@@ -163,6 +171,7 @@ package tb_pkg is
                              variable value : out integer;
                              variable valid : out integer);
 
+    --------------------------------------------------------------------------------
     --  index_array
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -171,9 +180,10 @@ package tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_array(variable var_list : in var_field_ptr;
                           variable index : in integer;
-                          variable arr_ptr : out array_ptr;
+                          variable array_object_ptr : out t_array_object_ptr;
                           variable valid : out integer);
 
+    --------------------------------------------------------------------------------
     --  index_file
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -182,7 +192,19 @@ package tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_file(variable var_list : in var_field_ptr;
                          variable index : in integer;
-                         variable file_rec : out file_ptr;
+                         variable file_object : out text_field;
+                         variable valid : out integer);
+
+    --------------------------------------------------------------------------------                         
+    --  index_lines
+    --     inputs:
+    --               index:  the index of the variable being accessed
+    --     outputs:
+    --               lines object
+    --               valid  is 1 if valid 0 if not
+    procedure index_lines(variable var_list : in var_field_ptr;
+                         variable index : in integer;
+                         variable lines_object_ptr : out t_lines_object_ptr;
                          variable valid : out integer);
 
     --------------------------------------------------------------------------------
@@ -207,7 +229,19 @@ package tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure update_array(variable var_list : in var_field_ptr;
                            variable index : in integer;
-                           variable arr_ptr : in array_ptr;
+                           variable array_object_ptr : in t_array_object_ptr;
+                           variable valid : out integer);
+                           
+    --------------------------------------------------------------------------------
+    --  update_lines
+    --     inputs:
+    --               index:  the index of the variable being accessed
+    --     outputs:
+    --               new lines
+    --               valid  is 1 if valid 0 if not
+    procedure update_array(variable var_list : in var_field_ptr;
+                           variable index : in integer;
+                           variable lines_object_ptr : in t_lines_object_ptr;
                            variable valid : out integer);
 
     -------------------------------------------------------------------------------
@@ -1069,7 +1103,7 @@ package body tb_pkg is
     end index_variable;
 
     --------------------------------------------------------------------------------
-    --  index_variable
+    --  index_array
     --     inputs:
     --               index:  the index of the variable being accessed
     --     outputs:
@@ -1077,7 +1111,7 @@ package body tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_array(variable var_list : in var_field_ptr;
                           variable index : in integer;
-                          variable arr_ptr : out array_ptr;
+                          variable array_object_ptr : out t_array_object_ptr;
                           variable valid : out integer) is
         variable ptr : var_field_ptr;
     begin
@@ -1085,14 +1119,14 @@ package body tb_pkg is
         valid := 0;
         while (ptr.next_rec /= null) loop
             if (ptr.var_index = index) then
-                arr_ptr := ptr.var_array;
+                array_object_ptr := ptr.var_array;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if (ptr.var_index = index) then
-            arr_ptr := ptr.var_array;
+            array_object_ptr := ptr.var_array;
             valid := 1;
         end if;
     end index_array;
@@ -1106,7 +1140,7 @@ package body tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_file(variable var_list : in var_field_ptr;
                          variable index : in integer;
-                         variable file_rec : out file_ptr;
+                         variable file_object : out text_field;
                          variable valid : out integer) is
         variable ptr : var_field_ptr;
     begin
@@ -1114,17 +1148,46 @@ package body tb_pkg is
         valid := 0;
         while (ptr.next_rec /= null) loop
             if (ptr.var_index = index) then
-                file_rec := ptr.var_file;
+                file_object := ptr.var_file;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if (ptr.var_index = index) then
-            file_rec := ptr.var_file;
+            file_object := ptr.var_file;
             valid := 1;
         end if;
     end index_file;
+    
+    --------------------------------------------------------------------------------
+    --  index_lines
+    --     inputs:
+    --               index:  the index of the variable being accessed
+    --     outputs:
+    --               lines
+    --               valid  is 1 if valid 0 if not
+    procedure index_lines(variable var_list : in var_field_ptr;
+                          variable index : in integer;
+                          variable lines_object_ptr : out t_lines_object_ptr;
+                          variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while (ptr.next_rec /= null) loop
+            if (ptr.var_index = index) then
+                lines_object_ptr := ptr.var_lines;
+                valid := 1;
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if (ptr.var_index = index) then
+            lines_object_ptr := ptr.var_lines;
+            valid := 1;
+        end if;
+    end index_array;
 
     --------------------------------------------------------------------------------
     --  update_variable
@@ -1164,7 +1227,7 @@ package body tb_pkg is
     --               valid  is 1 if valid 0 if not
     procedure update_array(variable var_list : in var_field_ptr;
                            variable index : in integer;
-                           variable arr_ptr : in array_ptr;
+                           variable array_object_ptr : in t_array_object_ptr;
                            variable valid : out integer) is
         variable ptr : var_field_ptr;
     begin
@@ -1172,7 +1235,7 @@ package body tb_pkg is
         valid := 0;
         while (ptr.next_rec /= null) loop
             if (ptr.var_index = index and not ptr.const) then
-                ptr.var_array := arr_ptr;
+                ptr.var_array := array_object_ptr;
                 valid := 1;
                 exit;
             end if;
@@ -1180,10 +1243,40 @@ package body tb_pkg is
         end loop;
         -- check the current one
         if (ptr.var_index = index and not ptr.const) then
-            ptr.var_array := arr_ptr;
+            ptr.var_array := array_object_ptr;
             valid := 1;
         end if;
     end update_array;
+    
+    --------------------------------------------------------------------------------
+    --  update_lines
+    --     inputs:
+    --               index:  the index of the variable being accessed
+    --     outputs:
+    --               new lines
+    --               valid  is 1 if valid 0 if not
+    procedure update_array(variable var_list : in var_field_ptr;
+                           variable index : in integer;
+                           variable lines_object_ptr : in t_lines_object_ptr;
+                           variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while (ptr.next_rec /= null) loop
+            if (ptr.var_index = index and not ptr.const) then
+                ptr.var_Lines := lines_object_ptr;
+                valid := 1;
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if (ptr.var_index = index and not ptr.const) then
+            ptr.var_lines := lines_object_ptr;
+            valid := 1;
+        end if;
+    end update_lines;
 
     -------------------------------------------------------------------------------
     -- read a line from a file
@@ -1439,22 +1532,37 @@ package body tb_pkg is
                     token2_len := 9;
                     token_merge := true;
                 end if;
-            elsif token1(1 to 4) = "line" then
+            elsif token1(1 to 4) = "file" then
                 token1_len := 4;
-                if token2(1 to 3) = "pos" then
-                    token2_len := 3;
-                    token_merge := true;
-                elsif token2(1 to 4) = "read" then
+                if token2(1 to 4) = "read" then
                     token2_len := 4;
                     token_merge := true;
                 elsif token2(1 to 5) = "write" then
                     token2_len := 5;
                     token_merge := true;
-                elsif token2(1 to 4) = "seek" then
-                    token2_len := 4;
+                elsif token2(1 to 6) = "append" then
+                    token2_len := 6;
+                    token_merge := true;
+                end if;
+            elsif token1(1 to 5) = "lines" then
+                token1_len := 5;
+                if token2(1 to 3) = "get" then
+                    token2_len := 3;
+                    token_merge := true;
+                elsif token2(1 to 3) = "set" then
+                    token2_len := 3;
+                    token_merge := true;
+                elsif token2(1 to 6) = "delete" then
+                    token2_len := 6;
+                    token_merge := true;
+                elsif token2(1 to 6) = "insert" then
+                    token2_len := 6;
                     token_merge := true;
                 elsif token2(1 to 4) = "size" then
                     token2_len := 4;
+                    token_merge := true;
+                elsif token2(1 to 7) = "pointer" then
+                    token2_len := 7;
                     token_merge := true;
                 end if;
             elsif token1(1 to 5) = "array" then
@@ -1669,7 +1777,7 @@ package body tb_pkg is
                            variable line_num : in integer;
                            variable name : in text_line;
                            variable length : in integer;
-                           constant var_type : in integer -- 0: Variable, 1: Constan 2: Array 3: File
+                           constant var_type : in integer -- 0:Variable, 1:Constant, 2:Array, 3:File, 4:Lines
                           ) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
@@ -1680,8 +1788,8 @@ package body tb_pkg is
         if (var_list /= null) then
             current_ptr := var_list;
             index := index + 1;
-
-            if (var_type = 3) then -- file
+            
+            if (var_type = 4) then -- lines
                 while (current_ptr.next_rec /= null) loop
                     -- if we have defined the current before then die
                     assert (current_ptr.var_name /= p1)
@@ -1704,9 +1812,36 @@ package body tb_pkg is
                 temp_var.var_index := index;
                 temp_var.const := false;
                 temp_var.var_array := null;
-                temp_var.var_file := new file_field;
-                temp_var.var_file.name := p2;
-                temp_var.var_file.pos := 0;
+                temp_var.var_file := null;
+                temp_var.var_lines := new t_lines_object;
+                temp_var.var_lines.lines := null;
+                current_ptr.next_rec := temp_var;
+
+            elsif (var_type = 3) then -- file
+                while (current_ptr.next_rec /= null) loop
+                    -- if we have defined the current before then die
+                    assert (current_ptr.var_name /= p1)
+                    report lf & "error: attemping to add a duplicate variable definition "
+                    & " on line " & (integer'image(line_num)) & " of file " & txt_shorter(name)
+                    severity failure;
+
+                    current_ptr := current_ptr.next_rec;
+                    index := index + 1;
+                end loop;
+                -- if we have defined the current before then die. this checks the last one
+                assert (current_ptr.var_name /= p1)
+                report lf & "error: attemping to add a duplicate variable definition "
+                    & " on line " & (integer'image(line_num)) & " of file " & txt_shorter(name)
+                severity failure;
+
+                temp_var := new var_field;
+                temp_var.var_name := p1; -- direct write of text_field
+                temp_var.var_value := 0;
+                temp_var.var_index := index;
+                temp_var.const := false;
+                temp_var.var_array := null;
+                temp_var.var_file := p2;
+                temp_var.var_lines := null;
                 current_ptr.next_rec := temp_var;
 
             elsif (var_type = 2) then -- array
@@ -1736,8 +1871,9 @@ package body tb_pkg is
                 temp_var.var_value := 0;
                 temp_var.var_index := index;
                 temp_var.const := false;
-                temp_var.var_array := new arr_int(0 to stim_to_integer(p2, name, line_num)-1);
+                temp_var.var_array := new t_array_object(0 to stim_to_integer(p2, name, line_num)-1);
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
 
                 current_ptr.next_rec := temp_var;
 
@@ -1765,6 +1901,7 @@ package body tb_pkg is
                 temp_var.const := (var_type = 1);
                 temp_var.var_array := null;
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
                 current_ptr.next_rec := temp_var;
 
 
@@ -1794,22 +1931,36 @@ package body tb_pkg is
                 temp_var.const := (var_type = 1);
                 temp_var.var_array := null;
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
                 current_ptr.next_rec := temp_var;
             end if;
         -- this is the first one
         else
 
-
-            if (var_type = 3) then -- file
+            if (var_type = 4) then -- lines
                 temp_var := new var_field;
                 temp_var.var_name := p1; -- direct write of text_field
                 temp_var.var_value := 0;
                 temp_var.var_index := index;
                 temp_var.const := false;
                 temp_var.var_array := null;
-                temp_var.var_file := new file_field;
+                temp_var.var_file := null;
+                temp_var.var_lines := new t_lines_object;
+                temp_var.var_lines.lines := null;
+                temp_var.var_lines.size := 0;
+                var_list := temp_var;
+                
+            elsif (var_type = 3) then -- file
+                temp_var := new var_field;
+                temp_var.var_name := p1; -- direct write of text_field
+                temp_var.var_value := 0;
+                temp_var.var_index := index;
+                temp_var.const := false;
+                temp_var.var_array := null;
+                temp_var.var_file := p2;
                 temp_var.var_file.name := p2;
                 temp_var.var_file.pos := 0;
+                temp_var.var_lines := null;
                 var_list := temp_var;
 
             elsif (var_type = 2) then -- array
@@ -1823,8 +1974,9 @@ package body tb_pkg is
                 temp_var.var_value := 0;
                 temp_var.var_index := index;
                 temp_var.const := false;
-                temp_var.var_array := new arr_int(0 to stim_to_integer(p2, name, line_num)-1);
+                temp_var.var_array := new t_array_object(0 to stim_to_integer(p2, name, line_num)-1);
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
                 var_list := temp_var;
 
             elsif (p1(length) /= ':') then -- is not an inline variable
@@ -1835,6 +1987,7 @@ package body tb_pkg is
                 temp_var.var_array := null;
                 temp_var.var_value := stim_to_integer(p2, name, line_num); -- convert text_field to integer
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
                 var_list := temp_var;
 
             else
@@ -1845,6 +1998,7 @@ package body tb_pkg is
                 temp_var.const := (var_type = 1);
                 temp_var.var_array := null;
                 temp_var.var_file := null;
+                temp_var.var_lines := null;
                 var_list := temp_var;
             end if;
         end if;
@@ -1916,6 +2070,12 @@ package body tb_pkg is
             l := fld_len(p1);
             --  add the variable to the file pool, not considered an instruction
             add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 3);
+            valid := 0; --removes this from the instruction list
+            
+        elsif (inst(1 to l) = "lines") then
+            l := fld_len(p1);
+            --  add the variable to the lines pool, not considered an instruction
+            add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 4);
             valid := 0; --removes this from the instruction list
 
         elsif (inst(l) = ':') then
