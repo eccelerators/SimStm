@@ -5,6 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_pkg_basics.all;
 use work.tb_pkg.all;
 use work.tb_pkg_bus.all;
 use work.tb_pkg_signals.all;
