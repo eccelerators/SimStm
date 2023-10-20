@@ -171,96 +171,8 @@ begin
 
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
-
-        -----------------------------------------------------------------------
-        --           stimulus file instruction definition
-        --  this is where the instructions used in the stimulus file are defined.
-        --  syntax is
-        --     define_instruction(inst_def_ptr, instruction, paramiters)
-        --           inst_def_ptr: is a record pointer defined in tb_pkg_header
-        --           instruction:  the text instruction name  ie. "define_var"
-        --           paramiters:   the number of fields or paramiters passed
-        --
-        --  some basic instruction are created here, the user should create new
-        --  instructions below the standard ones.
-        ------------------------------------------------------------------------
-
-        -- basic
-        define_instruction(inst_list, "abort", 0);
-        define_instruction(inst_list, "const", 2);
-        define_instruction(inst_list, "else", 0);
-        define_instruction(inst_list, "elsif", 3);
-        define_instruction(inst_list, "end_if", 0);
-        define_instruction(inst_list, "end_loop", 0);
-        define_instruction(inst_list, "finish", 0);
-        define_instruction(inst_list, "if", 3);
-        define_instruction(inst_list, "include", 1);
-        define_instruction(inst_list, "loop", 1);
-        define_instruction(inst_list, "var", 2);
-
-        -- variables
-        define_instruction(inst_list, "add", 2);
-        define_instruction(inst_list, "and", 2);
-        define_instruction(inst_list, "div", 2);
-        define_instruction(inst_list, "equ", 2);
-        define_instruction(inst_list, "mul", 2);
-        define_instruction(inst_list, "shl", 2);
-        define_instruction(inst_list, "shr", 2);
-        define_instruction(inst_list, "inv", 1);
-        define_instruction(inst_list, "or", 2);
-        define_instruction(inst_list, "sub", 2);
-        define_instruction(inst_list, "xor", 2);
-        define_instruction(inst_list, "ld", 1);
-
-        -- signals
-        define_instruction(inst_list, "signal_read", 2);
-        define_instruction(inst_list, "signal_verify", 4);
-        define_instruction(inst_list, "signal_write", 2);
-
-        -- bus
-        define_instruction(inst_list, "bus_read", 4);
-        define_instruction(inst_list, "bus_verify", 6);
-        define_instruction(inst_list, "bus_write", 4);
-        define_instruction(inst_list, "bus_timeout", 2);
-
-        -- file
-        define_instruction(inst_list, "file", 2); 
-        define_instruction(inst_list, "file_read", 2); 
-        define_instruction(inst_list, "file_write", 2); 
-        define_instruction(inst_list, "file_append", 2);
         
-        -- lines
-        define_instruction(inst_list, "lines", 1);
-        define_instruction(inst_list, "lines_get", 3);
-        define_instruction(inst_list, "lines_set", 3);
-        define_instruction(inst_list, "lines_delete", 2);
-        define_instruction(inst_list, "lines_insert", 3);
-        define_instruction(inst_list, "lines_append", 3);
-        define_instruction(inst_list, "lines_size", 2);
-        define_instruction(inst_list, "lines_pointer", 2);
-
-        -- array
-        define_instruction(inst_list, "array", 2);
-        define_instruction(inst_list, "array_get", 3);
-        define_instruction(inst_list, "array_set", 3);
-        define_instruction(inst_list, "array_size", 2);
-        define_instruction(inst_list, "array_pointer", 2);
-
-        -- others
-        define_instruction(inst_list, "proc", 0);
-        define_instruction(inst_list, "call", 1);
-        define_instruction(inst_list, "interrupt", 0);
-        define_instruction(inst_list, "end_proc", 0);
-        define_instruction(inst_list, "end_interrupt", 0);
-        define_instruction(inst_list, "random", 3);
-        define_instruction(inst_list, "log", 1);
-        define_instruction(inst_list, "return", 0);
-        define_instruction(inst_list, "resume", 1);
-        define_instruction(inst_list, "marker", 2);
-        define_instruction(inst_list, "verbosity", 1);
-        define_instruction(inst_list, "seed", 1);
-        define_instruction(inst_list, "trace", 1);
-        define_instruction(inst_list, "wait", 1);
+        define_instructions(inst_list); 
 
         file_open(v_stat, stimulus, stimulus_path & stimulus_file, read_mode);
         assert (v_stat = open_ok)
@@ -1161,6 +1073,7 @@ begin
                     else 
                         index_lines(defined_vars, par2, var_lines_ptr, valid);     
                         if (valid = 1) then
+                            file_read(var_lines_ptr, txt
                             file_open(v_stat, user_file, user_file_folder_path & var_file_ptr.name, read_mode);
                             assert (v_stat = open_ok)
                             report lf & "error: unable to open file " & user_file_folder_path & var_file_ptr.name

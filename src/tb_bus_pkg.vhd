@@ -6,7 +6,7 @@ use work.tb_pkg_bus_avalonmm.all;
 use work.tb_pkg_bus_axi4lite.all;
 use work.tb_pkg_bus_wishbone.all;
 
-package tb_pkg_bus is
+package tb_bus_pkg is
     type t_bus_down is record
         wishbone : t_wishbone_down;
         avalonmm : t_avalonmm_down;
@@ -159,4 +159,4 @@ package body tb_pkg_bus is
         end case;
 
     end procedure;
-end;
+end package body;

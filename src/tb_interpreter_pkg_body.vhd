@@ -45,841 +45,9 @@
 --
 --
 -------------------------------------------------------------------------------
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use std.textio.all;
-use ieee.math_real.all;
 
-use work.tb_pkg_basics.all;
+package body tb_interpreter_pkg_body is
 
-package tb_pkg is
-
-    ---*****************************************************************************
-    -- function declaration
-    -- function str_len(line: text_line) return text_field;
-    function fld_len(s : in text_field) return integer;
-    function line_len(s : in text_line) return integer;
-    function c2std_vec(c : in character) return std_logic_vector;
-
-    --------------------------------------------------------------------------------
-    -- procedure declarations
-    --------------------------------------------------------------------------
-    -- define_instruction
-    --    inputs     file_name  the file to be read from
-    --
-    --    output     file_line  a line of text from the file
-    procedure define_instruction(variable inst_set : inout inst_def_ptr;
-                                 constant inst : in string;
-                                 constant args : in integer);
-
-    --------------------------------------------------------------------------------
-    --  index_variable
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               variable value
-    --               valid  is 1 if valid 0 if not
-    procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index : in integer;
-                             variable value : out integer;
-                             variable valid : out integer);
-
-    --------------------------------------------------------------------------------
-    --  index_array
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               array
-    --               valid  is 1 if valid 0 if not
-    procedure index_array(variable var_list : in var_field_ptr;
-                          variable index : in integer;
-                          variable array_object_ptr : out t_array_object_ptr;
-                          variable valid : out integer);
-
-    --------------------------------------------------------------------------------
-    --  index_file
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               file record
-    --               valid  is 1 if valid 0 if not
-    procedure index_file(variable var_list : in var_field_ptr;
-                         variable index : in integer;
-                         variable file_object : out text_field;
-                         variable valid : out integer);
-
-    --------------------------------------------------------------------------------                         
-    --  index_lines
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               lines object
-    --               valid  is 1 if valid 0 if not
-    procedure index_lines(variable var_list : in var_field_ptr;
-                         variable index : in integer;
-                         variable lines_object_ptr : out t_lines_object_ptr;
-                         variable valid : out integer);
-
-    --------------------------------------------------------------------------------
-    --  update_variable
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               variable value
-    --               valid  is 1 if valid 0 if not
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index : in integer;
-                              variable value : in integer;
-                              variable valid : out integer);
-
-
-    --------------------------------------------------------------------------------
-    --  update_array
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               new array
-    --               valid  is 1 if valid 0 if not
-    procedure update_array(variable var_list : in var_field_ptr;
-                           variable index : in integer;
-                           variable array_object_ptr : in t_array_object_ptr;
-                           variable valid : out integer);
-                           
-    --------------------------------------------------------------------------------
-    --  update_lines
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               new lines
-    --               valid  is 1 if valid 0 if not
-    procedure update_array(variable var_list : in var_field_ptr;
-                           variable index : in integer;
-                           variable lines_object_ptr : in t_lines_object_ptr;
-                           variable valid : out integer);
-
-    -------------------------------------------------------------------------------
-    -- read_instruction_file
-    --  this procedure reads the instruction file, name passed throught file_name.
-    --  pointers to records are passed in and out.  a table of variables is created
-    --  with variable name and value (converted to integer).  the instructions are
-    --  parsesed into the inst_sequ list.  instructions are validated against the
-    --  inst_set which must have been set up prior to loading the instruction file.
-    procedure read_instruction_file(constant path_name : string;
-                                    constant file_name : string;
-                                    variable inst_set : inout inst_def_ptr;
-                                    variable var_list : inout var_field_ptr;
-                                    variable inst_sequ : inout stim_line_ptr;
-                                    variable file_list : inout file_def_ptr);
-
-    ------------------------------------------------------------------------------
-    -- access_inst_sequ
-    --   this procedure retreeves an instruction from the sequence of instructions.
-    --   based on the line number you pass to it, it returns the instruction with
-    --   any variables substituted as integers.
-    procedure access_inst_sequ(variable inst_sequ : in stim_line_ptr;
-                               variable var_list : in var_field_ptr;
-                               variable file_list : in file_def_ptr;
-                               variable sequ_num : in integer;
-                               variable inst : out text_field;
-                               variable p1 : out integer;
-                               variable p2 : out integer;
-                               variable p3 : out integer;
-                               variable p4 : out integer;
-                               variable p5 : out integer;
-                               variable p6 : out integer;
-                               variable txt : out stm_text_ptr;
-                               variable inst_len : out integer;
-                               variable fname : out text_line;
-                               variable file_line : out integer;
-                               variable last_num : inout integer;
-                               variable last_ptr : inout stim_line_ptr
-                              );
-
-    ------------------------------------------------------------------------
-    --  access_variable
-    --    accesses a variable.
-    procedure access_variable(variable var_list : in var_field_ptr;
-                              variable var : in text_field;
-                              variable value : out integer;
-                              variable valid : out integer);
-
-    ------------------------------------------------------------------------
-    -- takes a source string of type string and initializes a field of type
-    -- text_field that is primarly used by the open corse test bench.
-    procedure init_text_field(variable sourcestr : in string;
-                              variable destfield : out text_field);
-    ------------------------------------------------------------------------
-    --  tokenize_line
-    --    this procedure takes a type text_line in and returns up to 6
-    --    tokens and the count in integer valid, as well if text string
-    --    is found the pointer to that is returned.
-    procedure tokenize_line(variable text_line : in text_line;
-                            variable otoken1 : out text_field;
-                            variable otoken2 : out text_field;
-                            variable otoken3 : out text_field;
-                            variable otoken4 : out text_field;
-                            variable otoken5 : out text_field;
-                            variable otoken6 : out text_field;
-                            variable otoken7 : out text_field;
-                            variable txt_ptr : out stm_text_ptr;
-                            variable ovalid : out integer);
-    -------------------------------------------------------------------------
-    -- string convertion
-    function ew_to_str(int : integer; b : base) return text_field;
-    function ew_to_str_len(int : integer; b : base) return text_field;
-    function to_str(int : integer) return string;
-    function ew_str_cat(s1 : stm_text; s2 : text_field) return stm_text;
-    -------------------------------------------------------------------------
-    --  procedre print
-    --    print to stdout  string
-    procedure print(s : in string);
-    -------------------------------------------------------------------------
-    --  procedure print stim txt
-    procedure txt_print(variable ptr : in stm_text_ptr);
-    -------------------------------------------------------------------------
-    --  procedure copy text into an existing pointer
-    procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
-                           variable ptr_o : out stm_text_ptr;
-                           variable txt_str : in stm_text);
-    -------------------------------------------------------------------------
-    --  procedure print stim txt sub variables found
-    procedure txt_print_wvar(variable var_list : in var_field_ptr;
-                             variable ptr : in stm_text_ptr;
-                             constant b : in base);
-    -------------------------------------------------------------------------
-    -- dump inst_sequ
-    --  this procedure dumps to the simulation window the current instruction
-    --  sequence.  the whole thing will be dumped, which could be big.
-    --   ** intended for testbench development debug**
-    --  procedure dump_inst_sequ(variable inst_sequ  :  in  stim_line_ptr);
-
-    -------------------------------------------------------------------------
-    --  function short text_line (remove 'nul')
-    function txt_shorter(txt : in text_line) return string;
-
-    -------------------------------------------------------------------------
-    --  get a rundom intetger number
-    procedure getrandint(variable seed1 : inout positive;
-                         variable seed2 : inout positive;
-                         variable lowestvalue : in integer;
-                         variable utmostvalue : in integer;
-                         variable randint : out integer);
-
-end tb_pkg;
-
-package body tb_pkg is
-
-    -------------------------------------------------------------------------------
-    -- function defs
-    -------------------------------------------------------------------------------
-    --  is_digit
-    function is_digit(constant c : in character) return boolean is
-        variable rtn : boolean;
-    begin
-        if (c >= '0' and c <= '9') then
-            rtn := true;
-        else
-            rtn := false;
-        end if;
-        return rtn;
-    end is_digit;
-
-    --------------------------------------
-    -- is_space
-    function is_space(constant c : in character) return boolean is
-        variable rtn : boolean;
-    begin
-        if (c = ' ' or c = ht) then
-            rtn := true;
-        else
-            rtn := false;
-        end if;
-        return rtn;
-    end is_space;
-
-    ------------------------------------------------------------------------------
-    --  to_char
-    function ew_to_char(int : integer) return character is
-        variable c : character;
-    begin
-        c := nul;
-        case int is
-            when 0 => c := '0';
-            when 1 => c := '1';
-            when 2 => c := '2';
-            when 3 => c := '3';
-            when 4 => c := '4';
-            when 5 => c := '5';
-            when 6 => c := '6';
-            when 7 => c := '7';
-            when 8 => c := '8';
-            when 9 => c := '9';
-            when 10 => c := 'A';
-            when 11 => c := 'B';
-            when 12 => c := 'C';
-            when 13 => c := 'D';
-            when 14 => c := 'E';
-            when 15 => c := 'F';
-            when others =>
-                assert (false)
-                report lf & "error: ew_to_char was given a non number didgit."
-                severity failure;
-        end case;
-
-        return c;
-    end ew_to_char;
-
-    -------------------------------------------------------------------------------
-    --  to_string function  integer
-    function to_str(int : integer) return string is
-    begin
-        return ew_to_str(int, dec);
-    end to_str;
-
-    -------------------------------------------------------------------------------
-    --  ew_str_cat
-    function ew_str_cat(s1 : stm_text;
-                        s2 : text_field) return stm_text is
-        variable i : integer;
-        variable j : integer;
-        variable sc : stm_text;
-    begin
-        sc := s1;
-        i := 1;
-        while (sc(i) /= nul) loop
-            i := i + 1;
-        end loop;
-        j := 1;
-        while (s2(j) /= nul) loop
-            sc(i) := s2(j);
-            i := i + 1;
-            j := j + 1;
-        end loop;
-
-        return sc;
-    end ew_str_cat;
-
-    -------------------------------------------------------------------------------
-    -- fld_len    field length
-    --          inputs :  string of type text_field
-    --          return :  integer number of non 'nul' chars
-    function fld_len(s : in text_field) return integer is
-        variable i : integer := 1;
-    begin
-        while (s(i) /= nul and i /= max_field_len) loop
-            i := i + 1;
-        end loop;
-        return (i - 1);
-    end fld_len;
-
-    -------------------------------------------------------------------------------
-    -- line_len    textline length
-    --          inputs :  string of type text_field
-    --          return :  integer number of non 'nul' chars
-    function line_len(s : in text_line) return integer is
-        variable i : integer := 1;
-    begin
-        while (s(i) /= nul and i /= max_str_len) loop
-            i := i + 1;
-        end loop;
-        return (i - 1);
-    end line_len;
-
-    -------------------------------------------------------------------------------
-    -- fld_equal  check text field for equality
-    --          inputs :  text field s1 and s2
-    --          return :  true if text fields are equal; false otherwise.
-    function fld_equal(s1 : in text_field;
-                       s2 : in text_field) return boolean is
-        variable i : integer := 0;
-        variable s1_length : integer := 0;
-        variable s2_length : integer := 0;
-    begin
-        s1_length := fld_len(s1);
-        s2_length := fld_len(s2);
-
-        if (s1_length /= s2_length) then
-            return false;
-        end if;
-
-        while (i /= s1_length) loop
-            i := i + 1;
-            if s1(i) /= s2(i) then
-                return false;
-            end if;
-        end loop;
-        return true;
-    end fld_equal;
-
-    ------------------------------------------------------------------------------
-    -- c2int   convert character to integer
-    function c2int(c : in character) return integer is
-        variable i : integer;
-    begin
-        i := -1;
-        case c is
-            when '0' => i := 0;
-            when '1' => i := 1;
-            when '2' => i := 2;
-            when '3' => i := 3;
-            when '4' => i := 4;
-            when '5' => i := 5;
-            when '6' => i := 6;
-            when '7' => i := 7;
-            when '8' => i := 8;
-            when '9' => i := 9;
-            when others =>
-                assert (false)
-                report lf & "error: c2int was given a non number didgit."
-                severity failure;
-        end case;
-        return i;
-    end c2int;
-
-    -------------------------------------------------------------------------------
-    -- str2integer   convert a string to integer number.
-    --   inputs  :  string
-    --   output  :  int value
-    function str2integer(str : in string) return integer is
-        variable l : integer;
-        variable j : integer := 1;
-        variable rtn : integer := 0;
-    begin
-
-        l := fld_len(str);
-
-        for i in l downto 1 loop
-            rtn := rtn + (c2int(str(j)) * (10 ** (i - 1)));
-            j := j + 1;
-        end loop;
-
-        return rtn;
-    end str2integer;
-
-    -------------------------------------------------------------------------------
-    -- hex2integer    convert hex stimulus field to integer
-    --          inputs :  string of type text_field containing only hex numbers
-    --          return :  integer value
-    function hex2integer(hex_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer is
-        variable len : integer;
-        variable temp_int : integer;
-        variable power : integer;
-        variable int_number : integer;
-    begin
-        len := fld_len(hex_number);
-        power := 0;
-        temp_int := 0;
-        for i in len downto 1 loop
-            case hex_number(i) is
-                when '0' =>
-                    int_number := 0;
-                when '1' =>
-                    int_number := 1;
-                when '2' =>
-                    int_number := 2;
-                when '3' =>
-                    int_number := 3;
-                when '4' =>
-                    int_number := 4;
-                when '5' =>
-                    int_number := 5;
-                when '6' =>
-                    int_number := 6;
-                when '7' =>
-                    int_number := 7;
-                when '8' =>
-                    int_number := 8;
-                when '9' =>
-                    int_number := 9;
-                when 'a' | 'A' =>
-                    int_number := 10;
-                when 'b' | 'B' =>
-                    int_number := 11;
-                when 'c' | 'C' =>
-                    int_number := 12;
-                when 'd' | 'D' =>
-                    int_number := 13;
-                when 'e' | 'E' =>
-                    int_number := 14;
-                when 'f' | 'F' =>
-                    int_number := 15;
-                when others =>
-                    assert (false)
-                    report lf & "error: hex2integer found non hex didgit on line "
-                     & (integer'image(line)) & " of file " & file_name
-                    severity failure;
-            end case;
-            temp_int := temp_int + (int_number * (16 ** power));
-            power := power + 1;
-        end loop;
-        return temp_int;
-    end hex2integer;
-
-    -------------------------------------------------------------------------------
-    -- convert character to 4 bit vector
-    --   input    character
-    --   output   std_logic_vector  4 bits
-    function c2std_vec(c : in character) return std_logic_vector is
-    begin
-        case c is
-            when '0' => return "0000";
-            when '1' => return "0001";
-            when '2' => return "0010";
-            when '3' => return "0011";
-            when '4' => return "0100";
-            when '5' => return "0101";
-            when '6' => return "0110";
-            when '7' => return "0111";
-            when '8' => return "1000";
-            when '9' => return "1001";
-            when 'a' | 'A' => return "1010";
-            when 'b' | 'B' => return "1011";
-            when 'c' | 'C' => return "1100";
-            when 'd' | 'D' => return "1101";
-            when 'e' | 'E' => return "1110";
-            when 'f' | 'F' => return "1111";
-            when others =>
-                assert (false)
-                report lf & "error: c2std_vec found non hex didgit on file line "
-                severity failure;
-                return "XXXX";
-        end case;
-    end c2std_vec;
-
-    -------------------------------------------------------------------------------
-    --  std_vec2c  convert 4 bit std_vector to a character
-    --     input  std_logic_vector 4 bits
-    --     output  character
-    function std_vec2c(vec : in std_logic_vector(3 downto 0)) return character is
-    begin
-        case vec is
-            when "0000" => return '0';
-            when "0001" => return '1';
-            when "0010" => return '2';
-            when "0011" => return '3';
-            when "0100" => return '4';
-            when "0101" => return '5';
-            when "0110" => return '6';
-            when "0111" => return '7';
-            when "1000" => return '8';
-            when "1001" => return '9';
-            when "1010" => return 'A';
-            when "1011" => return 'B';
-            when "1100" => return 'C';
-            when "1101" => return 'D';
-            when "1110" => return 'E';
-            when "1111" => return 'F';
-            when others =>
-                assert (false)
-                report lf & "error: std_vec2c found non-binary didgit in vec "
-                severity failure;
-                return 'X';
-        end case;
-    end std_vec2c;
-
-    -------------------------------------------------------------------------------
-    -- bin2integer    convert bin stimulus field to integer
-    --          inputs :  string of type text_field containing only binary numbers
-    --          return :  integer value
-    function bin2integer(bin_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer is
-        variable len : integer;
-        variable temp_int : integer;
-        variable power : integer;
-        variable int_number : integer;
-    begin
-        len := fld_len(bin_number);
-        power := 0;
-        temp_int := 0;
-        for i in len downto 1 loop
-            case bin_number(i) is
-                when '0' =>
-                    int_number := 0;
-                when '1' =>
-                    int_number := 1;
-                when others =>
-                    assert (false)
-                    report lf & "error: bin2integer found non binary didgit on line "
-                     & (integer'image(line)) & " of file " & file_name
-                    severity failure;
-            end case;
-
-            temp_int := temp_int + (int_number * (2 ** power));
-            power := power + 1;
-        end loop;
-
-        return temp_int;
-    end bin2integer;
-
-    -------------------------------------------------------------------------------
-    -- stim_to_integer    convert stimulus field to integer
-    --          inputs :  string of type text_field "stimulus format of number"
-    --          return :  integer value
-    function stim_to_integer(field : in text_field;
-                             file_name : in text_line;
-                             line : in integer) return integer is
-        variable len : integer;
-        variable value : integer := 1;
-        variable temp_str : text_field;
-    begin
-        len := fld_len(field);
-
-        if (field(1) = '#') then
-            case field(2) is
-                when 'x' =>
-                    value := 3;
-                    while (field(value) /= nul) loop
-                        temp_str(value - 2) := field(value);
-                        value := value + 1;
-                    end loop;
-                    -- assert(false)
-                    -- report lf & "hex2integer: " & temp_str
-                    -- severity warning;
-                    value := hex2integer(temp_str, file_name, line);
-                when 'b' =>
-                    value := 3;
-                    while (field(value) /= nul) loop
-                        temp_str(value - 2) := field(value);
-                        value := value + 1;
-                    end loop;
-                    value := bin2integer(temp_str, file_name, line);
-                when 'd' =>
-                    value := 3;
-                    while (field(value) /= nul) loop
-                        temp_str(value - 2) := field(value);
-                        value := value + 1;
-                    end loop;
-                    value := str2integer(temp_str);
-                when others =>
-                    assert (false)
-                    report lf & "error: strange # found ! "
-                     & (integer'image(line)) & " of file " & file_name
-                    severity failure;
-            end case;
-        else
-            value := str2integer(field);
-        end if;
-        return value;
-    end stim_to_integer;
-
-    -------------------------------------------------------------------------------
-    --  to_str function  with base parameter
-    --     convert integer to number base
-    function ew_to_str(int : integer;
-                       b : base) return text_field is
-        variable temp : text_field;
-        variable temp1 : text_field;
-        variable radix : integer := 0;
-        variable num : integer := 0;
-        variable power : integer := 1;
-        variable len : integer := 1;
-        variable pre : string(1 to 2);
-        variable i : integer;
-        variable j : integer;
-        variable vec : std_logic_vector(31 downto 0);
-    begin
-        num := int;
-        temp := (others => nul);
-        case b is
-            when bin =>
-                radix := 2; -- depending on what
-                pre := "0b";
-            when oct =>
-                radix := 8; -- base the number is
-                pre := "0o";
-            when hex =>
-                radix := 16; -- to be displayed as
-                pre := "0x";
-            when dec =>
-                radix := 10; -- choose a radix range
-                pre := (others => nul);
-        end case;
-        -- now jump through hoops because of sign
-        if (num < 0 and b = hex) then
-            vec := std_logic_vector(to_unsigned(int, 32));
-            temp(1) := std_vec2c(vec(31 downto 28));
-            temp(2) := std_vec2c(vec(27 downto 24));
-            temp(3) := std_vec2c(vec(23 downto 20));
-            temp(4) := std_vec2c(vec(19 downto 16));
-            temp(5) := std_vec2c(vec(15 downto 12));
-            temp(6) := std_vec2c(vec(11 downto 8));
-            temp(7) := std_vec2c(vec(7 downto 4));
-            temp(8) := std_vec2c(vec(3 downto 0));
-        else
-            while num >= radix loop -- determine how many
-                len := len + 1; -- characters required
-                num := num / radix; -- to represent the
-            end loop; -- number.
-            for i in len downto 1 loop -- convert the number to
-                temp(i) := ew_to_char(int / power mod radix); -- a string starting
-                power := power * radix; -- with the right hand
-            end loop; -- side.
-        end if;
-        -- add prefix if is one
-        if (pre(1) /= nul) then
-            temp1 := temp;
-            i := 1;
-            j := 3;
-            temp(1 to 2) := pre;
-            while (temp1(i) /= nul) loop
-                temp(j) := temp1(i);
-                i := i + 1;
-                j := j + 1;
-            end loop;
-        end if;
-        return temp;
-    end ew_to_str;
-
-    -------------------------------------------------------------------------------
-    --  to_str function  with base parameter
-    --     convert integer to number base
-    function ew_to_str_len(int : integer;
-                           b : base) return text_field is
-        variable temp : text_field;
-        variable temp1 : text_field;
-        variable radix : integer := 0;
-        variable num : integer := 0;
-        variable power : integer := 1;
-        variable len : integer := 1; -- adjusted min. length to 2 for bytes
-        variable pre : string(1 to 2);
-        variable i : integer;
-        variable j : integer;
-        variable vec : std_logic_vector(31 downto 0);
-    begin
-        num := int;
-        temp := (others => nul);
-        case b is
-            when bin =>
-                radix := 2; -- depending on what
-                pre := "0b";
-            when oct =>
-                radix := 8; -- base the number is
-                pre := "0o";
-            when hex =>
-                radix := 16; -- to be displayed as
-                pre := "0x";
-            when dec =>
-                radix := 10; -- choose a radix range
-                pre := (others => nul);
-        end case;
-        -- now jump through hoops because of sign
-        if (num < 0 and b = hex) then
-            vec := std_logic_vector(to_signed(int, 32));
-            temp(1) := std_vec2c(vec(31 downto 28));
-            temp(2) := std_vec2c(vec(27 downto 24));
-            temp(3) := std_vec2c(vec(23 downto 20));
-            temp(4) := std_vec2c(vec(19 downto 16));
-            temp(5) := std_vec2c(vec(15 downto 12));
-            temp(6) := std_vec2c(vec(11 downto 8));
-            temp(7) := std_vec2c(vec(7 downto 4));
-            temp(8) := std_vec2c(vec(3 downto 0));
-        else
-            while num >= radix loop -- determine how many
-                len := len + 1; -- characters required
-                num := num / radix; -- to represent the
-            end loop; -- number.
-            if (len mod 2 > 0) then -- is odd number, add one
-                len := len + 1;
-            end if;
-            for i in len downto 1 loop -- convert the number to
-                temp(i) := ew_to_char(int / power mod radix); -- a string starting
-                power := power * radix; -- with the right hand
-            end loop; -- side.
-        end if;
-        -- add prefix if is one
-        if (pre(1) /= nul) then
-            temp1 := temp;
-            i := 1;
-            j := 3;
-            temp(1 to 2) := pre;
-            while (temp1(i) /= nul) loop
-                temp(j) := temp1(i);
-                i := i + 1;
-                j := j + 1;
-            end loop;
-        end if;
-        return temp;
-    end ew_to_str_len;
-
-    -------------------------------------------------------------------------
-    --  function short text_line (remove 'nul')
-    function txt_shorter(txt : in text_line) return string is
-        variable l : integer;
-    begin
-        l := line_len(txt);
-        return txt(1 to l);
-    end txt_shorter;
-
-    -------------------------------------------------------------------------------
-    -- procedure to print instruction records to stdout  *for debug*
-    procedure print_inst(variable inst : in stim_line_ptr) is
-        variable l : text_line;
-        variable l_i : integer := 1;
-        variable j : integer := 1;
-    begin
-        while (inst.instruction(j) /= nul) loop
-            l(l_i) := inst.instruction(j);
-            j := j + 1;
-            l_i := l_i + 1;
-        end loop;
-
-        l(l_i) := ' ';
-        l_i := l_i + 1;
-        j := 1;
-        -- field one
-        if (inst.inst_field_1(1) /= nul) then
-            while (inst.inst_field_1(j) /= nul) loop
-                l(l_i) := inst.inst_field_1(j);
-                j := j + 1;
-                l_i := l_i + 1;
-            end loop;
-            l(l_i) := ' ';
-            l_i := l_i + 1;
-            j := 1;
-            -- field two
-            if (inst.inst_field_2(1) /= nul) then
-                while (inst.inst_field_2(j) /= nul) loop
-                    l(l_i) := inst.inst_field_2(j);
-                    j := j + 1;
-                    l_i := l_i + 1;
-                end loop;
-                l(l_i) := ' ';
-                l_i := l_i + 1;
-                j := 1;
-                -- field three
-                if (inst.inst_field_3(1) /= nul) then
-                    while (inst.inst_field_3(j) /= nul) loop
-                        l(l_i) := inst.inst_field_3(j);
-                        j := j + 1;
-                        l_i := l_i + 1;
-                    end loop;
-                    l(l_i) := ' ';
-                    l_i := l_i + 1;
-                    j := 1;
-                    -- field four
-                    if (inst.inst_field_4(1) /= nul) then
-                        while (inst.inst_field_4(j) /= nul) loop
-                            l(l_i) := inst.inst_field_4(j);
-                            j := j + 1;
-                            l_i := l_i + 1;
-                        end loop;
-                    end if;
-                end if;
-            end if;
-        end if;
-        print(l);
-        print("   sequence number: " & to_str(inst.line_number) &
-          "  file line number: " & to_str(inst.file_line));
-        if (inst.num_of_lines > 0) then
-            print("   number of lines: " & to_str(inst.num_of_lines));
-        end if;
-    end print_inst;
-
-    --------------------------------------------------------------------------------
     --  access_variable
     --     inputs:
     --               text field containing variable
@@ -971,23 +139,9 @@ package body tb_pkg is
             report lf & "error: variable is not defined " & temp_field & lf
             severity failure;
         end if;
-    end access_variable;
+    end procedure;
 
-    --------------------------------------------------------------------------------
-    procedure init_text_field(variable sourcestr : in string;
-                              variable destfield : out text_field) is
-        variable tempfield : text_field;
-    begin
-        for i in 1 to sourcestr'length loop
-            tempfield(i) := sourcestr(i);
-        end loop;
 
-        for i in 1 to text_field'length loop
-            destfield(i) := tempfield(i);
-        end loop;
-    end init_text_field;
-
-    --------------------------------------------------------------------------------
     --  index_variable
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1014,9 +168,9 @@ package body tb_pkg is
             value := ptr.var_value;
             valid := 1;
         end if;
-    end index_variable;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  index_array
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1043,9 +197,9 @@ package body tb_pkg is
             array_object_ptr := ptr.var_array;
             valid := 1;
         end if;
-    end index_array;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  index_file
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1072,9 +226,9 @@ package body tb_pkg is
             file_object := ptr.var_file;
             valid := 1;
         end if;
-    end index_file;
+    end procedure;
     
-    --------------------------------------------------------------------------------
+
     --  index_lines
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1101,9 +255,9 @@ package body tb_pkg is
             lines_object_ptr := ptr.var_lines;
             valid := 1;
         end if;
-    end index_array;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  update_variable
     --     inputs:
     --               index:  the index of the variable being updated
@@ -1130,9 +284,9 @@ package body tb_pkg is
             ptr.var_value := value;
             valid := 1;
         end if;
-    end update_variable;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  update_array
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1160,9 +314,9 @@ package body tb_pkg is
             ptr.var_array := array_object_ptr;
             valid := 1;
         end if;
-    end update_array;
+    end procedure;
     
-    --------------------------------------------------------------------------------
+
     --  update_lines
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -1190,9 +344,9 @@ package body tb_pkg is
             ptr.var_lines := lines_object_ptr;
             valid := 1;
         end if;
-    end update_lines;
+    end procedure;
 
-    -------------------------------------------------------------------------------
+
     -- read a line from a file
     --   inputs  :   file of type text
     --   outputs :   the line of type text_line
@@ -1214,9 +368,9 @@ package body tb_pkg is
                 index := index + 1;
             end loop;
         end if;
-    end file_read_line;
+    end procedure;
 
-    ------------------------------------------------------------------------------
+
     -- procedure to break a line down in to text fields
     procedure tokenize_line(variable text_line : in text_line;
                             variable otoken1 : out text_field;
@@ -1430,130 +584,12 @@ package body tb_pkg is
                 end case;
             end if;
         end if;
-        if valid > 1 then
-            if token1(1 to 3) = "end" then
-                token1_len := 3;
-                if token2(1 to 2) = "if" then
-                    token2_len := 2;
-                    token_merge := true;
-                elsif token2(1 to 4) = "loop" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 4) = "proc" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 9) = "interrupt" then
-                    token2_len := 9;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 4) = "file" then
-                token1_len := 4;
-                if token2(1 to 4) = "read" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 5) = "write" then
-                    token2_len := 5;
-                    token_merge := true;
-                elsif token2(1 to 6) = "append" then
-                    token2_len := 6;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 5) = "lines" then
-                token1_len := 5;
-                if token2(1 to 3) = "get" then
-                    token2_len := 3;
-                    token_merge := true;
-                elsif token2(1 to 3) = "set" then
-                    token2_len := 3;
-                    token_merge := true;
-                elsif token2(1 to 6) = "delete" then
-                    token2_len := 6;
-                    token_merge := true;
-                elsif token2(1 to 6) = "insert" then
-                    token2_len := 6;
-                    token_merge := true;
-                elsif token2(1 to 4) = "size" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 7) = "pointer" then
-                    token2_len := 7;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 5) = "array" then
-                token1_len := 5;
-                if token2(1 to 3) = "set" then
-                    token2_len := 3;
-                    token_merge := true;
-                elsif token2(1 to 3) = "get" then
-                    token2_len := 3;
-                    token_merge := true;
-                elsif token2(1 to 4) = "size" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 7) = "pointer" then
-                    token2_len := 7;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 4) = "else" then
-                token1_len := 4;
-                if token2(1 to 2) = "if" then
-                    token2_len := 2;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 6) = "signal" then
-                token1_len := 6;
-                if token2(1 to 6) = "verify" then
-                    token2_len := 6;
-                    token_merge := true;
-                elsif token2(1 to 4) = "read" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 5) = "write" then
-                    token2_len := 5;
-                    token_merge := true;
-                end if;
-            elsif token1(1 to 3) = "bus" then
-                token1_len := 3;
-                if token2(1 to 6) = "verify" then
-                    token2_len := 6;
-                    token_merge := true;
-                elsif token2(1 to 4) = "read" then
-                    token2_len := 4;
-                    token_merge := true;
-                elsif token2(1 to 5) = "write" then
-                    token2_len := 5;
-                    token_merge := true;
-                elsif token2(1 to 7) = "timeout" then
-                    token2_len := 7;
-                    token_merge := true;
-                end if;
-            end if;
-        end if;
-        if token_merge then
-            token1(token1_len + 2 to token1_len + token2_len + 1) := token2(1 to token2_len);
-            token1(token1_len + 1) := '_';
+        token_merge( token1, token2, token3, token4, token5, token6, token7, token8, valid,
+                             otoken1,otoken2, otoken3, otoken4, otoken5, otoken6, otoken7, ovalid );     
+     
+    end procedure;
+    
 
-            otoken1 := token1;
-            otoken2 := token3;
-            otoken3 := token4;
-            otoken4 := token5;
-            otoken5 := token6;
-            otoken6 := token7;
-            otoken7 := token8;
-            ovalid := valid - 1;
-        else
-            otoken1 := token1;
-            otoken2 := token2;
-            otoken3 := token3;
-            otoken4 := token4;
-            otoken5 := token5;
-            otoken6 := token6;
-            otoken7 := token7;
-            ovalid := valid;
-        end if;
-    end tokenize_line;
-
-    --------------------------------------------------------------------------------
     -- add a new instruction to the instruction list
     --   inputs  :   the linked list of instructions
     --               the instruction
@@ -1614,9 +650,9 @@ package body tb_pkg is
         end loop;
         -- return the pointer
         inst_set := v_temp_inst;
-    end define_instruction;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  check for valid instruction in the list of instructions
     procedure check_valid_inst(variable inst : in text_field;
                                variable inst_set : in inst_def_ptr;
@@ -1677,9 +713,9 @@ package body tb_pkg is
         report lf & "error: undefined instruction on line " & (integer'image(line_num)) &
                   " found in input file " & name & lf
         severity failure;
-    end check_valid_inst;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  add_variable
     --    this procedure adds a variable to the variable list.  this is localy
     --    available at this time.
@@ -1916,9 +952,9 @@ package body tb_pkg is
                 var_list := temp_var;
             end if;
         end if;
-    end add_variable;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  add_instruction
     --    this is the procedure that adds the instruction to the linked list of
     --    instructions.  also variable addition are called and or handled.
@@ -2029,9 +1065,9 @@ package body tb_pkg is
             -- print_inst(temp_stim_line);  -- for debug
         end if;
 
-    end add_instruction;
+    end procedure;
 
-    ------------------------------------------------------------------------------
+
     -- test_inst_sequ
     --  this procedure accesses the full instruction sequence and checks for valid
     --   variables.  this is prior to the simulation run start.
@@ -2169,9 +1205,9 @@ package body tb_pkg is
             -- point to next record
             inst_ptr := inst_ptr.next_rec;
         end loop;
-    end test_inst_sequ;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  the read include file procedure
     --    this is the main procedure for reading, parcing, checking and returning
     --    the instruction sequence link list.
@@ -2294,9 +1330,9 @@ package body tb_pkg is
         inst_set := v_inst_ptr;
         var_list := v_var_prt;
         inst_sequ := v_sequ_ptr;
-    end read_include_file;
+    end procedure;
 
-    --------------------------------------------------------------------------------
+
     --  the read instruction file procedure
     --    this is the main procedure for reading, parcing, checking and returning
     --    the instruction sequence link list.
@@ -2443,9 +1479,9 @@ package body tb_pkg is
 
         --  now that all the stimulus is loaded, test for invalid variables
         test_inst_sequ(inst_sequ, v_tmp_fn, var_list);
-    end read_instruction_file;
+    end procedure;
 
-    ------------------------------------------------------------------------------
+
     -- access_inst_sequ
     --  this procedure accesses the instruction sequence and returns the parameters
     --  as they exsist related to the variables state.
@@ -2637,128 +1673,6 @@ package body tb_pkg is
                 severity failure;
             end if;
         end if;
-    end access_inst_sequ;
+    end procedure;
 
-    -------------------------------------------------------------------------------
-    -- procedure to print loggings to stdout
-    procedure print(s : in string) is
-        variable l : line;
-    begin
-        for i in 1 to s'length loop
-            if (s(i) /= nul) then
-                write(l, s(i));
-            end if;
-        end loop;
-        writeline(output, l);
-    end print;
-
-    -------------------------------------------------------------------------------
-    --  procedure to print to the stdout the txt pointer
-    procedure txt_print(variable ptr : in stm_text_ptr) is
-        variable txt_str : stm_text;
-    begin
-
-        if (ptr /= null) then
-            txt_str := (others => nul);
-            for i in 1 to c_stm_text_len loop
-                if (ptr(i) = nul) then
-                    exit;
-                end if;
-                txt_str(i) := ptr(i);
-            end loop;
-            print(txt_str);
-        end if;
-    end txt_print;
-
-    -------------------------------------------------------------------------------
-    --  procedure copy text into an existing pointer
-    procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
-                           variable ptr_o : out stm_text_ptr;
-                           variable txt_str : in stm_text) is
-        variable ptr_temp : stm_text_ptr;
-    begin
-        ptr_temp := ptr;
-        if (ptr_temp /= null) then
-            for i in 1 to c_stm_text_len loop
-                if (txt_str(i) = nul) then
-                    exit;
-                end if;
-                ptr_temp(i) := txt_str(i);
-            end loop;
-        end if;
-        ptr_o := ptr_temp;
-    end txt_ptr_copy;
-
-    -------------------------------------------------------------------------------
-    --  procedure to print to the stdout the txt pointer, and
-    --     sub any variables found
-    procedure txt_print_wvar(variable var_list : in var_field_ptr;
-                             variable ptr : in stm_text_ptr;
-                             constant b : in base) is
-        variable i : integer;
-        variable j : integer;
-        variable k : integer;
-        variable txt_str : stm_text;
-        variable v1 : integer;
-        variable valid : integer;
-        variable tmp_field : text_field;
-        variable tmp_i : integer;
-    begin
-        if (ptr /= null) then
-            i := 1;
-            j := 1;
-            txt_str := (others => nul);
-            while (i <= c_stm_text_len and j <= c_stm_text_len) loop
-                if (ptr(i) /= '$') then
-                    txt_str(j) := ptr(i);
-                    i := i + 1;
-                    j := j + 1;
-                else
-                    tmp_field := (others => nul);
-                    tmp_i := 1;
-                    tmp_field(tmp_i) := ptr(i);
-                    i := i + 1;
-                    tmp_i := tmp_i + 1;
-                    -- parse to the next space
-                    while (ptr(i) /= ' ' and ptr(i) /= nul) loop
-                        tmp_field(tmp_i) := ptr(i);
-                        i := i + 1;
-                        tmp_i := tmp_i + 1;
-                    end loop;
-                    access_variable(var_list, tmp_field, v1, valid);
-                    assert (valid = 1)
-                    report lf & "invalid variable found in stm_text_ptr: ignoring."
-                    severity warning;
-
-                    if (valid = 1) then
-
-                        txt_str := ew_str_cat(txt_str, ew_to_str_len(v1, b));
-                        k := 1;
-                        while (txt_str(k) /= nul) loop
-                            k := k + 1;
-                        end loop;
-                        j := k;
-                    end if;
-                end if;
-            end loop;
-            -- print the created string
-            print(txt_str);
-        end if;
-    end txt_print_wvar;
-
-    -------------------------------------------------------------------------
-    --  get a rundom intetger number
-    procedure getrandint(variable seed1 : inout positive;
-                         variable seed2 : inout positive;
-                         variable lowestvalue : in integer;
-                         variable utmostvalue : in integer;
-                         variable randint : out integer) is
-        variable randreal : real;
-        variable intdelta : integer;
-    begin
-        intdelta := utmostvalue - lowestvalue;
-        uniform(seed1, seed2, randreal); -- generate random number
-        randint := integer(trunc(randreal * (real(intdelta) + 1.0))) + lowestvalue; -- rescale to delta, find integer part, adjust
-    end getrandint;
-
-end tb_pkg;
+end package body;

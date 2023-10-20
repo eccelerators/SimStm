@@ -5,7 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package tb_pkg_signals is
+package tb_signals_pkg is
 
     type t_signals_in is record
         -- TODO: Add here all your inputs
