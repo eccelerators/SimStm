@@ -50,8 +50,8 @@ package tb_base_pkg is
         var_name : text_field;
         var_index : integer;
         var_value : integer;
+        var_string : stm_text_ptr;
         var_array : t_array_object_ptr;
-        var_file : text_field;
         var_lines : t_lines_object_ptr;
         const : boolean;
         next_rec : var_field_ptr;
@@ -93,62 +93,71 @@ package tb_base_pkg is
     type t_line_object_ptr is access t_line_object;
     
 
-    procedure file_read(variable lines_object : inout t_lines_object;
-                          variable file_path : in text_field;
+    procedure file_read(variable lines_object_ptr : inout t_lines_object_ptr;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer);
+
                           
-    procedure file_write(variable lines_object : out t_lines_object;
-                          variable file_path : in text_field;
+    procedure file_write(variable lines_object_ptr : out t_lines_object_ptr;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer);
                                            
-    procedure file_append(variable lines_object : in t_lines_object;
-                          variable file_path : in text_field;
+    procedure file_append(variable lines_object_ptr : in t_lines_object;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer);                           
 
-    procedure lines_get(variable line_object : inout t_line_object;
+
+    procedure lines_line_get(variable lines_object_ptr : in t_lines_object_ptr;
                            variable position : in integer;
-                           variable array_object : out t_array_object;
+                           variable array_object : inout t_array_object;
                            variable valid : out integer); 
 
-    procedure lines_set(variable line_object : inout t_line_object;
+
+    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable array_object : in t_array_object;
                            variable valid : out integer);
                                                        
-    procedure lines_set(variable line_object : inout t_line_object;
+    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable text_ptr : out stm_text_ptr;
                            variable valid : out integer); 
+
                            
-    procedure lines_append(variable line_object : inout t_line_object;
+    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable array_object : in t_array_object;
                            variable valid : out integer);
+
                                                        
-    procedure lines_append(variable line_object : inout t_line_object;
+    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable text_ptr : out stm_text_ptr;
                            variable valid : out integer);      
+
                            
-    procedure lines_insert(variable line_object : inout t_line_object;
+    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable array_object : in t_array_object;
                            variable valid : out integer);
                                                        
-    procedure lines_insert(variable line_object : inout t_line_object;
+    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable text_ptr : out stm_text_ptr;
-                           variable valid : out integer);                                                    
+                           variable valid : out integer);                                                   
+
                                                                                                            
-    procedure lines_delete(variable line_object : inout t_line_object;
+    procedure lines_line_delete(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable valid : out integer);  
+
                            
-    procedure lines_pointer(variable line_object : inout t_line_object;
-                           variable line_object : in t_line_object;
+    procedure lines_pointer(variable lines_object_ptr : inout t_lines_object_ptr;
+                           variable lines_object : in t_line_object;
                            variable valid : out integer);  
+ 
                            
-    procedure lines_size(variable line_object : inout t_line_object;
+    procedure lines_size(variable lines_object_ptr : in t_lines_object_ptr;
                            variable line_size : out integer;
-                           variable valid : out integer);   
+                           variable valid : out integer); 
                            
     function is_digit(constant c : in character) return boolean;
     

@@ -9,75 +9,119 @@ use ieee.math_real.all;
 package body tb_base_pkg_body is
 
     procedure file_read(variable lines_object_ptr : inout t_lines_object_ptr;
-                          variable file_path : in stm_text;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer) is
         file user_file : text;
-        variable var_line : line;
+        variable std_line : line;
+        variable line_append_valid : integer := 0;
     begin
         file_open(v_stat, user_file, file_path, read_mode);
-        assert (v_stat = open_ok)
-        report lf & "error: unable to open file " & path
-        severity failure;
+        if v_stat /= open_ok then
+            return;
+        end if;      
         while not endfile(user_file) loop
-            readline(user_file, var_line);
-            temp_int := temp_int + 1;
-            lines_add_line(lines_object_ptr, var_line);                         
+            readline(user_file, std_line);           
+            lines_line_append(lines_object_ptr, std_line, line_append_valid);
+            valid := line_append_valid;                         
         end loop;
         file_close(user_file);                      
     end procedure;
-
                           
     procedure file_write(variable lines_object_ptr : out t_lines_object_ptr;
-                          variable file_path : in stm_text;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer) is
         file user_file : text;
-        variable var_line : line;
+        variable std_line : line;
+        variable line_get_valid : integer := 0;
     begin
         file_open(v_stat, user_file, file_path, write_mode);
-        assert (v_stat = open_ok)
-        report lf & "error: unable to open file " & path
-        severity failure;
+        if v_stat /= open_ok then
+            return;
+        end if;   
         for i in 0 to lines_object_ptr.size - 1 loop                            
-            lines_get_line(lines_object_ptr, i, var_line);  
-            writeline(user_file, var_line);                                             
+            lines_line_get(lines_object_ptr, i, std_line, line_get_valid);  
+            writeline(user_file, std_line);
+            valid := line_get_valid;                                          
         end loop;
         file_close(user_file);
     end procedure;
                                            
-    procedure file_append(variable lines_object : in t_lines_object;
-                          variable file_path : in stm_text;
+    procedure file_append(variable lines_object_ptr : in t_lines_object;
+                          variable file_path : in stm_text_ptr;
                           variable valid : out integer) is
         file user_file : text;
-        variable var_line : line;
+        variable std_line : line;
+        variable line_get_valid : integer := 0;
     begin
         file_open(v_stat, user_file, file_path, append_mode);
-        assert (v_stat = open_ok)
-        report lf & "error: unable to open file " & path
-        severity failure;
+        if v_stat /= open_ok then
+            return;
+        end if;   
         for i in 0 to lines_object_ptr.size - 1 loop                            
-            lines_get_line(lines_object_ptr, i, var_line);  
-            writeline(user_file, var_line);                                             
+            lines_line_get(lines_object_ptr, i, std_line, line_get_valid);  
+            writeline(user_file, std_line);
+            valid := line_get_valid;                                          
         end loop;
         file_close(user_file);
     end procedure;                           
 
 
-    procedure lines_get(variable line_object : inout t_line_object;
+    procedure lines_line_get(variable lines_object_ptr : in t_lines_object_ptr;
                            variable position : in integer;
-                           variable array_object : out t_array_object;
+                           variable array_object_ptr : inout t_array_object_ptr;
                            variable valid : out integer) is
+        variable line_ptr : t_lines_object_ptr;
+        variable value : integer;
+        variable value_found : boolean;
+        variable array_index : integer := 0;
     begin
+        line_ptr := lines_object_ptr;
+        for i in 0 to lines_object_ptr.size - 1 loop     
+            if line_ptr.line_number = position then
+                hread(line_ptr.line_number.content, value, value_found);
+                if value_found then
+                    array_object(array_index) := value;
+                end if; 
+            end if;                        
+            valid := 0;                                              
+        end loop;
+    end procedure;
+    
+    procedure lines_line_get(variable lines_object_ptr : in t_lines_object_ptr;
+                           variable position : in integer;
+                           variable std_line : out line;
+                           variable valid : out integer) is
+        variable line_ptr : t_lines_object_ptr;
+    begin
+        line_ptr := lines_object_ptr;
+        for i in 0 to lines_object_ptr.size - 1 loop     
+            if line_ptr.line_number = position then  
+                return line_ptr.line_number.content;
+            end if;                        
+            valid := 0;                                              
+        end loop;
     end procedure; 
 
 
-    procedure lines_set(variable line_object : inout t_line_object;
+    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
-                           variable array_object : in t_array_object;
+                           variable array_object_ptr : in t_array_object_ptr;
                            variable valid : out integer) is
+    variable line_ptr : t_lines_object_ptr;
+    variable std_line : line;
     begin
+        line_ptr := lines_object_ptr;
+        for i in 0 to lines_object_ptr.size - 1 loop     
+            if line_ptr.line_number = position then  
+                for j in 0 to array_object_ptr.size - 1 loop
+                    hwrite(std_line, array_object_ptr(j));
+                end loop;          
+            end if;                       
+            valid := 0;                                              
+        end loop;    
     end procedure;
                                                        
-    procedure lines_set(variable line_object : inout t_line_object;
+    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable text_ptr : out stm_text_ptr;
                            variable valid : out integer) is
@@ -85,28 +129,34 @@ package body tb_base_pkg_body is
     end procedure; 
 
                            
-    procedure lines_append(variable line_object : inout t_line_object;
+    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable array_object : in t_array_object;
                            variable valid : out integer) is
     begin
     end procedure;
 
                                                        
-    procedure lines_append(variable line_object : inout t_line_object;
+    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable text_ptr : out stm_text_ptr;
                            variable valid : out integer) is
     begin
-    end procedure;      
+    end procedure;     
+    
+    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
+                           variable line_object : out line_object_ptr;
+                           variable valid : out integer) is
+    begin
+    end procedure;     
 
                            
-    procedure lines_insert(variable line_object : inout t_line_object;
+    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable array_object : in t_array_object;
                            variable valid : out integer) is
     begin
     end procedure;
                                                        
-    procedure lines_insert(variable line_object : inout t_line_object;
+    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable text_ptr : out stm_text_ptr;
                            variable valid : out integer) is
@@ -114,21 +164,21 @@ package body tb_base_pkg_body is
     end procedure;                                                   
 
                                                                                                            
-    procedure lines_delete(variable line_object : inout t_line_object;
+    procedure lines_line_delete(variable lines_object_ptr : inout t_lines_object_ptr;
                            variable position : in integer;
                            variable valid : out integer) is
     begin
     end procedure;  
 
                            
-    procedure lines_pointer(variable line_object : inout t_line_object;
-                           variable line_object : in t_line_object;
+    procedure lines_pointer(variable lines_object_ptr : inout t_lines_object_ptr;
+                           variable lines_object : in t_line_object;
                            variable valid : out integer) is
     begin
     end procedure;  
  
                            
-    procedure lines_size(variable line_object : inout t_line_object;
+    procedure lines_size(variable lines_object_ptr : in t_lines_object_ptr;
                            variable line_size : out integer;
                            variable valid : out integer) is
     begin

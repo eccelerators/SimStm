@@ -75,7 +75,6 @@ package body tb_pkg_signals is
         define_instruction(inst_list, "bus_timeout", 2);
 
         -- file
-        define_instruction(inst_list, "file", 2); 
         define_instruction(inst_list, "file_read", 2); 
         define_instruction(inst_list, "file_write", 2); 
         define_instruction(inst_list, "file_append", 2);

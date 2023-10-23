@@ -1,12 +1,17 @@
 include "an_include.stm"
 
-const a_const 0
+const a_const_num #x03
+const a_const_ref $a_const_num
+const a_const_string "Print $a_var_num"
+const a_const_file_string "filepath"
 
-var a_var #x05
+
+var a_var_num #x05
+var a_var_ref $a_var_num
+var a_var_string "Print $a_var_num"
+var a_var_file_string "filepath"
 
 array an_array 16
-
-file a_file "file_name"
 
 lines a_lines
 
@@ -17,7 +22,7 @@ proc
 end proc
 
 
-
+ 
 a_interrupt:
 interrupt 
 
@@ -87,9 +92,9 @@ end proc
 file_proc:
 proc 
 	
-	file write a_file a_lines
-	file append a_file  a_lines
-	file read a_file a_lines
+	file write a_var_file_string a_lines
+	file append a_var_file_string  a_lines
+	file read a_var_file_string a_lines
 	
 end proc
 
@@ -130,9 +135,10 @@ array another_array 16
 array_proc:
 proc 
 	
-	array set an_array $array_position $a_var
+	array set an_array $array_position #x07
+	array set an_array $array_position $a_var_ref
 	
-	array get an_array $array_position a_var
+	array get an_array $array_position a_var_ref
 			
 	array pointer an_array another_array
 	
@@ -146,12 +152,12 @@ var another_var 1
 if_proc:
 proc 
 	
-	if $a_var = $another_var
-		equ a_var 5
-	elsif $a_var > $another_var
-		equ a_var 6
+	if $a_var_ref = $another_var
+		equ a_var_ref 5
+	elsif $a_var_ref > $another_var
+		equ a_var_ref 6
 	else
-		equ a_var $a_const
+		equ a_var_ref $a_const_ref
 	end if	
 		
 end proc
@@ -163,7 +169,7 @@ loop_return_proc:
 proc 
 
 	loop $loop_var
-		if $a_var = $another_var
+		if $a_var_ref = $another_var
 			return
 		end if	
 	end loop
@@ -201,7 +207,7 @@ var time_to_wait 5000
 misc_proc:
 proc
 
-	log $INFO "misc_proc severity: $INFO"
+	log $INFO "misc_proc severity: $INFO"  
 	seed $seed_var
 	random rand_var $rand_min_var $rand_max_var
 	resume $RESUME_ON_VERIFY_ERROR
