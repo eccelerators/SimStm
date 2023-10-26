@@ -1432,7 +1432,7 @@ package body tb_interpreter_pkg is
         src_tail_i := 0;
         dest_txt_str := (others => nul);
         while src_i <= c_stm_text_len loop
-            if j = 0 then
+            if dest_i = 0 then
                 if ptr(src_i) = '"' then
                    src_tail_i := src_i + 1; 
                    exit;
@@ -1446,73 +1446,76 @@ package body tb_interpreter_pkg is
         src_i := 1;
         dest_i := 1;
         while src_i < src_tail_i and dest_i <= c_stm_text_len loop
-        
-      
+             
             -- copy until next '{'
             dest_txt_str := (others => nul);
             while src_i <= c_stm_text_len and dest_i <= c_stm_text_len loop
-                if ptr(i) = '{' then
-                    i := i + 1;
+                if ptr(src_i) = '{' then                 
                     exit;
                 else
-                    dest_txt_str(dest_i) := ptr(i);
-                    i := i + 1;
+                    dest_txt_str(dest_i) := ptr(src_i);
+                    src_i := src_i + 1;
                     dest_i := dest_i + 1;
                 end if;
             end loop;
-    
-            while i <= c_stm_text_len and dest_j <= c_stm_text_len loop
-                if ptr(i) = '}' then
-                    i := i + 1;
-                    exit;
-                else
-                    -- skip until next '}'
-                    i := i + 1;
-                end if;
-            end loop;
-                    
-                
-                
-    
-            i := 1;
-            j := 1;
-            dest_txt_str := (others => nul);
-            while i <= c_stm_text_len and j <= c_stm_text_len loop
-                if (ptr(i) /= '}') then
-                    dest_txt_str(j) := ptr(i);
-                    i := i + 1;
-                    j := j + 1;
-                else
-                    tmp_field := (others => nul);
-                    tmp_i := 1;
-                    tmp_field(tmp_i) := ptr(i);
-                    i := i + 1;
-                    tmp_i := tmp_i + 1;
-                    -- parse to the next space
-                    while ptr(i) /= ' ' and ptr(i) /= nul loop
-                        tmp_field(tmp_i) := ptr(i);
-                        i := i + 1;
-                        tmp_i := tmp_i + 1;
-                    end loop;
-                    access_variable(var_list, tmp_field, v1, valid);
-                    assert (valid = 1)
-                    report lf & "invalid variable found in stm_text_ptr: ignoring."
-                    severity warning;
-    
-                    if valid = 1 then
-    
-                        dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, b));
-                        k := 1;
-                        while dest_txt_str(k) /= nul loop
-                            k := k + 1;
-                        end loop;
-                        j := k;
+            
+            if src_i > c_stm_text_len then
+                -- src end reached
+                print(dest_txt_str);
+                return;
+            end if;
+            
+            -- place to embed a var found
+            if ptr(src_i) = '{' then
+                src_i := src_i + 1;
+                while src_i <= c_stm_text_len and dest_i <= c_stm_text_len loop
+                    if ptr(src_i) = '}' then
+                        src_i := src_i + 1;
+                        exit;
+                    else
+                        -- skip until next '}'
+                        src_i := src_i + 1;
                     end if;
-                end if;
-            end loop;            
+                end loop;            
+            end if;
+            
+            if ptr(src_i) = '}' then
+                src_i := src_i + 1;
+            else
+                assert (false)
+                report lf & "error: missing closing } bracket " & stm_text_crop(dest_txt_str)
+                severity failure;        
+            end if;
+                               
+            tmp_field := (others => nul);
+            tmp_i := 1;
+            tmp_field(tmp_i) := ptr(src_tail_i);
+            src_tail_i := src_tail_i + 1;
+            tmp_i := tmp_i + 1;
+            -- parse to the next space
+            while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul loop
+                tmp_field(tmp_i) := ptr(src_tail_i);
+                src_tail_i := src_tail_i + 1;
+                tmp_i := tmp_i + 1;
+            end loop;
+            access_variable(var_list, tmp_field, v1, valid);
+            assert (valid = 1)
+            report lf & "invalid variable found in stm_text_ptr: ignoring."
+            severity warning;
+
+            if valid = 1 then 
+                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, b));
+                k := 1;
+                while dest_txt_str(k) /= nul loop
+                    k := k + 1;
+                end loop;
+                dest_i := k;
+            end if;            
+           
         end loop;
-        -- print the created string
-        print(dest_txt_str);
+        assert (valid = 1)
+        report lf & "error: txt_print_wvar ended abnormally"
+        severity failure;
 
     end procedure;
 

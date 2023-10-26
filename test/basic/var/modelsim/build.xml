@@ -115,13 +115,13 @@
    <target name="-do_compile_tb_bus_pkg.vhd">
       <exec executable="${MODELSIM_BIN_DIR}/vcom" failonerror="true">
          <arg value="-2008"/>
-         <arg value="./../../../../src/tb_bus_pkg.vhd"/>
+         <arg value="./../../../../src_to_customize/tb_bus_pkg.vhd"/>
       </exec>
    </target> 
    <target name="-do_compile_tb_signals_pkg.vhd">
       <exec executable="${MODELSIM_BIN_DIR}/vcom" failonerror="true">
          <arg value="-2008"/>
-         <arg value="./../../../../src/tb_signals_pkg.vhd"/>
+         <arg value="./../../../../src_to_customize/tb_signals_pkg.vhd"/>
       </exec>
    </target>  
    <target name="-do_compile_tb_simstm.vhd">

@@ -746,7 +746,7 @@ package body tb_base_pkg is
     begin
         len := fld_len(field);
 
-        if (field(1) = '#') then
+        if field(1) = '0' and (field(2) = 'x' or field(2) = 'b') then
             case field(2) is
                 when 'x' =>
                     value := 3;
@@ -765,13 +765,6 @@ package body tb_base_pkg is
                         value := value + 1;
                     end loop;
                     value := bin2integer(temp_str, file_name, line);
-                when 'd' =>
-                    value := 3;
-                    while (field(value) /= nul) loop
-                        temp_str(value - 2) := field(value);
-                        value := value + 1;
-                    end loop;
-                    value := str2integer(temp_str);
                 when others =>
                     assert (false)
                     report lf & "error: strange # found ! "
