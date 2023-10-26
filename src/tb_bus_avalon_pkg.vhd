@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package tb_pkg_bus_avalonmm is
+package tb_bus_avalon_pkg is
     type t_avalonmm_down is record
         address : std_logic_vector(31 downto 0);
         byteenable : std_logic_vector(3 downto 0);
@@ -20,30 +20,30 @@ package tb_pkg_bus_avalonmm is
     function avalonmm_up_init return t_avalonmm_up;
 
     procedure write_avalonmm(signal clk : in std_logic;
-                             signal avalonmm_down : out t_avalonmm_down;
-                             signal avalonmm_up : in t_avalonmm_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+        signal avalonmm_down : out t_avalonmm_down;
+        signal avalonmm_up : in t_avalonmm_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 
     procedure read_avalonmm(signal clk : in std_logic;
-                            signal avalonmm_down : out t_avalonmm_down;
-                            signal avalonmm_up : in t_avalonmm_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+        signal avalonmm_down : out t_avalonmm_down;
+        signal avalonmm_up : in t_avalonmm_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 end;
 
-package body tb_pkg_bus_avalonmm is
+package body tb_bus_avalon_pkg is
     function avalonmm_up_init return t_avalonmm_up is
         variable init : t_avalonmm_up;
     begin
-        init.readdata := (others => 'U');
-        init.waitrequest := 'U';
+        init.readdata := (others => '0');
+        init.waitrequest := '0';
         return init;
     end;
 
@@ -59,13 +59,14 @@ package body tb_pkg_bus_avalonmm is
     end;
 
     procedure write_avalonmm(signal clk : in std_logic;
-                             signal avalonmm_down : out t_avalonmm_down;
-                             signal avalonmm_up : in t_avalonmm_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+        signal avalonmm_down : out t_avalonmm_down;
+        signal avalonmm_up : in t_avalonmm_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -132,13 +133,14 @@ package body tb_pkg_bus_avalonmm is
     end procedure;
 
     procedure read_avalonmm(signal clk : in std_logic;
-                            signal avalonmm_down : out t_avalonmm_down;
-                            signal avalonmm_up : in t_avalonmm_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+        signal avalonmm_down : out t_avalonmm_down;
+        signal avalonmm_up : in t_avalonmm_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -211,4 +213,5 @@ package body tb_pkg_bus_avalonmm is
 
         successfull := true;
     end procedure;
-end;
+
+end package body;

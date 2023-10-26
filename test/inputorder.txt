@@ -1,7 +1,11 @@
-tb_pkg.vhd
-tb_pkg_bus_avalonmm.vhd
-tb_pkg_bus_axi4lite.vhd
-tb_pkg_bus_wishbone.vhd
-tb_pkg_bus.vhd
-tb_pkg_signals.vhd
+tb_base_pkg.vhd
+tb_base_pkg_body.vhd
+tb_instructions_pkg.vhd
+tb_interpreter_pkg.vhd
+tb_interpreter_pkg_body.vhd
+tb_bus_avalon_pkg.vhd
+tb_bus_axi4lite_pkg.vhd
+tb_bus_wishbone_pkg.vhd
+tb_bus_pkg.vhd
+tb_signals_pkg.vhd
 tb_simstm.vhd

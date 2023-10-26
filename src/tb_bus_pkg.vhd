@@ -2,11 +2,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.tb_pkg_bus_avalonmm.all;
-use work.tb_pkg_bus_axi4lite.all;
-use work.tb_pkg_bus_wishbone.all;
+use work.tb_bus_avalon_pkg.all;
+use work.tb_bus_axi4lite_pkg.all;
+use work.tb_bus_wishbone_pkg.all;
 
 package tb_bus_pkg is
+
     type t_bus_down is record
         wishbone : t_wishbone_down;
         avalonmm : t_avalonmm_down;
@@ -45,7 +46,7 @@ package tb_bus_pkg is
                        variable timeout : in time);
 end;
 
-package body tb_pkg_bus is
+package body tb_bus_pkg is
     function bus_up_init return t_bus_up is
         variable init : t_bus_up;
     begin

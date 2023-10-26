@@ -4,10 +4,18 @@ var test_variable_3 3
 var test_variable_4 4
 var test_variable_5 5
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-log 0 "test_variable_3: $test_variable_3"
-log 0 "test_variable_4: $test_variable_4"
-log 0 "test_variable_5: $test_variable_5"
+const INFO 20
 
-finish
+Main:
+proc
+	log 0 "test_variable_1: {}" $test_variable_1
+	log 0 "test_variable_2: {}" $test_variable_2
+	log 0 "test_variable_3: {}" $test_variable_3
+	log 0 "test_variable_4: {}" $test_variable_4
+	log 0 "test_variable_5: {}" $test_variable_5
+
+	log $INFO "Main test finished {}" $INFO 
+	wait 1000
+	finish
+end proc
+

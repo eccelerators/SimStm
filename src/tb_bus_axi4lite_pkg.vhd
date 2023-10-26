@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package tb_pkg_bus_axi4lite is
+package tb_bus_axi4lite_pkg is
     type t_axi4lite_down is record
         awvalid : std_logic;
         awaddr : std_logic_vector(31 downto 0);
@@ -32,36 +32,37 @@ package tb_pkg_bus_axi4lite is
     function axi4lite_up_init return t_axi4lite_up;
 
     procedure write_axi4lite(signal clk : in std_logic;
-                             signal axi4lite_down : out t_axi4lite_down;
-                             signal axi4lite_up : in t_axi4lite_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+        signal axi4lite_down : out t_axi4lite_down;
+        signal axi4lite_up : in t_axi4lite_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 
     procedure read_axi4lite(signal clk : in std_logic;
-                            signal axi4lite_down : out t_axi4lite_down;
-                            signal axi4lite_up : in t_axi4lite_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+        signal axi4lite_down : out t_axi4lite_down;
+        signal axi4lite_up : in t_axi4lite_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 end;
 
-package body tb_pkg_bus_axi4lite is
+package body tb_bus_axi4lite_pkg is
+
     function axi4lite_up_init return t_axi4lite_up is
         variable init : t_axi4lite_up;
     begin
-        init.awready := 'U';
-        init.wready := 'U';
-        init.bvalid := 'U';
-        init.bresp := (others => 'U');
-        init.arready := 'U';
-        init.rvalid := 'U';
-        init.rdata := (others => 'U');
-        init.rresp := (others => 'U');
+        init.awready := '0';
+        init.wready := '0';
+        init.bvalid := '0';
+        init.bresp := (others => '0');
+        init.arready := '0';
+        init.rvalid := '0';
+        init.rdata := (others => '0');
+        init.rresp := (others => '0');
         return init;
     end;
 
@@ -83,13 +84,14 @@ package body tb_pkg_bus_axi4lite is
     end;
 
     procedure write_axi4lite(signal clk : in std_logic;
-                             signal axi4lite_down : out t_axi4lite_down;
-                             signal axi4lite_up : in t_axi4lite_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+        signal axi4lite_down : out t_axi4lite_down;
+        signal axi4lite_up : in t_axi4lite_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -154,13 +156,14 @@ package body tb_pkg_bus_axi4lite is
     end procedure;
 
     procedure read_axi4lite(signal clk : in std_logic;
-                            signal axi4lite_down : out t_axi4lite_down;
-                            signal axi4lite_up : in t_axi4lite_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+        signal axi4lite_down : out t_axi4lite_down;
+        signal axi4lite_up : in t_axi4lite_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin
@@ -197,4 +200,5 @@ package body tb_pkg_bus_axi4lite is
         end case;
         successfull := true;
     end procedure;
-end;
+
+end package body;

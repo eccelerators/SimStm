@@ -6,183 +6,391 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-package body tb_base_pkg_body is
+package body tb_base_pkg is
 
-    procedure file_read(variable lines_object_ptr : inout t_lines_object_ptr;
-                          variable file_path : in stm_text_ptr;
-                          variable valid : out integer) is
+    procedure stm_file_read(variable stm_lines : inout t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable v_stat : file_open_status;
         file user_file : text;
         variable std_line : line;
-        variable line_append_valid : integer := 0;
+        variable stm_lines_append_valid : integer := 0;
+        variable file_path_string : stm_text;
     begin
-        file_open(v_stat, user_file, file_path, read_mode);
+        valid := 0;
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), read_mode);
         if v_stat /= open_ok then
             return;
-        end if;      
+        end if;
         while not endfile(user_file) loop
-            readline(user_file, std_line);           
-            lines_line_append(lines_object_ptr, std_line, line_append_valid);
-            valid := line_append_valid;                         
+            readline(user_file, std_line);
+            stm_lines_append(stm_lines, std_line, stm_lines_append_valid);
+            if stm_lines_append_valid = 0 then
+                return;
+            end if;
         end loop;
-        file_close(user_file);                      
-    end procedure;
-                          
-    procedure file_write(variable lines_object_ptr : out t_lines_object_ptr;
-                          variable file_path : in stm_text_ptr;
-                          variable valid : out integer) is
-        file user_file : text;
-        variable std_line : line;
-        variable line_get_valid : integer := 0;
-    begin
-        file_open(v_stat, user_file, file_path, write_mode);
-        if v_stat /= open_ok then
-            return;
-        end if;   
-        for i in 0 to lines_object_ptr.size - 1 loop                            
-            lines_line_get(lines_object_ptr, i, std_line, line_get_valid);  
-            writeline(user_file, std_line);
-            valid := line_get_valid;                                          
-        end loop;
+        valid := 1;
         file_close(user_file);
     end procedure;
-                                           
-    procedure file_append(variable lines_object_ptr : in t_lines_object;
-                          variable file_path : in stm_text_ptr;
-                          variable valid : out integer) is
+
+
+    procedure stm_file_write(variable stm_lines : out t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable v_stat : file_open_status;
         file user_file : text;
         variable std_line : line;
-        variable line_get_valid : integer := 0;
+        variable stm_lines_get_valid : integer := 0;
+        variable position : integer;
+        variable file_path_string : stm_text;
     begin
-        file_open(v_stat, user_file, file_path, append_mode);
+        valid := 0;
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), write_mode);
         if v_stat /= open_ok then
             return;
-        end if;   
-        for i in 0 to lines_object_ptr.size - 1 loop                            
-            lines_line_get(lines_object_ptr, i, std_line, line_get_valid);  
+        end if;
+        for i in 0 to stm_lines.size - 1 loop
+            position := i;
+            stm_lines_get(stm_lines, position, std_line, stm_lines_get_valid);
             writeline(user_file, std_line);
-            valid := line_get_valid;                                          
+            if stm_lines_get_valid = 0 then
+                return;
+            end if;
         end loop;
+        valid := 1;
         file_close(user_file);
-    end procedure;                           
+    end procedure;
 
 
-    procedure lines_line_get(variable lines_object_ptr : in t_lines_object_ptr;
-                           variable position : in integer;
-                           variable array_object_ptr : inout t_array_object_ptr;
-                           variable valid : out integer) is
-        variable line_ptr : t_lines_object_ptr;
+    procedure stm_file_append(variable stm_lines : in t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable v_stat : file_open_status;
+        file user_file : text;
+        variable std_line : line;
+        variable stm_lines_get_valid : integer := 0;
+        variable position : integer;
+        variable file_path_string : stm_text;
+    begin
+        valid := 0;
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), append_mode);
+        if v_stat /= open_ok then
+            return;
+        end if;
+        for i in 0 to stm_lines.size - 1 loop
+            position := i;
+            stm_lines_get(stm_lines, position, std_line, stm_lines_get_valid);
+            writeline(user_file, std_line);
+            if stm_lines_get_valid = 0 then
+                return;
+            end if;
+        end loop;
+        valid := 1;
+        file_close(user_file);
+    end procedure;
+
+
+    procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
+        variable position : in integer;
+        variable stm_array : inout t_stm_array_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable value_std_logic_vector : std_logic_vector(31 downto 0);
         variable value : integer;
-        variable value_found : boolean;
+        variable success : boolean := true;
         variable array_index : integer := 0;
+        variable line_number : integer := -1;
     begin
-        line_ptr := lines_object_ptr;
-        for i in 0 to lines_object_ptr.size - 1 loop     
-            if line_ptr.line_number = position then
-                hread(line_ptr.line_number.content, value, value_found);
-                if value_found then
-                    array_object(array_index) := value;
-                end if; 
-            end if;                        
-            valid := 0;                                              
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                while success loop
+                    hread(stm_line_ptr.line_content, value_std_logic_vector, success);
+                    value := to_integer(signed(value_std_logic_vector));
+                    if success then
+                        stm_array(array_index) := value;
+                        array_index := array_index + 1;
+                    end if;
+                end loop;
+                valid := 1;
+                return;
+            end if;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
     end procedure;
-    
-    procedure lines_line_get(variable lines_object_ptr : in t_lines_object_ptr;
-                           variable position : in integer;
-                           variable std_line : out line;
-                           variable valid : out integer) is
-        variable line_ptr : t_lines_object_ptr;
+
+
+    procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
+        variable position : in integer;
+        variable std_line : out line;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable line_number : integer := -1;
     begin
-        line_ptr := lines_object_ptr;
-        for i in 0 to lines_object_ptr.size - 1 loop     
-            if line_ptr.line_number = position then  
-                return line_ptr.line_number.content;
-            end if;                        
-            valid := 0;                                              
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                std_line := stm_line_ptr.line_content;
+                valid := 1;
+                return;
+            end if;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
-    end procedure; 
-
-
-    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable position : in integer;
-                           variable array_object_ptr : in t_array_object_ptr;
-                           variable valid : out integer) is
-    variable line_ptr : t_lines_object_ptr;
-    variable std_line : line;
-    begin
-        line_ptr := lines_object_ptr;
-        for i in 0 to lines_object_ptr.size - 1 loop     
-            if line_ptr.line_number = position then  
-                for j in 0 to array_object_ptr.size - 1 loop
-                    hwrite(std_line, array_object_ptr(j));
-                end loop;          
-            end if;                       
-            valid := 0;                                              
-        end loop;    
-    end procedure;
-                                                       
-    procedure lines_line_set(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable position : in integer;
-                           variable text_ptr : out stm_text_ptr;
-                           variable valid : out integer) is
-    begin
-    end procedure; 
-
-                           
-    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable array_object : in t_array_object;
-                           variable valid : out integer) is
-    begin
     end procedure;
 
-                                                       
-    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable text_ptr : out stm_text_ptr;
-                           variable valid : out integer) is
-    begin
-    end procedure;     
-    
-    procedure lines_line_append(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable line_object : out line_object_ptr;
-                           variable valid : out integer) is
-    begin
-    end procedure;     
 
-                           
-    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable position : in integer;
-                           variable array_object : in t_array_object;
-                           variable valid : out integer) is
+    procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
+        variable position : integer;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable value_std_logic_vector :  std_logic_vector(31 downto 0);
+        variable line_number : integer := -1;
     begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                for j in 0 to stm_array'length - 1 loop
+                    value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+                    hwrite(std_line, value_std_logic_vector, left, 33);
+                end loop;
+                stm_line_ptr.line_content := std_line;
+                valid := 1;
+                return;
+            end if;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;
     end procedure;
-                                                       
-    procedure lines_line_insert(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable position : in integer;
-                           variable text_ptr : out stm_text_ptr;
-                           variable valid : out integer) is
-    begin
-    end procedure;                                                   
 
-                                                                                                           
-    procedure lines_line_delete(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable position : in integer;
-                           variable valid : out integer) is
-    begin
-    end procedure;  
 
-                           
-    procedure lines_pointer(variable lines_object_ptr : inout t_lines_object_ptr;
-                           variable lines_object : in t_line_object;
-                           variable valid : out integer) is
+    procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
+        variable position : in integer;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable line_number : integer := -1;
     begin
-    end procedure;  
- 
-                           
-    procedure lines_size(variable lines_object_ptr : in t_lines_object_ptr;
-                           variable line_size : out integer;
-                           variable valid : out integer) is
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                for j in 1 to var_stm_text'length loop
+                    if var_stm_text(j) /= nul then
+                        write(std_line, var_stm_text(j), left, 1);
+                    else
+                        exit;
+                    end if;
+                end loop;
+                stm_line_ptr.line_content := std_line;
+            end if;
+            valid := 0;
+        end loop;
+    end procedure;
+
+
+    procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
+        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable line_number : integer := -1;
     begin
-    end procedure; 
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            stm_line_ptr := stm_line_ptr.next_stm_line;
+        end loop;
+        stm_line_ptr.next_stm_line := stm_line_new;
+        for j in 0 to stm_array'length - 1 loop
+            value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+            hwrite(std_line, value_std_logic_vector, left, 33);
+        end loop;
+        stm_line_new.line_content := std_line;
+        stm_line_new.next_stm_line := null;
+        stm_lines.size := stm_lines.size + 1;
+        valid := 1;
+    end procedure;
+
+
+    procedure stm_lines_append (variable stm_lines : inout t_stm_lines_ptr;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
+        variable line_number : integer := -1;
+    begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            stm_line_ptr := stm_line_ptr.next_stm_line;
+        end loop;
+        stm_line_ptr.next_stm_line := stm_line_new;
+        for j in 1 to var_stm_text'length loop
+            if var_stm_text(j) /= nul then
+                write(std_line, var_stm_text(j), left, 1);
+            else
+                exit;
+            end if;
+        end loop;
+        stm_line_new.line_content := std_line;
+        stm_line_new.next_stm_line := null;
+        stm_lines.size := stm_lines.size + 1;
+        valid := 1;
+    end procedure;
+
+    procedure stm_lines_append (variable stm_lines : inout t_stm_lines_ptr;
+        variable std_line : in line;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
+        variable line_number : integer := -1;
+    begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            stm_line_ptr := stm_line_ptr.next_stm_line;
+        end loop;
+        stm_line_ptr.next_stm_line := stm_line_new;
+        stm_line_new.line_content := std_line;
+        stm_line_new.next_stm_line := null;
+        stm_lines.size := stm_lines.size + 1;
+        valid := 1;
+    end procedure;
+
+
+    procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
+        variable position : integer;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
+        variable value_std_logic_vector :  std_logic_vector(31 downto 0);
+        variable line_number : integer := -1;
+    begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                for j in 0 to stm_array'length - 1 loop
+                    value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+                    hwrite(std_line, value_std_logic_vector, left, 33);
+                end loop;
+                stm_line_new.line_content := std_line;
+                stm_line_new.next_stm_line := stm_line_ptr.next_stm_line;
+                stm_line_ptr.next_stm_line := stm_line_new;
+                valid := 1;
+                stm_lines.size := stm_lines.size + 1;
+                return;
+            end if;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;
+    end procedure;
+
+
+    procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
+        variable position : in integer;
+        variable var_stm_text : out stm_text_ptr;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable std_line : line;
+        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
+        variable value_std_logic_vector :  std_logic_vector(31 downto 0);
+        variable line_number : integer := -1;
+    begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                for j in 1 to var_stm_text'length loop
+                    if var_stm_text(j) /= nul then
+                        write(std_line, var_stm_text(j), left, 1);
+                    else
+                        exit;
+                    end if;
+                end loop;
+                stm_line_new.line_content := std_line;
+                stm_line_new.next_stm_line := stm_line_ptr.next_stm_line;
+                stm_line_ptr.next_stm_line := stm_line_new;
+                valid := 1;
+                stm_lines.size := stm_lines.size + 1;
+                return;
+            end if;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;
+    end procedure;
+
+
+    procedure stm_lines_delete(variable stm_lines : inout t_stm_lines_ptr;
+        variable position : in integer;
+        variable valid : out integer) is
+
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable stm_line_before : t_stm_line_ptr := null;
+        variable stm_line_after : t_stm_line_ptr := null;
+        variable line_number : integer := -1;
+    begin
+        valid := 0;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop
+            line_number := line_number + 1;
+            if line_number = position then
+                stm_line_after := stm_line_ptr.next_stm_line;
+                if stm_line_before /= null then
+                    stm_line_before.next_stm_line := stm_line_after;
+                end if;
+                stm_lines.size := stm_lines.size - 1;
+                valid := 1;
+                return;
+            end if;
+            stm_line_before := stm_line_ptr;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;
+    end procedure;
+
+
+    procedure stm_lines_pointer(variable stm_lines_out : inout t_stm_lines_ptr;
+        variable stm_lines_in : in t_stm_lines_ptr;
+        variable valid : out integer) is
+    begin
+        stm_lines_out := stm_lines_in;
+    end procedure;
+
+
+    procedure stm_lines_size(variable stm_lines : in t_stm_lines_ptr;
+        variable line_size : out integer;
+        variable valid : out integer) is
+    begin
+        line_size := stm_lines.size;
+    end procedure;
 
 
     --  is_digit
@@ -252,7 +460,7 @@ package body tb_base_pkg_body is
 
     --  ew_str_cat
     function ew_str_cat(s1 : stm_text;
-                        s2 : text_field) return stm_text is
+        s2 : text_field) return stm_text is
         variable i : integer;
         variable j : integer;
         variable sc : stm_text;
@@ -286,10 +494,23 @@ package body tb_base_pkg_body is
     end function;
 
 
-    -- line_len    textline length
-    --          inputs :  string of type text_field
+    -- text_line_len    text_line length
+    --          inputs :  string of type text_line
     --          return :  integer number of non 'nul' chars
-    function line_len(s : in text_line) return integer is
+    function text_line_len(s : in text_line) return integer is
+        variable i : integer := 1;
+    begin
+        while (s(i) /= nul and i /= max_str_len) loop
+            i := i + 1;
+        end loop;
+        return (i - 1);
+    end function;
+
+
+    -- stm_text_len    stm_text length
+    --          inputs :  string of type stm_text
+    --          return :  integer number of non 'nul' chars
+    function stm_text_len(s : in stm_text) return integer is
         variable i : integer := 1;
     begin
         while (s(i) /= nul and i /= max_str_len) loop
@@ -303,7 +524,7 @@ package body tb_base_pkg_body is
     --          inputs :  text field s1 and s2
     --          return :  true if text fields are equal; false otherwise.
     function fld_equal(s1 : in text_field;
-                       s2 : in text_field) return boolean is
+        s2 : in text_field) return boolean is
         variable i : integer := 0;
         variable s1_length : integer := 0;
         variable s2_length : integer := 0;
@@ -374,8 +595,8 @@ package body tb_base_pkg_body is
     --          inputs :  string of type text_field containing only hex numbers
     --          return :  integer value
     function hex2integer(hex_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer is
+        file_name : in text_line;
+        line : in integer) return integer is
         variable len : integer;
         variable temp_int : integer;
         variable power : integer;
@@ -497,8 +718,8 @@ package body tb_base_pkg_body is
     --          inputs :  string of type text_field containing only binary numbers
     --          return :  integer value
     function bin2integer(bin_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer is
+        file_name : in text_line;
+        line : in integer) return integer is
         variable len : integer;
         variable temp_int : integer;
         variable power : integer;
@@ -532,8 +753,9 @@ package body tb_base_pkg_body is
     --          inputs :  string of type text_field "stimulus format of number"
     --          return :  integer value
     function stim_to_integer(field : in text_field;
-                             file_name : in text_line;
-                             line : in integer) return integer is
+        file_name : in text_line;
+        line : in integer) return integer is
+
         variable len : integer;
         variable value : integer := 1;
         variable temp_str : text_field;
@@ -582,7 +804,7 @@ package body tb_base_pkg_body is
     --  to_str function  with base parameter
     --     convert integer to number base
     function ew_to_str(int : integer;
-                       b : base) return text_field is
+        b : base) return text_field is
         variable temp : text_field;
         variable temp1 : text_field;
         variable radix : integer := 0;
@@ -590,7 +812,7 @@ package body tb_base_pkg_body is
         variable power : integer := 1;
         variable len : integer := 1;
         variable pre : string(1 to 2);
-        variable i : integer;
+        variable ix : integer;
         variable j : integer;
         variable vec : std_logic_vector(31 downto 0);
     begin
@@ -634,12 +856,12 @@ package body tb_base_pkg_body is
         -- add prefix if is one
         if (pre(1) /= nul) then
             temp1 := temp;
-            i := 1;
+            ix := 1;
             j := 3;
             temp(1 to 2) := pre;
-            while (temp1(i) /= nul) loop
-                temp(j) := temp1(i);
-                i := i + 1;
+            while (temp1(ix) /= nul) loop
+                temp(j) := temp1(ix);
+                ix := ix + 1;
                 j := j + 1;
             end loop;
         end if;
@@ -650,7 +872,8 @@ package body tb_base_pkg_body is
     --  to_str function  with base parameter
     --     convert integer to number base
     function ew_to_str_len(int : integer;
-                           b : base) return text_field is
+        b : base) return text_field is
+
         variable temp : text_field;
         variable temp1 : text_field;
         variable radix : integer := 0;
@@ -658,7 +881,7 @@ package body tb_base_pkg_body is
         variable power : integer := 1;
         variable len : integer := 1; -- adjusted min. length to 2 for bytes
         variable pre : string(1 to 2);
-        variable i : integer;
+        variable ix : integer;
         variable j : integer;
         variable vec : std_logic_vector(31 downto 0);
     begin
@@ -705,12 +928,12 @@ package body tb_base_pkg_body is
         -- add prefix if is one
         if (pre(1) /= nul) then
             temp1 := temp;
-            i := 1;
+            ix := 1;
             j := 3;
             temp(1 to 2) := pre;
-            while (temp1(i) /= nul) loop
-                temp(j) := temp1(i);
-                i := i + 1;
+            while (temp1(ix) /= nul) loop
+                temp(j) := temp1(ix);
+                ix := ix + 1;
                 j := j + 1;
             end loop;
         end if;
@@ -719,13 +942,36 @@ package body tb_base_pkg_body is
 
 
     --  function short text_line (remove 'nul')
-    function txt_shorter(txt : in text_line) return string is
+    function text_line_crop(txt : in text_line) return string is
         variable l : integer;
     begin
-        l := line_len(txt);
+        l := text_line_len(txt);
         return txt(1 to l);
     end function;
 
+    --  function short text_line (remove 'nul')
+    function stm_text_crop(txt : in stm_text) return string is
+        variable l : integer;
+    begin
+        l := stm_text_len(txt);
+        return txt(1 to l);
+    end function;
+
+    --  function to get string of the txt pointer
+    procedure txt_to_string(variable ptr : in stm_text_ptr; variable str : out stm_text) is
+        variable txt_str : stm_text;
+    begin
+        txt_str := (others => nul);
+        if (ptr /= null) then
+            for i in 1 to c_stm_text_len loop
+                if (ptr(i) = nul) then
+                    exit;
+                end if;
+                txt_str(i) := ptr(i);
+            end loop;
+            str := txt_str;
+        end if;
+    end procedure;
 
     -- procedure to print instruction records to stdout  *for debug*
     procedure print_inst(variable inst : in stim_line_ptr) is
@@ -785,43 +1031,44 @@ package body tb_base_pkg_body is
         end if;
         print(l);
         print("   sequence number: " & to_str(inst.line_number) &
-          "  file line number: " & to_str(inst.file_line));
+            "  file line number: " & to_str(inst.file_line));
         if (inst.num_of_lines > 0) then
             print("   number of lines: " & to_str(inst.num_of_lines));
         end if;
     end procedure;
-    
+
     -------------------------------------------------------------------------
     -- dump inst_sequ
     --  this procedure dumps to the simulation window the current instruction
     --  sequence.  the whole thing will be dumped, which could be big.
     --   ** intended for testbench development debug **
     procedure dump_inst_sequ(variable inst_sequ  :  in  stim_line_ptr) is
-      variable v_sequ  :  stim_line_ptr;
+        variable v_sequ  :  stim_line_ptr;
     begin
-      v_sequ  :=  inst_sequ;
-      while(v_sequ.next_rec /= null) loop
+        v_sequ  :=  inst_sequ;
+        while(v_sequ.next_rec /= null) loop
+            print("-----------------------------------------------------------------");
+            print("instruction is " & v_sequ.instruction &
+            "     par1: "   & v_sequ.inst_field_1 &
+            "     par2: "   & v_sequ.inst_field_2 &
+            "     par3: "   & v_sequ.inst_field_3 &
+            "     par4: "   & v_sequ.inst_field_4);
+            print("line number: " & to_str(v_sequ.line_number) & "     file line number: " & to_str(v_sequ.file_line) &
+            "     file idx: " & to_str(v_sequ.file_idx));
+            v_sequ  :=  v_sequ.next_rec;
+        end loop;
+        -- get the last one
         print("-----------------------------------------------------------------");
-        print("instruction is " & v_sequ.instruction &
+        print("instruction is " & v_sequ.instruction & 
         "     par1: "   & v_sequ.inst_field_1 &
-        "     par2: "   & v_sequ.inst_field_2 &
+        "     par2: "   & v_sequ.inst_field_2 & 
         "     par3: "   & v_sequ.inst_field_3 &
         "     par4: "   & v_sequ.inst_field_4);
-        print("line number: " & to_str(v_sequ.line_number) & "     file line number: " & to_str(v_sequ.file_line) &
-        "     file name: " & v_sequ.file_name);
-    
-        v_sequ  :=  v_sequ.next_rec;
-      end loop;
-      -- get the last one
-      print("-----------------------------------------------------------------");
-      print("instruction is " & v_sequ.instruction & "     par1: "   & v_sequ.inst_field_1 &
-      "     par2: "   & v_sequ.inst_field_2 & "     par3: "   & v_sequ.inst_field_3 &
-      "     par4: "   & v_sequ.inst_field_4);
-      print("line number: " & to_str(v_sequ.line_number) & "     file line number: " & to_str(v_sequ.file_line) &
-      "     file name: " & v_sequ.file_name);
-    end procedure;
+        print("line number: " & to_str(v_sequ.line_number) & 
+        "     file line number: " & to_str(v_sequ.file_line) &
+        "     file idx: " & to_str(v_sequ.file_idx));
+        end procedure;
 
-    
 
     -- procedure to print loggings to stdout
     procedure print(s : in string) is
@@ -834,7 +1081,6 @@ package body tb_base_pkg_body is
         end loop;
         writeline(output, l);
     end procedure;
-
 
     --  procedure to print to the stdout the txt pointer
     procedure txt_print(variable ptr : in stm_text_ptr) is
@@ -856,8 +1102,9 @@ package body tb_base_pkg_body is
 
     --  procedure copy text into an existing pointer
     procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
-                           variable ptr_o : out stm_text_ptr;
-                           variable txt_str : in stm_text) is
+        variable ptr_o : out stm_text_ptr;
+        variable txt_str : in stm_text) is
+
         variable ptr_temp : stm_text_ptr;
     begin
         ptr_temp := ptr;
@@ -872,66 +1119,9 @@ package body tb_base_pkg_body is
         ptr_o := ptr_temp;
     end procedure;
 
-
-    --  procedure to print to the stdout the txt pointer, and
-    --  sub any variables found
-    procedure txt_print_wvar(variable var_list : in var_field_ptr;
-                             variable ptr : in stm_text_ptr;
-                             constant b : in base) is
-        variable i : integer;
-        variable j : integer;
-        variable k : integer;
-        variable txt_str : stm_text;
-        variable v1 : integer;
-        variable valid : integer;
-        variable tmp_field : text_field;
-        variable tmp_i : integer;
-    begin
-        if (ptr /= null) then
-            i := 1;
-            j := 1;
-            txt_str := (others => nul);
-            while (i <= c_stm_text_len and j <= c_stm_text_len) loop
-                if (ptr(i) /= '$') then
-                    txt_str(j) := ptr(i);
-                    i := i + 1;
-                    j := j + 1;
-                else
-                    tmp_field := (others => nul);
-                    tmp_i := 1;
-                    tmp_field(tmp_i) := ptr(i);
-                    i := i + 1;
-                    tmp_i := tmp_i + 1;
-                    -- parse to the next space
-                    while (ptr(i) /= ' ' and ptr(i) /= nul) loop
-                        tmp_field(tmp_i) := ptr(i);
-                        i := i + 1;
-                        tmp_i := tmp_i + 1;
-                    end loop;
-                    access_variable(var_list, tmp_field, v1, valid);
-                    assert (valid = 1)
-                    report lf & "invalid variable found in stm_text_ptr: ignoring."
-                    severity warning;
-
-                    if (valid = 1) then
-
-                        txt_str := ew_str_cat(txt_str, ew_to_str_len(v1, b));
-                        k := 1;
-                        while (txt_str(k) /= nul) loop
-                            k := k + 1;
-                        end loop;
-                        j := k;
-                    end if;
-                end if;
-            end loop;
-            -- print the created string
-            print(txt_str);
-        end if;
-    end procedure;
-     
-    
     procedure init_text_field(variable sourcestr : in string;
-                              variable destfield : out text_field) is
+        variable destfield : out text_field) is
+
         variable tempfield : text_field;
     begin
         for i in 1 to sourcestr'length loop
@@ -946,10 +1136,11 @@ package body tb_base_pkg_body is
 
     --  get a random intetger number
     procedure getrandint(variable seed1 : inout positive;
-                         variable seed2 : inout positive;
-                         variable lowestvalue : in integer;
-                         variable utmostvalue : in integer;
-                         variable randint : out integer) is
+        variable seed2 : inout positive;
+        variable lowestvalue : in integer;
+        variable utmostvalue : in integer;
+        variable randint : out integer) is
+
         variable randreal : real;
         variable intdelta : integer;
     begin
@@ -957,6 +1148,6 @@ package body tb_base_pkg_body is
         uniform(seed1, seed2, randreal); -- generate random number
         randint := integer(trunc(randreal * (real(intdelta) + 1.0))) + lowestvalue; -- rescale to delta, find integer part, adjust
     end procedure;
-        
+
 
 end package body;

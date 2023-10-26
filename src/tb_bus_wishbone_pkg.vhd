@@ -2,7 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package tb_pkg_bus_wishbone is
+package tb_bus_wishbone_pkg is
+
     type t_wishbone_down is record
         adr : std_logic_vector(31 downto 0);
         sel : std_logic_vector(3 downto 0);
@@ -21,30 +22,30 @@ package tb_pkg_bus_wishbone is
     function wishbone_up_init return t_wishbone_up;
 
     procedure write_wishbone(signal clk : in std_logic;
-                             signal wishbone_down : out t_wishbone_down;
-                             signal wishbone_up : in t_wishbone_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+        signal wishbone_down : out t_wishbone_down;
+        signal wishbone_up : in t_wishbone_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 
     procedure read_wishbone(signal clk : in std_logic;
-                            signal wishbone_down : out t_wishbone_down;
-                            signal wishbone_up : in t_wishbone_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+        signal wishbone_down : out t_wishbone_down;
+        signal wishbone_up : in t_wishbone_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time);
 end;
 
-package body tb_pkg_bus_wishbone is
+package body tb_bus_wishbone_pkg is
     function wishbone_up_init return t_wishbone_up is
         variable init : t_wishbone_up;
     begin
-        init.data := (others => 'U');
-        init.ack := 'U';
+        init.data := (others => '0');
+        init.ack := '0';
         return init;
     end;
 
@@ -61,13 +62,14 @@ package body tb_pkg_bus_wishbone is
     end;
 
     procedure write_wishbone(signal clk : in std_logic;
-                             signal wishbone_down : out t_wishbone_down;
-                             signal wishbone_up : in t_wishbone_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+        signal wishbone_down : out t_wishbone_down;
+        signal wishbone_up : in t_wishbone_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : in std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable sel : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -130,13 +132,14 @@ package body tb_pkg_bus_wishbone is
     end procedure;
 
     procedure read_wishbone(signal clk : in std_logic;
-                            signal wishbone_down : out t_wishbone_down;
-                            signal wishbone_up : in t_wishbone_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+        signal wishbone_down : out t_wishbone_down;
+        signal wishbone_up : in t_wishbone_up;
+        variable address : in std_logic_vector(31 downto 0);
+        variable data : out std_logic_vector(31 downto 0);
+        variable b_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
+        
         variable sel : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -209,4 +212,5 @@ package body tb_pkg_bus_wishbone is
         successfull := true;
 
     end procedure;
-end;
+
+end package body;
