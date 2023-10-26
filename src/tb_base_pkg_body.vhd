@@ -377,22 +377,6 @@ package body tb_base_pkg is
     end procedure;
 
 
-    procedure stm_lines_pointer(variable stm_lines_out : inout t_stm_lines_ptr;
-        variable stm_lines_in : in t_stm_lines_ptr;
-        variable valid : out integer) is
-    begin
-        stm_lines_out := stm_lines_in;
-    end procedure;
-
-
-    procedure stm_lines_size(variable stm_lines : in t_stm_lines_ptr;
-        variable line_size : out integer;
-        variable valid : out integer) is
-    begin
-        line_size := stm_lines.size;
-    end procedure;
-
-
     --  is_digit
     function is_digit(constant c : in character) return boolean is
         variable rtn : boolean;

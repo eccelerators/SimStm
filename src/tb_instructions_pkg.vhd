@@ -37,17 +37,20 @@ package tb_instructions_pkg is
         constant INSTR_LD : string := "ld";
 
         -- signals
+        constant INSTR_SIGNAL : string := "signal";
         constant INSTR_SIGNAL_READ : string := "signal_read";
         constant INSTR_SIGNAL_VERIFY : string := "signal_verify";
         constant INSTR_SIGNAL_WRITE : string := "signal_write";
 
         -- bus
+        constant INSTR_BUS : string := "bus";
         constant INSTR_BUS_READ : string := "bus_read";
         constant INSTR_BUS_VERIFY : string := "bus_verify";
         constant INSTR_BUS_WRITE : string := "bus_write";
         constant INSTR_BUS_TIMEOUT : string := "bus_timeout";
 
         -- file
+        constant INSTR_FILE : string := "file";
         constant INSTR_FILE_READ : string := "file_read";
         constant INSTR_FILE_WRITE : string := "file_write";
         constant INSTR_FILE_APPEND : string := "file_append";
@@ -144,7 +147,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_LOOP, 1);
         define_instruction(inst_list, INSTR_VAR, 2);
 
-        -- variables
+        -- variable
         define_instruction(inst_list, INSTR_ADD, 2);
         define_instruction(inst_list, INSTR_AND, 2);
         define_instruction(inst_list, INSTR_DIV, 2);
@@ -158,18 +161,21 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_XOR, 2);
         define_instruction(inst_list, INSTR_LD, 1);
 
-        -- signals
+        -- signal
+        define_instruction(inst_list, INSTR_SIGNAL, 2);
         define_instruction(inst_list, INSTR_SIGNAL_READ, 2);
         define_instruction(inst_list, INSTR_SIGNAL_VERIFY, 4);
         define_instruction(inst_list, INSTR_SIGNAL_WRITE, 2);
 
         -- bus
+        define_instruction(inst_list, INSTR_BUS, 2);
         define_instruction(inst_list, INSTR_BUS_READ, 4);
         define_instruction(inst_list, INSTR_BUS_VERIFY, 6);
         define_instruction(inst_list, INSTR_BUS_WRITE, 4);
         define_instruction(inst_list, INSTR_BUS_TIMEOUT, 2);
 
         -- file
+        define_instruction(inst_list, INSTR_FILE, 1);
         define_instruction(inst_list, INSTR_FILE_READ, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);

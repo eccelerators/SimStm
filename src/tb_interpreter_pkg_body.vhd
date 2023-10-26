@@ -223,7 +223,6 @@ package body tb_interpreter_pkg is
         end if;
     end procedure;
 
-
     --  update_variable
     --     inputs:
     --               index:  the index of the variable being updated
@@ -239,7 +238,7 @@ package body tb_interpreter_pkg is
         ptr := var_list;
         valid := 0;
         while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index and not ptr.const) then
+            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
                 ptr.var_value := value;
                 valid := 1;
                 exit;
@@ -247,7 +246,7 @@ package body tb_interpreter_pkg is
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
-        if (ptr.var_index = index and not ptr.const) then
+        if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
             ptr.var_value := value;
             valid := 1;
         end if;
@@ -270,7 +269,7 @@ package body tb_interpreter_pkg is
         ptr := var_list;
         valid := 0;
         while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index and not ptr.const) then
+            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
                 ptr.var_stm_array := stm_array;
                 valid := 1;
                 exit;
@@ -278,7 +277,7 @@ package body tb_interpreter_pkg is
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
-        if (ptr.var_index = index and not ptr.const) then
+        if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
             ptr.var_stm_array := stm_array;
             valid := 1;
         end if;
@@ -410,8 +409,8 @@ package body tb_interpreter_pkg is
                     print("tokenize_line: truncated txt line, it was larger than c_stm_text_len");
                     exit;
                 end if;
-
-                if (text_line(i) /= '"') then --"
+                -- till the very end of text_line
+                if (text_line(i) /= nul) then 
                     txt_str(j) := text_line(i);
                     txt_ptr_copy(txt_ptr_tmp, txt_ptr, txt_str);
                     j := j + 1;
@@ -566,13 +565,12 @@ package body tb_interpreter_pkg is
         variable line_num : in integer;
         variable name : in text_line;
         variable length : in integer;
-        constant var_type : in integer; -- 0:variable, 1:constant, 2:stm_array, 3:stm_lines
+        constant var_stm_type : in t_stm_var_type;
         variable str_ptr : in stm_text_ptr
     ) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;
-        variable len : integer := 0;
 
         procedure init_stm_lines_var is
         begin
@@ -585,7 +583,7 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_lines := new t_stm_lines;
             temp_var.var_stm_lines.stm_line_list := null;
             temp_var.var_stm_lines.size := 0;
-            temp_var.const := false;
+            temp_var.var_stm_type := var_stm_type;
         end procedure;
 
         procedure init_stm_array_var is
@@ -600,19 +598,34 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_text := null;
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1);
             temp_var.var_stm_lines := null;
-            temp_var.const := false;
+            temp_var.var_stm_type := var_stm_type;
         end procedure;
-
+        
+        procedure init_stm_text_var is
+        begin
+            assert (stim_to_integer(p2, name, line_num) > 0)
+            report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & name
+            severity failure;
+            temp_var := new var_field;
+            temp_var.var_name := p1; -- direct write of text_field
+            temp_var.var_index := index;
+            temp_var.var_value := 0;
+            temp_var.var_stm_text := str_ptr;
+            temp_var.var_stm_array := null;
+            temp_var.var_stm_lines := null;
+            temp_var.var_stm_type := var_stm_type;
+        end procedure;
+        
         procedure init_non_inline_var is
         begin
             temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := stim_to_integer(p2, name, line_num); -- convert text_field to integer
-            temp_var.var_stm_text := str_ptr;
+            temp_var.var_stm_text := null;
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
-            temp_var.const := (var_type = 1);
+            temp_var.var_stm_type := var_stm_type;
         end procedure;
 
         procedure init_inline_var is
@@ -624,7 +637,7 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_text := null;
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
-            temp_var.const := (var_type = 1);
+            temp_var.var_stm_type := var_stm_type;
         end procedure;
 
     begin
@@ -632,99 +645,52 @@ package body tb_interpreter_pkg is
         if (var_list /= null) then
             current_ptr := var_list;
             index := index + 1;
-            if (var_type = 3) then -- stm_lines
-                while (current_ptr.next_rec /= null) loop
-                    -- if we have defined the current before then die
-                    assert (current_ptr.var_name /= p1)
-                    report lf & "error: attemping to add a duplicate variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-                    severity failure;
-
-                    current_ptr := current_ptr.next_rec;
-                    index := index + 1;
-                end loop;
-                -- if we have defined the current before then die. this checks the last one
+            while (current_ptr.next_rec /= null) loop
+                -- if we have defined the current before then die
                 assert (current_ptr.var_name /= p1)
                 report lf & "error: attemping to add a duplicate variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
+                & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
                 severity failure;
+
+                current_ptr := current_ptr.next_rec;
+                index := index + 1;
+            end loop;
+            -- if we have defined the current before then die. this checks the last one
+            assert (current_ptr.var_name /= p1)
+            report lf & "error: attemping to add a duplicate variable definition "
+                & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
+            severity failure;            
+                        
+            if (var_stm_type = STM_LINES_TYPE) then 
                 init_stm_lines_var;
                 current_ptr.next_rec := temp_var;
-            elsif (var_type = 2) then -- stm_array
-                while (current_ptr.next_rec /= null) loop
-                    -- if we have defined the current before then die
-                    assert (current_ptr.var_name /= p1)
-                    report lf & "error: attemping to add a duplicate variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-                    severity failure;
-                    current_ptr := current_ptr.next_rec;
-                    index := index + 1;
-                end loop;
-                -- if we have defined the current before then die. this checks the last one
-                assert (current_ptr.var_name /= p1)
-                report lf & "error: attemping to add a duplicate variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-                severity failure;
-                assert (stim_to_integer(p2, name, line_num) > 0)
-                report lf & "error: array size <= 0 are not allowd. See "
-                  & " on line " & (integer'image(line_num)) & " of file " & name
-                severity failure;
+            elsif (var_stm_type = STM_ARRAY_TYPE) then
                 init_stm_array_var;
                 current_ptr.next_rec := temp_var;
-            elsif (p1(length) /= ':') then -- is not an inline variable
-                while (current_ptr.next_rec /= null) loop
-                    -- if we have defined the current before then die
-                    assert (current_ptr.var_name /= p1)
-                    report lf & "error: attemping to add a duplicate variable definition "
-                      & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-                    severity failure;
-
-                    current_ptr := current_ptr.next_rec;
-                    index := index + 1;
-                end loop;
-                -- if we have defined the current before then die. this checks the last one
-                assert (current_ptr.var_name /= p1)
-                report lf & "error: attemping to add a duplicate variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-                severity failure;
-                init_non_inline_var;
+            elsif (var_stm_type = STM_TEXT_TYPE) then
+                init_stm_text_var;
                 current_ptr.next_rec := temp_var;
-            else -- this is an inline variable
-                while (current_ptr.next_rec /= null) loop
-                    -- if we have defined the current before then die
-                    len := fld_len(current_ptr.var_name);
-                    assert (current_ptr.var_name(1 to len) /= p1(1 to (length - 1)))
-                    report lf & "error: attemping to add a duplicate inline variable definition "
-                      & " on line " & (integer'image(line_num)) & " of file " & name
-                    severity failure;
-
-                    current_ptr := current_ptr.next_rec;
-                    index := index + 1;
-                end loop;
-                -- if we have defined the current before then die. this checks the last one
-                len := fld_len(current_ptr.var_name);
-                assert (current_ptr.var_name(1 to len) /= p1(1 to (length - 1)))
-                report lf & "error: attemping to add a duplicate inline variable definition "
-                    & " on line " & (integer'image(line_num)) & " of file " & name
-                severity failure;
+            elsif (var_stm_type = STM_LABEL_TYPE) then
                 init_inline_var;
+                current_ptr.next_rec := temp_var;
+            else 
+                init_non_inline_var;
                 current_ptr.next_rec := temp_var;
             end if;
         -- this is the first one
         else
-            if (var_type = 3) then -- stm_lines
+            if (var_stm_type = STM_LINES_TYPE) then 
                 init_stm_lines_var;
-                var_list := temp_var;
-            elsif (var_type = 2) then -- stm_array
+            elsif (var_stm_type = STM_ARRAY_TYPE) then
                 init_stm_array_var;
-                var_list := temp_var;
-            elsif (p1(length) /= ':') then
-                init_non_inline_var;
-                var_list := temp_var;
-            else
+            elsif (var_stm_type = STM_TEXT_TYPE) then
+                init_stm_text_var;
+            elsif (var_stm_type = STM_LABEL_TYPE) then
                 init_inline_var;
-                var_list := temp_var;
+            else
+                init_non_inline_var;
             end if;
+            var_list := temp_var;
         end if;
     end procedure;
 
@@ -768,35 +734,42 @@ package body tb_interpreter_pkg is
         variable temp_current : stim_line_ptr;
         variable valid : integer;
         variable l : integer;
+        variable stm_var_type : t_stm_var_type := NO_VAR_TYPE;
     begin
         valid := 1;
         l := fld_len(inst);
         temp_current := inst_list;
+        
         -- take care of special cases
-        if (inst(1 to l) = "var") then
-            l := fld_len(p1);
-            --  add the variable to the variable pool, not considered an instruction
-            add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 0, str_ptr);
-            valid := 0; --removes this from the instruction list
-        elsif (inst(1 to l) = "const") then
-            l := fld_len(p1);
-            --  add the variable to the variable pool, not considered an instruction
-            add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 1, str_ptr);
-            valid := 0; --removes this from the instruction list
-        elsif (inst(1 to l) = "array") then
-            l := fld_len(p1);
-            --  add the variable to the array pool, not considered an instruction
-            add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 2, str_ptr);
-            valid := 0; --removes this from the instruction list
-        elsif (inst(1 to l) = "lines") then
-            l := fld_len(p1);
-            --  add the variable to the lines pool, not considered an instruction
-            add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, 4, str_ptr);
-            valid := 0; --removes this from the instruction list
+        if (inst(1 to l) = INSTR_VAR) then
+            stm_var_type := STM_VALUE_TYPE;
+        elsif (inst(1 to l) = INSTR_CONST) then
+            stm_var_type := STM_CONST_VALUE_TYPE;
+        elsif (inst(1 to l) = INSTR_ARRAY) then
+            stm_var_type := STM_ARRAY_TYPE;
+        elsif (inst(1 to l) = INSTR_LINES) then
+            stm_var_type := STM_LINES_TYPE;
+        elsif (inst(1 to l) = INSTR_FILE) then
+            stm_var_type := STM_TEXT_TYPE;
+        elsif (inst(1 to l) = INSTR_BUS) then
+            stm_var_type := STM_BUS_TYPE;
+        elsif (inst(1 to l) = INSTR_SIGNAL) then
+            stm_var_type := STM_SIGNAL_TYPE;
         elsif (inst(l) = ':') then
-            add_variable(var_list, inst, p1, token_num, sequ_num, line_num, file_name, l, 0, str_ptr);
-            valid := 0;
+            stm_var_type := STM_LABEL_TYPE;
         end if;
+        
+        if stm_var_type /= NO_VAR_TYPE then
+            --  add the variable to the variable pool, not considered an instruction
+            if stm_var_type /= STM_LABEL_TYPE then
+                l := fld_len(p1);
+                add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
+            else     
+            	add_variable(var_list, inst, p1, token_num, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
+            end if;
+            valid := 0; --removes this from the instruction list
+        end if;
+         
         if (valid = 1) then
             -- prepare the new record
             temp_stim_line := new stim_line;
@@ -1437,22 +1410,76 @@ package body tb_interpreter_pkg is
         variable ptr : in stm_text_ptr;
         constant b : in base) is
         
-        variable i : integer;
-        variable j : integer;
+        variable src_i : integer;
+        variable src_tail_i : integer;
+        variable dest_i : integer;
         variable k : integer;
-        variable txt_str : stm_text;
+        variable dest_txt_str : stm_text;
+        variable post_i : integer;
+        variable post_j : integer;
+        variable post_k : integer;
         variable v1 : integer;
         variable valid : integer;
         variable tmp_field : text_field;
         variable tmp_i : integer;
     begin
-        if (ptr /= null) then
+        if ptr = null then
+            return;
+        end if;
+        
+        -- determine variables tail_start in src string
+        src_i := 1;
+        src_tail_i := 0;
+        dest_txt_str := (others => nul);
+        while src_i <= c_stm_text_len loop
+            if j = 0 then
+                if ptr(src_i) = '"' then
+                   src_tail_i := src_i + 1; 
+                   exit;
+                end if;
+            else
+                src_i := src_i + 1;
+            end if;
+        end loop;
+        
+        
+        src_i := 1;
+        dest_i := 1;
+        while src_i < src_tail_i and dest_i <= c_stm_text_len loop
+        
+      
+            -- copy until next '{'
+            dest_txt_str := (others => nul);
+            while src_i <= c_stm_text_len and dest_i <= c_stm_text_len loop
+                if ptr(i) = '{' then
+                    i := i + 1;
+                    exit;
+                else
+                    dest_txt_str(dest_i) := ptr(i);
+                    i := i + 1;
+                    dest_i := dest_i + 1;
+                end if;
+            end loop;
+    
+            while i <= c_stm_text_len and dest_j <= c_stm_text_len loop
+                if ptr(i) = '}' then
+                    i := i + 1;
+                    exit;
+                else
+                    -- skip until next '}'
+                    i := i + 1;
+                end if;
+            end loop;
+                    
+                
+                
+    
             i := 1;
             j := 1;
-            txt_str := (others => nul);
-            while (i <= c_stm_text_len and j <= c_stm_text_len) loop
-                if (ptr(i) /= '$') then
-                    txt_str(j) := ptr(i);
+            dest_txt_str := (others => nul);
+            while i <= c_stm_text_len and j <= c_stm_text_len loop
+                if (ptr(i) /= '}') then
+                    dest_txt_str(j) := ptr(i);
                     i := i + 1;
                     j := j + 1;
                 else
@@ -1462,7 +1489,7 @@ package body tb_interpreter_pkg is
                     i := i + 1;
                     tmp_i := tmp_i + 1;
                     -- parse to the next space
-                    while (ptr(i) /= ' ' and ptr(i) /= nul) loop
+                    while ptr(i) /= ' ' and ptr(i) /= nul loop
                         tmp_field(tmp_i) := ptr(i);
                         i := i + 1;
                         tmp_i := tmp_i + 1;
@@ -1471,21 +1498,22 @@ package body tb_interpreter_pkg is
                     assert (valid = 1)
                     report lf & "invalid variable found in stm_text_ptr: ignoring."
                     severity warning;
-
-                    if (valid = 1) then
-
-                        txt_str := ew_str_cat(txt_str, ew_to_str_len(v1, b));
+    
+                    if valid = 1 then
+    
+                        dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, b));
                         k := 1;
-                        while (txt_str(k) /= nul) loop
+                        while dest_txt_str(k) /= nul loop
                             k := k + 1;
                         end loop;
                         j := k;
                     end if;
                 end if;
-            end loop;
-            -- print the created string
-            print(txt_str);
-        end if;
+            end loop;            
+        end loop;
+        -- print the created string
+        print(dest_txt_str);
+
     end procedure;
 
 

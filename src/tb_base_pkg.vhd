@@ -67,7 +67,7 @@ package tb_base_pkg is
         file_name : text_line;
         next_rec : file_def_ptr;
     end record;
-
+    
     type t_stm_array is array (natural range <>) of integer;
     type t_stm_array_ptr is access t_stm_array;
 
@@ -87,6 +87,8 @@ package tb_base_pkg is
     end record;
 
 
+    type t_stm_var_type is (STM_VALUE_TYPE, STM_CONST_VALUE_TYPE, STM_TEXT_TYPE, STM_ARRAY_TYPE, STM_LINES_TYPE, STM_BUS_TYPE, STM_SIGNAL_TYPE, STM_LABEL_TYPE, NO_VAR_TYPE);
+
     -- define the variables field and pointer
     type var_field;
     type var_field_ptr is access var_field; -- pointer to var_field
@@ -94,10 +96,10 @@ package tb_base_pkg is
         var_name : text_field;
         var_index : integer;
         var_value : integer;
+        var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_array : t_stm_array_ptr;
-        var_stm_lines : t_stm_lines_ptr;
-        const : boolean;
+        var_stm_lines : t_stm_lines_ptr;   
         next_rec : var_field_ptr;
     end record;
 
@@ -160,16 +162,6 @@ package tb_base_pkg is
 
     procedure stm_lines_delete(variable stm_lines : inout t_stm_lines_ptr;
         variable position : in integer;
-        variable valid : out integer);
-
-
-    procedure stm_lines_pointer(variable stm_lines_out : inout t_stm_lines_ptr;
-        variable stm_lines_in : in t_stm_lines_ptr;
-        variable valid : out integer);
-
-
-    procedure stm_lines_size(variable stm_lines : in t_stm_lines_ptr;
-        variable line_size : out integer;
         variable valid : out integer);
 
     function is_digit(constant c : in character) return boolean;
