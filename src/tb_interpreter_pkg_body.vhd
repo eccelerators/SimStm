@@ -1414,6 +1414,7 @@ package body tb_interpreter_pkg is
         variable src_tail_i : integer;
         variable dest_i : integer;
         variable k : integer;
+        variable src_tail_begin : integer;
         variable dest_txt_str : stm_text;
         variable post_i : integer;
         variable post_j : integer;
@@ -1422,34 +1423,38 @@ package body tb_interpreter_pkg is
         variable valid : integer;
         variable tmp_field : text_field;
         variable tmp_i : integer;
+        variable input_txt : stm_text;
+        
     begin
+    
+        -- txt_print(ptr); to print tstm_text pointer
+        -- print(dest_txt_str); to print stm_text 
+
         if ptr = null then
             return;
         end if;
         
+        txt_to_string(ptr, input_txt);
+        
         -- determine variables tail_start in src string
         src_i := 1;
-        src_tail_i := 0;
-        dest_txt_str := (others => nul);
-        while src_i <= c_stm_text_len loop
-            if dest_i = 0 then
-                if ptr(src_i) = '"' then
-                   src_tail_i := src_i + 1; 
-                   exit;
-                end if;
-            else
-                src_i := src_i + 1;
+        src_tail_begin := 0;      
+        while src_i <= c_stm_text_len loop           
+            if ptr(src_i) = '"' then
+               src_tail_begin := src_i; 
+               exit;
             end if;
+            src_i := src_i + 1;
         end loop;
-        
-        
+               
         src_i := 1;
+        src_tail_i := src_tail_begin;
         dest_i := 1;
-        while src_i < src_tail_i and dest_i <= c_stm_text_len loop
+        dest_txt_str := (others => nul);
+        while src_i <= src_tail_begin and dest_i <= c_stm_text_len loop
              
-            -- copy until next '{'
-            dest_txt_str := (others => nul);
-            while src_i <= c_stm_text_len and dest_i <= c_stm_text_len loop
+            -- copy until next '{'           
+            while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
                 if ptr(src_i) = '{' then                 
                     exit;
                 else
@@ -1459,7 +1464,7 @@ package body tb_interpreter_pkg is
                 end if;
             end loop;
             
-            if src_i > c_stm_text_len then
+            if src_i = src_tail_begin then
                 -- src end reached
                 print(dest_txt_str);
                 return;
@@ -1468,9 +1473,8 @@ package body tb_interpreter_pkg is
             -- place to embed a var found
             if ptr(src_i) = '{' then
                 src_i := src_i + 1;
-                while src_i <= c_stm_text_len and dest_i <= c_stm_text_len loop
-                    if ptr(src_i) = '}' then
-                        src_i := src_i + 1;
+                while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
+                    if ptr(src_i) = '}' then                        
                         exit;
                     else
                         -- skip until next '}'
@@ -1483,10 +1487,26 @@ package body tb_interpreter_pkg is
                 src_i := src_i + 1;
             else
                 assert (false)
-                report lf & "error: missing closing } bracket " & stm_text_crop(dest_txt_str)
+                report lf & "error: missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;        
             end if;
-                               
+                                    
+            while src_tail_i <= c_stm_text_len loop
+                if ptr(src_tail_i) = '$' then                 
+                    exit;
+                else
+                    src_tail_i := src_tail_i + 1;
+                end if;
+            end loop;
+            
+            if ptr(src_tail_i) = '$' then
+                src_tail_i := src_tail_i + 1;
+            else
+                assert (false)
+                report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
+                severity failure;        
+            end if;            
+                   
             tmp_field := (others => nul);
             tmp_i := 1;
             tmp_field(tmp_i) := ptr(src_tail_i);
@@ -1510,11 +1530,11 @@ package body tb_interpreter_pkg is
                     k := k + 1;
                 end loop;
                 dest_i := k;
-            end if;            
-           
+            end if; 
+                        
         end loop;
-        assert (valid = 1)
-        report lf & "error: txt_print_wvar ended abnormally"
+        assert false
+        report lf & "error: txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
 
     end procedure;

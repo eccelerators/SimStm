@@ -1075,8 +1075,7 @@ package body tb_base_pkg is
             print(txt_str);
         end if;
     end procedure;
-
-
+    
     --  procedure copy text into an existing pointer
     procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
         variable ptr_o : out stm_text_ptr;
