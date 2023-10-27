@@ -32,26 +32,26 @@ package body tb_interpreter_pkg is
         l := fld_len(var);
         valid := 0;
         -- if the variable is a special
-        if (var(1) = '=') then
+        if var(1) = '=' then
             value := 0;
             valid := 1;
-        elsif (var(1 to 2) = ">=") then
+        elsif var(1 to 2) = ">=" then
             value := 4;
             valid := 1;
-        elsif (var(1 to 2) = "<=") then
+        elsif var(1 to 2) = "<=" then
             value := 5;
             valid := 1;
-        elsif (var(1) = '>') then
+        elsif var(1) = '>' then
             value := 1;
             valid := 1;
-        elsif (var(1) = '<') then
+        elsif var(1) = '<' then
             value := 2;
             valid := 1;
-        elsif (var(1 to 2) = "!=") then
+        elsif var(1 to 2) = "!=" then
             value := 3;
             valid := 1;
         else
-            if (var(1) = '$') then
+            if var(1) = '$' then
                 ptr := 1; -- this is a pointer
                 for i in 2 to l loop
                     temp_field(i - 1) := var(i);
@@ -60,15 +60,15 @@ package body tb_interpreter_pkg is
                 temp_field := var;
             end if;
 
-            assert (var_list /= null)
+            assert var_list /= null
             report lf & "error: no variables are defined." & lf
             severity failure;
 
             var_ptr := var_list;
-            while (var_ptr.next_rec /= null) loop
+            while var_ptr.next_rec /= null loop
                 -- if we have a match
-                if (fld_equal(temp_field, var_ptr.var_name)) then
-                    if (ptr = 1) then
+                if fld_equal(temp_field, var_ptr.var_name) then
+                    if ptr = 1 then
                         value := var_ptr.var_value;
                         valid := 1;
                         is_defined := true;
@@ -83,9 +83,9 @@ package body tb_interpreter_pkg is
             end loop;
 
             -- if we have a match and was the last record
-            if (var_ptr.next_rec = null) then
-                if (fld_equal(temp_field, var_ptr.var_name)) then
-                    if (ptr = 1) then
+            if var_ptr.next_rec = null then
+                if fld_equal(temp_field, var_ptr.var_name) then
+                    if ptr = 1 then
                         value := var_ptr.var_value;
                         valid := 1;
                         is_defined := true;
@@ -97,7 +97,7 @@ package body tb_interpreter_pkg is
                 end if;
             end if;
 
-            assert (is_defined)
+            assert is_defined
             report lf & "error: variable is not defined " & temp_field & lf
             severity failure;
         end if;
@@ -119,15 +119,15 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index) then
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
                 value := ptr.var_value;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
-        if (ptr.var_index = index) then
+        if ptr.var_index = index then
             value := ptr.var_value;
             valid := 1;
         end if;
@@ -149,15 +149,15 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index) then
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
                 var_stm_text := ptr.var_stm_text;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
-        if (ptr.var_index = index) then
+        if ptr.var_index = index then
             var_stm_text := ptr.var_stm_text;
             valid := 1;
         end if;
@@ -179,15 +179,15 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index) then
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
                 stm_array := ptr.var_stm_array;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
-        if (ptr.var_index = index) then
+        if ptr.var_index = index then
             stm_array := ptr.var_stm_array;
             valid := 1;
         end if;
@@ -209,15 +209,15 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index) then
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
                 stm_lines := ptr.var_stm_lines;
                 valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
-        if (ptr.var_index = index) then
+        if ptr.var_index = index then
             stm_lines := ptr.var_stm_lines;
             valid := 1;
         end if;
@@ -237,7 +237,7 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
+        while ptr.next_rec /= null loop
             if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
                 ptr.var_value := value;
                 valid := 1;
@@ -246,7 +246,7 @@ package body tb_interpreter_pkg is
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
-        if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
             ptr.var_value := value;
             valid := 1;
         end if;
@@ -268,8 +268,8 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
-            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
                 ptr.var_stm_array := stm_array;
                 valid := 1;
                 exit;
@@ -277,7 +277,7 @@ package body tb_interpreter_pkg is
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
-        if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
             ptr.var_stm_array := stm_array;
             valid := 1;
         end if;
@@ -299,7 +299,7 @@ package body tb_interpreter_pkg is
     begin
         ptr := var_list;
         valid := 0;
-        while (ptr.next_rec /= null) loop
+        while ptr.next_rec /= null loop
             if (ptr.var_index = index) then
                 ptr.var_stm_lines := stm_lines;
                 valid := 1;
@@ -307,7 +307,7 @@ package body tb_interpreter_pkg is
             end if;
             ptr := ptr.next_rec;
         end loop;
-        if (ptr.var_index = index) then
+        if ptr.var_index = index then
             ptr.var_stm_lines := stm_lines;
             valid := 1;
         end if;
@@ -327,9 +327,9 @@ package body tb_interpreter_pkg is
 
         index := 1; -- set index to begin of string
         file_line := (others => nul);
-        if (not endfile(file_name)) then
+        if not endfile(file_name) then
             readline(file_name, rline);
-            while (rline'right /= (index - 1) and rline'length /= 0) loop
+            while rline'right /= (index - 1) and rline'length /= 0 loop
                 file_line(index) := rline(index);
                 index := index + 1;
             end loop;
@@ -366,6 +366,7 @@ package body tb_interpreter_pkg is
         variable token6 : text_field;
         variable token7 : text_field;
         variable token8 : text_field;
+        variable token9 : text_field;
         variable valid : integer := 0;
         variable token_merge : boolean;
     begin
@@ -378,6 +379,7 @@ package body tb_interpreter_pkg is
         token6 := (others => nul);
         token7 := (others => nul);
         token8 := (others => nul);
+        token9 := (others => nul);
         txt_ptr := null;
         txt_ptr_tmp := null;
         valid := 0;
@@ -391,26 +393,26 @@ package body tb_interpreter_pkg is
             -- collect for comment test ** assumed no line will be max 256
             c(1) := text_line(i);
             c(2) := text_line(i + 1); -- or this line will blow up
-            if (c = "--") then
+            if c = "--" then
                 comment_found := 1;
                 exit;
             end if;
             -- if is begin text char '"'
-            if (txt_found = 0 and c(1) = '"') then --"
+            if txt_found = 0 and c(1) = '"' then --"
                 txt_found := 1;
                 txt_ptr_tmp := new stm_text;
                 next;
             end if;
 
             -- if we have found a txt string
-            if (txt_found = 1 and text_line(i) /= nul) then
+            if txt_found = 1 and text_line(i) /= nul then
                 -- if string too long, prevent tool hang, truncate and notify
-                if (j > c_stm_text_len) then
+                if j > c_stm_text_len then
                     print("tokenize_line: truncated txt line, it was larger than c_stm_text_len");
                     exit;
                 end if;
                 -- till the very end of text_line
-                if (text_line(i) /= nul) then 
+                if text_line(i) /= nul then
                     txt_str(j) := text_line(i);
                     txt_ptr_copy(txt_ptr_tmp, txt_ptr, txt_str);
                     j := j + 1;
@@ -419,14 +421,14 @@ package body tb_interpreter_pkg is
                 end if;
 
             -- if is a character store in the right token
-            elsif (is_space(text_line(i)) = false and text_line(i) /= nul) then
+            elsif is_space(text_line(i)) = false and text_line(i) /= nul then
                 token_index := token_index + 1;
                 current_token(token_index) := text_line(i);
             -- else is a space, deal with pointers
-            elsif (is_space(text_line(i + 1)) = false and text_line(i + 1) /= nul) then
+            elsif is_space(text_line(i + 1)) = false and text_line(i + 1) /= nul then
                 case token_number is
                     when 0 =>
-                        if (token_index /= 0) then
+                        if token_index /= 0 then
                             token1 := current_token;
                             current_token := (others => nul);
                             token_number := 1;
@@ -476,13 +478,19 @@ package body tb_interpreter_pkg is
                         valid := 8;
                         token_index := 0;
                     when 8 =>
+                        token9 := current_token;
+                        current_token := (others => nul);
+                        token_number := 9;
+                        valid := 9;
+                        token_index := 0;
+                    when 9 =>
                     when others =>
                         null;
                 end case;
             end if;
             -- break from loop if is null
-            if (text_line(i) = nul) then
-                if (token_index /= 0) then
+            if text_line(i) = nul then
+                if token_index /= 0 then
                     case token_number is
                         when 0 =>
                             token1 := current_token;
@@ -508,6 +516,9 @@ package body tb_interpreter_pkg is
                         when 7 =>
                             token8 := current_token;
                             valid := 8;
+                        when 8 =>
+                            token9 := current_token;
+                            valid := 9;
                         when others =>
                             null;
                     end case;
@@ -516,8 +527,8 @@ package body tb_interpreter_pkg is
             end if;
         end loop;
         -- did we find a comment and there is a token
-        if (comment_found = 1) then
-            if (token_index /= 0) then
+        if comment_found = 1 then
+            if token_index /= 0 then
                 case token_number is
                     when 0 =>
                         token1 := current_token;
@@ -543,12 +554,15 @@ package body tb_interpreter_pkg is
                     when 7 =>
                         token8 := current_token;
                         valid := 8;
+                        when 8 =>
+                            token9 := current_token;
+                            valid := 9;
                     when others =>
                         null;
                 end case;
             end if;
         end if;
-        token_merge_words( token1, token2, token3, token4, token5, token6, token7, token8, valid,
+        token_merge_words( token1, token2, token3, token4, token5, token6, token7, token8, token9, valid,
             otoken1,otoken2, otoken3, otoken4, otoken5, otoken6, otoken7, ovalid );
 
     end procedure;
@@ -588,7 +602,7 @@ package body tb_interpreter_pkg is
 
         procedure init_stm_array_var is
         begin
-            assert (stim_to_integer(p2, name, line_num) > 0)
+            assert stim_to_integer(p2, name, line_num) > 0
             report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & name
             severity failure;
             temp_var := new var_field;
@@ -600,10 +614,10 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
-        
+
         procedure init_stm_text_var is
         begin
-            assert (stim_to_integer(p2, name, line_num) > 0)
+            assert stim_to_integer(p2, name, line_num) > 0
             report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & name
             severity failure;
             temp_var := new var_field;
@@ -615,7 +629,7 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
-        
+
         procedure init_non_inline_var is
         begin
             temp_var := new var_field;
@@ -642,12 +656,12 @@ package body tb_interpreter_pkg is
 
     begin
         -- if this is not the first one
-        if (var_list /= null) then
+        if var_list /= null then
             current_ptr := var_list;
             index := index + 1;
-            while (current_ptr.next_rec /= null) loop
+            while current_ptr.next_rec /= null loop
                 -- if we have defined the current before then die
-                assert (current_ptr.var_name /= p1)
+                assert current_ptr.var_name /= p1
                 report lf & "error: attemping to add a duplicate variable definition "
                 & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
                 severity failure;
@@ -656,36 +670,36 @@ package body tb_interpreter_pkg is
                 index := index + 1;
             end loop;
             -- if we have defined the current before then die. this checks the last one
-            assert (current_ptr.var_name /= p1)
+            assert current_ptr.var_name /= p1
             report lf & "error: attemping to add a duplicate variable definition "
                 & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;            
-                        
-            if (var_stm_type = STM_LINES_TYPE) then 
+
+            if var_stm_type = STM_LINES_TYPE then
                 init_stm_lines_var;
                 current_ptr.next_rec := temp_var;
-            elsif (var_stm_type = STM_ARRAY_TYPE) then
+            elsif var_stm_type = STM_ARRAY_TYPE then
                 init_stm_array_var;
                 current_ptr.next_rec := temp_var;
-            elsif (var_stm_type = STM_TEXT_TYPE) then
+            elsif var_stm_type = STM_TEXT_TYPE then
                 init_stm_text_var;
                 current_ptr.next_rec := temp_var;
-            elsif (var_stm_type = STM_LABEL_TYPE) then
+            elsif var_stm_type = STM_LABEL_TYPE then
                 init_inline_var;
                 current_ptr.next_rec := temp_var;
-            else 
+            else
                 init_non_inline_var;
                 current_ptr.next_rec := temp_var;
             end if;
         -- this is the first one
         else
-            if (var_stm_type = STM_LINES_TYPE) then 
+            if var_stm_type = STM_LINES_TYPE then
                 init_stm_lines_var;
-            elsif (var_stm_type = STM_ARRAY_TYPE) then
+            elsif var_stm_type = STM_ARRAY_TYPE then
                 init_stm_array_var;
-            elsif (var_stm_type = STM_TEXT_TYPE) then
+            elsif var_stm_type = STM_TEXT_TYPE then
                 init_stm_text_var;
-            elsif (var_stm_type = STM_LABEL_TYPE) then
+            elsif var_stm_type = STM_LABEL_TYPE then
                 init_inline_var;
             else
                 init_non_inline_var;
@@ -729,7 +743,7 @@ package body tb_interpreter_pkg is
         variable line_num : in integer;
         variable file_name : in text_line;
         variable file_idx : in integer) is
-        
+
         variable temp_stim_line : stim_line_ptr;
         variable temp_current : stim_line_ptr;
         variable valid : integer;
@@ -739,38 +753,38 @@ package body tb_interpreter_pkg is
         valid := 1;
         l := fld_len(inst);
         temp_current := inst_list;
-        
+
         -- take care of special cases
-        if (inst(1 to l) = INSTR_VAR) then
+        if inst(1 to l) = INSTR_VAR then
             stm_var_type := STM_VALUE_TYPE;
-        elsif (inst(1 to l) = INSTR_CONST) then
+        elsif inst(1 to l) = INSTR_CONST then
             stm_var_type := STM_CONST_VALUE_TYPE;
-        elsif (inst(1 to l) = INSTR_ARRAY) then
+        elsif inst(1 to l) = INSTR_ARRAY then
             stm_var_type := STM_ARRAY_TYPE;
-        elsif (inst(1 to l) = INSTR_LINES) then
+        elsif inst(1 to l) = INSTR_LINES then
             stm_var_type := STM_LINES_TYPE;
-        elsif (inst(1 to l) = INSTR_FILE) then
+        elsif inst(1 to l) = INSTR_FILE then
             stm_var_type := STM_TEXT_TYPE;
-        elsif (inst(1 to l) = INSTR_BUS) then
+        elsif inst(1 to l) = INSTR_BUS then
             stm_var_type := STM_BUS_TYPE;
-        elsif (inst(1 to l) = INSTR_SIGNAL) then
+        elsif inst(1 to l) = INSTR_SIGNAL then
             stm_var_type := STM_SIGNAL_TYPE;
-        elsif (inst(l) = ':') then
+        elsif inst(l) = ':' then
             stm_var_type := STM_LABEL_TYPE;
         end if;
-        
+
         if stm_var_type /= NO_VAR_TYPE then
             --  add the variable to the variable pool, not considered an instruction
             if stm_var_type /= STM_LABEL_TYPE then
                 l := fld_len(p1);
                 add_variable(var_list, p1, p2, token_num, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
-            else     
-            	add_variable(var_list, inst, p1, token_num, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
+            else
+                add_variable(var_list, inst, p1, token_num, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
             end if;
             valid := 0; --removes this from the instruction list
         end if;
-         
-        if (valid = 1) then
+
+        if valid = 1 then
             -- prepare the new record
             temp_stim_line := new stim_line;
             temp_stim_line.instruction := inst;
@@ -785,8 +799,8 @@ package body tb_interpreter_pkg is
             temp_stim_line.file_idx := file_idx;
             temp_stim_line.file_line := line_num;
             -- if is not the first instruction
-            if (inst_list /= null) then
-                while (temp_current.next_rec /= null) loop
+            if inst_list /= null then
+                while temp_current.next_rec /= null loop
                     temp_current := temp_current.next_rec;
                 end loop;
                 temp_current.next_rec := temp_stim_line;
@@ -821,12 +835,11 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         variable temp_fn_prt : file_def_ptr;
         variable tmp_int : integer;
-        -- variable value:     integer := 1;
-        -- variable temp_str : string(1 to 48);
+
     begin
         inst_ptr := inst_sequ;
         -- go through all the instructions
-        while (inst_ptr.next_rec /= null) loop
+        while inst_ptr.next_rec /= null loop
             inst := inst_ptr.instruction;
             inst_len := fld_len(inst_ptr.instruction);
             file_line := inst_ptr.file_line;
@@ -845,98 +858,78 @@ package body tb_interpreter_pkg is
             end loop;
 
             txt := inst_ptr.txt;
-            -- load parameter one
             temp_text_field := inst_ptr.inst_field_1;
-
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric  do nothing
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: first variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- load parameter two
             temp_text_field := inst_ptr.inst_field_2;
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric do nothing
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: second variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- load parameter three
             temp_text_field := inst_ptr.inst_field_3;
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric do nothing
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: third variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- load parameter four
             temp_text_field := inst_ptr.inst_field_4;
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric do nothing
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then                
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: forth variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- load parameter five
             temp_text_field := inst_ptr.inst_field_5;
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric do nothing
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: fifth variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- load parameter six
             temp_text_field := inst_ptr.inst_field_6;
-            if (temp_text_field(1) /= nul) then
-                -- if this is a numaric field convert to integer
-                if ((temp_text_field(1) = '#' and (temp_text_field(2) = 'x' or temp_text_field(2) = 'b'))
-                    or is_digit(temp_text_field(1)) = true) then
+            if temp_text_field(1) /= nul then
+                if is_digit(temp_text_field(1)) = true then
                     null;
-                else -- else is a variable, get the value or halt incase of error
+                else
                     access_variable(var_list, temp_text_field, v_p, valid);
-                    assert (valid = 1)
+                    assert valid = 1
                     report lf & "error: sixth variable on stimulus line " & (integer'image(line))
                       & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            -- point to next record
             inst_ptr := inst_ptr.next_rec;
         end loop;
     end procedure;
@@ -971,7 +964,6 @@ package body tb_interpreter_pkg is
         variable v_stat : file_open_status;
         variable idx : integer;
         variable v_tmp : text_line;
-
         variable v_tmp_fn_ptr : file_def_ptr;
         variable v_new_fn : integer;
         variable v_tmp_fn : file_def_ptr;
@@ -983,7 +975,7 @@ package body tb_interpreter_pkg is
         --    from file names
         --  copy text string to temp
         for i in 1 to c_stm_text_len loop
-            if (name(i) = nul) then
+            if name(i) = nul then
                 v_tmp(i) := name(i);
                 exit;
             else
@@ -994,7 +986,7 @@ package body tb_interpreter_pkg is
         idx := 0;
         --    get to the end of the string
         for i in 1 to c_stm_text_len loop
-            if (v_tmp(i) /= nul) then
+            if v_tmp(i) /= nul then
                 idx := idx + 1;
             else
                 exit;
@@ -1002,7 +994,7 @@ package body tb_interpreter_pkg is
         end loop;
         --  now nul out spaces
         for i in idx downto 1 loop
-            if (is_space(v_tmp(i)) = true) then
+            if is_space(v_tmp(i)) = true then
                 v_tmp(i) := nul;
             else
                 exit;
@@ -1010,7 +1002,7 @@ package body tb_interpreter_pkg is
         end loop;
         --  open include file
         file_open(v_stat, include_file, v_tmp, read_mode);
-        if (v_stat /= open_ok) then
+        if v_stat /= open_ok then
             print("error: unable to open include file  " & name);
             status := 1;
             return;
@@ -1018,7 +1010,7 @@ package body tb_interpreter_pkg is
         l_num := 1; -- initialize line number
 
         --  the file is opened, put it on the file name ll
-        while (v_tmp_fn_ptr.next_rec /= null) loop
+        while v_tmp_fn_ptr.next_rec /= null loop
             v_tmp_fn_ptr := v_tmp_fn_ptr.next_rec;
         end loop;
         v_new_fn := v_tmp_fn_ptr.rec_idx + 1;
@@ -1039,20 +1031,20 @@ package body tb_interpreter_pkg is
         v_sequ_ptr := inst_sequ;
 
         -- while not the end of file read it
-        while (not endfile(include_file)) loop
+        while not endfile(include_file) loop
             file_read_line(include_file, l);
             --  tokenize the line
             tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, valid);
             v_len := fld_len(t1);
-            if (t1(1 to v_len) = "include") then
+            if t1(1 to v_len) = "include" then
                 print("nested include statement found in " & v_tmp & " on line " &
                     (integer'image(l_num)));
-                assert (false)
+                assert false
                 report lf & "error: nested include statements are not supported at this time."
                 severity failure;
 
             -- if there was valid tokens
-            elsif (valid /= 0) then
+            elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
                 add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt, valid,
                     sequ_line, l_num, name, v_new_fn);
@@ -1076,7 +1068,7 @@ package body tb_interpreter_pkg is
         variable var_list : inout var_field_ptr;
         variable inst_sequ : inout stim_line_ptr;
         variable file_list : inout file_def_ptr) is
-        
+
         variable l : text_line; -- the line
         variable l_num : integer; -- line number file
         variable sequ_line : integer; -- line number program
@@ -1104,7 +1096,7 @@ package body tb_interpreter_pkg is
     begin
         -- open the stimulus_file and check
         file_open(v_stat, stimulus, path_name & file_name, read_mode);
-        assert (v_stat = open_ok)
+        assert v_stat = open_ok
         report lf & "error: unable to open stimulus_file  " & path_name & file_name
         severity failure;
         -- copy file name to type text_line
@@ -1139,40 +1131,38 @@ package body tb_interpreter_pkg is
         v_sequ_ptr := inst_sequ;
 
         -- while not the end of file read it
-        while (not endfile(stimulus)) loop
+        while not endfile(stimulus) loop
             file_read_line(stimulus, l);
             --  tokenize the line
             tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, valid);
 
             v_len := fld_len(t1);
             -- if there is an include instruction
-            if (t1(1 to v_len) = "include") then
+            if t1(1 to v_len) = "include" then
                 -- if file name is in par2
-                if (valid = 2) then
+                if valid = 2 then
                     v_iname := (others => nul);
                     for i in 1 to max_field_len loop
                         v_iname(i) := t2(i);
                     end loop;
                 -- elsif the text string is not null
-                elsif (t_txt /= null) then
+                elsif t_txt /= null then
                     v_iname := (others => nul);
                     for i in 1 to c_stm_text_len loop
                         v_iname(i) := t_txt(i);
-                        if (t_txt(i) = nul) then
+                        if t_txt(i) = nul then
                             exit;
                         end if;
                     end loop;
                 else
-                    assert (false)
+                    assert false
                     report lf & "error:  include instruction has not file name included.  found on" & lf &
                         "line " & (integer'image(l_num)) & " in file " & path_name & file_name & lf
                     severity failure;
                 end if;
                 -- copy include file name to type text_line
                 for i in 1 to path_name'high loop
-
                     path_v_iname(i) := path_name(i);
-
                 end loop;
                 for i in 1 to max_str_len - path_name'high loop
                     path_v_iname(i + path_name'high) := v_iname(i);
@@ -1180,11 +1170,11 @@ package body tb_interpreter_pkg is
                 print("include found: loading file " & path_v_iname);
                 read_include_file(path_v_iname, sequ_line, v_tmp_fn, v_inst_ptr, v_var_prt, v_sequ_ptr, v_ostat);
                 -- if include file not found
-                if (v_ostat = 1) then
+                if v_ostat = 1 then
                     exit;
                 end if;
             -- if there was valid tokens
-            elsif (valid /= 0) then
+            elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);
                 add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt, valid,
                     sequ_line, l_num, v_name, v_fn_idx);
@@ -1194,7 +1184,7 @@ package body tb_interpreter_pkg is
 
         file_close(stimulus); -- close the file when done
 
-        assert (v_ostat = 0)
+        assert v_ostat = 0
         report lf & "include file specified on line " & (integer'image(l_num)) &
                   " in file " & path_name & file_name &
                   " was not found! test terminated" & lf
@@ -1247,7 +1237,7 @@ package body tb_interpreter_pkg is
         variable file_line : out integer;
         variable last_num : inout integer;
         variable last_ptr : inout stim_line_ptr) is
-        
+
         variable temp_text_field : text_field;
         variable inst_ptr : stim_line_ptr;
         variable valid : integer;
@@ -1259,10 +1249,10 @@ package body tb_interpreter_pkg is
         -- get to the instruction indicated by sequ_num
         -- check to see if this sequence is before the last
         --    so search from start
-        if (last_num > sequ_num) then
+        if last_num > sequ_num then
             inst_ptr := inst_sequ;
-            while (inst_ptr.next_rec /= null) loop
-                if (inst_ptr.line_number = sequ_num) then
+            while inst_ptr.next_rec /= null loop
+                if inst_ptr.line_number = sequ_num then
                     exit;
                 else
                     inst_ptr := inst_ptr.next_rec;
@@ -1271,8 +1261,8 @@ package body tb_interpreter_pkg is
         -- else is equal or greater, so search forward
         else
             inst_ptr := last_ptr;
-            while (inst_ptr.next_rec /= null) loop
-                if (inst_ptr.line_number = sequ_num) then
+            while inst_ptr.next_rec /= null loop
+                if inst_ptr.line_number = sequ_num then
                     exit;
                 else
                     inst_ptr := inst_ptr.next_rec;
@@ -1292,8 +1282,8 @@ package body tb_interpreter_pkg is
         -- recover the file name this line came from
         temp_fn_prt := file_list;
         tmp_int := inst_ptr.file_idx;
-        while (temp_fn_prt.next_rec /= null) loop
-            if (temp_fn_prt.rec_idx = tmp_int) then
+        while temp_fn_prt.next_rec /= null loop
+            if temp_fn_prt.rec_idx = tmp_int then
                 exit;
             end if;
             temp_fn_prt := temp_fn_prt.next_rec;
@@ -1306,79 +1296,59 @@ package body tb_interpreter_pkg is
         --  print ("access_inst_sequ" & file_name);
 
         txt := inst_ptr.txt;
-        -- load parameter one
         temp_text_field := inst_ptr.inst_field_1;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p1 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p1 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p1, valid);
-                assert (valid = 1)
+                assert valid = 1
                 report lf & "error: first variable on stimulus line " & (integer'image(line))
                     & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
-        -- load parameter two
         temp_text_field := inst_ptr.inst_field_2;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p2 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p2 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p2, valid);
-                assert (valid = 1)
+                assert valid = 1
                 report lf & "error: second variable on stimulus line " & (integer'image(line))
                     & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
-        -- load parameter three
         temp_text_field := inst_ptr.inst_field_3;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p3 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p3 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p3, valid);
-                assert (valid = 1)
+                assert valid = 1
                 report lf & "error: third variable on stimulus line " & (integer'image(line))
                     & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
-        -- load parameter four
         temp_text_field := inst_ptr.inst_field_4;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p4 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p4 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p4, valid);
-                assert (valid = 1)
+                assert valid = 1
                 report lf & "error: forth variable on stimulus line " & (integer'image(line))
                     & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
-        -- load parameter five
         temp_text_field := inst_ptr.inst_field_5;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p5 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p5 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p5, valid);
                 assert (valid = 1)
                 report lf & "error: fifth variable on stimulus line " & (integer'image(line))
@@ -1386,17 +1356,13 @@ package body tb_interpreter_pkg is
                 severity failure;
             end if;
         end if;
-        -- load parameter six
         temp_text_field := inst_ptr.inst_field_6;
-        if (temp_text_field(1) /= nul) then
-            -- if this is a numaric field convert to integer
-            if (temp_text_field(1) = '#') then
+        if temp_text_field(1) /= nul then
+            if is_digit(temp_text_field(1)) then
                 p6 := stim_to_integer(temp_text_field, file_name, line);
-            elsif (is_digit(temp_text_field(1)) = true) then
-                p6 := stim_to_integer(temp_text_field, file_name, line);
-            else -- else is a variable, get the value or halt incase of error
+            else
                 access_variable(var_list, temp_text_field, p6, valid);
-                assert (valid = 1)
+                assert valid = 1
                 report lf & "error: sixth variable on stimulus line " & (integer'image(line))
                     & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -1409,53 +1375,50 @@ package body tb_interpreter_pkg is
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
         variable ptr : in stm_text_ptr;
         constant b : in base) is
-        
+
         variable src_i : integer;
         variable src_tail_i : integer;
         variable dest_i : integer;
         variable k : integer;
         variable src_tail_begin : integer;
         variable dest_txt_str : stm_text;
-        variable post_i : integer;
-        variable post_j : integer;
-        variable post_k : integer;
         variable v1 : integer;
         variable valid : integer;
         variable tmp_field : text_field;
         variable tmp_i : integer;
         variable input_txt : stm_text;
-        
+
     begin
-    
+
         -- txt_print(ptr); to print tstm_text pointer
         -- print(dest_txt_str); to print stm_text 
 
         if ptr = null then
             return;
         end if;
-        
+
         txt_to_string(ptr, input_txt);
-        
+
         -- determine variables tail_start in src string
         src_i := 1;
-        src_tail_begin := 0;      
-        while src_i <= c_stm_text_len loop           
+        src_tail_begin := 0;
+        while src_i <= c_stm_text_len loop
             if ptr(src_i) = '"' then
-               src_tail_begin := src_i; 
-               exit;
+                src_tail_begin := src_i;
+                exit;
             end if;
             src_i := src_i + 1;
         end loop;
-               
+
         src_i := 1;
         src_tail_i := src_tail_begin;
         dest_i := 1;
         dest_txt_str := (others => nul);
         while src_i <= src_tail_begin and dest_i <= c_stm_text_len loop
-             
+
             -- copy until next '{'           
             while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
-                if ptr(src_i) = '{' then                 
+                if ptr(src_i) = '{' then
                     exit;
                 else
                     dest_txt_str(dest_i) := ptr(src_i);
@@ -1463,26 +1426,26 @@ package body tb_interpreter_pkg is
                     dest_i := dest_i + 1;
                 end if;
             end loop;
-            
+
             if src_i = src_tail_begin then
                 -- src end reached
                 print(dest_txt_str);
                 return;
             end if;
-            
+
             -- place to embed a var found
             if ptr(src_i) = '{' then
                 src_i := src_i + 1;
                 while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
-                    if ptr(src_i) = '}' then                        
+                    if ptr(src_i) = '}' then
                         exit;
                     else
                         -- skip until next '}'
                         src_i := src_i + 1;
                     end if;
-                end loop;            
+                end loop;
             end if;
-            
+
             if ptr(src_i) = '}' then
                 src_i := src_i + 1;
             else
@@ -1490,23 +1453,23 @@ package body tb_interpreter_pkg is
                 report lf & "error: missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;        
             end if;
-                                    
+
             while src_tail_i <= c_stm_text_len loop
-                if ptr(src_tail_i) = '$' then                 
+                if ptr(src_tail_i) = '$' then
                     exit;
                 else
                     src_tail_i := src_tail_i + 1;
                 end if;
             end loop;
-            
+
             if ptr(src_tail_i) = '$' then
                 src_tail_i := src_tail_i + 1;
             else
                 assert (false)
                 report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
                 severity failure;        
-            end if;            
-                   
+            end if;
+
             tmp_field := (others => nul);
             tmp_i := 1;
             tmp_field(tmp_i) := ptr(src_tail_i);
@@ -1523,15 +1486,15 @@ package body tb_interpreter_pkg is
             report lf & "invalid variable found in stm_text_ptr: ignoring."
             severity warning;
 
-            if valid = 1 then 
+            if valid = 1 then
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, b));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
                 end loop;
                 dest_i := k;
-            end if; 
-                        
+            end if;
+
         end loop;
         assert false
         report lf & "error: txt_print_wvar ended abnormally " & stm_text_crop(input_txt)

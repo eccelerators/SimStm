@@ -1,5 +1,5 @@
-var test_variable_1 1
-var test_variable_2 2
+var test_variable_1 0b1
+var test_variable_2 0x2
 var test_variable_3 3
 var test_variable_4 4
 var test_variable_5 5

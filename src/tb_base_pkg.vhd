@@ -163,6 +163,9 @@ package tb_base_pkg is
     procedure stm_lines_delete(variable stm_lines : inout t_stm_lines_ptr;
         variable position : in integer;
         variable valid : out integer);
+        
+    procedure stm_lines_print(variable stm_lines : in t_stm_lines_ptr;
+        variable valid : out integer);
 
     function is_digit(constant c : in character) return boolean;
 

@@ -34,7 +34,7 @@ proc
 	
 	mul operand1_and_target $operand2
 	mul operand1_and_target 0xF0
-	
+	 
 	div operand1_and_target $operand2
 	div operand1_and_target 0xF0
 		
@@ -73,7 +73,7 @@ proc
 	
 	array size an_array a_varB
 				
-	array pointer an_array another_array		
+	array pointer copy an_array another_array		
 end proc
 
 file_proc:
@@ -89,33 +89,33 @@ var read_size 0
 
 lines_proc:
 proc 
-	lines get a_lines $position an_array
-	lines get a_lines 8 an_array
+	lines get array a_lines $position an_array
+	lines get array a_lines 8 an_array
 	
-	lines set a_lines $position an_array
-	lines set a_lines 9 an_array
-	lines set a_lines $position "abc"
-	lines set a_lines 7 "abc"
-	lines set a_lines $position "abc{}" $a_varB
-	lines set a_lines 7 "abc{}" $a_varB
+	lines set array a_lines $position an_array
+	lines set array a_lines 9 an_array
+	lines set message a_lines $position "abc"
+	lines set message a_lines 7 "abc"
+	lines set message a_lines $position "abc{}" $a_varB
+	lines set message a_lines 7 "abc{}" $a_varB
 	
-	lines insert a_lines $position an_array
-	lines insert a_lines 9 an_array
-	lines insert a_lines $position "abc"
-	lines insert a_lines 7 "abc"
-	lines insert a_lines $position "abc{}" $a_varB
-	lines insert a_lines 7 "abc{}" $a_varB			
+	lines insert array a_lines $position an_array
+	lines insert array a_lines 9 an_array
+	lines insert message a_lines $position "abc"
+	lines insert message a_lines 7 "abc"
+	lines insert message a_lines $position "abc{}" $a_varB
+	lines insert message a_lines 7 "abc{}" $a_varB			
 
-	lines append a_lines an_array
-	lines append a_lines "abc"
-	lines append a_lines "abc{}" $a_varB		
+	lines append array a_lines an_array
+	lines append message a_lines "abc"
+	lines append message a_lines "abc{}" $a_varB		
 		
 	lines delete a_lines $position
 	lines delete a_lines 13
 	
 	lines size a_lines read_size	
 	
-	lines pointer a_lines_target a_lines_source
+	lines pointer copy a_lines_target a_lines_source
 end proc
 
 
@@ -210,8 +210,9 @@ var time_to_wait 5000
 
 misc_proc:
 proc
-    log $INFO "some message"
-	log $INFO "misc_proc severity: {}" $INFO
+    log message $INFO "some message"
+	log message $INFO "misc_proc severity: {}" $INFO
+	log lines 0 a_lines_target
 	trace $a_varA
 	trace 1
 	verbosity $INFO

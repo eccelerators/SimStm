@@ -375,13 +375,33 @@ package body tb_base_pkg is
             stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
     end procedure;
+    
+    
+    procedure stm_lines_print(variable stm_lines : in t_stm_lines_ptr;
+        variable valid : out integer) is
+        
+        variable std_line : line;
+        variable stm_lines_get_valid : integer := 0;
+        variable position : integer;
+    begin
+        valid := 0;
+        for i in 0 to stm_lines.size - 1 loop
+            position := i;
+            stm_lines_get(stm_lines, position, std_line, stm_lines_get_valid);
+            writeline(output, std_line);
+            if stm_lines_get_valid = 0 then
+                return;
+            end if;
+        end loop;
+        valid := 1;
+    end procedure;
 
 
-    --  is_digit
+
     function is_digit(constant c : in character) return boolean is
         variable rtn : boolean;
     begin
-        if (c >= '0' and c <= '9') then
+        if c >= '0' and c <= '9' then
             rtn := true;
         else
             rtn := false;
@@ -390,11 +410,10 @@ package body tb_base_pkg is
     end function;
 
 
-    -- is_space
     function is_space(constant c : in character) return boolean is
         variable rtn : boolean;
     begin
-        if (c = ' ' or c = ht) then
+        if c = ' ' or c = ht then
             rtn := true;
         else
             rtn := false;
@@ -403,7 +422,6 @@ package body tb_base_pkg is
     end function;
 
 
-    --  to_char
     function ew_to_char(int : integer) return character is
         variable c : character;
     begin
@@ -426,23 +444,20 @@ package body tb_base_pkg is
             when 14 => c := 'E';
             when 15 => c := 'F';
             when others =>
-                assert (false)
+                assert false
                 report lf & "error: ew_to_char was given a non number didgit."
                 severity failure;
         end case;
-
         return c;
     end function;
 
 
-    --  to_string function  integer
     function to_str(int : integer) return string is
     begin
         return ew_to_str(int, dec);
     end function;
 
 
-    --  ew_str_cat
     function ew_str_cat(s1 : stm_text;
         s2 : text_field) return stm_text is
         variable i : integer;
@@ -451,16 +466,15 @@ package body tb_base_pkg is
     begin
         sc := s1;
         i := 1;
-        while (sc(i) /= nul) loop
+        while sc(i) /= nul loop
             i := i + 1;
         end loop;
         j := 1;
-        while (s2(j) /= nul) loop
+        while s2(j) /= nul loop
             sc(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-
         return sc;
     end function;
 
@@ -471,7 +485,7 @@ package body tb_base_pkg is
     function fld_len(s : in text_field) return integer is
         variable i : integer := 1;
     begin
-        while (s(i) /= nul and i /= max_field_len) loop
+        while s(i) /= nul and i /= max_field_len loop
             i := i + 1;
         end loop;
         return (i - 1);
@@ -484,7 +498,7 @@ package body tb_base_pkg is
     function text_line_len(s : in text_line) return integer is
         variable i : integer := 1;
     begin
-        while (s(i) /= nul and i /= max_str_len) loop
+        while s(i) /= nul and i /= max_str_len loop
             i := i + 1;
         end loop;
         return (i - 1);
@@ -497,7 +511,7 @@ package body tb_base_pkg is
     function stm_text_len(s : in stm_text) return integer is
         variable i : integer := 1;
     begin
-        while (s(i) /= nul and i /= max_str_len) loop
+        while s(i) /= nul and i /= max_str_len loop
             i := i + 1;
         end loop;
         return (i - 1);
@@ -516,11 +530,10 @@ package body tb_base_pkg is
         s1_length := fld_len(s1);
         s2_length := fld_len(s2);
 
-        if (s1_length /= s2_length) then
+        if s1_length /= s2_length then
             return false;
         end if;
-
-        while (i /= s1_length) loop
+        while i /= s1_length loop
             i := i + 1;
             if s1(i) /= s2(i) then
                 return false;
@@ -530,7 +543,6 @@ package body tb_base_pkg is
     end function;
 
 
-    -- c2int   convert character to integer
     function c2int(c : in character) return integer is
         variable i : integer;
     begin
@@ -563,14 +575,11 @@ package body tb_base_pkg is
         variable j : integer := 1;
         variable rtn : integer := 0;
     begin
-
         l := fld_len(str);
-
         for i in l downto 1 loop
             rtn := rtn + (c2int(str(j)) * (10 ** (i - 1)));
             j := j + 1;
         end loop;
-
         return rtn;
     end function;
 
@@ -624,7 +633,7 @@ package body tb_base_pkg is
                 when 'f' | 'F' =>
                     int_number := 15;
                 when others =>
-                    assert (false)
+                    assert false
                     report lf & "error: hex2integer found non hex didgit on line "
                      & (integer'image(line)) & " of file " & file_name
                     severity failure;
@@ -704,6 +713,7 @@ package body tb_base_pkg is
     function bin2integer(bin_number : in text_field;
         file_name : in text_line;
         line : in integer) return integer is
+
         variable len : integer;
         variable temp_int : integer;
         variable power : integer;
@@ -719,16 +729,14 @@ package body tb_base_pkg is
                 when '1' =>
                     int_number := 1;
                 when others =>
-                    assert (false)
+                    assert false
                     report lf & "error: bin2integer found non binary didgit on line "
                      & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
-
             temp_int := temp_int + (int_number * (2 ** power));
             power := power + 1;
         end loop;
-
         return temp_int;
     end function;
 
@@ -750,7 +758,7 @@ package body tb_base_pkg is
             case field(2) is
                 when 'x' =>
                     value := 3;
-                    while (field(value) /= nul) loop
+                    while field(value) /= nul loop
                         temp_str(value - 2) := field(value);
                         value := value + 1;
                     end loop;
@@ -760,13 +768,13 @@ package body tb_base_pkg is
                     value := hex2integer(temp_str, file_name, line);
                 when 'b' =>
                     value := 3;
-                    while (field(value) /= nul) loop
+                    while field(value) /= nul loop
                         temp_str(value - 2) := field(value);
                         value := value + 1;
                     end loop;
                     value := bin2integer(temp_str, file_name, line);
                 when others =>
-                    assert (false)
+                    assert false
                     report lf & "error: strange # found ! "
                      & (integer'image(line)) & " of file " & file_name
                     severity failure;
@@ -780,8 +788,7 @@ package body tb_base_pkg is
 
     --  to_str function  with base parameter
     --     convert integer to number base
-    function ew_to_str(int : integer;
-        b : base) return text_field is
+    function ew_to_str(int : integer; b : base) return text_field is
         variable temp : text_field;
         variable temp1 : text_field;
         variable radix : integer := 0;
@@ -810,7 +817,7 @@ package body tb_base_pkg is
                 pre := (others => nul);
         end case;
         -- now jump through hoops because of sign
-        if (num < 0 and b = hex) then
+        if num < 0 and b = hex then
             vec := std_logic_vector(to_unsigned(int, 32));
             temp(1) := std_vec2c(vec(31 downto 28));
             temp(2) := std_vec2c(vec(27 downto 24));
@@ -831,12 +838,12 @@ package body tb_base_pkg is
             end loop; -- side.
         end if;
         -- add prefix if is one
-        if (pre(1) /= nul) then
+        if pre(1) /= nul then
             temp1 := temp;
             ix := 1;
             j := 3;
             temp(1 to 2) := pre;
-            while (temp1(ix) /= nul) loop
+            while temp1(ix) /= nul loop
                 temp(j) := temp1(ix);
                 ix := ix + 1;
                 j := j + 1;
@@ -848,9 +855,7 @@ package body tb_base_pkg is
 
     --  to_str function  with base parameter
     --     convert integer to number base
-    function ew_to_str_len(int : integer;
-        b : base) return text_field is
-
+    function ew_to_str_len(int : integer; b : base) return text_field is
         variable temp : text_field;
         variable temp1 : text_field;
         variable radix : integer := 0;
@@ -939,7 +944,7 @@ package body tb_base_pkg is
         variable txt_str : stm_text;
     begin
         txt_str := (others => nul);
-        if (ptr /= null) then
+        if ptr /= null then
             for i in 1 to c_stm_text_len loop
                 if (ptr(i) = nul) then
                     exit;
@@ -956,7 +961,7 @@ package body tb_base_pkg is
         variable l_i : integer := 1;
         variable j : integer := 1;
     begin
-        while (inst.instruction(j) /= nul) loop
+        while inst.instruction(j) /= nul loop
             l(l_i) := inst.instruction(j);
             j := j + 1;
             l_i := l_i + 1;
@@ -966,7 +971,7 @@ package body tb_base_pkg is
         l_i := l_i + 1;
         j := 1;
         -- field one
-        if (inst.inst_field_1(1) /= nul) then
+        if inst.inst_field_1(1) /= nul then
             while (inst.inst_field_1(j) /= nul) loop
                 l(l_i) := inst.inst_field_1(j);
                 j := j + 1;
@@ -976,7 +981,7 @@ package body tb_base_pkg is
             l_i := l_i + 1;
             j := 1;
             -- field two
-            if (inst.inst_field_2(1) /= nul) then
+            if inst.inst_field_2(1) /= nul then
                 while (inst.inst_field_2(j) /= nul) loop
                     l(l_i) := inst.inst_field_2(j);
                     j := j + 1;
@@ -986,7 +991,7 @@ package body tb_base_pkg is
                 l_i := l_i + 1;
                 j := 1;
                 -- field three
-                if (inst.inst_field_3(1) /= nul) then
+                if inst.inst_field_3(1) /= nul then
                     while (inst.inst_field_3(j) /= nul) loop
                         l(l_i) := inst.inst_field_3(j);
                         j := j + 1;
@@ -996,7 +1001,7 @@ package body tb_base_pkg is
                     l_i := l_i + 1;
                     j := 1;
                     -- field four
-                    if (inst.inst_field_4(1) /= nul) then
+                    if inst.inst_field_4(1) /= nul then
                         while (inst.inst_field_4(j) /= nul) loop
                             l(l_i) := inst.inst_field_4(j);
                             j := j + 1;
@@ -1014,7 +1019,7 @@ package body tb_base_pkg is
         end if;
     end procedure;
 
-    -------------------------------------------------------------------------
+
     -- dump inst_sequ
     --  this procedure dumps to the simulation window the current instruction
     --  sequence.  the whole thing will be dumped, which could be big.
@@ -1023,28 +1028,28 @@ package body tb_base_pkg is
         variable v_sequ  :  stim_line_ptr;
     begin
         v_sequ  :=  inst_sequ;
-        while(v_sequ.next_rec /= null) loop
+        while v_sequ.next_rec /= null loop
             print("-----------------------------------------------------------------");
             print("instruction is " & v_sequ.instruction &
-            "     par1: "   & v_sequ.inst_field_1 &
+                "     par1: "   & v_sequ.inst_field_1 &
             "     par2: "   & v_sequ.inst_field_2 &
             "     par3: "   & v_sequ.inst_field_3 &
             "     par4: "   & v_sequ.inst_field_4);
             print("line number: " & to_str(v_sequ.line_number) & "     file line number: " & to_str(v_sequ.file_line) &
-            "     file idx: " & to_str(v_sequ.file_idx));
+                "     file idx: " & to_str(v_sequ.file_idx));
             v_sequ  :=  v_sequ.next_rec;
         end loop;
         -- get the last one
         print("-----------------------------------------------------------------");
         print("instruction is " & v_sequ.instruction & 
-        "     par1: "   & v_sequ.inst_field_1 &
+            "     par1: "   & v_sequ.inst_field_1 &
         "     par2: "   & v_sequ.inst_field_2 & 
         "     par3: "   & v_sequ.inst_field_3 &
         "     par4: "   & v_sequ.inst_field_4);
-        print("line number: " & to_str(v_sequ.line_number) & 
-        "     file line number: " & to_str(v_sequ.file_line) &
+        print("line number: " & to_str(v_sequ.line_number) &
+            "     file line number: " & to_str(v_sequ.file_line) &
         "     file idx: " & to_str(v_sequ.file_idx));
-        end procedure;
+    end procedure;
 
 
     -- procedure to print loggings to stdout
@@ -1052,7 +1057,7 @@ package body tb_base_pkg is
         variable l : line;
     begin
         for i in 1 to s'length loop
-            if (s(i) /= nul) then
+            if s(i) /= nul then
                 write(l, s(i));
             end if;
         end loop;
@@ -1063,8 +1068,7 @@ package body tb_base_pkg is
     procedure txt_print(variable ptr : in stm_text_ptr) is
         variable txt_str : stm_text;
     begin
-
-        if (ptr /= null) then
+        if ptr /= null then
             txt_str := (others => nul);
             for i in 1 to c_stm_text_len loop
                 if (ptr(i) = nul) then
@@ -1075,7 +1079,7 @@ package body tb_base_pkg is
             print(txt_str);
         end if;
     end procedure;
-    
+
     --  procedure copy text into an existing pointer
     procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
         variable ptr_o : out stm_text_ptr;
@@ -1084,9 +1088,9 @@ package body tb_base_pkg is
         variable ptr_temp : stm_text_ptr;
     begin
         ptr_temp := ptr;
-        if (ptr_temp /= null) then
+        if ptr_temp /= null then
             for i in 1 to c_stm_text_len loop
-                if (txt_str(i) = nul) then
+                if txt_str(i) = nul then
                     exit;
                 end if;
                 ptr_temp(i) := txt_str(i);
@@ -1103,7 +1107,6 @@ package body tb_base_pkg is
         for i in 1 to sourcestr'length loop
             tempfield(i) := sourcestr(i);
         end loop;
-
         for i in 1 to text_field'length loop
             destfield(i) := tempfield(i);
         end loop;
