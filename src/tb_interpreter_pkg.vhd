@@ -154,4 +154,9 @@ package tb_interpreter_pkg is
         variable ptr : in stm_text_ptr;
         constant b : in base);
 
+    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+        variable ptr : in stm_text_ptr;
+        variable stm_text_substituded : out stm_text;
+        constant b : in base);
+
 end package;

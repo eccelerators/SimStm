@@ -1374,6 +1374,18 @@ package body tb_interpreter_pkg is
     --  sub any variables found
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
         variable ptr : in stm_text_ptr;
+        constant b : in base) is        
+    variable stm_text_substituded : stm_text;
+    begin        
+        stm_text_substitude_wvar(var_list, ptr, stm_text_substituded, b);
+        print(stm_text_substituded);
+    end procedure;
+    
+  
+    --  procedure to substitude any variables found
+    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+        variable ptr : in stm_text_ptr;
+        variable stm_text_substituded : out stm_text;
         constant b : in base) is
 
         variable src_i : integer;
@@ -1429,7 +1441,7 @@ package body tb_interpreter_pkg is
 
             if src_i = src_tail_begin then
                 -- src end reached
-                print(dest_txt_str);
+                stm_text_substituded:= dest_txt_str;
                 return;
             end if;
 
@@ -1501,6 +1513,7 @@ package body tb_interpreter_pkg is
         severity failure;
 
     end procedure;
+
 
 
 end package body;

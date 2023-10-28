@@ -103,12 +103,21 @@ package tb_base_pkg is
         next_rec : var_field_ptr;
     end record;
 
+    function stm_file_status(v_stat : file_open_status) return integer;
+    
+    procedure stm_file_readable(variable file_path : in stm_text_ptr;
+        variable status : out integer);    
+    
+    procedure stm_file_writeable(variable file_path : in stm_text_ptr;
+        variable status : out integer);
 
-    procedure stm_file_read(variable stm_lines : inout t_stm_lines_ptr;
+    procedure stm_file_appendable(variable file_path : in stm_text_ptr;
+        variable status : out integer);
+        
+    procedure stm_file_read_all(variable stm_lines : inout t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer);
-
-
+        
     procedure stm_file_write(variable stm_lines : out t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer);
@@ -116,7 +125,6 @@ package tb_base_pkg is
     procedure stm_file_append(variable stm_lines : in t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer);
-
 
     procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
         variable position : in integer;

@@ -51,7 +51,12 @@ package tb_instructions_pkg is
 
         -- file
         constant INSTR_FILE : string := "file";
+        constant INSTR_FILE_READABLE : string := "file_readable";
+        constant INSTR_FILE_WRITEABLE : string := "file_writeable";        
+        constant INSTR_FILE_APPENDABLE : string := "file_appendable";               
         constant INSTR_FILE_READ : string := "file_read";
+        constant INSTR_FILE_READ_END : string := "file_read_end";
+        constant INSTR_FILE_READ_ALL : string := "file_read_all";
         constant INSTR_FILE_WRITE : string := "file_write";
         constant INSTR_FILE_APPEND : string := "file_append";
 
@@ -176,7 +181,12 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_BUS_TIMEOUT, 2);
         -- file
         define_instruction(inst_list, INSTR_FILE, 1);
-        define_instruction(inst_list, INSTR_FILE_READ, 2);
+        define_instruction(inst_list, INSTR_FILE_READABLE, 2);
+        define_instruction(inst_list, INSTR_FILE_WRITEABLE, 2);
+        define_instruction(inst_list, INSTR_FILE_APPENDABLE, 2);
+        define_instruction(inst_list, INSTR_FILE_READ, 3);
+        define_instruction(inst_list, INSTR_FILE_READ_END, 1);
+        define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);
         -- lines
@@ -272,6 +282,22 @@ package body tb_instructions_pkg is
                 if token2(1 to 4) = "read" then
                     token2_len := 4;
                     token_merge := 2;
+                    if token3(1 to 3) = "end" then
+                        token3_len := 3;
+                        token_merge := 3;    
+                    elsif token3(1 to 3) = "all" then              
+                        token3_len := 3;
+                        token_merge := 3;                      
+                    end if;
+                elsif token2(1 to 8) = "readable" then
+                    token2_len := 8;
+                    token_merge := 2; 
+                elsif token2(1 to 9) = "writeable" then
+                    token2_len := 9;
+                    token_merge := 2;    
+                elsif token2(1 to 10) = "appendable" then
+                    token2_len := 10;
+                    token_merge := 2;                                                          
                 elsif token2(1 to 5) = "write" then
                     token2_len := 5;
                     token_merge := 2;

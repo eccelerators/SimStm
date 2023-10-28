@@ -8,7 +8,67 @@ use ieee.math_real.all;
 
 package body tb_base_pkg is
 
-    procedure stm_file_read(variable stm_lines : inout t_stm_lines_ptr;
+    function stm_file_status(v_stat : file_open_status) return integer is
+    begin
+        if v_stat = open_ok then
+            return 0;
+        elsif v_stat = status_error then
+            return 1;
+        elsif v_stat = name_error then
+            return 2;
+        elsif v_stat = mode_error then
+            return 3;
+        else
+          return 4;  
+        end if;
+    end function;
+
+    procedure stm_file_readable(variable file_path : in stm_text_ptr;
+        variable status : out integer) is
+
+        variable v_stat : file_open_status;
+        file user_file : text;
+        variable file_path_string : stm_text;
+    begin
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), read_mode);
+        if v_stat = open_ok then
+            file_close(user_file);         
+        end if;
+        status := stm_file_status(v_stat);
+    end procedure;
+    
+    procedure stm_file_writeable(variable file_path : in stm_text_ptr;
+        variable status : out integer) is
+
+        variable v_stat : file_open_status;
+        file user_file : text;
+        variable file_path_string : stm_text;
+    begin
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), write_mode);
+        if v_stat = open_ok then
+            file_close(user_file);         
+        end if;
+        status := stm_file_status(v_stat);
+    end procedure;
+    
+    procedure stm_file_appendable(variable file_path : in stm_text_ptr;
+        variable status : out integer) is
+
+        variable v_stat : file_open_status;
+        file user_file : text;
+        variable file_path_string : stm_text;
+    begin
+        txt_to_string(file_path, file_path_string);
+        file_open(v_stat, user_file, stm_text_crop(file_path_string), read_mode);
+        if v_stat = open_ok then
+            file_close(user_file);         
+        end if;
+        status := stm_file_status(v_stat);
+    end procedure;
+      
+    procedure stm_file_read_all(variable stm_lines : inout t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer) is
 
@@ -34,8 +94,7 @@ package body tb_base_pkg is
         valid := 1;
         file_close(user_file);
     end procedure;
-
-
+    
     procedure stm_file_write(variable stm_lines : out t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer) is

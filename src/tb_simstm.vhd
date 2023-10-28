@@ -144,12 +144,32 @@ begin
 
         -- Text
         variable var_stm_text : stm_text_ptr;
+        variable stm_text_substituded : stm_text;       
 
         -- File
-        file user_file : text;
-        variable var_stm_lines : t_stm_lines_ptr;
-
+        file user_file_0 : text;
+        file user_file_1 : text;
+        file user_file_2 : text;
+        file user_file_3 : text;
+        variable user_file_name_0 : stm_text_ptr;
+        variable user_file_name_1 : stm_text_ptr;
+        variable user_file_name_2 : stm_text_ptr;
+        variable user_file_name_3 : stm_text_ptr;
+        variable user_file_in_use_0 : boolean;
+        variable user_file_in_use_1 : boolean;
+        variable user_file_in_use_2 : boolean;
+        variable user_file_in_use_3 : boolean;     
+        variable user_file_number : integer; 
+        variable user_files_used : integer := 0;    
+        variable user_v_stat : file_open_status;
+        variable user_file_path_string : stm_text;
+        variable user_file_append_done : boolean;
+        variable user_file_open_done : boolean;
+        variable user_std_line : line;
+        variable stm_lines_append_valid : integer := 0;
+        
         -- Lines
+        variable var_stm_lines : t_stm_lines_ptr;
         variable var_stm_lines_ptr : t_stm_lines_ptr;
         variable var_stm_line_ptr : t_stm_line_ptr;
 
@@ -298,7 +318,7 @@ begin
                 elsif instruction(1 to len) = INSTR_EQU then
                     update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " equ error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- equ operand1_and_target $operand2
@@ -311,7 +331,7 @@ begin
                     temp_int := temp_int + par2;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " add error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " add error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- equ operand1_and_target $operand2
@@ -324,7 +344,7 @@ begin
                     temp_int := temp_int - par2;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " sub error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " sub error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- mul operand1_and_target $operand2
@@ -337,7 +357,7 @@ begin
                     temp_int := temp_int * par2;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " mul error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- div operand1_and_target $operand2
@@ -360,7 +380,7 @@ begin
                     end if;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " div error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " div error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- and operand1_and_target $operand2
@@ -376,7 +396,7 @@ begin
                     temp_int := to_integer(signed(temp_stdvec_c));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " and error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " and error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- or operand1_and_target $operand2
@@ -392,7 +412,7 @@ begin
                     temp_int := to_integer(signed(temp_stdvec_c));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " or error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " or error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- xor operand1_and_target $operand2
@@ -408,7 +428,7 @@ begin
                     temp_int := to_integer(signed(temp_stdvec_c));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " xor error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " xor error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- shl operand1_and_target $operand2
@@ -421,7 +441,7 @@ begin
                     temp_int := to_integer(shift_left(to_signed(temp_int, 32), par2));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " mul error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- shr operand1_and_target $operand2
@@ -434,7 +454,7 @@ begin
                     temp_int := to_integer(shift_right(to_signed(temp_int, 32), par2));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " mul error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- inv operand1_and_target
@@ -448,7 +468,7 @@ begin
                     temp_int := to_integer(signed(temp_stdvec_c));
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " inv error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " inv error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- ld operand1_and_target
@@ -460,7 +480,7 @@ begin
                     temp_int := ld(temp_int);
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " ld error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " ld error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- array set an_array $array_position #x07
@@ -515,6 +535,42 @@ begin
                     assert valid /= 0
                     report "array_pointer error: not a array name??"
                     severity failure;
+                    
+                -- file readable a_fileA target
+                elsif instruction(1 to len) = INSTR_FILE_READABLE then
+                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                    severity failure;
+                    stm_file_readable(var_stm_text, temp_int);
+                    update_variable(defined_vars, par2, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
+                    severity failure;
+                    
+                -- file writeable a_fileA target
+                elsif instruction(1 to len) = INSTR_FILE_WRITEABLE then
+                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                    severity failure;
+                    stm_file_writeable(var_stm_text, temp_int);
+                    update_variable(defined_vars, par2, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
+                    severity failure;
+
+                -- file appendable a_fileA target
+                elsif instruction(1 to len) = INSTR_FILE_APPENDABLE then
+                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                    severity failure;
+                    stm_file_appendable(var_stm_text, temp_int);
+                    update_variable(defined_vars, par2, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
+                    severity failure;
 
                 -- file write a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_WRITE then
@@ -531,7 +587,6 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file write not successful"
                     severity failure;
 
-
                 -- file append a_fileB  a_lines                    
                 elsif instruction(1 to len) = INSTR_FILE_APPEND then
                     index_variable(defined_vars, par1, var_stm_text, valid);
@@ -547,7 +602,8 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file append not successful"
                     severity failure;
 
-                -- file read a_fileA a_lines
+                -- file read a_fileA a_lines $number_of_lines
+                -- file read a_fileA a_lines 256
                 elsif instruction(1 to len) = INSTR_FILE_READ then
                     index_variable(defined_vars, par1, var_stm_text, valid);
                     assert valid /= 0
@@ -556,12 +612,147 @@ begin
                     index_variable(defined_vars, par2, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
+                    severity failure;                              
+                    user_file_append_done := false;                   
+                    -- if file is already in use, us it
+                    if user_file_in_use_0 then
+                        if var_stm_text = user_file_name_0 then
+                            readline(user_file_0, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;
+                            user_file_append_done := true;
+                        end if;
+                    end if; 
+                    if user_file_in_use_1 then
+                        if var_stm_text = user_file_name_1 then
+                            readline(user_file_1, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;
+                            user_file_append_done := true;
+                        end if;
+                    end if;
+                    if user_file_in_use_2 then
+                        if var_stm_text = user_file_name_2 then
+                            readline(user_file_2, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;
+                            user_file_append_done := true;
+                        end if;
+                    end if;
+                    if user_file_in_use_3 then
+                        if var_stm_text = user_file_name_3 then
+                            readline(user_file_3, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;
+                            user_file_append_done := true;
+                        end if;
+                    end if;
+                    -- if file is not in use, try to open and use it
+                    if not user_file_append_done then                        
+                        txt_to_string(var_stm_text, user_file_path_string);
+                        user_file_open_done := false;
+                        if not user_file_in_use_0 and not user_file_open_done then
+                            file_open(v_stat, user_file_0, stm_text_crop(user_file_path_string), read_mode);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                            severity failure;
+                            user_file_name_0 := var_stm_text;
+                            user_file_in_use_0 := true;
+                            readline(user_file_0, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;                           
+                        elsif not user_file_in_use_1 and not user_file_open_done then
+                            file_open(v_stat, user_file_1, stm_text_crop(user_file_path_string), read_mode);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                            severity failure;
+                            user_file_name_1 := var_stm_text;
+                            user_file_in_use_1 := true;
+                            readline(user_file_1, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;                            
+                        elsif not user_file_in_use_2 and not user_file_open_done then
+                            file_open(v_stat, user_file_2, stm_text_crop(user_file_path_string), read_mode);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                            severity failure;
+                            user_file_name_2 := var_stm_text;
+                            user_file_in_use_2 := true;
+                            readline(user_file_2, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;                           
+                        elsif not user_file_in_use_3 and not user_file_open_done then
+                            file_open(v_stat, user_file_3, stm_text_crop(user_file_path_string), read_mode);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                            severity failure;
+                            user_file_name_3 := var_stm_text;
+                            user_file_in_use_3 := true;
+                            readline(user_file_3, user_std_line);
+                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                            severity failure;                           
+                        else
+                            assert false
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: only 4 files are allowed for file read concurrently"
+                            severity failure;                        
+                        end if;               
+                    end if;
+                    
+                -- file read end a_fileA a_lines
+                elsif instruction(1 to len) = INSTR_FILE_READ_END then
+                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_file_read(var_stm_lines, var_stm_text, valid);
+                    if var_stm_text = user_file_name_0 and user_file_in_use_0 then
+                        file_close(user_file_0);
+                        user_file_in_use_0 := false;
+                    elsif var_stm_text = user_file_name_1 and user_file_in_use_1 then
+                        file_close(user_file_1);
+                        user_file_in_use_1 := false;  
+                    elsif var_stm_text = user_file_name_2 and user_file_in_use_2 then
+                        file_close(user_file_2);
+                        user_file_in_use_2 := false;                
+                    elsif var_stm_text = user_file_name_3 and user_file_in_use_3 then
+                        file_close(user_file_3);
+                        user_file_in_use_3 := false;                        
+                    else
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
+                        severity failure;                                           
+                    end if;                      
+                    
+                -- file read all a_fileA a_lines
+                elsif instruction(1 to len) = INSTR_FILE_READ_ALL then
+                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                    severity failure;
+                    index_variable(defined_vars, par2, var_stm_lines, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
+                    severity failure;
+                    stm_file_read_all(var_stm_lines, var_stm_text, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file read not successful"
                     severity failure;
-
+                                 
                 -- lines get a_lines $position an_array
                 -- lines get a_lines 8 an_array               
                 elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
@@ -666,9 +857,11 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
+                    --stm_text_substitude_wvar(var_list, ptr, stm_text_substituded, b);
+                    --stm_text_substituded_ptr := new stm_text;
                     index_variable(defined_vars, par3, var_stm_text, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message object not found"
                     severity failure;
                     stm_lines_append(var_stm_lines, var_stm_text, valid);
                     assert valid /= 0
@@ -1000,7 +1193,7 @@ begin
                     seed2 := 1;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " random_seed error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " random_seed error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- random rand_var $rand_min_var $rand_max_var
@@ -1016,7 +1209,7 @@ begin
                     getrandint(seed1, seed2, par2, par3, temp_int);
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " random error: vabiable are constant??"
+                    report " line " & (integer'image(file_line)) & " random error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- wait $time_to_wait
