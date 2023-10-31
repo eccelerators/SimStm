@@ -1,6 +1,9 @@
 array array_name 10
 
 var var_name 0
-array_get array_name 10 var_name
-
-finish
+Main:
+proc
+	array get array_name 10 var_name
+	
+	finish
+end proc

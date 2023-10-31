@@ -158,5 +158,19 @@ package tb_interpreter_pkg is
         variable ptr : in stm_text_ptr;
         variable stm_text_substituded : out stm_text;
         constant b : in base);
+        
+    -- dump inst_sequ
+    --  this procedure dumps to the simulation window the current instruction
+    --  sequence.  the whole thing will be dumped, which could be big.
+    --   ** intended for testbench development debug**
+    procedure dump_inst_sequ(variable inst_sequ : in stim_line_ptr; file_list : inout file_def_ptr);
+    
+    -- procedure to print instruction records to stdout  *for debug*
+    procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
+
+     -- dump all variables    
+    procedure dump_variables(variable var_list : in var_field_ptr);
+    
+    procedure dump_var_field(variable ptr : var_field_ptr);
 
 end package;

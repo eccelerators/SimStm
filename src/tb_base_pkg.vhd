@@ -71,10 +71,16 @@ package tb_base_pkg is
     type t_stm_array is array (natural range <>) of integer;
     type t_stm_array_ptr is access t_stm_array;
 
+    type t_stm_line_type is (STM_LINE_TEXT_TYPE, STM_LINE_ARRAY_TYPE);
+
+
     type t_stm_line;
     type t_stm_line_ptr is access t_stm_line;
     type t_stm_line is record
+        line_number : integer;
         line_content : line;
+        line_type : t_stm_line_type;
+        array_size : integer;
         next_stm_line : t_stm_line_ptr;
     end record;
 
@@ -182,6 +188,7 @@ package tb_base_pkg is
     function ew_to_char(int : integer) return character;
 
     function to_str(int : integer) return string;
+    function to_str_hex(int : integer) return string;
 
     function ew_str_cat(s1 : stm_text;
         s2 : text_field) return stm_text;
@@ -226,17 +233,17 @@ package tb_base_pkg is
 
     procedure txt_to_string(variable ptr : in stm_text_ptr; variable str : out stm_text);
 
-
-    procedure print_inst(variable inst : in stim_line_ptr);
-
-    -- dump inst_sequ
-    --  this procedure dumps to the simulation window the current instruction
-    --  sequence.  the whole thing will be dumped, which could be big.
-    --   ** intended for testbench development debug**
-    procedure dump_inst_sequ(variable inst_sequ  :  in  stim_line_ptr);
-
     -- print to stdout  string
     procedure print(s : in string);
+    
+    -- procedure to get a line from a string
+    procedure get_line_from_str(s : in string; std_line : inout line);
+
+    -- procedure to get stm_text pointer from a line
+    procedure get_stm_text_ptr_from_line(std_line : inout line; var_stm_text_ptr : inout stm_text_ptr);
+    
+   --  procedure to get line of the txt pointer
+    procedure stm_text_ptr_to_line(variable var_stm_text : in stm_text_ptr; variable line_out : out line);
 
     -- procedure print stim txt
     procedure txt_print(variable ptr : in stm_text_ptr);
@@ -245,11 +252,17 @@ package tb_base_pkg is
     procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
         variable ptr_o : out stm_text_ptr;
         variable txt_str : in stm_text);
+    
+    --  procedure copy stm_text into an existing pointer    
+    procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
+        variable txt_str : in stm_text);
 
     -- takes a source string of type string and initializes a field of type
     -- text_field that is primarly used by the open corse test bench.
     procedure init_text_field(variable sourcestr : in string;
         variable destfield : out text_field);
+        
+    procedure get_instruction_file_name(file_list : inout file_def_ptr; file_idx: integer; file_name : inout text_line);
 
     --  get a random intetger number
     procedure getrandint(variable seed1 : inout positive;

@@ -3,7 +3,7 @@ library ieee;
     use ieee.numeric_std.all;
 
 library work;
-    use work.tb_pkg_signals.all;
+    use work.tb_signals_pkg.all;
 
 entity tb_top is
     generic (

@@ -1,8 +1,7 @@
-Main:
-proc
+lines a_lines
 
-    lines a_lines
-    
+Main:
+proc       
     lines append message a_lines "line 1"
     lines append message a_lines "line 2"
     lines append message a_lines "line 3"

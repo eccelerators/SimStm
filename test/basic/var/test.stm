@@ -7,14 +7,14 @@ var test_variable_5 5
 const INFO 20
 
 Main:
-proc
-	log 0 "test_variable_1: {}" $test_variable_1
-	log 0 "test_variable_2: {}" $test_variable_2
-	log 0 "test_variable_3: {}" $test_variable_3
-	log 0 "test_variable_4: {}" $test_variable_4
-	log 0 "test_variable_5: {}" $test_variable_5
+proc 
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	log message 0 "test_variable_3: {}" $test_variable_3
+	log message 0 "test_variable_4: {}" $test_variable_4
+	log message 0 "test_variable_5: {}" $test_variable_5
 
-	log $INFO "Main test finished {}" $INFO 
+	log message $INFO "Main test finished {}" $INFO 
 	wait 1000
 	finish
 end proc

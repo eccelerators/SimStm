@@ -144,7 +144,8 @@ begin
 
         -- Text
         variable var_stm_text : stm_text_ptr;
-        variable stm_text_substituded : stm_text;       
+        variable var_stm_text_out : stm_text_ptr;
+        variable var_stm_text_substituded : stm_text;       
 
         -- File
         file user_file_0 : text;
@@ -267,6 +268,9 @@ begin
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
                     par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                     last_sequ_num, last_sequ_ptr);
+
+                -- dump_variables(defined_vars);                
+                -- print_inst(inst_sequ, v_line, file_list);    
 
                 Executing_Line <= file_line;
                 Executing_File <= file_name;
@@ -492,7 +496,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    assert var_stm_array'length <= par2
+                    assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;
                     var_stm_array(par2) := par3;
@@ -503,7 +507,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    assert var_stm_array'length <= par2
+                    assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;                       
                     temp_int := var_stm_array(par2);
@@ -835,12 +839,11 @@ begin
 
                 -- lines append a_lines an_array
                 elsif instruction(1 to len) = INSTR_LINES_APPEND_ARRAY then
-                    temp_int := 0;
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    index_variable(defined_vars, par3, var_stm_array, valid);
+                    index_variable(defined_vars, par2, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
@@ -852,18 +855,14 @@ begin
                 -- lines append a_lines "abc"
                 -- lines append a_lines "abc{}" $a_varB
                 elsif instruction(1 to len) = INSTR_LINES_APPEND_MESSAGE then
-                    temp_int := 0;
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    --stm_text_substitude_wvar(var_list, ptr, stm_text_substituded, b);
-                    --stm_text_substituded_ptr := new stm_text;
-                    index_variable(defined_vars, par3, var_stm_text, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message object not found"
-                    severity failure;
-                    stm_lines_append(var_stm_lines, var_stm_text, valid);
+                    stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
+                    var_stm_text_out := new stm_text;                    
+                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
+                    stm_lines_append(var_stm_lines, var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
                     severity failure;   
@@ -1149,13 +1148,13 @@ begin
                     
                 -- log lines $INFO a_lines
                 elsif instruction(1 to len) = INSTR_LOG_LINES then
-                    index_variable(defined_vars, par1, var_stm_lines, valid);
-                    assert valid = 0
+                    index_variable(defined_vars, par2, var_stm_lines, valid);
+                    assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
                     if par1 <= loglevel then
                         stm_lines_print(var_stm_lines, valid);
-                        assert valid = 0
+                        assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object access"
                         severity failure;
                     end if;

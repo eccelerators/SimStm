@@ -833,8 +833,8 @@ package body tb_interpreter_pkg is
         variable inst_len : integer;
         variable fname : text_line;
         variable file_line : integer;
-        variable temp_fn_prt : file_def_ptr;
         variable tmp_int : integer;
+        variable tmp_file_list : file_def_ptr := file_list;
 
     begin
         inst_ptr := inst_sequ;
@@ -843,20 +843,9 @@ package body tb_interpreter_pkg is
             inst := inst_ptr.instruction;
             inst_len := fld_len(inst_ptr.instruction);
             file_line := inst_ptr.file_line;
-            line := inst_ptr.file_line;
-            -- recover the file name this line came from
-            temp_fn_prt := file_list;
-            tmp_int := inst_ptr.file_idx;
-            while (temp_fn_prt.next_rec /= null) loop
-                if (temp_fn_prt.rec_idx = tmp_int) then
-                    exit;
-                end if;
-                temp_fn_prt := temp_fn_prt.next_rec;
-            end loop;
-            for i in 1 to fname'high loop
-                file_name(i) := temp_fn_prt.file_name(i);
-            end loop;
-
+            line := inst_ptr.file_line; 
+                     
+            get_instruction_file_name(tmp_file_list, inst_ptr.file_idx,  file_name);
             txt := inst_ptr.txt;
             temp_text_field := inst_ptr.inst_field_1;
             if temp_text_field(1) /= nul then
@@ -1209,12 +1198,12 @@ package body tb_interpreter_pkg is
     --            sequ_num   the sequence number to recover
     --
     --  outputs:  inst  instruction text
-    --            p1    paramiter 1 in integer form
-    --            p2    paramiter 2 in integer form
-    --            p3    paramiter 3 in integer form
-    --            p4    paramiter 4 in integer form
-    --            p5    paramiter 5 in integer form
-    --            p6    paramiter 6 in integer form
+    --            p1    parameter 1 in integer form
+    --            p2    parameter 2 in integer form
+    --            p3    parameter 3 in integer form
+    --            p4    parameter 4 in integer form
+    --            p5    parameter 5 in integer form
+    --            p6    parameter 6 in integer form
     --            txt   pointer to any text string of this sequence
     --            inst_len  the lenth of inst in characters
     --            fname  file name this sequence came from
@@ -1474,13 +1463,9 @@ package body tb_interpreter_pkg is
                 end if;
             end loop;
 
-            if ptr(src_tail_i) = '$' then
-                src_tail_i := src_tail_i + 1;
-            else
-                assert (false)
-                report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
-                severity failure;        
-            end if;
+            assert ptr(src_tail_i) = '$'
+            report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
+            severity failure;        
 
             tmp_field := (others => nul);
             tmp_i := 1;
@@ -1511,9 +1496,172 @@ package body tb_interpreter_pkg is
         assert false
         report lf & "error: txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
-
     end procedure;
+    
+    
+    
+    -- dump inst_sequ
+    --  this procedure dumps to the simulation window the current instruction
+    --  sequence.  the whole thing will be dumped, which could be big.
+    --   ** intended for testbench development debug **
+    procedure dump_inst_sequ(variable inst_sequ : in stim_line_ptr; file_list : inout file_def_ptr) is
+        variable v_sequ  :  stim_line_ptr;              
+        variable tmp_txt : stm_text;
+        variable fn : text_line;
+    procedure dump is
+    begin
+        print("++++ -----------------------------------------------------------------");
+        print("++++ instruction is " & v_sequ.instruction);
+        txt_to_string(v_sequ.txt, tmp_txt);
+        print("++++ text: "   & tmp_txt);
+        print("++++ par1: "   & v_sequ.inst_field_1);
+        print("++++ par2: "   & v_sequ.inst_field_2);
+        print("++++ par3: "   & v_sequ.inst_field_3);
+        print("++++ par4: "   & v_sequ.inst_field_4);
+        print("++++ par5: "   & v_sequ.inst_field_5);
+        print("++++ par6: "   & v_sequ.inst_field_6);
+        print("++++ internal sequence linenumber: " & to_str(v_sequ.line_number));           
+        print("++++ instruction file linenumber: " & to_str(v_sequ.file_line));
+        print("++++ instruction file idx: " & to_str(v_sequ.file_idx));
+        get_instruction_file_name(file_list, v_sequ.file_idx, fn);
+        print("++++ instruction file name: " & fn);
+    end procedure;
+    begin
+        v_sequ  :=  inst_sequ;
+        print("++++ -----------------------------------------------------------------");
+        while v_sequ.next_rec /= null loop
+            dump;
+            v_sequ  :=  v_sequ.next_rec;
+        end loop;
+        -- get the last one
+        dump;
+    end procedure;    
+    
 
-
-
+    -- procedure to print instruction records to stdout  *for debug*
+    procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr) is
+    variable inst_ptr : stim_line_ptr;
+    variable tmp_txt : stm_text;
+    variable fn : text_line;
+    begin
+        inst_ptr := inst_sequ;
+        while inst_ptr.next_rec /= null loop
+            if inst_ptr.line_number = v_line then
+                exit;
+            else
+                inst_ptr := inst_ptr.next_rec;
+            end if;
+        end loop;
+        print(".... -----------------------------------------------------------------");
+        print(".... instruction is " & inst_ptr.instruction);
+        print(".... par1: "   & inst_ptr.inst_field_1);
+        print(".... par2: "   & inst_ptr.inst_field_2);
+        print(".... par3: "   & inst_ptr.inst_field_3);
+        print(".... par4: "   & inst_ptr.inst_field_4);
+        print(".... par5: "   & inst_ptr.inst_field_5);
+        print(".... par6: "   & inst_ptr.inst_field_6);
+        txt_to_string(inst_ptr.txt, tmp_txt);
+        print(".... text: "   & tmp_txt);
+        print(".... internal sequence linenumber: " & to_str(inst_ptr.line_number));           
+        print(".... instruction file linenumber: " & to_str(inst_ptr.file_line));
+        print(".... instruction file idx: " & to_str(inst_ptr.file_idx));
+        get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
+        print(".... instruction file name: " & fn);
+    end procedure;
+    
+   
+     -- dump all variables    
+    procedure dump_variables(variable var_list : in var_field_ptr) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        print("---- -----------------------------------------------------------------");
+        print("---- -- dump variables start -----------------------------------------");
+        while ptr.next_rec /= null loop      
+            dump_var_field(ptr);                                  
+            ptr := ptr.next_rec;
+        end loop;
+        -- the last one
+         dump_var_field(ptr);
+    end procedure;  
+    
+    procedure dump_var_field(variable ptr : var_field_ptr) is
+        variable std_line : line;
+        variable tmp_str : stm_text;
+        variable tmp_str_ptr : stm_text_ptr;
+        variable stm_line_ptr : t_stm_line_ptr;
+        variable success : boolean;
+        variable array_index : integer;
+        variable array_value : integer;
+        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable tmp_std_line : line;
+        variable stm_array : t_stm_array_ptr;
+    begin     
+        print("-----------------------------------------------------------------");
+        print("---- var_name: " & ptr.var_name);
+        print("---- var_index: " & to_str(ptr.var_index));
+        print("---- var_value: 0x" & to_str_hex(ptr.var_value));                    
+        if ptr.var_stm_type = STM_VALUE_TYPE then
+            print("---- var_stm_type: STM_VALUE_TYPE");
+        elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
+           print("---- var_stm_type: STM_CONST_VALUE_TYPE");
+        elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
+            print("---- var_stm_type: STM_CONST_VALUE_TYPE");
+        elsif ptr.var_stm_type = STM_TEXT_TYPE then
+            print("---- var_stm_type: STM_TEXT_TYPE"); 
+            txt_to_string(ptr.var_stm_text, tmp_str);        
+            print("---- var_stm_text: " & tmp_str); 
+        elsif ptr.var_stm_type = STM_ARRAY_TYPE then
+            print("---- var_stm_type: STM_ARRAY_TYPE");
+            stm_array := ptr.var_stm_array;
+            for i in 0 to stm_array'high loop
+                array_index := i;
+                array_value := ptr.var_stm_array(array_index);
+                print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));           
+            end loop;           
+        elsif ptr.var_stm_type = STM_LINES_TYPE then
+            print("---- var_stm_type: STM_LINES_TYPE");
+            assert ptr.var_stm_lines /= null
+            report " error: stm_lines_ptr pointer is null "
+            severity failure;
+            print("-------- stm_lines.size: " & to_str(ptr.var_stm_lines.size));
+            stm_line_ptr := ptr.var_stm_lines.stm_line_list;
+            while stm_line_ptr /= null loop
+                print("-------- stm_line_ptr.line_number: " & to_str(stm_line_ptr.line_number));
+                if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
+                    print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");
+                    std_line := stm_line_ptr.line_content;
+                    tmp_str_ptr := new stm_text;
+                    get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
+                    stm_text_ptr_to_line(tmp_str_ptr, std_line);
+                    stm_line_ptr.line_content := std_line;
+                    txt_print(tmp_str_ptr);
+                elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
+                    print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");
+                    success := true;
+                    array_index := 0;
+                    while array_index <  stm_line_ptr.array_size loop
+                        hread(stm_line_ptr.line_content, value_std_logic_vector, success);
+                        if success then
+                            array_value := to_integer(signed(value_std_logic_vector));
+                            hwrite(tmp_std_line, value_std_logic_vector, left, 33);              
+                            print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));           
+                        end if;
+                        array_index := array_index + 1;
+                    end loop;
+                    stm_line_ptr.line_content := tmp_std_line;                      
+                end if;
+                stm_line_ptr :=  stm_line_ptr.next_stm_line;
+            end loop;               
+        elsif ptr.var_stm_type = STM_BUS_TYPE then
+            print("---- var_stm_type: STM_BUS_TYPE");  
+        elsif ptr.var_stm_type = STM_SIGNAL_TYPE then
+            print("---- var_stm_type: STM_SIGNAL_TYPE");
+        elsif ptr.var_stm_type = STM_LABEL_TYPE then
+            print("---- var_stm_type: STM_LABEL_TYPE");
+        elsif ptr.var_stm_type = NO_VAR_TYPE then
+            print("---- var_stm_type: NO_VAR_TYPE");
+        end if;                       
+    end procedure;
+        
 end package body;

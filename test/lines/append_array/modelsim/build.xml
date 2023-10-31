@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<project name="test_lines_append_array">
+   <include file="../../../unit_test_build.xml"/>
+</project>

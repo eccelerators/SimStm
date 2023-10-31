@@ -17,15 +17,17 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-start simulation
+test_variable_1: 0x01
+test_variable_2: 0x02
+test_variable_3: 0x03
+test_variable_4: 0x04
+test_variable_5: 0x05
 EOF
 )
-out_expected_2="error: array size < 1 is not allowed"
 
-if [[ ! $return_value == 0 ]] &&
+if [[ $return_value == 0 ]] &&
    [[ ! "$error" =~ "$error_not_contain" ]] &&
-   [[ "$out" =~ "$out_expected" ]] &&
-   [[ "$out" =~ "$out_expected_2" ]] ; then
+   [[ "$out" =~ "$out_expected" ]] ; then
     echo -e "$test_name -> ${GREEN}successfull${NC}"
     exit 0
 else
