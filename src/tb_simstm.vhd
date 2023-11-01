@@ -125,6 +125,7 @@ begin
         variable tempaddress : std_logic_vector(31 downto 0);
         variable tempdata : std_logic_vector(31 downto 0);
         variable temp_int : integer;
+        variable number_found : integer;
 
         variable temp_stdvec_a : std_logic_vector(31 downto 0);
         variable temp_stdvec_b : std_logic_vector(31 downto 0);
@@ -757,16 +758,24 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file read not successful"
                     severity failure;
                                  
-                -- lines get a_lines $position an_array
-                -- lines get a_lines 8 an_array               
+                -- lines get a_lines $position an_array number_found
+                -- lines get a_lines 8 an_array number_found              
                 elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_lines_get(var_stm_lines, par2, var_stm_array, valid);
+                    index_variable(defined_vars, par3, temp_int, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " array object not get successfully"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    stm_lines_get(var_stm_lines, par2, var_stm_array, number_found, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
+                    severity failure;
+                    update_variable(defined_vars, par3, number_found, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- lines set a_lines $position an_array
@@ -878,6 +887,20 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete not successful"
                     severity failure;
+                    
+                -- lines delete all a_lines
+                elsif instruction(1 to len) = INSTR_LINES_DELETE_ALL then
+                    index_variable(defined_vars, par1, var_stm_lines, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    for i in 0 to var_stm_lines.size - 1 loop
+                        temp_int := i;
+                        stm_lines_delete(var_stm_lines, temp_int, valid);               
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
+                        severity failure;          
+                    end loop;         
                    
                 -- lines size a_lines read_size
                 elsif instruction(1 to len) = INSTR_LINES_SIZE then

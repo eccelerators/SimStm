@@ -66,6 +66,7 @@ package tb_instructions_pkg is
         constant INSTR_LINES_SET_ARRAY : string := "lines_set_array";
         constant INSTR_LINES_SET_MESSAGE : string := "lines_set_array_message";
         constant INSTR_LINES_DELETE : string := "lines_delete";
+        constant INSTR_LINES_DELETE_ALL : string := "lines_delete_all";
         constant INSTR_LINES_INSERT_ARRAY : string := "lines_insert_array";
         constant INSTR_LINES_INSERT_MESSAGE : string := "lines_insert_message";
         constant INSTR_LINES_APPEND_ARRAY : string := "lines_append_array";
@@ -191,10 +192,11 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
-        define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 3);
+        define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
         define_instruction(inst_list, INSTR_LINES_SET_ARRAY, 3);
         define_instruction(inst_list, INSTR_LINES_SET_MESSAGE, 2);
         define_instruction(inst_list, INSTR_LINES_DELETE, 2);
+        define_instruction(inst_list, INSTR_LINES_DELETE_ALL, 1);
         define_instruction(inst_list, INSTR_LINES_INSERT_ARRAY, 3);
         define_instruction(inst_list, INSTR_LINES_INSERT_MESSAGE, 2);
         define_instruction(inst_list, INSTR_LINES_APPEND_ARRAY, 2);
@@ -327,6 +329,10 @@ package body tb_instructions_pkg is
                 elsif token2(1 to 6) = "delete" then
                     token2_len := 6;
                     token_merge := 2;
+                    if token3(1 to 3) = "all" then
+                        token3_len := 3;
+                        token_merge := 3;                         
+                    end if;
                 elsif token2(1 to 6) = "insert" then
                     token2_len := 6;
                     token_merge := 2;

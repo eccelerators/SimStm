@@ -158,11 +158,11 @@ package body tb_base_pkg is
     procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
         variable position : in integer;
         variable stm_array : inout t_stm_array_ptr;
+        variable number_found : out integer;
         variable valid : out integer) is
 
         variable stm_line_ptr : t_stm_line_ptr;
         variable value_std_logic_vector : std_logic_vector(31 downto 0);
-        variable value : integer;
         variable success : boolean := true;
         variable array_index : integer := 0;
         variable tmp_std_line : line;
@@ -176,10 +176,11 @@ package body tb_base_pkg is
                     if success then
                         hwrite(tmp_std_line, value_std_logic_vector, left, 33);
                         stm_line_ptr.line_content := tmp_std_line;  
-                        stm_array(array_index) := value;
+                        stm_array(array_index) := to_integer(signed(value_std_logic_vector));
                         array_index := array_index + 1;
                     end if;
                 end loop;
+                number_found := array_index;
                 valid := 1;
                 return;
             end if;

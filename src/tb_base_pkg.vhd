@@ -135,6 +135,7 @@ package tb_base_pkg is
     procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
         variable position : in integer;
         variable stm_array : inout t_stm_array_ptr;
+        variable number_found : out integer;
         variable valid : out integer);
 
     procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
