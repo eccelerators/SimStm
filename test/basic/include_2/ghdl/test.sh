@@ -17,10 +17,10 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-Load File test.stm
-Load File lib1.stm
-Load File lib2.stm
-Load File lib3.stm
+load file test.stm
+load file lib1.stm
+load file lib2.stm
+load file lib3.stm
 EOF
 )
 

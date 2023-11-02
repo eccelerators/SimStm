@@ -1042,7 +1042,7 @@ package body tb_interpreter_pkg is
                 if present then
                     print("nested include found: not loading file since already present " & text_line_crop(v_iname));
                 else                                                             
-                    print("nested include found: loading file " & v_iname);
+                    print("nested include found: loading file " & path_name & v_iname);
                     read_include_file(path_name, v_iname, sequ_line, v_tmp_fn, v_inst_ptr, v_var_prt, v_sequ_ptr, v_ostat);
                     -- if include file not found
                     if v_ostat = 1 then

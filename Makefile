@@ -30,4 +30,4 @@ start_ghdl_docker:
 
 .PHONY: ghdl test $(TARGETS)
 
-test: test_array test_basic
+test: test_basic test_array
