@@ -1181,12 +1181,11 @@ package body tb_base_pkg is
     
     procedure get_instruction_file_name(file_list : inout file_def_ptr; file_idx: integer; file_name : inout text_line) is
         variable temp_fn_prt : file_def_ptr;
-        variable tmp_int : integer;
     begin
         -- recover the file name this line came from
         temp_fn_prt := file_list;
-        while (temp_fn_prt.next_rec /= null) loop
-            if (temp_fn_prt.rec_idx = tmp_int) then
+        while temp_fn_prt.next_rec /= null loop
+            if temp_fn_prt.rec_idx = file_idx then
                 exit;
             end if;
             temp_fn_prt := temp_fn_prt.next_rec;
@@ -1194,6 +1193,23 @@ package body tb_base_pkg is
         for i in 1 to max_str_len  loop
             file_name(i) := temp_fn_prt.file_name(i);
         end loop;
+    end procedure;
+    
+
+    procedure check_presence_instruction_file_name(file_list : inout file_def_ptr; file_name : in string; present: out boolean) is
+        variable temp_fn_prt : file_def_ptr;        
+    begin
+        present := false;
+        -- recover the file name this line came from
+        temp_fn_prt := file_list;
+        while temp_fn_prt.next_rec /= null loop
+            if file_name = temp_fn_prt.file_name then
+                present := true;
+                return;
+            end if;
+            temp_fn_prt := temp_fn_prt.next_rec;
+        end loop;
+        return;
     end procedure;
 
 

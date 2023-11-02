@@ -269,7 +269,8 @@ begin
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
                     par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                     last_sequ_num, last_sequ_ptr);
-
+                    
+                -- dump_file_defs(file_list);
                 -- dump_variables(defined_vars);                
                 -- print_inst(inst_sequ, v_line, file_list);    
 
@@ -1138,7 +1139,7 @@ begin
                         report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & file_name;
                         wait;
                     end if;
-                    assert stack_ptr <= 0
+                    assert stack_ptr >= 0
                     report " line " & (integer'image(file_line)) & " call error: stack under run??"
                     severity failure;
                     stack_ptr := stack_ptr - 1;

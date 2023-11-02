@@ -1,6 +1,14 @@
-log 0 "load file test.stm"
-include lib1.stm
-include lib2.stm
-include lib3.stm
 
-finish
+include "lib1.stm"
+include "lib2.stm"
+include "lib3.stm"
+
+Main:
+proc
+    log message 0 "load file test.stm"
+    call $Lib1
+    call $Lib2
+    call $Lib3
+	finish
+
+end proc

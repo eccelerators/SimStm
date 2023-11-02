@@ -1,5 +1,20 @@
 PWD=$(shell pwd)
 
+test_basic:
+	@cd ./test/basic/abort/ghdl/             && ./test.sh
+	@cd ./test/basic/const_2/ghdl/           && ./test.sh
+	@cd ./test/basic/const/ghdl/             && ./test.sh
+	@cd ./test/basic/elsif/ghdl/             && ./test.sh
+	@cd ./test/basic/else/ghdl/              && ./test.sh
+	@cd ./test/basic/finish/ghdl/            && ./test.sh
+	@cd ./test/basic/if/ghdl/                && ./test.sh
+	@cd ./test/basic/include/ghdl/           && ./test.sh
+	@cd ./test/basic/include_2/ghdl/           && ./test.sh
+	@cd ./test/basic/loop/ghdl/              && ./test.sh
+	@cd ./test/basic/var_2/ghdl/             && ./test.sh
+	@cd ./test/basic/var_3/ghdl/             && ./test.sh
+	@cd ./test/basic/var/ghdl/               && ./test.sh
+
 test_array:
 	@cd ./test/array/array/ghdl/                && ./test.sh
 	@cd ./test/array/array_get/ghdl/            && ./test.sh
@@ -15,4 +30,4 @@ start_ghdl_docker:
 
 .PHONY: ghdl test $(TARGETS)
 
-test: test_array
+test: test_array test_basic

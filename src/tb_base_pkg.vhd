@@ -14,7 +14,6 @@ package tb_base_pkg is
 
     -- file handles
     file stimulus : text; -- file main file
-    file include_file : text; -- file declaration for includes
 
     -- type def's
     type base is (bin, oct, hex, dec);
@@ -264,6 +263,8 @@ package tb_base_pkg is
         variable destfield : out text_field);
         
     procedure get_instruction_file_name(file_list : inout file_def_ptr; file_idx: integer; file_name : inout text_line);
+    
+    procedure check_presence_instruction_file_name(file_list : inout file_def_ptr; file_name : in string; present: out boolean);
 
     --  get a random intetger number
     procedure getrandint(variable seed1 : inout positive;

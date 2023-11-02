@@ -927,13 +927,15 @@ package body tb_interpreter_pkg is
     --  the read include file procedure
     --    this is the main procedure for reading, parcing, checking and returning
     --    the instruction sequence link list.
-    procedure read_include_file(variable name : text_line;
+    procedure read_include_file(constant path_name : string;
+        variable name : text_line;
         variable sequ_numb : inout integer;
         variable file_list : inout file_def_ptr;
         variable inst_set : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
         variable inst_sequ : inout stim_line_ptr;
         variable status : inout integer) is
+        
         variable l : text_line; -- the line
         variable l_num : integer; -- line number file
         variable sequ_line : integer; -- line number program
@@ -956,43 +958,30 @@ package body tb_interpreter_pkg is
         variable v_tmp_fn_ptr : file_def_ptr;
         variable v_new_fn : integer;
         variable v_tmp_fn : file_def_ptr;
+        variable present : boolean;
+        variable v_iname : text_line;
+        variable include_file_path_name : text_line;
+        variable v_ostat : integer;
+        variable v_fn_idx : integer;
+        variable v_idx : integer;
+        file include_file : text; -- file declaration for includes
 
     begin
+           
         sequ_line := sequ_numb;
         v_tmp_fn_ptr := file_list;
-        -- for linux systems, trailing spaces need to be removed
-        --    from file names
-        --  copy text string to temp
-        for i in 1 to c_stm_text_len loop
-            if name(i) = nul then
-                v_tmp(i) := name(i);
-                exit;
-            else
-                v_tmp(i) := name(i);
-            end if;
+               
+        for i in 1 to path_name'high loop
+            include_file_path_name(i) := path_name(i);
         end loop;
-        --fix up any trailing white space in txt
-        idx := 0;
-        --    get to the end of the string
-        for i in 1 to c_stm_text_len loop
-            if v_tmp(i) /= nul then
-                idx := idx + 1;
-            else
-                exit;
-            end if;
+        for i in 1 to max_str_len - path_name'high loop
+            include_file_path_name(i + path_name'high) := name(i);
         end loop;
-        --  now nul out spaces
-        for i in idx downto 1 loop
-            if is_space(v_tmp(i)) = true then
-                v_tmp(i) := nul;
-            else
-                exit;
-            end if;
-        end loop;
+               
         --  open include file
-        file_open(v_stat, include_file, v_tmp, read_mode);
+        file_open(v_stat, include_file, text_line_crop(include_file_path_name), read_mode);
         if v_stat /= open_ok then
-            print("error: unable to open include file  " & name);
+            print("error: unable to open include file  " & text_line_crop(include_file_path_name));
             status := 1;
             return;
         end if;
@@ -1014,23 +1003,52 @@ package body tb_interpreter_pkg is
         end loop;
         v_tmp_fn.next_rec := null;
 
-
         v_inst_ptr := inst_set;
         v_var_prt := var_list;
         v_sequ_ptr := inst_sequ;
-
+        
         -- while not the end of file read it
         while not endfile(include_file) loop
             file_read_line(include_file, l);
             --  tokenize the line
             tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, valid);
-            v_len := fld_len(t1);
+            v_len := fld_len(t1);            
             if t1(1 to v_len) = "include" then
-                print("nested include statement found in " & v_tmp & " on line " &
-                    (integer'image(l_num)));
-                assert false
-                report lf & "error: nested include statements are not supported at this time."
-                severity failure;
+                -- if file name is in par2
+                if valid = 2 then
+                    v_iname := (others => nul);
+                    for i in 1 to max_field_len loop
+                        v_iname(i) := t2(i);
+                    end loop;
+                -- elsif the text string is not null
+                elsif t_txt /= null then
+                    v_iname := (others => nul);
+                    for i in 1 to c_stm_text_len loop
+                        v_iname(i) := t_txt(i);
+                        if t_txt(i) = '"' then -- "
+                            v_iname(i) := nul;
+                            exit;
+                        end if;
+                    end loop;                 
+                else
+                    assert false
+                    report lf & "error:  include instruction is missing included file name paramater , found at:" & lf &
+                        "line " & (integer'image(l_num)) & " in file " & include_file_path_name & lf
+                    severity failure;
+                end if;
+                             
+                print("nested include found in : " & include_file_path_name);                              
+                check_presence_instruction_file_name(file_list, text_line_crop(v_iname), present);
+                if present then
+                    print("nested include found: not loading file since already present " & text_line_crop(v_iname));
+                else                                                             
+                    print("nested include found: loading file " & v_iname);
+                    read_include_file(path_name, v_iname, sequ_line, v_tmp_fn, v_inst_ptr, v_var_prt, v_sequ_ptr, v_ostat);
+                    -- if include file not found
+                    if v_ostat = 1 then
+                        exit;
+                    end if;
+                end if;
 
             -- if there was valid tokens
             elsif valid /= 0 then
@@ -1039,7 +1057,7 @@ package body tb_interpreter_pkg is
                     sequ_line, l_num, name, v_new_fn);
             end if;
             l_num := l_num + 1;
-        end loop; -- end loop read file
+        end loop; -- end loop read file        
         file_close(include_file);
         sequ_numb := sequ_line;
         inst_set := v_inst_ptr;
@@ -1081,7 +1099,7 @@ package body tb_interpreter_pkg is
         variable v_tmp_fn : file_def_ptr;
         variable v_fn_idx : integer;
         variable v_idx : integer;
-        variable path_v_iname : text_line;
+
     begin
         -- open the stimulus_file and check
         file_open(v_stat, stimulus, path_name & file_name, read_mode);
@@ -1139,7 +1157,8 @@ package body tb_interpreter_pkg is
                     v_iname := (others => nul);
                     for i in 1 to c_stm_text_len loop
                         v_iname(i) := t_txt(i);
-                        if t_txt(i) = nul then
+                        if t_txt(i) = '"' then -- "
+                            v_iname(i) := nul;
                             exit;
                         end if;
                     end loop;
@@ -1149,15 +1168,8 @@ package body tb_interpreter_pkg is
                         "line " & (integer'image(l_num)) & " in file " & path_name & file_name & lf
                     severity failure;
                 end if;
-                -- copy include file name to type text_line
-                for i in 1 to path_name'high loop
-                    path_v_iname(i) := path_name(i);
-                end loop;
-                for i in 1 to max_str_len - path_name'high loop
-                    path_v_iname(i + path_name'high) := v_iname(i);
-                end loop;
-                print("include found: loading file " & path_v_iname);
-                read_include_file(path_v_iname, sequ_line, v_tmp_fn, v_inst_ptr, v_var_prt, v_sequ_ptr, v_ostat);
+                print("include found: loading file " & path_name & v_iname);
+                read_include_file(path_name, v_iname, sequ_line, v_tmp_fn, v_inst_ptr, v_var_prt, v_sequ_ptr, v_ostat);
                 -- if include file not found
                 if v_ostat = 1 then
                     exit;
@@ -1662,6 +1674,45 @@ package body tb_interpreter_pkg is
         elsif ptr.var_stm_type = NO_VAR_TYPE then
             print("---- var_stm_type: NO_VAR_TYPE");
         end if;                       
+    end procedure;
+    
+    
+     -- dump all file_defs    
+    procedure dump_file_defs(file_list : inout file_def_ptr) is
+        variable tmp_file_def_ptr : file_def_ptr;
+        variable index : integer;
+    begin
+        print("---- -----------------------------------------------------------------");
+        print("---- -- dump file defs start -----------------------------------------");     
+        index := 0;
+        tmp_file_def_ptr := file_list;
+        while tmp_file_def_ptr.next_rec /= null loop
+            print_file_def(file_list, index);
+            tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
+            index := index + 1;
+        end loop;         
+        -- the last one
+         print_file_def(file_list, index);
+    end procedure;      
+    
+    -- procedure to file_def record to stdout  *for debug*
+    procedure print_file_def(file_list : inout file_def_ptr; index : in integer) is
+    variable tmp_file_def_ptr : file_def_ptr;
+    variable tmp_txt : stm_text;
+    variable fn : text_line;
+    begin
+        tmp_file_def_ptr := file_list;
+        while tmp_file_def_ptr.next_rec /= null loop
+            if tmp_file_def_ptr.rec_idx = index then
+                exit;
+            else
+                tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
+            end if;
+        end loop;
+        print(".... -----------------------------------------------------------------");
+        print(".... file_def is ");
+        print(".... index: "   & to_str(tmp_file_def_ptr.rec_idx));
+        print(".... name: "   & tmp_file_def_ptr.file_name);
     end procedure;
         
 end package body;

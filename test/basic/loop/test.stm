@@ -1,14 +1,19 @@
-loop 4
-    log 0 "log 0"
-end loop
 
-loop 5
-    log 0 "log 1"
-    loop 2
-        log 0 "log 3"
-    end loop
-end loop
 
-log 0 "log 2"
-
-finish
+Main:
+proc
+	loop 4
+	    log message 0 "log 0"
+	end loop
+	
+	loop 5
+	    log message 0 "log 1"
+	    loop 2
+	        log message 0 "log 3"
+	    end loop
+	end loop
+	
+	log message 0 "log 2"
+	
+	finish
+end proc
