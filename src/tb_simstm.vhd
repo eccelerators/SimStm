@@ -279,7 +279,7 @@ begin
                 wait for 100 ps;
 
                 if trc_on then
-                    report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & file_name;
+                    report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 end if;
 
                 -- include "an_include.stm"
@@ -953,7 +953,7 @@ begin
                             end if;
                         when others =>
                             assert false
-                            report " line " & (integer'image(file_line)) & " error:  if instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & file_name
+                            report " line " & (integer'image(file_line)) & " error:  if instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                             severity failure;
                     end case;
                     if if_state(if_level) = false then
@@ -1022,7 +1022,7 @@ begin
                                 end if;
                             when others =>
                                 assert false
-                                report " line " & (integer'image(file_line)) & " error:  elsif instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & file_name
+                                report " line " & (integer'image(file_line)) & " error:  elsif instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                                 severity failure;
                         end case;
                         if if_state(if_level) = false then
@@ -1136,7 +1136,7 @@ begin
                         if_level := stack_loop_if_enter_level(stack_ptr);
                     end if;
                     if stack_ptr = 0 then
-                        report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & file_name;
+                        report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                         wait;
                     end if;
                     assert stack_ptr >= 0
@@ -1289,7 +1289,7 @@ begin
                         temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
                         assert (temp_stdvec_c and temp_stdvec_a) = (temp_stdvec_c and temp_stdvec_b)
-                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & " file " & file_name
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & " file " & text_line_crop(file_name)
                         severity failure;
                     end if;
                     wait for 0 ns;

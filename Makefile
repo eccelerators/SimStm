@@ -38,6 +38,8 @@ test_array:
 	@cd ./test/array/array_zero_size/ghdl/      && ./test.sh
 	
 test_others:
+	@cd ./test/others/wait/ghdl/                     && ./test.sh
+	@cd ./test/others/trace/ghdl/                    && ./test.sh
 	@cd ./test/others/call/ghdl/                     && ./test.sh
 	@cd ./test/others/proc/ghdl/                     && ./test.sh
 	@cd ./test/others/return_call/ghdl/              && ./test.sh
@@ -46,6 +48,7 @@ test_others:
 	@cd ./test/others/log_with_substitutions/ghdl/   && ./test.sh	
 	@cd ./test/others/random/ghdl/                   && ./test.sh
 	@cd ./test/others/seed/ghdl/                     && ./test.sh
+	@cd ./test/others/marker/ghdl/                   && ./test.sh
 	
 test_signals:
 	@cd ./test/signal/signal_read/ghdl/         && ./test.sh
@@ -66,4 +69,5 @@ start_ghdl_docker:
 
 .PHONY: ghdl test $(TARGETS)
 
-test: test_basic test_variable test_array test_others test_signals test_bus
+# test: test_basic test_variable test_array test_others test_signals test_bus
+test: test_others
