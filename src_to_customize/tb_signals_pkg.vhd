@@ -12,12 +12,15 @@ package tb_signals_pkg is
         in_signal : std_logic;
         in_signal_1 : std_logic_vector(7 downto 0);
         in_signal_2 : std_logic;
+        in_signal_3 : std_logic;
     end record;
 
     type t_signals_out is record
         -- TODO: Add here all your outputs
-        my_signal : std_logic;
-        my_signal_1 : std_logic_vector(7 downto 0);
+        out_signal : std_logic;
+        out_signal_1 : std_logic_vector(7 downto 0);
+        out_signal_2 : std_logic;
+        out_signal_3 : std_logic;
     end record;
 
     -- TODO: Define here the number of interrupts you want to have
@@ -65,6 +68,7 @@ package body tb_signals_pkg is
         signals.in_signal := '0';
         signals.in_signal_1 := (others => '0');
         signals.in_signal_2 := '0';
+        signals.in_signal_3 := '0';
         return signals;
     end function;
 
@@ -73,8 +77,10 @@ package body tb_signals_pkg is
         variable signals : t_signals_out;
     begin
         -- TODO: Set here your init values
-        signals.my_signal := '0';
-        signals.my_signal_1 := (others => '0');
+        signals.out_signal := '0';
+        signals.out_signal_1 := (others => '0');
+        signals.out_signal_2 := '0';
+        signals.out_signal_3 := '0';
         return signals;
     end function;
 
@@ -96,11 +102,13 @@ package body tb_signals_pkg is
                 temp_var(signals.in_signal_1'left downto 0) := signals.in_signal_1;
             when 2 =>
                 temp_var(0) := signals.in_signal_2;
+            when 3 =>
+                temp_var(0) := signals.in_signal_3;
             when others =>
                 valid := 0;
         end case;
 
-        value := to_integer(unsigned(temp_var));
+        value := to_integer(signed(temp_var));
     end procedure;
 
     -- SimStm Mapping for output signals
@@ -111,14 +119,14 @@ package body tb_signals_pkg is
         variable temp_var : std_logic_vector(31 downto 0);
     begin
         valid := 1;
-        temp_var := std_logic_vector(to_unsigned(value, 32));
+        temp_var := std_logic_vector(to_signed(value, 32));
 
         case signal_number is
             -- TODO: add here your SimStm mapping
             when 0 =>
-                signals.my_signal <= temp_var(0);
+                signals.out_signal <= temp_var(0);
             when 1 =>
-                signals.my_signal_1 <= temp_var(signals.my_signal_1'left downto 0);
+                signals.out_signal_1 <= temp_var(signals.out_signal_1'left downto 0);
             when others =>
                 valid := 0;
         end case;
@@ -132,8 +140,8 @@ package body tb_signals_pkg is
         variable interrupt_requests : out unsigned) is
     begin
         -- TODO: Connect in_signals used as interrupt to the interrupt_vector
-        interrupt_requests(0) := signals.in_signal;
-        interrupt_requests(1) := signals.in_signal_2;
+        interrupt_requests(0) := signals.in_signal_2;
+        interrupt_requests(1) := signals.in_signal_3;
         wait for 0 ps;
     end procedure;
 

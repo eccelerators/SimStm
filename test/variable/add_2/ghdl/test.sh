@@ -23,7 +23,7 @@ EOF
 )
 
 out_expected2=$(cat <<EOF
-line 7 add error: vabiable are constant??
+line 10 add error: cannot update variable, it may be a constant ?
 EOF
 )
 

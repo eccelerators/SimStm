@@ -22,7 +22,7 @@ wb addr:0 32bit: 0x55555555
 wb addr:0 32bit: 0x55555555
 EOF
 )
-out_expected_2="line 16, bus_verify: address=0x00000008, read=0x55555555, expected=0x00000000, mask=0xFFFFFFFF"
+out_expected_2="line 19, bus_verify: address=0x00000008, read=0x55555555, expected=0x00000000, mask=0xFFFFFFFF"
 out_expected_3="simulation failed"
 
 

@@ -17,7 +17,7 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-line 2 equ error: vabiable are constant??
+line 5 equ error: cannot update variable, it may be a constant ?
 EOF
 )
 

@@ -40,6 +40,7 @@
   
    
    <target name="compile" depends="
+     -do_compile_wb_ram.vhd,
      -do_compile_tb_base_pkg.vhd,
      -do_compile_tb_base_pkg_body.vhd,
      -do_compile_tb_instructions_pkg.vhd,
@@ -65,6 +66,12 @@
       </exec>
    </target>
    
+   <target name="-do_compile_wb_ram.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}/vcom" failonerror="true">
+         <arg value="-2008"/>
+         <arg value="./../../../../ip/wb_ram.vhd"/>
+      </exec>
+   </target> 
    <target name="-do_compile_tb_base_pkg.vhd">
       <exec executable="${MODELSIM_BIN_DIR}/vcom" failonerror="true">
          <arg value="-2008"/>

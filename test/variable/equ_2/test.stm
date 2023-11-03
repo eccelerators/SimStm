@@ -1,4 +1,9 @@
 const test_variable_1 1
-equ   test_variable_1 10
 
-finish
+Main:
+proc
+	equ   test_variable_1 10
+	
+	finish
+
+end proc

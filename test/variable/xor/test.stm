@@ -1,19 +1,24 @@
 var test_variable_1 1234
 var test_variable_2 1024
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
+Main:
+proc
 
-xor test_variable_1 10
-xor test_variable_2 20
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	                                                  
+	xor test_variable_1 10                            
+	xor test_variable_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	                                                  
+	xor test_variable_1 5                             
+	xor test_variable_2 100                           
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	
+	finish
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-
-xor test_variable_1 5
-xor test_variable_2 100
-
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-
-finish
+end proc

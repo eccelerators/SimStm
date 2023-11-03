@@ -1,19 +1,24 @@
 var test_variable_1 12345
 var test_variable_2 88
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
+Main:
+proc
 
-sub test_variable_1 10
-sub test_variable_2 20
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	                                                  
+	sub test_variable_1 10                            
+	sub test_variable_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	                                                  
+	sub test_variable_1 2                             
+	sub test_variable_2 1                             
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	
+	finish
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-
-sub test_variable_1 2
-sub test_variable_2 1
-
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-
-finish
+end proc

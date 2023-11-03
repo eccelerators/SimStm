@@ -1209,15 +1209,10 @@ begin
                 -- seed 1397
                 elsif instruction(1 to len) = INSTR_SEED then
                     assert par1 > 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": seeds must allow only positive values"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": seed expects a positive values"
                     severity failure;
-                    temp_int := 0;
                     seed1 := par1;
                     seed2 := 1;
-                    update_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " random_seed error: cannot update variable, it may be a constant ?"
-                    severity failure;
 
                 -- random rand_var $rand_min_var $rand_max_var
                 -- random rand_var 0 $rand_max_var
@@ -1263,7 +1258,11 @@ begin
                 -- signal write $a_signal $signal_to_be_set_value
                 -- signal write $a_signal #x1234
                 elsif instruction(1 to len) = INSTR_SIGNAL_WRITE then
-                    signal_write(signals_out, par1, par2, valid);
+                    index_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
+                    signal_write(signals_out, temp_int, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": signal not defined"
                     severity failure;
@@ -1273,7 +1272,11 @@ begin
                 -- signal verify $a_signal signal_read_value $signal_expected_value $signal_mask_value
                 -- signal verify $a_signal signal_read_value #x0002 #x00FF               --  signal_read or signal_verify
                 elsif instruction(1 to len) = INSTR_SIGNAL_VERIFY or instruction(1 to len) = INSTR_SIGNAL_READ then
-                    signal_read(signals_in, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
+                    signal_read(signals_in, temp_int, temp_int, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": signal not defined"
                     severity failure;
@@ -1294,9 +1297,13 @@ begin
                 -- bus write $a_bus $bus_width  $bus_address $bus_to_be_set_value
                 -- bus write $a_bus 16 #x00001000 #x1233
                 elsif (instruction(1 to len) = INSTR_BUS_WRITE) then
+                    index_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
                     tempaddress := std_logic_vector(to_signed(par3, tempaddress'length));
                     tempdata := std_logic_vector(to_signed(par4, tempdata'length));
-                    bus_write(clk, bus_down, bus_up, tempaddress, tempdata, par2, par1, valid, successfull, bus_timeouts(par1));
+                    bus_write(clk, bus_down, bus_up, tempaddress, tempdata, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
                     report "Bus number not avalible"
                     severity failure;
@@ -1310,9 +1317,13 @@ begin
                 -- bus verify $a_bus $bus_width  $bus_address bus_read_value $bus_expected_value $bus_mask_value
                 -- bus verify $a_bus 32  #x00001004 bus_read_value #x00050000 #x000FC000
                 elsif instruction(1 to len) = INSTR_BUS_READ or instruction(1 to len) = INSTR_BUS_VERIFY then
+                    index_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
                     temp_stdvec_a := std_logic_vector(to_signed(par3, tempaddress'length));
                     temp_stdvec_b := (others => '0');
-                    bus_read(clk, bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, par1, valid, successfull, bus_timeouts(par1));
+                    bus_read(clk, bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
                     report "Bus number not avalible"
                     severity failure;
@@ -1348,7 +1359,11 @@ begin
                 -- bus timeout $a_bus 1000
                 -- bus timeout a_bus $bus_timeout_value
                 elsif instruction(1 to len) = INSTR_BUS_TIMEOUT then
-                    bus_timeouts(par1) := par2 * 1 ns;
+                    index_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
+                    bus_timeouts(temp_int) := par2 * 1 ns;
 
                 -- undefined instructions
                 else
