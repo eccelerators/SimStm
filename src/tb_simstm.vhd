@@ -814,11 +814,10 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    index_variable(defined_vars, par3, var_stm_text, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message object not found"
-                    severity failure;
-                    stm_lines_set(var_stm_lines, par2, var_stm_text, valid);
+                    stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
+                    var_stm_text_out := new stm_text;                    
+                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
+                    stm_lines_set(var_stm_lines, par2, var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message not set successfully"
                     severity failure;
@@ -848,11 +847,10 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    index_variable(defined_vars, par3, var_stm_text, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message object not found"
-                    severity failure;
-                    stm_lines_insert(var_stm_lines, par2, var_stm_text, valid);
+                    stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
+                    var_stm_text_out := new stm_text;                    
+                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);                    
+                    stm_lines_insert(var_stm_lines, par2, var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message not inserted successfully"
                     severity failure;
@@ -905,8 +903,8 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    for i in 0 to var_stm_lines.size - 1 loop
-                        temp_int := i;
+                    while var_stm_lines.size > 0 loop
+                        temp_int := 0;
                         stm_lines_delete(var_stm_lines, temp_int, valid);               
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"

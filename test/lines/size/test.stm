@@ -1,0 +1,35 @@
+lines a_lines
+array a_array 8
+
+var lines_size 0
+
+
+Main:
+proc       
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	log lines 0 a_lines
+	
+	lines size a_lines lines_size
+	
+	log message 0 "lines size is {}" $lines_size
+
+	log message 0 "Main test finished"
+	wait 1000
+	finish
+end proc

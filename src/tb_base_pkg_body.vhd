@@ -245,6 +245,7 @@ package body tb_base_pkg is
         variable stm_line_ptr : t_stm_line_ptr;
         variable std_line : line;
     begin
+        valid := 0;
         stm_line_ptr := stm_lines.stm_line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
@@ -256,8 +257,12 @@ package body tb_base_pkg is
                     end if;
                 end loop;
                 stm_line_ptr.line_content := std_line;
+                stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+                stm_line_ptr.array_size := 0;
+                valid := 1;
+                return;
             end if;
-            valid := 0;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
     end procedure;
 
@@ -373,7 +378,7 @@ package body tb_base_pkg is
         variable valid : out integer) is
 
         variable stm_line_ptr : t_stm_line_ptr;
-        variable std_line : line;
+        variable tmp_std_line : line;
         variable stm_line_new : t_stm_line_ptr := new t_stm_line;
         variable value_std_logic_vector :  std_logic_vector(31 downto 0);
     begin
@@ -383,49 +388,74 @@ package body tb_base_pkg is
             if i = position then
                 for j in 0 to stm_array'length - 1 loop
                     value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
-                    hwrite(std_line, value_std_logic_vector, left, 33);
+                    hwrite(tmp_std_line, value_std_logic_vector, left, 9);
                 end loop;
-                stm_line_new.line_content := std_line;
+                -- copy current stm_line to new stmline object
+                stm_line_new.line_content := stm_line_ptr.line_content;
+                stm_line_new.line_type := stm_line_ptr.line_type;
+                stm_line_new.array_size := stm_line_ptr.array_size;               
                 stm_line_new.next_stm_line := stm_line_ptr.next_stm_line;
+                -- set current stm_line to new content
+                stm_line_ptr.line_content := tmp_std_line;
+                stm_line_ptr.line_type := STM_LINE_ARRAY_TYPE;
+                stm_line_ptr.array_size := stm_array'length;                 
                 stm_line_ptr.next_stm_line := stm_line_new;
+                stm_lines.size := stm_lines.size + 1;                
                 valid := 1;
-                stm_lines.size := stm_lines.size + 1;
-                return;
+                exit;
             end if;
             stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop      
+            stm_line_ptr.line_number := i;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;        
     end procedure;
 
 
     procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
         variable position : in integer;
-        variable var_stm_text : out stm_text_ptr;
+        variable var_stm_text : in stm_text_ptr;
         variable valid : out integer) is
 
         variable stm_line_ptr : t_stm_line_ptr;
-        variable std_line : line;
+        variable tmp_std_line : line;
         variable stm_line_new : t_stm_line_ptr := new t_stm_line;
-    begin
+    begin       
         valid := 0;
         stm_line_ptr := stm_lines.stm_line_list;
-        for i in 0 to stm_lines.size - 1 loop
+        for i in 0 to stm_lines.size - 1 loop      
             if i = position then
                 for j in 1 to var_stm_text'length loop
                     if var_stm_text(j) /= nul then
-                        write(std_line, var_stm_text(j), left, 1);
+                        write(tmp_std_line, var_stm_text(j), left, 1);
                     else
                         exit;
                     end if;
                 end loop;
-                stm_line_new.line_content := std_line;
+                -- copy current stm_line to new stmline object
+                stm_line_new.line_content := stm_line_ptr.line_content;
+                stm_line_new.line_type := stm_line_ptr.line_type;
+                stm_line_new.array_size := stm_line_ptr.array_size;               
                 stm_line_new.next_stm_line := stm_line_ptr.next_stm_line;
+                -- set current stm_line to new content
+                stm_line_ptr.line_content := tmp_std_line;
+                stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+                stm_line_ptr.array_size := 0;                 
                 stm_line_ptr.next_stm_line := stm_line_new;
+                stm_lines.size := stm_lines.size + 1;                
                 valid := 1;
-                stm_lines.size := stm_lines.size + 1;
-                return;
+                exit;
             end if;
             stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop      
+            stm_line_ptr.line_number := i;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;         
+        
     end procedure;
 
 
@@ -442,19 +472,31 @@ package body tb_base_pkg is
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
                 stm_line_after := stm_line_ptr.next_stm_line;
-                if stm_line_before /= null then
+                if stm_line_before /= null and stm_line_after /= null then
                     stm_line_before.next_stm_line := stm_line_after;
+                elsif stm_line_before = null and stm_line_after /= null then
+                    stm_lines.stm_line_list := stm_line_after;
+                elsif stm_line_before /= null and stm_line_after = null then
+                    stm_line_before.next_stm_line := null;
+                else
+                    stm_lines.stm_line_list := null;
                 end if;
+                deallocate(stm_line_ptr);
                 stm_lines.size := stm_lines.size - 1;
                 valid := 1;
-                return;
+                exit;
             end if;
             stm_line_before := stm_line_ptr;
             stm_line_ptr :=  stm_line_ptr.next_stm_line;
         end loop;
+        stm_line_ptr := stm_lines.stm_line_list;
+        for i in 0 to stm_lines.size - 1 loop      
+            stm_line_ptr.line_number := i;
+            stm_line_ptr :=  stm_line_ptr.next_stm_line;
+        end loop;       
     end procedure;
     
-    
+
     procedure stm_lines_print(variable stm_lines : in t_stm_lines_ptr;
         variable valid : out integer) is
         

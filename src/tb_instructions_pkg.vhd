@@ -64,7 +64,7 @@ package tb_instructions_pkg is
         constant INSTR_LINES : string := "lines";
         constant INSTR_LINES_GET_ARRAY : string := "lines_get_array";
         constant INSTR_LINES_SET_ARRAY : string := "lines_set_array";
-        constant INSTR_LINES_SET_MESSAGE : string := "lines_set_array_message";
+        constant INSTR_LINES_SET_MESSAGE : string := "lines_set_message";
         constant INSTR_LINES_DELETE : string := "lines_delete";
         constant INSTR_LINES_DELETE_ALL : string := "lines_delete_all";
         constant INSTR_LINES_INSERT_ARRAY : string := "lines_insert_array";

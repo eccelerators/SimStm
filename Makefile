@@ -66,12 +66,20 @@ test_bus:
 test_lines:
 	@cd ./test/lines/append_array/ghdl/             && ./test.sh
 	@cd ./test/lines/append_text/ghdl/              && ./test.sh
-	@cd ./test/lines/array_get/ghdl/                && ./test.sh
+	@cd ./test/lines/get_array/ghdl/                && ./test.sh
+	@cd ./test/lines/set_array/ghdl/                && ./test.sh
+	@cd ./test/lines/set_text/ghdl/                 && ./test.sh
+	@cd ./test/lines/insert_array/ghdl/             && ./test.sh
+	@cd ./test/lines/insert_text/ghdl/              && ./test.sh
+	@cd ./test/lines/delete_array/ghdl/             && ./test.sh
+	@cd ./test/lines/delete_all_array/ghdl/         && ./test.sh
+	@cd ./test/lines/size/ghdl/                     && ./test.sh
+	@cd ./test/lines/pointer/ghdl/                  && ./test.sh
 
 start_ghdl_docker:
 	docker run -it -v ${PWD}:/work -w /work ghdl/ghdl:ubuntu22-llvm-11
 
 .PHONY: ghdl test $(TARGETS)
 
-# test: test_basic test_variable test_array test_others test_signals test_bus
-test: test_lines
+test: test_basic test_variable test_array test_others test_signals test_bus test_lines
+# test: test_lines
