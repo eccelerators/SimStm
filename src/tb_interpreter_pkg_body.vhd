@@ -1603,10 +1603,11 @@ package body tb_interpreter_pkg is
         variable tmp_str_ptr : stm_text_ptr;
         variable stm_line_ptr : t_stm_line_ptr;
         variable success : boolean;
+        variable line_len : integer;
         variable array_index : integer;
         variable array_value : integer;
         variable value_std_logic_vector : std_logic_vector(31 downto 0);
-        variable tmp_std_line : line;
+        variable tmp_std_line_print : line;
         variable stm_array : t_stm_array_ptr;
     begin     
         print("-----------------------------------------------------------------");
@@ -1641,27 +1642,25 @@ package body tb_interpreter_pkg is
             while stm_line_ptr /= null loop
                 print("-------- stm_line_ptr.line_number: " & to_str(stm_line_ptr.line_number));
                 if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
-                    print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");
-                    std_line := stm_line_ptr.line_content;
+                    print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");           
                     tmp_str_ptr := new stm_text;
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
-                    stm_text_ptr_to_line(tmp_str_ptr, std_line);
-                    stm_line_ptr.line_content := std_line;
                     txt_print(tmp_str_ptr);
                 elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
-                    print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");
+                    print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");    
                     success := true;
+                    print("-------- stm_line_ptr.line_content'length before reading: " & to_str(stm_line_ptr.line_content'length));
                     array_index := 0;
-                    while array_index <  stm_line_ptr.array_size loop
-                        hread(stm_line_ptr.line_content, value_std_logic_vector, success);
+                    tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
+                    while success loop
+                        hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
-                            array_value := to_integer(signed(value_std_logic_vector));
-                            hwrite(tmp_std_line, value_std_logic_vector, left, 33);              
+                            array_value := to_integer(signed(value_std_logic_vector));            
                             print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));           
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    stm_line_ptr.line_content := tmp_std_line;                      
+                    print("-------- stm_line_ptr.line_content'length after reading: " & to_str(stm_line_ptr.line_content'length));                    
                 end if;
                 stm_line_ptr :=  stm_line_ptr.next_stm_line;
             end loop;               

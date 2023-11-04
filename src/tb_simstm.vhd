@@ -131,7 +131,7 @@ begin
         variable temp_stdvec_b : std_logic_vector(31 downto 0);
         variable temp_stdvec_c : std_logic_vector(31 downto 0);
 
-        variable trc_on : boolean := false;
+        variable trc_on : integer := 0;
 
         file stimulus : text; -- file main file
         variable v_stat : file_open_status;
@@ -269,16 +269,22 @@ begin
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
                     par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                     last_sequ_num, last_sequ_ptr);
-                    
-                -- dump_file_defs(file_list);
-                -- dump_variables(defined_vars);                
-                -- print_inst(inst_sequ, v_line, file_list);    
+
+                if to_signed(trc_on, 32)(3) = '1' then
+                    dump_file_defs(file_list);  
+                end if;                    
+                if to_signed(trc_on, 32)(2) = '1' then
+                    dump_variables(defined_vars);   
+                end if;
+                if to_signed(trc_on, 32)(1) = '1' then           
+                    print_inst(inst_sequ, v_line, file_list);  
+                end if;  
 
                 Executing_Line <= file_line;
                 Executing_File <= file_name;
                 wait for 100 ps;
 
-                if trc_on then
+                if to_signed(trc_on, 32)(0) = '1' then
                     report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 end if;
 
@@ -774,7 +780,11 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
                     severity failure;
-                    update_variable(defined_vars, par3, number_found, valid);
+                    update_variable(defined_vars, par3, var_stm_array, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
+                    severity failure;
+                    update_variable(defined_vars, par4, number_found, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -1185,11 +1195,7 @@ begin
 
                 -- trace 1
                 elsif instruction(1 to len) = INSTR_TRACE then
-                    if par1 /= 0 then
-                        trc_on := true;
-                    else
-                        trc_on := false;
-                    end if;
+                    trc_on := par1;
 
                 -- verbosity $INFO
                 -- verbosity 25

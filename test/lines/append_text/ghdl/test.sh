@@ -17,11 +17,11 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-test_variable_1: 0x01
-test_variable_2: 0x02
-test_variable_3: 0x03
-test_variable_4: 0x04
-test_variable_5: 0x05
+start simulation
+line 1
+line 2
+line 3
+Main test finished
 EOF
 )
 

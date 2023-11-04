@@ -62,7 +62,11 @@ test_bus:
 	@cd ./test/bus/wishbone_verification_fail/ghdl/ && ./test.sh
 	@cd ./test/bus/wishbone_timeout_read/ghdl/      && ./test.sh
 	@cd ./test/bus/wishbone_timeout_write/ghdl/     && ./test.sh
-
+	
+test_lines:
+	@cd ./test/lines/append_array/ghdl/             && ./test.sh
+	@cd ./test/lines/append_text/ghdl/              && ./test.sh
+	@cd ./test/lines/array_get/ghdl/                && ./test.sh
 
 start_ghdl_docker:
 	docker run -it -v ${PWD}:/work -w /work ghdl/ghdl:ubuntu22-llvm-11
@@ -70,4 +74,4 @@ start_ghdl_docker:
 .PHONY: ghdl test $(TARGETS)
 
 # test: test_basic test_variable test_array test_others test_signals test_bus
-test: test_others
+test: test_lines
