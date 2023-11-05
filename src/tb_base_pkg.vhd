@@ -123,7 +123,7 @@ package tb_base_pkg is
         variable file_path : in stm_text_ptr;
         variable valid : out integer);
         
-    procedure stm_file_write(variable stm_lines : out t_stm_lines_ptr;
+    procedure stm_file_write(variable stm_lines : in t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer);
 
@@ -197,6 +197,16 @@ package tb_base_pkg is
     function fld_len(s : in text_field) return integer;
 
     function text_line_len(s : in text_line) return integer;
+    
+    -- stm_text_len    stm_text length
+    --          inputs :  string of type stm_text
+    --          out :  integer number of non 'nul' chars
+    function stm_text_len(s : in stm_text) return integer ;
+        
+    -- stm_text_ptr_truncate_trailing_quote 
+    --          inputs :  stm_text pointer
+    --          inout :  adjusted stm_text
+    procedure stm_text_ptr_truncate_trailing_quote(variable si : stm_text_ptr; variable so : inout stm_text_ptr); 
 
     function fld_equal(s1 : in text_field;
         s2 : in text_field) return boolean;

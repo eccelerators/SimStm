@@ -581,11 +581,13 @@ package body tb_interpreter_pkg is
         variable length : in integer;
         constant var_stm_type : in t_stm_var_type;
         variable str_ptr : in stm_text_ptr
+        
     ) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;
-
+        variable str_ptr_truncated : stm_text_ptr;
+        
         procedure init_stm_lines_var is
         begin
             temp_var := new var_field;
@@ -617,14 +619,16 @@ package body tb_interpreter_pkg is
 
         procedure init_stm_text_var is
         begin
-            assert stim_to_integer(p2, name, line_num) > 0
-            report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & name
+            assert str_ptr /= null
+            report lf & "error: missing file name in file declaration " & (integer'image(line_num)) & " of file " & name
             severity failure;
             temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := 0;
-            temp_var.var_stm_text := str_ptr;
+            temp_var.var_value := 0;            
+            str_ptr_truncated := new stm_text;
+            stm_text_ptr_truncate_trailing_quote(str_ptr, str_ptr_truncated); 
+            temp_var.var_stm_text := str_ptr_truncated;
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;

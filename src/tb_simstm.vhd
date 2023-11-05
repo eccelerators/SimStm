@@ -168,6 +168,7 @@ begin
         variable user_file_append_done : boolean;
         variable user_file_open_done : boolean;
         variable user_std_line : line;
+        variable tmp_std_line : line;
         variable stm_lines_append_valid : integer := 0;
         
         -- Lines
@@ -630,7 +631,8 @@ begin
                     if user_file_in_use_0 then
                         if var_stm_text = user_file_name_0 then
                             readline(user_file_0, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;
@@ -640,7 +642,8 @@ begin
                     if user_file_in_use_1 then
                         if var_stm_text = user_file_name_1 then
                             readline(user_file_1, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;
@@ -650,7 +653,8 @@ begin
                     if user_file_in_use_2 then
                         if var_stm_text = user_file_name_2 then
                             readline(user_file_2, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;
@@ -660,7 +664,8 @@ begin
                     if user_file_in_use_3 then
                         if var_stm_text = user_file_name_3 then
                             readline(user_file_3, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;
@@ -679,7 +684,8 @@ begin
                             user_file_name_0 := var_stm_text;
                             user_file_in_use_0 := true;
                             readline(user_file_0, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;                           
@@ -691,7 +697,8 @@ begin
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
                             readline(user_file_1, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;                            
@@ -703,7 +710,8 @@ begin
                             user_file_name_2 := var_stm_text;
                             user_file_in_use_2 := true;
                             readline(user_file_2, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;                           
@@ -715,7 +723,8 @@ begin
                             user_file_name_3 := var_stm_text;
                             user_file_in_use_3 := true;
                             readline(user_file_3, user_std_line);
-                            stm_lines_append(var_stm_lines, user_std_line, stm_lines_append_valid);
+                            tmp_std_line := new string'(user_std_line.all);
+                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                             assert valid /= 0
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                             severity failure;                           

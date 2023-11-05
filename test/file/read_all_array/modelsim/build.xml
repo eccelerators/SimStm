@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<project name="test_lines_array_delete">
+<project name="test_file_read_all_array">
    <include file="../../../unit_test_build.xml"/>
 </project>

@@ -1,14 +1,7 @@
-include "Array.stm"
-
+file user_data_out "user_data_out.dat"
 lines a_lines
 array a_array 8
-
-array another_array 8
-
-var number_of_elements_got 0
-var number_of_lines 0
-var index_of_line 0
-
+lines b_lines
 
 Main:
 proc       
@@ -22,24 +15,20 @@ proc
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
     lines append array a_lines a_array
-  
+    
     array set a_array 0 1
-    lines append array a_lines a_array
-  
+    lines append array a_lines a_array    
+    
     array set a_array 0 2
-    lines append array a_lines a_array 
+    lines append array a_lines a_array    
     
-	log lines 0 a_lines
-    
-    lines delete a_lines 1
 	log lines 0 a_lines
 	
-    lines delete a_lines 1
-	log lines 0 a_lines
+	file write user_data_out a_lines
 	
-    lines delete a_lines 0
-	log lines 0 a_lines
-    
+	file read all user_data_out b_lines
+	
+	log lines 0 b_lines
 
 	log message 0 "Main test finished"
 	wait 1000

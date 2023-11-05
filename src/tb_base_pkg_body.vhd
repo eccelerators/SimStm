@@ -75,6 +75,7 @@ package body tb_base_pkg is
         variable v_stat : file_open_status;
         file user_file : text;
         variable std_line : line;
+        variable tmp_std_line : line;
         variable stm_lines_append_valid : integer := 0;
         variable file_path_string : stm_text;
     begin
@@ -86,7 +87,8 @@ package body tb_base_pkg is
         end if;
         while not endfile(user_file) loop
             readline(user_file, std_line);
-            stm_lines_append(stm_lines, std_line, stm_lines_append_valid);
+            tmp_std_line := new string'(std_line.all);
+            stm_lines_append(stm_lines, tmp_std_line, stm_lines_append_valid);
             if stm_lines_append_valid = 0 then
                 return;
             end if;
@@ -95,7 +97,7 @@ package body tb_base_pkg is
         file_close(user_file);
     end procedure;
     
-    procedure stm_file_write(variable stm_lines : out t_stm_lines_ptr;
+    procedure stm_file_write(variable stm_lines : in t_stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer) is
 
@@ -201,8 +203,7 @@ package body tb_base_pkg is
         stm_line_ptr := stm_lines.stm_line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
-                tmp_str_ptr := new stm_text;
-                get_stm_text_ptr_from_line(stm_line_ptr.line_content, tmp_str_ptr);            
+                std_line := new string'(stm_line_ptr.line_content.all);           
                 valid := 1;
                 return;
             end if;
@@ -323,8 +324,7 @@ package body tb_base_pkg is
         variable std_line : line;
     begin
         valid := 0;
-        stm_text_ptr_to_line(var_stm_text, std_line);
-        --writeline(output, std_line);
+        stm_text_ptr_to_line(var_stm_text, std_line);        
         if stm_lines.size = 0 then
             stm_line_ptr := new t_stm_line;       
             stm_line_ptr.line_number := 0;     
@@ -357,18 +357,34 @@ package body tb_base_pkg is
         variable valid : out integer) is
 
         variable stm_line_ptr : t_stm_line_ptr;
-        variable stm_line_new : t_stm_line_ptr := new t_stm_line;
-    begin
-        valid := 0;
-        stm_line_ptr := stm_lines.stm_line_list;
-        for i in 0 to stm_lines.size - 1 loop
-            stm_line_ptr := stm_line_ptr.next_stm_line;
-        end loop;
-        stm_line_ptr.next_stm_line := stm_line_new;
-        stm_line_new.line_content := std_line;
-        stm_line_new.next_stm_line := null;
-        stm_lines.size := stm_lines.size + 1;
-        valid := 1;
+        variable stm_next_line_ptr : t_stm_line_ptr;
+    begin        
+        valid := 0;      
+        if stm_lines.size = 0 then
+            stm_line_ptr := new t_stm_line;       
+            stm_line_ptr.line_number := 0;     
+            stm_line_ptr.line_content := std_line;
+            stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_line_ptr.array_size := 0;
+            stm_line_ptr.next_stm_line := null;
+            stm_lines.stm_line_list := stm_line_ptr;
+            stm_lines.size := 1;
+        else
+            stm_line_ptr := stm_lines.stm_line_list;
+            while stm_line_ptr.next_stm_line /= null loop
+                stm_line_ptr := stm_line_ptr.next_stm_line;
+            end loop;
+            stm_next_line_ptr := new t_stm_line;
+            stm_next_line_ptr.line_number := stm_line_ptr.line_number + 1;
+            stm_next_line_ptr.line_content := std_line;
+            stm_next_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_next_line_ptr.array_size := 0;
+            stm_next_line_ptr.next_stm_line := null;
+            stm_line_ptr.next_stm_line := stm_next_line_ptr;
+            stm_lines.size := stm_lines.size + 1;
+            valid := 1;             
+        end if;
+        valid := 1;            
     end procedure;
 
 
@@ -652,20 +668,30 @@ package body tb_base_pkg is
         end loop;
         return (i - 1);
     end function;
-
-
+    
     -- stm_text_len    stm_text length
     --          inputs :  string of type stm_text
-    --          return :  integer number of non 'nul' chars
+    --          out :  integer number of non 'nul' chars
     function stm_text_len(s : in stm_text) return integer is
         variable i : integer := 1;
     begin
-        while s(i) /= nul and i /= max_str_len loop
+        while s(i) /= nul and i /= c_stm_text_len loop
             i := i + 1;
         end loop;
         return (i - 1);
     end function;
-
+       
+    -- stm_text_ptr_truncate_trailing_quote 
+    --          inputs :  stm_text pointer
+    --          inout :  adjusted stm_text
+    procedure stm_text_ptr_truncate_trailing_quote(variable si : stm_text_ptr; variable so : inout stm_text_ptr) is
+        variable i : integer := 1;
+    begin
+        while si(i) /= nul and i /= max_str_len and si(i) /= '"' loop -- "
+            so(i) := si(i);
+            i := i + 1;
+        end loop;
+    end procedure;   
 
     -- fld_equal  check text field for equality
     --          inputs :  text field s1 and s2

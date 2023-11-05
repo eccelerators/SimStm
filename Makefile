@@ -75,11 +75,15 @@ test_lines:
 	@cd ./test/lines/delete_all_array/ghdl/         && ./test.sh
 	@cd ./test/lines/size/ghdl/                     && ./test.sh
 	@cd ./test/lines/pointer/ghdl/                  && ./test.sh
+	
+test_file:
+	@cd ./test/file/write_array/ghdl/             && ./test.sh
+	@cd ./test/file/read_all_array/ghdl/              && ./test.sh
 
 start_ghdl_docker:
 	docker run -it -v ${PWD}:/work -w /work ghdl/ghdl:ubuntu22-llvm-11
 
 .PHONY: ghdl test $(TARGETS)
 
-test: test_basic test_variable test_array test_others test_signals test_bus test_lines
-# test: test_lines
+# test: test_basic test_variable test_array test_others test_signals test_bus test_lines
+test: test_file
