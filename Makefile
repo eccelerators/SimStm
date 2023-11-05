@@ -78,8 +78,10 @@ test_lines:
 	
 test_file:
 	@cd ./test/file/write_array/ghdl/             && ./test.sh
-	@cd ./test/file/read_all_array/ghdl/              && ./test.sh
-	@cd ./test/file/append_array/ghdl/             && ./test.sh
+	@cd ./test/file/read_all_array/ghdl/          && ./test.sh
+	@cd ./test/file/append_array/ghdl/            && ./test.sh
+	@cd ./test/file/read_array/ghdl/              && ./test.sh
+	@cd ./test/file/statuses/ghdl/                && ./test.sh
 
 start_ghdl_docker:
 	docker run -it -v ${PWD}:/work -w /work ghdl/ghdl:ubuntu22-llvm-11

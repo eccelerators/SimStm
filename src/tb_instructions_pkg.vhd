@@ -281,17 +281,7 @@ package body tb_instructions_pkg is
                 end if;
             elsif token1(1 to 4) = "file" then
                 token1_len := 4;
-                if token2(1 to 4) = "read" then
-                    token2_len := 4;
-                    token_merge := 2;
-                    if token3(1 to 3) = "end" then
-                        token3_len := 3;
-                        token_merge := 3;    
-                    elsif token3(1 to 3) = "all" then              
-                        token3_len := 3;
-                        token_merge := 3;                      
-                    end if;
-                elsif token2(1 to 8) = "readable" then
+                if token2(1 to 8) = "readable" then
                     token2_len := 8;
                     token_merge := 2; 
                 elsif token2(1 to 9) = "writeable" then
@@ -306,6 +296,16 @@ package body tb_instructions_pkg is
                 elsif token2(1 to 6) = "append" then
                     token2_len := 6;
                     token_merge := 2;
+                elsif token2(1 to 4) = "read" then
+                    token2_len := 4;
+                    token_merge := 2;
+                    if token3(1 to 3) = "end" then
+                        token3_len := 3;
+                        token_merge := 3;    
+                    elsif token3(1 to 3) = "all" then              
+                        token3_len := 3;
+                        token_merge := 3;                      
+                    end if;
                 end if;
             elsif token1(1 to 5) = "lines" then
                 token1_len := 5;

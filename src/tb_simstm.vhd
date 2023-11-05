@@ -630,45 +630,53 @@ begin
                     -- if file is already in use, us it
                     if user_file_in_use_0 then
                         if var_stm_text = user_file_name_0 then
-                            readline(user_file_0, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;
+                            for i in 1 to par3 loop
+                                readline(user_file_0, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;
                             user_file_append_done := true;
                         end if;
                     end if; 
                     if user_file_in_use_1 then
                         if var_stm_text = user_file_name_1 then
-                            readline(user_file_1, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;
+                            for i in 1 to par3 loop
+                                readline(user_file_1, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;
                             user_file_append_done := true;
                         end if;
                     end if;
                     if user_file_in_use_2 then
                         if var_stm_text = user_file_name_2 then
-                            readline(user_file_2, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;
+                            for i in 1 to par3 loop
+                                readline(user_file_2, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;
                             user_file_append_done := true;
                         end if;
                     end if;
                     if user_file_in_use_3 then
                         if var_stm_text = user_file_name_3 then
-                            readline(user_file_3, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;
+                            for i in 1 to par3 loop
+                                readline(user_file_3, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;
                             user_file_append_done := true;
                         end if;
                     end if;
@@ -683,12 +691,14 @@ begin
                             severity failure;
                             user_file_name_0 := var_stm_text;
                             user_file_in_use_0 := true;
-                            readline(user_file_0, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;                           
+                            for i in 1 to par3 loop
+                                readline(user_file_0, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;                           
                         elsif not user_file_in_use_1 and not user_file_open_done then
                             file_open(v_stat, user_file_1, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -696,12 +706,14 @@ begin
                             severity failure;
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
+                            for i in 1 to par3 loop
                             readline(user_file_1, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;                            
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;                            
                         elsif not user_file_in_use_2 and not user_file_open_done then
                             file_open(v_stat, user_file_2, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -709,12 +721,14 @@ begin
                             severity failure;
                             user_file_name_2 := var_stm_text;
                             user_file_in_use_2 := true;
-                            readline(user_file_2, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;                           
+                            for i in 1 to par3 loop
+                                readline(user_file_2, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure;
+                            end loop;                          
                         elsif not user_file_in_use_3 and not user_file_open_done then
                             file_open(v_stat, user_file_3, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -722,12 +736,14 @@ begin
                             severity failure;
                             user_file_name_3 := var_stm_text;
                             user_file_in_use_3 := true;
-                            readline(user_file_3, user_std_line);
-                            tmp_std_line := new string'(user_std_line.all);
-                            stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                            severity failure;                           
+                            for i in 1 to par3 loop
+                                readline(user_file_3, user_std_line);
+                                tmp_std_line := new string'(user_std_line.all);
+                                stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
+                                severity failure; 
+                            end loop;                          
                         else
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: only 4 files are allowed for file read concurrently"
