@@ -23,6 +23,8 @@ package tb_base_pkg is
     type int_array is array (1 to 128) of integer;
     type int_array_array is array (1 to 16) of int_array;
     type boolean_array is array (0 to 127) of boolean;
+    
+    type interrupt_array is array (0 to 127) of integer;
 
     subtype text_field is string(1 to max_field_len);
     subtype text_line is string(1 to max_str_len);

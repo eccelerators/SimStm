@@ -75,6 +75,16 @@ package tb_interpreter_pkg is
         variable index : in integer;
         variable value : in integer;
         variable valid : out integer);
+        
+    --  update_variable
+    --     inputs:
+    --               index:  the index of the variable being updated
+    --     outputs:
+    --               valid is 1, not valid is 0    
+    procedure update_variable(variable var_list : in var_field_ptr;
+        variable index : in integer;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer);
 
     --  update_array
     --     inputs:

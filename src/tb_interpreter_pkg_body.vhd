@@ -251,6 +251,34 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
+    
+    --  update_variable
+    --     inputs:
+    --               index:  the index of the variable being updated
+    --     outputs:
+    --               valid is 1, not valid is 0    
+    procedure update_variable(variable var_list : in var_field_ptr;
+        variable index : in integer;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer) is
+
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                ptr.var_stm_text :=  var_stm_text;
+                valid := 1;
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            ptr.var_stm_text :=  var_stm_text;
+            valid := 1;
+        end if;
+    end procedure;
 
 
     --  update_array

@@ -7,6 +7,7 @@ const a_constC $a_varA
 var a_varA 0x05
 var a_varB $a_varA
 var a_varC $a_constA
+var result 0
 
 array an_array 16
 
@@ -78,19 +79,24 @@ end proc
 
 file_proc:
 proc 
+    file writeable a_fileA result
+    file readable a_fileA result
+    file appendable a_fileA result
 	file write a_fileA a_lines
 	file append a_fileB  a_lines
-	file read a_fileA a_lines	
+	file read all a_fileA a_lines
+    file read a_fileA a_lines 5
+    file read end a_fileA
 end proc
-
+ 
 lines a_lines_target
 lines a_lines_source
 var read_size 0
 
 lines_proc:
 proc 
-	lines get array a_lines $position an_array
-	lines get array a_lines 8 an_array
+	lines get array a_lines $position an_array result
+	lines get array a_lines 8 an_array result
 	
 	lines set array a_lines $position an_array
 	lines set array a_lines 9 an_array

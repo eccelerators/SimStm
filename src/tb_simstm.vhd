@@ -112,8 +112,8 @@ begin
         variable num_of_if_in_false_if_leave : int_array := (others => 0);
         variable valid : integer;
         variable interrupt_number_entered_stack_pointer : integer := -1;
-        variable interrupt_number_entered_stack : int_array := (others => 0);
-        variable interrupt_entry_call_stack_ptr_stack : int_array := (others => 0);
+        variable interrupt_number_entered_stack : interrupt_array := (others => 0);
+        variable interrupt_entry_call_stack_ptr_stack : interrupt_array := (others => 0);
 
         variable successfull : boolean := false;
 
@@ -219,7 +219,10 @@ begin
         while v_line < inst_sequ.num_of_lines loop
 
             get_interrupt_requests(signals_in, interrupt_requests);
-
+            if interrupt_requests > 0 then
+                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);                                                  
+            end if;
+            
             if main_entered = 0 then
 
                 access_variable(defined_vars, main_label_text_field, main_line, valid);
@@ -228,42 +231,32 @@ begin
                 severity failure;
                 v_line := main_line;
                 main_entered := 1;
-
-            elsif interrupt_requests > 0 then
-
-                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
-
-                if branch_to_interrupt then
-                    if (stack_ptr >= 31) then
-                        assert false
-                        report " line " & (integer'image(file_line)) & " interrupt enter error: stack over run, calls to deeply nested!!"
-                        severity failure;
-                    end if;
-
-                    if (stack_ptr >= 31) then
-                        assert false
-                        report " line " & (integer'image(file_line)) & " interrupt enter error: interrupt number stack over run, interrupts to deeply nested!!"
-                        severity failure;
-                    end if;
-
-                    interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
-                    interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
-                    interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := stack_ptr;
-
-                    set_interrupt_in_service(interrupt_in_service, interrupt_number);
-
-                    stack(stack_ptr) := v_line;
-                    stack_ptr := stack_ptr + 1;
-                    -- report " line " & (integer'image(file_line)) & "call stack_ptr incremented to = " & integer'image(stack_ptr);
-                    line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
-                    access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
-                    assert valid = 1
-                    report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !" 
+                
+            elsif branch_to_interrupt then
+                if (stack_ptr >= 31) then
+                    assert false
+                    report " line " & (integer'image(file_line)) & " interrupt enter error: stack over run, calls to deeply nested!!"
                     severity failure;
-                    v_line := branch_to_interrupt_v_line;
-
                 end if;
-
+                if (stack_ptr >= 31) then
+                    assert false
+                    report " line " & (integer'image(file_line)) & " interrupt enter error: interrupt number stack over run, interrupts to deeply nested!!"
+                    severity failure;
+                end if;
+                interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
+                interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
+                interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := stack_ptr;
+                set_interrupt_in_service(interrupt_in_service, interrupt_number);
+                stack(stack_ptr) := v_line;
+                stack_ptr := stack_ptr + 1;
+                -- report " line " & (integer'image(file_line)) & "call stack_ptr incremented to = " & integer'image(stack_ptr);
+                line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
+                access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
+                assert valid = 1
+                report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !" 
+                severity failure;
+                v_line := branch_to_interrupt_v_line; 
+                
             else
 
                 v_line := v_line + 1;
@@ -788,6 +781,17 @@ begin
                     stm_file_read_all(var_stm_lines, var_stm_text, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file read not successful"
+                    severity failure;
+                    
+                --  file pointer copy a_file_target a_file_source
+                elsif instruction(1 to len) = INSTR_FILE_POINTER_COPY then
+                    index_variable(defined_vars, par2, var_stm_text, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1, var_stm_text, valid);
+                    assert valid /= 0
+                    report "files_pointer error: not a lines object name??"
                     severity failure;
                                  
                 -- lines get a_lines $position an_array number_found

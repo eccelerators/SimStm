@@ -82,11 +82,15 @@ test_file:
 	@cd ./test/file/append_array/ghdl/            && ./test.sh
 	@cd ./test/file/read_array/ghdl/              && ./test.sh
 	@cd ./test/file/statuses/ghdl/                && ./test.sh
+	@cd ./test/file/pointer/ghdl/                 && ./test.sh
+	
+test_interrupt:
+	@cd ./test/interrupt/plain/ghdl/             && ./test.sh
 
 start_ghdl_docker:
 	docker run -it -v ${PWD}:/work -w /work ghdl/ghdl:ubuntu22-llvm-11
 
 .PHONY: ghdl test $(TARGETS)
 
-# test: test_basic test_variable test_array test_others test_signals test_bus test_lines
-test: test_file
+test: test_basic test_variable test_array test_others test_signals test_bus test_lines test_file test_interrupt
+

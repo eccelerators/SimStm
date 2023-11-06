@@ -127,6 +127,10 @@ package body tb_signals_pkg is
                 signals.out_signal <= temp_var(0);
             when 1 =>
                 signals.out_signal_1 <= temp_var(signals.out_signal_1'left downto 0);
+            when 2 =>
+                signals.out_signal_2 <= temp_var(0);
+            when 3 =>
+                signals.out_signal_3 <= temp_var(0);
             when others =>
                 valid := 0;
         end case;
@@ -155,8 +159,8 @@ package body tb_signals_pkg is
         variable empty_label : line := new string'("");
         variable interrupt_labels : t_interrupt_labels := (
           -- TODO: Add here all your simstm interrupt entry procedure labels
-            new string'("$InterruptA"),
-            new string'("$InterruptB")
+            new string'("$InterruptB"),
+            new string'("$InterruptA")
         );
     begin
         interrupt_number := -1;
@@ -185,7 +189,7 @@ package body tb_signals_pkg is
     -- Set in service bit for a processed interrupt
     procedure set_interrupt_in_service (variable interrupt_in_service : inout unsigned; variable interrupt_number : in integer) is
     begin
-        interrupt_in_service(interrupt_number) := '0';
+        interrupt_in_service(interrupt_number) := '1';
     end procedure;
 
 

@@ -59,6 +59,7 @@ package tb_instructions_pkg is
         constant INSTR_FILE_READ_ALL : string := "file_read_all";
         constant INSTR_FILE_WRITE : string := "file_write";
         constant INSTR_FILE_APPEND : string := "file_append";
+        constant INSTR_FILE_POINTER_COPY : string := "file_pointer_copy";
 
         -- lines
         constant INSTR_LINES : string := "lines";
@@ -190,6 +191,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);
+        define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
         define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
@@ -306,7 +308,14 @@ package body tb_instructions_pkg is
                         token3_len := 3;
                         token_merge := 3;                      
                     end if;
-                end if;
+                elsif token2(1 to 7) = "pointer" then
+                    token2_len := 7;
+                    token_merge := 2;
+                    if token3(1 to 4) = "copy" then
+                        token3_len := 4;
+                        token_merge := 3;                         
+                    end if;
+                end if;                                        
             elsif token1(1 to 5) = "lines" then
                 token1_len := 5;
                 if token2(1 to 3) = "get" then
