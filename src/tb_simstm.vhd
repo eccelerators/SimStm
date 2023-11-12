@@ -1326,6 +1326,17 @@ begin
                         severity failure;
                     end if;
                     wait for 0 ns;
+                    
+                --  signal pointer copy a_file_target a_file_source
+                elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_COPY then
+                    index_variable(defined_vars, par2, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: signal object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report "signal_pointer error: not a signal object name??"
+                    severity failure;
 
                 -- bus write $a_bus $bus_width  $bus_address $bus_to_be_set_value
                 -- bus write $a_bus 16 #x00001000 #x1233
@@ -1397,6 +1408,17 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     bus_timeouts(temp_int) := par2 * 1 ns;
+                    
+                --  bus pointer copy a_file_target a_file_source
+                elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then
+                    index_variable(defined_vars, par2, temp_int, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1, temp_int, valid);
+                    assert valid /= 0
+                    report "bus_pointer error: not a bus object name??"
+                    severity failure;
 
                 -- undefined instructions
                 else
