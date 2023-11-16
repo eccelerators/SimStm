@@ -5,7 +5,7 @@ lines b_lines
 
 Main:
 proc       
-
+ 
     array set a_array 0 0
     array set a_array 1 1
     array set a_array 2 0xA
