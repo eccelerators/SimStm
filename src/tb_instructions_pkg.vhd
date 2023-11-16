@@ -41,6 +41,7 @@ package tb_instructions_pkg is
         constant INSTR_SIGNAL_READ : string := "signal_read";
         constant INSTR_SIGNAL_VERIFY : string := "signal_verify";
         constant INSTR_SIGNAL_WRITE : string := "signal_write";
+        constant INSTR_SIGNAL_POINTER_COPY : string := "signal_pointer_copy";
 
         -- bus
         constant INSTR_BUS : string := "bus";
@@ -48,6 +49,7 @@ package tb_instructions_pkg is
         constant INSTR_BUS_VERIFY : string := "bus_verify";
         constant INSTR_BUS_WRITE : string := "bus_write";
         constant INSTR_BUS_TIMEOUT : string := "bus_timeout";
+        constant INSTR_BUS_POINTER_COPY : string := "bus_pointer_copy";
 
         -- file
         constant INSTR_FILE : string := "file";
@@ -175,12 +177,14 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_SIGNAL_READ, 2);
         define_instruction(inst_list, INSTR_SIGNAL_VERIFY, 4);
         define_instruction(inst_list, INSTR_SIGNAL_WRITE, 2);
+        define_instruction(inst_list, INSTR_SIGNAL_POINTER_COPY, 2);
         -- bus
         define_instruction(inst_list, INSTR_BUS, 2);
         define_instruction(inst_list, INSTR_BUS_READ, 4);
         define_instruction(inst_list, INSTR_BUS_VERIFY, 6);
         define_instruction(inst_list, INSTR_BUS_WRITE, 4);
         define_instruction(inst_list, INSTR_BUS_TIMEOUT, 2);
+        define_instruction(inst_list, INSTR_BUS_POINTER_COPY, 2);
         -- file
         define_instruction(inst_list, INSTR_FILE, 1);
         define_instruction(inst_list, INSTR_FILE_READABLE, 2);
@@ -409,6 +413,13 @@ package body tb_instructions_pkg is
                 elsif token2(1 to 5) = "write" then
                     token2_len := 5;
                     token_merge := 2;
+                elsif token2(1 to 7) = "pointer" then
+                    token2_len := 7;
+                    token_merge := 2;
+                    if token3(1 to 4) = "copy" then
+                        token3_len := 4;
+                        token_merge := 3;                         
+                    end if;
                 end if;
             elsif token1(1 to 3) = "bus" then
                 token1_len := 3;
@@ -424,6 +435,13 @@ package body tb_instructions_pkg is
                 elsif token2(1 to 7) = "timeout" then
                     token2_len := 7;
                     token_merge := 2;
+                elsif token2(1 to 7) = "pointer" then
+                    token2_len := 7;
+                    token_merge := 2;
+                    if token3(1 to 4) = "copy" then
+                        token3_len := 4;
+                        token_merge := 3;                         
+                    end if;
                 end if;
             end if;
         end if;
