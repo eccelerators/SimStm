@@ -3,7 +3,8 @@ SimStm is a VHDL testbench designed to facilitate testing using external stimulu
 This testbench, is provided by Eccelerators and aims to simplify test script creation by introducing the SimStm language.                                            
 Eccelerators provides IDE support for Visual Studio Code and Eclipse by SimStm plugins, visit https://eccelerators.com . 
 The origin of the VHDL testbench is https://github.com/sckoarn/VHDL-Test-Bench, therefore this repository is forked from
-the original. The complete VHDL source code of the SimStm is a VHDL testbench is distributed under the same license as the original.
+the original. The complete VHDL source code of the SimStm VHDL testbench is distributed under the same license as the original.
+However the code has been repartioned and changed substantially.
                                                                                                                                                                      
 ## Focus                                                                                                         
 It is a common practice to use the file I/O features of VHDL for VHDL testbenches.                                                                                   
