@@ -1,14 +1,14 @@
 # SimStm                                                                                                                                                             
 SimStm is a VHDL testbench designed to facilitate testing driven by external stimulus files with a ".stm" extension.
-This testbench, is provided by Eccelerators and aims to simplify test script creation by introducing the SimStm language.
-Eccelerators provides IDE support for Visual Studio Code and Eclipse by SimStm plugins, visit https://eccelerators.com .
+This testbench, is provided by Eccelerators GmbH and aims to simplify test script creation by introducing the SimStm language.
+Eccelerators GmbH provides IDE support for Visual Studio Code and Eclipse by SimStm plugins, visit https://eccelerators.com .
 
 The original of the VHDL testbench has been coded by Ken Campbell, visit https://github.com/sckoarn/VHDL-Test-Bench . Therefore the SimStm
 repository is forked from this original. The complete VHDL source code of the SimStm VHDL testbench is distributed under the same license as the original.
-However the code has been repartioned and changed substantially. The original copyright notice has been kept within all source files having a relation to
-an original.
+However the code has been repartioned and changed by Eccelerators GmbH substantially. The original copyright notice has been kept within all source files
+having a relation to an original.
 
-The IDE plugins are available for free at the Eccelerators web page. They may be available for free at the respective IDE marketplaces once they are deployed there.
+The IDE plugins are available for free at the Eccelerators GmbH web page. They may be available for free at the respective IDE marketplaces once they are deployed there.
 The source code of the SimStm language plugins is Eccelerators GmbH property and closed source. 
                                                                                                                                                                      
 ## Focus                                                                                                         
