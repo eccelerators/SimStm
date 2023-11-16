@@ -7,8 +7,7 @@ the original. The complete VHDL source code of the SimStm VHDL testbench is dist
 However the code has been repartioned and changed substantially.
                                                                                                                                                                      
 ## Focus                                                                                                         
-It is a common practice to use the file I/O features of VHDL for VHDL testbenches.                                                                                   
-Usually each developer creates an own format for commands in an input stimuli text file                                                                              
+It is a common practice to use the file I/O features of VHDL for VHDL testbenches. Usually each developer creates an own format for commands in an input stimuli text file                                                                              
 and its own file name and file extension. The command set is focused on the tasks currently to be solved.                                                            
                                                                                                                                                                      
 The general advantage of this technique is that the VHDL-code of the testbench doesn't have to be changed and recompiled for different stimuli command sets          
