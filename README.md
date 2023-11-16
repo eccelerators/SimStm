@@ -7,6 +7,9 @@ The original of the VHDL testbench has been coded by Ken Campbell, visit https:/
 repository is forked from this original. The complete VHDL source code of the SimStm VHDL testbench is distributed under the same license as the original.
 However the code has been repartioned and changed substantially. The original copyright notice has been kept within all source files having a relation to
 an original.
+
+The IDE plugins are available for free at the Eccelerators web page. They may be available for free at the respective IDE marketplaces once they are deployed there.
+The source code of the SimStm language plugins is Eccelerators GmbH property and closed source. 
                                                                                                                                                                      
 ## Focus                                                                                                         
 It is a common practice to use the file I/O features of VHDL for VHDL testbenches. Usually each developer creates an own format for commands in an input stimuli text file                                                                              
