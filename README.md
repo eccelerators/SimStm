@@ -84,103 +84,82 @@ Create or open a ".stm" test script file within your project.
 Leverage the plugin's IDE features to enhance your testing workflow.  
 
 
-## Test Commands
+## SimStm language instructions
 
-### Basics
+### Includes, objects and declarations
 
-| Command | Parameters | Description | Comment |
-|---------|------------|-------------|---------|
-| abort | | Abort simulation | |
-| break | | Exit a while loop | Future implementation |
-| const | [name] [value] | Define a constant | |
-| else | | Else statement | |
-| elsif | [value] [operation] [value] | Elseif statement | |
-| end if | | End statement for if | |
-| finish | | Successful end of simulation | |
-| if | [value] [operation] [value] | If statement | |
-| include | [file] | Include another *.stm file | |
-| loop | [num of iterations] | Start a loop | |
-| end loop | | End statement for loop | |
-| var | [name] [value] | Define a variable | |
-| while | [value] [operation] [value] | Start a while loop | Future implementation |
-| end while | | End statement for while | |
+#### include
 
-### Operations
+${\color{purple}\texttt{include} \space \color{blue}\texttt{"an\\_include.stm"}}$
 
-| Command | Parameters | Description | Comment |
-|---------|------------|-------------|---------|
-| add | [variable] [value] | Add value to variable | |
-| and | [variable] [value] | Logical AND | |
-| div | [variable] [value] | Divide value | |
-| equ | [variable] [value] | Set new value | |
-| mul | [variable] [value] | Multiply value | |
-| or | [variable] [value] | Logical OR | |
-| sub | [variable] [value] | Subtract value | |
-| xor | [variable] [value] | Logical XOR | |
-| shl | [variable] [value] | Shift left | |
-| shr | [variable] [value] | Shift right | |
-| ld | [variable] | Logarithmus Dualis | |
-| lg | [variable] [value] | Logarithmus | Maybe a future Implementation |
-| pwr | [variable] [value] | Variable ** value (power of) | Maybe a future Implementation |
-| inv | [variable] | Invert | |
+Include another child *.stm file
 
-### Signals
+Include instructions should be the first instructions of a *.stm file.
+An included file can include further *.stm files thus nested includes are possible. The file path 
+to be given is relative to the file with the respective include instruction. Nested includes of files 
+from the same folder or in child folders are predictable, nested includes to files in parent folders 
+would be a bad practice. 
 
-| Command | Parameters | Description |
-|---------|------------|-------------|
-| signal read | [signal number] [store variable] | Read from a signal |
-| signal verify | [signal number] [store variable] [match value] [mask] | Verify a signal |
-| signal write | [signal number] [value] | Write to a signal |
 
-### Bus
+#### const
 
-| Command | Parameters | Description |
-|---------|------------|-------------|
-| bus read | [bus number] [bit width] [address] [store variable] | Read from a bus |
-| bus timeout | [bus number] [timeout] | Set a read timeout for a bus |
-| bus verify | [bus number] [bit width] [address] [store variable] [match value] [mask] | Verify the read data from a bus |
-| bus write | [bus number] [bit width] [address] [value] | Write to a bus |
+${\color{purple}\texttt{const} \space \color{black}\texttt{a\\_constA 0x03}}$
 
-### File
+${\color{purple}\texttt{const} \space \color{black}\texttt{a\\_constB 0b011}}$
 
-| Command | Parameters | Description |
-|---------|------------|-------------|
-| file | [name] [path] | Path to the file |
-| line pos | [name] | Get the current line number of a file |
-| line read | [name] [variable to store read data] | Read a line from a file and store data in variable |
-| line size | [name] | Get the number of lines in a file |
-| line seek | [name] [line number] | Seek to a specific line in a file |
-| line write | [name] [message] | Write a line to a file |
+${\color{purple}\texttt{const} \space \color{black}\texttt{a\\_constC 3}}$
 
-### Array
+Declare and define a constant with ID and hex, binary or decimal unsigned 32 bit integer value.
 
-| Command | Parameters | Description |
-|---------|------------|-------------|
-| array | [name] [size] | Define an array, 1 dim with size of [size] |
-| array get | [name] [pos] [variable name] | Read a value at the [pos] of the array and store it into a variable |
-| array set | [name] [pos] [value] | Write the value at the array [pos] |
-| array size | [name] [variable name] | Read the size of the array and store it into a variable |
+It isn't possible to initialize a constant by referencing another constant or variable.
 
-### Others
 
-| Command | Parameters | Description |
-|---------|------------|-------------|
-| call | [name] | Call a subroutine |
-| return | | Return from a called subroutine or interrupt routine |
-| resume | [0 / 1] | Exit simulation on error (default is 1) |
-| interrupt | | Define an interrupt subroutine |
-| end interrupt | | End statement for interrupt | |
-| jump | [label] | Jump to a label |
-| label | | Define a new label |
-| marker | [marker number] [value] | Set a marker |
-| log | [log level] [message] | Print a message |
-| verbosity | [number] | Print only messages that are lesser or equal to the log level |
-| random | [variable] | Get a random number |
-| seed | [seed number A] [seed number B] | Set the seed numbers for the pseudo-random generator |
-| proc | | Begin a subroutine |
-| end proc | | End statement for proc | |
-| trace | [0 / 1] | Enable or disable SimStm trace |
-| wait | [ns] | Wait for * ns |
+#### var
+
+${\color{purple}\texttt{var} \space \color{black}\texttt{a\\_varA 0x03}}$
+
+${\color{purple}\texttt{var} \space \color{black}\texttt{a\\_varB 0b011}}$
+
+${\color{purple}\texttt{var} \space \color{black}\texttt{a\\_varC 3}}$
+
+Declare and define a variable with ID and initial hex, binary or decimal unsigned 32 bit integer value.
+
+It isn't possible to initialize a variable by referencing another variable or constant yet.
+The ${\color{purple}\texttt{equ}}$ instruction must be used within a procedure for this purpose.
+
+
+
+#### array
+
+${\color{purple}\texttt{var} \space \color{black}\texttt{an\\_array 16}}$
+
+Declare an array with ID and an unsigned 32 bit integer length.
+
+Only arrays with one dimension are possible, the length must be fix.
+
+
+#### file
+
+${\color{purple}\texttt{file} \space \color{black}\texttt{a\\_fileA} \space \color{blue}\texttt{"file\\_name.stm"}}$
+
+${\color{purple}\texttt{file} \space \color{black}\texttt{a\\_fileB} \space \color{blue}\texttt{"file\\_name\\{\\}\\{\\}.stm"} \space \color{grey}\texttt{\\$} \color{black}\texttt{file\\_user\\_index1} \space \color{grey}\texttt{\\$} \color{black}\texttt{file\\_user\\_index2}}$
+
+Declare a file with ID and file name. 
+
+The later must be a relative path to the location of the main.stm file. Text substitution by variables is allowed in file names.
+Thus files can be accessed in an indexed manner. The variables are evaluated each time when a reference to a file is used in another 
+instruction accessing a file e.g., ${\color{purple}\texttt{file read all} \space \color{black}\texttt{a\\_file} \space \color{black}\texttt{a\\_lines} }$
+
+
+#### lines
+
+${\color{purple}\texttt{a\\_lines}}$
+
+Declare a lines object with ID.
+
+The lines object contains an arbitrary number of line objects. It is defined to have null content when it is declared by default.
+It can grow or shrink dynamically by lines instructions accessing it e.g., ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{a\\_lines} \space \color{black}\texttt{9} \space \color{black}\texttt{an\\_array}}$
+
 
 
 ## Example Usage
