@@ -98,6 +98,10 @@ Press "Install" button
 Create or open a ".stm" test script file within a project.
 Leverage the plugin's IDE features to enhance your testing workflow.
 
+## Overview
+![tb_simstm](https://github.com/eccelerators/simstm/assets/124497409/1ec08fb8-c643-42cf-928c-b5cf07c5520c)
+
+
 
 ## SimStm language instructions
 SimStm instructions follow the rule one line is one instruction. Subroutine labels are considered as instruction in this manner too.
