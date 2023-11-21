@@ -698,7 +698,7 @@ Dump a lines object at a given verbosity level to the console.
 
 ${\color{purple}\texttt{verbosity} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar}}$
 
-v{\color{purple}\texttt{verbosity} \space \color{black}\texttt{20}}$
+${\color{purple}\texttt{verbosity} \space \color{black}\texttt{20}}$
 
 Usual practice is to use the following constants to set verbosity:
 
