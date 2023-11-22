@@ -49,6 +49,7 @@ test_others:
 	@cd ./test/others/random/ghdl/                   && ./test.sh
 	@cd ./test/others/seed/ghdl/                     && ./test.sh
 	@cd ./test/others/marker/ghdl/                   && ./test.sh
+	@cd ./test/others/hello_world/ghdl/              && ./test.sh
 	
 test_signals:
 	@cd ./test/signal/signal_read/ghdl/         && ./test.sh
