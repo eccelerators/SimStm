@@ -79,42 +79,73 @@ To install the plugins, follow these steps:
 
 ### Visual Studio Code
 
-Open Visual Studio Code.
-Go to the Extensions Marketplace.
-Search for "SimStm" and install the plugin.
-Create or open a ".stm" test script file.
-Enjoy the IDE support provided by the plugin.
+- Open Visual Studio Code.
+- Go to the Extensions Marketplace.
+- Search for "SimStm" and install the plugin.
+- Create or open a ".stm" test script file.
+- Leverage the plugin's IDE features to enhance your testing workflow.
 
 ### Eclipse
 
-Navigate to the eccelerators.com.
-Download the "SimStm" Eclipse plugin.
-Unpack it to a local folder
-Open Eclipse and navigate via menu to "Help" , "Install new Software..."
-Press the "Add" button
-Choose "Local", enter SimStm as plugin name
-Browse to the folder you have unpacked as location
-Press "Install" button
-Create or open a ".stm" test script file within a project.
-Leverage the plugin's IDE features to enhance your testing workflow.
+- Navigate to the eccelerators.com.
+- Download the "SimStm" Eclipse plugin.
+- Unpack it to a local folder
+- Open Eclipse and navigate via menu to "Help" , "Install new Software..."
+- Press the "Add" button
+- Choose "Local", enter SimStm as plugin name
+- Browse to the folder you have unpacked as location
+- Press "Install" button
+- Create or open a ".stm" test script file within a project.
+- Leverage the plugin's IDE features to enhance your testing workflow.
 
 ## Overview and integration into user testbench
+
+The following picture shows how the tb_simstm module is integrated into the user testbench. The tb_simstm module shall not be changed 
+by the user. The signals and interrupts the user wants to control the DUT or the Mocks shall be defined in tb_signals_pkg. The busses 
+the user wants to connect to the DUT or the Mocks shall be defined in tb_bus_pkg and eventually a new bus type package if the prdifined busses 
+aren't sufficient. All other packages shall not be changed.
+
 ![simstm-overview](https://github.com/eccelerators/simstm/assets/124497409/1f15e6b8-1587-4bd7-96a7-8ad51ebe7d05)
 
 
+## Contributions and bugs
+
+Eccelerators accepts github pull requests, github issues or an email to trigger a bug fix. Reported issues with samples cut down to reproduce a bug are highly appreciated.
+In case of email please send it to support@eccelerators.com.
+
+Eccelerators may accept pull requests for small improvements. 
 
 
 ## SimStm language instructions
-SimStm instructions follow the rule one line is one instruction. Subroutine labels are considered as instruction in this manner too.
-The colon postfix and dollar sign object content reference prefix are not allowed have a space between them and the object name. 
+
+### General
+
+In SimStm instructions a line is a instruction, except empty lines or comment only lines. 
+Subroutine labels are considered as instruction in this manner too.
+
+The colon postfix of a subroutine label must end with a colon. No space is allowed between the label ID and the colon.
+A dollar sign as prefix is used to reference to object content e.g. variables. No space is allowed between the dollar sign and referenced object ID. 
 Otherwise the SimStm language is not white space sensitive. 
 
 The SimStm language is case sensitive. 
 
-All constant, variable or labels ID are global within a SimStm project. The IDs must be unique.
+All constant, variable or label ID are global within a SimStm project. The IDs must be unique.
 
 There are no subroutine parameters or local variables. Values must be passed by unique global objects. This is an accommodation to having a 
 simple SimStm interpreter and develops its own charm when using and debugging it.
+
+The subroutine with the label Main is the entry point into the SimStm code for the simulator.
+
+
+### Comments
+
+${\color{green}\texttt{-- this is a full line comment}}$
+
+${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{-- this is an appended line comment}}$
+
+Comments in a line start wit two hyphens.
+
+There are only line comments but no block comments.
 
 
 ### Includes, language objects and declarations
@@ -885,7 +916,7 @@ see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
 
 ### Unit tests
 
-The unit tests in the folder test in this repository show tested examples for all instructions, see https://github.com/eccelerators/simstm/blob/main/test/commands/command_list.stm. 
+The unit tests in the folder test in this repository show tested examples for all instructions, see https://github.com/eccelerators/simstm/blob/lines/test/commands/command_list.stm. 
 
 An exception is example command_list.stm in the subfolder commands.
 It lists all commands only for demonstration and is not a real testcase.
