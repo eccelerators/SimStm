@@ -880,11 +880,12 @@ ${\color{purple}\texttt{finish}}$
 
 ${\color{purple}\texttt{end proc}}$
 
-This example can be found unit tests in the folder test in this repository in the subfolder others and ther in the subfolder hello_world.
+This example can be found unit tests in the folder test in this repository in the subfolder others and ther in the subfolder hello_world, 
+see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
 
 ### Unit tests
 
-The unit tests in the folder test in this repository show tested examples for all instructions. 
+The unit tests in the folder test in this repository show tested examples for all instructions, see https://github.com/eccelerators/simstm/blob/main/test/commands/command_list.stm. 
 
 An exception is example command_list.stm in the subfolder commands.
 It lists all commands only for demonstration and is not a real testcase.
@@ -892,5 +893,5 @@ It lists all commands only for demonstration and is not a real testcase.
 
 ### SPI controller
 
-A complex real world example is found in the eccelerators spi_controller repository on github.
+A complex real world example is found in the eccelerators spi_controller repository on github, see https://github.com/eccelerators/spi-controller.
 
