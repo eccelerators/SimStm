@@ -351,7 +351,7 @@ The user should handle this discontinuity if another result or an error is expec
 
 ${\color{black}\texttt{aproc}  \space \color{grey}\texttt{:}}$
 
-${\color{purple}\texttt{proc} \space \color{black}\texttt{aproc}}$
+${\color{purple}\texttt{proc}}$
 
 ${\color{black}\texttt{...}}$
 
@@ -854,164 +854,43 @@ Sets the global resume behavior for verify instructions.
 On a verify mismatch the simulation stops with severity failure if the global resume is set to 0 otherwise it continues and reports an error.
 
 
-## Example Usage
+## Examples
 
-Here's an example of how SimStm commands can be used in a test script:
+### Hello World
 
-### `main.stm`
+${\color{purple}\texttt{const} \space \color{black}\texttt{YEAR} \space \color{black}\texttt{0x2023} }$
 
-```stm
-equ ReadModifyWriteBus32 0
-equ ReadModifyWriteBus16 0
-equ ReadModifyWriteBus8 0
-equ CmdBus 0
-equ SpiFlashBus 0
-equ DoubleBufferBus 0
+${\color{purple}\texttt{var} \space \color{black}\texttt{month} \space \color{black}\texttt{0x11}}$
 
-var WaitTimeOut 100000 -- ms
+${\color{purple}\texttt{var} \space \color{black}\texttt{day} \space \color{black}\texttt{0x22}}$
 
-call $SpiControllerIfcInit
-call $CellBufferIfcInit
+${\color{black}\texttt{Main} \space \color{grey}\texttt{:}}$
 
-verbosity $INFO_2
-trace 0
-wait 1000
-log $INFO "Main test started"
-log $INFO_3 "HwBufferMask: $HwBufferMask"
+${\color{purple}\texttt{proc}}$
 
-call $testSpiFlash
+${\space \space \space \space \color{purple}\texttt{loop} \space \color{black}\texttt{3} }$
 
-log $INFO "Main test finished"
-wait 1000
-finish
+${\space \space \space \space \space \space \space \space \color{green}\texttt{-- currently values are printed in hex format only}}$
 
--- includes must be placed at the end of a module
-include "DoubleBuffer/StatusReg.stm"
-```
+${\space \space \space \space \space \space \space \space \color{purple}\texttt{log message} \space \color{black}\texttt{0} \space \color{blue}\texttt{"Hello World \\{\\}-\\{\\}-\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{YEAR} \space \color{grey}\texttt{\\$} \color{black}\texttt{month} \space \color{grey}\texttt{\\$} \color{black}\texttt{day}}$
 
-### `StatusReg.stm`
+${\space \space \space \space \color{purple}\texttt{end loop}}$
 
-```stm
--- global
--- var WaitTimeOut Test.stm
--- var DoubleBufferBus from DoubleBuffer.stm
+${\color{purple}\texttt{finish}}$
 
--- parameter
-var StatusRegOperationMVal 0
-var StatusRegOperationMValToWaitFor 0
-var StatusRegHwBufferMVal 0
-var StatusRegHwBufferMValToWaitFor 0
+${\color{purple}\texttt{end proc}}$
 
--- intern
-var StatusRegTmp0 0
+This example can be found unit tests in the folder test in this repository in the subfolder others and ther in the subfolder hello_world.
 
-getStatusRegOperationMVal:
-proc
-	bus read $DoubleBufferBus 32 $StatusRegAddress StatusRegTmp0
-	and StatusRegTmp0 $OperationMask
-	equ StatusRegOperationMVal $StatusRegTmp0
-end proc
+### Unit tests
 
-getStatusRegHwBufferMVal:
-proc
-	bus read $DoubleBufferBus 32 $StatusRegAddress StatusRegTmp0
-	log $INFO_3 "getStatusRegHwBufferMVal: $StatusRegTmp0"
-	and StatusRegTmp0 $HwBufferMask
-	log $INFO_3 -- global
--- var WaitTimeOut Test.stm
--- var DoubleBufferBus from DoubleBuffer.stm
+The unit tests in the folder test in this repository show tested examples for all instructions. 
 
--- parameter
-var StatusRegOperationMVal 0
-var StatusRegOperationMValToWaitFor 0
-var StatusRegHwBufferMVal 0
-var StatusRegHwBufferMValToWaitFor 0
+An exception is example command_list.stm in the subfolder commands.
+It lists all commands only for demonstration and is not a real testcase.
 
--- intern
-var StatusRegTmp0 0
 
-getStatusRegOperationMVal:
-proc
-	bus read $DoubleBufferBus 32 $StatusRegAddress StatusRegTmp0
-	and StatusRegTmp0 $OperationMask
-	equ StatusRegOperationMVal $StatusRegTmp0
-end proc
+### SPI controller
 
-getStatusRegHwBufferMVal:
-proc
-	bus read $DoubleBufferBus 32 $StatusRegAddress StatusRegTmp0
-	log $INFO_3 "getStatusRegHwBufferMVal: $StatusRegTmp0"
-	and StatusRegTmp0 $HwBufferMask
-	log $INFO_3 "getStatusRegHwBufferMValHwBufferMask: $HwBufferMask"
-	log $INFO_3 "getStatusRegHwBufferMValMasked: $StatusRegTmp0"
-	equ StatusRegHwBufferMVal $StatusRegTmp0
-end proc
+A complex real world example is found in the eccelerators spi_controller repository on github.
 
-waitForStatusRegOperationMVal:
-proc
-    loop $WaitTimeOut
-        wait 1000
-        call $getStatusRegOperationMVal
-        log $INFO_3 "waitForStatusRegOperationMVal: $StatusRegOperationMVal"
-        if $StatusRegOperationMVal = $StatusRegOperationMValToWaitFor
-            return
-        end if
-    end loop
-    log $ERROR "waitForStatusRegOperationMVal: $WaitForStatusRegOperationMVal not set within reasonable time"
-    abort
-end proc
-
-waitForStatusRegHwBufferMVal:
-proc
-    loop $WaitTimeOut
-        wait 1000
-        call $getStatusRegHwBufferMVal
-        log $INFO_3 "waitForStatusRegHwBufferMVal: $StatusRegHwBufferMVal"
-        if $StatusRegHwBufferMVal = $StatusRegHwBufferMValToWaitFor
-            return
-        end if
-    end loop
-    log $ERROR "waitForStatusRegHwBufferMVal: $WaitForStatusRegHwBufferMVal not set within reasonable time"
-    abort
-end proc"getStatusRegHwBufferMValHwBufferMask: $HwBufferMask"
-	log $INFO_3 "getStatusRegHwBufferMValMasked: $StatusRegTmp0"
-	equ StatusRegHwBufferMVal $StatusRegTmp0
-end proc
-
-waitForStatusRegOperationMVal:
-proc
-    loop $WaitTimeOut
-        wait 1000
-        call $getStatusRegOperationMVal
-        log $INFO_3 "waitForStatusRegOperationMVal: $StatusRegOperationMVal"
-        if $StatusRegOperationMVal = $StatusRegOperationMValToWaitFor
-            return
-        end if
-    end loop
-    log $ERROR "waitForStatusRegOperationMVal: $WaitForStatusRegOperationMVal not set within reasonable time"
-    abort
-end proc
-
-waitForStatusRegHwBufferMVal:
-proc
-    loop $WaitTimeOut
-        wait 1000
-        call $getStatusRegHwBufferMVal
-        log $INFO_3 "waitForStatusRegHwBufferMVal: $StatusRegHwBufferMVal"
-        if $StatusRegHwBufferMVal = $StatusRegHwBufferMValToWaitFor
-            return
-        end if
-    end loop
-    log $ERROR "waitForStatusRegHwBufferMVal: $WaitForStatusRegHwBufferMVal not set within reasonable time"
-    abort
-end proc
-```
-
-## Prerequisites
-To write ".stm" files, we recommend using the provided IDE plugins for Visual Code and Eclipse. For executing the tests, any VHDL simulator like Siemens Questa or GHDL can be used.
-
-## Connecting to the DUT
-SimStm offers two ways to interface with the Device Under Test (DUT): dedicated signals and bus systems. The "signal" and "bus" commands are used to interact with these interfaces. Additionally, SimStm provides packages for both signal and bus definitions, allowing easy integration with named objects without requiring extensive modifications to the testbench.
-
-## Licensing
-This project is licensed under the Apache License 2.0. You can find a copy of the license in the LICENSE file.

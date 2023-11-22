@@ -2,14 +2,11 @@ const year 0x2023
 var month 0x11
 var day 0x22
 
-const INFO 20
-
 Main:
 proc
 	loop 3
 		-- currently values are only printed in hex format
 		log message 0 "Hello World {}-{}-{}" $year $month $day
-		log message $INFO "Main test finished {}" $INFO 
 		wait 1000
 	end loop
 	finish
