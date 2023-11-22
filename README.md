@@ -98,8 +98,9 @@ Press "Install" button
 Create or open a ".stm" test script file within a project.
 Leverage the plugin's IDE features to enhance your testing workflow.
 
-## Overview
-![tb_simstm](https://github.com/eccelerators/simstm/assets/124497409/1ec08fb8-c643-42cf-928c-b5cf07c5520c)
+## Overview and integration into user testbench
+![simstm-overview](https://github.com/eccelerators/simstm/assets/124497409/1f15e6b8-1587-4bd7-96a7-8ad51ebe7d05)
+
 
 
 
