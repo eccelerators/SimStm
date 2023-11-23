@@ -467,7 +467,7 @@ Exits the simulation with severity note or error. The latter occurs only if resu
 
 ### Array Access
 
-### Array Set
+#### Array Set
 
 ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$
 
@@ -479,7 +479,7 @@ ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \c
 
 Set the value of an array at a position.
 
-### Array Get
+#### Array Get
 
 ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tvar}}$
 
@@ -487,13 +487,13 @@ ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \c
 
 Get the value of an array from a position.
 
-### Array Size
+#### Array Size
 
 ${\color{purple}\texttt{array size} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{tvar}}$
 
 Get the size of an array.
 
-### Array Pointer Copy
+#### Array Pointer Copy
 
 ${\color{purple}\texttt{array pointer copy} \space \color{black}\texttt{tarray} \space \color{black}\texttt{sarray}}$
 
@@ -715,9 +715,9 @@ ${\color{purple}\texttt{marker} \space \color{black}\texttt{0xF} \space \color{b
 
 The `tb_simstm` entity has an output signal marker which is a `std_logic_vector(15 downto 0)`. Thus there are 16 markers which can be set `0b1` or `0b0`. This should be used to mark occurrences during the execution of the SimStm code so they can be found easily in the waveform display. Beneath this, the `Executing_Line` and `Executing_File` `tb_simstm` intern variables are always present and show the currently executed line of code.
 
-#### Signal and Bus Access
+### Signal and Bus Access
 
-### Signal Write
+#### Signal Write
 
 ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
@@ -725,13 +725,13 @@ ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \spac
 
 Write variable, constant, or numeric value to a signal.
 
-### Signal Read
+#### Signal Read
 
 ${\color{purple}\texttt{signal read} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar}}$
 
 Read the value of a signal into a variable.
 
-### Signal Verify
+#### Signal Verify
 
 ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
 
@@ -739,7 +739,7 @@ ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \spa
 
 Read the value of a signal into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0.
 
-### Bus Write
+#### Bus Write
 
 ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
@@ -747,13 +747,13 @@ ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space  \co
 
 Write a variable, constant, or numeric value to a bus.
 
-### Bus Read
+#### Bus Read
 
 ${\color{purple}\texttt{bus read} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar}}$
 
 Read the value of a bus into a variable.
 
-### Bus Verify
+#### Bus Verify
 
 ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
 
@@ -761,7 +761,7 @@ ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \co
 
 Read the value of a bus into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
-### Bus Timeout
+#### Bus Timeout
 
 ${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
