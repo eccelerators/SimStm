@@ -238,8 +238,7 @@ The signal object associates a SimStm bus name with a bus number. This bus numbe
 
 
 
-### Equations and arithmetic operations
-
+### Equations and Arithmetic Operations
 
 #### equ
 
@@ -247,118 +246,107 @@ ${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color
 
 ${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
-Copy value of operand2 variable, constant or numeric value into variable operand1 value or
-copy value 0xF0 into variable operand1 value.
-
+Copy the value of operand2 variable, constant, or numeric value into variable operand1 value or
+copy the value 0xF0 into variable operand1 value.
 
 #### add
 
-${\color{purple}\texttt{add} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{add} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Add variable or constant operand2 value to variable operand1 value or 
 add value 0xF0 to variable operand1 value.
 The resulting value of the addition is in variable operand1 value after the operation.
 
-
 #### sub
 
-${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Subtract variable or constant operand2 value from variable operand1 value or 
 subtract value 0xF0 from variable operand1 value.
 The resulting value of the subtraction is in variable operand1 value after the operation.
 
-
 #### mul
 
-${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Multiply variable or constant operand2 value with variable operand1 value or 
 multiply value 0xF0 with variable operand1 value.
 The resulting value of the multiplication is in variable operand1 value after the operation.
 
-
 #### div
 
-${\color{purple}\texttt{div} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{div} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Divide variable operand1 value by variable or constant operand2 value or 
 divide variable operand1 value by value 0xF0.
 The resulting value of the division is in variable operand1 value after the operation.
 
-
 #### and
 
-${\color{purple}\texttt{and} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{and} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise and variable or constant operand2 value with variable operand1 value or 
 bitwise and value 0xF0 with variable operand1 value.
 The resulting value of the bitwise and is in variable operand1 value after the operation.
 
-
 #### or
 
-${\color{purple}\texttt{or} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{or} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise or variable or constant operand2 value with variable operand1 value or 
 bitwise or value 0xF0 with variable operand1 value.
 The resulting value of the bitwise or is in variable operand1 value after the operation.
 
-
 #### xor
 
-${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise xor variable or constant operand2 value with variable operand1 value or 
 bitwise xor value 0xF0 with variable operand1 value.
 The resulting value of the bitwise xor is in variable operand1 value after the operation.
 
-
 #### shl
 
-${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise shift left variable or constant operand2 value with variable operand1 value or 
 bitwise shift left value 0xF0 with variable operand1 value.
 The resulting value of the bitwise shift left is in variable operand1 value after the operation.
 
-
 #### shr
 
-${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise shift right variable or constant operand2 value with variable operand1 value or 
 bitwise shift right value 0xF0 with variable operand1 value.
 The resulting value of the bitwise shift right is in variable operand1 value after the operation.
 
-
 #### inv
 
-${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1}  \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
+${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
 
-${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1}  \space \color{black}\texttt{0xF0}}$
+${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise invert variable operand1 value.
 The resulting value of the bitwise invert is in variable operand1 value after the operation.
-
 
 #### ld
 
@@ -366,16 +354,15 @@ ${\color{purple}\texttt{ld} \space \color{black}\texttt{operand1}}$
 
 Calculate logarithmus dualis of variable operand1 value.
 The resulting value is in variable operand1 value after the operation.
-The function returns the number of the utmost set bit e.g. 4 for the input 16.
+The function returns the number of the utmost set bit, e.g., 4 for the input 16.
 It returns 0 for the input 0 too since this is the best approximation in a natural number range.
 The user should handle this discontinuity if another result or an error is expected.
 
-
-### Subroutines, branches and loops
+### Subroutines, Branches, and Loops
 
 #### proc and end proc
 
-${\color{black}\texttt{aproc}  \space \color{grey}\texttt{:}}$
+${\color{black}\texttt{aproc} \space \color{grey}\texttt{:}}$
 
 ${\color{purple}\texttt{proc}}$
 
@@ -387,10 +374,8 @@ ${\color{black}\texttt{...}}$
 
 ${\color{purple}\texttt{end proc}}$
 
-
-Code of a subroutine is placed between a proc and end proc instruction. The subroutine name is a label placed in the line before the proc
-instruction e.g. aproc. The label ends with a colon as label indicator.
-
+Code of a subroutine is placed between a proc and end proc instruction. The subroutine name is a label placed on the line before the proc
+instruction, e.g., aproc. The label ends with a colon as a label indicator.
 
 #### call
 
@@ -399,13 +384,11 @@ ${\color{purple}\texttt{call} \space \color{grey}\texttt{\\$} \color{black}\text
 Branches execution to the subroutine with the label aproc and continues execution with the next line when it returns
 from the subroutine after it has reached an end proc or return instruction there.
 
-
 #### return
 
 ${\color{purple}\texttt{return}}$
 
 Returns to calling code from a subroutine.
-
 
 #### interrupt and end interrupt
 
@@ -421,13 +404,11 @@ ${\color{black}\texttt{...}}$
 
 ${\color{purple}\texttt{end proc}}$
 
+Code of an interrupt subroutine is placed between an interrupt and end interrupt instruction. The interrupt subroutine name is a label placed on the line before the proc
+instruction, e.g., ainterrupt. The label ends with a colon as a label indicator. The label must be given in the tbsignal package by customization and
+attached to a signal triggering the interrupt. If necessary, the handling of nested interrupts must be resolved there too.
 
-Code of a interrupt subroutine is placed between a interrupt and end interrupt instruction. The interrupt subroutine name is a label placed in the line before the proc
-instruction e.g. ainterrupt. The label ends with a colon as label indicator. The label must be given in the tbsignal package by customization and
-attached to a signal triggering the interrupt. If necessary the handling of nested interrupts must be reolved there too.
-
-
-#### if, elsif, else and end if
+#### if, elsif, else, and end if
 
 ${\color{purple}\texttt{if} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar} \space \color{grey}\texttt{=} \space \color{grey}\texttt{\\$} \color{black}\texttt{bvar}}$
 
@@ -450,9 +431,8 @@ ${\color{purple}\texttt{end if}}$
 Possible comparison operators are:
 ${\space \color{grey}\texttt{>= <= > < != =}}$
 
-Compares 2 variable, constant or numeric values and branches execution to next line if resolving to true. Otherwise it branches to the next elsif or else or end if instruction.
-The if instructions can be nested. 
-
+Compares 2 variables, constants, or numeric values and branches execution to the next line if resolving to true. Otherwise, it branches to the next elsif or else or end if instruction.
+The if instructions can be nested.
 
 #### loop
 
@@ -462,37 +442,32 @@ ${\color{black}\texttt{...}}$
 
 ${\color{purple}\texttt{end loop}}$
 
-
-
 ${\color{purple}\texttt{loop} \space \color{black}\texttt{32}}$
 
 ${\color{black}\texttt{...}}$
 
-${\color{purple}\texttt{end loop} \space}$
+${\color{purple}\texttt{end loop} \space }$
 
 Executes a loop of the code between the loop and end loop instruction. The number of times the loop should be executed is given after the loop keyword.
-It can be a numeric value, a variable or a constant. In case of a variable this number can be changed by code within the loop, e.g. to skip loops or end
+It can be a numeric value, a variable, or a constant. In case of a variable, this number can be changed by code within the loop, e.g., to skip loops or end
 the loop earlier, due to the global nature of all variables. No break or continue instructions are supported therefore. The loop can be terminated by a 
 return instruction too at any time, which is a good practice.
-
 
 #### abort
 
 ${\color{purple}\texttt{abort}}$
 
-Aborts the simulaton with severity failure.
-
+Aborts the simulation with severity failure.
 
 #### finish
 
 ${\color{purple}\texttt{abort}}$
 
-Exits the simulaton with severity note or error. The later occurs only if resume has been set to other values than 0 and there were verify errors in verify instructions.
+Exits the simulation with severity note or error. The latter occurs only if resume has been set to other values than 0, and there were verify errors in verify instructions.
 
+### Array Access
 
-### array access
-
-### array set
+### Array Set
 
 ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$
 
@@ -504,137 +479,105 @@ ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \c
 
 Set the value of an array at a position.
 
-
-### array get
+### Array Get
 
 ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tvar}}$
 
 ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{black}\texttt{tvar}}$
 
-
 Get the value of an array from a position.
 
-
-### array size
+### Array Size
 
 ${\color{purple}\texttt{array size} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{tvar}}$
 
 Get the size of an array.
 
-
-### array pointer copy
+### Array Pointer Copy
 
 ${\color{purple}\texttt{array pointer copy} \space \color{black}\texttt{tarray} \space \color{black}\texttt{sarray}}$
 
-Copy an array pointer e.g., tarray pointer is a copy of sarray pointer after execution of the instruction.
+Copy an array pointer; for example, `tarray` pointer is a copy of `sarray` pointer after the execution of the instruction. Used, for instance, 
+to hand over an array to a subroutine. Changes to the source array happen in the target array too.
 
-Used e.g., to hand over an array to a subroutine. Changes to the source array happen in the target array too.
+### File Access
 
-
-### file access
-
-#### file writeable
+#### File Writeable
 
 ${\color{purple}\texttt{file writeable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
+Test if a file is writable. If the file is not present, it is created without having content. The result is for STATUSOK 0, STATUSERROR 1, 
+STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
-Test if a file is writable.
-
-If the file is not present it is created without having a content.
-The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may in case of error depend on the operating system.
-
-
-#### file readable
+#### File Readable
 
 ${\color{purple}\texttt{file readable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
+Test if a file is readable. The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
-Test if a file is readable.
-
-The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may in case of error depend on the operating system.
-
-
-#### file appendable
+#### File Appendable
 
 ${\color{purple}\texttt{file appendable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
+Test if a file is appendable. The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
-Test if a file is appendable.
-
-The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may in case of error depend on the operating system.
-
-
-#### file write
+#### File Write
 
 ${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
-Write all lines of a-lines object to afile.
+Write all lines of an `alines` object to a file. The file is overwritten if it exists.
 
-The file is overwritten if it exists.
-
-
-#### file append
+#### File Append
 
 ${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
-Append all lines of a-lines object to afile.
+Append all lines of an `alines` object to a file. The method will fail if the file doesn't exist.
 
-The method will fail if the file doesn't exist.
-
-
-#### file read all
+#### File Read All
 
 ${\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
-Read all lines of afile into a-lines object.
+Read all lines of a file into an `alines` object.
 
-
-#### file read
+#### File Read
 
 ${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{nvar}}$
 
 ${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{black}\texttt{10}}$
 
-Read a number of lines from afile into a-lines object.
+Read a number of lines from a file into an `alines` object. The first read opens the file for read, following reads start at the line after 
+the last line which has been read by the previous read. Thus a file can be read piecewise similar as it can be written piecewise by file 
+append. The piecewise read process of the file must be terminated by a file read end instruction always. The number of concurrent file read processes is limited to 4.
 
-The first read opens the file for read, following reads start at the line after the last line which has been read by the previous read. Thus a file can be read piecewise similar
-as it can be written piecewise by file append. The piecewise read process of file must be terminated by a file read end instruction always. The number of concurrent file read processes
-is limited by 4.
-
-
-#### file read end
+#### File Read End
 
 ${\color{purple}\texttt{file read end} \space \color{black}\texttt{afile}}$
 
-End piecewise read process of a file.
+End the piecewise read process of a file.
 
-
-#### file pointer copy
+#### File Pointer Copy
 
 ${\color{purple}\texttt{file pointer copy} \space \color{black}\texttt{tfile} \space \color{black}\texttt{sfile}}$
 
-Copy a file pointer e.g., tfile pointer is a copy of sfile pointer after execution of the instruction.
+Copy a file pointer; for example, `tfile` pointer is a copy of `sfile` pointer after the execution of the instruction. Used, for instance, to hand over a file to a subroutine. 
+Changes to the source file happen in the target file too.
 
-Used e.g., to hand over a file to a subroutine. Changes to the source file happen in the target file too.
 
 
-### lines access
+### Lines Access
 
-#### lines get
+#### Lines Get
 
 ${\color{purple}\texttt{lines get array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$
 
 ${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$
 
-Get a line from a lines object at a given position and write its content into an array. The line is expected to hold hex numbers (without 0x prefix) separated by spaces e.g.,
-A123 BCF11 123 E333 would be 4 hex numbers. The given array must be able to hold the number of found hex numbers. It will not be filled completely if less than its size are found.
-Numbers will be skipped if there are mor hex numbers found than the array vćan hold. The number of detected hex numbers is reported in a result variable. Then the user can decide
-what action should follow a mismatch.
+Get a line from a lines object at a given position and write its content into an array. The line is expected to hold hex numbers (without 0x prefix) separated by 
+spaces (e.g., A123 BCF11 123 E333 would be 4 hex numbers). The given array must be able to hold the number of found hex numbers. It will not be filled 
+completely if fewer than its size are found. Numbers will be skipped if there are more hex numbers found than the array can hold. The number of detected hex 
+numbers is reported in a result variable. Then the user can decide what action should follow a mismatch.
 
-
-
-
-#### lines set
+#### Lines Set
 
 ${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$
 
@@ -644,13 +587,10 @@ ${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \
 
 ${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
-SEt a line at a given postion of a lines object. 
+Set a line at a given position of a lines object. The line currently at this position is overwritten. The line can be derived from an array or a message. The message string can 
+contain {} placeholders which are filled by values of variables given after the message string.
 
-Te line currently at this position overwritten. The line can be derived from an array or a message. 
-The message string can contain {} placeholders which are filled by values of variables given after the message string. 
-
-
-#### lines insert
+#### Lines Insert
 
 ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$
 
@@ -660,13 +600,10 @@ ${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines
 
 ${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
-Insert a line at a given postion of a lines object. 
+Insert a line at a given position of a lines object. The line currently at this position is moved to the next position. The line can be derived from an array or a message. 
+The message string can contain {} placeholders which are filled by values of variables given after the message string.
 
-Te line currently at this position is moved to the next position. The line can be derived from an array or a message. 
-The message string can contain {} placeholders which are filled by values of variables given after the message string. 
-
-
-#### lines append
+#### Lines Append
 
 ${\color{purple}\texttt{lines append array} \space \color{black}\texttt{alines} \space \color{black}\texttt{sarray}}$
 
@@ -674,35 +611,28 @@ ${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines
 
 ${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
-Append a line at the end of a lines object. 
+Append a line at the end of a lines object. The line can be derived from an array or a message. The message string can contain {} placeholders which are filled 
+by values of variables given after the message string.
 
-The line can be derived from an array or a message. The message string can contain {} placeholders which are filled by values of variables given after the message string. 
-
-
-#### lines delete
+#### Lines Delete
 
 ${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar}}$
 
 ${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{black}\texttt{3}}$
 
-Delete a line at a given positon of a lines object.
+Delete a line at a given position of a lines object. The next line is moved to the given position if it exists.
 
-The next line is moved to the given position if it exists.
-
-
-#### lines size
+#### Lines Size
 
 ${\color{purple}\texttt{lines size} \space \color{black}\texttt{alines} \space \color{black}\texttt{rvar}}$
 
-Get the size of a lines object which is the number of lines it contains currently..
+Get the size of a lines object, which is the number of lines it contains currently.
 
-#### lines pointer copy
+#### Lines Pointer Copy
 
 ${\color{purple}\texttt{lines pointer copy} \space \color{black}\texttt{tlines} \space \color{black}\texttt{slines}}$
 
-Copy an lines pointer e.g., tlines pointer is a copy of slines pointer after execution of the instruction.
-
-Used e.g., to hand over a lines object to a subroutine. Changes to the source lines object happen in the target lines object too.
+Copy a lines pointer; for example, `tlines` pointer is a copy of `slines`
 
 
 ### log
