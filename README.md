@@ -147,31 +147,27 @@ The subroutine with the label `Main:`is the entry point into the SimStm code for
 
 ### Comments
 
-${\color{green}\texttt{-- this is a full line comment}}$
+${\color{green}\texttt{-- This is a full line comment}}$
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{-- this is an appended line comment}}$
+${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{-- This is an appended line comment}}$
 
-Comments in a line start wit two hyphens.
+Comments in a line start with two hyphens.
 
 There are only line comments but no block comments.
 
+### Includes, Language Objects, and Declarations
 
-### Includes, language objects and declarations
-
-#### include
+#### Include
 
 ${\color{purple}\texttt{include} \space \color{blue}\texttt{"aninclude.stm"}}$
 
-Include another child *.stm file
+Include another child *.stm file.
 
-Include instructions should be the first instructions of a *.stm file.
-An included file can include further *.stm files thus nested includes are possible. The file path 
-to be given is relative to the file with the respective include instruction. Nested includes of files 
-from the same folder or in child folders are predictable, nested includes to files in parent folders 
-would be a bad practice. 
+Include instructions should be the first instructions of a *.stm file. An included file can include further *.stm files, 
+thus nested includes are possible. The file path to be given is relative to the file with the respective include instruction. 
+Nested includes of files from the same folder or in child folders are predictable; nested includes to files in parent folders would be bad practice.
 
-
-#### const
+#### Const
 
 ${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03}}$
 
@@ -179,12 +175,11 @@ ${\color{purple}\texttt{const} \space \color{black}\texttt{bconst 0b011}}$
 
 ${\color{purple}\texttt{const} \space \color{black}\texttt{cconst 3}}$
 
-Declare and define a constant with ID and hex, binary or decimal unsigned 32 bit integer value.
+Declare and define a constant with ID and hex, binary, or decimal unsigned 32-bit integer value.
 
 It isn't possible to initialize a constant by referencing another constant or variable.
 
-
-#### var
+#### Var
 
 ${\color{purple}\texttt{var} \space \color{black}\texttt{avar 0x03}}$
 
@@ -192,63 +187,55 @@ ${\color{purple}\texttt{var} \space \color{black}\texttt{bvar 0b011}}$
 
 ${\color{purple}\texttt{var} \space \color{black}\texttt{cvar 3}}$
 
-Declare and define a variable with ID and initial hex, binary or decimal unsigned 32 bit integer value.
+Declare and define a variable with ID and initial hex, binary, or decimal unsigned 32-bit integer value.
 
-It isn't possible to initialize a variable by referencing another variable or constant yet.
-The ${\color{purple}\texttt{equ}}$ instruction must be used within a procedure for this purpose.
+It isn't possible to initialize a variable by referencing another variable or constant yet. The ${\color{purple}\texttt{equ}}$ 
+instruction must be used within a procedure for this purpose.
 
-
-
-#### array
+#### Array
 
 ${\color{purple}\texttt{var} \space \color{black}\texttt{barray 16}}$
 
-Declare an array with ID and an unsigned 32 bit integer length.
+Declare an array with ID and an unsigned 32-bit integer length.
 
-Only arrays with one dimension are possible, the length must be fix.
+Only arrays with one dimension are possible; the length must be fixed.
 
-
-#### file
+#### File
 
 ${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename.stm"}}$
 
 ${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename\\{\\}\\{\\}.stm"} \space \color{grey}\texttt{\\$} \color{black}\texttt{index1} \space \color{grey}\texttt{\\$} \color{black}\texttt{index2}}$
 
-Declare a file with ID and file name. 
+Declare a file with ID and file name.
 
-The later must be a relative path to the location of the main.stm file. Text substitution by variables is allowed in file names.
-Thus files can be accessed in an indexed manner. The variables are evaluated each time when a reference to a file is used in another 
-instruction accessing a file e.g., ${\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
+The latter must be a relative path to the location of the main.stm file. Text substitution by variables is allowed in file names. 
+Thus, files can be accessed in an indexed manner. The variables are evaluated each time when a reference to a file is used in another instruction accessing a file, e.g., ${\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$.
 
-
-#### lines
+#### Lines
 
 ${\color{purple}\texttt{lines} \space \color{black}\texttt{alines}}$
 
 Declare a lines object with ID.
 
-The lines object contains an arbitrary number of line objects. It is defined to have no content when it is declared by default.
-It can grow or shrink dynamically by lines instructions accessing it e.g., ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{barray}}$
+The lines object contains an arbitrary number of line objects. It is defined to have no content when it is declared by default. 
+It can grow or shrink dynamically by lines instructions accessing it, e.g., ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{barray}}$.
 
-
-#### signal
+#### Signal
 
 ${\color{purple}\texttt{signal} \space \color{black}\texttt{asignal}}$
 
 Declare a signal object with ID.
 
-The signal object associates a SimStm signal name to a signal number. This signal number must be given in the tb_signal package by customization and
-attached to a signal.
+The signal object associates a SimStm signal name with a signal number. This signal number must be given in the tb_signal package by customization and attached to a signal.
 
-
-#### bus
+#### Bus
 
 ${\color{purple}\texttt{bus} \space \color{black}\texttt{abus}}$
 
 Declare a bus object with ID.
 
-The signal object associates a SimStm bus name to a bus number. This bus number must be given in the tb_bus package by customization and
-attached to a bus.
+The signal object associates a SimStm bus name with a bus number. This bus number must be given in the tb_bus package by customization and attached to a bus.
+
 
 
 ### Equations and arithmetic operations
