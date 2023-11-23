@@ -635,27 +635,23 @@ ${\color{purple}\texttt{lines pointer copy} \space \color{black}\texttt{tlines} 
 Copy a lines pointer; for example, `tlines` pointer is a copy of `slines`
 
 
-### log
+### Log
 
-#### log message  
+#### Log Message
 
 ${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console"}}$
 
 ${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console\\{\\}\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
-Print a message at a given verbosity level to the console. 
+Print a message at a given verbosity level to the console. The message string can contain {} placeholders which are filled by values of variables given after the message string.
 
-The message string can contain {} placeholders which are filled by values of variables given after the message string. 
-
-
-#### log lines 
+#### Log Lines
 
 ${\color{purple}\texttt{log lines} \space \color{grey}\texttt{\\$} \space \color{black}\texttt{vvar} \space \color{black}\texttt{slines}}$
 
-Dump a lines object at a given verbosity level to the console. 
+Dump a lines object at a given verbosity level to the console.
 
-
-#### verbosity 
+#### Verbosity
 
 ${\color{purple}\texttt{verbosity} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar}}$
 
@@ -669,24 +665,19 @@ ${\color{purple}\texttt{const} \space \color{black}\texttt{WARNING} \space \colo
 
 ${\color{purple}\texttt{const} \space \color{black}\texttt{INFO} \space \color{black}\texttt{20}}$
 
-Sets the global verbosity for log messages. 
+Sets the global verbosity for log messages. Log messages with a verbosity level greater than the globally set verbosity are not printed to the console. Of course, the global verbosity can be changed at any point in the execution flow.
 
-Log messages with a verbosity level greater than the globally set verbosity are not printed to the console. 
-Of course the global verbosity can be changed at any point in the execution flow.
-
-  
-### wait
+### Wait
 
 ${\color{purple}\texttt{wait} \space \color{grey}\texttt{\\$} \color{black}\texttt{wvar}}$
 
 ${\color{purple}\texttt{wait} \space \color{black}\texttt{10000}}$
 
-Waits for the given number of nanosecond.
+Waits for the given number of nanoseconds.
 
+### Random Numbers
 
-### random numbers
-
-#### random
+#### Random
 
 ${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{minvar} \color{grey}\texttt{\\$} \space \color{black}\texttt{maxvar}}$  
 
@@ -694,8 +685,7 @@ ${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{
 
 Generates a random number greater or equal to the min value given and less than the maximum number given.
 
-
-#### seed
+#### Seed
 
 ${\color{purple}\texttt{seed} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
 
@@ -703,101 +693,87 @@ ${\color{purple}\texttt{seed} \space \color{black}\texttt{10}}$
 
 Set the internal start value for the random number generator.
 
+### Debug
 
-### debug
-
-#### trace
+#### Trace
 
 ${\color{purple}\texttt{trace} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
 
 ${\color{purple}\texttt{trace} \space \color{black}\texttt{0b111}}$  
 
-The trace instruction enables or disables the output of trace information when it is set at some point during the SimStm code execution. 
-Thus e.g., the flow through complex if, elsif ... trees can be shown.
- 
-- Setting the bit 0 in the given value  prints the lines of code with some additonal information. 
+The trace instruction enables or disables the output of trace information when it is set at some point during the SimStm code execution. Thus, e.g., the flow through complex if, elsif ... trees can be shown.
+
+- Setting the bit 0 in the given value  prints the lines of code with some additional information. 
 - Setting the bit 1 dumps all(!) objects before a line is executed.
 - Setting the bit 2 dumps all file names currently in use.
 
-#### marker
+#### Marker
 
 ${\color{purple}\texttt{marker} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar} \space \color{grey}\texttt{\\$} \color{black}\texttt{lvar}}$  
 
 ${\color{purple}\texttt{marker} \space \color{black}\texttt{0xF} \space \color{black}\texttt{0b1}}$ 
 
-The tb_simstm entity has an output signal marker which is a std_logic_vector(15 downto 0). Thus there are 16 markers which can be set 0b1 or 0b0.
-This should be used to mark occurences during the execution of the SimStm code thus they can be found easy in the waveform display. Beneath this
-the Executing_Line and Executing_File tb_simstm intern variables are always present and show the currently executed line of code. 
+The `tb_simstm` entity has an output signal marker which is a `std_logic_vector(15 downto 0)`. Thus there are 16 markers which can be set `0b1` or `0b0`. This should be used to mark occurrences during the execution of the SimStm code so they can be found easily in the waveform display. Beneath this, the `Executing_Line` and `Executing_File` `tb_simstm` intern variables are always present and show the currently executed line of code.
 
+#### Signal and Bus Access
 
-#### signal and bus access
-
-### signal write
+### Signal Write
 
 ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
 ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space  \color{black}\texttt{0b11}}$
 
-Write variable, constant or numeric value to a signal.
+Write variable, constant, or numeric value to a signal.
 
-
-### signal read
+### Signal Read
 
 ${\color{purple}\texttt{signal read} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar}}$
 
-Read value of a signal into a variable.
+Read the value of a signal into a variable.
 
-
-### signal verify
+### Signal Verify
 
 ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
 
 ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
 
-Read value of a signal into a variable and compare it to a expected value with a given mask. The expexted value and mask can be variables, constants or numeric values.
-On mismatch the simulation stops with severity failure if the global resume is set to 0.
+Read the value of a signal into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0.
 
-
-### bus write
+### Bus Write
 
 ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
 ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space  \color{black}\texttt{0b11}}$
 
-Write variable, constant or numeric value to a bus.
+Write a variable, constant, or numeric value to a bus.
 
-
-### bus read
+### Bus Read
 
 ${\color{purple}\texttt{bus read} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar}}$
 
-Read value of a bus into a variable.
+Read the value of a bus into a variable.
 
-
-### bus verify
+### Bus Verify
 
 ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
 
 ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
 
-Read value of a bus into a variable and compare it to a expected value with a given mask. The expexted value and mask can be variables, constants or numeric values.
-On mismatch the simulation stops with severity failure if the global resume is set to 0 otherwise it continues and reports an error.
+Read the value of a bus into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
-
-### bus timeout
+### Bus Timeout
 
 ${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
 
 ${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space  \color{black}\texttt{1000}}$
 
-Sets the timeout in nanoseconds to wait for a bus access to end. On violation the simulation stops with severity failure always.
+Sets the timeout in nanoseconds to wait for a bus access to end. On violation, the simulation stops with severity failure always.
 
-
-#### resume 
+#### Resume 
 
 ${\color{purple}\texttt{resume} \space \color{grey}\texttt{\\$} \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR}}$
 
-v{\color{purple}\texttt{resume} \space \color{black}\texttt{0}}$
+${\color{purple}\texttt{resume} \space \color{black}\texttt{0}}$
 
 Usual practice is to use the following constants to set verbosity:
 
@@ -805,10 +781,7 @@ ${\color{purple}\texttt{const} \space \color{black}\texttt{RESUME\\_ON\\_VERIFY\
 
 ${\color{purple}\texttt{const} \space \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{0}}$
 
-Sets the global resume behavior for verify instructions. 
-
-On a verify mismatch the simulation stops with severity failure if the global resume is set to 0 otherwise it continues and reports an error.
-
+Sets the global resume behavior for verify instructions. On a verify mismatch, the simulation stops with severity failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
 ## Examples
 
@@ -836,18 +809,14 @@ ${\color{purple}\texttt{finish}}$
 
 ${\color{purple}\texttt{end proc}}$
 
-This example can be found unit tests in the folder test in this repository in the subfolder others and ther in the subfolder hello_world, 
-see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
+This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
 
-### Unit tests
+### Unit Tests
 
 The unit tests in the folder test in this repository show tested examples for all instructions, see https://github.com/eccelerators/simstm/blob/lines/test/commands/command_list.stm. 
 
-An exception is example command_list.stm in the subfolder commands.
-It lists all commands only for demonstration and is not a real testcase.
+An exception is example command_list.stm in the subfolder commands. It lists all commands only for demonstration and is not a real testcase.
 
+### SPI Controller
 
-### SPI controller
-
-A complex real world example is found in the eccelerators spi_controller repository on github, see https://github.com/eccelerators/spi-controller.
-
+A complex real-world example is found in the eccelerators spi_controller repository on GitHub, see https://github.com/eccelerators/spi-controller.
