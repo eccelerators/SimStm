@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<project name="array_get">
+<project name="array_set_out_pos">
    <include file="../../../unit_test_build.xml"/>
 </project>

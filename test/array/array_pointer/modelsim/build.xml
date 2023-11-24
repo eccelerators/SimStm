@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<project name="test_array_array_pointer">
+<project name="array_pointer">
    <include file="../../../unit_test_build.xml"/>
 </project>
