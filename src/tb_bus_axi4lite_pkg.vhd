@@ -32,22 +32,22 @@ package tb_bus_axi4lite_pkg is
     function axi4lite_up_init return t_axi4lite_up;
 
     procedure write_axi4lite(signal clk : in std_logic;
-        signal axi4lite_down : out t_axi4lite_down;
-        signal axi4lite_up : in t_axi4lite_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : in std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time);
+                             signal axi4lite_down : out t_axi4lite_down;
+                             signal axi4lite_up : in t_axi4lite_up;
+                             variable address : in std_logic_vector(31 downto 0);
+                             variable data : in std_logic_vector(31 downto 0);
+                             variable b_width : in integer;
+                             variable successfull : out boolean;
+                             variable timeout : in time);
 
     procedure read_axi4lite(signal clk : in std_logic;
-        signal axi4lite_down : out t_axi4lite_down;
-        signal axi4lite_up : in t_axi4lite_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : out std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time);
+                            signal axi4lite_down : out t_axi4lite_down;
+                            signal axi4lite_up : in t_axi4lite_up;
+                            variable address : in std_logic_vector(31 downto 0);
+                            variable data : out std_logic_vector(31 downto 0);
+                            variable b_width : in integer;
+                            variable successfull : out boolean;
+                            variable timeout : in time);
 end;
 
 package body tb_bus_axi4lite_pkg is
@@ -84,14 +84,14 @@ package body tb_bus_axi4lite_pkg is
     end;
 
     procedure write_axi4lite(signal clk : in std_logic;
-        signal axi4lite_down : out t_axi4lite_down;
-        signal axi4lite_up : in t_axi4lite_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : in std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time) is
-        
+                             signal axi4lite_down : out t_axi4lite_down;
+                             signal axi4lite_up : in t_axi4lite_up;
+                             variable address : in std_logic_vector(31 downto 0);
+                             variable data : in std_logic_vector(31 downto 0);
+                             variable b_width : in integer;
+                             variable successfull : out boolean;
+                             variable timeout : in time) is
+
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -156,14 +156,14 @@ package body tb_bus_axi4lite_pkg is
     end procedure;
 
     procedure read_axi4lite(signal clk : in std_logic;
-        signal axi4lite_down : out t_axi4lite_down;
-        signal axi4lite_up : in t_axi4lite_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : out std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time) is
-        
+                            signal axi4lite_down : out t_axi4lite_down;
+                            signal axi4lite_up : in t_axi4lite_up;
+                            variable address : in std_logic_vector(31 downto 0);
+                            variable data : out std_logic_vector(31 downto 0);
+                            variable b_width : in integer;
+                            variable successfull : out boolean;
+                            variable timeout : in time) is
+
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin

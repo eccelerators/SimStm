@@ -20,22 +20,22 @@ package tb_bus_avalon_pkg is
     function avalonmm_up_init return t_avalonmm_up;
 
     procedure write_avalonmm(signal clk : in std_logic;
-        signal avalonmm_down : out t_avalonmm_down;
-        signal avalonmm_up : in t_avalonmm_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : in std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time);
+                             signal avalonmm_down : out t_avalonmm_down;
+                             signal avalonmm_up : in t_avalonmm_up;
+                             variable address : in std_logic_vector(31 downto 0);
+                             variable data : in std_logic_vector(31 downto 0);
+                             variable b_width : in integer;
+                             variable successfull : out boolean;
+                             variable timeout : in time);
 
     procedure read_avalonmm(signal clk : in std_logic;
-        signal avalonmm_down : out t_avalonmm_down;
-        signal avalonmm_up : in t_avalonmm_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : out std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time);
+                            signal avalonmm_down : out t_avalonmm_down;
+                            signal avalonmm_up : in t_avalonmm_up;
+                            variable address : in std_logic_vector(31 downto 0);
+                            variable data : out std_logic_vector(31 downto 0);
+                            variable b_width : in integer;
+                            variable successfull : out boolean;
+                            variable timeout : in time);
 end;
 
 package body tb_bus_avalon_pkg is
@@ -59,14 +59,14 @@ package body tb_bus_avalon_pkg is
     end;
 
     procedure write_avalonmm(signal clk : in std_logic;
-        signal avalonmm_down : out t_avalonmm_down;
-        signal avalonmm_up : in t_avalonmm_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : in std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time) is
-        
+                             signal avalonmm_down : out t_avalonmm_down;
+                             signal avalonmm_up : in t_avalonmm_up;
+                             variable address : in std_logic_vector(31 downto 0);
+                             variable data : in std_logic_vector(31 downto 0);
+                             variable b_width : in integer;
+                             variable successfull : out boolean;
+                             variable timeout : in time) is
+
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -133,14 +133,14 @@ package body tb_bus_avalon_pkg is
     end procedure;
 
     procedure read_avalonmm(signal clk : in std_logic;
-        signal avalonmm_down : out t_avalonmm_down;
-        signal avalonmm_up : in t_avalonmm_up;
-        variable address : in std_logic_vector(31 downto 0);
-        variable data : out std_logic_vector(31 downto 0);
-        variable b_width : in integer;
-        variable successfull : out boolean;
-        variable timeout : in time) is
-        
+                            signal avalonmm_down : out t_avalonmm_down;
+                            signal avalonmm_up : in t_avalonmm_up;
+                            variable address : in std_logic_vector(31 downto 0);
+                            variable data : out std_logic_vector(31 downto 0);
+                            variable b_width : in integer;
+                            variable successfull : out boolean;
+                            variable timeout : in time) is
+
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;

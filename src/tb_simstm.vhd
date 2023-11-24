@@ -14,8 +14,7 @@ use work.tb_signals_pkg.all;
 entity tb_simstm is
     generic(
         stimulus_path : in string;
-        stimulus_file : in string;
-        user_file_folder_path : in string := ""
+        stimulus_file : in string
     );
     port(
         clk : in std_logic;
@@ -32,8 +31,6 @@ entity tb_simstm is
 end;
 
 architecture behavioural of tb_simstm is
-    signal rstneg : std_logic;
-
     function ld(m : integer) return natural is
     begin
         if m < 0 then
@@ -60,7 +57,6 @@ architecture behavioural of tb_simstm is
     end procedure;
 
 begin
-    rstneg <= not rst;
     --------------------------------------------------------------------------------
     --! Read_file Process:
     --! This process is the main process of the testbench.  This process reads
@@ -107,7 +103,6 @@ begin
         variable exit_on_verify_error : boolean := true;
         variable error_count : integer := 0;
         variable if_level : integer := 0;
-        variable loop_if_enter_level : integer := 0;
         variable if_state : boolean_array := (others => false);
         variable num_of_if_in_false_if_leave : int_array := (others => 0);
         variable valid : integer;
@@ -146,7 +141,7 @@ begin
         -- Text
         variable var_stm_text : stm_text_ptr;
         variable var_stm_text_out : stm_text_ptr;
-        variable var_stm_text_substituded : stm_text;       
+        variable var_stm_text_substituded : stm_text;
 
         -- File
         file user_file_0 : text;
@@ -160,29 +155,24 @@ begin
         variable user_file_in_use_0 : boolean;
         variable user_file_in_use_1 : boolean;
         variable user_file_in_use_2 : boolean;
-        variable user_file_in_use_3 : boolean;     
-        variable user_file_number : integer; 
-        variable user_files_used : integer := 0;    
-        variable user_v_stat : file_open_status;
+        variable user_file_in_use_3 : boolean;
         variable user_file_path_string : stm_text;
         variable user_file_append_done : boolean;
         variable user_file_open_done : boolean;
         variable user_std_line : line;
         variable tmp_std_line : line;
         variable stm_lines_append_valid : integer := 0;
-        
+
         -- Lines
         variable var_stm_lines : t_stm_lines_ptr;
-        variable var_stm_lines_ptr : t_stm_lines_ptr;
-        variable var_stm_line_ptr : t_stm_line_ptr;
 
         variable main_label_text_field : text_field;
         variable main_label_string : string(1 to 5) := "$Main";
         variable main_line : integer := 0;
         variable main_entered : integer := 0;
 
-        variable interrupt_requests : unsigned(number_of_interrupts-1 downto 0) := (others => '0');
-        variable interrupt_in_service : unsigned(number_of_interrupts-1 downto 0) := (others => '0');
+        variable interrupt_requests : unsigned(number_of_interrupts - 1 downto 0) := (others => '0');
+        variable interrupt_in_service : unsigned(number_of_interrupts - 1 downto 0) := (others => '0');
 
         variable interrupt_number : integer := 0;
         variable branch_to_interrupt : boolean := false;
@@ -220,18 +210,18 @@ begin
 
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
-                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);                                                  
+                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
             end if;
-            
+
             if main_entered = 0 then
 
                 access_variable(defined_vars, main_label_text_field, main_line, valid);
                 assert valid = 1
-                report lf & "error: Entry point proc Main not found !" 
+                report lf & "error: Entry point proc Main not found !"
                 severity failure;
                 v_line := main_line;
                 main_entered := 1;
-                
+
             elsif branch_to_interrupt then
                 if (stack_ptr >= 31) then
                     assert false
@@ -253,29 +243,29 @@ begin
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
                 access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
                 assert valid = 1
-                report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !" 
+                report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !"
                 severity failure;
-                v_line := branch_to_interrupt_v_line; 
-                
+                v_line := branch_to_interrupt_v_line;
+
             else
 
                 v_line := v_line + 1;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                    par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                    last_sequ_num, last_sequ_ptr);
+                                 par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                 last_sequ_num, last_sequ_ptr);
 
                 if to_signed(trc_on, 32)(3) = '1' then
-                    dump_file_defs(file_list);  
-                end if;                    
-                if to_signed(trc_on, 32)(2) = '1' then
-                    dump_variables(defined_vars);   
+                    dump_file_defs(file_list);
                 end if;
-                if to_signed(trc_on, 32)(1) = '1' then           
-                    print_inst(inst_sequ, v_line, file_list);  
-                end if;  
+                if to_signed(trc_on, 32)(2) = '1' then
+                    dump_variables(defined_vars);
+                end if;
+                if to_signed(trc_on, 32)(1) = '1' then
+                    print_inst(inst_sequ, v_line, file_list);
+                end if;
 
-                Executing_Line <= file_line;
-                Executing_File <= file_name;
+                executing_line <= file_line;
+                executing_file <= file_name;
                 wait for 100 ps;
 
                 if to_signed(trc_on, 32)(0) = '1' then
@@ -285,14 +275,14 @@ begin
                 -- include "an_include.stm"
                 if instruction(1 to len) = INSTR_INCLUDE then
                     null; -- This instruction was implemented while reading the file
-                    -- 
-                -- const a_const_num #x03
+                --
+                -- const a_const_num 0x03
                 -- const a_constB $a_constA
                 -- const a_constC $a_varA
                 elsif instruction(1 to len) = INSTR_CONST then
                     null; -- This instruction was implemented while reading the file
 
-                -- var a_varA #x05
+                -- var a_varA 0x05
                 -- var a_varB $a_varA
                 -- var a_varC $a_constA
                 elsif instruction(1 to len) = INSTR_VAR then
@@ -310,17 +300,17 @@ begin
                 -- signal a_signal
                 elsif instruction(1 to len) = INSTR_SIGNAL then
                     null; -- This instruction was implemented while reading the file
-                    -- 
-                 -- bus a_bus                 
+                --
+                -- bus a_bus
                 elsif instruction(1 to len) = INSTR_BUS then
                     null; -- This instruction was implemented while reading the file
-                    --                
+                --
                 -- lines a_lines
                 elsif instruction(1 to len) = INSTR_LINES then
                     null; -- This instruction was implemented while reading the file
 
                 -- equ operand1_and_target $operand2
-                -- equ operand1_and_target #xF0
+                -- equ operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_EQU then
                     update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
@@ -328,7 +318,7 @@ begin
                     severity failure;
 
                 -- equ operand1_and_target $operand2
-                -- add operand1_and_target #xF0
+                -- add operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_ADD then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -341,12 +331,12 @@ begin
                     severity failure;
 
                 -- equ operand1_and_target $operand2
-                -- sub operand1_and_target #xF0
+                -- sub operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SUB then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " sub error: not a valid variable??"
-                    severity failure;                    
+                    severity failure;
                     temp_int := temp_int - par2;
                     update_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -354,7 +344,7 @@ begin
                     severity failure;
 
                 -- mul operand1_and_target $operand2
-                -- mul operand1_and_target #xF0
+                -- mul operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_MUL then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -367,7 +357,7 @@ begin
                     severity failure;
 
                 -- div operand1_and_target $operand2
-                -- div operand1_and_target #xF0
+                -- div operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_DIV then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -390,7 +380,7 @@ begin
                     severity failure;
 
                 -- and operand1_and_target $operand2
-                -- and operand1_and_target #xF0
+                -- and operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_AND then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -406,7 +396,7 @@ begin
                     severity failure;
 
                 -- or operand1_and_target $operand2
-                -- or operand1_and_target #xF0
+                -- or operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_OR then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -422,7 +412,7 @@ begin
                     severity failure;
 
                 -- xor operand1_and_target $operand2
-                -- xor operand1_and_target #xF0
+                -- xor operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_XOR then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -438,7 +428,7 @@ begin
                     severity failure;
 
                 -- shl operand1_and_target $operand2
-                -- shl operand1_and_target #xF0
+                -- shl operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SHL then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -451,7 +441,7 @@ begin
                     severity failure;
 
                 -- shr operand1_and_target $operand2
-                -- shr operand1_and_target #xF0
+                -- shr operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SHR then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -489,9 +479,9 @@ begin
                     report " line " & (integer'image(file_line)) & " ld error: cannot update variable, it may be a constant ?"
                     severity failure;
 
-                -- array set an_array $array_position #x07
+                -- array set an_array $array_position 0x07
                 -- array set an_array $array_position $a_varA
-                -- array set an_array 5 #x07
+                -- array set an_array 5 0x07
                 -- array set an_array 3 $a_varA
                 elsif instruction(1 to len) = INSTR_ARRAY_SET then
                     index_variable(defined_vars, par1, var_stm_array, valid);
@@ -511,7 +501,7 @@ begin
                     severity failure;
                     assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
-                    severity failure;                       
+                    severity failure;
                     temp_int := var_stm_array(par2);
                     update_variable(defined_vars, par3, temp_int, valid);
                     assert valid /= 0
@@ -541,7 +531,7 @@ begin
                     assert valid /= 0
                     report "array_pointer error: not a array name??"
                     severity failure;
-                    
+
                 -- file readable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_READABLE then
                     index_variable(defined_vars, par1, var_stm_text, valid);
@@ -553,7 +543,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " error: cannot update variable, it may be a constant ?"
                     severity failure;
-                    
+
                 -- file writeable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_WRITEABLE then
                     index_variable(defined_vars, par1, var_stm_text, valid);
@@ -593,7 +583,7 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file write not successful"
                     severity failure;
 
-                -- file append a_fileB  a_lines                    
+                -- file append a_fileB  a_lines
                 elsif instruction(1 to len) = INSTR_FILE_APPEND then
                     index_variable(defined_vars, par1, var_stm_text, valid);
                     assert valid /= 0
@@ -618,8 +608,8 @@ begin
                     index_variable(defined_vars, par2, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
-                    severity failure;                              
-                    user_file_append_done := false;                   
+                    severity failure;
+                    user_file_append_done := false;
                     -- if file is already in use, us it
                     if user_file_in_use_0 then
                         if var_stm_text = user_file_name_0 then
@@ -633,7 +623,7 @@ begin
                             end loop;
                             user_file_append_done := true;
                         end if;
-                    end if; 
+                    end if;
                     if user_file_in_use_1 then
                         if var_stm_text = user_file_name_1 then
                             for i in 1 to par3 loop
@@ -674,7 +664,7 @@ begin
                         end if;
                     end if;
                     -- if file is not in use, try to open and use it
-                    if not user_file_append_done then                        
+                    if not user_file_append_done then
                         txt_to_string(var_stm_text, user_file_path_string);
                         user_file_open_done := false;
                         if not user_file_in_use_0 and not user_file_open_done then
@@ -691,7 +681,7 @@ begin
                                 assert valid /= 0
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                                 severity failure;
-                            end loop;                           
+                            end loop;
                         elsif not user_file_in_use_1 and not user_file_open_done then
                             file_open(v_stat, user_file_1, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -700,13 +690,13 @@ begin
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
                             for i in 1 to par3 loop
-                            readline(user_file_1, user_std_line);
+                                readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                                 assert valid /= 0
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                                 severity failure;
-                            end loop;                            
+                            end loop;
                         elsif not user_file_in_use_2 and not user_file_open_done then
                             file_open(v_stat, user_file_2, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -721,7 +711,7 @@ begin
                                 assert valid /= 0
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
                                 severity failure;
-                            end loop;                          
+                            end loop;
                         elsif not user_file_in_use_3 and not user_file_open_done then
                             file_open(v_stat, user_file_3, stm_text_crop(user_file_path_string), read_mode);
                             assert valid /= 0
@@ -735,15 +725,15 @@ begin
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
                                 assert valid /= 0
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: line couldn't be appended"
-                                severity failure; 
-                            end loop;                          
+                                severity failure;
+                            end loop;
                         else
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: only 4 files are allowed for file read concurrently"
-                            severity failure;                        
-                        end if;               
+                            severity failure;
+                        end if;
                     end if;
-                    
+
                 -- file read end a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_READ_END then
                     index_variable(defined_vars, par1, var_stm_text, valid);
@@ -755,19 +745,19 @@ begin
                         user_file_in_use_0 := false;
                     elsif var_stm_text = user_file_name_1 and user_file_in_use_1 then
                         file_close(user_file_1);
-                        user_file_in_use_1 := false;  
+                        user_file_in_use_1 := false;
                     elsif var_stm_text = user_file_name_2 and user_file_in_use_2 then
                         file_close(user_file_2);
-                        user_file_in_use_2 := false;                
+                        user_file_in_use_2 := false;
                     elsif var_stm_text = user_file_name_3 and user_file_in_use_3 then
                         file_close(user_file_3);
-                        user_file_in_use_3 := false;                        
+                        user_file_in_use_3 := false;
                     else
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
-                        severity failure;                                           
-                    end if;                      
-                    
+                        severity failure;
+                    end if;
+
                 -- file read all a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_READ_ALL then
                     index_variable(defined_vars, par1, var_stm_text, valid);
@@ -782,7 +772,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file read not successful"
                     severity failure;
-                    
+
                 --  file pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_FILE_POINTER_COPY then
                     index_variable(defined_vars, par2, var_stm_text, valid);
@@ -793,9 +783,9 @@ begin
                     assert valid /= 0
                     report "files_pointer error: not a lines object name??"
                     severity failure;
-                                 
+
                 -- lines get a_lines $position an_array number_found
-                -- lines get a_lines 8 an_array number_found              
+                -- lines get a_lines 8 an_array number_found
                 elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
@@ -828,23 +818,23 @@ begin
                     index_variable(defined_vars, par3, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
-                    severity failure;                    
+                    severity failure;
                     stm_lines_set(var_stm_lines, par2, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not set successfully"
                     severity failure;
-                    
+
                 -- lines set a_lines $position "abc" txt
                 -- lines set a_lines 7 "abc"
                 -- lines set a_lines $position "abc{}" $a_varB
-                -- lines set a_lines 7 "abc{}" $a_varB 
+                -- lines set a_lines 7 "abc{}" $a_varB
                 elsif instruction(1 to len) = INSTR_LINES_SET_MESSAGE then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
                     stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
-                    var_stm_text_out := new stm_text;                    
+                    var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_set(var_stm_lines, par2, var_stm_text_out, valid);
                     assert valid /= 0
@@ -861,24 +851,24 @@ begin
                     index_variable(defined_vars, par3, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
-                    severity failure;                    
+                    severity failure;
                     stm_lines_insert(var_stm_lines, par2, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not inserted successfully"
                     severity failure;
-                    
+
                 -- lines insert a_lines $position "abc"
                 -- lines insert a_lines 7 "abc"
                 -- lines insert a_lines $position "abc{}" $a_varB
-                -- lines insert a_lines 7 "abc{}" $a_varB 
+                -- lines insert a_lines 7 "abc{}" $a_varB
                 elsif (instruction(1 to len) = INSTR_LINES_INSERT_MESSAGE) then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
                     stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
-                    var_stm_text_out := new stm_text;                    
-                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);                    
+                    var_stm_text_out := new stm_text;
+                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_insert(var_stm_lines, par2, var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message not inserted successfully"
@@ -897,8 +887,8 @@ begin
                     stm_lines_append(var_stm_lines, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
-                    severity failure;                   
-                    
+                    severity failure;
+
                 -- lines append a_lines "abc"
                 -- lines append a_lines "abc{}" $a_varB
                 elsif instruction(1 to len) = INSTR_LINES_APPEND_MESSAGE then
@@ -907,12 +897,12 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
                     stm_text_substitude_wvar(defined_vars, txt, var_stm_text_substituded, hex);
-                    var_stm_text_out := new stm_text;                    
+                    var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
-                    severity failure;   
+                    severity failure;
 
                 -- lines delete a_lines $position
                 -- lines delete a_lines 13
@@ -921,11 +911,11 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_lines_delete(var_stm_lines, par2, valid);               
+                    stm_lines_delete(var_stm_lines, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete not successful"
                     severity failure;
-                    
+
                 -- lines delete all a_lines
                 elsif instruction(1 to len) = INSTR_LINES_DELETE_ALL then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
@@ -934,12 +924,12 @@ begin
                     severity failure;
                     while var_stm_lines.size > 0 loop
                         temp_int := 0;
-                        stm_lines_delete(var_stm_lines, temp_int, valid);               
+                        stm_lines_delete(var_stm_lines, temp_int, valid);
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
-                        severity failure;          
-                    end loop;         
-                   
+                        severity failure;
+                    end loop;
+
                 -- lines size a_lines read_size
                 elsif instruction(1 to len) = INSTR_LINES_SIZE then
                     index_variable(defined_vars, par1, var_stm_lines, valid);
@@ -960,9 +950,9 @@ begin
                     severity failure;
 
                 -- if $a_var_ref = $another_var
-                -- if #x09 = $another_var
-                -- if $a_varA = #x09
-                -- if #x09 = #x09
+                -- if 0x09 = $another_var
+                -- if $a_varA = 0x09
+                -- if 0x09 = 0x09
                 elsif instruction(1 to len) = INSTR_IF then
                     if_level := if_level + 1;
                     --    assert false
@@ -996,8 +986,8 @@ begin
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                            par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                            last_sequ_num, last_sequ_ptr);
+                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
                             if instruction(1 to len) = INSTR_IF then
@@ -1008,33 +998,33 @@ begin
                             end if;
                             assert v_line < inst_sequ.num_of_lines
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
-                            severity failure;                              
+                            severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                last_sequ_num, last_sequ_ptr);
+                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             last_sequ_num, last_sequ_ptr);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     end if;
 
                 -- elsif $a_varA > $another_var
-                -- #x09 > $another_var
-                -- $a_varA > #x09
-                -- elsif #x0A > #x09
+                -- 0x09 > $another_var
+                -- $a_varA > 0x09
+                -- elsif 0x0A > 0x09
                 elsif instruction(1 to len) = INSTR_ELSIF then
-                    if if_state(if_level) = true then -- if the if_state is true then skip to the end
+                    if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                            par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                            last_sequ_num, last_sequ_ptr);
+                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         last_sequ_num, last_sequ_ptr);
                         while (instruction(1 to len) /= INSTR_IF) and instruction(1 to len) /= INSTR_END_IF loop
                             assert v_line < inst_sequ.num_of_lines
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                last_sequ_num, last_sequ_ptr);
+                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             last_sequ_num, last_sequ_ptr);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     else
@@ -1065,8 +1055,8 @@ begin
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                last_sequ_num, last_sequ_ptr);
+                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             last_sequ_num, last_sequ_ptr);
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
                                 if instruction(1 to len) = INSTR_IF then
@@ -1080,8 +1070,8 @@ begin
                                 severity failure;
                                 v_line := v_line + 1;
                                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                    par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                    last_sequ_num, last_sequ_ptr);
+                                                 par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                                 last_sequ_num, last_sequ_ptr);
                             end loop;
                             v_line := v_line - 1; -- re-align so it will be operated on.
                         end if;
@@ -1089,19 +1079,19 @@ begin
 
                 -- else
                 elsif instruction(1 to len) = INSTR_ELSE then
-                    if if_state(if_level) = true then -- if the if_state is true then skip the else
+                    if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                            par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                            last_sequ_num, last_sequ_ptr);
+                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         last_sequ_num, last_sequ_ptr);
                         while instruction(1 to len) /= INSTR_IF and instruction(1 to len) /= INSTR_END_IF loop
                             assert v_line < inst_sequ.num_of_lines
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                last_sequ_num, last_sequ_ptr);
+                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             last_sequ_num, last_sequ_ptr);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     end if;
@@ -1109,9 +1099,9 @@ begin
                 -- end if
                 elsif instruction(1 to len) = INSTR_END_IF then
                     if_level := if_level - 1;
-                    -- assert false
-                    -- report " line " & (integer'image(file_line)) & " executing end_if command" & lf & "  if_level decremented to " & ht & integer'image(if_level)
-                    -- severity note;
+                -- assert false
+                -- report " line " & (integer'image(file_line)) & " executing end_if command" & lf & "  if_level decremented to " & ht & integer'image(if_level)
+                -- severity note;
 
                 -- loop $loop_num
                 -- loop 100
@@ -1123,9 +1113,9 @@ begin
                     stack_loop_line(stack_ptr + 1)(act_loop_num) := v_line;
                     stack_curr_loop_count(stack_ptr + 1)(act_loop_num) := 0;
                     stack_term_loop_count(stack_ptr + 1)(act_loop_num) := par1;
-                    -- assert false
-                    -- report " line " & (integer'image(file_line)) & " executing loop command" & lf & "  nested loop:" & ht & integer'image(act_loop_num) & lf & "  loop length:" & ht & integer'image(par1)
-                    -- severity note;
+                -- assert false
+                -- report " line " & (integer'image(file_line)) & " executing loop command" & lf & "  nested loop:" & ht & integer'image(act_loop_num) & lf & "  loop length:" & ht & integer'image(par1)
+                -- severity note;
 
                 -- end loop
                 elsif instruction(1 to len) = INSTR_END_LOOP then
@@ -1181,7 +1171,7 @@ begin
                     severity failure;
                     stack_ptr := stack_ptr - 1;
                     if interrupt_in_service > 0 then
-                        interrupt_number :=  interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);
+                        interrupt_number := interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);
                         if interrupt_entry_call_stack_ptr_stack(interrupt_number) = stack_ptr then
                             reset_interrupt_in_service(interrupt_in_service, interrupt_number);
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
@@ -1190,7 +1180,7 @@ begin
                     -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
 
-                -- call $some_proc 
+                -- call $some_proc
                 elsif instruction(1 to len) = INSTR_CALL then
                     assert stack_ptr < 31
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
@@ -1201,12 +1191,12 @@ begin
                     v_line := par1 - 1;
 
                 -- log message $INFO "some message"
-                -- log message  $INFO "misc_proc severity: {}" $INFO 
+                -- log message  $INFO "misc_proc severity: {}" $INFO
                 elsif instruction(1 to len) = INSTR_LOG_MESSAGE then
                     if par1 <= loglevel then
                         txt_print_wvar(defined_vars, txt, hex);
                     end if;
-                    
+
                 -- log lines $INFO a_lines
                 elsif instruction(1 to len) = INSTR_LOG_LINES then
                     index_variable(defined_vars, par2, var_stm_lines, valid);
@@ -1289,7 +1279,7 @@ begin
                     wait for 0 ns;
 
                 -- signal write $a_signal $signal_to_be_set_value
-                -- signal write $a_signal #x1234
+                -- signal write $a_signal 0x1234
                 elsif instruction(1 to len) = INSTR_SIGNAL_WRITE then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -1303,7 +1293,8 @@ begin
 
                 -- signal read $a_signal signal_read_value
                 -- signal verify $a_signal signal_read_value $signal_expected_value $signal_mask_value
-                -- signal verify $a_signal signal_read_value #x0002 #x00FF               --  signal_read or signal_verify
+                -- signal verify $a_signal signal_read_value 0x0002 0x00FF
+                --  signal_read or signal_verify
                 elsif instruction(1 to len) = INSTR_SIGNAL_VERIFY or instruction(1 to len) = INSTR_SIGNAL_READ then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -1326,7 +1317,7 @@ begin
                         severity failure;
                     end if;
                     wait for 0 ns;
-                    
+
                 --  signal pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_COPY then
                     index_variable(defined_vars, par2, temp_int, valid);
@@ -1339,7 +1330,7 @@ begin
                     severity failure;
 
                 -- bus write $a_bus $bus_width  $bus_address $bus_to_be_set_value
-                -- bus write $a_bus 16 #x00001000 #x1233
+                -- bus write $a_bus 16 0x00001000 0x1233
                 elsif (instruction(1 to len) = INSTR_BUS_WRITE) then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -1357,9 +1348,9 @@ begin
                     wait for 0 ns;
 
                 -- bus read  $a_bus $bus_width  $bus_address  bus_read_value
-                -- bus read  $a_bus 16 #x00001000  bus_read_value
+                -- bus read  $a_bus 16 0x00001000  bus_read_value
                 -- bus verify $a_bus $bus_width  $bus_address bus_read_value $bus_expected_value $bus_mask_value
-                -- bus verify $a_bus 32  #x00001004 bus_read_value #x00050000 #x000FC000
+                -- bus verify $a_bus 32  0x00001004 bus_read_value 0x00050000 0x000FC000
                 elsif instruction(1 to len) = INSTR_BUS_READ or instruction(1 to len) = INSTR_BUS_VERIFY then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
@@ -1408,7 +1399,7 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     bus_timeouts(temp_int) := par2 * 1 ns;
-                    
+
                 --  bus pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then
                     index_variable(defined_vars, par2, temp_int, valid);

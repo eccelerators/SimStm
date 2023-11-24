@@ -9,139 +9,136 @@ use work.tb_base_pkg.all;
 
 package tb_instructions_pkg is
 
-        -- basic
-        constant INSTR_ABORT : string := "abort";
-        constant INSTR_CONST : string := "const";
-        constant INSTR_ELSE : string := "else";
-        constant INSTR_ELSIF : string := "elsif";
-        constant INSTR_END_IF : string := "end_if";
-        constant INSTR_END_LOOP : string := "end_loop";
-        constant INSTR_FINISH : string := "finish";
-        constant INSTR_IF : string := "if";
-        constant INSTR_INCLUDE : string := "include";
-        constant INSTR_LOOP : string := "loop";
-        constant INSTR_VAR : string := "var";
+    -- basic
+    constant INSTR_ABORT : string := "abort";
+    constant INSTR_CONST : string := "const";
+    constant INSTR_ELSE : string := "else";
+    constant INSTR_ELSIF : string := "elsif";
+    constant INSTR_END_IF : string := "end_if";
+    constant INSTR_END_LOOP : string := "end_loop";
+    constant INSTR_FINISH : string := "finish";
+    constant INSTR_IF : string := "if";
+    constant INSTR_INCLUDE : string := "include";
+    constant INSTR_LOOP : string := "loop";
+    constant INSTR_VAR : string := "var";
 
-        -- variables
-        constant INSTR_ADD : string := "add";
-        constant INSTR_AND : string := "and";
-        constant INSTR_DIV : string := "div";
-        constant INSTR_EQU : string := "equ";
-        constant INSTR_MUL : string := "mul";
-        constant INSTR_SHL : string := "shl";
-        constant INSTR_SHR : string := "shr";
-        constant INSTR_INV : string := "inv";
-        constant INSTR_OR : string := "or";
-        constant INSTR_SUB : string := "sub";
-        constant INSTR_XOR : string := "xor";
-        constant INSTR_LD : string := "ld";
+    -- variables
+    constant INSTR_ADD : string := "add";
+    constant INSTR_AND : string := "and";
+    constant INSTR_DIV : string := "div";
+    constant INSTR_EQU : string := "equ";
+    constant INSTR_MUL : string := "mul";
+    constant INSTR_SHL : string := "shl";
+    constant INSTR_SHR : string := "shr";
+    constant INSTR_INV : string := "inv";
+    constant INSTR_OR : string := "or";
+    constant INSTR_SUB : string := "sub";
+    constant INSTR_XOR : string := "xor";
+    constant INSTR_LD : string := "ld";
 
-        -- signals
-        constant INSTR_SIGNAL : string := "signal";
-        constant INSTR_SIGNAL_READ : string := "signal_read";
-        constant INSTR_SIGNAL_VERIFY : string := "signal_verify";
-        constant INSTR_SIGNAL_WRITE : string := "signal_write";
-        constant INSTR_SIGNAL_POINTER_COPY : string := "signal_pointer_copy";
+    -- signals
+    constant INSTR_SIGNAL : string := "signal";
+    constant INSTR_SIGNAL_READ : string := "signal_read";
+    constant INSTR_SIGNAL_VERIFY : string := "signal_verify";
+    constant INSTR_SIGNAL_WRITE : string := "signal_write";
+    constant INSTR_SIGNAL_POINTER_COPY : string := "signal_pointer_copy";
 
-        -- bus
-        constant INSTR_BUS : string := "bus";
-        constant INSTR_BUS_READ : string := "bus_read";
-        constant INSTR_BUS_VERIFY : string := "bus_verify";
-        constant INSTR_BUS_WRITE : string := "bus_write";
-        constant INSTR_BUS_TIMEOUT : string := "bus_timeout";
-        constant INSTR_BUS_POINTER_COPY : string := "bus_pointer_copy";
+    -- bus
+    constant INSTR_BUS : string := "bus";
+    constant INSTR_BUS_READ : string := "bus_read";
+    constant INSTR_BUS_VERIFY : string := "bus_verify";
+    constant INSTR_BUS_WRITE : string := "bus_write";
+    constant INSTR_BUS_TIMEOUT : string := "bus_timeout";
+    constant INSTR_BUS_POINTER_COPY : string := "bus_pointer_copy";
 
-        -- file
-        constant INSTR_FILE : string := "file";
-        constant INSTR_FILE_READABLE : string := "file_readable";
-        constant INSTR_FILE_WRITEABLE : string := "file_writeable";        
-        constant INSTR_FILE_APPENDABLE : string := "file_appendable";               
-        constant INSTR_FILE_READ : string := "file_read";
-        constant INSTR_FILE_READ_END : string := "file_read_end";
-        constant INSTR_FILE_READ_ALL : string := "file_read_all";
-        constant INSTR_FILE_WRITE : string := "file_write";
-        constant INSTR_FILE_APPEND : string := "file_append";
-        constant INSTR_FILE_POINTER_COPY : string := "file_pointer_copy";
+    -- file
+    constant INSTR_FILE : string := "file";
+    constant INSTR_FILE_READABLE : string := "file_readable";
+    constant INSTR_FILE_WRITEABLE : string := "file_writeable";
+    constant INSTR_FILE_APPENDABLE : string := "file_appendable";
+    constant INSTR_FILE_READ : string := "file_read";
+    constant INSTR_FILE_READ_END : string := "file_read_end";
+    constant INSTR_FILE_READ_ALL : string := "file_read_all";
+    constant INSTR_FILE_WRITE : string := "file_write";
+    constant INSTR_FILE_APPEND : string := "file_append";
+    constant INSTR_FILE_POINTER_COPY : string := "file_pointer_copy";
 
-        -- lines
-        constant INSTR_LINES : string := "lines";
-        constant INSTR_LINES_GET_ARRAY : string := "lines_get_array";
-        constant INSTR_LINES_SET_ARRAY : string := "lines_set_array";
-        constant INSTR_LINES_SET_MESSAGE : string := "lines_set_message";
-        constant INSTR_LINES_DELETE : string := "lines_delete";
-        constant INSTR_LINES_DELETE_ALL : string := "lines_delete_all";
-        constant INSTR_LINES_INSERT_ARRAY : string := "lines_insert_array";
-        constant INSTR_LINES_INSERT_MESSAGE : string := "lines_insert_message";
-        constant INSTR_LINES_APPEND_ARRAY : string := "lines_append_array";
-        constant INSTR_LINES_APPEND_MESSAGE : string := "lines_append_message";
-        constant INSTR_LINES_SIZE : string := "lines_size";
-        constant INSTR_LINES_POINTER_COPY : string := "lines_pointer_copy";
+    -- lines
+    constant INSTR_LINES : string := "lines";
+    constant INSTR_LINES_GET_ARRAY : string := "lines_get_array";
+    constant INSTR_LINES_SET_ARRAY : string := "lines_set_array";
+    constant INSTR_LINES_SET_MESSAGE : string := "lines_set_message";
+    constant INSTR_LINES_DELETE : string := "lines_delete";
+    constant INSTR_LINES_DELETE_ALL : string := "lines_delete_all";
+    constant INSTR_LINES_INSERT_ARRAY : string := "lines_insert_array";
+    constant INSTR_LINES_INSERT_MESSAGE : string := "lines_insert_message";
+    constant INSTR_LINES_APPEND_ARRAY : string := "lines_append_array";
+    constant INSTR_LINES_APPEND_MESSAGE : string := "lines_append_message";
+    constant INSTR_LINES_SIZE : string := "lines_size";
+    constant INSTR_LINES_POINTER_COPY : string := "lines_pointer_copy";
 
-        -- array
-        constant INSTR_ARRAY : string := "array";
-        constant INSTR_ARRAY_GET : string := "array_get";
-        constant INSTR_ARRAY_SET : string := "array_set";
-        constant INSTR_ARRAY_SIZE : string := "array_size";
-        constant INSTR_ARRAY_POINTER_COPY : string := "array_pointer_copy";
+    -- array
+    constant INSTR_ARRAY : string := "array";
+    constant INSTR_ARRAY_GET : string := "array_get";
+    constant INSTR_ARRAY_SET : string := "array_set";
+    constant INSTR_ARRAY_SIZE : string := "array_size";
+    constant INSTR_ARRAY_POINTER_COPY : string := "array_pointer_copy";
 
-        -- others
-        constant INSTR_PROC : string := "proc";
-        constant INSTR_CALL : string := "call";
-        constant INSTR_INTERRUPT : string := "interrupt";
-        constant INSTR_END_PROC : string := "end_proc";
-        constant INSTR_END_INTERRUPT : string := "end_interrupt";
-        constant INSTR_RANDOM : string := "random";
-        constant INSTR_LOG_MESSAGE : string := "log_message";
-        constant INSTR_LOG_LINES : string := "log_lines";
-        constant INSTR_RETURN : string := "return";
-        constant INSTR_RESUME : string := "resume";
-        constant INSTR_MARKER : string := "marker";
-        constant INSTR_VERBOSITY : string := "verbosity";
-        constant INSTR_SEED : string := "seed";
-        constant INSTR_TRACE : string := "trace";
-        constant INSTR_WAIT : string := "wait";
-
-
+    -- others
+    constant INSTR_PROC : string := "proc";
+    constant INSTR_CALL : string := "call";
+    constant INSTR_INTERRUPT : string := "interrupt";
+    constant INSTR_END_PROC : string := "end_proc";
+    constant INSTR_END_INTERRUPT : string := "end_interrupt";
+    constant INSTR_RANDOM : string := "random";
+    constant INSTR_LOG_MESSAGE : string := "log_message";
+    constant INSTR_LOG_LINES : string := "log_lines";
+    constant INSTR_RETURN : string := "return";
+    constant INSTR_RESUME : string := "resume";
+    constant INSTR_MARKER : string := "marker";
+    constant INSTR_VERBOSITY : string := "verbosity";
+    constant INSTR_SEED : string := "seed";
+    constant INSTR_TRACE : string := "trace";
+    constant INSTR_WAIT : string := "wait";
 
     procedure define_instructions(variable inst_list : inout inst_def_ptr);
 
-    procedure token_merge_words( variable token1 : in text_field;
-        variable token2 : in text_field;
-        variable token3 : in text_field;
-        variable token4 : in text_field;
-        variable token5 : in text_field;
-        variable token6 : in text_field;
-        variable token7 : in text_field;
-        variable token8 : in text_field;
-        variable token9 : in text_field;
-        variable valid : in integer;
-        variable otoken1 : out text_field;
-        variable otoken2 : out text_field;
-        variable otoken3 : out text_field;
-        variable otoken4 : out text_field;
-        variable otoken5 : out text_field;
-        variable otoken6 : out text_field;
-        variable otoken7 : out text_field;
-        variable ovalid : out integer);
+    procedure token_merge_words(variable token1 : in text_field;
+                                variable token2 : in text_field;
+                                variable token3 : in text_field;
+                                variable token4 : in text_field;
+                                variable token5 : in text_field;
+                                variable token6 : in text_field;
+                                variable token7 : in text_field;
+                                variable token8 : in text_field;
+                                variable token9 : in text_field;
+                                variable valid : in integer;
+                                variable otoken1 : out text_field;
+                                variable otoken2 : out text_field;
+                                variable otoken3 : out text_field;
+                                variable otoken4 : out text_field;
+                                variable otoken5 : out text_field;
+                                variable otoken6 : out text_field;
+                                variable otoken7 : out text_field;
+                                variable ovalid : out integer);
 
-    -- define_instruction
-    --    inputs     file_name  the file to be read from
-    --
-    --    output     file_line  a line of text from the file
+    -- add a new instruction to the instruction list
+    --   inputs  :   the linked list of instructions
+    --               the instruction
+    --               the number of args
+    --   outputs :   updated instruction set linked list
     procedure define_instruction(variable inst_set : inout inst_def_ptr;
-        constant inst : in string;
-        constant args : in integer);
+                                 constant inst : in string;
+                                 constant args : in integer);
 
     --  check for valid instruction in the list of instructions
     procedure check_valid_inst(variable inst : in text_field;
-        variable inst_set : in inst_def_ptr;
-        variable token_num : in integer;
-        variable line_num : in integer;
-        variable name : in text_line);
+                               variable inst_set : in inst_def_ptr;
+                               variable token_num : in integer;
+                               variable line_num : in integer;
+                               variable name : in text_line);
 
 end package;
-
-
 
 package body tb_instructions_pkg is
 
@@ -233,32 +230,29 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_WAIT, 1);
     end procedure;
 
-
-    procedure token_merge_words( variable token1 : in text_field;
-        variable token2 : in text_field;
-        variable token3 : in text_field;
-        variable token4 : in text_field;
-        variable token5 : in text_field;
-        variable token6 : in text_field;
-        variable token7 : in text_field;
-        variable token8 : in text_field;
-        variable token9 : in text_field;
-        variable valid : in integer;
-        variable otoken1 : out text_field;
-        variable otoken2 : out text_field;
-        variable otoken3 : out text_field;
-        variable otoken4 : out text_field;
-        variable otoken5 : out text_field;
-        variable otoken6 : out text_field;
-        variable otoken7 : out text_field;
-        variable ovalid : out integer) is
-
+    procedure token_merge_words(variable token1 : in text_field;
+                                variable token2 : in text_field;
+                                variable token3 : in text_field;
+                                variable token4 : in text_field;
+                                variable token5 : in text_field;
+                                variable token6 : in text_field;
+                                variable token7 : in text_field;
+                                variable token8 : in text_field;
+                                variable token9 : in text_field;
+                                variable valid : in integer;
+                                variable otoken1 : out text_field;
+                                variable otoken2 : out text_field;
+                                variable otoken3 : out text_field;
+                                variable otoken4 : out text_field;
+                                variable otoken5 : out text_field;
+                                variable otoken6 : out text_field;
+                                variable otoken7 : out text_field;
+                                variable ovalid : out integer) is
         variable token_merge : integer;
         variable token1_len : integer;
         variable token2_len : integer;
         variable token3_len : integer;
         variable token : text_field := token1;
-
     begin
         if valid > 1 then
             if token1(1 to 3) = "end" then
@@ -289,13 +283,13 @@ package body tb_instructions_pkg is
                 token1_len := 4;
                 if token2(1 to 8) = "readable" then
                     token2_len := 8;
-                    token_merge := 2; 
+                    token_merge := 2;
                 elsif token2(1 to 9) = "writeable" then
                     token2_len := 9;
-                    token_merge := 2;    
+                    token_merge := 2;
                 elsif token2(1 to 10) = "appendable" then
                     token2_len := 10;
-                    token_merge := 2;                                                          
+                    token_merge := 2;
                 elsif token2(1 to 5) = "write" then
                     token2_len := 5;
                     token_merge := 2;
@@ -307,19 +301,19 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 3) = "end" then
                         token3_len := 3;
-                        token_merge := 3;    
-                    elsif token3(1 to 3) = "all" then              
+                        token_merge := 3;
+                    elsif token3(1 to 3) = "all" then
                         token3_len := 3;
-                        token_merge := 3;                      
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 7) = "pointer" then
                     token2_len := 7;
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
-                end if;                                        
+                end if;
             elsif token1(1 to 5) = "lines" then
                 token1_len := 5;
                 if token2(1 to 3) = "get" then
@@ -327,44 +321,44 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 5) = "array" then
                         token3_len := 5;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 3) = "set" then
                     token2_len := 3;
                     token_merge := 2;
                     if token3(1 to 5) = "array" then
                         token3_len := 5;
-                        token_merge := 3;    
-                    elsif token3(1 to 7) = "message" then              
+                        token_merge := 3;
+                    elsif token3(1 to 7) = "message" then
                         token3_len := 7;
-                        token_merge := 3;                      
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 6) = "delete" then
                     token2_len := 6;
                     token_merge := 2;
                     if token3(1 to 3) = "all" then
                         token3_len := 3;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 6) = "insert" then
                     token2_len := 6;
                     token_merge := 2;
                     if token3(1 to 5) = "array" then
                         token3_len := 5;
-                        token_merge := 3;    
-                    elsif token3(1 to 7) = "message" then              
+                        token_merge := 3;
+                    elsif token3(1 to 7) = "message" then
                         token3_len := 7;
-                        token_merge := 3;                      
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 6) = "append" then
                     token2_len := 6;
                     token_merge := 2;
                     if token3(1 to 5) = "array" then
                         token3_len := 5;
-                        token_merge := 3;    
-                    elsif token3(1 to 7) = "message" then              
+                        token_merge := 3;
+                    elsif token3(1 to 7) = "message" then
                         token3_len := 7;
-                        token_merge := 3;                      
+                        token_merge := 3;
                     end if;
                 elsif token2(1 to 4) = "size" then
                     token2_len := 4;
@@ -374,7 +368,7 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 end if;
             elsif token1(1 to 5) = "array" then
@@ -393,7 +387,7 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 end if;
             elsif token1(1 to 4) = "else" then
@@ -418,7 +412,7 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 end if;
             elsif token1(1 to 3) = "bus" then
@@ -440,7 +434,7 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;                         
+                        token_merge := 3;
                     end if;
                 end if;
             end if;
@@ -457,7 +451,7 @@ package body tb_instructions_pkg is
             otoken5 := token7;
             otoken6 := token8;
             otoken7 := token9;
-            ovalid := valid - 2;        
+            ovalid := valid - 2;
         elsif token_merge = 2 then
             token(token1_len + 2 to token1_len + token2_len + 1) := token2(1 to token2_len);
             token(token1_len + 1) := '_';
@@ -479,19 +473,11 @@ package body tb_instructions_pkg is
             otoken7 := token7;
             ovalid := valid;
         end if;
-
     end procedure;
 
-
-    -- add a new instruction to the instruction list
-    --   inputs  :   the linked list of instructions
-    --               the instruction
-    --               the number of args
-    --   outputs :   updated instruction set linked list
     procedure define_instruction(variable inst_set : inout inst_def_ptr;
-        constant inst : in string;
-        constant args : in integer) is
-
+                                 constant inst : in string;
+                                 constant args : in integer) is
         variable v_inst_ptr : inst_def_ptr;
         variable v_prev_ptr : inst_def_ptr;
         variable v_new_ptr : inst_def_ptr;
@@ -545,14 +531,11 @@ package body tb_instructions_pkg is
         inst_set := v_temp_inst;
     end procedure;
 
-
-    --  check for valid instruction in the list of instructions
     procedure check_valid_inst(variable inst : in text_field;
-        variable inst_set : in inst_def_ptr;
-        variable token_num : in integer;
-        variable line_num : in integer;
-        variable name : in text_line) is
-
+                               variable inst_set : in inst_def_ptr;
+                               variable token_num : in integer;
+                               variable line_num : in integer;
+                               variable name : in text_line) is
         variable l : integer := 0;
         variable seti : inst_def_ptr;
         variable match : integer := 0;
