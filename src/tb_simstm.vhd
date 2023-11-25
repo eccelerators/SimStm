@@ -1,3 +1,52 @@
+-------------------------------------------------------------------------------
+--             Copyright 2023  Ken Campbell
+--               All rights reserved.
+-------------------------------------------------------------------------------
+-- $Author: sckoarn $
+--
+-- $Date:  $
+--
+-- $Id:  $
+--
+-- $Source:  $
+--
+-- Description :  The the testbench template file.
+--
+------------------------------------------------------------------------------
+--  This file is a template used to generate test bench _bhv.vhd  file.
+--
+--  Redistribution and use in source and binary forms, with or without
+--  modification, are permitted provided that the following conditions are met:
+--
+--  1. Redistributions of source code must retain the above copyright notice,
+--     this list of conditions and the following disclaimer.
+--
+--  2. Redistributions in binary form must reproduce the above copyright notice,
+--     this list of conditions and the following disclaimer in the documentation
+--     and/or other materials provided with the distribution.
+--
+-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+-- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+-- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+-- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+-- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+-- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+-- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+-- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+-- POSSIBILITY OF SUCH DAMAGE.
+-------------------------------------------------------------------------------
+-- Changes:
+--
+-- Materially changed 2023 by Eccelerators, please diff with original at
+-- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/template_tb_bhv.tmpl
+--
+-- Adapt to new fix SimStm language
+--
+-- Export code to be modified by the user into packages
+-- ----------------------------------------------------------------------------
+
 library std;
 use std.textio.all;
 
