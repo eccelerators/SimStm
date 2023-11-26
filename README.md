@@ -151,19 +151,17 @@ The subroutine with the label `Main:`is the entry point into the SimStm code for
 
 ### Comments
 
-${\color{green}\texttt{-- This is a full line comment}}$
+> ${\color{green}\texttt{-- This is a full line comment}}$  
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{  -- This is an appended line comment}}$
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{-- This is an appended line comment}}$
-
-Comments in a line start with two hyphens.
-
+Comments in a line start with two hyphens.  
 There are only line comments but no block comments.
 
 ### Includes, Language Objects, and Declarations
 
 #### Include
 
-${\color{purple}\texttt{include} \space \color{blue}\texttt{"aninclude.stm"}}$
+> ${\color{purple}\texttt{include} \space \color{blue}\texttt{"aninclude.stm"}}$
 
 Include another child *.stm file.
 
@@ -173,42 +171,34 @@ Nested includes of files from the same folder or in child folders are predictabl
 
 #### Const
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03}}$
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03}}$  
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{bconst 0b011}}$  
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{cconst 3}}$
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{bconst 0b011}}$
-
-${\color{purple}\texttt{const} \space \color{black}\texttt{cconst 3}}$
-
-Declare and define a constant with ID and hex, binary, or decimal unsigned 32-bit integer value.
-
+Declare and define a constant with ID and hex, binary, or decimal unsigned 32-bit integer value.  
 It isn't possible to initialize a constant by referencing another constant or variable.
 
 #### Var
 
-${\color{purple}\texttt{var} \space \color{black}\texttt{avar 0x03}}$
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{avar 0x03}}$  
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{bvar 0b011}}$  
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{cvar 3}}$
 
-${\color{purple}\texttt{var} \space \color{black}\texttt{bvar 0b011}}$
-
-${\color{purple}\texttt{var} \space \color{black}\texttt{cvar 3}}$
-
-Declare and define a variable with ID and initial hex, binary, or decimal unsigned 32-bit integer value.
-
+Declare and define a variable with ID and initial hex, binary, or decimal unsigned 32-bit integer value.  
 It isn't possible to initialize a variable by referencing another variable or constant yet. The ${\color{purple}\texttt{equ}}$ 
 instruction must be used within a procedure for this purpose.
 
 #### Array
 
-${\color{purple}\texttt{var} \space \color{black}\texttt{barray 16}}$
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{barray 16}}$
 
-Declare an array with ID and an unsigned 32-bit integer length.
-
+Declare an array with ID and an unsigned 32-bit integer length.  
 Only arrays with one dimension are possible; the length must be fixed.
 
 #### File
 
-${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename.stm"}}$
-
-${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename\\{\\}\\{\\}.stm"} \space \color{grey}\texttt{\\$} \color{black}\texttt{index1} \space \color{grey}\texttt{\\$} \color{black}\texttt{index2}}$
+> ${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename.stm"}}$  
+> ${\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename\\{\\}\\{\\}.stm"} \space \color{grey}\texttt{\\$} \color{black}\texttt{index1} \space \color{grey}\texttt{\\$} \color{black}\texttt{index2}}$
 
 Declare a file with ID and file name.
 
@@ -217,16 +207,15 @@ Thus, files can be accessed in an indexed manner. The variables are evaluated ea
 
 #### Lines
 
-${\color{purple}\texttt{lines} \space \color{black}\texttt{alines}}$
+> ${\color{purple}\texttt{lines} \space \color{black}\texttt{alines}}$
 
-Declare a lines object with ID.
-
+Declare a lines object with ID.  
 The lines object contains an arbitrary number of line objects. It is defined to have no content when it is declared by default. 
 It can grow or shrink dynamically by lines instructions accessing it, e.g., ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{barray}}$.
 
 #### Signal
 
-${\color{purple}\texttt{signal} \space \color{black}\texttt{asignal}}$
+> ${\color{purple}\texttt{signal} \space \color{black}\texttt{asignal}}$
 
 Declare a signal object with ID.
 
@@ -234,30 +223,26 @@ The signal object associates a SimStm signal name with a signal number. This sig
 
 #### Bus
 
-${\color{purple}\texttt{bus} \space \color{black}\texttt{abus}}$
+> ${\color{purple}\texttt{bus} \space \color{black}\texttt{abus}}$
 
 Declare a bus object with ID.
 
 The signal object associates a SimStm bus name with a bus number. This bus number must be given in the tb_bus package by customization and attached to a bus.
 
-
-
 ### Equations and Arithmetic Operations
 
 #### equ
 
-${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Copy the value of operand2 variable, constant, or numeric value into variable operand1 value or
 copy the value 0xF0 into variable operand1 value.
 
 #### add
 
-${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Add variable or constant operand2 value to variable operand1 value or 
 add value 0xF0 to variable operand1 value.
@@ -265,9 +250,8 @@ The resulting value of the addition is in variable operand1 value after the oper
 
 #### sub
 
-${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Subtract variable or constant operand2 value from variable operand1 value or 
 subtract value 0xF0 from variable operand1 value.
@@ -275,9 +259,8 @@ The resulting value of the subtraction is in variable operand1 value after the o
 
 #### mul
 
-${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Multiply variable or constant operand2 value with variable operand1 value or 
 multiply value 0xF0 with variable operand1 value.
@@ -285,9 +268,8 @@ The resulting value of the multiplication is in variable operand1 value after th
 
 #### div
 
-${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Divide variable operand1 value by variable or constant operand2 value or 
 divide variable operand1 value by value 0xF0.
@@ -295,9 +277,8 @@ The resulting value of the division is in variable operand1 value after the oper
 
 #### and
 
-${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise and variable or constant operand2 value with variable operand1 value or 
 bitwise and value 0xF0 with variable operand1 value.
@@ -305,9 +286,8 @@ The resulting value of the bitwise and is in variable operand1 value after the o
 
 #### or
 
-${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise or variable or constant operand2 value with variable operand1 value or 
 bitwise or value 0xF0 with variable operand1 value.
@@ -315,9 +295,8 @@ The resulting value of the bitwise or is in variable operand1 value after the op
 
 #### xor
 
-${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise xor variable or constant operand2 value with variable operand1 value or 
 bitwise xor value 0xF0 with variable operand1 value.
@@ -325,9 +304,8 @@ The resulting value of the bitwise xor is in variable operand1 value after the o
 
 #### shl
 
-${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise shift left variable or constant operand2 value with variable operand1 value or 
 bitwise shift left value 0xF0 with variable operand1 value.
@@ -335,9 +313,8 @@ The resulting value of the bitwise shift left is in variable operand1 value afte
 
 #### shr
 
-${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise shift right variable or constant operand2 value with variable operand1 value or 
 bitwise shift right value 0xF0 with variable operand1 value.
@@ -345,9 +322,8 @@ The resulting value of the bitwise shift right is in variable operand1 value aft
 
 #### inv
 
-${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$
-
-${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
+> ${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\$} \color{black}\texttt{operand2}}$  
+> ${\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}$
 
 Bitwise invert variable operand1 value.
 The resulting value of the bitwise invert is in variable operand1 value after the operation.
@@ -366,47 +342,37 @@ The user should handle this discontinuity if another result or an error is expec
 
 #### proc and end proc
 
-${\color{black}\texttt{aproc} \space \color{grey}\texttt{:}}$
-
-${\color{purple}\texttt{proc}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{black}\texttt{subroutine code}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{end proc}}$
+> ${\color{black}\texttt{aproc} \space \color{grey}\texttt{:}}$  
+> ${\color{purple}\texttt{proc}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{black}\texttt{subroutine code}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{end proc}}$
 
 Code of a subroutine is placed between a proc and end proc instruction. The subroutine name is a label placed on the line before the proc
 instruction, e.g., aproc. The label ends with a colon as a label indicator.
 
 #### call
 
-${\color{purple}\texttt{call} \space \color{grey}\texttt{\\$} \color{black}\texttt{aproc}}$
+> ${\color{purple}\texttt{call} \space \color{grey}\texttt{\\$} \color{black}\texttt{aproc}}$
 
 Branches execution to the subroutine with the label aproc and continues execution with the next line when it returns
 from the subroutine after it has reached an end proc or return instruction there.
 
 #### return
 
-${\color{purple}\texttt{return}}$
+> ${\color{purple}\texttt{return}}$
 
 Returns to calling code from a subroutine.
 
 #### interrupt and end interrupt
 
-${\color{black}\texttt{ainterrupt} \space \color{grey}\texttt{:}}$
-
-${\color{purple}\texttt{proc} \space \color{black}\texttt{ainterrupt}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{black}\texttt{subroutine code}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{end proc}}$
+> ${\color{black}\texttt{ainterrupt} \space \color{grey}\texttt{:}}$  
+> ${\color{purple}\texttt{proc} \space \color{black}\texttt{ainterrupt}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{black}\texttt{subroutine code}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{end proc}}$
 
 Code of an interrupt subroutine is placed between an interrupt and end interrupt instruction. The interrupt subroutine name is a label placed on the line before the proc
 instruction, e.g., ainterrupt. The label ends with a colon as a label indicator. The label must be given in the tbsignal package by customization and
@@ -414,23 +380,15 @@ attached to a signal triggering the interrupt. If necessary, the handling of nes
 
 #### if, elsif, else, and end if
 
-${\color{purple}\texttt{if} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar} \space \color{grey}\texttt{=} \space \color{grey}\texttt{\\$} \color{black}\texttt{bvar}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{elsif} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar} \space \color{grey}\texttt{>} \space \color{black}\texttt{0xABC}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{elsif} \space \color{black}\texttt{0x123} \space \color{grey}\texttt{<=} \space \color{grey}\texttt{\\$} \color{black}\texttt{bvar}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{else}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{end if}}$
+> ${\color{purple}\texttt{if} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar} \space \color{grey}\texttt{=} \space \color{grey}\texttt{\\$} \color{black}\texttt{bvar}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{elsif} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar} \space \color{grey}\texttt{>} \space \color{black}\texttt{0xABC}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{elsif} \space \color{black}\texttt{0x123} \space \color{grey}\texttt{<=} \space \color{grey}\texttt{\\$} \color{black}\texttt{bvar}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{else}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{end if}}$
 
 Possible comparison operators are:
 ${\space \color{grey}\texttt{>= <= > < != =}}$
@@ -440,17 +398,12 @@ The if instructions can be nested.
 
 #### loop
 
-${\color{purple}\texttt{loop} \space \color{grey}\texttt{\\$} \color{black}\texttt{lvar}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{end loop}}$
-
-${\color{purple}\texttt{loop} \space \color{black}\texttt{32}}$
-
-${\color{black}\texttt{...}}$
-
-${\color{purple}\texttt{end loop} \space }$
+> ${\color{purple}\texttt{loop} \space \color{grey}\texttt{\\$} \color{black}\texttt{lvar}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{end loop}}$  
+> ${\color{purple}\texttt{loop} \space \color{black}\texttt{32}}$  
+> ${\color{black}\texttt{...}}$  
+> ${\color{purple}\texttt{end loop} \space }$
 
 Executes a loop of the code between the loop and end loop instruction. The number of times the loop should be executed is given after the loop keyword.
 It can be a numeric value, a variable, or a constant. In case of a variable, this number can be changed by code within the loop, e.g., to skip loops or end
@@ -459,13 +412,13 @@ return instruction too at any time, which is a good practice.
 
 #### abort
 
-${\color{purple}\texttt{abort}}$
+> ${\color{purple}\texttt{abort}}$
 
 Aborts the simulation with severity failure.
 
 #### finish
 
-${\color{purple}\texttt{abort}}$
+> ${\color{purple}\texttt{abort}}$
 
 Exits the simulation with severity note or error. The latter occurs only if resume has been set to other values than 0, and there were verify errors in verify instructions.
 
@@ -473,33 +426,29 @@ Exits the simulation with severity note or error. The latter occurs only if resu
 
 #### Array Set
 
-${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$
-
-${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$
-
-${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{5}}$
-
-${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{3} \space \color{black}\texttt{5}}$
+> ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$   
+> ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{grey}\texttt{\\$} \color{black}\texttt{avar}}$  
+> ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{5}}$  
+> ${\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{3} \space \color{black}\texttt{5}}$
 
 Set the value of an array at a position.
 
 #### Array Get
 
-${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tvar}}$
-
-${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{black}\texttt{tvar}}$
+> ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tvar}}$  
+> ${\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{black}\texttt{tvar}}$
 
 Get the value of an array from a position.
 
 #### Array Size
 
-${\color{purple}\texttt{array size} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{tvar}}$
+> ${\color{purple}\texttt{array size} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\$} \color{black}\texttt{tvar}}$
 
 Get the size of an array.
 
 #### Array Pointer Copy
 
-${\color{purple}\texttt{array pointer copy} \space \color{black}\texttt{tarray} \space \color{black}\texttt{sarray}}$
+> ${\color{purple}\texttt{array pointer copy} \space \color{black}\texttt{tarray} \space \color{black}\texttt{sarray}}$
 
 Copy an array pointer; for example, `tarray` pointer is a copy of `sarray` pointer after the execution of the instruction. Used, for instance, 
 to hand over an array to a subroutine. Changes to the source array happen in the target array too.
@@ -508,46 +457,45 @@ to hand over an array to a subroutine. Changes to the source array happen in the
 
 #### File Writeable
 
-${\color{purple}\texttt{file writeable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
+> ${\color{purple}\texttt{file writeable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
 Test if a file is writable. If the file is not present, it is created without having content. The result is for STATUSOK 0, STATUSERROR 1, 
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
 #### File Readable
 
-${\color{purple}\texttt{file readable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
+> ${\color{purple}\texttt{file readable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
 Test if a file is readable. The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
 #### File Appendable
 
-${\color{purple}\texttt{file appendable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
+> ${\color{purple}\texttt{file appendable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}$
 
 Test if a file is appendable. The result is for STATUSOK 0, STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend on the operating system.
 
 #### File Write
 
-${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
+> ${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
 Write all lines of an `alines` object to a file. The file is overwritten if it exists.
 
 #### File Append
 
-${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
+> ${\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
 Append all lines of an `alines` object to a file. The method will fail if the file doesn't exist.
 
 #### File Read All
 
-${\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
+> ${\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}$
 
 Read all lines of a file into an `alines` object.
 
 #### File Read
 
-${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{nvar}}$
-
-${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{black}\texttt{10}}$
+> ${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{nvar}}$  
+> ${\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{black}\texttt{10}}$
 
 Read a number of lines from a file into an `alines` object. The first read opens the file for read, following reads start at the line after 
 the last line which has been read by the previous read. Thus a file can be read piecewise similar as it can be written piecewise by file 
@@ -555,26 +503,23 @@ append. The piecewise read process of the file must be terminated by a file read
 
 #### File Read End
 
-${\color{purple}\texttt{file read end} \space \color{black}\texttt{afile}}$
+> ${\color{purple}\texttt{file read end} \space \color{black}\texttt{afile}}$
 
 End the piecewise read process of a file.
 
 #### File Pointer Copy
 
-${\color{purple}\texttt{file pointer copy} \space \color{black}\texttt{tfile} \space \color{black}\texttt{sfile}}$
+> ${\color{purple}\texttt{file pointer copy} \space \color{black}\texttt{tfile} \space \color{black}\texttt{sfile}}$
 
 Copy a file pointer; for example, `tfile` pointer is a copy of `sfile` pointer after the execution of the instruction. Used, for instance, to hand over a file to a subroutine. 
 Changes to the source file happen in the target file too.
-
-
 
 ### Lines Access
 
 #### Lines Get
 
-${\color{purple}\texttt{lines get array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$
-
-${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$
+> ${\color{purple}\texttt{lines get array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$  
+> ${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}$
 
 Get a line from a lines object at a given position and write its content into an array. The line is expected to hold hex numbers (without 0x prefix) separated by 
 spaces (e.g., A123 BCF11 123 E333 would be 4 hex numbers). The given array must be able to hold the number of found hex numbers. It will not be filled 
@@ -583,58 +528,49 @@ numbers is reported in a result variable. Then the user can decide what action s
 
 #### Lines Set
 
-${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$
-
-${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}$
-
-${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Some message to be written to a file later"}}$
-
-${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
+> ${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$  
+> ${\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}$  
+> ${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Some message to be written to a file later"}}$  
+> ${\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
 Set a line at a given position of a lines object. The line currently at this position is overwritten. The line can be derived from an array or a message. The message string can 
 contain {} placeholders which are filled by values of variables given after the message string.
 
 #### Lines Insert
 
-${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$
-
-${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}$
-
-${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Some message to be written to a file later"}}$
-
-${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
+> ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{black}\texttt{sarray}}$   
+> ${\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}$  
+> ${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Some message to be written to a file later"}}$  
+> ${\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
 Insert a line at a given position of a lines object. The line currently at this position is moved to the next position. The line can be derived from an array or a message. 
 The message string can contain {} placeholders which are filled by values of variables given after the message string.
 
 #### Lines Append
 
-${\color{purple}\texttt{lines append array} \space \color{black}\texttt{alines} \space \color{black}\texttt{sarray}}$
-
-${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Some message to be written to a file later"}}$
-
-${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
+> ${\color{purple}\texttt{lines append array} \space \color{black}\texttt{alines} \space \color{black}\texttt{sarray}}$  
+> ${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Some message to be written to a file later"}}$  
+> ${\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
 Append a line at the end of a lines object. The line can be derived from an array or a message. The message string can contain {} placeholders which are filled 
 by values of variables given after the message string.
 
 #### Lines Delete
 
-${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar}}$
-
-${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{black}\texttt{3}}$
+> ${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\$} \color{black}\texttt{pvar}}$  
+> ${\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{black}\texttt{3}}$
 
 Delete a line at a given position of a lines object. The next line is moved to the given position if it exists.
 
 #### Lines Size
 
-${\color{purple}\texttt{lines size} \space \color{black}\texttt{alines} \space \color{black}\texttt{rvar}}$
+> ${\color{purple}\texttt{lines size} \space \color{black}\texttt{alines} \space \color{black}\texttt{rvar}}$
 
 Get the size of a lines object, which is the number of lines it contains currently.
 
 #### Lines Pointer Copy
 
-${\color{purple}\texttt{lines pointer copy} \space \color{black}\texttt{tlines} \space \color{black}\texttt{slines}}$
+> ${\color{purple}\texttt{lines pointer copy} \space \color{black}\texttt{tlines} \space \color{black}\texttt{slines}}$
 
 Copy a lines pointer; for example, `tlines` pointer is a copy of `slines`
 
@@ -643,39 +579,34 @@ Copy a lines pointer; for example, `tlines` pointer is a copy of `slines`
 
 #### Log Message
 
-${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console"}}$
-
-${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console\\{\\}\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
+> ${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console"}}$  
+> ${\color{purple}\texttt{log message} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar} \space \color{blue}\texttt{"A message to the console\\{\\}\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar2}}$
 
 Print a message at a given verbosity level to the console. The message string can contain {} placeholders which are filled by values of variables given after the message string.
 
 #### Log Lines
 
-${\color{purple}\texttt{log lines} \space \color{grey}\texttt{\\$} \space \color{black}\texttt{vvar} \space \color{black}\texttt{slines}}$
+> ${\color{purple}\texttt{log lines} \space \color{grey}\texttt{\\$} \space \color{black}\texttt{vvar} \space \color{black}\texttt{slines}}$
 
 Dump a lines object at a given verbosity level to the console.
 
 #### Verbosity
 
-${\color{purple}\texttt{verbosity} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar}}$
-
-${\color{purple}\texttt{verbosity} \space \color{black}\texttt{20}}$
+> ${\color{purple}\texttt{verbosity} \space \color{grey}\texttt{\\$} \color{black}\texttt{vvar}}$  
+> ${\color{purple}\texttt{verbosity} \space \color{black}\texttt{20}}$
 
 Usual practice is to use the following constants to set verbosity:
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{FAILURE} \space \color{black}\texttt{0}}$
-
-${\color{purple}\texttt{const} \space \color{black}\texttt{WARNING} \space \color{black}\texttt{10}}$
-
-${\color{purple}\texttt{const} \space \color{black}\texttt{INFO} \space \color{black}\texttt{20}}$
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{FAILURE} \space \color{black}\texttt{0}}$  
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{WARNING} \space \color{black}\texttt{10}}$  
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{INFO} \space \color{black}\texttt{20}}$
 
 Sets the global verbosity for log messages. Log messages with a verbosity level greater than the globally set verbosity are not printed to the console. Of course, the global verbosity can be changed at any point in the execution flow.
 
 ### Wait
 
-${\color{purple}\texttt{wait} \space \color{grey}\texttt{\\$} \color{black}\texttt{wvar}}$
-
-${\color{purple}\texttt{wait} \space \color{black}\texttt{10000}}$
+> ${\color{purple}\texttt{wait} \space \color{grey}\texttt{\\$} \color{black}\texttt{wvar}}$  
+> ${\color{purple}\texttt{wait} \space \color{black}\texttt{10000}}$
 
 Waits for the given number of nanoseconds.
 
@@ -683,17 +614,15 @@ Waits for the given number of nanoseconds.
 
 #### Random
 
-${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{minvar} \color{grey}\texttt{\\$} \space \color{black}\texttt{maxvar}}$  
-
-${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0} \space \color{black}\texttt{10}}$
+> ${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{minvar} \color{grey}\texttt{\\$} \space \color{black}\texttt{maxvar}}$   
+> ${\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0} \space \color{black}\texttt{10}}$
 
 Generates a random number greater or equal to the min value given and less than the maximum number given.
 
 #### Seed
 
-${\color{purple}\texttt{seed} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
-
-${\color{purple}\texttt{seed} \space \color{black}\texttt{10}}$
+> ${\color{purple}\texttt{seed} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$   
+> ${\color{purple}\texttt{seed} \space \color{black}\texttt{10}}$
 
 Set the internal start value for the random number generator.
 
@@ -701,9 +630,8 @@ Set the internal start value for the random number generator.
 
 #### Trace
 
-${\color{purple}\texttt{trace} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
-
-${\color{purple}\texttt{trace} \space \color{black}\texttt{0b111}}$  
+> ${\color{purple}\texttt{trace} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$   
+> ${\color{purple}\texttt{trace} \space \color{black}\texttt{0b111}}$  
 
 The trace instruction enables or disables the output of trace information when it is set at some point during the SimStm code execution. Thus, e.g., the flow through complex if, elsif ... trees can be shown.
 
@@ -713,9 +641,8 @@ The trace instruction enables or disables the output of trace information when i
 
 #### Marker
 
-${\color{purple}\texttt{marker} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar} \space \color{grey}\texttt{\\$} \color{black}\texttt{lvar}}$  
-
-${\color{purple}\texttt{marker} \space \color{black}\texttt{0xF} \space \color{black}\texttt{0b1}}$ 
+> ${\color{purple}\texttt{marker} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar} \space \color{grey}\texttt{\\$} \color{black}\texttt{lvar}}$   
+> ${\color{purple}\texttt{marker} \space \color{black}\texttt{0xF} \space \color{black}\texttt{0b1}}$ 
 
 The `tb_simstm` entity has an output signal marker which is a `std_logic_vector(15 downto 0)`. Thus there are 16 markers which can be set `0b1` or `0b0`. This should be used to mark occurrences during the execution of the SimStm code so they can be found easily in the waveform display. Beneath this, the `Executing_Line` and `Executing_File` `tb_simstm` intern variables are always present and show the currently executed line of code.
 
@@ -723,66 +650,58 @@ The `tb_simstm` entity has an output signal marker which is a `std_logic_vector(
 
 #### Signal Write
 
-${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
-
-${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space  \color{black}\texttt{0b11}}$
+> ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
+> ${\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space  \color{black}\texttt{0b11}}$
 
 Write variable, constant, or numeric value to a signal.
 
 #### Signal Read
 
-${\color{purple}\texttt{signal read} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar}}$
+> ${\color{purple}\texttt{signal read} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar}}$
 
 Read the value of a signal into a variable.
 
 #### Signal Verify
 
-${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
-
-${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
+> ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
+> ${\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
 
 Read the value of a signal into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0.
 
 #### Bus Write
 
-${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
-
-${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space  \color{black}\texttt{0b11}}$
+> ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
+> ${\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space  \color{black}\texttt{0b11}}$
 
 Write a variable, constant, or numeric value to a bus.
 
 #### Bus Read
 
-${\color{purple}\texttt{bus read} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar}}$
+> ${\color{purple}\texttt{bus read} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar}}$
 
 Read the value of a bus into a variable.
 
 #### Bus Verify
 
-${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
-
-${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
+> ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\$} \color{black}\texttt{evar} \space \color{grey}\texttt{\\$} \color{black}\texttt{mvar}}$  
+> ${\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}$  
 
 Read the value of a bus into a variable and compare it to an expected value with a given mask. The expected value and mask can be variables, constants, or numeric values. On mismatch, the simulation stops with severity failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
 #### Bus Timeout
 
-${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$
-
-${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space  \color{black}\texttt{1000}}$
+> ${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\$} \color{black}\texttt{svar}}$  
+> ${\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space  \color{black}\texttt{1000}}$
 
 Sets the timeout in nanoseconds to wait for a bus access to end. On violation, the simulation stops with severity failure always.
 
 #### Resume 
 
-${\color{purple}\texttt{resume} \space \color{grey}\texttt{\\$} \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR}}$
+> ${\color{purple}\texttt{resume} \space \color{grey}\texttt{\\$} \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR}}$  
+> ${\color{purple}\texttt{resume} \space \color{black}\texttt{0}}$
 
-${\color{purple}\texttt{resume} \space \color{black}\texttt{0}}$
-
-Usual practice is to use the following constants to set verbosity:
-
-${\color{purple}\texttt{const} \space \color{black}\texttt{RESUME\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{1}}$
-
+Usual practice is to use the following constants to set verbosity:  
+${\color{purple}\texttt{const} \space \color{black}\texttt{RESUME\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{1}}$  
 ${\color{purple}\texttt{const} \space \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{0}}$
 
 Sets the global resume behavior for verify instructions. On a verify mismatch, the simulation stops with severity failure if the global resume is set to 0; otherwise, it continues and reports an error.
@@ -791,27 +710,19 @@ Sets the global resume behavior for verify instructions. On a verify mismatch, t
 
 ### Hello World
 
-${\color{purple}\texttt{const} \space \color{black}\texttt{YEAR} \space \color{black}\texttt{0x2023} }$
-
-${\color{purple}\texttt{var} \space \color{black}\texttt{month} \space \color{black}\texttt{0x11}}$
-
-${\color{purple}\texttt{var} \space \color{black}\texttt{day} \space \color{black}\texttt{0x22}}$
-
-${\color{black}\texttt{Main} \space \color{grey}\texttt{:}}$
-
-${\color{purple}\texttt{proc}}$
-
-${\space \space \space \space \color{purple}\texttt{loop} \space \color{black}\texttt{3} }$
-
-${\space \space \space \space \space \space \space \space \color{green}\texttt{-- currently values are printed in hex format only}}$
-
-${\space \space \space \space \space \space \space \space \color{purple}\texttt{log message} \space \color{black}\texttt{0} \space \color{blue}\texttt{"Hello World \\{\\}-\\{\\}-\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{YEAR} \space \color{grey}\texttt{\\$} \color{black}\texttt{month} \space \color{grey}\texttt{\\$} \color{black}\texttt{day}}$
-
-${\space \space \space \space \color{purple}\texttt{end loop}}$
-
-${\color{purple}\texttt{finish}}$
-
-${\color{purple}\texttt{end proc}}$
+> ${\color{purple}\texttt{const} \space \color{black}\texttt{YEAR} \space \color{black}\texttt{0x2023} }$  
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{month} \space \color{black}\texttt{0x11}}$  
+> ${\color{purple}\texttt{var} \space \color{black}\texttt{day} \space \color{black}\texttt{0x22}}$  
+> 
+> ${\color{black}\texttt{Main} \space \color{grey}\texttt{:}}$  
+> ${\color{purple}\texttt{proc}}$  
+> ${\space \space \space \space \color{purple}\texttt{loop} \space \color{black}\texttt{3} }$  
+> ${\space \space \space \space \space \space \space \space \color{green}\texttt{-- currently values are printed in hex format only}}$  
+> ${\space \space \space \space \space \space \space \space \color{purple}\texttt{log message} \space \color{black}\texttt{0} \space \color{blue}\texttt{"Hello World \\{\\}-\\{\\}-\\{\\}"} \space \color{grey}\texttt{\\$} \color{black}\texttt{YEAR} \space \color{grey}\texttt{\\$} \color{black}\texttt{month} \space \color{grey}\texttt{\\$} \color{black}\texttt{day}}$  
+> ${\space \space \space \space \color{purple}\texttt{end loop}}$  
+> 
+> ${\color{purple}\texttt{finish}}$  
+> ${\color{purple}\texttt{end proc}}$
 
 This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see [hello_world](./test/others/hello_world).
 
