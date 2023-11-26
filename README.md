@@ -813,9 +813,9 @@ ${\color{purple}\texttt{finish}}$
 
 ${\color{purple}\texttt{end proc}}$
 
-This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
+This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see [hello_world](./test/others/hello_world).
 
-An overiew can also find here: https://github.com/eccelerators/simstm/main/command_list.stm. 
+An overiew can also find here: [command_list.stm](./command_list.stm). 
 
 ### Unit Tests
 
