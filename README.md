@@ -811,11 +811,12 @@ ${\color{purple}\texttt{end proc}}$
 
 This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see https://github.com/eccelerators/simstm/tree/lines/test/others/hello_world.
 
+An overiew can also find here: https://github.com/eccelerators/simstm/main/command_list.stm. 
+
 ### Unit Tests
 
-The unit tests in the folder test in this repository show tested examples for all instructions, see https://github.com/eccelerators/simstm/blob/lines/test/commands/command_list.stm. 
-
-An exception is example command_list.stm in the subfolder commands. It lists all commands only for demonstration and is not a real testcase.
+The test folder contains for all commands some unittest.  
+With this we can verify if all commands works as expected.
 
 ### SPI Controller
 

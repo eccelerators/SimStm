@@ -1,0 +1,308 @@
+include "an_include.stm"
+
+const a_constA 0x03
+const a_constB $a_constA
+const a_constC $a_varA
+
+var a_varA 0x05
+var a_varB $a_varA
+var a_varC $a_constA
+var result 0
+
+array an_array 16
+
+var file_user_index1 1
+var file_user_index2 4
+file a_fileA "file_name"
+file a_fileB "file_name{}{}" $file_user_index1 $file_user_index2
+
+lines a_lines
+
+
+var operand1_and_target 0
+var operand2 0
+
+ArithProc:
+proc 
+	equ operand1_and_target $operand2
+	equ operand1_and_target 0xF0
+	
+	add operand1_and_target $operand2
+	add operand1_and_target 0xF0
+	
+	sub operand1_and_target $operand2
+	sub operand1_and_target 0xF0
+	
+	mul operand1_and_target $operand2
+	mul operand1_and_target 0xF0
+	 
+	div operand1_and_target $operand2
+	div operand1_and_target 0xF0
+		
+	and operand1_and_target $operand2
+	and operand1_and_target 0xF0
+	
+	or operand1_and_target $operand2
+	or operand1_and_target 0xF0
+	
+	xor operand1_and_target $operand2
+	xor operand1_and_target 0xF0		
+	
+	shl operand1_and_target $operand2
+	shl operand1_and_target 0xF0 
+	
+	shr operand1_and_target $operand2
+	shr operand1_and_target 0xF0
+	
+	inv operand1_and_target
+
+	ld operand1_and_target
+
+end proc
+
+var position 0
+array another_array 16
+
+array_proc:
+proc 	
+	array set an_array $position 0x07
+	array set an_array $position $a_varA
+	array set an_array 5 0x07
+	array set an_array 3 $a_varA
+	
+	array get an_array $position a_varB
+	
+	array size an_array a_varB
+				
+	array pointer copy an_array another_array		
+end proc
+
+file_proc:
+proc 
+    file writeable a_fileA result
+    file readable a_fileA result
+    file appendable a_fileA result
+	file write a_fileA a_lines
+	file append a_fileB  a_lines
+	file read all a_fileA a_lines
+    file read a_fileA a_lines 5
+    file read end a_fileA
+end proc
+ 
+lines a_lines_target
+lines a_lines_source
+var read_size 0
+
+lines_proc:
+proc 
+	lines get array a_lines $position an_array result
+	lines get array a_lines 8 an_array result
+	
+	lines set array a_lines $position an_array
+	lines set array a_lines 9 an_array
+	lines set message a_lines $position "abc"
+	lines set message a_lines 7 "abc"
+	lines set message a_lines $position "abc{}" $a_varB
+	lines set message a_lines 7 "abc{}" $a_varB
+	
+	lines insert array a_lines $position an_array
+	lines insert array a_lines 9 an_array
+	lines insert message a_lines $position "abc"
+	lines insert message a_lines 7 "abc"
+	lines insert message a_lines $position "abc{}" $a_varB
+	lines insert message a_lines 7 "abc{}" $a_varB			
+
+	lines append array a_lines an_array
+	lines append message a_lines "abc"
+	lines append message a_lines "abc{}" $a_varB		
+		
+	lines delete a_lines $position
+	lines delete a_lines 13
+	
+	lines size a_lines read_size	
+	
+	lines pointer copy a_lines_target a_lines_source
+end proc
+
+
+var another_var 1
+
+if_proc:
+proc 	
+	if $a_varA = $another_var
+		equ a_varA 5
+	elsif $a_varA > $another_var
+		equ a_varA 6
+	else
+		equ a_varA $a_constA
+	end if
+	
+	if 0x09 = $another_var
+		equ a_varA 5
+	elsif 0x09 > $another_var
+		equ a_varA 6
+	else
+		equ a_varA $a_constA
+	end if
+	
+	if $a_varA = 0x09
+		equ a_varA 5
+	elsif $a_varA > 0x09
+		equ a_varA 6
+	else
+		equ a_varA $a_constA
+	end if
+	
+	if 0x09 = 0x09
+		equ a_varA 5
+	elsif 0x0A > 0x09
+		equ a_varA 6
+	else
+		equ a_varA $a_constA
+	end if	
+end proc
+
+
+var loop_num 1
+
+loop_return_proc:
+proc 
+	loop $loop_num
+		if $a_varA = $another_var
+			return
+		end if	
+	end loop		
+end proc
+
+
+abort_proc:
+proc 
+	abort
+end proc
+
+
+some_proc:
+proc 
+	finish
+end proc
+
+
+a_proc:
+proc 
+
+end proc
+
+a_interrupt:
+interrupt 
+
+end interrupt
+
+
+call_proc:
+proc 
+	call $some_proc
+end proc
+
+
+const INFO 5
+var seed_var 589043
+var rand_var 0
+var rand_min_var 0
+var rand_max_var 1000
+const RESUME_ON_VERIFY_ERROR 1
+const EXIT_ON_VERIFY_ERROR 0
+
+var time_to_wait 5000
+
+misc_proc:
+proc
+    log message $INFO "some message"
+	log message $INFO "misc_proc severity: {}" $INFO
+	log lines 0 a_lines_target
+	trace $a_varA
+	trace 1
+	verbosity $INFO
+	verbosity 25
+    resume $RESUME_ON_VERIFY_ERROR
+	resume $EXIT_ON_VERIFY_ERROR
+	seed $seed_var
+	seed 1397
+	random rand_var $rand_min_var $rand_max_var
+	random rand_var 0 $rand_max_var
+	random rand_var $rand_min_var 9
+	random rand_var 3 9
+	wait $time_to_wait
+	wait 10000
+	marker $a_varA $a_varB
+	marker 5 1
+end proc
+
+
+signal a_signal 10
+var signal_to_be_set_value 0
+var signal_read_value 0
+var signal_expected_value 0
+var signal_mask_value 0
+
+signal_proc: 
+proc 	
+	signal write a_signal $signal_to_be_set_value
+	signal write a_signal 0x1234
+	signal read a_signal signal_read_value
+	signal verify a_signal signal_read_value $signal_expected_value $signal_mask_value
+	signal verify a_signal signal_read_value 0x0002 0x00FF
+end proc
+
+
+
+bus a_bus 10
+var bus_width 32
+var bus_address 0
+var bus_to_be_set_value 0
+var bus_read_value 0
+var bus_expected_value 0
+var bus_mask_value 0
+var bus_timeout_value 0
+
+bus_proc:
+proc 	
+	bus write a_bus $bus_width  $bus_address $bus_to_be_set_value
+	bus write a_bus 16 0x00001000 0x1233
+	bus read  a_bus $bus_width  $bus_address  bus_read_value
+	bus read  a_bus 16 0x00001000  bus_read_value
+	bus verify a_bus $bus_width  $bus_address bus_read_value $bus_expected_value $bus_mask_value
+	bus verify a_bus 32  0x00001004 bus_read_value 0x00050000 0x000FC000
+	bus timeout a_bus 1000
+	bus timeout a_bus $bus_timeout_value
+end proc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
