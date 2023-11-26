@@ -12,7 +12,7 @@ const STATUS_MODE_ERROR 3
 var status 0
 
 Main:
-proc       
+proc
 
     array set a_array 0 0
     array set a_array 1 1
@@ -23,27 +23,27 @@ proc
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
     lines append array a_lines a_array
-    
+
     array set a_array 0 1
-    lines append array a_lines a_array    
-    
+    lines append array a_lines a_array
+
     array set a_array 0 2
-    lines append array a_lines a_array    
-    
+    lines append array a_lines a_array
+
 	log lines 0 a_lines
-	
-	log message 0 "Check if file is readable, which doesn't exist "
+
+	log message 0 "Check if file is readable, which doesn't exist"
 	file readable user_data_out status
 	call $print_file_status
-	
-	log message 0 "Check if file is writeable, which doesn't exist "
+
+	log message 0 "Check if file is writeable, which doesn't exist"
 	file writeable user_data_out status
 	call $print_file_status
-	
-	log message 0 "Check if file is appendable, which doesn't exist "
+
+	log message 0 "Check if file is appendable, which doesn't exist"
 	file appendable user_data_out status
 	call $print_file_status
-		
+
 	log message 0 "Main test finished"
 	wait 1000
 	finish

@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<project name="test_other_trace">
+<project name="array">
    <include file="../../../unit_test_build.xml"/>
 </project>

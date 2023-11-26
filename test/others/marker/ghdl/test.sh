@@ -18,7 +18,6 @@ error_not_contain="error"
 out=$(cat out.log)
 out_expected="test finished with no errors!!"
 
-
 if [[ $return_value == 0 ]] &&
    [[ ! "$error" =~ "$error_not_contain" ]] &&
    [[ "$out" =~ "$out_expected" ]] ; then

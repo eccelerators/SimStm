@@ -21,11 +21,11 @@ start simulation
 00000000 00000001 0000000A 00000002 0000000B 7FFFFFFF 80000000 FFFFFFFF 
 00000001 00000001 0000000A 00000002 0000000B 7FFFFFFF 80000000 FFFFFFFF 
 00000002 00000001 0000000A 00000002 0000000B 7FFFFFFF 80000000 FFFFFFFF 
-Check if file is readable, which doesn't exist 
+Check if file is readable, which doesn't exist
 STATUS_NAME_ERROR
-Check if file is writeable, which doesn't exist 
+Check if file is writeable, which doesn't exist
 STATUS_OK
-Check if file is appendable, which doesn't exist 
+Check if file is appendable, which doesn't exist
 STATUS_OK
 Main test finished
 EOF
