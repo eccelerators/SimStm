@@ -20,7 +20,7 @@ out_expected=$(cat <<EOF
 start simulation
 EOF
 )
-out_expected_2="error: array size <= 0 are not allowd."
+out_expected_2="error: array size < 1 is not allowed"
 
 if [[ ! $return_value == 0 ]] &&
    [[ ! "$error" =~ "$error_not_contain" ]] &&

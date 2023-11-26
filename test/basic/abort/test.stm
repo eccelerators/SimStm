@@ -1,1 +1,4 @@
-abort
+Main:
+proc
+	abort
+end proc

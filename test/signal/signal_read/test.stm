@@ -1,0 +1,88 @@
+signal in_signal_0 0
+signal in_signal_1 1
+signal in_signal_2 2
+signal in_signal_3 3
+
+signal out_signal_0 0
+signal out_signal_1 1
+signal out_signal_2 2
+signal out_signal_3 3
+
+var read_back 0xffff
+
+Main:
+proc
+	------------------------------------------
+	-- set signal to 0
+	signal write out_signal_0 0
+	signal read in_signal_0 read_back
+	
+	if 0 = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 0, got {}" $read_back
+	end if
+	signal verify in_signal_0 read_back 0 1
+	
+	-- set signal to 1
+	signal write out_signal_0 1
+	signal read in_signal_0 read_back
+	
+	if 1 = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 1, got {}" $read_back
+	end if
+	signal verify in_signal_0 read_back 1 1
+	
+	-- set signal to 0xffff (signal_0 = std_logic)
+	signal write out_signal_0 0xffff
+	signal read in_signal_0 read_back
+	
+	if 1 = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 1, got {}" $read_back
+	end if
+	signal verify in_signal_0 read_back 1 0xffff
+	
+	------------------------------------------
+	-- set signal to 0
+	signal write out_signal_1 0
+	signal read in_signal_1 read_back
+	
+	if 0 = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 0, got {}" $read_back
+	end if
+	signal verify in_signal_1 read_back 0 1
+	
+	-- set signal to 1
+	signal write out_signal_1 1
+	signal read in_signal_1 read_back
+	
+	if 1 = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 1, got {}" $read_back
+	end if
+	signal verify in_signal_1 read_back 1 1
+	
+	-- set signal to 0xffff (signal_1 = std_logic_vector(7 downto 0))
+	signal write out_signal_1 0xffff
+	signal read in_signal_1 read_back
+	
+	if 0xff = $read_back
+	    log message 0 "signal readback match"
+	else
+	    log message 0 "signal readback doesn't match expected 0xff, got {}" $read_back
+	end if
+	signal verify in_signal_1 read_back 0xff 0xffff
+	
+	finish
+
+end proc
+
+
+

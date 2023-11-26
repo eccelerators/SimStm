@@ -4,10 +4,15 @@ const test_variable_3 3
 const test_variable_4 4
 const test_variable_5 5
 
-log 0 "test_variable_1: $test_variable_1"
-log 0 "test_variable_2: $test_variable_2"
-log 0 "test_variable_3: $test_variable_3"
-log 0 "test_variable_4: $test_variable_4"
-log 0 "test_variable_5: $test_variable_5"
+Main:
+proc
 
-finish
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	log message 0 "test_variable_3: {}" $test_variable_3
+	log message 0 "test_variable_4: {}" $test_variable_4
+	log message 0 "test_variable_5: {}" $test_variable_5
+
+	finish
+
+end proc

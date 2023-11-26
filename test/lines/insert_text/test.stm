@@ -1,0 +1,21 @@
+lines a_lines
+
+Main:
+proc       
+    lines append message a_lines "line 0"
+    lines append message a_lines "line 1"
+    lines append message a_lines "line 2"
+    
+	log lines 0 a_lines
+
+    lines insert message a_lines 0 "line insert 1"
+    log lines 0 a_lines
+    lines insert message a_lines 1 "line insert 0"
+    log lines 0 a_lines
+    lines insert message a_lines 4 "line insert 4"
+    log lines 0 a_lines
+
+	log message 0 "Main test finished"
+	wait 1000
+	finish
+end proc

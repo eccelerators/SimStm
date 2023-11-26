@@ -1,0 +1,28 @@
+signal in_signal_0 0
+signal in_signal_1 1
+signal in_signal_2 2
+signal in_signal_3 3
+
+signal out_signal_0 0
+signal out_signal_1 1
+signal out_signal_2 2
+signal out_signal_3 3
+
+var read_back 0xffff
+
+Main:
+proc
+
+	------------------------------------------
+	-- set signal to 0
+	signal write out_signal_0 0
+	
+	signal verify in_signal_0 read_back 0 1
+	log message 0 "signal verify match"
+	
+	signal verify in_signal_0 read_back 1 1
+	log message 0 "signal verify not match"
+	
+	finish
+
+end proc

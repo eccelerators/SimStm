@@ -1,0 +1,66 @@
+file user_data_out "user_data_out.dat"
+lines a_lines
+array a_array 8
+lines b_lines
+lines c_lines
+
+const STATUS_OK 0
+const STATUS_ERROR 1
+const STATUS_NAME_ERROR 2
+const STATUS_MODE_ERROR 3
+
+var status 0
+
+Main:
+proc
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+
+    array set a_array 0 1
+    lines append array a_lines a_array
+
+    array set a_array 0 2
+    lines append array a_lines a_array
+
+	log lines 0 a_lines
+
+	log message 0 "Check if file is readable, which doesn't exist"
+	file readable user_data_out status
+	call $print_file_status
+
+	log message 0 "Check if file is writeable, which doesn't exist"
+	file writeable user_data_out status
+	call $print_file_status
+
+	log message 0 "Check if file is appendable, which doesn't exist"
+	file appendable user_data_out status
+	call $print_file_status
+
+	log message 0 "Main test finished"
+	wait 1000
+	finish
+end proc
+
+
+print_file_status:
+proc
+	if $status = $STATUS_OK
+		log message 0 "STATUS_OK"
+	elsif $status = $STATUS_ERROR
+		log message 0 "STATUS_ERROR"
+	elsif $status = $STATUS_NAME_ERROR
+		log message 0 "STATUS_NAME_ERROR"
+	elsif $status = $STATUS_MODE_ERROR
+		log message 0 "STATUS_MODE_ERROR"
+	else
+		log message 0 "Other status: {}" $status
+	end if
+end proc

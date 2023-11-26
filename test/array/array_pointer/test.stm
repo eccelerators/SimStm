@@ -1,0 +1,77 @@
+array src_array 10
+array des_array 1
+
+var var_name 0
+
+Main:
+proc
+
+	array size src_array var_name
+	log message 0 "var_name: {}" $var_name
+	
+	if $var_name != 10
+	    abort
+	end if
+	
+	
+	array size des_array var_name
+	log message 0 "var_name: {}" $var_name
+	
+	if $var_name != 1
+	    abort
+	end if
+	
+	
+	array set src_array 0 10
+	array set src_array 1 11
+	array set src_array 2 12
+	
+	array pointer copy des_array src_array 
+	
+	array size src_array var_name
+	log message 0 "var_name: {}" $var_name
+	
+	if $var_name != 10
+	    abort
+	end if
+	
+	
+	array size des_array var_name
+	log message 0 "var_name: {}" $var_name
+	
+	if $var_name != 10
+	    abort
+	end if
+	
+	
+	array get des_array 0 var_name
+	log message 0 "var_name: {}" $var_name
+	if $var_name != 10
+	    abort
+	end if
+	
+	array get des_array 1 var_name
+	log message 0 "var_name: {}" $var_name
+	if $var_name != 11
+	    abort
+	end if
+	
+	array get des_array 2 var_name
+	log message 0 "var_name: {}" $var_name
+	if $var_name != 12
+	    abort
+	end if
+	
+	
+	array set des_array 5 55
+	
+	array get src_array 5 var_name
+	log message 0 "src_array 5: {}" $var_name
+	if $var_name != 55
+	    abort
+	end if
+	
+	
+	finish
+
+end proc

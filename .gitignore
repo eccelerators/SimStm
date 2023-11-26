@@ -4,11 +4,17 @@
 *.mti
 *.vstf
 transcript
+libraries
 vsim.wlf
 work
+*/**/modelsim/*
 
 # GHDL
 *.cf
 *.log
 *.o
 test/**/tb_top
+*/**/ghdl/*
+
+!run.sh
+!test.sh

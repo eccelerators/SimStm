@@ -1,0 +1,10 @@
+
+Main:
+proc
+
+	trace 1
+    wait 1000
+    trace 0
+    	
+	finish
+end proc

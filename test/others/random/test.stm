@@ -1,8 +1,12 @@
-var randum_number 0
+var random_number 0
 
-loop 20
-    random randum_number 0 10
-    log 0 "$randum_number"
-end loop
 
-finish
+Main:
+proc
+	loop 20
+	    random random_number 0 10
+	    log message 0 "random_number: {}" $random_number
+	end loop
+	
+	finish
+end proc

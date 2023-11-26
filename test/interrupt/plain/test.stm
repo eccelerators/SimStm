@@ -1,0 +1,33 @@
+signal in_signal_0 0
+signal in_signal_1 1
+signal in_signal_2 2
+signal in_signal_3 3
+
+signal out_signal_0 0
+signal out_signal_1 1
+signal out_signal_2 2
+signal out_signal_3 3
+
+Main:
+proc
+	wait 1000
+	signal write out_signal_2 1
+    wait 1000 
+    signal write out_signal_3 1
+	finish
+
+end proc
+
+
+InterruptA:
+interrupt
+    log message 0 "InterruptA happened"
+	signal write out_signal_2 0
+end interrupt
+
+InterruptB:
+interrupt
+    log message 0 "InterruptB happened"
+	signal write out_signal_3 0
+end interrupt
+

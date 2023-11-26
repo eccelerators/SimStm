@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<project name="unit_test_general">
+   <dirname property="included.basedir" file="${ant.file.included}" />
+   <property environment="env" />
+   <property name="MODELSIM_BIN_DIR" value="" />
+   <property name="ROOT_DIR" value="${included.basedir}/../" />
+   <property name="MODELSIM_RUN_DIR" value="${ROOT_DIR}/modelsim" />
+   <property name="MODELSIM_LIBRARIES_DIR" value="${MODELSIM_RUN_DIR}/libraries" />
+   <property name="TOP_LEVEL_NAME" value="work.tb_top" />
+
+   <target name="make-lib" description="make work lib">
+      <mkdir dir="${MODELSIM_LIBRARIES_DIR}" />
+      <exec executable="${MODELSIM_BIN_DIR}vlib" failonerror="true">
+         <arg value="${MODELSIM_LIBRARIES_DIR}/work" />
+      </exec>
+      <exec executable="${MODELSIM_BIN_DIR}vmap" failonerror="true">
+         <arg value="work" />
+         <arg value="${MODELSIM_LIBRARIES_DIR}/work" />
+      </exec>
+      <exec executable="${MODELSIM_BIN_DIR}vmap" failonerror="true">
+         <arg value="work_lib" />
+         <arg value="${MODELSIM_LIBRARIES_DIR}/work" />
+      </exec>
+   </target>
+
+   <target name="clean-lib" description="clean libs">
+      <delete failonerror="false">
+         <fileset dir="${MODELSIM_LIBRARIES_DIR}/work">
+            <include name="**/*" />
+         </fileset>
+      </delete>
+   </target>
+
+   <target name="build" depends="
+      clean-lib,
+      make-lib,
+      compile"
+      description="build all" />
+
+   <target name="all" depends="
+      clean-lib,
+      make-lib,
+      compile,
+      elaborate"
+      description="compile all" />
+
+
+   <target name="compile"
+      depends="
+     -do_compile_wb_ram.vhd,
+     -do_compile_tb_base_pkg.vhd,
+     -do_compile_tb_base_pkg_body.vhd,
+     -do_compile_tb_instructions_pkg.vhd,
+     -do_compile_tb_interpreter_pkg.vhd,
+     -do_compile_tb_interpreter_pkg_body.vhd,
+     -do_compile_tb_bus_avalon_pkg.vhd,
+     -do_compile_tb_bus_axi4lite_pkg.vhd,
+     -do_compile_tb_bus_wishbone_pkg.vhd,
+     -do_compile_tb_bus_pkg.vhd,
+     -do_compile_tb_signals_pkg.vhd,
+     -do_compile_tb_simstm.vhd,
+     -do_compile_tb_top.vhd"
+      description="CompileAll" />
+
+   <target name="elaborate" description="ElabLinux">
+      <exec executable="${MODELSIM_BIN_DIR}vsim">
+         <arg value="-t" />
+         <arg value="ps" />
+         <arg value="-L" />
+         <arg value="work" />
+         <arg value="${TOP_LEVEL_NAME}" />
+         <arg value="-i" />
+      </exec>
+   </target>
+
+   <target name="-do_compile_wb_ram.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../ip/wb_ram.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_base_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_base_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_base_pkg_body.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_base_pkg_body.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_instructions_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_instructions_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_interpreter_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_interpreter_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_interpreter_pkg_body.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_interpreter_pkg_body.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_bus_avalon_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_bus_avalon_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_bus_axi4lite_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_bus_axi4lite_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_bus_wishbone_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_bus_wishbone_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_bus_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src_to_customize/tb_bus_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_signals_pkg.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src_to_customize/tb_signals_pkg.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_simstm.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../../../../src/tb_simstm.vhd" />
+      </exec>
+   </target>
+   <target name="-do_compile_tb_top.vhd">
+      <exec executable="${MODELSIM_BIN_DIR}vcom" failonerror="true">
+         <arg value="-2008" />
+         <arg value="./../tb_top.vhd" />
+      </exec>
+   </target>
+
+</project>

@@ -4,10 +4,14 @@ var bba 3
 var cbb 4
 var aba 5
 
-log 0 "aab: $aab"
-log 0 "abb: $abb"
-log 0 "bba: $bba"
-log 0 "cbb: $cbb"
-log 0 "aba: $aba"
+Main:
+proc
+	log message 0 "aab: {}" $aab
+	log message 0 "abb: {}" $abb
+	log message 0 "bba: {}" $bba
+	log message 0 "cbb: {}" $cbb
+	log message 0 "aba: {}" $aba
+	
+	finish
 
-finish
+end proc

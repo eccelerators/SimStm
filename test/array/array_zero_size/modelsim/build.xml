@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<project name="array_zero_size">
+   <include file="../../../unit_test_build.xml"/>
+</project>
