@@ -62,7 +62,8 @@ package tb_base_pkg is
     type stack_register is array (31 downto 0) of integer;
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
-    type int_array_array is array (1 to 16) of int_array;
+    type stack_int_array is array (0 to 127) of integer;
+    type stack_int_array_array is array (0 to 15) of stack_int_array;
     type boolean_array is array (0 to 127) of boolean;
     type interrupt_array is array (0 to 127) of integer;
 

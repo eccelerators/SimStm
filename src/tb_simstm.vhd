@@ -142,11 +142,11 @@ begin
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
         variable act_term_loop_count : integer := 0;
-        variable stack_loop_num : int_array := (others => 0);
-        variable stack_curr_loop_count : int_array_array := (others => (others => 0));
-        variable stack_term_loop_count : int_array_array := (others => (others => 0));
-        variable stack_loop_line : int_array_array := (others => (others => 0));
-        variable stack_loop_if_enter_level : int_array := (others => 0);
+        variable stack_loop_num : stack_int_array := (others => 0);
+        variable stack_curr_loop_count : stack_int_array_array := (others => (others => 0));
+        variable stack_term_loop_count : stack_int_array_array := (others => (others => 0));
+        variable stack_loop_line : stack_int_array_array := (others => (others => 0));
+        variable stack_loop_if_enter_level : stack_int_array := (others => 0);
 
         variable loglevel : integer := 0;
         variable exit_on_verify_error : boolean := true;
@@ -288,7 +288,6 @@ begin
                 set_interrupt_in_service(interrupt_in_service, interrupt_number);
                 stack(stack_ptr) := v_line;
                 stack_ptr := stack_ptr + 1;
-                -- report " line " & (integer'image(file_line)) & "call stack_ptr incremented to = " & integer'image(stack_ptr);
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
                 access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
                 assert valid = 1
@@ -1004,10 +1003,11 @@ begin
                 -- if 0x09 = 0x09
                 elsif instruction(1 to len) = INSTR_IF then
                     if_level := if_level + 1;
-                    --    assert false
-                    --    report " line " & (integer'image(file_line)) & " executing if command" & lf & "  if_level incremented to " & ht & integer'image(if_level)
-                    --    severity note;
                     if_state(if_level) := false;
+                    if to_signed(trc_on, 32)(4) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  incremented if_level " & integer'image(if_level);
+                    end if;
                     case par2 is
                         when 0 => if (par1 = par3) then
                                 if_state(if_level) := true;
@@ -1032,6 +1032,13 @@ begin
                             report " line " & (integer'image(file_line)) & " error:  if instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                             severity failure;
                     end case;
+                    if to_signed(trc_on, 32)(4) = '1' then  
+                        if if_state(if_level) = true then               
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is true";
+                        else
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is false";
+                        end if;
+                    end if;
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
@@ -1053,6 +1060,9 @@ begin
                                              par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
+                        if to_signed(trc_on, 32)(4) = '1' then             
+                            report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
+                        end if;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     end if;
 
@@ -1061,6 +1071,10 @@ begin
                 -- $a_varA > 0x09
                 -- elsif 0x0A > 0x09
                 elsif instruction(1 to len) = INSTR_ELSIF then
+                    if to_signed(trc_on, 32)(4) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
+                    end if;
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
@@ -1101,6 +1115,13 @@ begin
                                 report " line " & (integer'image(file_line)) & " error:  elsif instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                                 severity failure;
                         end case;
+                        if to_signed(trc_on, 32)(4) = '1' then  
+                            if if_state(if_level) = true then               
+                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is true";
+                            else
+                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is false";
+                            end if;
+                        end if;
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
@@ -1122,12 +1143,19 @@ begin
                                                  par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                                                  last_sequ_num, last_sequ_ptr);
                             end loop;
+                            if to_signed(trc_on, 32)(4) = '1' then             
+                                report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
+                            end if;
                             v_line := v_line - 1; -- re-align so it will be operated on.
                         end if;
                     end if;
 
                 -- else
                 elsif instruction(1 to len) = INSTR_ELSE then
+                    if to_signed(trc_on, 32)(4) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
+                    end if;
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
@@ -1148,36 +1176,59 @@ begin
                 -- end if
                 elsif instruction(1 to len) = INSTR_END_IF then
                     if_level := if_level - 1;
-                -- assert false
-                -- report " line " & (integer'image(file_line)) & " executing end_if command" & lf & "  if_level decremented to " & ht & integer'image(if_level)
-                -- severity note;
+                    if to_signed(trc_on, 32)(4) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  decremented if_level " & integer'image(if_level);
+                    end if;
 
                 -- loop $loop_num
                 -- loop 100
                 elsif instruction(1 to len) = INSTR_LOOP then
-                    stack_loop_if_enter_level(stack_ptr + 1) := if_level;
-                    act_loop_num := stack_loop_num(stack_ptr + 1);
+                    stack_loop_if_enter_level(stack_ptr) := if_level;
+                    act_loop_num := stack_loop_num(stack_ptr);
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
+                        report instruction(1 to len) & ":  stack_loop_if_enter_level(" & integer'image(stack_ptr) & ")=" & integer'image(if_level);
+                        report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
+                    end if;
                     act_loop_num := act_loop_num + 1;
-                    stack_loop_num(stack_ptr + 1) := act_loop_num;
-                    stack_loop_line(stack_ptr + 1)(act_loop_num) := v_line;
-                    stack_curr_loop_count(stack_ptr + 1)(act_loop_num) := 0;
-                    stack_term_loop_count(stack_ptr + 1)(act_loop_num) := par1;
-                -- assert false
-                -- report " line " & (integer'image(file_line)) & " executing loop command" & lf & "  nested loop:" & ht & integer'image(act_loop_num) & lf & "  loop length:" & ht & integer'image(par1)
-                -- severity note;
+                    stack_loop_num(stack_ptr) := act_loop_num;
+                    stack_loop_line(stack_ptr)(act_loop_num) := v_line;
+                    stack_curr_loop_count(stack_ptr)(act_loop_num) := 0;
+                    stack_term_loop_count(stack_ptr)(act_loop_num) := par1;
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ":  incremented stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
+                        report instruction(1 to len) & ":  set to goto v_line: stack_loop_line(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(v_line);
+                        report instruction(1 to len) & ":  stack_curr_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(stack_curr_loop_count(stack_ptr)(act_loop_num));
+                        report instruction(1 to len) & ":  stack_term_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(stack_term_loop_count(stack_ptr)(act_loop_num));
+                    end if;
 
                 -- end loop
                 elsif instruction(1 to len) = INSTR_END_LOOP then
-                    act_loop_num := stack_loop_num(stack_ptr + 1);
-                    act_curr_loop_count := stack_curr_loop_count(stack_ptr + 1)(act_loop_num);
+                    act_loop_num := stack_loop_num(stack_ptr);
+                    act_curr_loop_count := stack_curr_loop_count(stack_ptr)(act_loop_num);
                     act_curr_loop_count := act_curr_loop_count + 1;
-                    stack_curr_loop_count(stack_ptr + 1)(act_loop_num) := act_curr_loop_count;
-                    act_term_loop_count := stack_term_loop_count(stack_ptr + 1)(act_loop_num);
+                    stack_curr_loop_count(stack_ptr)(act_loop_num) := act_curr_loop_count;
+                    act_term_loop_count := stack_term_loop_count(stack_ptr)(act_loop_num);
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
+                        report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
+                        report instruction(1 to len) & ":  set incremented stack_curr_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_curr_loop_count);
+                        report instruction(1 to len) & ":  stack_term_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_term_loop_count);
+                    end if;
                     if (act_curr_loop_count = act_term_loop_count) then
                         act_loop_num := act_loop_num - 1;
-                        stack_loop_num(stack_ptr + 1) := act_loop_num;
+                        stack_loop_num(stack_ptr) := act_loop_num;
+                        if to_signed(trc_on, 32)(5) = '1' then
+                            report instruction(1 to len) & ":  expired, set decremented stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
+                        end if;
                     else
-                        v_line := stack_loop_line(stack_ptr + 1)(act_loop_num);
+                        v_line := stack_loop_line(stack_ptr)(act_loop_num);
+                        if to_signed(trc_on, 32)(5) = '1' then
+                            report instruction(1 to len) & ":  next goto v_line: stack_loop_line(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(v_line);
+                        end if;
                     end if;
 
                 -- abort
@@ -1207,9 +1258,14 @@ begin
                 -- end interrupt
                 -- return
                 elsif instruction(1 to len) = INSTR_RETURN or instruction(1 to len) = INSTR_END_PROC or instruction(1 to len) = INSTR_END_INTERRUPT then
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
+                    end if;
                     act_loop_num := stack_loop_num(stack_ptr);
                     if act_loop_num > 0 then
                         if_level := stack_loop_if_enter_level(stack_ptr);
+                        stack_loop_num(stack_ptr) := 0;
                     end if;
                     if stack_ptr = 0 then
                         report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
@@ -1228,16 +1284,32 @@ begin
                     end if;
                     -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ":  if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
+                        report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
+                        report instruction(1 to len) & ":  decremented stack_ptr:" & integer'image(stack_ptr);
+                        report instruction(1 to len) & ":  set to goto v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                    end if;
 
                 -- call $some_proc
                 elsif instruction(1 to len) = INSTR_CALL then
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
+                    end if;
                     assert stack_ptr < 31
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;
                     stack(stack_ptr) := v_line;
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                    end if;
                     stack_ptr := stack_ptr + 1;
-                    -- report " line " & (integer'image(file_line)) & "call stack_ptr incremented to = " & integer'image(stack_ptr);
                     v_line := par1 - 1;
+                    if to_signed(trc_on, 32)(5) = '1' then
+                        report instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                        report instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                    end if;
 
                 -- log message $INFO "some message"
                 -- log message  $INFO "misc_proc severity: {}" $INFO

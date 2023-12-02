@@ -724,14 +724,13 @@ Sets the global resume behavior for verify instructions. On a verify mismatch, t
 > ${\color{purple}\texttt{finish}}$  
 > ${\color{purple}\texttt{end proc}}$
 
-This example can be found unit tests in the folder test in this repository in the subfolder others and there in the subfolder hello_world, see [hello_world](./test/others/hello_world).
+This example is a unit test too and can be found in the folder 'test/others/hello_world', see [hello_world](./test/others/hello_world).
 
 An overiew can also find here: [command_list.stm](./command_list.stm). 
 
 ### Unit Tests
 
-The test folder contains for all commands some unittest.  
-With this we can verify if all commands works as expected.
+The test folder contains unittest for all commands. Thus all commands are verified for each release by regression tests. 
 
 ### SPI Controller
 
