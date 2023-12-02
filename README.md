@@ -724,9 +724,9 @@ Sets the global resume behavior for verify instructions. On a verify mismatch, t
 > ${\color{purple}\texttt{finish}}$  
 > ${\color{purple}\texttt{end proc}}$
 
-This example is a unit test too and can be found in the folder 'test/others/hello_world', see [hello_world](./test/others/hello_world).
+This example is a unit test too and can be found in the repository folder [test/others/hello_world](./test/others/hello_world).
 
-An overiew can also find here: [command_list.stm](./command_list.stm). 
+An demonstration of all commands is in the file [command_list.stm](./command_list.stm) in the repository root folder.. 
 
 ### Unit Tests
 
