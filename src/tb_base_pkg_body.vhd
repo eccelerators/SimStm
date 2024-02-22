@@ -69,7 +69,7 @@ package body tb_base_pkg is
                     int_number := 1;
                 when others =>
                     assert false
-                    report lf & "error: bin2integer found non binary didgit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "error: bin2integer found non binary digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (2 ** power));
@@ -95,7 +95,7 @@ package body tb_base_pkg is
             when '9' => i := 9;
             when others =>
                 assert (false)
-                report lf & "error: c2int was given a non number didgit."
+                report lf & "error: c2int was given a non number digit."
                 severity failure;
         end case;
         return i;
@@ -122,7 +122,7 @@ package body tb_base_pkg is
             when 'f' | 'F' => return "1111";
             when others =>
                 assert (false)
-                report lf & "error: c2std_vec found non hex didgit on file line "
+                report lf & "error: c2std_vec found non hex digit on file line "
                 severity failure;
                 return "XXXX";
         end case;
@@ -165,6 +165,50 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
+    
+    function ew_str_cat(s1 : stm_text;
+                        s2 : text_field;
+                        s3 : integer) return stm_text is
+        variable i : integer;
+        variable j : integer;
+        variable sc : stm_text;
+    begin
+        sc := s1;
+        i := 1;
+        while sc(i) /= nul loop
+            i := i + 1;
+        end loop;
+        j := s3;
+        while s2(j) /= nul loop
+            sc(i) := s2(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
+        return sc;
+    end function;
+    
+    function ew_str_cat(s1 : stm_text;
+                        s2 : text_field;
+                        s3 : integer;
+                        s4 : character ) return stm_text is
+        variable i : integer;
+        variable j : integer;
+        variable sc : stm_text;
+    begin
+        sc := s1;
+        i := 1;
+        while sc(i) /= nul loop
+            i := i + 1;
+        end loop;
+        j := s3;
+        while s2(j) /= nul loop
+            sc(i) := s2(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
+        sc(i) := s4;
+        return sc;
+    end function;
 
     function ew_to_char(int : integer) return character is
         variable c : character;
@@ -189,7 +233,7 @@ package body tb_base_pkg is
             when 15 => c := 'F';
             when others =>
                 assert false
-                report lf & "error: ew_to_char was given a non number didgit."
+                report lf & "error: ew_to_char was given a non number digit."
                 severity failure;
         end case;
         return c;
@@ -466,7 +510,7 @@ package body tb_base_pkg is
                     int_number := 15;
                 when others =>
                     assert false
-                    report lf & "error: hex2integer found non hex didgit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "error: hex2integer found non hex digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (16 ** power));
@@ -541,7 +585,7 @@ package body tb_base_pkg is
             when "1111" => return 'F';
             when others =>
                 assert (false)
-                report lf & "error: std_vec2c found non-binary didgit in vec "
+                report lf & "error: std_vec2c found non-binary digit in vec "
                 severity failure;
                 return 'X';
         end case;
@@ -1125,10 +1169,42 @@ package body tb_base_pkg is
     procedure stm_text_ptr_truncate_trailing_quote(variable si : stm_text_ptr;
                                                    variable so : inout stm_text_ptr) is
         variable i : integer := 1;
+        variable o : integer := 1;
     begin
-        while si(i) /= nul and i /= max_str_len and si(i) /= '"' loop -- "
-            so(i) := si(i);
-            i := i + 1;
+        while si(i) /= nul and i /= max_str_len loop 
+            if i+1 /= max_str_len then
+                if si(i+1) /= nul then            
+                    if si(i) = '\' and si(i+1) = '"' then -- "  
+                        -- skip '/' before '"'    "
+                        i := i + 1;
+                        so(o) := si(i);
+                        i := i + 1;
+                        o := o + 1;       
+                    else
+                       -- don't skip '/' before others but '"'    "
+                       if si(i) = '"' then -- this is the trailing '"'    "
+                               exit;
+                       end if;
+                       so(o) := si(i);   
+                       i := i + 1;
+                       o := o + 1;            
+                    end if;
+                else
+                    if si(i) = '"' then -- this is the trailing '"'    "
+                        exit;
+                    end if;
+                    so(o) := si(i);   
+                    i := i + 1;
+                    o := o + 1;        
+                end if;
+            else
+                if si(i) = '"' then -- this is the trailing '"'    "
+                    exit;
+                end if;
+                so(o) := si(i);   
+                i := i + 1;
+                o := o + 1;                          
+            end if;        
         end loop;
     end procedure;
 

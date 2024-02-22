@@ -186,9 +186,10 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := 0;
-            str_ptr_truncated := new stm_text;
-            stm_text_ptr_truncate_trailing_quote(str_ptr, str_ptr_truncated);
-            temp_var.var_stm_text := str_ptr_truncated;
+            --str_ptr_truncated := new stm_text;
+            --stm_text_ptr_truncate_trailing_quote(str_ptr, str_ptr_truncated);
+            --temp_var.var_stm_text := str_ptr_truncated;
+            temp_var.var_stm_text := str_ptr;
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
@@ -784,6 +785,21 @@ package body tb_interpreter_pkg is
         get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
     end procedure;
+    
+    procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field) is
+        variable inst_ptr : stim_line_ptr;
+    begin
+        inst_ptr := inst_sequ;
+        while inst_ptr.next_rec /= null loop
+            if inst_ptr.line_number = v_line then
+                exit;
+            else
+                inst_ptr := inst_ptr.next_rec;
+            end if;
+        end loop;
+        inst_field_1 := inst_ptr.inst_field_1;
+    end procedure;   
+    
 
     procedure read_include_file(constant path_name : string;
                                 variable name : text_line;
@@ -1029,11 +1045,17 @@ package body tb_interpreter_pkg is
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable ptr : in stm_text_ptr;
-                                       variable stm_text_substituded : out stm_text;
-                                       constant b : in base) is
+                                       variable stack_ptr : integer;
+                                       variable stack_called_files : stack_text_line_array;
+                                       variable stack_called_file_line_numbers: stack_numbers_array;
+                                       variable stack_called_labels : stack_text_field_array;
+                                       variable stm_text_substituded : out stm_text) is
         variable src_i : integer;
         variable src_tail_i : integer;
         variable dest_i : integer;
+        variable f_src_i : integer;
+        variable f_dest_i : integer;
+        variable f_dest_txt_str : stm_text;
         variable k : integer;
         variable src_tail_begin : integer;
         variable dest_txt_str : stm_text;
@@ -1042,6 +1064,19 @@ package body tb_interpreter_pkg is
         variable tmp_field : text_field;
         variable tmp_i : integer;
         variable input_txt : stm_text;
+        
+        variable insert_var : boolean;
+        variable format : base;    
+        variable insert_call_stack_label : boolean;
+        variable previous_level : integer;       
+        variable insert_call_stack_file : boolean;    
+        variable insert_call_stack_line_number : boolean;
+        variable insert_call_stack_test_name : boolean;
+        variable stack_called_file : text_field;
+        variable stack_called_file_line_number: integer;
+        variable stack_called_label : text_field;
+        variable stack_called_test_name : text_field;
+        
     begin
         if ptr = null then
             return;
@@ -1051,17 +1086,35 @@ package body tb_interpreter_pkg is
         src_i := 1;
         src_tail_begin := 0;
         while src_i <= c_stm_text_len loop
-            if ptr(src_i) = '"' then
-                src_tail_begin := src_i;
-                exit;
+            if src_i > 1 then
+                if ptr(src_i-1) = '\' and ptr(src_i) = '"' then  -- "
+                    src_i := src_i + 1;
+                else
+                    if ptr(src_i) = '"' then
+                        src_tail_begin := src_i;
+                        exit;
+                    end if;    
+                    src_i := src_i + 1;              
+                end if;
+            else
+                if ptr(src_i) = '"' then
+                    src_tail_begin := src_i;
+                    exit;
+                end if;
+                src_i := src_i + 1;
             end if;
-            src_i := src_i + 1;
         end loop;
         src_i := 1;
         src_tail_i := src_tail_begin;
         dest_i := 1;
         dest_txt_str := (others => nul);
         while src_i <= src_tail_begin and dest_i <= c_stm_text_len loop
+            if src_i < src_tail_begin then 
+                if ptr(src_i) = '\' and ptr(src_i+1)= '"' then  -- "
+                    src_i := src_i + 1;
+                end if;
+            end if;
+        
             -- copy until next '{'
             while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
                 if ptr(src_i) = '{' then
@@ -1074,18 +1127,97 @@ package body tb_interpreter_pkg is
             end loop;
             if src_i = src_tail_begin then
                 -- src end reached
-                stm_text_substituded := dest_txt_str;
+                f_src_i := 1;
+                f_dest_i := 1;
+                f_dest_txt_str := (others => nul);                
+                while f_src_i < dest_i loop
+                    if f_src_i+1 < dest_i then
+                        if dest_txt_str(f_src_i) = '\' and dest_txt_str(f_src_i+1) = '"' then -- " 
+                            -- skip '/' before '"'    "
+                            f_src_i := f_src_i + 1;
+                            f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
+                            f_src_i := f_src_i + 1;
+                            f_dest_i := f_dest_i + 1;       
+                        else
+                           -- don't skip '/' before others but '"'    "
+                            f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
+                            f_src_i := f_src_i + 1;
+                            f_dest_i := f_dest_i + 1;              
+                        end if;
+                    else
+                        f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
+                        f_src_i := f_src_i + 1;
+                        f_dest_i := f_dest_i + 1;                
+                    end if;
+                end loop;
+                stm_text_substituded := f_dest_txt_str;
                 return;
             end if;
             -- place to embed a var found
+            insert_call_stack_label := false;  
+            insert_call_stack_file := false;
+            insert_call_stack_line_number := false;
+            insert_call_stack_test_name := false;
             if ptr(src_i) = '{' then
                 src_i := src_i + 1;
+                format := hex;
+                insert_var := true;
                 while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
                     if ptr(src_i) = '}' then
+                        -- default insert variable hex
                         exit;
                     else
                         -- skip until next '}'
-                        src_i := src_i + 1;
+                        if ptr(src_i) = ':' then 
+                            -- insert variable decimal, binary or octal
+                            src_i := src_i + 1;
+                            if src_i = src_tail_begin then
+                                exit;
+                            end if;                       
+                            if ptr(src_i) = 'd' then
+                                format := dec;                               
+                            elsif ptr(src_i) = 'b' then
+                                format := bin;
+                            elsif ptr(src_i) = 'o' then
+                                format := oct;
+                            end if;              
+                            src_i := src_i + 1;
+                            if src_i = src_tail_begin then
+                                exit;
+                            end if;
+                        elsif ptr(src_i) = '@' then 
+                            insert_var := false;
+                            src_i := src_i + 1;
+                            if src_i = src_tail_begin then
+                                exit;
+                            end if;                        
+                            if ptr(src_i) = 'c' then 
+                                insert_call_stack_label := true;  
+                            elsif ptr(src_i) = 'f' then 
+                                insert_call_stack_file := true;
+                            elsif ptr(src_i) = 'l' then 
+                                insert_call_stack_line_number := true;
+                            elsif ptr(src_i) = 't' then 
+                                insert_call_stack_test_name := true;
+                            else
+                                assert (false)
+                                report lf & "error: wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                                severity failure;                          
+                            end if;
+                            src_i := src_i + 1;
+                            if src_i = src_tail_begin then
+                                exit;
+                            end if;             
+                            previous_level := c2int(ptr(src_i));                                 
+                            src_i := src_i + 1;
+                            if src_i = src_tail_begin then
+                                exit;
+                            end if; 
+                        else 
+                            assert (false)
+                            report lf & "error: wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                            severity failure;                          
+                        end if; 
                     end if;
                 end loop;
             end if;
@@ -1096,33 +1228,74 @@ package body tb_interpreter_pkg is
                 report lf & "error: missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;
             end if;
-            while src_tail_i <= c_stm_text_len loop
-                if ptr(src_tail_i) = '$' then
-                    exit;
-                else
-                    src_tail_i := src_tail_i + 1;
-                end if;
-            end loop;
-            assert ptr(src_tail_i) = '$'
-            report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
-            severity failure;
-            tmp_field := (others => nul);
-            tmp_i := 1;
-            tmp_field(tmp_i) := ptr(src_tail_i);
-            src_tail_i := src_tail_i + 1;
-            tmp_i := tmp_i + 1;
-            -- parse to the next space
-            while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul loop
+            
+            if insert_var then  
+                while src_tail_i <= c_stm_text_len loop
+                    if ptr(src_tail_i) = '$' then
+                        exit;
+                    else
+                        src_tail_i := src_tail_i + 1;
+                    end if;
+                end loop;
+                assert ptr(src_tail_i) = '$'
+                report lf & "error: missing variable for substitution bracket " & stm_text_crop(input_txt)
+                severity failure;
+                tmp_field := (others => nul);
+                tmp_i := 1;
                 tmp_field(tmp_i) := ptr(src_tail_i);
                 src_tail_i := src_tail_i + 1;
                 tmp_i := tmp_i + 1;
-            end loop;
-            access_variable(var_list, tmp_field, v1, valid);
-            assert (valid = 1)
-            report lf & "invalid variable found in stm_text_ptr: ignoring."
-            severity warning;
-            if valid = 1 then
-                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, b));
+                -- parse to the next space
+                while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul loop
+                    tmp_field(tmp_i) := ptr(src_tail_i);
+                    src_tail_i := src_tail_i + 1;
+                    tmp_i := tmp_i + 1;
+                end loop;
+                access_variable(var_list, tmp_field, v1, valid);
+                assert (valid = 1)
+                report lf & "invalid variable found in stm_text_ptr: ignoring."
+                severity warning;
+                if valid = 1 then
+                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, format));
+                    k := 1;
+                    while dest_txt_str(k) /= nul loop
+                        k := k + 1;
+                    end loop;
+                    dest_i := k;
+                end if;
+            elsif insert_call_stack_file then
+                stack_called_file := stack_called_files(stack_ptr - previous_level)(1 to max_field_len);               
+                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_file);
+                k := 1;
+                while dest_txt_str(k) /= nul loop
+                    k := k + 1;
+                end loop;
+                dest_i := k;          
+            elsif insert_call_stack_line_number then
+                stack_called_file_line_number := stack_called_file_line_numbers(stack_ptr - previous_level);   
+                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(stack_called_file_line_number, dec));
+                k := 1;
+                while dest_txt_str(k) /= nul loop
+                    k := k + 1;
+                end loop;
+                dest_i := k;
+            elsif insert_call_stack_label then
+                stack_called_label := stack_called_labels(stack_ptr - previous_level); 
+                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label);
+                k := 1;
+                while dest_txt_str(k) /= nul loop
+                    k := k + 1;
+                end loop;
+                dest_i := k;
+            elsif insert_call_stack_test_name then                           
+                for i in 2 to stack_ptr - previous_level loop                 
+                     stack_called_test_name := stack_called_labels(i)(1 to max_field_len); 
+                     if i < stack_ptr - previous_level then
+                         dest_txt_str := ew_str_cat(dest_txt_str, stack_called_test_name, 2, '_');                    
+                     else
+                         dest_txt_str := ew_str_cat(dest_txt_str, stack_called_test_name, 2);      
+                     end if;
+                end loop;
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
@@ -1451,10 +1624,13 @@ package body tb_interpreter_pkg is
 
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
                              variable ptr : in stm_text_ptr;
-                             constant b : in base) is
+                             variable stack_ptr : integer;
+                             variable stack_called_files : stack_text_line_array;
+                             variable stack_called_file_line_numbers: stack_numbers_array;
+                             variable stack_called_labels : stack_text_field_array) is
         variable stm_text_substituded : stm_text;
     begin
-        stm_text_substitude_wvar(var_list, ptr, stm_text_substituded, b);
+        stm_text_substitude_wvar(var_list, ptr, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded);
         print(stm_text_substituded);
     end procedure;
 

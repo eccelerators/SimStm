@@ -211,6 +211,9 @@ package tb_interpreter_pkg is
     -- procedure to print instruction records to stdout  *for debug*
     procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
     
+    -- procedure to get parameter 1 instruction text which is the called label in case of a call instrucution
+    procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field); 
+    
     procedure read_include_file(constant path_name : string;
                                 variable name : text_line;
                                 variable sequ_numb : inout integer;
@@ -235,8 +238,11 @@ package tb_interpreter_pkg is
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable ptr : in stm_text_ptr;
-                                       variable stm_text_substituded : out stm_text;
-                                       constant b : in base);
+                                       variable stack_ptr : integer;
+                                       variable stack_called_files : stack_text_line_array;
+                                       variable stack_called_file_line_numbers: stack_numbers_array;
+                                       variable stack_called_labels : stack_text_field_array;
+                                       variable stm_text_substituded : out stm_text);
 
     procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
                              variable file_list : in file_def_ptr;
@@ -260,7 +266,10 @@ package tb_interpreter_pkg is
     --procedure print stim txt sub variables found
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
                              variable ptr : in stm_text_ptr;
-                             constant b : in base);
+                             variable stack_ptr : integer;
+                             variable stack_called_files : stack_text_line_array;
+                             variable stack_called_file_line_numbers: stack_numbers_array;
+                             variable stack_called_labels : stack_text_field_array);
 
     --  update_variable
     --     inputs:

@@ -71,7 +71,11 @@ package tb_base_pkg is
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
-
+    
+    type stack_text_field_array is array(31 downto 0) of text_field;
+    type stack_text_line_array is array(31 downto 0) of text_line;
+    type stack_numbers_array is array(31 downto 0) of integer;
+    
     -- define the stimulus line record and access
     type stim_line;
     type stim_line_ptr is access stim_line; -- pointer to stim_line record
@@ -180,6 +184,15 @@ package tb_base_pkg is
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field) return stm_text;
+                        
+    function ew_str_cat(s1 : stm_text;
+                        s2 : text_field;
+                        s3 : integer) return stm_text;
+                        
+    function ew_str_cat(s1 : stm_text;
+                        s2 : text_field;
+                        s3 : integer;
+                        s4 : character ) return stm_text;
 
     function ew_to_char(int : integer) return character;
 
