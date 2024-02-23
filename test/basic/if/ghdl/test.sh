@@ -61,7 +61,6 @@ test multi if (4)
 enter multi else 1
 test multi if (5)
 enter multi else 1
-enter multi else 2
 EOF
 )
 out_not_contain="No enter if"

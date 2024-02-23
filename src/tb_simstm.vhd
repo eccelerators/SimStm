@@ -740,7 +740,10 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        txt_to_string(var_stm_text, user_file_path_string);
+                        stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                        var_stm_text_substituded_ptr := new stm_text;
+                        stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
+                        txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
                         user_file_open_done := false;
                         if not user_file_in_use_0 and not user_file_open_done then
                             file_open(v_stat, user_file_0, stm_text_crop(user_file_path_string), read_mode);
@@ -815,16 +818,19 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    if var_stm_text = user_file_name_0 and user_file_in_use_0 then
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    var_stm_text_substituded_ptr := new stm_text;
+                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);  
+                    if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
                         file_close(user_file_0);
                         user_file_in_use_0 := false;
-                    elsif var_stm_text = user_file_name_1 and user_file_in_use_1 then
+                    elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
                         file_close(user_file_1);
                         user_file_in_use_1 := false;
-                    elsif var_stm_text = user_file_name_2 and user_file_in_use_2 then
+                    elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
                         file_close(user_file_2);
                         user_file_in_use_2 := false;
-                    elsif var_stm_text = user_file_name_3 and user_file_in_use_3 then
+                    elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
                         file_close(user_file_3);
                         user_file_in_use_3 := false;
                     else
@@ -843,7 +849,10 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
                     severity failure;
-                    stm_file_read_all(var_stm_lines, var_stm_text, valid);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    var_stm_text_substituded_ptr := new stm_text;
+                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
+                    stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file read not successful"
                     severity failure;
@@ -1061,9 +1070,9 @@ begin
                     end case;
                     if to_signed(trc_on, 32)(4) = '1' then  
                         if if_state(if_level) = true then               
-                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is true";
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
                         else
-                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is false";
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is false";
                         end if;
                     end if;
                     if if_state(if_level) = false then
@@ -1101,6 +1110,11 @@ begin
                     if to_signed(trc_on, 32)(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
+                        if if_state(if_level) = true then               
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
+                        else 
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is false";
+                        end if;
                     end if;
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
@@ -1144,9 +1158,9 @@ begin
                         end case;
                         if to_signed(trc_on, 32)(4) = '1' then  
                             if if_state(if_level) = true then               
-                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is true";
-                            else
-                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & "is false";
+                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
+                            else 
+                                report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is false";
                             end if;
                         end if;
                         if if_state(if_level) = false then
@@ -1182,21 +1196,34 @@ begin
                     if to_signed(trc_on, 32)(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
+                        if if_state(if_level) = true then               
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
+                        else 
+                            report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is false";
+                        end if;
                     end if;
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
                                          par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
-                                         last_sequ_num, last_sequ_ptr);
-                        while instruction(1 to len) /= INSTR_IF and instruction(1 to len) /= INSTR_END_IF loop
+                                         last_sequ_num, last_sequ_ptr);                       
+                        num_of_if_in_false_if_leave(if_level) := 0;
+                        while num_of_if_in_false_if_leave(if_level) /= 0 or instruction(1 to len) /= INSTR_END_IF loop
+                            if instruction(1 to len) = INSTR_IF then
+                                num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
+                            end if;
+                            if instruction(1 to len) = INSTR_END_IF then
+                                num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) - 1;
+                            end if;
                             assert v_line < inst_sequ.num_of_lines
-                            report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
+                            report " line " & (integer'image(file_line)) & " error:  else instruction unable to find terminating" & lf & "    end_if statement."
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
                                              par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
-                        end loop;
+                        end loop;                        
+                        
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     end if;
 
