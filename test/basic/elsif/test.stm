@@ -1,7 +1,7 @@
 var zero 0
 var one  1
 
-Main:
+testMain:
 proc
 
 	------------------------------------------

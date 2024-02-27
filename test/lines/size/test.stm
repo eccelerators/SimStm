@@ -4,7 +4,7 @@ array a_array 8
 var lines_size 0
 
 
-Main:
+testMain:
 proc       
 
     array set a_array 0 0

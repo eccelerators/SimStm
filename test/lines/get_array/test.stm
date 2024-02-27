@@ -10,7 +10,7 @@ var number_of_lines 0
 var index_of_line 0
 
 
-Main:
+testMain:
 proc       
 
     array set a_array 0 0

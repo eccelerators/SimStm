@@ -1,7 +1,7 @@
 var wb_value 0
 bus wb_bus 0
 
-Main:
+testMain:
 proc
 	wait 1000
 	bus write wb_bus  32 0 0x55555555

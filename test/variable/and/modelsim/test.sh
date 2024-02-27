@@ -21,10 +21,10 @@ out=$(cat out.log)
 out_expected=$(cat <<EOF
 # test_variable_1: 0xAAAA
 # test_variable_2: 0xFFFFFF
-# test_variable_1: 0x0A
+# test_variable_1: 0xA
 # test_variable_2: 0x14
-# test_variable_1: 0x00
-# test_variable_2: 0x04
+# test_variable_1: 0x0
+# test_variable_2: 0x4
 EOF
 )
 

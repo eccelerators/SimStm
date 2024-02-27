@@ -2,7 +2,7 @@ const year 0x2023
 var month 0x11
 var day 0x22
 
-Main:
+testMain:
 proc
 	loop 3
 		-- currently values are only printed in hex format

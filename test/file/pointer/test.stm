@@ -4,7 +4,7 @@ file tmp_file "unused"
 lines a_lines
 array a_array 8
 
-Main:
+testMain:
 proc       
 
     array set a_array 0 0

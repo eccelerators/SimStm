@@ -17,12 +17,12 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-test_variable_1: 0x01F4
+test_variable_1: 0x1F4
 test_variable_2: 0x1388
 test_variable_1: 0x32
 test_variable_2: 0xFA
-test_variable_1: 0x0A
-test_variable_2: 0x02
+test_variable_1: 0xA
+test_variable_2: 0x2
 EOF
 )
 

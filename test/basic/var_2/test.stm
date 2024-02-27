@@ -1,7 +1,7 @@
 var test_variable_1 1
 var test_variable_1 1
 
-Main:
+testMain:
 proc
 	finish
 end proc

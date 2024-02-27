@@ -17,11 +17,11 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-aab: 0x01
-abb: 0x02
-bba: 0x03
-cbb: 0x04
-aba: 0x05
+aab: 0x1
+abb: 0x2
+bba: 0x3
+cbb: 0x4
+aba: 0x5
 EOF
 )
 

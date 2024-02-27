@@ -11,7 +11,7 @@ const STATUS_MODE_ERROR 3
 
 var status 0
 
-Main:
+testMain:
 proc
 
     array set a_array 0 0

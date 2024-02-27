@@ -2,7 +2,7 @@ array array_name 3
 
 var var_name 10
 
-Main:
+testMain:
 proc
 
 	array set array_name 0 3

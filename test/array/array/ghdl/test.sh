@@ -18,9 +18,9 @@ error_not_contain="error"
 out=$(cat out.log)
 out_expected=$(cat <<EOF
 start simulation
-var_name: 0x03
-var_name: 0x04D2
-var_name: 0x03
+var_name: 0x3
+var_name: 0x4D2
+var_name: 0x3
 EOF
 )
 out_expected_2="test finished with no errors!!"

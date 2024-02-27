@@ -19,26 +19,26 @@ error_not_contain="error"
 
 out=$(cat out.log)
 out_expected=$(cat <<EOF
-# random_number: 0x0A
-# random_number: 0x0A
-# random_number: 0x07
-# random_number: 0x03
-# random_number: 0x00
-# random_number: 0x01
-# random_number: 0x07
-# random_number: 0x00
-# random_number: 0x02
-# random_number: 0x01
-# random_number: 0x07
-# random_number: 0x01
-# random_number: 0x0A
-# random_number: 0x01
-# random_number: 0x03
-# random_number: 0x02
-# random_number: 0x07
-# random_number: 0x0A
-# random_number: 0x01
-# random_number: 0x09
+# random_number: 0xA
+# random_number: 0xA
+# random_number: 0x7
+# random_number: 0x3
+# random_number: 0x0
+# random_number: 0x1
+# random_number: 0x7
+# random_number: 0x0
+# random_number: 0x2
+# random_number: 0x1
+# random_number: 0x7
+# random_number: 0x1
+# random_number: 0xA
+# random_number: 0x1
+# random_number: 0x3
+# random_number: 0x2
+# random_number: 0x7
+# random_number: 0xA
+# random_number: 0x1
+# random_number: 0x9
 EOF
 )
 

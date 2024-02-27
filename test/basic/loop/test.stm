@@ -1,6 +1,6 @@
 
 
-Main:
+testMain:
 proc
 	loop 4
 	    log message 0 "log 0"

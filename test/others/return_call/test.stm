@@ -6,7 +6,7 @@ var test_variable_5 5
 
 
 
-Main:
+testMain:
 proc
 
 	call $var1

@@ -1,5 +1,5 @@
 
-Main:
+testMain:
 proc
 	log message 0 "log 0"
 	log message 1 "log 1"

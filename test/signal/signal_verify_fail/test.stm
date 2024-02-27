@@ -10,7 +10,7 @@ signal out_signal_3 3
 
 var read_back 0xffff
 
-Main:
+testMain:
 proc
 
 	------------------------------------------

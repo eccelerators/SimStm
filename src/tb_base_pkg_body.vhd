@@ -239,74 +239,6 @@ package body tb_base_pkg is
         return c;
     end function;
 
-    function ew_to_str_len(int : integer;
-                           b : base) return text_field is
-        variable temp : text_field;
-        variable temp1 : text_field;
-        variable radix : integer := 0;
-        variable num : integer := 0;
-        variable power : integer := 1;
-        variable len : integer := 1; -- adjusted min. length to 2 for bytes
-        variable pre : string(1 to 2);
-        variable ix : integer;
-        variable j : integer;
-        variable vec : std_logic_vector(31 downto 0);
-    begin
-        num := int;
-        temp := (others => nul);
-        case b is
-            when bin =>
-                radix := 2; -- depending on what
-                pre := "0b";
-            when oct =>
-                radix := 8; -- base the number is
-                pre := "0o";
-            when hex =>
-                radix := 16; -- to be displayed as
-                pre := "0x";
-            when dec =>
-                radix := 10; -- choose a radix range
-                pre := (others => nul);
-        end case;
-        -- now jump through hoops because of sign
-        if (num < 0 and b = hex) then
-            vec := std_logic_vector(to_signed(int, 32));
-            temp(1) := std_vec2c(vec(31 downto 28));
-            temp(2) := std_vec2c(vec(27 downto 24));
-            temp(3) := std_vec2c(vec(23 downto 20));
-            temp(4) := std_vec2c(vec(19 downto 16));
-            temp(5) := std_vec2c(vec(15 downto 12));
-            temp(6) := std_vec2c(vec(11 downto 8));
-            temp(7) := std_vec2c(vec(7 downto 4));
-            temp(8) := std_vec2c(vec(3 downto 0));
-        else
-            while num >= radix loop -- determine how many
-                len := len + 1; -- characters required
-                num := num / radix; -- to represent the
-            end loop; -- number.
-            if (len mod 2 > 0) then -- is odd number, add one
-                len := len + 1;
-            end if;
-            for i in len downto 1 loop -- convert the number to
-                temp(i) := ew_to_char(int / power mod radix); -- a string starting
-                power := power * radix; -- with the right hand
-            end loop; -- side.
-        end if;
-        -- add prefix if is one
-        if (pre(1) /= nul) then
-            temp1 := temp;
-            ix := 1;
-            j := 3;
-            temp(1 to 2) := pre;
-            while (temp1(ix) /= nul) loop
-                temp(j) := temp1(ix);
-                ix := ix + 1;
-                j := j + 1;
-            end loop;
-        end if;
-        return temp;
-    end function;
-
     function ew_to_str(int : integer;
                        b : base) return text_field is
         variable temp : text_field;
@@ -542,6 +474,18 @@ package body tb_base_pkg is
     end function;
 
     procedure init_text_field(variable sourcestr : in string;
+                              variable destfield : out text_field) is
+        variable tempfield : text_field;
+    begin
+        for i in 1 to sourcestr'length loop
+            tempfield(i) := sourcestr(i);
+        end loop;
+        for i in 1 to text_field'length loop
+            destfield(i) := tempfield(i);
+        end loop;
+    end procedure;
+    
+    procedure init_const_text_field(constant sourcestr : in string;
                               variable destfield : out text_field) is
         variable tempfield : text_field;
     begin

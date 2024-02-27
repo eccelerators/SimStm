@@ -1,4 +1,4 @@
-Main:
+testMain:
 proc
 	abort
 end proc

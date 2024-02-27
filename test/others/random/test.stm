@@ -1,7 +1,7 @@
 var random_number 0
 
 
-Main:
+testMain:
 proc
 	loop 20
 	    random random_number 0 10

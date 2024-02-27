@@ -1,6 +1,6 @@
 lines a_lines
 
-Main:
+testMain:
 proc       
     lines append message a_lines "line 0"
     lines append message a_lines "line 1"

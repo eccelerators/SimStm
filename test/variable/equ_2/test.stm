@@ -1,6 +1,6 @@
 const test_variable_1 1
 
-Main:
+testMain:
 proc
 	equ   test_variable_1 10
 	

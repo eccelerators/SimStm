@@ -3,7 +3,7 @@ array des_array 1
 
 var var_name 0
 
-Main:
+testMain:
 proc
 
 	array size src_array var_name

@@ -198,11 +198,6 @@ package tb_base_pkg is
 
     --  to_str function  with base parameter
     --     convert integer to number base
-    function ew_to_str_len(int : integer;
-                           b : base) return text_field;
-
-    --  to_str function  with base parameter
-    --     convert integer to number base
     function ew_to_str(int : integer;
                        b : base) return text_field;
 
@@ -248,6 +243,9 @@ package tb_base_pkg is
     function is_space(constant c : in character) return boolean;
 
     procedure init_text_field(variable sourcestr : in string;
+                              variable destfield : out text_field);
+                              
+    procedure init_const_text_field(constant sourcestr : in string;
                               variable destfield : out text_field);
 
     -- procedure to print loggings to stdout

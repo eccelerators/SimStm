@@ -1,7 +1,7 @@
 const test_variable_1 1
 const test_variable_2 2
 
-Main:
+testMain:
 proc
 
 	log message 0 "test_variable_1: {}" $test_variable_1

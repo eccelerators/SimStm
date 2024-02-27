@@ -4,7 +4,7 @@ const marker_15 15
 const val_marker_low 0
 const val_marker_high 1
 
-Main:
+testMain:
 proc
 
 	wait 100

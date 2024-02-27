@@ -1071,11 +1071,9 @@ package body tb_interpreter_pkg is
         variable previous_level : integer;       
         variable insert_call_stack_file : boolean;    
         variable insert_call_stack_line_number : boolean;
-        variable insert_call_stack_test_name : boolean;
         variable stack_called_file : text_field;
         variable stack_called_file_line_number: integer;
         variable stack_called_label : text_field;
-        variable stack_called_test_name : text_field;
         
     begin
         if ptr = null then
@@ -1157,7 +1155,6 @@ package body tb_interpreter_pkg is
             insert_call_stack_label := false;  
             insert_call_stack_file := false;
             insert_call_stack_line_number := false;
-            insert_call_stack_test_name := false;
             if ptr(src_i) = '{' then
                 src_i := src_i + 1;
                 format := hex;
@@ -1197,8 +1194,6 @@ package body tb_interpreter_pkg is
                                 insert_call_stack_file := true;
                             elsif ptr(src_i) = 'l' then 
                                 insert_call_stack_line_number := true;
-                            elsif ptr(src_i) = 't' then 
-                                insert_call_stack_test_name := true;
                             else
                                 assert (false)
                                 report lf & "error: wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
@@ -1256,7 +1251,7 @@ package body tb_interpreter_pkg is
                 report lf & "invalid variable found in stm_text_ptr: ignoring."
                 severity warning;
                 if valid = 1 then
-                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(v1, format));
+                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(v1, format));
                     k := 1;
                     while dest_txt_str(k) /= nul loop
                         k := k + 1;
@@ -1273,7 +1268,7 @@ package body tb_interpreter_pkg is
                 dest_i := k;          
             elsif insert_call_stack_line_number then
                 stack_called_file_line_number := stack_called_file_line_numbers(stack_ptr - previous_level);   
-                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str_len(stack_called_file_line_number, dec));
+                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(stack_called_file_line_number, dec));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
@@ -1281,21 +1276,7 @@ package body tb_interpreter_pkg is
                 dest_i := k;
             elsif insert_call_stack_label then
                 stack_called_label := stack_called_labels(stack_ptr - previous_level); 
-                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label);
-                k := 1;
-                while dest_txt_str(k) /= nul loop
-                    k := k + 1;
-                end loop;
-                dest_i := k;
-            elsif insert_call_stack_test_name then                           
-                for i in 2 to stack_ptr - previous_level loop                 
-                     stack_called_test_name := stack_called_labels(i)(1 to max_field_len); 
-                     if i < stack_ptr - previous_level then
-                         dest_txt_str := ew_str_cat(dest_txt_str, stack_called_test_name, 2, '_');                    
-                     else
-                         dest_txt_str := ew_str_cat(dest_txt_str, stack_called_test_name, 2);      
-                     end if;
-                end loop;
+                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label, 2);
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;

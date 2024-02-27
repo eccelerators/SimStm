@@ -1,7 +1,7 @@
 array array_name 5544
 
 var var_name 10
-Main:
+testMain:
 proc
 	array size array_name var_name
 	log message 0 "var_name: {}" $var_name

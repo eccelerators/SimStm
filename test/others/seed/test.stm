@@ -5,7 +5,7 @@ var random_min 0
 var random_max 10
 
 
-Main:
+testMain:
 proc
 	seed 1
 	loop 5

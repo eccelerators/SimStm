@@ -8,7 +8,7 @@ signal out_signal_1 1
 signal out_signal_2 2
 signal out_signal_3 3
 
-Main:
+testMain:
 proc
 	wait 1000
 	signal write out_signal_2 1

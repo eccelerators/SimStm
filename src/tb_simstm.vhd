@@ -63,7 +63,8 @@ use work.tb_signals_pkg.all;
 entity tb_simstm is
     generic(
         stimulus_path : in string;
-        stimulus_file : in string
+        stimulus_file : in string;
+        stimulus_main_entry_label : in string := "$testMain"
     );
     port(
         clk : in std_logic;
@@ -220,7 +221,7 @@ begin
         variable var_stm_lines : t_stm_lines_ptr;
 
         variable main_label_text_field : text_field;
-        variable main_label_string : string(1 to 5) := "$Main";
+        -- variable main_label_string : string := stimulus_main_entry_label;
         variable main_line : integer := 0;
         variable main_entered : integer := 0;
 
@@ -239,7 +240,7 @@ begin
         simdone <= '0';
         marker <= (others => '0');
 
-        init_text_field(main_label_string, main_label_text_field);
+        init_const_text_field(stimulus_main_entry_label, main_label_text_field);
 
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;

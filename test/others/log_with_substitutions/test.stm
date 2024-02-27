@@ -6,7 +6,7 @@ var test_variable_5 0xF5
 
 const INFO 20
 
-Main:
+testMain:
 proc
 
 	log message 0 "test_variable_1: {}" $test_variable_1

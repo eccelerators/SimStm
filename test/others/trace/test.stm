@@ -7,7 +7,7 @@ const val_marker_high 1
 const val_trace_off 0
 const val_trace_on 1
 
-Main:
+testMain:
 proc
     trace 1
 	wait 100

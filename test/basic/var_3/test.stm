@@ -4,7 +4,7 @@ var bba 3
 var cbb 4
 var aba 5
 
-Main:
+testMain:
 proc
 	log message 0 "aab: {}" $aab
 	log message 0 "abb: {}" $abb

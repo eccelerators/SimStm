@@ -18,13 +18,13 @@ error_not_contain="error"
 out=$(cat out.log)
 out_expected=$(cat <<EOF
 start simulation
-var_name: 0x0A
-var_name: 0x01
-var_name: 0x0A
-var_name: 0x0A
-var_name: 0x0A
-var_name: 0x0B
-var_name: 0x0C
+var_name: 0xA
+var_name: 0x1
+var_name: 0xA
+var_name: 0xA
+var_name: 0xA
+var_name: 0xB
+var_name: 0xC
 src_array 5: 0x37
 EOF
 )

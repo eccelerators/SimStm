@@ -1,7 +1,7 @@
 var test_variable_1 1234
 var test_variable_2 1024
 
-Main:
+testMain:
 proc
 
 	log message 0 "test_variable_1: {}" $test_variable_1
