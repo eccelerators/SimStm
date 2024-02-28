@@ -1,0 +1,39 @@
+var test_variable_1 0xA1
+var test_variable_2 0xB2
+var test_variable_3 0xC3
+var test_variable_4 0xE4
+
+const INFO 20
+
+testMain:
+proc
+
+    call $testContent -- to have a reasonable call stack
+
+	log message $INFO "Main test finished {}" $INFO 
+	wait 1000
+	finish
+end proc
+
+testContent:
+proc
+
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_1: {} test_variable_2: {}" $test_variable_1 $test_variable_2
+	log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {}" $test_variable_1 $test_variable_2 $test_variable_2
+	log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {} test_variable_4: {}" $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4
+
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_1: {:x} test_variable_2: {:d} test_variable_3: {:o} test_variable_4: {:b}" $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4
+	
+	log message 0 'test_variable_1: {}' $test_variable_1
+	log message 0 'test_variable_1: {:x} test_variable_2: {:d} test_variable_3: {:o} test_variable_4: {:b}' $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4
+
+	log message 0 "label: {@c1}"
+	
+	log message 0 "file: '{@f1}', line: '{@l1}'"	
+	log message 0 'file: "{@f1}", line: "{@l1}"'
+    log message 0 "file: \"{@f1}\", line: \"{@l1}\""
+	log message 0 'file: \'{@f1}\', line: \'{@l1}\''
+
+end proc

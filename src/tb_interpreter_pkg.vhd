@@ -55,18 +55,19 @@ package tb_interpreter_pkg is
     --    instructions.  also variable addition are called and or handled.
     --    the instruction sequence link list.
     --     inputs:
-    --               stim_line_ptr   is the pointer to the instruction list
-    --               inst            is the instruction token
-    --               p1              paramitor one, corrisponds to field one of stimulus
-    --               p2              paramitor one, corrisponds to field two of stimulus
-    --               p3              paramitor one, corrisponds to field three of stimulus
-    --               p4              paramitor one, corrisponds to field four of stimulus
-    --               p5              paramitor one, corrisponds to field three of stimulus
-    --               p6              paramitor one, corrisponds to field four of stimulus
-    --               str_ptr         pointer to string for print instruction
-    --               token_num       the number of tokens, including instruction
-    --               sequ_num        is the stimulus file line referance  ie program line number
-    --               line_num        line number in the text file
+    --               stim_line_ptr        is the pointer to the instruction list
+    --               inst                 is the instruction token
+    --               p1                   paramitor one, corrisponds to field one of stimulus
+    --               p2                   paramitor one, corrisponds to field two of stimulus
+    --               p3                   paramitor one, corrisponds to field three of stimulus
+    --               p4                   paramitor one, corrisponds to field four of stimulus
+    --               p5                   paramitor one, corrisponds to field three of stimulus
+    --               p6                   paramitor one, corrisponds to field four of stimulus
+    --               str_ptr              pointer to string for print instruction
+    --               txt_enclosing_quote  enclosing quote of text string of this sequence
+    --               token_num            the number of tokens, including instruction
+    --               sequ_num             is the stimulus file line referance  ie program line number
+    --               line_num             line number in the text file
     --     outputs:
     --               none.  error will terminate sim
     procedure add_instruction(variable inst_list : inout stim_line_ptr;
@@ -79,6 +80,7 @@ package tb_interpreter_pkg is
                               variable p5 : in text_field;
                               variable p6 : in text_field;
                               variable str_ptr : in stm_text_ptr;
+                              variable txt_enclosing_quote : in character;
                               variable sequ_num : inout integer;
                               variable line_num : in integer;
                               variable file_name : in text_line;
@@ -92,7 +94,8 @@ package tb_interpreter_pkg is
                            variable name : in text_line;
                            variable length : in integer;
                            constant var_stm_type : in t_stm_var_type;
-                           variable str_ptr : in stm_text_ptr);
+                           variable str_ptr : in stm_text_ptr;
+                           variable txt_enclosing_quote : in character);
 
     --  access_variable
     --     inputs:
@@ -116,17 +119,18 @@ package tb_interpreter_pkg is
     --            file_list  link list of file names
     --            sequ_num   the sequence number to recover
     --
-    --  outputs:  inst  instruction text
-    --            p1    parameter 1 in integer form
-    --            p2    parameter 2 in integer form
-    --            p3    parameter 3 in integer form
-    --            p4    parameter 4 in integer form
-    --            p5    parameter 5 in integer form
-    --            p6    parameter 6 in integer form
-    --            txt   pointer to any text string of this sequence
-    --            inst_len  the lenth of inst in characters
-    --            fname  file name this sequence came from
-    --            file_line  the line number in fname this sequence came from
+    --  outputs:  inst                 instruction text
+    --            p1                   parameter 1 in integer form
+    --            p2                   parameter 2 in integer form
+    --            p3                   parameter 3 in integer form
+    --            p4                   parameter 4 in integer form
+    --            p5                   parameter 5 in integer form
+    --            p6                   parameter 6 in integer form
+    --            txt                  pointer to any text string of this sequence
+    --            txt_enclosing_quote  enclosing quote of text string of this sequence
+    --            inst_len             the lenth of inst in characters
+    --            fname                file name this sequence came from
+    --            file_line            the line number in fname this sequence came from
     --
     procedure access_inst_sequ(variable inst_sequ : in stim_line_ptr;
                                variable var_list : in var_field_ptr;
@@ -140,6 +144,7 @@ package tb_interpreter_pkg is
                                variable p5 : out integer;
                                variable p6 : out integer;
                                variable txt : out stm_text_ptr;
+                               variable txt_enclosing_quote : out character;
                                variable inst_len : out integer;
                                variable fname : out text_line;
                                variable file_line : out integer;
@@ -182,6 +187,7 @@ package tb_interpreter_pkg is
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable var_stm_text : out stm_text_ptr;
+                             variable var_stm_text_enclosing_quote : out character;
                              variable valid : out integer);
 
     --  index_stm_array
@@ -238,7 +244,8 @@ package tb_interpreter_pkg is
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable ptr : in stm_text_ptr;
-                                       variable stack_ptr : integer;
+                                       variable txt_enclosing_quote : in character;
+                                       variable stack_ptr : integer;                                      
                                        variable stack_called_files : stack_text_line_array;
                                        variable stack_called_file_line_numbers: stack_numbers_array;
                                        variable stack_called_labels : stack_text_field_array;
@@ -261,11 +268,13 @@ package tb_interpreter_pkg is
                             variable otoken6 : out text_field;
                             variable otoken7 : out text_field;
                             variable txt_ptr : out stm_text_ptr;
+                            variable txt_enclosing_quote : out character;
                             variable ovalid : out integer);
 
     --procedure print stim txt sub variables found
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
                              variable ptr : in stm_text_ptr;
+                             variable txt_enclosing_quote : in character;
                              variable stack_ptr : integer;
                              variable stack_called_files : stack_text_line_array;
                              variable stack_called_file_line_numbers: stack_numbers_array;

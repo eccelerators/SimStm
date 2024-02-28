@@ -64,6 +64,7 @@ test_others:
 	@cd ./test/others/call/${tool}/						&& ./test.sh
 	@cd ./test/others/end_proc/${tool}/					&& ./test.sh
 	@cd ./test/others/hello_world/${tool}/				&& ./test.sh
+	@cd ./test/others/log_with_formats/${tool}/			&& ./test.sh
 	@cd ./test/others/log_with_substitutions/${tool}/	&& ./test.sh
 	@cd ./test/others/log/${tool}/						&& ./test.sh
 	@cd ./test/others/marker/${tool}/					&& ./test.sh

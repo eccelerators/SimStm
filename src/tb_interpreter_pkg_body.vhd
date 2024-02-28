@@ -61,6 +61,7 @@ package body tb_interpreter_pkg is
                               variable p5 : in text_field;
                               variable p6 : in text_field;
                               variable str_ptr : in stm_text_ptr;
+                              variable txt_enclosing_quote : in character;
                               variable sequ_num : inout integer;
                               variable line_num : in integer;
                               variable file_name : in text_line;
@@ -96,9 +97,9 @@ package body tb_interpreter_pkg is
             --  add the variable to the variable pool, not considered an instruction
             if stm_var_type /= STM_LABEL_TYPE then
                 l := fld_len(p1);
-                add_variable(var_list, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
+                add_variable(var_list, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote);
             else
-                add_variable(var_list, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr);
+                add_variable(var_list, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote);
             end if;
             valid := 0; --removes this from the instruction list
         end if;
@@ -113,6 +114,7 @@ package body tb_interpreter_pkg is
             temp_stim_line.inst_field_5 := p5;
             temp_stim_line.inst_field_6 := p6;
             temp_stim_line.txt := str_ptr;
+            temp_stim_line.txt_enclosing_quote := txt_enclosing_quote;
             temp_stim_line.line_number := sequ_num;
             temp_stim_line.file_idx := file_idx;
             temp_stim_line.file_line := line_num;
@@ -140,13 +142,13 @@ package body tb_interpreter_pkg is
                            variable line_num : in integer;
                            variable name : in text_line;
                            variable length : in integer;
-                           constant var_stm_type : in t_stm_var_type;
-                           variable str_ptr : in stm_text_ptr
+                           constant var_stm_type : in t_stm_var_type;       
+                           variable str_ptr : in stm_text_ptr;
+                           variable txt_enclosing_quote : in character
                           ) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;
-        variable str_ptr_truncated : stm_text_ptr;
 
         procedure init_stm_lines_var is
         begin
@@ -155,6 +157,7 @@ package body tb_interpreter_pkg is
             temp_var.var_value := 0;
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
+            temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := new t_stm_lines;
             temp_var.var_stm_lines.stm_line_list := null;
@@ -172,6 +175,7 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := 0;
             temp_var.var_stm_text := null;
+            temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1);
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
@@ -186,10 +190,8 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := 0;
-            --str_ptr_truncated := new stm_text;
-            --stm_text_ptr_truncate_trailing_quote(str_ptr, str_ptr_truncated);
-            --temp_var.var_stm_text := str_ptr_truncated;
             temp_var.var_stm_text := str_ptr;
+            temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
@@ -202,6 +204,7 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := stim_to_integer(p2, name, line_num); -- convert text_field to integer
             temp_var.var_stm_text := null;
+            temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
@@ -214,6 +217,7 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := sequ_num;
             temp_var.var_stm_text := null;
+            temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
@@ -362,6 +366,7 @@ package body tb_interpreter_pkg is
                                variable p5 : out integer;
                                variable p6 : out integer;
                                variable txt : out stm_text_ptr;
+                               variable txt_enclosing_quote : out character;
                                variable inst_len : out integer;
                                variable fname : out text_line;
                                variable file_line : out integer;
@@ -420,6 +425,7 @@ package body tb_interpreter_pkg is
             fname(i) := temp_fn_prt.file_name(i);
         end loop;
         txt := inst_ptr.txt;
+        txt_enclosing_quote := inst_ptr.txt_enclosing_quote;
         temp_text_field := inst_ptr.inst_field_1;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
@@ -584,6 +590,7 @@ package body tb_interpreter_pkg is
             print("---- var_stm_type: STM_TEXT_TYPE");
             txt_to_string(ptr.var_stm_text, tmp_str);
             print("---- var_stm_text: " & tmp_str);
+            print("---- var_stm_text_enclosing_quote: " & ptr.var_stm_text_enclosing_quote);
         elsif ptr.var_stm_type = STM_ARRAY_TYPE then
             print("---- var_stm_type: STM_ARRAY_TYPE");
             stm_array := ptr.var_stm_array;
@@ -676,6 +683,7 @@ package body tb_interpreter_pkg is
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable var_stm_text : out stm_text_ptr;
+                             variable var_stm_text_enclosing_quote : out character;
                              variable valid : out integer) is
         variable ptr : var_field_ptr;
     begin
@@ -691,6 +699,7 @@ package body tb_interpreter_pkg is
         end loop;
         if ptr.var_index = index then
             var_stm_text := ptr.var_stm_text;
+            var_stm_text_enclosing_quote := ptr.var_stm_text_enclosing_quote;
             valid := 1;
         end if;
     end procedure;
@@ -820,6 +829,7 @@ package body tb_interpreter_pkg is
         variable t6 : text_field;
         variable t7 : text_field;
         variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
         variable valid : integer;
         variable v_inst_ptr : inst_def_ptr;
         variable v_var_prt : var_field_ptr;
@@ -834,6 +844,7 @@ package body tb_interpreter_pkg is
         variable include_file_path_name : text_line;
         variable v_ostat : integer;
         file include_file : text; -- file declaration for includes
+       
     begin
         sequ_line := sequ_numb;
         v_tmp_fn_ptr := file_list;
@@ -872,7 +883,7 @@ package body tb_interpreter_pkg is
         while not endfile(include_file) loop
             file_read_line(include_file, l);
             --  tokenize the line
-            tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, valid);
+            tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote, valid);
             v_len := fld_len(t1);
             if t1(1 to v_len) = "include" then
                 -- if file name is in par2
@@ -886,7 +897,7 @@ package body tb_interpreter_pkg is
                     v_iname := (others => nul);
                     for i in 1 to c_stm_text_len loop
                         v_iname(i) := t_txt(i);
-                        if t_txt(i) = '"' then -- "
+                        if t_txt(i) = txt_enclosing_quote then
                             v_iname(i) := nul;
                             exit;
                         end if;
@@ -913,7 +924,7 @@ package body tb_interpreter_pkg is
             elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
                 add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7,
-                                t_txt, sequ_line, l_num, name, v_new_fn);
+                                t_txt, txt_enclosing_quote, sequ_line, l_num, name, v_new_fn);
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file
@@ -941,6 +952,7 @@ package body tb_interpreter_pkg is
         variable t6 : text_field;
         variable t7 : text_field;
         variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
         variable valid : integer;
         variable v_ostat : integer;
         variable v_inst_ptr : inst_def_ptr;
@@ -989,7 +1001,7 @@ package body tb_interpreter_pkg is
         while not endfile(stimulus) loop
             file_read_line(stimulus, l);
             --  tokenize the line
-            tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, valid);
+            tokenize_line(l, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote, valid);
             v_len := fld_len(t1);
             -- if there is an include instruction
             if t1(1 to v_len) = "include" then
@@ -1004,7 +1016,7 @@ package body tb_interpreter_pkg is
                     v_iname := (others => nul);
                     for i in 1 to c_stm_text_len loop
                         v_iname(i) := t_txt(i);
-                        if t_txt(i) = '"' then -- "
+                        if t_txt(i) = txt_enclosing_quote then 
                             v_iname(i) := nul;
                             exit;
                         end if;
@@ -1024,7 +1036,7 @@ package body tb_interpreter_pkg is
             -- if there was valid tokens
             elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);
-                add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt,
+                add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
                                 sequ_line, l_num, v_name, v_fn_idx);
             end if;
             l_num := l_num + 1;
@@ -1045,6 +1057,7 @@ package body tb_interpreter_pkg is
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable ptr : in stm_text_ptr;
+                                       variable txt_enclosing_quote : in character;
                                        variable stack_ptr : integer;
                                        variable stack_called_files : stack_text_line_array;
                                        variable stack_called_file_line_numbers: stack_numbers_array;
@@ -1079,23 +1092,23 @@ package body tb_interpreter_pkg is
         if ptr = null then
             return;
         end if;
-        txt_to_string(ptr, input_txt);
+        txt_to_string(ptr, input_txt);        
         -- determine variables tail_start in src string
         src_i := 1;
         src_tail_begin := 0;
         while src_i <= c_stm_text_len loop
             if src_i > 1 then
-                if ptr(src_i-1) = '\' and ptr(src_i) = '"' then  -- "
+                if ptr(src_i-1) = '\' and ptr(src_i) = txt_enclosing_quote then  
                     src_i := src_i + 1;
                 else
-                    if ptr(src_i) = '"' then
+                    if ptr(src_i) = txt_enclosing_quote then
                         src_tail_begin := src_i;
                         exit;
                     end if;    
                     src_i := src_i + 1;              
                 end if;
             else
-                if ptr(src_i) = '"' then
+                if ptr(src_i) = txt_enclosing_quote then
                     src_tail_begin := src_i;
                     exit;
                 end if;
@@ -1108,7 +1121,7 @@ package body tb_interpreter_pkg is
         dest_txt_str := (others => nul);
         while src_i <= src_tail_begin and dest_i <= c_stm_text_len loop
             if src_i < src_tail_begin then 
-                if ptr(src_i) = '\' and ptr(src_i+1)= '"' then  -- "
+                if ptr(src_i) = '\' and ptr(src_i+1)= txt_enclosing_quote then 
                     src_i := src_i + 1;
                 end if;
             end if;
@@ -1130,14 +1143,14 @@ package body tb_interpreter_pkg is
                 f_dest_txt_str := (others => nul);                
                 while f_src_i < dest_i loop
                     if f_src_i+1 < dest_i then
-                        if dest_txt_str(f_src_i) = '\' and dest_txt_str(f_src_i+1) = '"' then -- " 
-                            -- skip '/' before '"'    "
+                        if dest_txt_str(f_src_i) = '\' and dest_txt_str(f_src_i+1) = txt_enclosing_quote then 
+                            -- skip '/' before txt_enclosing_quote 
                             f_src_i := f_src_i + 1;
                             f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
                             f_src_i := f_src_i + 1;
                             f_dest_i := f_dest_i + 1;       
                         else
-                           -- don't skip '/' before others but '"'    "
+                           -- don't skip '/' before others but txt_enclosing_quote    
                             f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
                             f_src_i := f_src_i + 1;
                             f_dest_i := f_dest_i + 1;              
@@ -1390,6 +1403,7 @@ package body tb_interpreter_pkg is
                             variable otoken6 : out text_field;
                             variable otoken7 : out text_field;
                             variable txt_ptr : out stm_text_ptr;
+                            variable txt_enclosing_quote : out character;
                             variable ovalid : out integer) is
         variable token_index : integer := 0;
         variable current_token : text_field;
@@ -1410,6 +1424,9 @@ package body tb_interpreter_pkg is
         variable token8 : text_field;
         variable token9 : text_field;
         variable valid : integer := 0;
+        constant SINGLE_QUOTE: character := character'val(39);
+        constant DOUBLE_QUOTE: character := character'val(34);
+
     begin
         -- null outputs
         token1 := (others => nul);
@@ -1436,9 +1453,10 @@ package body tb_interpreter_pkg is
                 comment_found := 1;
                 exit;
             end if;
-            -- if is begin text char '"'
-            if txt_found = 0 and c(1) = '"' then --"
+            -- if is begin text char 
+            if txt_found = 0 and (c(1) = DOUBLE_QUOTE or c(1) = SINGLE_QUOTE) then
                 txt_found := 1;
+                txt_enclosing_quote := c(1);
                 txt_ptr_tmp := new stm_text;
                 next;
             end if;
@@ -1605,13 +1623,14 @@ package body tb_interpreter_pkg is
 
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
                              variable ptr : in stm_text_ptr;
+                             variable txt_enclosing_quote : in character;
                              variable stack_ptr : integer;
                              variable stack_called_files : stack_text_line_array;
                              variable stack_called_file_line_numbers: stack_numbers_array;
                              variable stack_called_labels : stack_text_field_array) is
         variable stm_text_substituded : stm_text;
     begin
-        stm_text_substitude_wvar(var_list, ptr, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded);
+        stm_text_substitude_wvar(var_list, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded);
         print(stm_text_substituded);
     end procedure;
 

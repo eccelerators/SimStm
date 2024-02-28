@@ -134,6 +134,7 @@ begin
         variable par5 : integer; -- parameter 5
         variable par6 : integer; -- parameter 6
         variable txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
         variable len : integer; -- length of the instruction field
         variable file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
@@ -193,6 +194,7 @@ begin
 
         -- Text
         variable var_stm_text : stm_text_ptr;
+        variable var_stm_text_enclosing_quote : character;
         variable var_stm_text_out : stm_text_ptr;
         variable var_stm_text_substituded : stm_text;
         variable var_stm_text_substituded_ptr : stm_text_ptr;
@@ -303,7 +305,7 @@ begin
                 stack_called_labels(stack_ptr) := branch_to_interrupt_label;                
                 v_line := branch_to_interrupt_v_line;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                 par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                 par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line; 
@@ -312,7 +314,7 @@ begin
 
                 v_line := v_line + 1;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                 par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                 par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
 
                 if to_signed(trc_on, 32)(3) = '1' then
@@ -595,11 +597,11 @@ begin
 
                 -- file readable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_READABLE then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_readable(var_stm_text_substituded_ptr, temp_int);
@@ -610,11 +612,11 @@ begin
 
                 -- file writeable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_WRITEABLE then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_writeable(var_stm_text_substituded_ptr, temp_int);
@@ -625,11 +627,11 @@ begin
 
                 -- file appendable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_APPENDABLE then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_appendable(var_stm_text_substituded_ptr, temp_int);
@@ -640,7 +642,7 @@ begin
 
                 -- file write a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_WRITE then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
@@ -648,7 +650,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_write(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -658,7 +660,7 @@ begin
 
                 -- file append a_fileB  a_lines
                 elsif instruction(1 to len) = INSTR_FILE_APPEND then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
@@ -666,7 +668,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);              
                     stm_file_append(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -677,7 +679,7 @@ begin
                 -- file read a_fileA a_lines $number_of_lines
                 -- file read a_fileA a_lines 256
                 elsif instruction(1 to len) = INSTR_FILE_READ then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
@@ -741,7 +743,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                        stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -815,11 +817,11 @@ begin
 
                 -- file read end a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_READ_END then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);  
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -842,7 +844,7 @@ begin
 
                 -- file read all a_fileA a_lines
                 elsif instruction(1 to len) = INSTR_FILE_READ_ALL then
-                    index_variable(defined_vars, par1, var_stm_text, valid);
+                    index_variable(defined_vars, par1, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
@@ -850,7 +852,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
                     stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -860,7 +862,7 @@ begin
 
                 --  file pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_FILE_POINTER_COPY then
-                    index_variable(defined_vars, par2, var_stm_text, valid);
+                    index_variable(defined_vars, par2, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
@@ -918,7 +920,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_set(var_stm_lines, par2, var_stm_text_out, valid);
@@ -951,7 +953,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_insert(var_stm_lines, par2, var_stm_text_out, valid);
@@ -981,7 +983,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out, valid);
@@ -1079,7 +1081,7 @@ begin
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
@@ -1094,7 +1096,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
                         if to_signed(trc_on, 32)(4) = '1' then             
@@ -1120,7 +1122,7 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         while (instruction(1 to len) /= INSTR_IF) and instruction(1 to len) /= INSTR_END_IF loop
                             assert v_line < inst_sequ.num_of_lines
@@ -1128,7 +1130,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
@@ -1167,7 +1169,7 @@ begin
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
@@ -1182,7 +1184,7 @@ begin
                                 severity failure;
                                 v_line := v_line + 1;
                                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                                 par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                                 par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                                  last_sequ_num, last_sequ_ptr);
                             end loop;
                             if to_signed(trc_on, 32)(4) = '1' then             
@@ -1206,7 +1208,7 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                         par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                         par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);                       
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or instruction(1 to len) /= INSTR_END_IF loop
@@ -1221,7 +1223,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction,
-                                             par1, par2, par3, par4, par5, par6, txt, len, file_name, file_line,
+                                             par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;                        
                         
@@ -1374,7 +1376,7 @@ begin
                 -- log message  $INFO "misc_proc severity: {}" $INFO
                 elsif instruction(1 to len) = INSTR_LOG_MESSAGE then
                     if par1 <= loglevel then
-                        txt_print_wvar(defined_vars, txt, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels);
+                        txt_print_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels);
                     end if;
 
                 -- log lines $INFO a_lines

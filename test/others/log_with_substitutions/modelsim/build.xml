@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<project name="array">
+<project name="log_with_substitutions">
    <include file="../../../unit_test_build.xml"/>
 </project>
