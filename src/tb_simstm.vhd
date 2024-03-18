@@ -72,6 +72,7 @@ entity tb_simstm is
         simdone : out std_logic;
         executing_line : out integer;
         executing_file : out text_line;
+        standard_test_error_count : out std_logic_vector(31 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
         signals_in : in t_signals_in := signals_in_init;
@@ -241,12 +242,12 @@ begin
     begin
         simdone <= '0';
         marker <= (others => '0');
-
-        init_const_text_field(stimulus_main_entry_label, main_label_text_field);
-
+        standard_test_error_count <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
+        wait for 0 ns;
 
+        init_const_text_field(stimulus_main_entry_label, main_label_text_field);
         define_instructions(inst_list);
 
         file_open(v_stat, stimulus, stimulus_path & stimulus_file, read_mode);
@@ -265,6 +266,8 @@ begin
         -- using the instruction record list, get the instruction and implement
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
+        
+            standard_test_error_count <= std_logic_vector(to_unsigned(error_count, 32));
 
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
@@ -1494,9 +1497,18 @@ begin
                         temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
                         temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
-                        assert (temp_stdvec_c and temp_stdvec_a) = (temp_stdvec_c and temp_stdvec_b)
-                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & " file " & text_line_crop(file_name)
-                        severity failure;
+                        if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
+                            if exit_on_verify_error then
+                                assert false
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                                severity failure;
+                            else
+                                assert false
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                                severity error;
+                                error_count := error_count + 1;                            
+                            end if;
+                        end if;
                     end if;
                     wait for 0 ns;
 
@@ -1561,11 +1573,11 @@ begin
                         if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then
                             if exit_on_verify_error then
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
                                 severity failure;
                             else
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
                                 severity error;
                                 error_count := error_count + 1;
                             end if;
