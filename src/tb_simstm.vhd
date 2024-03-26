@@ -164,6 +164,7 @@ begin
         variable interrupt_number_entered_stack_pointer : integer := -1;
         variable interrupt_number_entered_stack : interrupt_array := (others => 0);
         variable interrupt_entry_call_stack_ptr_stack : interrupt_array := (others => 0);
+        variable v_set_interrupt_in_service : std_logic := '0';
 
         variable successfull : boolean := false;
 
@@ -297,7 +298,8 @@ begin
                 interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
                 interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
                 interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := stack_ptr;
-                set_interrupt_in_service(interrupt_in_service, interrupt_number);
+                v_set_interrupt_in_service := '1';
+                set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);                
                 stack(stack_ptr) := v_line;
                 stack_ptr := stack_ptr + 1;
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
@@ -311,7 +313,8 @@ begin
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                 stack_called_files(stack_ptr) := file_name;
-                stack_called_file_line_numbers(stack_ptr) := file_line; 
+                stack_called_file_line_numbers(stack_ptr) := file_line;
+                wait for 0 ns;
 
             else
 
@@ -1338,7 +1341,8 @@ begin
                     if interrupt_in_service > 0 then
                         interrupt_number := interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);
                         if interrupt_entry_call_stack_ptr_stack(interrupt_number) = stack_ptr then
-                            reset_interrupt_in_service(interrupt_in_service, interrupt_number);
+                            v_set_interrupt_in_service := '0';
+                            set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
                     end if;
@@ -1350,6 +1354,7 @@ begin
                         report instruction(1 to len) & ":  decremented stack_ptr:" & integer'image(stack_ptr);
                         report instruction(1 to len) & ":  set to goto v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
                     end if;
+                    wait for 0 ns;
 
                 -- call $some_proc
                 elsif instruction(1 to len) = INSTR_CALL then

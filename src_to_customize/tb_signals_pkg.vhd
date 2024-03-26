@@ -50,10 +50,10 @@ package tb_signals_pkg is
                                          variable branch_to_interrupt : out boolean;
                                          variable branch_to_interrupt_label_std_txt_io_line : out line);
 
-    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned; variable interrupt_number : in integer);
-
-    procedure reset_interrupt_in_service(variable interrupt_in_service : inout unsigned; variable interrupt_number : in integer);
-
+    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned; 
+                                       variable interrupt_number : in integer;
+                                       variable value_to_be_set : in std_logic; 
+                                       signal signals : out t_signals_out);
 end package;
 
 package body tb_signals_pkg is
@@ -180,16 +180,24 @@ package body tb_signals_pkg is
 
     end procedure;
 
-    -- Set in service bit for a processed interrupt
-    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned; variable interrupt_number : in integer) is
-    begin
-        interrupt_in_service(interrupt_number) := '1';
-    end procedure;
-
-    -- Reset in service bit for a processed interrupt
-    procedure reset_interrupt_in_service(variable interrupt_in_service : inout unsigned; variable interrupt_number : in integer) is
-    begin
-        interrupt_in_service(interrupt_number) := '0';
+    -- Set or Reset the in service bit for a processed interrupt
+    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned; 
+                                       variable interrupt_number : in integer;
+                                       variable value_to_be_set : in std_logic; 
+                                       signal signals : out t_signals_out) is
+    begin        
+        interrupt_in_service(interrupt_number) := value_to_be_set;
+        -- TODO: Connect to out_signals used to interrupt busy e.g., to a interrupt dispatcher for 
+        -- multicore systems
+        --case interrupt_number is
+            -- TODO: add here your SimStm mapping
+        --    when 0 =>
+        --        signals.out_signal_1001 <= value_to_be_set;
+        --    when 1 =>
+        --        signals.out_signal_1011 <= value_to_be_set;
+        --    when others =>
+        --        null;
+        --end case;
     end procedure;
 
 end package body;
