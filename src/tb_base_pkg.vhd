@@ -50,9 +50,9 @@ use ieee.numeric_std.all;
 package tb_base_pkg is
 
     -- constants
-    constant max_str_len : integer := 256;
+    constant max_str_len : integer := 512;
     constant max_field_len : integer := 128;
-    constant c_stm_text_len : integer := 200;
+    constant c_stm_text_len : integer := 500;
 
     -- file handles
     file stimulus : text; -- file main file
