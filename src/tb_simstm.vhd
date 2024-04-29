@@ -49,6 +49,8 @@
 
 library std;
 use std.textio.all;
+use std.env.all;
+
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -69,7 +71,6 @@ entity tb_simstm is
     port(
         clk : in std_logic;
         rst : in std_logic;
-        simdone : out std_logic;
         executing_line : out integer;
         executing_file : out text_line;
         standard_test_error_count : out std_logic_vector(31 downto 0);
@@ -241,7 +242,6 @@ begin
         variable called_label :text_field;
 
     begin
-        simdone <= '0';
         marker <= (others => '0');
         standard_test_error_count <= (others => '0');
         signals_out <= signals_out_init;
@@ -1296,22 +1296,21 @@ begin
 
                 -- abort
                 elsif instruction(1 to len) = INSTR_ABORT then
-                    simdone <= '1';
                     assert false
                     report "the test has aborted due to an error!!"
                     severity failure;
-                    wait;
+                    finish;
 
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
-                    simdone <= '1';
                     assert error_count /= 0
                     report "test finished with no errors!!"
                     severity note;
                     assert error_count = 0
                     report "test finished with " & (integer'image(error_count)) & " errors!!"
                     severity error;
-                    wait;
+                    wait for 1000 ns;
+                    finish;
 
                 -- proc
                 elsif instruction(1 to len) = INSTR_PROC then

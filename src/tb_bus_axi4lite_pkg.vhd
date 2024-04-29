@@ -98,7 +98,7 @@ package body tb_bus_axi4lite_pkg is
     begin
         successfull := false;
         axi4lite_down <= axi4lite_down_init;
-        axi4lite_down.awaddr <= address(31 downto 2) & "00";
+        axi4lite_down.awaddr <= address;
 
         case b_width is
             when 8 =>
@@ -169,7 +169,7 @@ package body tb_bus_axi4lite_pkg is
     begin
         successfull := false;
         axi4lite_down <= axi4lite_down_init;
-        axi4lite_down.araddr <= address(31 downto 2) & "00";
+        axi4lite_down.araddr <= address;
 
         axi4lite_down.arvalid <= '1';
         axi4lite_down.rready <= '0';

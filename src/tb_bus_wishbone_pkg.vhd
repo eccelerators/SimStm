@@ -75,7 +75,7 @@ package body tb_bus_wishbone_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
-        wishbone_down.adr <= address(31 downto 2) & "00";
+        wishbone_down.adr <= address;
         case b_width is
             when 8 =>
                 sel := "0001";
@@ -145,7 +145,7 @@ package body tb_bus_wishbone_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
-        wishbone_down.adr <= address(31 downto 2) & "00";
+        wishbone_down.adr <= address;
 
         case b_width is
             when 8 => sel := "0001";

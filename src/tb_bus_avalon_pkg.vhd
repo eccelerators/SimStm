@@ -72,7 +72,7 @@ package body tb_bus_avalon_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
-        avalonmm_down.address <= address(31 downto 2) & "00";
+        avalonmm_down.address <= address;
         case b_width is
             when 8 =>
                 byteenable := "0001";
@@ -146,7 +146,7 @@ package body tb_bus_avalon_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
-        avalonmm_down.address <= address(31 downto 2) & "00";
+        avalonmm_down.address <= address;
 
         case b_width is
             when 8 => byteenable := "0001";
