@@ -95,6 +95,8 @@ package body tb_bus_axi4lite_pkg is
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
+        variable awready_present : boolean := false;
+        variable wready_present : boolean := false;
     begin
         successfull := false;
         axi4lite_down <= axi4lite_down_init;
@@ -130,25 +132,31 @@ package body tb_bus_axi4lite_pkg is
         end case;
 
         axi4lite_down.awvalid <= '1';
-        axi4lite_down.wvalid <= '0';
-        axi4lite_down.bready <= '0';
-        wait until rising_edge(clk);
-        wait on axi4lite_up.awready until axi4lite_up.awready = '0';
-
-        axi4lite_down.awvalid <= '0';
         axi4lite_down.wvalid <= '1';
         axi4lite_down.bready <= '0';
-        wait until rising_edge(clk);
-        wait on axi4lite_up.wready until axi4lite_up.wready = '0';
+        loop
+        	wait until rising_edge(clk);
+	        if axi4lite_up.awready then
+	         	axi4lite_down.awvalid <= '0';
+	        	awready_present := true;
+	        end if;
+	        if axi4lite_up.wready then
+	            axi4lite_down.wvalid <= '0';
+	        	wready_present := true;
+	        end if;
+        	if awready_present and wready_present then
+        		exit;
+        	end if;    
+        end loop;
 
-        axi4lite_down.awvalid <= '0';
-        axi4lite_down.wvalid <= '0';
         axi4lite_down.bready <= '1';
-        wait until rising_edge(clk);
-        wait on axi4lite_up.bvalid until axi4lite_up.bvalid = '0';
+        loop
+        	wait until rising_edge(clk);
+        	if axi4lite_up.bvalid then
+        		exit;
+        	end if;
+        end loop;        
 
-        axi4lite_down.awvalid <= '0';
-        axi4lite_down.wvalid <= '0';
         axi4lite_down.bready <= '0';
         axi4lite_down <= axi4lite_down_init;
         wait until rising_edge(clk);
@@ -173,14 +181,23 @@ package body tb_bus_axi4lite_pkg is
 
         axi4lite_down.arvalid <= '1';
         axi4lite_down.rready <= '0';
-        wait until rising_edge(clk);
-        wait on axi4lite_up.arready until axi4lite_up.arready = '0';
+        
+        loop
+        	wait until rising_edge(clk);
+        	if axi4lite_up.arready then
+        		exit;
+        	end if;
+        end loop;   
 
         axi4lite_down.arvalid <= '0';
-        axi4lite_down.rready <= '1';
-        wait until rising_edge(clk);
-        wait on axi4lite_up.rvalid until axi4lite_up.rvalid = '0';
-
+        axi4lite_down.rready <= '1';   
+        loop
+        	wait until rising_edge(clk);
+        	if axi4lite_up.rvalid then
+        		exit;
+        	end if;
+        end loop;           
+        
         data_temp := axi4lite_up.rdata;
         axi4lite_down <= axi4lite_down_init;
         wait until rising_edge(clk);
