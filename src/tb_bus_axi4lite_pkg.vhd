@@ -27,6 +27,24 @@ package tb_bus_axi4lite_pkg is
         rdata : std_logic_vector(31 downto 0);
         rresp : std_logic_vector(1 downto 0);
     end record;
+    
+    type t_axi4lite_access is
+    record
+        wprivileged : std_logic;
+        wsecure : std_logic;
+        winstruction : std_logic;
+        rprivileged : std_logic;
+        rsecure : std_logic;
+        rinstruction : std_logic;
+    end record;
+    
+    type t_axi4lite_trace is record
+        axi4lite_down : t_axi4lite_down;
+        axi4lite_up : t_axi4lite_up;
+        axi4lite_access : t_axi4lite_access;
+        hxs_unoccupied_access : std_logic;
+        hxs_timeout_access : std_logic;
+    end record;
 
     function axi4lite_down_init return t_axi4lite_down;
     function axi4lite_up_init return t_axi4lite_up;

@@ -17,6 +17,13 @@ package tb_bus_wishbone_pkg is
         data : std_logic_vector(31 downto 0);
         ack : std_logic;
     end record;
+    
+    type t_wishbone_trace is record
+        wishbone_down : t_wishbone_down;
+        wishbone_up : t_wishbone_up;
+        hxs_unoccupied_access : std_logic;
+        hxs_timeout_access : std_logic;
+    end record;
 
     function wishbone_down_init return t_wishbone_down;
     function wishbone_up_init return t_wishbone_up;

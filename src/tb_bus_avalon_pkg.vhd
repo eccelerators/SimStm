@@ -15,6 +15,13 @@ package tb_bus_avalon_pkg is
         readdata : std_logic_vector(31 downto 0);
         waitrequest : std_logic;
     end record;
+    
+    type t_avalonmm_trace is record
+        avalonmm_down : t_avalonmm_down;
+        avalonmm_up : t_avalonmm_up;
+        hxs_unoccupied_access : std_logic;
+        hxs_timeout_access : std_logic;
+    end record;
 
     function avalonmm_down_init return t_avalonmm_down;
     function avalonmm_up_init return t_avalonmm_up;
