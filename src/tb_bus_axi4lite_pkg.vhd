@@ -18,6 +18,7 @@ package tb_bus_axi4lite_pkg is
     end record;
 
     type t_axi4lite_up is record
+        clk : std_logic;
         awready : std_logic;
         wready : std_logic;
         bvalid : std_logic;
@@ -49,8 +50,7 @@ package tb_bus_axi4lite_pkg is
     function axi4lite_down_init return t_axi4lite_down;
     function axi4lite_up_init return t_axi4lite_up;
 
-    procedure write_axi4lite(signal clk : in std_logic;
-                             signal axi4lite_down : out t_axi4lite_down;
+    procedure write_axi4lite(signal axi4lite_down : out t_axi4lite_down;
                              signal axi4lite_up : in t_axi4lite_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -58,8 +58,7 @@ package tb_bus_axi4lite_pkg is
                              variable successfull : out boolean;
                              variable timeout : in time);
 
-    procedure read_axi4lite(signal clk : in std_logic;
-                            signal axi4lite_down : out t_axi4lite_down;
+    procedure read_axi4lite(signal axi4lite_down : out t_axi4lite_down;
                             signal axi4lite_up : in t_axi4lite_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -73,6 +72,7 @@ package body tb_bus_axi4lite_pkg is
     function axi4lite_up_init return t_axi4lite_up is
         variable init : t_axi4lite_up;
     begin
+        init.clk := '0';
         init.awready := '0';
         init.wready := '0';
         init.bvalid := '0';
@@ -101,8 +101,7 @@ package body tb_bus_axi4lite_pkg is
         return init;
     end;
 
-    procedure write_axi4lite(signal clk : in std_logic;
-                             signal axi4lite_down : out t_axi4lite_down;
+    procedure write_axi4lite(signal axi4lite_down : out t_axi4lite_down;
                              signal axi4lite_up : in t_axi4lite_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -153,7 +152,7 @@ package body tb_bus_axi4lite_pkg is
         axi4lite_down.wvalid <= '1';
         axi4lite_down.bready <= '0';
         loop
-        	wait until rising_edge(clk);
+        	wait until rising_edge(axi4lite_up.clk);
 	        if axi4lite_up.awready then
 	         	axi4lite_down.awvalid <= '0';
 	        	awready_present := true;
@@ -169,7 +168,7 @@ package body tb_bus_axi4lite_pkg is
 
         axi4lite_down.bready <= '1';
         loop
-        	wait until rising_edge(clk);
+        	wait until rising_edge(axi4lite_up.clk);
         	if axi4lite_up.bvalid then
         		exit;
         	end if;
@@ -177,12 +176,11 @@ package body tb_bus_axi4lite_pkg is
 
         axi4lite_down.bready <= '0';
         axi4lite_down <= axi4lite_down_init;
-        wait until rising_edge(clk);
+        wait until rising_edge(axi4lite_up.clk);
         successfull := true;
     end procedure;
 
-    procedure read_axi4lite(signal clk : in std_logic;
-                            signal axi4lite_down : out t_axi4lite_down;
+    procedure read_axi4lite(signal axi4lite_down : out t_axi4lite_down;
                             signal axi4lite_up : in t_axi4lite_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -201,7 +199,7 @@ package body tb_bus_axi4lite_pkg is
         axi4lite_down.rready <= '0';
         
         loop
-        	wait until rising_edge(clk);
+        	wait until rising_edge(axi4lite_up.clk);
         	if axi4lite_up.arready then
         		exit;
         	end if;
@@ -210,7 +208,7 @@ package body tb_bus_axi4lite_pkg is
         axi4lite_down.arvalid <= '0';
         axi4lite_down.rready <= '1';   
         loop
-        	wait until rising_edge(clk);
+        	wait until rising_edge(axi4lite_up.clk);
         	if axi4lite_up.rvalid then
         		exit;
         	end if;
@@ -218,7 +216,7 @@ package body tb_bus_axi4lite_pkg is
         
         data_temp := axi4lite_up.rdata;
         axi4lite_down <= axi4lite_down_init;
-        wait until rising_edge(clk);
+        wait until rising_edge(axi4lite_up.clk);
 
         case address(1 downto 0) is
             when "00" => data_temp := data_temp;
