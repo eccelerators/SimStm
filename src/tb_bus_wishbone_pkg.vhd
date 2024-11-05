@@ -14,7 +14,6 @@ package tb_bus_wishbone_pkg is
     end record;
 
     type t_wishbone_up is record
-        clk : std_logic;
         data : std_logic_vector(31 downto 0);
         ack : std_logic;
     end record;
@@ -29,7 +28,8 @@ package tb_bus_wishbone_pkg is
     function wishbone_down_init return t_wishbone_down;
     function wishbone_up_init return t_wishbone_up;
 
-    procedure write_wishbone(signal wishbone_down : out t_wishbone_down;
+    procedure write_wishbone(signal clk : in std_logic;
+                             signal wishbone_down : out t_wishbone_down;
                              signal wishbone_up : in t_wishbone_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -37,7 +37,8 @@ package tb_bus_wishbone_pkg is
                              variable successfull : out boolean;
                              variable timeout : in time);
 
-    procedure read_wishbone(signal wishbone_down : out t_wishbone_down;
+    procedure read_wishbone(signal clk : in std_logic;
+                            signal wishbone_down : out t_wishbone_down;
                             signal wishbone_up : in t_wishbone_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -50,7 +51,6 @@ package body tb_bus_wishbone_pkg is
     function wishbone_up_init return t_wishbone_up is
         variable init : t_wishbone_up;
     begin
-        init.clk := '0';
         init.data := (others => '0');
         init.ack := '0';
         return init;
@@ -68,7 +68,8 @@ package body tb_bus_wishbone_pkg is
         return init;
     end;
 
-    procedure write_wishbone(signal wishbone_down : out t_wishbone_down;
+    procedure write_wishbone(signal clk : in std_logic;
+                             signal wishbone_down : out t_wishbone_down;
                              signal wishbone_up : in t_wishbone_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -114,21 +115,21 @@ package body tb_bus_wishbone_pkg is
         wishbone_down.we <= '1';
         wishbone_down.stb <= '1';
         wishbone_down.cyc <= '1';
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
         end if;
 
         wait on wishbone_up.ack until wishbone_up.ack = '1';
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
         end if;
 
         wishbone_down <= wishbone_down_init;
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
@@ -137,7 +138,8 @@ package body tb_bus_wishbone_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_wishbone(signal wishbone_down : out t_wishbone_down;
+    procedure read_wishbone(signal clk : in std_logic;
+                            signal wishbone_down : out t_wishbone_down;
                             signal wishbone_up : in t_wishbone_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -175,7 +177,7 @@ package body tb_bus_wishbone_pkg is
         wishbone_down.we <= '0';
         wishbone_down.stb <= '1';
         wishbone_down.cyc <= '1';
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
@@ -187,7 +189,7 @@ package body tb_bus_wishbone_pkg is
             return;
         end if;
 
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
@@ -209,7 +211,7 @@ package body tb_bus_wishbone_pkg is
             when others =>
         end case;
 
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        wait until rising_edge(clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
             return;
