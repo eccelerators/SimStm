@@ -69,8 +69,6 @@ entity tb_simstm is
         stimulus_main_entry_label : in string := "$testMain"
     );
     port(
-        clk : in std_logic;
-        rst : in std_logic;
         executing_line : out integer;
         executing_file : out text_line;
         standard_test_error_count : out std_logic_vector(31 downto 0);
@@ -1536,7 +1534,7 @@ begin
                     severity failure;
                     tempaddress := std_logic_vector(to_signed(par3, tempaddress'length));
                     tempdata := std_logic_vector(to_signed(par4, tempdata'length));
-                    bus_write(clk, bus_down, bus_up, tempaddress, tempdata, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
+                    bus_write(bus_down, bus_up, tempaddress, tempdata, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
                     report "Bus number not avalible"
                     severity failure;
@@ -1556,7 +1554,7 @@ begin
                     severity failure;
                     temp_stdvec_a := std_logic_vector(to_signed(par3, tempaddress'length));
                     temp_stdvec_b := (others => '0');
-                    bus_read(clk, bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
+                    bus_read(bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
                     report "Bus number not avalible"
                     severity failure;

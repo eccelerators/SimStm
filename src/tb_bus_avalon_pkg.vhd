@@ -12,6 +12,7 @@ package tb_bus_avalon_pkg is
     end record;
 
     type t_avalonmm_up is record
+        clk : std_logic;
         readdata : std_logic_vector(31 downto 0);
         waitrequest : std_logic;
     end record;
@@ -26,8 +27,7 @@ package tb_bus_avalon_pkg is
     function avalonmm_down_init return t_avalonmm_down;
     function avalonmm_up_init return t_avalonmm_up;
 
-    procedure write_avalonmm(signal clk : in std_logic;
-                             signal avalonmm_down : out t_avalonmm_down;
+    procedure write_avalonmm(signal avalonmm_down : out t_avalonmm_down;
                              signal avalonmm_up : in t_avalonmm_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -35,8 +35,7 @@ package tb_bus_avalon_pkg is
                              variable successfull : out boolean;
                              variable timeout : in time);
 
-    procedure read_avalonmm(signal clk : in std_logic;
-                            signal avalonmm_down : out t_avalonmm_down;
+    procedure read_avalonmm(signal avalonmm_down : out t_avalonmm_down;
                             signal avalonmm_up : in t_avalonmm_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -49,6 +48,7 @@ package body tb_bus_avalon_pkg is
     function avalonmm_up_init return t_avalonmm_up is
         variable init : t_avalonmm_up;
     begin
+        init.clk := '0';
         init.readdata := (others => '0');
         init.waitrequest := '0';
         return init;
@@ -65,8 +65,7 @@ package body tb_bus_avalon_pkg is
         return init;
     end;
 
-    procedure write_avalonmm(signal clk : in std_logic;
-                             signal avalonmm_down : out t_avalonmm_down;
+    procedure write_avalonmm(signal avalonmm_down : out t_avalonmm_down;
                              signal avalonmm_up : in t_avalonmm_up;
                              variable address : in std_logic_vector(31 downto 0);
                              variable data : in std_logic_vector(31 downto 0);
@@ -111,7 +110,7 @@ package body tb_bus_avalon_pkg is
 
         avalonmm_down.read <= '0';
         avalonmm_down.write <= '1';
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
@@ -123,14 +122,14 @@ package body tb_bus_avalon_pkg is
             return;
         end if;
 
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
         end if;
 
         avalonmm_down <= avalonmm_down_init;
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
@@ -139,8 +138,7 @@ package body tb_bus_avalon_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_avalonmm(signal clk : in std_logic;
-                            signal avalonmm_down : out t_avalonmm_down;
+    procedure read_avalonmm(signal avalonmm_down : out t_avalonmm_down;
                             signal avalonmm_up : in t_avalonmm_up;
                             variable address : in std_logic_vector(31 downto 0);
                             variable data : out std_logic_vector(31 downto 0);
@@ -178,7 +176,7 @@ package body tb_bus_avalon_pkg is
         avalonmm_down.read <= '1';
         avalonmm_down.write <= '0';
 
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
@@ -190,7 +188,7 @@ package body tb_bus_avalon_pkg is
             return;
         end if;
 
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
@@ -212,7 +210,7 @@ package body tb_bus_avalon_pkg is
             when others =>
         end case;
 
-        wait until rising_edge(clk) or (now > start_time + timeout);
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
