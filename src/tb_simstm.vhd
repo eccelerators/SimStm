@@ -180,6 +180,8 @@ begin
         variable temp_stdvec_a : std_logic_vector(31 downto 0);
         variable temp_stdvec_b : std_logic_vector(31 downto 0);
         variable temp_stdvec_c : std_logic_vector(31 downto 0);
+        
+        variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
         variable trc_on : integer := 0;
 
@@ -1452,9 +1454,9 @@ begin
                         for i in 0 to 15 loop
                             if par1 = i then
                                 if par2 = 0 then
-                                    marker(i) <= '0';
+                                    temp_marker(i) := '0';
                                 else
-                                    marker(i) <= '1';
+                                    temp_marker(i) := '1';
                                 end if;
                             end if;
                         end loop;
@@ -1463,6 +1465,7 @@ begin
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": 16 markers are provided only"
                         severity failure;
                     end if;
+                    marker <= temp_marker;
                     wait for 0 ns;
 
                 -- signal write $a_signal $signal_to_be_set_value
