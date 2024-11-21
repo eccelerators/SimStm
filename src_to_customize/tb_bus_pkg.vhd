@@ -19,12 +19,17 @@ package tb_bus_pkg is
         avalonmm : t_avalonmm_up;
         axi4lite : t_axi4lite_up;
     end record;
+    
+    type t_bus_trace is record
+        wishbone_trace : t_wishbone_trace;
+        avalonmm_trace : t_avalonmm_trace;
+        axi4lite_trace : t_axi4lite_trace;
+    end record;
 
     function bus_down_init return t_bus_down;
     function bus_up_init return t_bus_up;
 
-    procedure bus_write(signal clk : in std_logic;
-                        signal bus_down : out t_bus_down;
+    procedure bus_write(signal bus_down : out t_bus_down;
                         signal bus_up : in t_bus_up;
                         variable address : in std_logic_vector(31 downto 0);
                         variable data : in std_logic_vector(31 downto 0);
@@ -34,8 +39,7 @@ package tb_bus_pkg is
                         variable successfull : out boolean;
                         variable timeout : in time);
 
-    procedure bus_read(signal clk : in std_logic;
-                       signal bus_down : out t_bus_down;
+    procedure bus_read(signal bus_down : out t_bus_down;
                        signal bus_up : in t_bus_up;
                        variable address : in std_logic_vector(31 downto 0);
                        variable data : out std_logic_vector(31 downto 0);
@@ -65,8 +69,7 @@ package body tb_bus_pkg is
         return init;
     end;
 
-    procedure bus_write(signal clk : in std_logic;
-                        signal bus_down : out t_bus_down;
+    procedure bus_write(signal bus_down : out t_bus_down;
                         signal bus_up : in t_bus_up;
                         variable address : in std_logic_vector(31 downto 0);
                         variable data : in std_logic_vector(31 downto 0);
@@ -79,7 +82,7 @@ package body tb_bus_pkg is
         valid := 1;
         case bus_number is
             when 0 =>
-                write_wishbone(clk,
+                write_wishbone(
                                bus_down.wishbone,
                                bus_up.wishbone,
                                address,
@@ -89,7 +92,7 @@ package body tb_bus_pkg is
                                timeout);
 
             when 1 =>
-                write_avalonmm(clk,
+                write_avalonmm(
                                bus_down.avalonmm,
                                bus_up.avalonmm,
                                address,
@@ -99,7 +102,7 @@ package body tb_bus_pkg is
                                timeout);
 
             when 2 =>
-                write_axi4lite(clk,
+                write_axi4lite(
                                bus_down.axi4lite,
                                bus_up.axi4lite,
                                address,
@@ -113,7 +116,7 @@ package body tb_bus_pkg is
 
     end procedure;
 
-    procedure bus_read(signal clk : in std_logic;
+    procedure bus_read(
                        signal bus_down : out t_bus_down;
                        signal bus_up : in t_bus_up;
                        variable address : in std_logic_vector(31 downto 0);
@@ -127,7 +130,7 @@ package body tb_bus_pkg is
         valid := 1;
         case bus_number is
             when 0 =>
-                read_wishbone(clk,
+                read_wishbone(
                               bus_down.wishbone,
                               bus_up.wishbone,
                               address,
@@ -137,7 +140,7 @@ package body tb_bus_pkg is
                               timeout);
 
             when 1 =>
-                read_avalonmm(clk,
+                read_avalonmm(
                               bus_down.avalonmm,
                               bus_up.avalonmm,
                               address,
@@ -147,7 +150,7 @@ package body tb_bus_pkg is
                               timeout);
 
             when 2 =>
-                read_axi4lite(clk,
+                read_axi4lite(
                               bus_down.axi4lite,
                               bus_up.axi4lite,
                               address,
