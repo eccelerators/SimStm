@@ -1,8 +1,9 @@
 
 	-- intern
-	file TestCaseSignalStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSignalFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
+	file TestCaseSignalWriteReadVerifyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseSignalWriteReadVerifyFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseSignalVerifyFailStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseSignalVerifyFailFile "../../SimulationResults/{@c3}_{@c2}.xml"
 	
 testSuiteSignal:
 proc
@@ -12,8 +13,8 @@ end proc
 
 testCaseSignalWriteReadVerify:
 proc
-    file pointer copy TestCaseStartFile TestCaseSignalStartFile
-    file pointer copy TestCaseFile TestCaseSignalFile
+    file pointer copy TestCaseStartFile TestCaseSignalWriteReadVerifyStartFile
+    file pointer copy TestCaseFile TestCaseSignalWriteReadVerifyFile
     equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
@@ -27,7 +28,7 @@ proc
     call $testSignalWriteReadVerify
 
     signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != 0
+    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
         lines append message TestCaseLines "SignalWriteReadVerify test failed"
         call $failureTestCase
     end if
@@ -38,8 +39,8 @@ end proc
 
 testCaseSignalVerifyFail:
 proc
-    file pointer copy TestCaseStartFile TestCaseSignalStartFile
-    file pointer copy TestCaseFile TestCaseSignalFile
+    file pointer copy TestCaseStartFile TestCaseSignalVerifyFailStartFile
+    file pointer copy TestCaseFile TestCaseSignalVerifyFailFile
     equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
@@ -53,7 +54,7 @@ proc
     call $testSignalVerifyFail
 
     signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != 0
+    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
         lines append message TestCaseLines "SignalVerifyFail test failed"
         call $failureTestCase
     end if

@@ -1,6 +1,6 @@
 include "Common/Common.stm"
 
-testMainSuiteSignal:
+testMainSuiteArray:
 proc
     call $initBase
         	
@@ -9,11 +9,11 @@ proc
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0
-	log message $INFO "Main test suite Signal started"
+	log message $INFO "Main test suite Array started"
 	
-	call $testSuiteSignal	
+	call $testSuiteArray	
 	
-	log message $INFO "Main test suite Signal ended"
+	log message $INFO "Main test suite Array ended"
 	wait 1000
 	finish
 end proc

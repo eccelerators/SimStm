@@ -604,7 +604,7 @@ begin
                     
                 --  array pointer set a_array_target a_var
                 --  array pointer set a_array_target 0x01
-                elsif instruction(1 to len) = INSTR_array_POINTER_SET then
+                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_SET then
                     index_variable(defined_vars, par2, temp_int, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var object not found"
@@ -615,7 +615,7 @@ begin
                     severity failure;
 
                 --  array pointer get a_array_source a_var
-                elsif instruction(1 to len) = INSTR_array_POINTER_GET then
+                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_GET then
                     index_variable(defined_vars, par1, temp_int, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
@@ -624,6 +624,35 @@ begin
                     assert valid /= 0
                     report "variable error: not a var object name??"
                     severity failure;                    
+                    
+                -- array verify $a_var $array_position $var_expected_value $var_mask_value
+                -- array verify $a_var $array_position 0x0002 0x00FF
+                -- array verify $a_var 5 $var_expected_value $var_mask_value
+                -- array verify $a_var 5 0x0002 0x00FF               
+                elsif instruction(1 to len) = INSTR_ARRAY_VERIFY then
+                    index_variable(defined_vars, par1, var_stm_array, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                    severity failure;
+                    assert var_stm_array'length > par2
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
+                    severity failure;
+                    temp_int := var_stm_array(par2);
+                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
+                    temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
+                    temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
+                    if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
+                        if exit_on_verify_error then
+                            assert false
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            severity failure;
+                        else
+                            assert false
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            severity error;
+                            error_count := error_count + 1;                            
+                        end if;
+                    end if;
 
                 -- file readable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_READABLE then

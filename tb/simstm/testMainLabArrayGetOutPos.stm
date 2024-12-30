@@ -1,9 +1,11 @@
-include "Common/Common.stm"
+include "Common/CommonLabs.stm"
+
+include "TestLabs/TestLabArrayGetOutPos.stm"
 
 file simulation_success "simulation.success"
 lines success_lines
 
-testMain:
+testMainLabArrayGetOutPos:
 proc
     call $initBase
 
@@ -15,8 +17,7 @@ proc
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test started"
 
-	call $testSignalWriteReadVerify
-	call $testSignalVerifyFail
+	call $testLabArrayGetOutPos
 
 	log message $INFO "Main test finished"
 	wait 1000

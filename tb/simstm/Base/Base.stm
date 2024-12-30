@@ -53,6 +53,14 @@ var TestSuiteIndex 255
 signal sigInZero 2
 var BasicZero 0
 
+var MAX 0
+
+initBase:
+proc
+    sub MAX 1
+end proc	
+
+
 signal StandardTestErrorCount 3
 signal ExpectedStandardTestErrorCount 3
 

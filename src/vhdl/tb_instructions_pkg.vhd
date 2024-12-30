@@ -136,6 +136,7 @@ package tb_instructions_pkg is
     constant INSTR_ARRAY_POINTER_COPY : string := "array_pointer_copy";
     constant INSTR_ARRAY_POINTER_SET : string := "array_pointer_set";
     constant INSTR_ARRAY_POINTER_GET : string := "array_pointer_get";
+    constant INSTR_ARRAY_VERIFY : string := "array_verify";
 
     -- others
     constant INSTR_PROC : string := "proc";
@@ -276,6 +277,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_ARRAY_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_ARRAY_POINTER_SET, 2);
         define_instruction(inst_list, INSTR_ARRAY_POINTER_GET, 2);
+        define_instruction(inst_list, INSTR_ARRAY_VERIFY, 4);
         -- others
         define_instruction(inst_list, INSTR_PROC, 0);
         define_instruction(inst_list, INSTR_CALL, 1);
@@ -457,6 +459,9 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                 elsif token2(1 to 4) = "size" then
                     token2_len := 4;
+                    token_merge := 2;
+                elsif token2(1 to 6) = "verify" then
+                    token2_len := 6;
                     token_merge := 2;
                 elsif token2(1 to 7) = "pointer" then
                     token2_len := 7;

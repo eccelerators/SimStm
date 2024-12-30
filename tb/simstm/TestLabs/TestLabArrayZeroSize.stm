@@ -1,0 +1,10 @@
+
+
+testLabArrayZeroSize:
+proc
+	call $testArrayZeroSize
+end proc
+
+
+
+

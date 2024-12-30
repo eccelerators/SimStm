@@ -31,9 +31,13 @@ static_setup_data = {
     "tb_top_entity" : "tbTop",
     "tb_top_entity_file" : "/tb/hdl/tbTop.vhd",
     "test_suites" : [
+            {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"$testMainSuiteArray"},
             {"testsuite-name":"testSuiteSignal", "file":"TestSuites/TestSuiteSignal.stm", "entry-file":"testMainSuiteSignal.stm", "entry-label":"$testMainSuiteSignal"}
     ],
     "test_labs" : [
+            {"testlab-name":"testLabArrayGetOutPos", "file":"TestLabs/TestLabArrayGetOutPos.stm", "entry-file":"testMainLabArrayGetOutPos.stm", "entry-label":"$testMainLabArrayGetOutPos"},
+            {"testlab-name":"testLabArrayZeroSize", "file":"TestLabs/TestLabArrayZeroSize.stm", "entry-file":"testMainLabArrayZeroSize.stm", "entry-label":"$testMainLabArrayZeroSize"},
+            {"testlab-name":"testLabArraySetOutPos", "file":"TestLabs/TestLabArraySetOutPos.stm", "entry-file":"testMainLabArraySetOutPos.stm", "entry-label":"$testMainLabArraySetOutPos"}
     ],
     "other_data_files" : [(
         "simstm", [
@@ -66,14 +70,26 @@ static_setup_data = {
         ])
     ],
     "src_tb_simstm_data_files" : [(
+        "simstm/tb/simstm/TestLabs", [
+            {"file":"tb/simstm/TestLabs/TestLabArrayGetOutPos.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabArrayZeroSize.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabArraySetOutPos.stm"}
+        ]),(
         "simstm/tb/simstm/Signal", [
-            {"file":"tb/simstm/Signal/Signal.stm"}
+            {"file":"tb/simstm/Signal/signal.stm"}
         ]),(
         "simstm/tb/simstm/Common", [
             {"file":"tb/simstm/Common/Common.stm"}
         ]),(
         "simstm/tb/simstm/TestSuites", [
+            {"file":"tb/simstm/TestSuites/TestSuiteArray.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteSignal.stm"}
+        ]),(
+        "simstm/tb/simstm/Array", [
+            {"file":"tb/simstm/Array/array.stm"},
+            {"file":"tb/simstm/Array/array_zero_size.stm"},
+            {"file":"tb/simstm/Array/array_pointer.stm"},
+            {"file":"tb/simstm/Array/array_size.stm"}
         ]),(
         "simstm/tb/simstm/TestCase", [
             {"file":"tb/simstm/TestCase/TestCase.stm"}
@@ -82,8 +98,12 @@ static_setup_data = {
             {"file":"tb/simstm/Base/Base.stm"}
         ]),(
         "simstm/tb/simstm", [
+            {"file":"tb/simstm/testMainLabArraySetOutPos.stm"},
+            {"file":"tb/simstm/testMainLabArrayGetOutPos.stm"},
             {"file":"tb/simstm/testMain.stm"},
-            {"file":"tb/simstm/testMainSuiteSignal.stm"}
+            {"file":"tb/simstm/testMainLabArrayZeroSize.stm"},
+            {"file":"tb/simstm/testMainSuiteSignal.stm"},
+            {"file":"tb/simstm/testMainSuiteArray.stm"}
         ])
     ],
       
