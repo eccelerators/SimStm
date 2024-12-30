@@ -1,0 +1,18 @@
+include "Common/Common.stm"
+
+testMainSuiteSignal:
+proc
+    	
+	verbosity $INFO_2
+	trace 0
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+	log message $INFO "Main test suite Signal started"
+	
+	call $testSuiteSignal	
+	
+	log message $INFO "Main test suite Signal ended"
+	wait 1000
+	finish
+end proc

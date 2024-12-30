@@ -1,0 +1,64 @@
+
+	-- intern
+	file TestCaseSignalStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseSignalFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	
+testSuiteSignal:
+proc
+	call $testCaseSignalWriteReadVerify
+end proc
+
+
+testCaseSignalWriteReadVerify:
+proc
+    file pointer copy TestCaseStartFile TestCaseSignalStartFile
+    file pointer copy TestCaseFile TestCaseSignalFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testSignalWriteReadVerify
+
+    signal read StandardTestErrorCount StandardTestErrorCountResult
+    if $StandardTestErrorCountResult != 0
+        lines append message TestCaseLines "SignalWriteReadVerify test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseSignalVerifyFail:
+proc
+    file pointer copy TestCaseStartFile TestCaseSignalStartFile
+    file pointer copy TestCaseFile TestCaseSignalFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testSignalVerifyFail
+
+    signal read StandardTestErrorCount StandardTestErrorCountResult
+    if $StandardTestErrorCountResult != 0
+        lines append message TestCaseLines "SignalVerifyFail test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+

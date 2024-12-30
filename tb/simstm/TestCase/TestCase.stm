@@ -1,0 +1,192 @@
+file TestCaseStartFile "TestCaseStartFilePointer"
+file TestCaseFile "TestCaseFilePointer"
+
+lines TestCaseStartLines
+lines TestCaseLines
+var TestCaseLinesPosition 0
+var TestCasePropertiesInsertionPoint 0
+
+var TestCaseNumberOfAssertions 0
+var TestCaseIndex 0xFFFFFFFF
+var TestCaseHasIndex 0
+var TestSuiteHasIndex 0
+
+var TestCaseSimulatedStartTime 0
+var TestCaseSimulatedEndTime 0
+var TestCaseSimulatedDurationTime 0
+
+beginTestCaseIndexedSuiteIndexed:
+proc
+    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
+    equ TestSuiteHasIndex 1    
+    equ TestCaseHasIndex 1
+    lines delete all TestCaseLines 
+    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"    
+    file write TestCaseStartFile TestCaseStartLines
+  
+    lines append message TestCaseLines '<testcase'    
+    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}_{:d}"' $TestSuiteIndex $TestCaseIndex
+    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines append message TestCaseLines ' classname="{@c3}_{:d}' $TestSuiteIndex    
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"' 
+    lines append message TestCaseLines '>'
+    
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint $TestCaseLinesPosition  
+end proc
+
+beginTestCaseSuiteIndexed:
+proc
+    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
+    equ TestSuiteHasIndex 1    
+    equ TestCaseHasIndex 0
+    lines delete all TestCaseLines 
+    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"    
+    file write TestCaseStartFile TestCaseStartLines
+      
+    lines append message TestCaseLines '<testcase'     
+    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}"' $TestSuiteIndex
+    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines append message TestCaseLines ' classname="{@c3}_{:d}"' $TestSuiteIndex 
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"' 
+    lines append message TestCaseLines '>'
+    
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint $TestCaseLinesPosition  
+end proc
+
+beginTestCaseIndexed:
+proc
+    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
+    equ TestSuiteHasIndex 0    
+    equ TestCaseHasIndex 1
+    lines delete all TestCaseLines 
+    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"    
+    file write TestCaseStartFile TestCaseStartLines
+      
+    lines append message TestCaseLines '<testcase'     
+    lines append message TestCaseLines ' name="{@c3}_{@c2}_{:d}"' $TestCaseIndex
+    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines append message TestCaseLines ' classname="{@c3}"'   
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"' 
+    lines append message TestCaseLines '>'
+    
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint $TestCaseLinesPosition  
+end proc
+
+beginTestCase:
+proc
+    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
+    equ TestSuiteHasIndex 0    
+    equ TestCaseHasIndex 0
+    lines delete all TestCaseLines 
+    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    log message $ALLWAYS "Started at simulation time of {:d}ns" $TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"    
+    file write TestCaseStartFile TestCaseStartLines
+    
+    lines append message TestCaseLines '<testcase'     
+    lines append message TestCaseLines ' name="{@c3}_{@c2}"'    
+    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions 
+    lines append message TestCaseLines ' classname="{@c3}"'    
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"'
+    lines append message TestCaseLines '>'
+    
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint $TestCaseLinesPosition   
+end proc
+
+
+endTestCase:
+proc
+    signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
+    log message $ALLWAYS "Ended at simulation time of {:d}ns" $TestCaseSimulatedEndTime
+    equ TestCaseSimulatedDurationTime $TestCaseSimulatedEndTime
+    sub TestCaseSimulatedDurationTime $TestCaseSimulatedStartTime
+ 	lines append message TestCaseLines '</testcase>'
+ 	lines insert message TestCaseLines $TestCaseLinesPosition '</properties>'
+    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedDuration" value="{:d}"/>' $TestCaseSimulatedDurationTime   
+    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedEndTime" value="{:d}"/>' $TestCaseSimulatedEndTime
+    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedStartTime" value="{:d}"/>' $TestCaseSimulatedStartTime 
+    lines insert message TestCaseLines $TestCaseLinesPosition '<properties>'	
+ 	-- file last modified time is test case end real time 
+ 	file append TestCaseFile TestCaseLines
+ 	if $TestSuiteHasIndex = 1
+	 	if $TestCaseHasIndex = 1 
+	 		log message $ALLWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
+	 	else
+	 		log message $ALLWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
+	 	end if
+ 	else
+	 	if $TestCaseHasIndex = 1 
+	 		log message $ALLWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
+	 	else
+	 		log message $ALLWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
+	 	end if
+ 	end if
+end proc
+
+
+skipTestCase:
+proc
+    lines size TestCaseLines TestCaseLinesPosition
+    sub TestCaseLinesPosition 1
+    lines insert message TestCaseLines $TestCaseLinesPosition "<skipped message=\""
+ 	lines append message TestCaseLines "\"/>"
+end proc
+
+errorTestCase:
+proc
+    lines size TestCaseLines TestCaseLinesPosition
+    sub TestCaseLinesPosition 1
+    lines insert message TestCaseLines $TestCaseLinesPosition "<error message=\""
+ 	lines append message TestCaseLines "\"/>"
+end proc
+
+failureTestCase:
+proc
+    lines size TestCaseLines TestCaseLinesPosition
+    sub TestCaseLinesPosition 1
+    lines insert message TestCaseLines $TestCaseLinesPosition "<failure message=\""
+ 	lines append message TestCaseLines "\"/>"
+end proc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

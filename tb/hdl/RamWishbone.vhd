@@ -35,33 +35,33 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity wb_ram is
+entity RamWishbone is
   generic(
-    ADR_WIDTH : positive := 10;  -- Determines the size of the RAM (num. of words = 2**ADR_WIDTH)
-    DAT_WIDTH : positive := 32;  -- Must be a multiple of GRANULARITY
+    ADDRESS_WIDTH : positive;  -- Determines the size of the RAM (num. of words = 2**ADDRESS_WIDTH)
+    DATA_WIDTH : positive := 32;  -- -- Number of data bits, must be a multiple of GRANULARITY
     GRANULARITY : positive := 8  -- Usually 8 (for byte granularity)
   );
   port(
     -- Wishbone SLAVE signals.
     i_rst : in std_logic;
     i_clk : in std_logic;
-    i_adr : in std_logic_vector(ADR_WIDTH-1 downto 0);
-    i_dat : in std_logic_vector(DAT_WIDTH-1 downto 0);
+    i_adr : in std_logic_vector(ADDRESS_WIDTH-1 downto 0);
+    i_dat : in std_logic_vector(DATA_WIDTH-1 downto 0);
     i_we : in std_logic;
-    i_sel : in std_logic_vector(DAT_WIDTH/GRANULARITY-1 downto 0);
+    i_sel : in std_logic_vector(DATA_WIDTH/GRANULARITY-1 downto 0);
     i_cyc : in std_logic;
     i_stb : in std_logic;
-    o_dat : out std_logic_vector(DAT_WIDTH-1 downto 0);
+    o_dat : out std_logic_vector(DATA_WIDTH-1 downto 0);
     o_ack : out std_logic;
     o_stall : out std_logic;
     o_rty : out std_logic;
     o_err : out std_logic
   );
-end wb_ram;
+end entity;
 
-architecture rtl of wb_ram is
-  constant C_NUM_WORDS : positive := 2**ADR_WIDTH;
-  constant C_PARTS_PER_WORD : positive := DAT_WIDTH / GRANULARITY;
+architecture rtl of RamWishbone is
+  constant C_NUM_WORDS : positive := 2**ADDRESS_WIDTH;
+  constant C_PARTS_PER_WORD : positive := DATA_WIDTH / GRANULARITY;
 
   subtype T_PART is std_logic_vector(GRANULARITY-1 downto 0);
   type T_PART_ARRAY is array (0 to C_NUM_WORDS-1) of T_PART;
@@ -110,4 +110,4 @@ begin
   o_stall <= '0';
   o_rty <= '0';
   o_err <= '0';
-end rtl;
+end architecture;

@@ -1,0 +1,97 @@
+
+var val_signal_read_back 0xffff
+
+testSignalWriteReadVerify:
+proc
+    call $startStandardTestShell
+
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_read_back
+	
+	if 0 = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 0, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2000 val_signal_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_read_back
+	
+	if 1 = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 1, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2000 val_signal_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_read_back
+	
+	if 1 = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 1, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2000 val_signal_read_back 1 0xffff
+	
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_read_back
+	
+	if 0 = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 0, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2001 val_signal_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_read_back
+	
+	if 1 = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 1, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2001 val_signal_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_read_back
+	
+	if 0xff = $val_signal_read_back
+	    log message $INFO "signal read back match"
+	else
+	    log message $FAILURE "signal read back doesn't match expected 0xff, got {}" $val_signal_read_back
+	    call $incStandardTestErrorCount
+	end if
+	signal verify in_signal_2001 val_signal_read_back 0xff 0xffff
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+
+testSignalVerifyFail:
+proc
+
+    call $startStandardTestShell
+
+	signal write out_signal_3000 0
+		
+	log message $INFO "signal verify no match"	
+	signal verify in_signal_2000 val_signal_read_back 1 1
+
+    call $incExpectedStandardTestErrorCount
+    
+	call $endStandardTestShell
+
+end proc
+
+
+

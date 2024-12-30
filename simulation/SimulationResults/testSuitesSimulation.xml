@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<testsuites name="testSuitesSimulation" tests="1" skipped="0" errors="0" failures="0" assertions="12" timestamp="2024-12-30T07:15:25.427133" time="4.090994">
+   <testsuite name="testSuiteSignal" tests="1" skipped="0" errors="0" failures="0" assertions="12" timestamp="2024-12-30T07:15:29.507127" time="0.001" file="TestSuites/TestSuiteSignal.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteSignal.stm -gstimulus_main_entry_label=$testMainSuiteSignal -do &quot;run_all.do&quot; 
+# Start time: 07:15:25 on Dec 30,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_pkg(body)
+# Loading work.tb_bus_axi4lite_pkg(body)
+# Loading work.tb_bus_wishbone_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite
+# ** Warning: NUMERIC_STD.&quot;=&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/Signal.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteSignal.stm
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# Main test suite Signal started
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalWriteReadVerify**********
+# Started at simulation time of 1002ns
+# testSignalWriteReadVerify started
+# signal read back match
+# signal read back match
+# signal read back match
+# signal read back match
+# signal read back match
+# signal read back match
+# testSignalWriteReadVerify ended successfully
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalWriteReadVerify**********
+# Main test suite Signal ended
+# ** Note: test finished with no errors!!
+#    Time: 2012300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 07:15:29 on Dec 30,2024, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 3
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+   </testsuite>
+</testsuites>

@@ -1,0 +1,27 @@
+include "Base/Base.stm"
+
+include "Signal/Signal.stm"
+
+include "TestCase/TestCase.stm"
+
+include "TestSuites/TestSuiteSignal.stm"
+
+bus wishbone 0
+bus avalon 1
+bus axi4lite 2
+var WaitTimeOut 100000 -- ms
+
+signal out_signal_init_dut 0
+
+signal out_signal_interrupt_a 1000
+signal out_signal_interrupt_b 1001
+
+signal in_signal_2000 2000
+signal in_signal_2001 2001
+signal in_signal_2002 2002
+signal in_signal_2003 2003
+
+signal out_signal_3000 3000
+signal out_signal_3001 3001
+
+
