@@ -18,11 +18,8 @@
 	file TestCaseArrayZeroSizeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
 	file TestCaseArrayZeroSizeFile "../../SimulationResults/{@c3}_{@c2}.xml"	
 	
-	file TestCaseArrayPointerStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayPointerFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-	file TestCaseArrayPointerGetSetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayPointerGetSetFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseArrayPointerCopyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseArrayPointerCopyFile "../../SimulationResults/{@c3}_{@c2}.xml"
 	
 testSuiteArray:
 proc
@@ -30,8 +27,7 @@ proc
 	call $testCaseArrayGet
 	call $testCaseArraySet
 	call $testCaseArraySize
-	call $testCaseArrayPointer	
-	call $testArrayPointerGetSet
+	call $testCaseArrayPointerCopy	
 end proc
 
 
@@ -191,10 +187,10 @@ proc
     
 end proc
 
-testCaseArrayPointer:
+testCaseArrayPointerCopy:
 proc
-    file pointer copy TestCaseStartFile TestCaseArrayPointerStartFile
-    file pointer copy TestCaseFile TestCaseArrayPointerFile
+    file pointer copy TestCaseStartFile TestCaseArrayPointerCopyStartFile
+    file pointer copy TestCaseFile TestCaseArrayPointerCopyFile
     equ TestCaseNumberOfAssertions 7
     call $beginTestCase
     
@@ -205,7 +201,7 @@ proc
 	    return   
     end if
     
-    call $testArrayPointer
+    call $testArrayPointerCopy
 
     signal read StandardTestErrorCount StandardTestErrorCountResult
     if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
@@ -217,29 +213,4 @@ proc
     
 end proc
 
-testCaseArrayPointerGetSet:
-proc
-    file pointer copy TestCaseStartFile TestCaseArrayPointerGetSetStartFile
-    file pointer copy TestCaseFile TestCaseArrayPointerGetSetFile
-    equ TestCaseNumberOfAssertions 7
-    call $beginTestCase
-    
-    if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
-    end if
-    
-    call $testArrayPointerGetSet
-
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
-        lines append message TestCaseLines "ArrayPointerGetSet test failed"
-        call $failureTestCase
-    end if
-    
-    call $endTestCase
-    
-end proc
 

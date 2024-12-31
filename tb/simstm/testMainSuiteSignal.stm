@@ -1,11 +1,17 @@
 include "Common/Common.stm"
 
+include "Signal/signal.stm"
+include "Signal/signal_pointer.stm"
+
+include "TestSuites/TestSuiteSignal.stm"
+
 testMainSuiteSignal:
 proc
     call $initBase
         	
 	verbosity $INFO_2
-	trace 0
+	trace $TRACE_OFF
+	resume $RESUME_ON_VERIFY_ERROR
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0

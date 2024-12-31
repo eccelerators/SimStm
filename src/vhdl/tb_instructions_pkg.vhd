@@ -109,8 +109,6 @@ package tb_instructions_pkg is
     constant INSTR_FILE_WRITE : string := "file_write";
     constant INSTR_FILE_APPEND : string := "file_append";
     constant INSTR_FILE_POINTER_COPY : string := "file_pointer_copy";
-    constant INSTR_FILE_POINTER_SET : string := "file_pointer_set";
-    constant INSTR_FILE_POINTER_GET : string := "file_pointer_get";
 
     -- lines
     constant INSTR_LINES : string := "lines";
@@ -125,8 +123,6 @@ package tb_instructions_pkg is
     constant INSTR_LINES_APPEND_MESSAGE : string := "lines_append_message";
     constant INSTR_LINES_SIZE : string := "lines_size";
     constant INSTR_LINES_POINTER_COPY : string := "lines_pointer_copy";
-    constant INSTR_LINES_POINTER_SET : string := "lines_pointer_set";
-    constant INSTR_LINES_POINTER_GET : string := "lines_pointer_get";
 
     -- array
     constant INSTR_ARRAY : string := "array";
@@ -134,8 +130,6 @@ package tb_instructions_pkg is
     constant INSTR_ARRAY_SET : string := "array_set";
     constant INSTR_ARRAY_SIZE : string := "array_size";
     constant INSTR_ARRAY_POINTER_COPY : string := "array_pointer_copy";
-    constant INSTR_ARRAY_POINTER_SET : string := "array_pointer_set";
-    constant INSTR_ARRAY_POINTER_GET : string := "array_pointer_get";
     constant INSTR_ARRAY_VERIFY : string := "array_verify";
 
     -- others
@@ -251,9 +245,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);
-        define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
-        define_instruction(inst_list, INSTR_FILE_POINTER_SET, 2);
-        define_instruction(inst_list, INSTR_FILE_POINTER_GET, 2);                
+        define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);              
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
         define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
@@ -267,16 +259,12 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_LINES_APPEND_MESSAGE, 1);
         define_instruction(inst_list, INSTR_LINES_SIZE, 2);
         define_instruction(inst_list, INSTR_LINES_POINTER_COPY, 2);
-        define_instruction(inst_list, INSTR_LINES_POINTER_SET, 2);
-        define_instruction(inst_list, INSTR_LINES_POINTER_GET, 2);
         -- array
         define_instruction(inst_list, INSTR_ARRAY, 2);
         define_instruction(inst_list, INSTR_ARRAY_GET, 3);
         define_instruction(inst_list, INSTR_ARRAY_SET, 3);
         define_instruction(inst_list, INSTR_ARRAY_SIZE, 2);
         define_instruction(inst_list, INSTR_ARRAY_POINTER_COPY, 2);
-        define_instruction(inst_list, INSTR_ARRAY_POINTER_SET, 2);
-        define_instruction(inst_list, INSTR_ARRAY_POINTER_GET, 2);
         define_instruction(inst_list, INSTR_ARRAY_VERIFY, 4);
         -- others
         define_instruction(inst_list, INSTR_PROC, 0);
@@ -378,12 +366,6 @@ package body tb_instructions_pkg is
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
                         token_merge := 3;
-                    elsif token3(1 to 3) = "set" then
-                        token3_len := 3;
-                        token_merge := 3;
-                    elsif token3(1 to 3) = "get" then
-                        token3_len := 3;
-                        token_merge := 3;
                     end if;
                 end if;
             elsif token1(1 to 5) = "lines" then
@@ -441,12 +423,6 @@ package body tb_instructions_pkg is
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
                         token_merge := 3;
-                    elsif token3(1 to 3) = "set" then
-                        token3_len := 3;
-                        token_merge := 3;
-                    elsif token3(1 to 3) = "get" then
-                        token3_len := 3;
-                        token_merge := 3;
                     end if;
                 end if;
             elsif token1(1 to 5) = "array" then
@@ -468,12 +444,6 @@ package body tb_instructions_pkg is
                     token_merge := 2;
                     if token3(1 to 4) = "copy" then
                         token3_len := 4;
-                        token_merge := 3;
-                    elsif token3(1 to 3) = "set" then
-                        token3_len := 3;
-                        token_merge := 3;
-                    elsif token3(1 to 3) = "get" then
-                        token3_len := 3;
                         token_merge := 3;
                     end if;
                 end if;

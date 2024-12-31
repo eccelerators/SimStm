@@ -1,11 +1,18 @@
 include "Common/Common.stm"
 
+include "Array/array.stm"
+include "Array/array_size.stm"
+include "Array/array_pointer.stm"
+
+include "TestSuites/TestSuiteArray.stm"
+
 testMainSuiteArray:
 proc
     call $initBase
         	
 	verbosity $INFO_2
-	trace 0
+	trace $TRACE_OFF
+	resume $RESUME_ON_VERIFY_ERROR
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0

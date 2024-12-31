@@ -44,6 +44,20 @@ const SKIP 1
 const SKIPPED 1
 const NOT_SKIPPED 0
 
+const STOP_ON_VERIFY_ERROR 0
+const RESUME_ON_VERIFY_ERROR 1    
+
+const TRACE_OFF 0b000
+const TRACE_INSTRUCTIONS 0b001
+const TRACE_VARIABLES 0b010
+const TRACE_FILES 0b100
+const TRACE_ALL 0b111
+
+const FILE_STATUS_OK 0
+const FILE_STATUS_ERROR 1
+const FILE_STATUS_NAME_ERROR 2
+const FILE_STATUS_MODE_ERROR 3
+
 signal sigInSimulatedTimeNow 0
 var SimulatedTimeNow 0
 
@@ -81,6 +95,22 @@ var ExpectedStandardTestErrorCountResult 0
 --
 --  Each verify instruction with non success increments the StandardTestError count automatically.
 
+var FileStatus 0
+
+printFileStatus:
+proc
+	if $FileStatus = $FILE_STATUS_OK
+		log message 0 "STATUS_OK"
+	elsif $FileStatus = $FILE_STATUS_ERROR
+		log message 0 "STATUS_ERROR"
+	elsif $FileStatus = $FILE_STATUS_NAME_ERROR
+		log message 0 "STATUS_NAME_ERROR"
+	elsif $FileStatus = $FILE_STATUS_MODE_ERROR
+		log message 0 "STATUS_MODE_ERROR"
+	else
+		log message 0 "Other status: {}" $FileStatus
+	end if
+end proc
 
 startStandardTestShell:
 proc
@@ -95,7 +125,7 @@ proc
 	signal read StandardTestErrorCount StandardTestErrorCountResult
 	sub StandardTestErrorCountResult $StandardTestErrorCountStartSnapShot
     if $StandardTestErrorCountResult > 0 
-    	log message 0 "{@c2} ended with {:d} failures" $StandardTestErrorCountResult
+    	log message 0 "{@c2} ended with {:d} SimStm errors considered as junit failures, if not expected" $StandardTestErrorCountResult
     else 
     	log message 0 "{@c2} ended successfully"    
     end if	
@@ -105,6 +135,7 @@ end proc
 incExpectedStandardTestErrorCount:
 proc
 	add ExpectedStandardTestErrorCountResult 1
+	signal write ExpectedStandardTestErrorCount $ExpectedStandardTestErrorCountResult
 end proc	
 	
 -- manual method to increment the StandardTestErrorCount based on if instruction decisions	

@@ -601,30 +601,7 @@ begin
                     assert valid /= 0
                     report "array_pointer error: not a array name??"
                     severity failure;
-                    
-                --  array pointer set a_array_target a_var
-                --  array pointer set a_array_target 0x01
-                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_SET then
-                    index_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var object not found"
-                    severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report "array_pointer error: not a array object name??"
-                    severity failure;
-
-                --  array pointer get a_array_source a_var
-                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_GET then
-                    index_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
-                    severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report "variable error: not a var object name??"
-                    severity failure;                    
-                    
+                                                         
                 -- array verify $a_var $array_position $var_expected_value $var_mask_value
                 -- array verify $a_var $array_position 0x0002 0x00FF
                 -- array verify $a_var 5 $var_expected_value $var_mask_value
@@ -929,30 +906,7 @@ begin
                     assert valid /= 0
                     report "files_pointer error: not a lines object name??"
                     severity failure;
-                    
-                --  file pointer set a_file_target a_var
-                --  file pointer set a_file_target 0x01
-                elsif instruction(1 to len) = INSTR_file_POINTER_SET then
-                    index_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var object not found"
-                    severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report "file_pointer error: not a file object name??"
-                    severity failure;
-
-                --  file pointer get a_file_source a_var
-                elsif instruction(1 to len) = INSTR_file_POINTER_GET then
-                    index_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
-                    severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report "variable error: not a var object name??"
-                    severity failure;                    
-
+                                   
                 -- lines get a_lines $position an_array number_found
                 -- lines get a_lines 8 an_array number_found
                 elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
@@ -1117,30 +1071,7 @@ begin
                     assert valid /= 0
                     report "lines_pointer error: not a lines object name??"
                     severity failure;
-                    
-                --  lines pointer set a_lines_target a_var
-                --  lines pointer set a_lines_target 0x01
-                elsif instruction(1 to len) = INSTR_lines_POINTER_SET then
-                    index_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var object not found"
-                    severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report "lines_pointer error: not a lines object name??"
-                    severity failure;
-
-                --  lines pointer get a_lines_source a_var
-                elsif instruction(1 to len) = INSTR_lines_POINTER_GET then
-                    index_variable(defined_vars, par1, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
-                    severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report "variable error: not a var object name??"
-                    severity failure;                 
-
+                                
                 -- if $a_var_ref = $another_var
                 -- if 0x09 = $another_var
                 -- if $a_varA = 0x09
@@ -1403,16 +1334,19 @@ begin
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
                     expected_error_count := to_integer(unsigned(signals_out.out_signal_3));
-                    assert error_count /= expected_error_count
-                    report "test finished with no errors!!"
-                    severity note;
                     if expected_error_count = 0 then
+                        assert error_count /= 0
+                        report "test finished with no errors!!"
+                        severity note;
                         assert error_count = 0
-                        report "test finished with " & (integer'image(error_count)) & (integer'image(error_count)) & " errors!!"
+                        report "test finished with " & (integer'image(error_count)) & " errors!!"
                         severity error;
                     else
+                        assert error_count /= expected_error_count
+                        report "test finished without difference between expected and actual error count of " & (integer'image(expected_error_count)) & " errors"
+                        severity note;                    
                         assert error_count = expected_error_count
-                        report "test finished with expected error count different from actual, expected: " & (integer'image(expected_error_count)) & " actual: " & (integer'image(error_count)) & " errors!!"
+                        report "test finished with expected error count different from actual, expected count: " & (integer'image(expected_error_count)) & " actual count: " & (integer'image(error_count)) & " errors!!"
                         severity error;
                     end if;
                     wait for 1000 ns;
@@ -1660,11 +1594,7 @@ begin
                 --  signal pointer set a_signal_target a_var
                 --  signal pointer set a_signal_target 0x01
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_SET then
-                    index_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: variable object not found"
-                    severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
@@ -1766,11 +1696,7 @@ begin
                 --  bus pointer set a_bus_target a_var
                 --  bus pointer set a_bus_target 0x01
                 elsif instruction(1 to len) = INSTR_bus_POINTER_SET then
-                    index_variable(defined_vars, par2, temp_int, valid);
-                    assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var object not found"
-                    severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
                     report "bus_pointer error: not a bus object name??"
                     severity failure;

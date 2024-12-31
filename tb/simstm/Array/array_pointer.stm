@@ -3,7 +3,7 @@ array des_array 1
 
 var var_name_p 0
 
-testArrayPointer:
+testArrayPointerCopy:
 proc
 	call $startStandardTestShell
 
@@ -51,50 +51,3 @@ proc
 	call $endStandardTestShell
 end proc
 
-
-array a_array 4
-array b_array 4
-
-var a_array_pointer_value_absolut 0
-var b_array_pointer_value_absolut 0
-
-testArrayPointerGetSet:
-proc
-
-	array set a_array 0 0xa0
-	array set a_array 1 0xa1
-	array set a_array 2 0xa2
-	array set a_array 3 0xa3
-
-	array set b_array 0 0xb0
-	array set b_array 1 0xb1
-	array set b_array 2 0xb2
-	array set b_array 3 0xb3
-	
-	array verify a_array 0 0xa0 $MAX
-	array verify a_array 1 0xa1 $MAX
-	array verify a_array 2 0xa2 $MAX
-	array verify a_array 3 0xa3 $MAX
-
-	array verify b_array 0 0xb0 $MAX
-	array verify b_array 1 0xb1 $MAX
-	array verify b_array 2 0xb2 $MAX
-	array verify b_array 3 0xb3 $MAX
-	
-	array pointer get a_array a_array_pointer_value_absolut
-	array pointer get b_array b_array_pointer_value_absolut	
-	
-	array pointer set a_array $b_array_pointer_value_absolut
-	array pointer set b_array $a_array_pointer_value_absolut	
-	
-	array verify b_array 0 0xa0 $MAX
-	array verify b_array 1 0xa1 $MAX
-	array verify b_array 2 0xa2 $MAX
-	array verify b_array 3 0xa3 $MAX
-
-	array verify a_array 0 0xb0 $MAX
-	array verify a_array 1 0xb1 $MAX
-	array verify a_array 2 0xb2 $MAX
-	array verify a_array 3 0xb3 $MAX
-	
-end proc

@@ -1,0 +1,204 @@
+file user_data_out "user_data_out.dat"
+file tmp_file "unused"
+lines a_lines
+lines b_lines
+lines c_lines
+array a_array 8
+
+testFileAppendArray:
+proc
+    call $startStandardTestShell     
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	-- log lines 0 a_lines
+	
+	file write user_data_out a_lines
+	
+	file append user_data_out a_lines
+
+	call $endStandardTestShell
+end proc
+
+
+testFileReadAllArray:
+proc
+    call $startStandardTestShell      
+ 
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	-- log lines 0 a_lines
+	
+	file write user_data_out a_lines
+	
+	file read all user_data_out b_lines
+	
+	-- log lines 0 b_lines
+
+	call $endStandardTestShell
+end proc
+
+
+testFileReadArray:
+proc
+    call $startStandardTestShell      
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	-- log lines 0 a_lines
+	
+	file write user_data_out a_lines
+	
+	file read user_data_out b_lines 1
+	
+	-- log lines 0 b_lines
+	
+	file read user_data_out c_lines 2
+	
+	-- log lines 0 c_lines
+	
+	file read end user_data_out
+
+	call $endStandardTestShell
+end proc
+
+
+testFileStatus:
+proc
+    call $startStandardTestShell
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+
+    array set a_array 0 1
+    lines append array a_lines a_array
+
+    array set a_array 0 2
+    lines append array a_lines a_array
+
+	-- log lines 0 a_lines
+
+	log message 0 "Check if file is readable, which doesn't exist"
+	file readable user_data_out FileStatus
+	call $printFileStatus
+
+	log message 0 "Check if file is writeable, which doesn't exist"
+	file writeable user_data_out FileStatus
+	call $printFileStatus
+
+	log message 0 "Check if file is appendable, which doesn't exist"
+	file appendable user_data_out FileStatus
+	call $printFileStatus
+
+	call $endStandardTestShell
+end proc
+
+testFileWriteArray:
+proc
+    call $startStandardTestShell      
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	-- log lines 0 a_lines
+	
+	file write user_data_out a_lines
+
+	call $endStandardTestShell
+end proc
+
+
+testFilePointerCopy:
+proc
+    call $startStandardTestShell     
+
+    array set a_array 0 0
+    array set a_array 1 1
+    array set a_array 2 0xA
+    array set a_array 3 2
+    array set a_array 4 0xB
+    array set a_array 5 0x7FFFFFFF
+    array set a_array 6 0x80000000
+    array set a_array 7 0xFFFFFFFF
+    lines append array a_lines a_array
+    
+    array set a_array 0 1
+    lines append array a_lines a_array    
+    
+    array set a_array 0 2
+    lines append array a_lines a_array    
+    
+	-- log lines 0 a_lines
+	
+	file pointer copy tmp_file user_data_out
+	call $WriteFile
+
+	call $endStandardTestShell
+end proc
+
+WriteFile:
+proc
+	file write tmp_file a_lines
+end proc

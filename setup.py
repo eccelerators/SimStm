@@ -31,6 +31,7 @@ static_setup_data = {
     "tb_top_entity" : "tbTop",
     "tb_top_entity_file" : "/tb/hdl/tbTop.vhd",
     "test_suites" : [
+            {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"$testMainSuiteFile"},
             {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"$testMainSuiteArray"},
             {"testsuite-name":"testSuiteSignal", "file":"TestSuites/TestSuiteSignal.stm", "entry-file":"testMainSuiteSignal.stm", "entry-label":"$testMainSuiteSignal"}
     ],
@@ -75,13 +76,18 @@ static_setup_data = {
             {"file":"tb/simstm/TestLabs/TestLabArrayZeroSize.stm"},
             {"file":"tb/simstm/TestLabs/TestLabArraySetOutPos.stm"}
         ]),(
+        "simstm/tb/simstm/File", [
+            {"file":"tb/simstm/File/file.stm"}
+        ]),(
         "simstm/tb/simstm/Signal", [
             {"file":"tb/simstm/Signal/signal.stm"}
         ]),(
         "simstm/tb/simstm/Common", [
-            {"file":"tb/simstm/Common/Common.stm"}
+            {"file":"tb/simstm/Common/Common.stm"},
+            {"file":"tb/simstm/Common/CommonLabs.stm"}
         ]),(
         "simstm/tb/simstm/TestSuites", [
+            {"file":"tb/simstm/TestSuites/TestSuiteFile.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteArray.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteSignal.stm"}
         ]),(
@@ -103,7 +109,8 @@ static_setup_data = {
             {"file":"tb/simstm/testMain.stm"},
             {"file":"tb/simstm/testMainLabArrayZeroSize.stm"},
             {"file":"tb/simstm/testMainSuiteSignal.stm"},
-            {"file":"tb/simstm/testMainSuiteArray.stm"}
+            {"file":"tb/simstm/testMainSuiteArray.stm"},
+            {"file":"tb/simstm/testMainSuiteFile.stm"}
         ])
     ],
       

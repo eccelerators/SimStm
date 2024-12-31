@@ -1,146 +1,10 @@
 <?xml version="1.0" ?>
-<testsuites name="testSuitesSimulation" tests="6" skipped="0" errors="0" failures="0" assertions="29" timestamp="2024-12-30T11:17:58.199090" time="2.590002">
-   <testsuite name="testSuiteArray" tests="5" skipped="0" errors="0" failures="0" assertions="17" timestamp="2024-12-30T11:17:59.501091" time="0.0" file="TestSuites/TestSuiteArray.stm">
-      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteArray.stm -gstimulus_main_entry_label=$testMainSuiteArray -do &quot;run_all.do&quot; 
-# Start time: 11:17:58 on Dec 30,2024
+<testsuites name="testSuitesSimulation" tests="15" skipped="0" errors="0" failures="0" assertions="77" timestamp="2024-12-31T09:59:04.201524" time="3.578009">
+   <testsuite name="testSuiteFile" tests="6" skipped="0" errors="0" failures="0" assertions="12" timestamp="2024-12-31T09:59:06.870531" time="0.001" file="TestSuites/TestSuiteFile.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteFile.stm -gstimulus_main_entry_label=$testMainSuiteFile -do &quot;run_all.do&quot; 
+# Start time: 09:59:04 on Dec 31,2024
 # ** Note: (vsim-3812) Design is being optimized...
-# //  Questa Intel Starter FPGA Edition-64
-# //  Version 2023.3 linux_x86_64 Jul 17 2023
-# //
-# //  Copyright 1991-2023 Mentor Graphics Corporation
-# //  All Rights Reserved.
-# //
-# //  QuestaSim and its associated documentation contain trade
-# //  secrets and commercial or financial information that are the property of
-# //  Mentor Graphics Corporation and are privileged, confidential,
-# //  and exempt from disclosure under the Freedom of Information Act,
-# //  5 U.S.C. Section 552. Furthermore, this information
-# //  is prohibited from disclosure under the Trade Secrets Act,
-# //  18 U.S.C. Section 1905.
-# //
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading ieee.math_real(body)
-# Loading work.tb_base_pkg(body)
-# Loading work.tb_bus_avalon_pkg(body)
-# Loading work.tb_bus_axi4lite_pkg(body)
-# Loading work.tb_bus_wishbone_pkg(body)
-# Loading work.tb_bus_pkg(body)
-# Loading work.tb_signals_pkg(body)
-# Loading std.env(body)
-# Loading work.tb_instructions_pkg(body)
-# Loading work.tb_interpreter_pkg(body)
-# Loading work.tbtop(behavioural)#1
-# Loading work.tb_simstm(behavioural)#1
-# Loading work.ramavalon(simulation)#1
-# 
-# do run_all.do
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite
-# ** Warning: NUMERIC_STD.&quot;=&quot;: metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAvalon
-# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_size.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_pointer.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteSignal.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteArray.stm
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 5 ns  Iteration: 0  Instance: /tbtop/i_RamAvalon
-# Main test suite Array started
-# **********START*TESTCASE*testSuiteArray_testCaseArray**********
-# Started at simulation time of 1002ns
-# testArray started
-# testArray ended successfully
-# Ended at simulation time of 1007ns
-# **********END*TESTCASE*testSuiteArray_testCaseArray**********
-# **********START*TESTCASE*testSuiteArray_testCaseArrayGet**********
-# Started at simulation time of 1010ns
-# testArrayGet started
-# testArrayGet ended successfully
-# Ended at simulation time of 1014ns
-# **********END*TESTCASE*testSuiteArray_testCaseArrayGet**********
-# **********START*TESTCASE*testSuiteArray_testCaseArraySet**********
-# Started at simulation time of 1018ns
-# testArraySet started
-# testArraySet ended successfully
-# Ended at simulation time of 1022ns
-# **********END*TESTCASE*testSuiteArray_testCaseArraySet**********
-# **********START*TESTCASE*testSuiteArray_testCaseArraySize**********
-# Started at simulation time of 1025ns
-# testArraySize started
-# testArraySize ended successfully
-# Ended at simulation time of 1029ns
-# **********END*TESTCASE*testSuiteArray_testCaseArraySize**********
-# **********START*TESTCASE*testSuiteArray_testCaseArrayPointer**********
-# Started at simulation time of 1032ns
-# testArrayPointer started
-# var_name_p: 0xA
-# testArrayPointer ended successfully
-# Ended at simulation time of 1039ns
-# **********END*TESTCASE*testSuiteArray_testCaseArrayPointer**********
-# ** Failure:  line 87, array_pointer_set error: var object not found
-#    Time: 1043 ns  Iteration: 0  Process: /tbtop/i_tb_simstm/read_file File: /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/src/vhdl/tb_simstm.vhd
-# Break in Process read_file at /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/src/vhdl/tb_simstm.vhd line 610
-# Stopped at /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/src/vhdl/tb_simstm.vhd line 610
-# End time: 11:17:59 on Dec 30,2024, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 3
-</system-out>
-      <system-err/>
-      <testcase name="testSuiteArray_testCaseArraySet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.001">
-         <properties>
-            <property name="SimulatedStartTime" value="1018"/>
-            <property name="SimulatedEndTime" value="1022"/>
-            <property name="SimulatedDuration" value="4"/>
-         </properties>
-      </testcase>
-      <testcase name="testSuiteArray_testCaseArrayGet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.001">
-         <properties>
-            <property name="SimulatedStartTime" value="1010"/>
-            <property name="SimulatedEndTime" value="1014"/>
-            <property name="SimulatedDuration" value="4"/>
-         </properties>
-      </testcase>
-      <testcase name="testSuiteArray_testCaseArray" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.0">
-         <properties>
-            <property name="SimulatedStartTime" value="1002"/>
-            <property name="SimulatedEndTime" value="1007"/>
-            <property name="SimulatedDuration" value="5"/>
-         </properties>
-      </testcase>
-      <testcase name="testSuiteArray_testCaseArrayPointer" assertions="7" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.001">
-         <properties>
-            <property name="SimulatedStartTime" value="1032"/>
-            <property name="SimulatedEndTime" value="1039"/>
-            <property name="SimulatedDuration" value="7"/>
-         </properties>
-      </testcase>
-      <testcase name="testSuiteArray_testCaseArraySize" assertions="1" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.001">
-         <properties>
-            <property name="SimulatedStartTime" value="1025"/>
-            <property name="SimulatedEndTime" value="1029"/>
-            <property name="SimulatedDuration" value="4"/>
-         </properties>
-      </testcase>
-   </testsuite>
-   <testsuite name="testSuiteSignal" tests="1" skipped="0" errors="0" failures="0" assertions="12" timestamp="2024-12-30T11:18:00.768091" time="0.002001" file="TestSuites/TestSuiteSignal.stm">
-      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteSignal.stm -gstimulus_main_entry_label=$testMainSuiteSignal -do &quot;run_all.do&quot; 
-# Start time: 11:17:58 on Dec 30,2024
-# ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 27095&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 66935&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
@@ -183,19 +47,282 @@
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
 # nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/File/file.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteFile.stm
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# Main test suite File started
+# **********START*TESTCASE*testSuiteFile_testCaseFileAppendArray**********
+# Started at simulation time of 1002ns
+# testFileAppendArray started
+# testFileAppendArray ended successfully
+# Ended at simulation time of 1007ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileAppendArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileReadAllArray**********
+# Started at simulation time of 1010ns
+# testFileReadAllArray started
+# testFileReadAllArray ended successfully
+# Ended at simulation time of 1016ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileReadAllArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileReadArray**********
+# Started at simulation time of 1019ns
+# testFileReadArray started
+# testFileReadArray ended successfully
+# Ended at simulation time of 1024ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileReadArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileStatus**********
+# Started at simulation time of 1027ns
+# testFileStatus started
+# Check if file is readable, which doesn't exist
+# STATUS_OK
+# Check if file is writeable, which doesn't exist
+# STATUS_OK
+# Check if file is appendable, which doesn't exist
+# STATUS_OK
+# testFileStatus ended successfully
+# Ended at simulation time of 1035ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileStatus**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileWriteArray**********
+# Started at simulation time of 1038ns
+# testFileWriteArray started
+# testFileWriteArray ended successfully
+# Ended at simulation time of 1044ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileWriteArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFilePointerCopy**********
+# Started at simulation time of 1047ns
+# testFilePointerCopy started
+# testFilePointerCopy ended successfully
+# Ended at simulation time of 1052ns
+# **********END*TESTCASE*testSuiteFile_testCaseFilePointerCopy**********
+# Main test suite File ended
+# ** Note: test finished with no errors!!
+#    Time: 2055 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 09:59:06 on Dec 31,2024, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 4
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteFile_testCaseFileAppendArray" assertions="3" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1007"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileWriteArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1038"/>
+            <property name="SimulatedEndTime" value="1044"/>
+            <property name="SimulatedDuration" value="6"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileReadAllArray" assertions="3" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="1010"/>
+            <property name="SimulatedEndTime" value="1016"/>
+            <property name="SimulatedDuration" value="6"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileReadArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="1019"/>
+            <property name="SimulatedEndTime" value="1024"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileStatus" assertions="3" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="1027"/>
+            <property name="SimulatedEndTime" value="1035"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFilePointerCopy" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="1047"/>
+            <property name="SimulatedEndTime" value="1052"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteArray" tests="5" skipped="0" errors="0" failures="0" assertions="17" timestamp="2024-12-31T09:59:07.759533" time="0.0" file="TestSuites/TestSuiteArray.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteArray.stm -gstimulus_main_entry_label=$testMainSuiteArray -do &quot;run_all.do&quot; 
+# Start time: 09:59:04 on Dec 31,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 66935&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_pkg(body)
+# Loading work.tb_bus_axi4lite_pkg(body)
+# Loading work.tb_bus_wishbone_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite
+# ** Warning: NUMERIC_STD.&quot;=&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_size.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_pointer.stm
-# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
 # nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_size.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_pointer.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteArray.stm
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 5 ns  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# Main test suite Array started
+# **********START*TESTCASE*testSuiteArray_testCaseArray**********
+# Started at simulation time of 1002ns
+# testArray started
+# testArray ended successfully
+# Ended at simulation time of 1007ns
+# **********END*TESTCASE*testSuiteArray_testCaseArray**********
+# **********START*TESTCASE*testSuiteArray_testCaseArrayGet**********
+# Started at simulation time of 1010ns
+# testArrayGet started
+# testArrayGet ended successfully
+# Ended at simulation time of 1015ns
+# **********END*TESTCASE*testSuiteArray_testCaseArrayGet**********
+# **********START*TESTCASE*testSuiteArray_testCaseArraySet**********
+# Started at simulation time of 1018ns
+# testArraySet started
+# testArraySet ended successfully
+# Ended at simulation time of 1022ns
+# **********END*TESTCASE*testSuiteArray_testCaseArraySet**********
+# **********START*TESTCASE*testSuiteArray_testCaseArraySize**********
+# Started at simulation time of 1025ns
+# testArraySize started
+# testArraySize ended successfully
+# Ended at simulation time of 1029ns
+# **********END*TESTCASE*testSuiteArray_testCaseArraySize**********
+# **********START*TESTCASE*testSuiteArray_testCaseArrayPointerCopy**********
+# Started at simulation time of 1033ns
+# testArrayPointerCopy started
+# var_name_p: 0xA
+# testArrayPointerCopy ended successfully
+# Ended at simulation time of 1039ns
+# **********END*TESTCASE*testSuiteArray_testCaseArrayPointerCopy**********
+# Main test suite Array ended
+# ** Note: test finished with no errors!!
+#    Time: 2041400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 09:59:07 on Dec 31,2024, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 4
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteArray_testCaseArraySet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.0">
+         <properties>
+            <property name="SimulatedStartTime" value="1018"/>
+            <property name="SimulatedEndTime" value="1022"/>
+            <property name="SimulatedDuration" value="4"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArrayGet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.0">
+         <properties>
+            <property name="SimulatedStartTime" value="1010"/>
+            <property name="SimulatedEndTime" value="1015"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArray" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.0">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1007"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArrayPointerCopy" assertions="7" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.004">
+         <properties>
+            <property name="SimulatedStartTime" value="1033"/>
+            <property name="SimulatedEndTime" value="1039"/>
+            <property name="SimulatedDuration" value="6"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArraySize" assertions="1" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.0">
+         <properties>
+            <property name="SimulatedStartTime" value="1025"/>
+            <property name="SimulatedEndTime" value="1029"/>
+            <property name="SimulatedDuration" value="4"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteSignal" tests="4" skipped="0" errors="0" failures="0" assertions="48" timestamp="2024-12-31T09:59:05.345527" time="0.002" file="TestSuites/TestSuiteSignal.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteSignal.stm -gstimulus_main_entry_label=$testMainSuiteSignal -do &quot;run_all.do&quot; 
+# Start time: 09:59:04 on Dec 31,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_pkg(body)
+# Loading work.tb_bus_axi4lite_pkg(body)
+# Loading work.tb_bus_wishbone_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite
+# ** Warning: NUMERIC_STD.&quot;=&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAvalon
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteSignal.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
 # nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
-# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteArray.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal_pointer.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteSignal.stm
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 #    Time: 5 ns  Iteration: 0  Instance: /tbtop/i_RamAvalon
 # Main test suite Signal started
@@ -205,18 +332,60 @@
 # testSignalWriteReadVerify ended successfully
 # Ended at simulation time of 1008ns
 # **********END*TESTCASE*testSuiteSignal_testCaseSignalWriteReadVerify**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalVerifyFail**********
+# Started at simulation time of 1011ns
+# testSignalVerifyFail started
+# signal verify intended error on no match
+# ** Error:  line 58, signal_verify:, read=0x00000000, expected=0x00000001, mask=0x00000001, file Signal/signal.stm
+#    Time: 1014300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# testSignalVerifyFail ended with 1 SimStm errors considered as junit failures, if not expected
+# Ended at simulation time of 1016ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalVerifyFail**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalPointerCopy**********
+# Started at simulation time of 1019ns
+# testSignalPointerCopy started
+# testSignalPointerCopy ended successfully
+# Ended at simulation time of 1029ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalPointerCopy**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalPointerGetSet**********
+# Started at simulation time of 1032ns
+# testSignalPointerGetSet started
+# testSignalPointerGetSet ended successfully
+# Ended at simulation time of 1042ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalPointerGetSet**********
 # Main test suite Signal ended
-# ** Note: test finished with no errors!!
-#    Time: 2010900 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 11:18:00 on Dec 30,2024, Elapsed time: 0:00:02
-# Errors: 0, Warnings: 4
+# ** Note: test finished without difference between expected and actual error count of 1 errors
+#    Time: 2044500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 09:59:05 on Dec 31,2024, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 3
 </system-out>
       <system-err/>
-      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.002001">
+      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1008"/>
             <property name="SimulatedDuration" value="6"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalPointerCopy" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="1019"/>
+            <property name="SimulatedEndTime" value="1029"/>
+            <property name="SimulatedDuration" value="10"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalVerifyFail" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.0">
+         <properties>
+            <property name="SimulatedStartTime" value="1011"/>
+            <property name="SimulatedEndTime" value="1016"/>
+            <property name="SimulatedDuration" value="5"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalPointerGetSet" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="1032"/>
+            <property name="SimulatedEndTime" value="1042"/>
+            <property name="SimulatedDuration" value="10"/>
          </properties>
       </testcase>
    </testsuite>
