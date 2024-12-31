@@ -1,9 +1,10 @@
 include "Common/Common.stm"
 
-include "File/file.stm"
-include "TestSuites/TestSuiteFile.stm"
+include "Bus/bus.stm"
 
-testMainSuiteFile:
+include "TestSuites/TestSuiteBusWishbone.stm"
+
+testMainSuiteBusWishbone:
 proc
     call $initBase
         	
@@ -13,11 +14,11 @@ proc
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0
-	log message $INFO "Main test suite File started"
+	log message $INFO "Main test suite Bus started"
 	
-	call $testSuiteFile	
+	call $testSuiteBusWishbone	
 	
-	log message $INFO "Main test suite File ended"
+	log message $INFO "Main test suite Bus ended"
 	wait 1000
 	finish
 end proc

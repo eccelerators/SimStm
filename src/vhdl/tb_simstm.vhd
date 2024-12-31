@@ -154,7 +154,7 @@ begin
         variable stack_loop_if_enter_level : stack_int_array := (others => 0);
 
         variable loglevel : integer := 0;
-        variable exit_on_verify_error : boolean := true;
+        variable resume : integer := 0;
         variable error_count : integer := 0;
         variable expected_error_count : integer := 0;
         variable if_level : integer := 0;
@@ -619,7 +619,7 @@ begin
                     temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
                     temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
                     if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                        if exit_on_verify_error then
+                        if to_signed(resume, 32)(0) = '0' then
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                             severity failure;
@@ -1451,11 +1451,7 @@ begin
                 -- resume $RESUME_ON_VERIFY_ERROR
                 -- resume $EXIT_ON_VERIFY_ERROR
                 elsif instruction(1 to len) = INSTR_RESUME then
-                    if par1 = 0 then
-                        exit_on_verify_error := true;
-                    else
-                        exit_on_verify_error := false;
-                    end if;
+                   resume := par1;
 
                 -- seed $seed_var
                 -- seed 1397
@@ -1519,7 +1515,7 @@ begin
                     temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
                     temp_stdvec_c := std_logic_vector(to_signed(par3, 32));
                     if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                        if exit_on_verify_error then
+                        if to_signed(resume, 32)(0) = '0' then
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                             severity failure;
@@ -1566,7 +1562,7 @@ begin
                         temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
                         if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                            if exit_on_verify_error then
+                            if to_signed(resume, 32)(0) = '0' then
                                 assert false
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                                 severity failure;
@@ -1622,11 +1618,17 @@ begin
                     tempdata := std_logic_vector(to_signed(par4, tempdata'length));
                     bus_write(bus_down, bus_up, tempaddress, tempdata, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
-                    report "Bus number not avalible"
+                    report "Bus number not available"
                     severity failure;
-                    assert successfull
-                    report "Bus Read timeout"
-                    severity failure;
+                    if to_signed(resume, 32)(1) = '0' then
+                        assert successfull
+                        report "Bus Read timeout"
+                        severity failure;
+                    else
+                        assert successfull
+                        report "Bus Read timeout"
+                        severity error;                    
+                    end if;
                     wait for 0 ns;
 
                 -- bus read  $a_bus $bus_width  $bus_address  bus_read_value
@@ -1642,11 +1644,17 @@ begin
                     temp_stdvec_b := (others => '0');
                     bus_read(bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
                     assert valid /= 0
-                    report "Bus number not avalible"
+                    report "Bus number not available"
                     severity failure;
-                    assert successfull
-                    report "Bus Read timeout"
-                    severity failure;
+                    if to_signed(resume, 32)(1) = '0' then
+                        assert successfull
+                        report "Bus Read timeout"
+                        severity failure;
+                    else
+                        assert successfull
+                        report "Bus Read timeout"
+                        severity error;                    
+                    end if;
                     temp_int := to_integer(signed(temp_stdvec_b));
                     update_variable(defined_vars, par4, temp_int, valid);
                     if valid = 0 then
@@ -1659,7 +1667,7 @@ begin
                         temp_stdvec_b := std_logic_vector(to_signed(par5, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par6, 32));
                         if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then
-                            if exit_on_verify_error then
+                            if to_signed(resume, 32)(0) = '0' then
                                 assert false
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
                                 severity failure;

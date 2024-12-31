@@ -3,6 +3,8 @@ include "Common/Common.stm"
 include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
 
+include "Bus/bus.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -12,14 +14,17 @@ proc
 
 	verbosity $INFO_2
 	trace $TRACE_OFF
-	resume $RESUME_ON_VERIFY_ERROR
+	resume $RESUME_ON_ALL_ERRORS
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test started"
+	
+	bus pointer copy busToTest wishbone
+	call $testBus
 
-	call $testSignalWriteReadVerify
-	call $testSignalVerifyFail
+	-- call $testSignalWriteReadVerify
+	-- call $testSignalVerifyFail
 
 	log message $INFO "Main test finished"
 	wait 1000
