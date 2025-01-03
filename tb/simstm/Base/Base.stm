@@ -76,27 +76,6 @@ proc
     sub MAX 1
 end proc	
 
-
-signal StandardTestErrorCount 3
-signal ExpectedStandardTestErrorCount 3
-
-var StandardTestErrorCountStartSnapShot 0
-var StandardTestErrorCountResult 0
-
-var ExpectedStandardTestErrorCountResult 0
-
--- A standard test is usually wrapped by a 
---
---  call$ startStandardTestShell at its begin
---   producing a standard message that the test has been started
---   and recording the standard error counter state before the test
---
---  call$ endStandardTestShell at its end
---   producing a standard message that the test has ended successfully or with errors
---   returning the StandardTestErrorCountResult the number of errors occurred within the test shell
---
---  Each verify instruction with non success increments the StandardTestError count automatically.
-
 var FileStatus 0
 
 printFileStatus:
@@ -114,34 +93,119 @@ proc
 	end if
 end proc
 
+
+signal sigInStandardTestVerifyFailureCount 3
+signal sigOutExpectedStandardTestVerifyFailureCount 3
+
+signal sigInStandardTestBusTimeoutFailureCount 4
+signal sigOutExpectedStandardTestBusTimeoutFailureCount 4
+
+var StandardTestVerifyFailureCountStartSnapShot 0
+var StandardTestVerifyFailureCountResult 0
+
+var StandardTestBusTimeoutFailureCountStartSnapShot 0
+var StandardTestBusTimeoutFailureCountResult 0
+
+var ExpectedStandardTestVerifyFailureCountStartSnapShot 0
+var ExpectedStandardTestVerifyFailureCount 0
+var ExpectedStandardTestVerifyFailureCountResult 0
+
+var ExpectedStandardTestBusTimeoutFailureCountStartSnapShot 0
+var ExpectedStandardTestBusTimeoutFailureCount 0
+var ExpectedStandardTestBusTimeoutFailureCountResult 0
+
+var StandardTestFailure 0
+
+-- A standard test is usually wrapped by a 
+--
+--  call$ startStandardTestShell at its begin
+--   producing a standard message that the test has been started
+--   and recording the standard verify and but timeout failure counters state before the test
+--
+--  call$ endStandardTestShell at its end
+--   producing a standard message that the test has ended successfully or with failures
+--   returning the StandardTestVerifyFailureCountResult and StandardTestBusTimeoutFailureCountResult 
+--   the number of respective failures occurred within the test shell
+--
+--  Each verify instruction with non success increments the StandardTestVerifyFailure count automatically.
+--  Each bus access instruction with non success increments the StandardTestBusTimeoutFailure count automatically.
+-- 
+--  In case a failure is intended the respective expected failure count may be incremented to tolerate the failure
+
+
 startStandardTestShell:
 proc
-    -- record count of standard error count at shell begin
-	signal read StandardTestErrorCount StandardTestErrorCountStartSnapShot
+	signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountStartSnapShot
+	equ ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestVerifyFailureCount
+	equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCount
+	log message 0 "ExpectedStandardTestVerifyFailureCountStartSnapShot {:d} ExpectedStandardTestBusTimeoutFailureCountStartSnapShot {:d}" $ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCountStartSnapShot
+	log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
 	log message 0 "{@c2} started" 
 end proc	
 
 endStandardTestShell:
 proc
-    -- record count of standard error count at shell end
-	signal read StandardTestErrorCount StandardTestErrorCountResult
-	sub StandardTestErrorCountResult $StandardTestErrorCountStartSnapShot
-    if $StandardTestErrorCountResult > 0 
-    	log message 0 "{@c2} ended with {:d} SimStm errors considered as junit failures, if not expected" $StandardTestErrorCountResult
-    else 
-    	log message 0 "{@c2} ended successfully"    
-    end if	
+	signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountResult
+	sub StandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountResult
+	sub StandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountStartSnapShot	
+	equ ExpectedStandardTestVerifyFailureCountResult $ExpectedStandardTestVerifyFailureCount
+	sub ExpectedStandardTestVerifyFailureCountResult $ExpectedStandardTestVerifyFailureCountStartSnapShot
+	equ ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCount
+	sub ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCountStartSnapShot	
+	if $StandardTestVerifyFailureCountResult > $ExpectedStandardTestVerifyFailureCountResult
+		if $StandardTestBusTimeoutFailureCountResult > $ExpectedStandardTestBusTimeoutFailureCountResult		    
+			log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
+			log message 0 "Expected {:d} bus timeout failures, got {:d}" $ExpectedStandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountResult
+			log message 0 "Failures"
+			log message 0 "{@c2} ended" 
+			equ StandardTestFailure 1
+			return
+		end if
+	end if	
+	if $StandardTestVerifyFailureCountResult > $ExpectedStandardTestVerifyFailureCountResult    
+		log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
+		log message 0 "Failures"
+		log message 0 "{@c2} ended" 
+		equ StandardTestFailure 1
+		return
+	end if	
+	if $StandardTestBusTimeoutFailureCountResult > $ExpectedStandardTestBusTimeoutFailureCountResult
+		log message 0 "Expected {:d} bus timeout failures, got {:d}" $ExpectedStandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountResult
+		log message 0 "Failures"
+		log message 0 "{@c2} ended" 
+		equ StandardTestFailure 1
+		return
+	end if
+	if $ExpectedStandardTestVerifyFailureCountResult > 0
+		log message 0 "Expected {:d} verify failures, ignored" $ExpectedStandardTestVerifyFailureCountResult
+	end if
+	if $ExpectedStandardTestBusTimeoutFailureCountResult > 0
+		log message 0 "Expected {:d} bus timeout failures, ignored" $ExpectedStandardTestBusTimeoutFailureCountResult
+	end if
+	log message 0 "Success"
+    log message 0 "{@c2} ended"  
+    equ StandardTestFailure 0  
 end proc
 
--- manual method to increment the ExpectedStandardTestErrorCount to allow tests to fail intentionally	
-incExpectedStandardTestErrorCount:
+-- method to increment the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally	
+incExpectedStandardTestVerifyFailureCount:
 proc
-	add ExpectedStandardTestErrorCountResult 1
-	signal write ExpectedStandardTestErrorCount $ExpectedStandardTestErrorCountResult
+	add ExpectedStandardTestVerifyFailureCount 1
+	signal write sigOutExpectedStandardTestVerifyFailureCount $ExpectedStandardTestVerifyFailureCount
+end proc
+
+-- method to increment the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally	
+incExpectedStandardTestBusTimeoutFailureCount:
+proc
+	add ExpectedStandardTestBusTimeoutFailureCount 1
+	signal write sigOutExpectedStandardTestBusTimeoutFailureCount $ExpectedStandardTestBusTimeoutFailureCount
 end proc	
+		
 	
--- manual method to increment the StandardTestErrorCount based on if instruction decisions	
-incStandardTestErrorCount:
+-- manual method to increment the StandardTestVerifyFailureCount based on if instruction decisions	
+incStandardTestVerifyFailureCount:
 proc
 	signal verify sigInZero BasicZero 1 1 
 	-- fail intentionally thus incrementing standard error counter

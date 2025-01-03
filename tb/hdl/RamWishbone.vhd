@@ -67,7 +67,7 @@ architecture rtl of RamWishbone is
   type T_PART_ARRAY is array (0 to C_NUM_WORDS-1) of T_PART;
   type T_MEM is array (0 to C_PARTS_PER_WORD-1) of T_PART_ARRAY;
 
-  signal s_mem : T_MEM;
+  signal s_mem : T_MEM := (others => ( others => (others => '0')));
   signal pre_ack : std_logic;
 begin
   o_ack <= pre_ack;

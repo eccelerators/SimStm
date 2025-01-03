@@ -35,8 +35,7 @@ proc
     
     call $testSignalWriteReadVerify
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalWriteReadVerify test failed"
         call $failureTestCase
     end if
@@ -61,8 +60,7 @@ proc
     
     call $testSignalVerifyFail
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalVerifyFail test failed"
         call $failureTestCase
     end if
@@ -87,8 +85,7 @@ proc
     
     call $testSignalPointerCopy
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalPointerCopy test failed"
         call $failureTestCase
     end if
@@ -113,8 +110,7 @@ proc
     
     call $testSignalPointerGetSet
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalPointerGetSet test failed"
         call $failureTestCase
     end if

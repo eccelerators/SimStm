@@ -78,6 +78,11 @@ package body tb_bus_avalon_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            avalonmm_down <= avalonmm_down_init;
+            return;
+        end if;
         avalonmm_down.address <= address;
         case b_width is
             when 8 =>
@@ -110,19 +115,7 @@ package body tb_bus_avalon_pkg is
 
         avalonmm_down.read <= '0';
         avalonmm_down.write <= '1';
-        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_init;
-            return;
-        end if;
-
-        wait on avalonmm_up.waitrequest until avalonmm_up.waitrequest = '0' or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_init;
-            return;
-        end if;
-
-        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+        wait until (rising_edge(avalonmm_up.clk) and avalonmm_up.waitrequest = '0') or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;
@@ -151,6 +144,11 @@ package body tb_bus_avalon_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
+        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            avalonmm_down <= avalonmm_down_init;
+            return;
+        end if;
         avalonmm_down.address <= address;
 
         case b_width is
@@ -182,13 +180,7 @@ package body tb_bus_avalon_pkg is
             return;
         end if;
 
-        wait on avalonmm_up.waitrequest until avalonmm_up.waitrequest = '0' or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_init;
-            return;
-        end if;
-
-        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+        wait until (rising_edge(avalonmm_up.clk) and avalonmm_up.waitrequest = '0') or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_init;
             return;

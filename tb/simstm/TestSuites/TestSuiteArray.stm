@@ -47,8 +47,7 @@ proc
     
     call $testArray
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "Array test failed"
         call $failureTestCase
     end if
@@ -73,8 +72,7 @@ proc
     
     call $testArrayGet
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArrayGet test failed"
         call $failureTestCase
     end if
@@ -99,8 +97,7 @@ proc
     
     call $testArrayGetOutPos
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "ArrayGet test failed"
         call $failureTestCase
     end if
@@ -125,8 +122,7 @@ proc
     
     call $testArraySet
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySet test failed"
         call $failureTestCase
     end if
@@ -151,8 +147,7 @@ proc
     
     call $testArraySetOutPos
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySet test failed"
         call $failureTestCase
     end if
@@ -177,8 +172,7 @@ proc
     
     call $testArraySize
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySize test failed"
         call $failureTestCase
     end if
@@ -203,8 +197,7 @@ proc
     
     call $testArrayPointerCopy
 
-    signal read StandardTestErrorCount StandardTestErrorCountResult
-    if $StandardTestErrorCountResult != $ExpectedStandardTestErrorCountResult
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArrayPointer test failed"
         call $failureTestCase
     end if

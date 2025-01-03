@@ -81,6 +81,11 @@ package body tb_bus_wishbone_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
+        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            wishbone_down <= wishbone_down_init;
+            return;
+        end if;
         wishbone_down.adr <= address;
         case b_width is
             when 8 =>
@@ -120,7 +125,8 @@ package body tb_bus_wishbone_pkg is
             return;
         end if;
 
-        wait on wishbone_up.ack until wishbone_up.ack = '1';
+        wait on wishbone_up.ack until wishbone_up.ack = '1'or (now > start_time + timeout);
+        
         wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_init;
@@ -149,7 +155,12 @@ package body tb_bus_wishbone_pkg is
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin
-        successfull := false;
+        successfull := false;       
+        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            wishbone_down <= wishbone_down_init;
+            return;
+        end if;        
         wishbone_down.adr <= address;
 
         case b_width is

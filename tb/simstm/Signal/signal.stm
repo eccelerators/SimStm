@@ -56,7 +56,7 @@ proc
 		
 	log message $ALLWAYS "signal verify intended error on no match"	
 	signal verify in_signal_2000 val_signal_read_back 1 1
-    call $incExpectedStandardTestErrorCount
+    call $incExpectedStandardTestVerifyFailureCount
     
 	call $endStandardTestShell
 

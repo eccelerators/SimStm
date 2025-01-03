@@ -116,6 +116,7 @@ package body tb_bus_axi4lite_pkg is
         variable wready_present : boolean := false;
     begin
         successfull := false;
+        wait until rising_edge(axi4lite_up.clk);
         axi4lite_down <= axi4lite_down_init;
         axi4lite_down.awaddr <= address;
 
@@ -192,6 +193,7 @@ package body tb_bus_axi4lite_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
+        wait until rising_edge(axi4lite_up.clk);        
         axi4lite_down <= axi4lite_down_init;
         axi4lite_down.araddr <= address;
 

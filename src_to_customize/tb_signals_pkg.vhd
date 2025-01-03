@@ -12,6 +12,7 @@ package tb_signals_pkg is
         -- TODO: Add here all your inputs        
         in_signal_1 : std_logic_vector(31 downto 0); -- stimulus_test_suite_index       
         in_signal_3 : std_logic_vector(31 downto 0); -- standard_test_error_count
+        in_signal_4 : std_logic_vector(31 downto 0); -- bus_timeout_error_count
         
         in_signal_1000 : std_logic;
         in_signal_1001 : std_logic;
@@ -28,6 +29,7 @@ package tb_signals_pkg is
         -- TODO: Add here all your outputs 
         out_signal_0 : std_logic; -- init dut
         out_signal_3 : std_logic_vector(31 downto 0); -- expected standard_test_error_count    
+        out_signal_4 : std_logic_vector(31 downto 0); -- expected bus_timeout_test_error_count    
         out_signal_3000 : std_logic;
         out_signal_3001 : std_logic_vector(7 downto 0);
         out_signal_3002 : std_logic;
@@ -79,6 +81,7 @@ package body tb_signals_pkg is
         -- TODO: Set here your init values      
         signals.in_signal_1 := (others => '0');       
         signals.in_signal_3 := (others => '0');
+        signals.in_signal_4 := (others => '0');
         
         signals.in_signal_1000 := '0';
         signals.in_signal_1001 := '0';
@@ -98,7 +101,8 @@ package body tb_signals_pkg is
     
         -- TODO: Set here your init values 
         signals.out_signal_0 := '0'; 
-        signals.out_signal_3 := (others => '0');  
+        signals.out_signal_3 := (others => '0'); 
+        signals.out_signal_4 := (others => '0');  
         signals.out_signal_3000 := '0';
         signals.out_signal_3001 := (others => '0');
         signals.out_signal_3002 := '0';
@@ -128,6 +132,8 @@ package body tb_signals_pkg is
                 temp_var := (others => '0');
             when 3 =>
                 temp_var(signals.in_signal_3'left downto 0) := signals.in_signal_3;
+            when 4 =>
+                temp_var(signals.in_signal_4'left downto 0) := signals.in_signal_4;                
                 
             when 1000 =>
                 temp_var(0) := signals.in_signal_1000;
@@ -167,7 +173,9 @@ package body tb_signals_pkg is
                 signals.out_signal_0 <= temp_var(0);
             when 3 =>
                 signals.out_signal_3 <= temp_var(signals.out_signal_3'left downto 0);
-                                
+            when 4 =>
+                signals.out_signal_4 <= temp_var(signals.out_signal_4'left downto 0);
+                                                
             when 3000 =>
                 signals.out_signal_3000 <= temp_var(0);
             when 3001 =>

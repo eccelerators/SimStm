@@ -13,9 +13,9 @@ class GenAntBuildXml:
     
     def generate(self, setup_py_file_path='test/setup.py', simulation_subdir_path='test/modelsim/build_modelsim.xml'):
         
-        target_prefix = 'modelsim-'
-        time_stamps_prefix = 'simulation/' + 'modelsim' +"/work/TimeStamps/"
-        simulation_dir_prefix = 'simulation/' + 'modelsim' + '/'    
+        target_prefix = 'ghdl-'
+        time_stamps_prefix = 'simulation/' + 'ghdl' +"/work/TimeStamps/"
+        simulation_dir_prefix = 'simulation/' + 'ghdl' + '/'    
         
         # --------------------------
         # extract data from setup.py

@@ -42,12 +42,7 @@ end proc
 
 testArrayGetOutPos:
 proc
-	call $startStandardTestShell
-
 	array get array_name 3 var_name
-    call $incExpectedStandardTestErrorCount
-    	
-	call $endStandardTestShell
 end proc
 
 testArraySet:
@@ -71,10 +66,5 @@ end proc
 
 testArraySetOutPos:
 proc
-	call $startStandardTestShell
-
 	array set array_name 3 $var_name
-    call $incExpectedStandardTestErrorCount
-    	
-	call $endStandardTestShell
 end proc

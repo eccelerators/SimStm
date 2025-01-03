@@ -71,7 +71,8 @@ entity tb_simstm is
     port(
         executing_line : out integer;
         executing_file : out text_line;
-        standard_test_error_count : out std_logic_vector(31 downto 0);
+        verify_failures : out std_logic_vector(31 downto 0);
+        bus_timeout_failures : out std_logic_vector(31 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
         signals_in : in t_signals_in := signals_in_init;
@@ -155,8 +156,10 @@ begin
 
         variable loglevel : integer := 0;
         variable resume : integer := 0;
-        variable error_count : integer := 0;
-        variable expected_error_count : integer := 0;
+        variable verify_failure_count : integer := 0;
+        variable bus_timeout_failure_count : integer := 0;
+        variable expected_verify_failure_count : integer := 0;
+        variable expected_bus_timeout_failure_count : integer := 0;
         variable if_level : integer := 0;
         variable if_state : boolean_array := (others => false);
         variable num_of_if_in_false_if_leave : int_array := (others => 0);
@@ -244,7 +247,8 @@ begin
 
     begin
         marker <= (others => '0');
-        standard_test_error_count <= (others => '0');
+        verify_failures <= (others => '0');
+        bus_timeout_failures <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
         wait for 0 ns;
@@ -269,7 +273,8 @@ begin
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
         
-            standard_test_error_count <= std_logic_vector(to_unsigned(error_count, 32));
+            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
+            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
 
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
@@ -627,7 +632,7 @@ begin
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                             severity error;
-                            error_count := error_count + 1;                            
+                            verify_failure_count := verify_failure_count + 1;                            
                         end if;
                     end if;
 
@@ -1333,22 +1338,51 @@ begin
 
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
-                    expected_error_count := to_integer(unsigned(signals_out.out_signal_3));
-                    if expected_error_count = 0 then
-                        assert error_count /= 0
-                        report "test finished with no errors!!"
-                        severity note;
-                        assert error_count = 0
-                        report "test finished with " & (integer'image(error_count)) & " errors!!"
-                        severity error;
-                    else
-                        assert error_count /= expected_error_count
-                        report "test finished without difference between expected and actual error count of " & (integer'image(expected_error_count)) & " errors"
-                        severity note;                    
-                        assert error_count = expected_error_count
-                        report "test finished with expected error count different from actual, expected count: " & (integer'image(expected_error_count)) & " actual count: " & (integer'image(error_count)) & " errors!!"
-                        severity error;
+                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_3));
+                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_4));
+                    if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then                       
+                        report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
+                        report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
+                        if expected_verify_failure_count /= verify_failure_count then
+                            report "FAILURES";
+                            report "Test finished";
+                            wait for 1000 ns;
+                            finish;                     
+                        end if;
+                        if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
+                            report "FAILURES";
+                            report "Test finished";
+                            wait for 1000 ns;
+                            finish;                         
+                        end if;
+                        report "SUCCESS";
+                        wait for 1000 ns;
+                        finish;                                                            
+                    elsif expected_verify_failure_count /= 0 then
+                        report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
+                        if expected_verify_failure_count /= verify_failure_count then
+                            report "FAILURES";
+                            report "Test finished";
+                            wait for 1000 ns;
+                            finish;                            
+                        end if;
+                        report "SUCCESS";
+                        wait for 1000 ns;
+                        finish;                                           
+                    elsif expected_bus_timeout_failure_count /= 0 then
+                        report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
+                        if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
+                            report "FAILURES";
+                            report "Test finished";
+                            wait for 1000 ns;
+                            finish;                         
+                        end if;
+                        report "SUCCESS";
+                        wait for 1000 ns;
+                        finish;                                                
                     end if;
+                    report "SUCCESS";                                        
+                    report "Test finished";
                     wait for 1000 ns;
                     finish;
 
@@ -1523,7 +1557,7 @@ begin
                             assert false
                             report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                             severity error;
-                            error_count := error_count + 1;                            
+                            verify_failure_count := verify_failure_count + 1;                            
                         end if;
                     end if;
 
@@ -1570,7 +1604,7 @@ begin
                                 assert false
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
                                 severity error;
-                                error_count := error_count + 1;                            
+                                verify_failure_count := verify_failure_count + 1;                            
                             end if;
                         end if;
                     end if;
@@ -1622,11 +1656,14 @@ begin
                     severity failure;
                     if to_signed(resume, 32)(1) = '0' then
                         assert successfull
-                        report "Bus Read timeout"
+                        report "Bus Write timeout"
                         severity failure;
                     else
+                        if not successfull then
+                            bus_timeout_failure_count := bus_timeout_failure_count + 1;
+                        end if;
                         assert successfull
-                        report "Bus Read timeout"
+                        report "Bus Write timeout"
                         severity error;                    
                     end if;
                     wait for 0 ns;
@@ -1651,6 +1688,9 @@ begin
                         report "Bus Read timeout"
                         severity failure;
                     else
+                        if not successfull then
+                            bus_timeout_failure_count := bus_timeout_failure_count + 1;
+                        end if;
                         assert successfull
                         report "Bus Read timeout"
                         severity error;                    
@@ -1675,7 +1715,7 @@ begin
                                 assert false
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
                                 severity error;
-                                error_count := error_count + 1;
+                                verify_failure_count := verify_failure_count + 1;
                             end if;
                         end if;
                     end if;

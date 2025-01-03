@@ -2,9 +2,9 @@ include "Common/Common.stm"
 
 include "Bus/bus.stm"
 
-include "TestSuites/TestSuiteBusWishbone.stm"
+include "TestSuites/TestSuiteBusAxi4Lite.stm"
 
-testMainSuiteBusWishbone:
+testMainSuiteBusAxi4Lite:
 proc
     call $initBase
         	
@@ -14,14 +14,14 @@ proc
 	signal write out_signal_init_dut 1
 	wait 1000
 	signal write out_signal_init_dut 0
-	log message $INFO "Main test suite Bus Wishbone started"
-	
-	bus pointer copy busToTest wishbone
+	log message $INFO "Main test suite Bus Axi4Lite started"
+
+	bus pointer copy busToTest axi4lite
 	call $testBus
 	
-	call $testSuiteBusWishbone	
+	call $testSuiteBusAxi4Lite	
 	
-	log message $INFO "Main test suite Bus Wishbone ended"
+	log message $INFO "Main test suite Bus Axi4Lite ended"
 	wait 1000
 	finish
 end proc

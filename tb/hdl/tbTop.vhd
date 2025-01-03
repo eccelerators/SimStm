@@ -54,7 +54,8 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal standard_test_error_count : std_logic_vector(31 downto 0);
+    signal verify_failures : std_logic_vector(31 downto 0);
+    signal bus_timeout_failures : std_logic_vector(31 downto 0);
      
     signal signals_in : t_signals_in;
     signal signals_out : t_signals_out;
@@ -71,11 +72,13 @@ begin
     -- signals_in.in_signal_0 actual simulation time already supplied by package
     signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
     -- signals_in.in_signal_2 constant 0 already supplied by package
-    signals_in.in_signal_3 <= standard_test_error_count;
-    -- 
+    signals_in.in_signal_3 <= verify_failures;
+    signals_in.in_signal_4 <= bus_timeout_failures;
+    
     -- standard outputs
     InitDut <= signals_out.out_signal_0;
     -- signals_out.out_signal_3 <= expected_standard_test_error_count already connected in tb_simstm
+    -- signals_out.out_signal_4 <= expected_bus_timeout_test_error_count already connected in tb_simstm
    
     -- interrupts
     signals_in.in_signal_1000 <= '0';
@@ -97,7 +100,8 @@ begin
         port map (
             executing_line => executing_line,
             executing_file => executing_file,
-            standard_test_error_count => standard_test_error_count,
+            verify_failures => verify_failures,
+            bus_timeout_failures => bus_timeout_failures,
             marker => marker,
             signals_in => signals_in,
             signals_out => signals_out,
@@ -114,8 +118,8 @@ begin
         port map(
         -- wishbone slave signals.
             i_rst => Rst,
-            i_clk => Clk,
-            i_adr => bus_down.wishbone.adr(7 downto 0),
+            i_clk => bus_up.wishbone.clk,
+            i_adr => bus_down.wishbone.adr(9 downto 2),
             i_dat => bus_down.wishbone.data,
             i_we  => bus_down.wishbone.we,
             i_sel => bus_down.wishbone.sel,
@@ -137,15 +141,15 @@ begin
         )
         port map(
         -- avalon slave signals.
-            clk_i => Clk,
+            clk_i => bus_up.avalonmm.clk,
             rst_i => Rst,
             avm_waitrequest_o => bus_up.avalonmm.waitrequest,
             avm_write_i => bus_down.avalonmm.write,
             avm_read_i => bus_down.avalonmm.read,
-            avm_address_i => bus_down.avalonmm.address(7 downto 0),
+            avm_address_i => bus_down.avalonmm.address(9 downto 2),
             avm_writedata_i => bus_down.avalonmm.writedata,
             avm_byteenable_i => bus_down.avalonmm.byteenable,
-            avm_burstcount_i => x"00",
+            avm_burstcount_i => x"01",
             avm_readdata_o => bus_up.avalonmm.readdata,
             avm_readdatavalid_o => open
         );
@@ -157,10 +161,10 @@ begin
             ADDRESS_WIDTH => 8
         )
         port map (
-            Clk => Clk,
+            Clk => bus_up.axi4lite.clk,
             Rst => Rst,
             AWVALID => bus_down.axi4lite.awvalid,
-            AWADDR => bus_down.axi4lite.awaddr(15 downto 0),
+            AWADDR => bus_down.axi4lite.awaddr(9 downto 2),
             AWPROT => bus_down.axi4lite.awprot,
             AWREADY => bus_up.axi4lite.awready,
             WVALID => bus_down.axi4lite.wvalid,
@@ -171,7 +175,7 @@ begin
             BVALID => bus_up.axi4lite.bvalid,
             BRESP => bus_up.axi4lite.bresp,
             ARVALID => bus_down.axi4lite.arvalid,
-            ARADDR => bus_down.axi4lite.araddr(15 downto 0),
+            ARADDR => bus_down.axi4lite.araddr(9 downto 2),
             ARPROT => bus_down.axi4lite.arprot,
             ARREADY => bus_up.axi4lite.arready,
             RREADY => bus_down.axi4lite.rready,

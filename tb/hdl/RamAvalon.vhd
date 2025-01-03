@@ -49,16 +49,16 @@ architecture simulation of RamAvalon is
    -- This defines a type containing an array of bytes
    type   mem_type is array (0 to 2 ** ADDRESS_WIDTH - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-   signal write_burstcount : std_logic_vector(7 downto 0);
-   signal write_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
+   signal write_burstcount : std_logic_vector(7 downto 0) := (others => '0');
+   signal write_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
-   signal read_burstcount : std_logic_vector(7 downto 0);
-   signal read_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
+   signal read_burstcount : std_logic_vector(7 downto 0) := (others => '0');
+   signal read_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
-   signal mem_write_burstcount : std_logic_vector(7 downto 0);
-   signal mem_read_burstcount  : std_logic_vector(7 downto 0);
-   signal mem_write_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
-   signal mem_read_address     : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
+   signal mem_write_burstcount : std_logic_vector(7 downto 0) := (others => '0');
+   signal mem_read_burstcount  : std_logic_vector(7 downto 0) := (others => '0');
+   signal mem_write_address    : std_logic_vector(ADDRESS_WIDTH - 1 downto 0) := (others => '0');
+   signal mem_read_address     : std_logic_vector(ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
 begin
 
@@ -84,10 +84,10 @@ begin
             write_address    <= std_logic_vector(unsigned(mem_write_address) + 1);
             write_burstcount <= std_logic_vector(unsigned(mem_write_burstcount) - 1);
 
-            report "Writing 0x" & to_hstring(avm_writedata_i) &
-                   " to 0x" & to_hstring(mem_write_address) &
-                   " with burstcount " & to_hstring(write_burstcount) &
-                   " and byteenable 0x" & to_hstring(avm_byteenable_i);
+            -- report "Writing 0x" & to_hstring(avm_writedata_i) &
+            --        " to 0x" & to_hstring(mem_write_address) &
+            --        " with burstcount " & to_hstring(write_burstcount) &
+            --        " and byteenable 0x" & to_hstring(avm_byteenable_i);
 
             for b in 0 to DATA_WIDTH / 8 - 1 loop
                if avm_byteenable_i(b) = '1' then
@@ -104,9 +104,9 @@ begin
             avm_readdata_o      <= mem_v(to_integer(unsigned(mem_read_address)));
             avm_readdatavalid_o <= '1';
 
-            report "Reading 0x" & to_hstring(mem_v(to_integer(unsigned(mem_read_address)))) &
-                   " from 0x" & to_hstring(mem_read_address) &
-                   " with burstcount " & to_hstring(read_burstcount);
+            --report "Reading 0x" & to_hstring(mem_v(to_integer(unsigned(mem_read_address)))) &
+            --       " from 0x" & to_hstring(mem_read_address) &
+            --       " with burstcount " & to_hstring(read_burstcount);
          end if;
 
          if rst_i = '1' then

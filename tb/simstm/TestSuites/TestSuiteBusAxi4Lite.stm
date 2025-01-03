@@ -12,7 +12,7 @@
 	file TestCaseBusTimeOutWriteStartFile "../../SimulationResults/{@c3}_{@c2}.start"
 	file TestCaseBusTimeOutWriteFile "../../SimulationResults/{@c3}_{@c2}.xml"
 		
-testSuiteBusWishbone:
+testSuiteBusAxi4Lite:
 proc
     bus pointer copy busToTest wishbone
 	call $testCaseBus
@@ -39,7 +39,7 @@ proc
     
     call $testBus
 
- 	if $StandardTestFailure != 0
+	if $StandardTestFailure != 0
         lines append message TestCaseLines "Bus test failed"
         call $failureTestCase
     end if

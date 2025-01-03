@@ -20,9 +20,11 @@ proc
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test started"
 	
-	bus pointer copy busToTest wishbone
-	call $testBus
-
+	-- bus timeout axi4lite 1000
+	
+	bus pointer copy busToTest axi4lite
+	call $testBusVerifyFail
+	call $testBusVerifyFail
 	-- call $testSignalWriteReadVerify
 	-- call $testSignalVerifyFail
 
