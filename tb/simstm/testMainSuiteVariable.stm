@@ -1,0 +1,24 @@
+include "Common/Common.stm"
+
+include "Variable/variable.stm"
+
+include "TestSuites/TestSuiteVariable.stm"
+
+testMainSuiteVariable:
+proc
+    call $initBase
+        	
+	verbosity $INFO_2
+	trace $TRACE_OFF
+	resume $RESUME_ON_ALL_ERRORS
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+	log message $INFO "Main test suite Variable started"
+	
+	call $testSuiteVariable	
+	
+	log message $INFO "Main test suite Variable ended"
+	wait 1000
+	finish
+end proc

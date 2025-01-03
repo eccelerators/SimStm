@@ -1,0 +1,297 @@
+
+	-- intern
+	file TestCaseVariableAddStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableAddFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableAndStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableAndFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableDivStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableDivFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableEquStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableEquFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableMulStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableMulFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableOrStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableOrFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableSubStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableSubFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseVariableXorStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableXorFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	
+	file TestCaseVariableInvStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableInvFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	
+	file TestCaseVariableLdStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseVariableLdFile "../../SimulationResults/{@c3}_{@c2}.xml"
+			
+testSuiteVariable:
+proc
+	call $testCaseVariableAdd
+	call $testCaseVariableAnd
+	call $testCaseVariableDiv
+	call $testCaseVariableEqu
+	call $testCaseVariableMul
+	call $testCaseVariableOr
+	call $testCaseVariableSub
+	call $testCaseVariableXor
+	call $testCaseVariableInv
+	call $testCaseVariableLd
+end proc
+
+testCaseVariableLd:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableLdStartFile
+    file pointer copy TestCaseFile TestCaseVariableLdFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableLd
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableLd test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableInv:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableInvStartFile
+    file pointer copy TestCaseFile TestCaseVariableInvFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableInv
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableInv test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableXor:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableXorStartFile
+    file pointer copy TestCaseFile TestCaseVariableXorFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableXor
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableXor test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableSub:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableSubStartFile
+    file pointer copy TestCaseFile TestCaseVariableSubFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableSub
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableSub test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableOr:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableOrStartFile
+    file pointer copy TestCaseFile TestCaseVariableOrFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableOr
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableOr test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableMul:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableMulStartFile
+    file pointer copy TestCaseFile TestCaseVariableMulFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableMul
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableMul test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableEqu:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableEquStartFile
+    file pointer copy TestCaseFile TestCaseVariableEquFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableEqu
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableEqu test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+
+testCaseVariableDiv:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableDivStartFile
+    file pointer copy TestCaseFile TestCaseVariableDivFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableDiv
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableDiv test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseVariableAnd:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableAndStartFile
+    file pointer copy TestCaseFile TestCaseVariableAndFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableAnd
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableAnd test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+
+testCaseVariableAdd:
+proc
+    file pointer copy TestCaseStartFile TestCaseVariableAddStartFile
+    file pointer copy TestCaseFile TestCaseVariableAddFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testVariableAdd
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "VariableAdd test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc

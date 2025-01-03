@@ -1,9 +1,0 @@
-const test_variable_1 1
-
-testMain:
-proc
-	equ   test_variable_1 10
-	
-	finish
-
-end proc

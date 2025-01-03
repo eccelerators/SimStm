@@ -1,0 +1,277 @@
+var test_variable_add_1 1
+var test_variable_add_2 2
+
+testVariableAdd:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_add_1
+	log message 0 "test_variable_2: {}" $test_variable_add_2
+	                                                  
+	add test_variable_add_1 10                            
+	add test_variable_add_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_add_1
+	log message 0 "test_variable_2: {}" $test_variable_add_2
+	                                                  
+	add test_variable_add_1 12345                         
+	add test_variable_add_2 88                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_add_1
+	log message 0 "test_variable_2: {}" $test_variable_add_2
+
+call $endStandardTestShell
+
+end proc
+
+
+
+var test_variable_and_1 43690
+var test_variable_and_2 16777215
+
+testVariableAnd:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_and_1
+	log message 0 "test_variable_2: {}" $test_variable_and_2
+	                                                  
+	and test_variable_and_1 10                            
+	and test_variable_and_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_and_1
+	log message 0 "test_variable_2: {}" $test_variable_and_2
+	                                                  
+	and test_variable_and_1 5                             
+	and test_variable_and_2 100                           
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_and_1
+	log message 0 "test_variable_2: {}" $test_variable_and_2
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_div_1 500
+var test_variable_div_2 5000
+
+testVariableDiv:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_div_1
+	log message 0 "test_variable_2: {}" $test_variable_div_2
+	                                                  
+	div test_variable_div_1 10                            
+	div test_variable_div_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_div_1
+	log message 0 "test_variable_2: {}" $test_variable_div_2
+	                                                  
+	div test_variable_div_1 5                             
+	div test_variable_div_2 100                           
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_div_1
+	log message 0 "test_variable_2: {}" $test_variable_div_2
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_equ_1 1
+var test_variable_equ_2 2
+var test_variable_equ_3 3
+var test_variable_equ_4 4
+var test_variable_equ_5 5
+
+testVariableEqu:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_equ_1
+	log message 0 "test_variable_2: {}" $test_variable_equ_2
+	log message 0 "test_variable_3: {}" $test_variable_equ_3
+	log message 0 "test_variable_4: {}" $test_variable_equ_4
+	log message 0 "test_variable_5: {}" $test_variable_equ_5
+	                                                  
+	equ test_variable_equ_1 10                            
+	equ test_variable_equ_2 20                            
+	equ test_variable_equ_3 30                            
+	equ test_variable_equ_4 44                            
+	equ test_variable_equ_5 55                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_equ_1
+	log message 0 "test_variable_2: {}" $test_variable_equ_2
+	log message 0 "test_variable_3: {}" $test_variable_equ_3
+	log message 0 "test_variable_4: {}" $test_variable_equ_4
+	log message 0 "test_variable_5: {}" $test_variable_equ_5
+	                                                  
+	equ test_variable_equ_1 99                            
+	equ test_variable_equ_2 88                            
+	equ test_variable_equ_3 55                            
+	equ test_variable_equ_4 11                            
+	equ test_variable_equ_5 0                             
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_equ_1
+	log message 0 "test_variable_2: {}" $test_variable_equ_2
+	log message 0 "test_variable_3: {}" $test_variable_equ_3
+	log message 0 "test_variable_4: {}" $test_variable_equ_4
+	log message 0 "test_variable_5: {}" $test_variable_equ_5
+	
+	call $endStandardTestShell
+end proc
+
+var test_variable_mul_1 1
+var test_variable_mul_2 2
+
+testVariableMul:
+proc
+    call $startStandardTestShell
+    
+	log message 0 "test_variable_1: {}" $test_variable_mul_1
+	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	                                                    
+	mul test_variable_mul_1 10                              
+	mul test_variable_mul_2 20                              
+	                                                    
+	log message 0 "test_variable_1: {}" $test_variable_mul_1
+	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	                                                    
+	mul test_variable_mul_1 12345                           
+	mul test_variable_mul_2 88                              
+	                                                    
+	log message 0 "test_variable_1: {}" $test_variable_mul_1
+	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	
+	call $endStandardTestShell
+
+end proc
+
+
+var test_variable_or_1 1234
+var test_variable_or_2 1024
+
+testVariableOr:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_or_1
+	log message 0 "test_variable_2: {}" $test_variable_or_2
+	                                                  
+	or test_variable_or_1 10                             
+	or test_variable_or_2 20                             
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_or_1
+	log message 0 "test_variable_2: {}" $test_variable_or_2
+	                                                  
+	or test_variable_or_1 5                              
+	or test_variable_or_2 100                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_or_1
+	log message 0 "test_variable_2: {}" $test_variable_or_2
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_sub_1 12345
+var test_variable_sub_2 88
+
+testVariableSub:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_sub_1
+	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	                                                  
+	sub test_variable_sub_1 10                            
+	sub test_variable_sub_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_sub_1
+	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	                                                  
+	sub test_variable_sub_1 2                             
+	sub test_variable_sub_2 1                             
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_sub_1
+	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_xor_1 1234
+var test_variable_xor_2 1024
+
+testVariableXor:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_xor_1
+	log message 0 "test_variable_2: {}" $test_variable_xor_2
+	                                                  
+	xor test_variable_xor_1 10                            
+	xor test_variable_xor_2 20                            
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_xor_1
+	log message 0 "test_variable_2: {}" $test_variable_xor_2
+	                                                  
+	xor test_variable_xor_1 5                             
+	xor test_variable_xor_2 100                           
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_xor_1
+	log message 0 "test_variable_2: {}" $test_variable_xor_2
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_inv_1 1234
+var test_variable_inv_2 1024
+
+testVariableInv:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_inv_1
+	log message 0 "test_variable_2: {}" $test_variable_inv_2
+	                                                  
+	inv test_variable_inv_1                          
+	inv test_variable_inv_2                          
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_inv_1
+	log message 0 "test_variable_2: {}" $test_variable_inv_2
+	                                                  
+	inv test_variable_xor_1                        
+	inv test_variable_xor_2                       
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_inv_1
+	log message 0 "test_variable_2: {}" $test_variable_inv_2
+	
+	call $endStandardTestShell
+
+end proc
+
+
+var test_variable_ld_1 0x1000
+var test_variable_ld_2 0x80000000
+
+testVariableLd:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_variable_1: {}" $test_variable_ld_1
+	log message 0 "test_variable_2: {}" $test_variable_ld_2
+	                                                  
+	ld test_variable_ld_1                          
+	ld test_variable_ld_2                          
+	                                                  
+	log message 0 "test_variable_1: {}" $test_variable_ld_1
+	log message 0 "test_variable_2: {}" $test_variable_ld_2
+	                                                  	
+	call $endStandardTestShell
+
+end proc
+
+
+
