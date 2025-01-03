@@ -5,6 +5,8 @@ include "Signal/signal_pointer.stm"
 
 include "Bus/bus.stm"
 
+include "Interrupt/interrupt.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -22,11 +24,13 @@ proc
 	
 	-- bus timeout axi4lite 1000
 	
-	bus pointer copy busToTest axi4lite
-	call $testBusVerifyFail
-	call $testBusVerifyFail
+	--	bus pointer copy busToTest axi4lite
+	--	call $testBusVerifyFail
+	--	call $testBusVerifyFail
 	-- call $testSignalWriteReadVerify
 	-- call $testSignalVerifyFail
+	
+	call $testInterrupt
 
 	log message $INFO "Main test finished"
 	wait 1000

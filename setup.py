@@ -32,6 +32,7 @@ static_setup_data = {
     "tb_top_entity_file" : "/tb/hdl/tbTop.vhd",
     "test_suites" : [
             {"testsuite-name":"testSuiteLines", "file":"TestSuites/TestSuiteLines.stm", "entry-file":"testMainSuiteLines.stm", "entry-label":"$testMainSuiteLines"},
+            {"testsuite-name":"testSuiteInterrupt", "file":"TestSuites/TestSuiteInterrupt.stm", "entry-file":"testMainSuiteInterrupt.stm", "entry-label":"$testMainSuiteInterrupt"},
             {"testsuite-name":"testSuiteBusAvalon", "file":"TestSuites/TestSuiteBusAvalon.stm", "entry-file":"testMainSuiteBusAvalon.stm", "entry-label":"$testMainSuiteBusAvalon"},
             {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"$testMainSuiteFile"},
             {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"$testMainSuiteArray"},
@@ -80,11 +81,11 @@ static_setup_data = {
             {"file":"tb/simstm/TestLabs/TestLabArrayZeroSize.stm"},
             {"file":"tb/simstm/TestLabs/TestLabArraySetOutPos.stm"}
         ]),(
+        "simstm/tb/simstm/Interrupt", [
+            {"file":"tb/simstm/Interrupt/interrupt.stm"}
+        ]),(
         "simstm/tb/simstm/File", [
             {"file":"tb/simstm/File/file.stm"}
-        ]),(
-        "simstm/tb/simstm/LInes", [
-            {"file":"tb/simstm/LInes/lines.stm"}
         ]),(
         "simstm/tb/simstm/Signal", [
             {"file":"tb/simstm/Signal/signal.stm"},
@@ -99,6 +100,7 @@ static_setup_data = {
         ]),(
         "simstm/tb/simstm/TestSuites", [
             {"file":"tb/simstm/TestSuites/TestSuiteLines.stm"},
+            {"file":"tb/simstm/TestSuites/TestSuiteInterrupt.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusAvalon.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteFile.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteArray.stm"},
@@ -115,6 +117,9 @@ static_setup_data = {
         "simstm/tb/simstm/TestCase", [
             {"file":"tb/simstm/TestCase/TestCase.stm"}
         ]),(
+        "simstm/tb/simstm/Lines", [
+            {"file":"tb/simstm/Lines/lines.stm"}
+        ]),(
         "simstm/tb/simstm/Base", [
             {"file":"tb/simstm/Base/Array.stm"},
             {"file":"tb/simstm/Base/Base.stm"},
@@ -122,6 +127,7 @@ static_setup_data = {
         ]),(
         "simstm/tb/simstm", [
             {"file":"tb/simstm/testMainSuiteBusWishbone.stm"},
+            {"file":"tb/simstm/testMainSuiteInterrupt.stm"},
             {"file":"tb/simstm/testMainLabArraySetOutPos.stm"},
             {"file":"tb/simstm/testMainSuiteLines.stm"},
             {"file":"tb/simstm/testMainLabArrayGetOutPos.stm"},

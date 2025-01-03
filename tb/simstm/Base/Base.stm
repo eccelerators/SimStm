@@ -139,8 +139,6 @@ proc
 	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountStartSnapShot
 	equ ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestVerifyFailureCount
 	equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCount
-	log message 0 "ExpectedStandardTestVerifyFailureCountStartSnapShot {:d} ExpectedStandardTestBusTimeoutFailureCountStartSnapShot {:d}" $ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCountStartSnapShot
-	log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
 	log message 0 "{@c2} started" 
 end proc	
 

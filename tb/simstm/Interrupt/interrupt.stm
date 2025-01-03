@@ -1,0 +1,26 @@
+
+
+testInterrupt:
+proc
+ 	call $startStandardTestShell
+ 	
+	wait 1000
+	signal write out_signal_3002 1
+    wait 1000 
+    signal write out_signal_3003 1
+    
+	call $endStandardTestShell
+end proc
+
+
+InterruptA:
+interrupt
+    log message 0 "InterruptA happened"
+	signal write out_signal_3002 0
+end interrupt
+
+InterruptB:
+interrupt
+    log message 0 "InterruptB happened"
+	signal write out_signal_3003 0
+end interrupt

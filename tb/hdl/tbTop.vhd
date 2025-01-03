@@ -81,8 +81,8 @@ begin
     -- signals_out.out_signal_4 <= expected_bus_timeout_test_error_count already connected in tb_simstm
    
     -- interrupts
-    signals_in.in_signal_1000 <= '0';
-    signals_in.in_signal_1001 <= '0';
+    signals_in.in_signal_1000 <= signals_out.out_signal_3002;
+    signals_in.in_signal_1001 <= signals_out.out_signal_3003;
         
     -- user inputs and outputs
     signals_in.in_signal_2000 <= signals_out.out_signal_3000;
