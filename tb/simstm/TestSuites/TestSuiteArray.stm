@@ -81,31 +81,6 @@ proc
     
 end proc
 
-testCaseArrayGetOutPos:
-proc
-    file pointer copy TestCaseStartFile TestCaseArrayGetOutPosStartFile
-    file pointer copy TestCaseFile TestCaseArrayGetOutPosFile
-    equ TestCaseNumberOfAssertions 1
-    call $beginTestCase
-    
-    if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
-    end if
-    
-    call $testArrayGetOutPos
-
-    if $StandardTestFailure != 0
-        lines append message TestCaseLines "ArrayGet test failed"
-        call $failureTestCase
-    end if
-    
-    call $endTestCase
-    
-end proc
-
 testCaseArraySet:
 proc
     file pointer copy TestCaseStartFile TestCaseArraySetStartFile
@@ -121,31 +96,6 @@ proc
     end if
     
     call $testArraySet
-
-	if $StandardTestFailure != 0
-        lines append message TestCaseLines "ArraySet test failed"
-        call $failureTestCase
-    end if
-    
-    call $endTestCase
-    
-end proc
-
-testCaseArraySetOutPos:
-proc
-    file pointer copy TestCaseStartFile TestCaseArraySetOutPosStartFile
-    file pointer copy TestCaseFile TestCaseArraySetOutPosFile
-    equ TestCaseNumberOfAssertions 1
-    call $beginTestCase
-    
-    if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
-    end if
-    
-    call $testArraySetOutPos
 
 	if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySet test failed"

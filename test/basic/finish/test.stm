@@ -1,5 +1,0 @@
-
-testMain:
-proc
-	finish
-end proc

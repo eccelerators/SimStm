@@ -40,10 +40,6 @@ proc
 	call $endStandardTestShell
 end proc
 
-testArrayGetOutPos:
-proc
-	array get array_name 3 var_name
-end proc
 
 testArraySet:
 proc
@@ -64,7 +60,3 @@ proc
 	call $endStandardTestShell
 end proc
 
-testArraySetOutPos:
-proc
-	array set array_name 3 $var_name
-end proc

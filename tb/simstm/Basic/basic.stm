@@ -1,0 +1,1193 @@
+
+const test_constant_1 1
+const test_constant_2 2
+const test_constant_3 3
+const test_constant_4 4
+const test_constant_5 5
+
+var zero 0
+var one  1
+
+testBasicConst:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_constant_1: {}" $test_constant_1
+	log message 0 "test_constant_2: {}" $test_constant_2
+	log message 0 "test_constant_3: {}" $test_constant_3
+	log message 0 "test_constant_4: {}" $test_constant_4
+	log message 0 "test_constant_5: {}" $test_constant_5
+
+	call $endStandardTestShell
+
+end proc
+
+testBasicElse:
+proc
+    call $startStandardTestShell
+
+	------------------------------------------
+	-- eual
+	if 0 = 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 = 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 = 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 1 = 0
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 0 = 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- not eual
+	if 0 != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 != 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 != 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 1 != 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 0 != 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater
+	if 0 > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 > 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater or equal
+	if 0 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 >= 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 2
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller
+	if 0 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 < 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 1 < 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 0 < 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller or equal
+	if 0 <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 <= 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 <= 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $one
+	    log message 0 "enter if"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 2 <= 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 1 <= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- multi if
+	
+	log message 0 "test multi if (1)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            end if
+	            log message 0 "enter multi if 2"
+	        end if
+	        log message 0 "enter multi if 3"
+	    end if
+	    log message 0 "enter multi if 4"
+	end if
+	
+	log message 0 "test multi if (2)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            elsif 1 = 1
+	                log message 0 "no enter multi elsif"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        elsif 1 = 1
+	            log message 0 "no enter multi elsif"
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    elsif 1 = 1
+	        log message 0 "no enter multi elsif"
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	elsif 1 = 1
+	    log message 0 "no enter multi elsif"
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (3)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (4)"
+	if 0 = 0
+	    if 0 = 1
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "enter multi else 1"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (5)"
+	if 0 = 0
+	    if 1 = 1
+	        if 0 = 1
+	            log message 0 "no enter multi if"
+	        else
+	            log message 0 "enter multi else 1"
+	        end if
+	    else
+	        if 1 = 1
+	            if 0 = 1
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "enter multi else 2"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    end if
+	end if
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+testBasicElsIf:
+proc
+    call $startStandardTestShell
+
+	------------------------------------------
+	-- eual
+	if 0 = 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 = 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 = 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 1 = 0
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 0 = 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- not eual
+	if 0 != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 != 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 != 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 1 != 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 0 != 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater
+	if 0 > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 > 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater or equal
+	if 0 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 >= 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 2
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller
+	if 0 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 < 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 1 < 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 0 < 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller or equal
+	if 0 <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 <= 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 <= 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $one
+	    log message 0 "enter if"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 2 <= 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 1 <= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- multi if
+	
+	log message 0 "test multi if (1)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            end if
+	            log message 0 "enter multi if 2"
+	        end if
+	        log message 0 "enter multi if 3"
+	    end if
+	    log message 0 "enter multi if 4"
+	end if
+	
+	log message 0 "test multi if (2)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            elsif 1 = 1
+	                log message 0 "no enter multi elsif"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        elsif 1 = 1
+	            log message 0 "no enter multi elsif"
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    elsif 1 = 1
+	        log message 0 "no enter multi elsif"
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	elsif 1 = 1
+	    log message 0 "no enter multi elsif"
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (3)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (4)"
+	if 0 = 0
+	    if 0 = 1
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "enter multi else 1"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (5)"
+	if 0 = 0
+	    if 1 = 1
+	        if 0 = 1
+	            log message 0 "no enter multi if"
+	        else
+	            log message 0 "enter multi else 1"
+	        end if
+	    else
+	        if 1 = 1
+	            if 0 = 1
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "enter multi else 2"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    end if
+	end if
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+
+testBasicIf:
+proc
+    call $startStandardTestShell
+
+	------------------------------------------
+	-- eual
+	if 0 = 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 = 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 = 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero = $one
+	    log message 0 "no enter if"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 1 = 0
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 = 1
+	    log message 0 "no enter if"
+	elsif 0 = 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- not eual
+	if 0 != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 != 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 != 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero != 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero != $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 1 != 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 != 0
+	    log message 0 "no enter if"
+	elsif 0 != 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater
+	if 0 > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 > 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero > 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero > $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 > 0
+	    log message 0 "no enter if"
+	elsif 1 > 0
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- grater or equal
+	if 0 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 >= 2
+	    log message 0 "no enter if"
+	end if
+	
+	if 2 >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero >= $one
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 2
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 >= 1
+	    log message 0 "no enter if"
+	elsif 1 >= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller
+	if 0 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if 0 < 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $zero
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero < $one
+	    log message 0 "enter if"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 1 < 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 0 < 0
+	    log message 0 "no enter if"
+	elsif 0 < 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- smaller or equal
+	if 0 <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if 0 <= 2
+	    log message 0 "enter if"
+	end if
+	
+	if 2 <= 0
+	    log message 0 "no enter if"
+	end if
+	
+	if $zero <= 0
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $zero
+	    log message 0 "enter if"
+	end if
+	
+	if $zero <= $one
+	    log message 0 "enter if"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 2 <= 1
+	    log message 0 "no enter elsif"
+	else
+	    log message 0 "enter else"
+	end if
+	
+	if 1 <= 0
+	    log message 0 "no enter if"
+	elsif 1 <= 1
+	    log message 0 "enter elsif"
+	else
+	    log message 0 "no enter else"
+	end if
+	
+	------------------------------------------
+	-- multi if
+	
+	log message 0 "test multi if (1)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            end if
+	            log message 0 "enter multi if 2"
+	        end if
+	        log message 0 "enter multi if 3"
+	    end if
+	    log message 0 "enter multi if 4"
+	end if
+	
+	log message 0 "test multi if (2)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            elsif 1 = 1
+	                log message 0 "no enter multi elsif"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        elsif 1 = 1
+	            log message 0 "no enter multi elsif"
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    elsif 1 = 1
+	        log message 0 "no enter multi elsif"
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	elsif 1 = 1
+	    log message 0 "no enter multi elsif"
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (3)"
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multi if 1"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "no enter multi else"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (4)"
+	if 0 = 0
+	    if 0 = 1
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "no enter multi else"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    else
+	        log message 0 "enter multi else 1"
+	    end if
+	else
+	    log message 0 "no enter multi else"
+	end if
+	
+	log message 0 "test multi if (5)"
+	if 0 = 0
+	    if 1 = 1
+	        if 0 = 1
+	            log message 0 "no enter multi if"
+	        else
+	            log message 0 "enter multi else 1"
+	        end if
+	    else
+	        if 1 = 1
+	            if 0 = 1
+	                log message 0 "no enter multi if"
+	            else
+	                log message 0 "enter multi else 2"
+	            end if
+	        else
+	            log message 0 "no enter multi else"
+	        end if
+	    end if
+	end if
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+testBasicLoop:
+proc
+    call $startStandardTestShell
+	loop 4
+	    log message 0 "log 0"
+	end loop
+	
+	loop 5
+	    log message 0 "log 1"
+	    loop 2
+	        log message 0 "log 3"
+	    end loop
+	end loop
+	
+	log message 0 "log 2"
+	
+	call $endStandardTestShell
+end proc
+
+var test_variable_1 0b1
+var test_variable_2 0x2
+var test_variable_3 3
+var test_variable_4 4
+var test_variable_5 5
+
+
+testBasicVar:
+proc
+    call $startStandardTestShell
+	log message 0 "test_variable_1: {}" $test_variable_1
+	log message 0 "test_variable_2: {}" $test_variable_2
+	log message 0 "test_variable_3: {}" $test_variable_3
+	log message 0 "test_variable_4: {}" $test_variable_4
+	log message 0 "test_variable_5: {}" $test_variable_5
+
+	log message $INFO "Main test call $endStandardTestShelled {}" $INFO 
+	wait 1000
+	call $endStandardTestShell
+end proc
+
+var aab 1
+var abb 2
+var bba 3
+var cbb 4
+var aba 5
+
+testBasicVar3:
+proc
+    call $startStandardTestShell
+	log message 0 "aab: {}" $aab
+	log message 0 "abb: {}" $abb
+	log message 0 "bba: {}" $bba
+	log message 0 "cbb: {}" $cbb
+	log message 0 "aba: {}" $aba
+	
+	call $endStandardTestShell
+
+end proc

@@ -1,0 +1,4 @@
+Lib4:
+proc
+	log message 0 "load file lib1.stm"
+end proc

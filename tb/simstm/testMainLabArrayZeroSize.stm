@@ -1,7 +1,7 @@
 include "Common/CommonLabs.stm"
 include "TestLabs/TestLabArrayZeroSize.stm"
 
-include "Array/array_zero_size.stm"
+include "Array/array_labs.stm"
 
 
 file simulation_success "simulation.success"

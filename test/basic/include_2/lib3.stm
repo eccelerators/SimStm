@@ -1,4 +1,0 @@
-Lib3:
-proc
-	log message 0 "load file lib3.stm"
-end proc

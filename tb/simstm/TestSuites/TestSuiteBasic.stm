@@ -1,0 +1,210 @@
+
+	-- intern
+	file TestCaseBasicConstStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicConstFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicElseStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicElseFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicElsIfStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicElsIfFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicIfStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicIfFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicLoopStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicLoopFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicVarStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicVarFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBasicVar3StartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicVar3File "../../SimulationResults/{@c3}_{@c2}.xml"	
+	
+			
+testSuiteBasic:
+proc
+	call $testCaseBasicConst
+	call $testCaseBasicElse
+	call $testCaseBasicElsIf
+	call $testCaseBasicIf
+	call $testCaseBasicLoop
+	call $testCaseBasicVar
+	call $testCaseBasicVar3
+end proc
+
+testCaseBasicLoop:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicLoopStartFile
+    file pointer copy TestCaseFile TestCaseBasicLoopFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicLoop
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicLoop test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicVar:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicVarStartFile
+    file pointer copy TestCaseFile TestCaseBasicVarFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicVar
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicVar test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicVar3:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicVar3StartFile
+    file pointer copy TestCaseFile TestCaseBasicVar3File
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicVar3
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicVar3 test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicIf:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicIfStartFile
+    file pointer copy TestCaseFile TestCaseBasicIfFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicIf
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicIf test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicElsIf:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicElsIfStartFile
+    file pointer copy TestCaseFile TestCaseBasicElsIfFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicElsIf
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicElsIf test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicElse:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicElseStartFile
+    file pointer copy TestCaseFile TestCaseBasicElseFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicElse
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicElse test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBasicConst:
+proc
+    file pointer copy TestCaseStartFile TestCaseBasicConstStartFile
+    file pointer copy TestCaseFile TestCaseBasicConstFile
+    equ TestCaseNumberOfAssertions 12
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBasicConst
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "BasicConst test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+

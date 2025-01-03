@@ -2,6 +2,8 @@ include "Common/CommonLabs.stm"
 
 include "TestLabs/TestLabArrayGetOutPos.stm"
 
+include "Array/array_labs.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 

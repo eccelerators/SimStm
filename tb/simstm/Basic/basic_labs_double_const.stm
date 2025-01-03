@@ -1,0 +1,7 @@
+const test_variable_1 1
+const test_variable_1 1
+
+testBasicConst2:
+proc
+	finish
+end proc
