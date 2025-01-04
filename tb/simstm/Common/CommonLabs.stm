@@ -1,11 +1,5 @@
 include "Base/Base.stm"
 
-include "Array/array.stm"
-include "Array/array_size.stm"
-include "Array/array_pointer.stm"
-
-include "Signal/signal.stm"
-
 bus wishbone 0
 bus avalon 1
 bus axi4lite 2
