@@ -95,7 +95,8 @@ begin
     i_tb_simstm : entity work.tb_simstm
         generic map (
             stimulus_path => stimulus_path,
-            stimulus_file => stimulus_file          
+            stimulus_file => stimulus_file,
+            stimulus_main_entry_label => stimulus_main_entry_label          
         )
         port map (
             executing_line => executing_line,
