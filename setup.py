@@ -36,6 +36,7 @@ static_setup_data = {
             {"testsuite-name":"testSuiteLines", "file":"TestSuites/TestSuiteLines.stm", "entry-file":"testMainSuiteLines.stm", "entry-label":"$testMainSuiteLines"},
             {"testsuite-name":"testSuiteInterrupt", "file":"TestSuites/TestSuiteInterrupt.stm", "entry-file":"testMainSuiteInterrupt.stm", "entry-label":"$testMainSuiteInterrupt"},
             {"testsuite-name":"testSuiteBusAvalon", "file":"TestSuites/TestSuiteBusAvalon.stm", "entry-file":"testMainSuiteBusAvalon.stm", "entry-label":"$testMainSuiteBusAvalon"},
+            {"testsuite-name":"testSuiteOther", "file":"TestSuites/TestSuiteOther.stm", "entry-file":"testMainSuiteOther.stm", "entry-label":"$testMainSuiteOther"},
             {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"$testMainSuiteFile"},
             {"testsuite-name":"testSuiteBasic", "file":"TestSuites/TestSuiteBasic.stm", "entry-file":"testMainSuiteBasic.stm", "entry-label":"$testMainSuiteBasic"},
             {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"$testMainSuiteArray"},
@@ -111,12 +112,17 @@ static_setup_data = {
             {"file":"tb/simstm/TestSuites/TestSuiteLines.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteInterrupt.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusAvalon.stm"},
+            {"file":"tb/simstm/TestSuites/TestSuiteOther.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteFile.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBasic.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteArray.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusAxi4Lite.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteSignal.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusWishbone.stm"}
+        ]),(
+        "simstm/tb/simstm/Other", [
+            {"file":"tb/simstm/Other/other.stm"},
+            {"file":"tb/simstm/Other/other_labs.stm"}
         ]),(
         "simstm/tb/simstm/Variable", [
             {"file":"tb/simstm/Variable/variable.stm"}
@@ -152,6 +158,7 @@ static_setup_data = {
         ]),(
         "simstm/tb/simstm", [
             {"file":"tb/simstm/testMainSuiteBusWishbone.stm"},
+            {"file":"tb/simstm/testMainSuiteOther.stm"},
             {"file":"tb/simstm/testMainSuiteInterrupt.stm"},
             {"file":"tb/simstm/testMainLabArraySetOutPos.stm"},
             {"file":"tb/simstm/testMainSuiteLines.stm"},
