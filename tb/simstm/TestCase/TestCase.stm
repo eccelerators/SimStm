@@ -7,7 +7,6 @@ var TestCaseLinesPosition 0
 var TestCaseAssertionsInsertionPoint 0
 var TestCasePropertiesInsertionPoint 0
 
-var TestCaseNumberOfAssertions 0
 var TestCaseIndex 0xFFFFFFFF
 var TestCaseHasIndex 0
 var TestSuiteHasIndex 0

@@ -37,7 +37,6 @@ testCaseBasicLoop:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicLoopStartFile
     file pointer copy TestCaseFile TestCaseBasicLoopFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -62,7 +61,6 @@ testCaseBasicVar:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicVarStartFile
     file pointer copy TestCaseFile TestCaseBasicVarFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -87,7 +85,6 @@ testCaseBasicVar3:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicVar3StartFile
     file pointer copy TestCaseFile TestCaseBasicVar3File
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -112,7 +109,6 @@ testCaseBasicIf:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicIfStartFile
     file pointer copy TestCaseFile TestCaseBasicIfFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -137,7 +133,6 @@ testCaseBasicElsIf:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicElsIfStartFile
     file pointer copy TestCaseFile TestCaseBasicElsIfFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -162,7 +157,6 @@ testCaseBasicElse:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicElseStartFile
     file pointer copy TestCaseFile TestCaseBasicElseFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -187,7 +181,6 @@ testCaseBasicConst:
 proc
     file pointer copy TestCaseStartFile TestCaseBasicConstStartFile
     file pointer copy TestCaseFile TestCaseBasicConstFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

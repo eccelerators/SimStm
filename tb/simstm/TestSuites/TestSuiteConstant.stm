@@ -12,7 +12,6 @@ testCaseConstantAdd:
 proc
     file pointer copy TestCaseStartFile TestCaseConstantAddStartFile
     file pointer copy TestCaseFile TestCaseConstantAddFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

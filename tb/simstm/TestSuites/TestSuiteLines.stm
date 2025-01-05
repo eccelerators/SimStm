@@ -53,7 +53,6 @@ testCaseLinesAppendArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesAppendArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesAppendArrayFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -78,7 +77,6 @@ testCaseLinesAppendText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesAppendTextStartFile
     file pointer copy TestCaseFile TestCaseLinesAppendTextFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -103,7 +101,6 @@ testCaseLinesDeleteAllArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesDeleteAllArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesDeleteAllArrayFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -128,7 +125,6 @@ testCaseLinesDeleteArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesDeleteArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesDeleteArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -153,7 +149,6 @@ testCaseLinesGetArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesGetArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesGetArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -178,7 +173,6 @@ testCaseLinesInsertArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesInsertArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesInsertArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -205,7 +199,6 @@ testCaseLinesInsertText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesInsertTextStartFile
     file pointer copy TestCaseFile TestCaseLinesInsertTextFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -230,7 +223,6 @@ testCaseLinesPointerCopy:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesPointerCopyStartFile
     file pointer copy TestCaseFile TestCaseLinesPointerCopyFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -255,7 +247,6 @@ testCaseLinesSetArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSetArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesSetArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -280,7 +271,6 @@ testCaseLinesSetText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSetTextStartFile
     file pointer copy TestCaseFile TestCaseLinesSetTextFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -306,7 +296,6 @@ testCaseLinesSize:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSizeStartFile
     file pointer copy TestCaseFile TestCaseLinesSizeFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

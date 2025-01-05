@@ -48,7 +48,6 @@ testCaseOtherRandom:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherRandomStartFile
     file pointer copy TestCaseFile TestCaseOtherRandomFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -73,7 +72,6 @@ testCaseOtherSeed:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherSeedStartFile
     file pointer copy TestCaseFile TestCaseOtherSeedFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -98,7 +96,6 @@ testCaseOtherTrace:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherTraceStartFile
     file pointer copy TestCaseFile TestCaseOtherTraceFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -123,7 +120,6 @@ testCaseOtherMarker:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherMarkerStartFile
     file pointer copy TestCaseFile TestCaseOtherMarkerFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -148,7 +144,6 @@ testCaseOtherWait:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherWaitStartFile
     file pointer copy TestCaseFile TestCaseOtherWaitFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -174,7 +169,6 @@ testCaseOtherLogSubstitutions:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherLogSubstitutionsStartFile
     file pointer copy TestCaseFile TestCaseOtherLogSubstitutionsFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -199,7 +193,6 @@ testCaseOtherLogFormats:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherLogFormatsStartFile
     file pointer copy TestCaseFile TestCaseOtherLogFormatsFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -225,7 +218,6 @@ testCaseOtherLog:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherLogStartFile
     file pointer copy TestCaseFile TestCaseOtherLogFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -250,7 +242,6 @@ testCaseOtherHelloWorld:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherHelloWorldStartFile
     file pointer copy TestCaseFile TestCaseOtherHelloWorldFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -275,7 +266,6 @@ testCaseOtherCall:
 proc
     file pointer copy TestCaseStartFile TestCaseOtherCallStartFile
     file pointer copy TestCaseFile TestCaseOtherCallFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

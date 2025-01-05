@@ -35,7 +35,6 @@ testCaseFileAppendArray:
 proc
     file pointer copy TestCaseStartFile TestCaseFileAppendArrayStartFile
     file pointer copy TestCaseFile TestCaseFileAppendArrayFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -60,7 +59,6 @@ testCaseFileReadAllArray:
 proc
     file pointer copy TestCaseStartFile TestCaseFileReadAllArrayStartFile
     file pointer copy TestCaseFile TestCaseFileReadAllArrayFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -85,7 +83,6 @@ testCaseFileReadArray:
 proc
     file pointer copy TestCaseStartFile TestCaseFileReadArrayStartFile
     file pointer copy TestCaseFile TestCaseFileReadArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -110,7 +107,6 @@ testCaseFileStatus:
 proc
     file pointer copy TestCaseStartFile TestCaseFileStatusStartFile
     file pointer copy TestCaseFile TestCaseFileStatusFile
-    equ TestCaseNumberOfAssertions 3
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -135,7 +131,6 @@ testCaseFileWriteArray:
 proc
     file pointer copy TestCaseStartFile TestCaseFileWriteArrayStartFile
     file pointer copy TestCaseFile TestCaseFileWriteArrayFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -160,7 +155,6 @@ testCaseFilePointerCopy:
 proc
     file pointer copy TestCaseStartFile TestCaseFilePointerCopyStartFile
     file pointer copy TestCaseFile TestCaseFilePointerCopyFile
-    equ TestCaseNumberOfAssertions 1
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

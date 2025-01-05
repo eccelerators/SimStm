@@ -13,7 +13,6 @@ testCaseInterrupt:
 proc
     file pointer copy TestCaseStartFile TestCaseInterruptStartFile
     file pointer copy TestCaseFile TestCaseInterruptFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED

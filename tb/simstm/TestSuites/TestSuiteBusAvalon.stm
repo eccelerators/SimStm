@@ -27,7 +27,6 @@ testCaseBus:
 proc
     file pointer copy TestCaseStartFile TestCaseBusStartFile
     file pointer copy TestCaseFile TestCaseBusFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -52,7 +51,6 @@ testCaseBusVerifySuccess:
 proc
     file pointer copy TestCaseStartFile TestCaseBusVerifySuccessStartFile
     file pointer copy TestCaseFile TestCaseBusVerifySuccessFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -77,7 +75,6 @@ testCaseBusVerifyFail:
 proc
     file pointer copy TestCaseStartFile TestCaseBusVerifyFailStartFile
     file pointer copy TestCaseFile TestCaseBusVerifyFailFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -102,7 +99,6 @@ testCaseBusTimeOutRead:
 proc
     file pointer copy TestCaseStartFile TestCaseBusTimeOutReadStartFile
     file pointer copy TestCaseFile TestCaseBusTimeOutReadFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -127,7 +123,6 @@ testCaseBusTimeOutWrite:
 proc
     file pointer copy TestCaseStartFile TestCaseBusTimeOutWriteStartFile
     file pointer copy TestCaseFile TestCaseBusTimeOutWriteFile
-    equ TestCaseNumberOfAssertions 12
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
