@@ -54,9 +54,11 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
+    signal verify_passes : std_logic_vector(31 downto 0);
     signal verify_failures : std_logic_vector(31 downto 0);
+    signal bus_timeout_passes : std_logic_vector(31 downto 0);
     signal bus_timeout_failures : std_logic_vector(31 downto 0);
-     
+         
     signal signals_in : t_signals_in;
     signal signals_out : t_signals_out;
     signal bus_down : t_bus_down;
@@ -72,13 +74,15 @@ begin
     -- signals_in.in_signal_0 actual simulation time already supplied by package
     signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
     -- signals_in.in_signal_2 constant 0 already supplied by package
-    signals_in.in_signal_3 <= verify_failures;
-    signals_in.in_signal_4 <= bus_timeout_failures;
+    signals_in.in_signal_3 <= verify_passes;
+    signals_in.in_signal_4 <= verify_failures;
+    signals_in.in_signal_5 <= bus_timeout_passes;
+    signals_in.in_signal_6 <= bus_timeout_failures;
     
     -- standard outputs
     InitDut <= signals_out.out_signal_0;
-    -- signals_out.out_signal_3 <= expected_standard_test_error_count already connected in tb_simstm
-    -- signals_out.out_signal_4 <= expected_bus_timeout_test_error_count already connected in tb_simstm
+    -- signals_out.out_signal_4 <= expected_standard_test_verify_failure_count already connected in tb_simstm
+    -- signals_out.out_signal_6 <= expected_bus_timeout_test_failure_count already connected in tb_simstm
    
     -- interrupts
     signals_in.in_signal_1000 <= signals_out.out_signal_3002;
@@ -101,7 +105,9 @@ begin
         port map (
             executing_line => executing_line,
             executing_file => executing_file,
+            verify_passes => verify_passes,
             verify_failures => verify_failures,
+            bus_timeout_passes => bus_timeout_passes,
             bus_timeout_failures => bus_timeout_failures,
             marker => marker,
             signals_in => signals_in,

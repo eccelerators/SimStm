@@ -71,7 +71,9 @@ entity tb_simstm is
     port(
         executing_line : out integer;
         executing_file : out text_line;
+        verify_passes : out std_logic_vector(31 downto 0);
         verify_failures : out std_logic_vector(31 downto 0);
+        bus_timeout_passes : out std_logic_vector(31 downto 0);
         bus_timeout_failures : out std_logic_vector(31 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
@@ -156,7 +158,9 @@ begin
 
         variable loglevel : integer := 0;
         variable resume : integer := 0;
+        variable verify_passes_count : integer := 0;
         variable verify_failure_count : integer := 0;
+        variable bus_timeout_passes_count : integer := 0;
         variable bus_timeout_failure_count : integer := 0;
         variable expected_verify_failure_count : integer := 0;
         variable expected_bus_timeout_failure_count : integer := 0;
@@ -247,7 +251,9 @@ begin
 
     begin
         marker <= (others => '0');
+        verify_passes <= (others => '0');
         verify_failures <= (others => '0');
+        bus_timeout_passes <= (others => '0');
         bus_timeout_failures <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
@@ -272,10 +278,12 @@ begin
         -- using the instruction record list, get the instruction and implement
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
-        
-            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
-            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
 
+            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));        
+            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
+            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, 32));
+            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
+            
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
                 resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
@@ -619,6 +627,7 @@ begin
                     assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;
+                    verify_passes_count := verify_passes_count + 1; 
                     temp_int := var_stm_array(par2);
                     temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
                     temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
@@ -1338,8 +1347,10 @@ begin
 
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
-                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_3));
-                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_4));
+                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4));
+                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6));
+                    report "Verify passes " & (integer'image(verify_passes_count));
+                    report "Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then                       
                         report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
                         report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
@@ -1482,8 +1493,8 @@ begin
                 elsif instruction(1 to len) = INSTR_VERBOSITY then
                     loglevel := par1;
 
-                -- resume $RESUME_ON_VERIFY_ERROR
-                -- resume $EXIT_ON_VERIFY_ERROR
+                -- resume ON_VERIFY (Flag Bit0) or BUS_TIMEOUT (Flag Bit1) failure
+                -- if respective flag in resume value is set
                 elsif instruction(1 to len) = INSTR_RESUME then
                    resume := par1;
 
@@ -1545,6 +1556,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
+                    verify_passes_count := verify_passes_count + 1; 
                     temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
                     temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
                     temp_stdvec_c := std_logic_vector(to_signed(par3, 32));
@@ -1590,8 +1602,9 @@ begin
                     update_variable(defined_vars, par2, temp_int, valid);
                     assert valid /= 0
                     report "get_sig error: not a valid variable??"
-                    severity failure;
+                    severity failure;           
                     if (instruction(1 to len) = INSTR_SIGNAL_VERIFY) then
+                        verify_passes_count := verify_passes_count + 1; 
                         temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
                         temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
@@ -1654,6 +1667,7 @@ begin
                     assert valid /= 0
                     report "Bus number not available"
                     severity failure;
+                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
                     if to_signed(resume, 32)(1) = '0' then
                         assert successfull
                         report "Bus Write timeout"
@@ -1683,6 +1697,7 @@ begin
                     assert valid /= 0
                     report "Bus number not available"
                     severity failure;
+                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
                     if to_signed(resume, 32)(1) = '0' then
                         assert successfull
                         report "Bus Read timeout"
@@ -1703,6 +1718,7 @@ begin
                         severity failure;
                     end if;
                     if instruction(1 to len) = INSTR_BUS_VERIFY then
+                        verify_passes_count := verify_passes_count + 1; 
                         temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
                         temp_stdvec_b := std_logic_vector(to_signed(par5, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par6, 32));

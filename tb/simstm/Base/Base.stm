@@ -93,12 +93,13 @@ proc
 	end if
 end proc
 
+signal sigInStandardTestVerifyPassCount 3
+signal sigInStandardTestVerifyFailureCount 4
+signal sigOutExpectedStandardTestVerifyFailureCount 4
 
-signal sigInStandardTestVerifyFailureCount 3
-signal sigOutExpectedStandardTestVerifyFailureCount 3
-
-signal sigInStandardTestBusTimeoutFailureCount 4
-signal sigOutExpectedStandardTestBusTimeoutFailureCount 4
+signal sigInStandardTestBusTimeoutPassCount 5
+signal sigInStandardTestBusTimeoutFailureCount 6
+signal sigOutExpectedStandardTestBusTimeoutFailureCount 6
 
 var StandardTestVerifyFailureCountStartSnapShot 0
 var StandardTestVerifyFailureCountResult 0
@@ -115,6 +116,12 @@ var ExpectedStandardTestBusTimeoutFailureCount 0
 var ExpectedStandardTestBusTimeoutFailureCountResult 0
 
 var StandardTestFailure 0
+
+var StandardTestVerifyPassCountStartSnapShot 0
+var StandardTestVerifyPassCountResult 0
+
+var StandardTestBusTimeoutPassCountStartSnapShot 0
+var StandardTestBusTimeoutPassCountResult 0
 
 -- A standard test is usually wrapped by a 
 --
@@ -139,6 +146,10 @@ proc
 	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountStartSnapShot
 	equ ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestVerifyFailureCount
 	equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCount
+
+	signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountStartSnapShot	
+	
 	log message 0 "{@c2} started" 
 end proc	
 
@@ -152,6 +163,15 @@ proc
 	sub ExpectedStandardTestVerifyFailureCountResult $ExpectedStandardTestVerifyFailureCountStartSnapShot
 	equ ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCount
 	sub ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCountStartSnapShot	
+	
+	signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountResult
+	sub StandardTestVerifyPassCountResult $StandardTestVerifyPassCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountResult
+	sub StandardTestBusTimeoutPassCountResult $StandardTestBusTimeoutPassCountStartSnapShot	
+	
+	log message 0 "Passed {:d} verify instructions" $StandardTestVerifyPassCountResult
+	log message 0 "Passed {:d} timeout monitored bus access instructions" $StandardTestBusTimeoutPassCountResult
+	
 	if $StandardTestVerifyFailureCountResult > $ExpectedStandardTestVerifyFailureCountResult
 		if $StandardTestBusTimeoutFailureCountResult > $ExpectedStandardTestBusTimeoutFailureCountResult		    
 			log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult

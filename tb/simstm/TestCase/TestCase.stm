@@ -4,6 +4,7 @@ file TestCaseFile "TestCaseFilePointer"
 lines TestCaseStartLines
 lines TestCaseLines
 var TestCaseLinesPosition 0
+var TestCaseAssertionsInsertionPoint 0
 var TestCasePropertiesInsertionPoint 0
 
 var TestCaseNumberOfAssertions 0
@@ -27,7 +28,9 @@ proc
   
     lines append message TestCaseLines '<testcase'    
     lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}_{:d}"' $TestSuiteIndex $TestCaseIndex
-    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint $TestCaseLinesPosition     
+        
     lines append message TestCaseLines ' classname="{@c3}_{:d}' $TestSuiteIndex    
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"' 
@@ -49,7 +52,9 @@ proc
       
     lines append message TestCaseLines '<testcase'     
     lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}"' $TestSuiteIndex
-    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint $TestCaseLinesPosition     
+      
     lines append message TestCaseLines ' classname="{@c3}_{:d}"' $TestSuiteIndex 
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"' 
@@ -71,7 +76,9 @@ proc
       
     lines append message TestCaseLines '<testcase'     
     lines append message TestCaseLines ' name="{@c3}_{@c2}_{:d}"' $TestCaseIndex
-    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions     
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint $TestCaseLinesPosition     
+    
     lines append message TestCaseLines ' classname="{@c3}"'   
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"' 
@@ -94,7 +101,9 @@ proc
     
     lines append message TestCaseLines '<testcase'     
     lines append message TestCaseLines ' name="{@c3}_{@c2}"'    
-    lines append message TestCaseLines ' assertions="{:d}"' $TestCaseNumberOfAssertions 
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint $TestCaseLinesPosition      
+       
     lines append message TestCaseLines ' classname="{@c3}"'    
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"'
@@ -110,13 +119,15 @@ proc
     signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
     log message $ALLWAYS "Ended at simulation time of {:d}ns" $TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime $TestCaseSimulatedEndTime
-    sub TestCaseSimulatedDurationTime $TestCaseSimulatedStartTime
+    sub TestCaseSimulatedDurationTime $TestCaseSimulatedStartTime     
+    lines insert message TestCaseLines $TestCaseAssertionsInsertionPoint' assertions="{:d}"' $StandardTestVerifyPassCountResult 
+    add TestCasePropertiesInsertionPoint 1
  	lines append message TestCaseLines '</testcase>'
- 	lines insert message TestCaseLines $TestCaseLinesPosition '</properties>'
-    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedDuration" value="{:d}"/>' $TestCaseSimulatedDurationTime   
-    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedEndTime" value="{:d}"/>' $TestCaseSimulatedEndTime
-    lines insert message TestCaseLines $TestCaseLinesPosition '<property name="SimulatedStartTime" value="{:d}"/>' $TestCaseSimulatedStartTime 
-    lines insert message TestCaseLines $TestCaseLinesPosition '<properties>'	
+ 	lines insert message TestCaseLines $TestCasePropertiesInsertionPoint '</properties>'
+    lines insert message TestCaseLines $TestCasePropertiesInsertionPoint '<property name="SimulatedDuration" value="{:d}"/>' $TestCaseSimulatedDurationTime   
+    lines insert message TestCaseLines $TestCasePropertiesInsertionPoint '<property name="SimulatedEndTime" value="{:d}"/>' $TestCaseSimulatedEndTime
+    lines insert message TestCaseLines $TestCasePropertiesInsertionPoint '<property name="SimulatedStartTime" value="{:d}"/>' $TestCaseSimulatedStartTime 
+    lines insert message TestCaseLines $TestCasePropertiesInsertionPoint '<properties>'	
  	-- file last modified time is test case end real time 
  	file append TestCaseFile TestCaseLines
  	if $TestSuiteHasIndex = 1
