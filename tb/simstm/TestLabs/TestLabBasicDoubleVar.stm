@@ -1,0 +1,10 @@
+
+
+testLabBasicDoubleVar:
+proc
+	call $testBasicDoubleVar
+end proc
+
+
+
+

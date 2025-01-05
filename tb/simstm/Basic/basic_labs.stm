@@ -9,11 +9,14 @@ proc
 	finish
 end proc
 
-include "lib1.stm"
-include "lib2.stm"
-include "lib3.stm"
+include "Basic/lib1.stm"
+include "Basic/lib2.stm"
+include "Basic/lib3.stm"
+include "Basic/lib4.stm"
+include "Basic/lib5.stm"
+include "Basic/lib6.stm"
 
-testBasicInclude:
+testBasicIncludeFlat:
 proc
     log message 0 "load file test.stm"
     call $Lib1
@@ -23,17 +26,17 @@ proc
 
 end proc
 
-include "lib4.stm"
-include "lib5.stm"
+include "Basic/lib4.stm"
+include "Basic/lib5.stm"
 
 
-testBasicInclude2:
+testBasicIncludeNested:
 proc
 
     log message 0 "load file test.stm"
-    call $Lib1
-    call $Lib2
-    call $Lib3
+    call $Lib4
+    call $Lib5
+    call $Lib6
 	finish
 
 end proc

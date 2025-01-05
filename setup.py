@@ -46,10 +46,16 @@ static_setup_data = {
     ],
     "test_labs" : [
             {"testlab-name":"testLabConstantEqu", "file":"TestLabs/TestLabConstantEqu.stm", "entry-file":"testMainLabConstantEqu.stm", "entry-label":"$testMainLabConstantEqu"},
+            {"testlab-name":"testLabBasicDoubleVar", "file":"TestLabs/TestLabBasicDoubleVar.stm", "entry-file":"testMainLabBasicDoubleVar.stm", "entry-label":"$testMainLabBasicDoubleVar"},
             {"testlab-name":"testLabArrayGetOutPos", "file":"TestLabs/TestLabArrayGetOutPos.stm", "entry-file":"testMainLabArrayGetOutPos.stm", "entry-label":"$testMainLabArrayGetOutPos"},
+            {"testlab-name":"testLabBasicIncludeNested", "file":"TestLabs/TestLabBasicIncludeNested.stm", "entry-file":"testMainLabBasicIncludeNested.stm", "entry-label":"$testMainLabBasicIncludeNested"},
+            {"testlab-name":"testLabBasicIncludeFlat", "file":"TestLabs/TestLabBasicIncludeFlat.stm", "entry-file":"testMainLabBasicIncludeFlat.stm", "entry-label":"$testMainLabBasicIncludeFlat"},
             {"testlab-name":"testLabArrayZeroSize", "file":"TestLabs/TestLabArrayZeroSize.stm", "entry-file":"testMainLabArrayZeroSize.stm", "entry-label":"$testMainLabArrayZeroSize"},
             {"testlab-name":"testLabArraySetOutPos", "file":"TestLabs/TestLabArraySetOutPos.stm", "entry-file":"testMainLabArraySetOutPos.stm", "entry-label":"$testMainLabArraySetOutPos"},
-            {"testlab-name":"testLabConstantAdd", "file":"TestLabs/TestLabConstantAdd.stm", "entry-file":"testMainLabConstantAdd.stm", "entry-label":"$testMainLabConstantAdd"}
+            {"testlab-name":"testLabConstantAdd", "file":"TestLabs/TestLabConstantAdd.stm", "entry-file":"testMainLabConstantAdd.stm", "entry-label":"$testMainLabConstantAdd"},
+            {"testlab-name":"testLabBasicAbort", "file":"TestLabs/TestLabBasicAbort.stm", "entry-file":"testMainLabBasicAbort.stm", "entry-label":"$testMainLabBasicAbort"},
+            {"testlab-name":"testLabBasicDoubleConst", "file":"TestLabs/TestLabBasicDoubleConst.stm", "entry-file":"testMainLabBasicDoubleConst.stm", "entry-label":"$testMainLabBasicDoubleConst"},
+            {"testlab-name":"testLabBasicFinish", "file":"TestLabs/TestLabBasicFinish.stm", "entry-file":"testMainLabBasicFinish.stm", "entry-label":"$testMainLabBasicFinish"}
     ],
     "other_data_files" : [(
         "simstm", [
@@ -84,10 +90,16 @@ static_setup_data = {
     "src_tb_simstm_data_files" : [(
         "simstm/tb/simstm/TestLabs", [
             {"file":"tb/simstm/TestLabs/TestLabConstantEqu.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicDoubleVar.stm"},
             {"file":"tb/simstm/TestLabs/TestLabArrayGetOutPos.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicIncludeNested.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicIncludeFlat.stm"},
             {"file":"tb/simstm/TestLabs/TestLabArrayZeroSize.stm"},
             {"file":"tb/simstm/TestLabs/TestLabArraySetOutPos.stm"},
-            {"file":"tb/simstm/TestLabs/TestLabConstantAdd.stm"}
+            {"file":"tb/simstm/TestLabs/TestLabConstantAdd.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicAbort.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicDoubleConst.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabBasicFinish.stm"}
         ]),(
         "simstm/tb/simstm/Interrupt", [
             {"file":"tb/simstm/Interrupt/interrupt.stm"}
@@ -125,8 +137,7 @@ static_setup_data = {
             {"file":"tb/simstm/TestSuites/TestSuiteBusWishbone.stm"}
         ]),(
         "simstm/tb/simstm/Other", [
-            {"file":"tb/simstm/Other/other.stm"},
-            {"file":"tb/simstm/Other/other_labs.stm"}
+            {"file":"tb/simstm/Other/other.stm"}
         ]),(
         "simstm/tb/simstm/Variable", [
             {"file":"tb/simstm/Variable/variable.stm"}
@@ -163,20 +174,26 @@ static_setup_data = {
         ]),(
         "simstm/tb/simstm", [
             {"file":"tb/simstm/testMainSuiteBusWishbone.stm"},
+            {"file":"tb/simstm/testMainLabBasicDoubleConst.stm"},
             {"file":"tb/simstm/testMainSuiteOther.stm"},
             {"file":"tb/simstm/testMainSuiteInterrupt.stm"},
             {"file":"tb/simstm/testMainLabArraySetOutPos.stm"},
             {"file":"tb/simstm/testMainSuiteLines.stm"},
             {"file":"tb/simstm/testMainLabArrayGetOutPos.stm"},
+            {"file":"tb/simstm/testMainLabBasicIncludeFlat.stm"},
             {"file":"tb/simstm/testMainSuiteBusAxi4Lite.stm"},
+            {"file":"tb/simstm/testMainLabBasicAbort.stm"},
             {"file":"tb/simstm/testMainSuiteConstant.stm"},
             {"file":"tb/simstm/testMainSuiteBusAvalon.stm"},
+            {"file":"tb/simstm/testMainLabBasicDoubleVar.stm"},
             {"file":"tb/simstm/testMainLabConstantEqu.stm"},
             {"file":"tb/simstm/testMain.stm"},
             {"file":"tb/simstm/testMainSuiteVariable.stm"},
             {"file":"tb/simstm/testMainLabArrayZeroSize.stm"},
             {"file":"tb/simstm/testMainSuiteSignal.stm"},
+            {"file":"tb/simstm/testMainLabBasicIncludeNested.stm"},
             {"file":"tb/simstm/testMainSuiteArray.stm"},
+            {"file":"tb/simstm/testMainLabBasicFinish.stm"},
             {"file":"tb/simstm/testMainSuiteBasic.stm"},
             {"file":"tb/simstm/testMainLabConstantAdd.stm"},
             {"file":"tb/simstm/testMainSuiteFile.stm"}

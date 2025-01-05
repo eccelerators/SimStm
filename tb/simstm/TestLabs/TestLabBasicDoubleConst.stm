@@ -1,0 +1,10 @@
+
+
+testLabBasicDoubleConst:
+proc
+	call $testBasicDoubleConst
+end proc
+
+
+
+
