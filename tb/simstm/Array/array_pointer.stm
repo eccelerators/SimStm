@@ -22,12 +22,7 @@ proc
 	array pointer copy des_array src_array 
 	
 	array size src_array var_name_p
-	log message 0 "var_name_p: {}" $var_name_p
-	
-	if $var_name_p != 10
-	    abort
-	end if
-	
+	var verify var_name_p 10 $MAX
 	
 	array size des_array var_name_p
 	var verify var_name_p 10 $MAX

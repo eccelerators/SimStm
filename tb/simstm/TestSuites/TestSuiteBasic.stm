@@ -3,14 +3,11 @@
 	file TestCaseBasicConstStartFile "../../SimulationResults/{@c3}_{@c2}.start"
 	file TestCaseBasicConstFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
-	file TestCaseBasicElseStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseBasicElseFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseBasicIfElseElsifStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicIfElseElsifFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
-	file TestCaseBasicElsIfStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseBasicElsIfFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-	file TestCaseBasicIfStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseBasicIfFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseBasicNestedIfElseElsifStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBasicNestedIfElseElsifFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
 	file TestCaseBasicLoopStartFile "../../SimulationResults/{@c3}_{@c2}.start"
 	file TestCaseBasicLoopFile "../../SimulationResults/{@c3}_{@c2}.xml"
@@ -25,9 +22,8 @@
 testSuiteBasic:
 proc
 	call $testCaseBasicConst
-	call $testCaseBasicElse
-	call $testCaseBasicElsIf
-	call $testCaseBasicIf
+	call $testCaseBasicIfElseElsif
+	call $testCaseBasicNestedIfElseElsif
 	call $testCaseBasicLoop
 	call $testCaseBasicVar
 	call $testCaseBasicVar3
@@ -105,10 +101,10 @@ proc
     
 end proc
 
-testCaseBasicIf:
+testCaseBasicIfElseElsif:
 proc
-    file pointer copy TestCaseStartFile TestCaseBasicIfStartFile
-    file pointer copy TestCaseFile TestCaseBasicIfFile
+    file pointer copy TestCaseStartFile TestCaseBasicIfElseElsifStartFile
+    file pointer copy TestCaseFile TestCaseBasicIfElseElsifFile
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -118,10 +114,10 @@ proc
 	    return   
     end if
     
-    call $testBasicIf
+    call $testBasicIfElseElsif
 
 	if $StandardTestFailure != 0
-        lines append message TestCaseLines "BasicIf test failed"
+        lines append message TestCaseLines "BasicIfElseElsif test failed"
         call $failureTestCase
     end if
     
@@ -129,10 +125,10 @@ proc
     
 end proc
 
-testCaseBasicElsIf:
+testCaseBasicNestedIfElseElsif:
 proc
-    file pointer copy TestCaseStartFile TestCaseBasicElsIfStartFile
-    file pointer copy TestCaseFile TestCaseBasicElsIfFile
+    file pointer copy TestCaseStartFile TestCaseBasicNestedIfElseElsifStartFile
+    file pointer copy TestCaseFile TestCaseBasicNestedIfElseElsifFile
     call $beginTestCase
     
     if $SKIP = $NOT_SKIPPED
@@ -142,34 +138,10 @@ proc
 	    return   
     end if
     
-    call $testBasicElsIf
+    call $testBasicNestedIfElseElsif
 
 	if $StandardTestFailure != 0
-        lines append message TestCaseLines "BasicElsIf test failed"
-        call $failureTestCase
-    end if
-    
-    call $endTestCase
-    
-end proc
-
-testCaseBasicElse:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicElseStartFile
-    file pointer copy TestCaseFile TestCaseBasicElseFile
-    call $beginTestCase
-    
-    if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
-    end if
-    
-    call $testBasicElse
-
-	if $StandardTestFailure != 0
-        lines append message TestCaseLines "BasicElse test failed"
+        lines append message TestCaseLines "BasicNestedIfElseElsif test failed"
         call $failureTestCase
     end if
     
