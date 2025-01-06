@@ -14,6 +14,8 @@ lines a_read_lines
 lines b_read_lines
 lines c_read_lines
 array a_array 8
+array z_array 8
+
 array a_read_array 8
 array b_read_array 8
 array c_read_array 8
@@ -120,8 +122,38 @@ var read_elements_got 0
 
 testFileReadArray:
 proc
-    call $startStandardTestShell      
+    call $startStandardTestShell
 
+
+    array set a_read_array 0 0
+    array set a_read_array 1 0
+    array set a_read_array 2 0
+    array set a_read_array 3 0
+    array set a_read_array 4 0
+    array set a_read_array 5 0
+    array set a_read_array 6 0
+    array set a_read_array 7 0
+    
+    array verify a_read_array 0 0 $MAX
+    
+    array set b_read_array 0 0
+    array set b_read_array 1 0
+    array set b_read_array 2 0
+    array set b_read_array 3 0
+    array set b_read_array 4 0
+    array set b_read_array 5 0
+    array set b_read_array 6 0
+    array set b_read_array 7 0
+    
+    array set c_read_array 0 0
+    array set c_read_array 1 0
+    array set c_read_array 2 0
+    array set c_read_array 3 0
+    array set c_read_array 4 0
+    array set c_read_array 5 0
+    array set c_read_array 6 0
+    array set c_read_array 7 0
+    
     array set a_array 0 0
     array set a_array 1 1
     array set a_array 2 0xA
@@ -130,6 +162,8 @@ proc
     array set a_array 5 0x7FFFFFFF
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
+    lines delete all a_lines
+    
     lines append array a_lines a_array
     
     array set a_array 0 1
@@ -140,14 +174,35 @@ proc
     	
 	file write user_data_out_read_array a_lines
 	
-	file read user_data_out_read_array a_read_lines 0	
-	file read user_data_out_read_array b_read_lines 1		
-	file read user_data_out_read_array c_read_lines 2		
+	wait 1000
+	
+	file read user_data_out_read_array a_read_lines 1
+	lines size a_read_lines FileTmpResult
+	var verify FileTmpResult 1 $MAX
+	
+	file read user_data_out_read_array b_read_lines 1
+	lines size b_read_lines FileTmpResult
+	var verify FileTmpResult 1 $MAX
+	
+	file read user_data_out_read_array c_read_lines 1
+	lines size c_read_lines FileTmpResult
+	var verify FileTmpResult 1 $MAX
+	
 	file read end user_data_out_read_array
 	
 	lines get array a_read_lines 0 a_read_array read_elements_got
+	var verify read_elements_got 8 $MAX
 	lines get array b_read_lines 0 b_read_array read_elements_got
-	lines get array c_read_lines 0 b_read_array read_elements_got
+	var verify read_elements_got 8 $MAX
+	lines get array c_read_lines 0 c_read_array read_elements_got
+	var verify read_elements_got 8 $MAX
+	
+	array pointer copy ArrayToDump a_read_array
+	call $arrayDump
+	array pointer copy ArrayToDump b_read_array
+	call $arrayDump
+	array pointer copy ArrayToDump c_read_array
+	call $arrayDump
 	
 	array verify a_read_array 0 0 $MAX
 	array verify b_read_array 0 1 $MAX
@@ -169,6 +224,7 @@ proc
     array set a_array 5 0x7FFFFFFF
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
+    lines delete all a_lines
     lines append array a_lines a_array
 
     array set a_array 0 1
@@ -224,6 +280,7 @@ proc
     array set a_array 5 0x7FFFFFFF
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
+    lines delete all a_lines
     lines append array a_lines a_array
     
     array set a_array 0 1

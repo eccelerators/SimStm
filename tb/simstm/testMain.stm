@@ -5,7 +5,8 @@ include "Signal/signal_pointer.stm"
 
 include "Bus/bus.stm"
 
-include "Interrupt/interrupt.stm"
+include "File/file.stm"
+include "Base/Array.stm"
 
 file simulation_success "simulation.success"
 lines success_lines
@@ -30,7 +31,7 @@ proc
 	-- call $testSignalWriteReadVerify
 	-- call $testSignalVerifyFail
 	
-	call $testInterrupt
+	call $testFileReadArray
 
 	log message $INFO "Main test finished"
 	wait 1000

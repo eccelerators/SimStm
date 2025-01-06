@@ -928,9 +928,9 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    index_variable(defined_vars, par3, temp_int, valid);
+                    index_variable(defined_vars, par3, var_stm_array, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
                     stm_lines_get(var_stm_lines, par2, var_stm_array, number_found, valid);
                     assert valid /= 0

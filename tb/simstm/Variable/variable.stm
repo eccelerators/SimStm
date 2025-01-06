@@ -5,20 +5,24 @@ testVariableAdd:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
+	log message 0 "test_variable_1: {:d}" $test_variable_add_1
+	log message 0 "test_variable_2: {:d}" $test_variable_add_2
 	                                                  
 	add test_variable_add_1 10                            
 	add test_variable_add_2 20                            
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
+	log message 0 "test_variable_1: {:d}" $test_variable_add_1
+	log message 0 "test_variable_2: {:d}" $test_variable_add_2
+	var verify test_variable_add_1 11 $MAX
+	var verify test_variable_add_2 22 $MAX
 	                                                  
 	add test_variable_add_1 12345                         
 	add test_variable_add_2 88                            
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
+	log message 0 "test_variable_1: {:d}" $test_variable_add_1
+	log message 0 "test_variable_2: {:d}" $test_variable_add_2
+	var verify test_variable_add_1 12356 $MAX
+	var verify test_variable_add_2 110 $MAX
 
 call $endStandardTestShell
 
@@ -26,28 +30,32 @@ end proc
 
 
 
-var test_variable_and_1 43690
-var test_variable_and_2 16777215
+var test_variable_and_1 0xAAAA
+var test_variable_and_2 0x77777777
 
 testVariableAnd:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_and_1
-	log message 0 "test_variable_2: {}" $test_variable_and_2
+	log message 0 "test_variable_1: {:x}" $test_variable_and_1
+	log message 0 "test_variable_2: {:x}" $test_variable_and_2
 	                                                  
-	and test_variable_and_1 10                            
-	and test_variable_and_2 20                            
+	and test_variable_and_1 0xAA02
+	and test_variable_and_2 0x70745607
+
+	log message 0 "test_variable_1: {:x}" $test_variable_and_1
+	log message 0 "test_variable_2: {:x}" $test_variable_and_2
+	var verify test_variable_and_1 0xAA02 $MAX
+	var verify test_variable_and_2 0x70745607 $MAX
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_and_1
-	log message 0 "test_variable_2: {}" $test_variable_and_2
+	and test_variable_and_1 0xAAAA
+	and test_variable_and_2 0x77777777
+
+	log message 0 "test_variable_1: {:x}" $test_variable_and_1
+	log message 0 "test_variable_2: {:x}" $test_variable_and_2
+	var verify test_variable_and_1 0xAA02 $MAX
+	var verify test_variable_and_2 0x70745607 $MAX                   
 	                                                  
-	and test_variable_and_1 5                             
-	and test_variable_and_2 100                           
-	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_and_1
-	log message 0 "test_variable_2: {}" $test_variable_and_2
-	
 	call $endStandardTestShell
 
 end proc
@@ -59,20 +67,24 @@ testVariableDiv:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_div_1
-	log message 0 "test_variable_2: {}" $test_variable_div_2
+	log message 0 "test_variable_1: {:d}" $test_variable_div_1
+	log message 0 "test_variable_2: {:d}" $test_variable_div_2
 	                                                  
 	div test_variable_div_1 10                            
 	div test_variable_div_2 20                            
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_div_1
-	log message 0 "test_variable_2: {}" $test_variable_div_2
+	log message 0 "test_variable_1: {:d}" $test_variable_div_1
+	log message 0 "test_variable_2: {:d}" $test_variable_div_2
+	var verify test_variable_div_1 50 $MAX
+	var verify test_variable_div_2 250 $MAX 
 	                                                  
 	div test_variable_div_1 5                             
 	div test_variable_div_2 100                           
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_div_1
-	log message 0 "test_variable_2: {}" $test_variable_div_2
+	log message 0 "test_variable_1: {:d}" $test_variable_div_1
+	log message 0 "test_variable_2: {:d}" $test_variable_div_2
+	var verify test_variable_div_1 10 $MAX
+	var verify test_variable_div_2 2 $MAX
 	
 	call $endStandardTestShell
 
@@ -88,11 +100,11 @@ testVariableEqu:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_equ_1
-	log message 0 "test_variable_2: {}" $test_variable_equ_2
-	log message 0 "test_variable_3: {}" $test_variable_equ_3
-	log message 0 "test_variable_4: {}" $test_variable_equ_4
-	log message 0 "test_variable_5: {}" $test_variable_equ_5
+	log message 0 "test_variable_1: {:d}" $test_variable_equ_1
+	log message 0 "test_variable_2: {:d}" $test_variable_equ_2
+	log message 0 "test_variable_3: {:d}" $test_variable_equ_3
+	log message 0 "test_variable_4: {:d}" $test_variable_equ_4
+	log message 0 "test_variable_5: {:d}" $test_variable_equ_5
 	                                                  
 	equ test_variable_equ_1 10                            
 	equ test_variable_equ_2 20                            
@@ -100,23 +112,33 @@ proc
 	equ test_variable_equ_4 44                            
 	equ test_variable_equ_5 55                            
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_equ_1
-	log message 0 "test_variable_2: {}" $test_variable_equ_2
-	log message 0 "test_variable_3: {}" $test_variable_equ_3
-	log message 0 "test_variable_4: {}" $test_variable_equ_4
-	log message 0 "test_variable_5: {}" $test_variable_equ_5
-	                                                  
+	log message 0 "test_variable_1: {:d}" $test_variable_equ_1
+	log message 0 "test_variable_2: {:d}" $test_variable_equ_2
+	log message 0 "test_variable_3: {:d}" $test_variable_equ_3
+	log message 0 "test_variable_4: {:d}" $test_variable_equ_4
+	log message 0 "test_variable_5: {:d}" $test_variable_equ_5
+    var verify test_variable_equ_1 10 $MAX
+	var verify test_variable_equ_2 20 $MAX 
+    var verify test_variable_equ_3 30 $MAX
+	var verify test_variable_equ_4 44 $MAX
+	var verify test_variable_equ_5 55 $MAX
+		                                                  
 	equ test_variable_equ_1 99                            
 	equ test_variable_equ_2 88                            
 	equ test_variable_equ_3 55                            
 	equ test_variable_equ_4 11                            
 	equ test_variable_equ_5 0                             
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_equ_1
-	log message 0 "test_variable_2: {}" $test_variable_equ_2
-	log message 0 "test_variable_3: {}" $test_variable_equ_3
-	log message 0 "test_variable_4: {}" $test_variable_equ_4
-	log message 0 "test_variable_5: {}" $test_variable_equ_5
+	log message 0 "test_variable_1: {:d}" $test_variable_equ_1
+	log message 0 "test_variable_2: {:d}" $test_variable_equ_2
+	log message 0 "test_variable_3: {:d}" $test_variable_equ_3
+	log message 0 "test_variable_4: {:d}" $test_variable_equ_4
+	log message 0 "test_variable_5: {:d}" $test_variable_equ_5
+    var verify test_variable_equ_1 99 $MAX
+	var verify test_variable_equ_2 88 $MAX 
+    var verify test_variable_equ_3 55 $MAX
+	var verify test_variable_equ_4 11 $MAX
+	var verify test_variable_equ_5 0 $MAX
 	
 	call $endStandardTestShell
 end proc
@@ -128,28 +150,32 @@ testVariableMul:
 proc
     call $startStandardTestShell
     
-	log message 0 "test_variable_1: {}" $test_variable_mul_1
-	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	log message 0 "test_variable_1: {:d}" $test_variable_mul_1
+	log message 0 "test_variable_2: {:d}" $test_variable_mul_2
 	                                                    
 	mul test_variable_mul_1 10                              
 	mul test_variable_mul_2 20                              
 	                                                    
-	log message 0 "test_variable_1: {}" $test_variable_mul_1
-	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	log message 0 "test_variable_1: {:d}" $test_variable_mul_1
+	log message 0 "test_variable_2: {:d}" $test_variable_mul_2
+	var verify test_variable_mul_1 10 $MAX
+	var verify test_variable_mul_2 40 $MAX
 	                                                    
 	mul test_variable_mul_1 12345                           
 	mul test_variable_mul_2 88                              
 	                                                    
-	log message 0 "test_variable_1: {}" $test_variable_mul_1
-	log message 0 "test_variable_2: {}" $test_variable_mul_2
+	log message 0 "test_variable_1: {:d}" $test_variable_mul_1
+	log message 0 "test_variable_2: {:d}" $test_variable_mul_2
+	var verify test_variable_mul_1 123450 $MAX
+	var verify test_variable_mul_2 3520 $MAX
 	
 	call $endStandardTestShell
 
 end proc
 
 
-var test_variable_or_1 1234
-var test_variable_or_2 1024
+var test_variable_or_1 0x1234
+var test_variable_or_2 0x80000000
 
 testVariableOr:
 proc
@@ -158,18 +184,22 @@ proc
 	log message 0 "test_variable_1: {}" $test_variable_or_1
 	log message 0 "test_variable_2: {}" $test_variable_or_2
 	                                                  
-	or test_variable_or_1 10                             
-	or test_variable_or_2 20                             
+	or test_variable_or_1 0x2441                             
+	or test_variable_or_2 0x1                          
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_or_1
 	log message 0 "test_variable_2: {}" $test_variable_or_2
+	var verify test_variable_or_1 0x3675 $MAX
+	var verify test_variable_or_2 0x80000001 $MAX
 	                                                  
-	or test_variable_or_1 5                              
-	or test_variable_or_2 100                            
+	or test_variable_or_1 0x1234                              
+	or test_variable_or_2 0x80000000                            
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_or_1
 	log message 0 "test_variable_2: {}" $test_variable_or_2
-	
+	var verify test_variable_or_1 0x3675 $MAX
+	var verify test_variable_or_2 0x80000001 $MAX
+
 	call $endStandardTestShell
 
 end proc
@@ -181,27 +211,31 @@ testVariableSub:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_sub_1
-	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	log message 0 "test_variable_1: {:d}" $test_variable_sub_1
+	log message 0 "test_variable_2: {:d}" $test_variable_sub_2
 	                                                  
 	sub test_variable_sub_1 10                            
 	sub test_variable_sub_2 20                            
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_sub_1
-	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	log message 0 "test_variable_1: {:d}" $test_variable_sub_1
+	log message 0 "test_variable_2: {:d}" $test_variable_sub_2
+	var verify test_variable_sub_1 12335 $MAX
+	var verify test_variable_sub_2 68 $MAX
 	                                                  
 	sub test_variable_sub_1 2                             
 	sub test_variable_sub_2 1                             
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_sub_1
-	log message 0 "test_variable_2: {}" $test_variable_sub_2
+	log message 0 "test_variable_1: {:d}" $test_variable_sub_1
+	log message 0 "test_variable_2: {:d}" $test_variable_sub_2
+	var verify test_variable_sub_1 12333 $MAX
+	var verify test_variable_sub_2 67 $MAX
 	
 	call $endStandardTestShell
 
 end proc
 
-var test_variable_xor_1 1234
-var test_variable_xor_2 1024
+var test_variable_xor_1 0xFFFFFFFF
+var test_variable_xor_2 0x00000000
 
 testVariableXor:
 proc
@@ -210,24 +244,28 @@ proc
 	log message 0 "test_variable_1: {}" $test_variable_xor_1
 	log message 0 "test_variable_2: {}" $test_variable_xor_2
 	                                                  
-	xor test_variable_xor_1 10                            
-	xor test_variable_xor_2 20                            
+	xor test_variable_xor_1 0xAAAAAAAAA                           
+	xor test_variable_xor_2 0x333333333                            
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_xor_1
 	log message 0 "test_variable_2: {}" $test_variable_xor_2
+	var verify test_variable_xor_1 0x55555555 $MAX
+	var verify test_variable_xor_2 0x333333333 $MAX
 	                                                  
-	xor test_variable_xor_1 5                             
-	xor test_variable_xor_2 100                           
+	xor test_variable_xor_1 0x55555555                             
+	xor test_variable_xor_2 0xCCCCCCCC                           
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_xor_1
 	log message 0 "test_variable_2: {}" $test_variable_xor_2
+	var verify test_variable_xor_1 0 $MAX
+	var verify test_variable_xor_2 0xFFFFFFFF $MAX
 	
 	call $endStandardTestShell
 
 end proc
 
-var test_variable_inv_1 1234
-var test_variable_inv_2 1024
+var test_variable_inv_1 0x12345678
+var test_variable_inv_2 0x0FEDCBA9
 
 testVariableInv:
 proc
@@ -241,12 +279,16 @@ proc
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_inv_1
 	log message 0 "test_variable_2: {}" $test_variable_inv_2
+	var verify test_variable_inv_1 0xEDCBA987 $MAX
+	var verify test_variable_inv_2 0xF0123456 $MAX
 	                                                  
-	inv test_variable_xor_1                        
-	inv test_variable_xor_2                       
+	inv test_variable_inv_1                          
+	inv test_variable_inv_2                          
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_inv_1
 	log message 0 "test_variable_2: {}" $test_variable_inv_2
+	var verify test_variable_inv_1 0x12345678 $MAX
+	var verify test_variable_inv_2 0x0FEDCBA9 $MAX
 	
 	call $endStandardTestShell
 
@@ -266,8 +308,10 @@ proc
 	ld test_variable_ld_1                          
 	ld test_variable_ld_2                          
 	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_ld_1
-	log message 0 "test_variable_2: {}" $test_variable_ld_2
+	log message 0 "test_variable_1: {:d}" $test_variable_ld_1
+	log message 0 "test_variable_2: {:d}" $test_variable_ld_2
+	var verify test_variable_ld_1 12 $MAX
+	var verify test_variable_ld_2 31 $MAX
 	                                                  	
 	call $endStandardTestShell
 

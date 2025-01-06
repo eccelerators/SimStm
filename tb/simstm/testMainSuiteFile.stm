@@ -1,6 +1,7 @@
 include "Common/Common.stm"
 
 include "File/file.stm"
+include "Base/Array.stm"
 include "TestSuites/TestSuiteFile.stm"
 
 testMainSuiteFile:

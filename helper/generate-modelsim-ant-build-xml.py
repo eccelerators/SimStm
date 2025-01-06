@@ -137,12 +137,13 @@ class GenAntBuildXml:
         echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
         echo.text = "ENDED"        
 
-        t = ET.SubElement(root, "target", name=target_prefix + "simulate-gui", description="simulate start gui")
+        t = ET.SubElement(root, "target", name=target_prefix + "simulate-gui-debug", description="simulate start gui")
         ET.SubElement(t, "delete",  dir=simulation_dir_prefix + "../SimulationResults" )
         ET.SubElement(t, "mkdir",  dir=simulation_dir_prefix + "../SimulationResults" )
         ex = ET.SubElement(t, "exec", executable="${vsim-executable}", dir=simulation_dir_prefix + "work")
         ET.SubElement(ex, "arg",  value="-t")
         ET.SubElement(ex, "arg",  value="ps")
+        ET.SubElement(ex, "arg",  value="-voptargs=+acc")
         ET.SubElement(ex, "arg",  value="-L")
         ET.SubElement(ex, "arg",  value="work")
         ET.SubElement(ex, "arg",  value="work." + context['tb_top_entity'] )
@@ -260,6 +261,7 @@ class GenAntBuildXml:
                 t = ET.SubElement(root, "target", name=do, depends=target_prefix + "init-skip-properties", unless=target_prefix + shf['file'].replace('/', '_') + '.skip')      
                 ex = ET.SubElement(t, "exec", executable="${vcom-executable}", dir=simulation_dir_prefix + "work", failonerror="true")
                 if '2008' in shf['file_type']:
+                    ET.SubElement(ex, "arg", value="-O0")
                     ET.SubElement(ex, "arg", value="-2008")
                 ET.SubElement(ex, "arg", value="${basedir}/" + shf['file'])
             ET.SubElement(t, "touch", file="${basedir}/" + time_stamps_prefix + shf['file'].replace('/', '_'))   
