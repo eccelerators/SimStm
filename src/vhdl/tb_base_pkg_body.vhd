@@ -77,6 +77,34 @@ package body tb_base_pkg is
         end loop;
         return temp_int;
     end function;
+    
+    function bin2stm_value(bin_number : in text_field;
+                         file_name : in text_line;
+                         line : in integer) return t_stm_value is
+        variable len : integer;
+        variable temp_stm_value : t_stm_value;
+        variable power : integer;
+        variable int_number : integer;
+    begin
+        len := fld_len(bin_number);
+        power := 0;
+        temp_stm_value := to_unsigned(0, c_stm_value_width);
+        for i in len downto 1 loop
+            case bin_number(i) is
+                when '0' =>
+                    int_number := 0;
+                when '1' =>
+                    int_number := 1;
+                when others =>
+                    assert false
+                    report lf & "error: bin2integer found non binary digit on line " & (integer'image(line)) & " of file " & file_name
+                    severity failure;
+            end case;
+            temp_stm_value := temp_stm_value + (int_number * (2 ** power));
+            power := power + 1;
+        end loop;
+        return temp_stm_value;
+    end function;
 
     function c2int(c : in character) return integer is
         variable i : integer;
@@ -303,6 +331,61 @@ package body tb_base_pkg is
         end if;
         return temp;
     end function;
+    
+    function ew_to_str(stmvalue : t_stm_value;
+                       b : base) return text_field is
+        variable temp : text_field;
+        variable temp1 : text_field;
+        variable radix : integer := 0;
+        variable num : t_stm_value := to_unsigned(0, c_stm_value_width);
+        variable power : integer := 1;
+        variable len : integer := 1;
+        variable pre : string(1 to 2);
+        variable ix : integer;
+        variable j : integer;
+        variable vec : std_logic_vector(31 downto 0);
+        variable cpval : t_stm_value := to_unsigned(0, c_stm_value_width);
+    begin
+        num := stmvalue;
+        temp := (others => nul);
+        case b is
+            when bin =>
+                radix := 2; -- depending on what
+                pre := "0b";
+            when oct =>
+                radix := 8; -- base the number is
+                pre := "0o";
+            when hex =>
+                radix := 16; -- to be displayed as
+                pre := "0x";
+            when dec =>
+                radix := 10; -- choose a radix range
+                pre := (others => nul);
+        end case;
+        while num >= radix loop -- determine how many
+            len := len + 1; -- characters required
+            num := num / radix; -- to represent the
+        end loop; -- number.
+        for i in len downto 1 loop -- convert the number to
+            cpval := stmvalue / power mod radix;
+            temp(i) := ew_to_char(to_integer(cpval(3 downto 0))); -- a string starting
+            power := power * radix; -- with the right hand
+        end loop; -- side.
+
+        -- add prefix if is one
+        if pre(1) /= nul then
+            temp1 := temp;
+            ix := 1;
+            j := 3;
+            temp(1 to 2) := pre;
+            while temp1(ix) /= nul loop
+                temp(j) := temp1(ix);
+                ix := ix + 1;
+                j := j + 1;
+            end loop;
+        end if;
+        return temp;
+    end function;
 
     function fld_equal(s1 : in text_field;
                        s2 : in text_field) return boolean is
@@ -450,6 +533,62 @@ package body tb_base_pkg is
         end loop;
         return temp_int;
     end function;
+    
+    function hex2stm_value(hex_number : in text_field;
+                         file_name : in text_line;
+                         line : in integer) return t_stm_value is
+        variable len : integer;
+        variable temp_t_stm_value : t_stm_value;
+        variable power : integer;
+        variable int_number : integer;
+    begin
+        len := fld_len(hex_number);
+        power := 0;
+        temp_t_stm_value := to_unsigned(0, c_stm_value_width);
+        for i in len downto 1 loop
+            case hex_number(i) is
+                when '0' =>
+                    int_number := 0;
+                when '1' =>
+                    int_number := 1;
+                when '2' =>
+                    int_number := 2;
+                when '3' =>
+                    int_number := 3;
+                when '4' =>
+                    int_number := 4;
+                when '5' =>
+                    int_number := 5;
+                when '6' =>
+                    int_number := 6;
+                when '7' =>
+                    int_number := 7;
+                when '8' =>
+                    int_number := 8;
+                when '9' =>
+                    int_number := 9;
+                when 'a' | 'A' =>
+                    int_number := 10;
+                when 'b' | 'B' =>
+                    int_number := 11;
+                when 'c' | 'C' =>
+                    int_number := 12;
+                when 'd' | 'D' =>
+                    int_number := 13;
+                when 'e' | 'E' =>
+                    int_number := 14;
+                when 'f' | 'F' =>
+                    int_number := 15;
+                when others =>
+                    assert false
+                    report lf & "error: hex2integer found non hex digit on line " & (integer'image(line)) & " of file " & file_name
+                    severity failure;
+            end case;
+            temp_t_stm_value := temp_t_stm_value + (int_number * (16 ** power));
+            power := power + 1;
+        end loop;
+        return temp_t_stm_value;
+    end function;
 
     function is_digit(constant c : in character) return boolean is
         variable rtn : boolean;
@@ -569,6 +708,43 @@ package body tb_base_pkg is
             value := str2integer(field);
         end if;
         return value;
+    end function;
+    
+    function stim_to_stm_value(field : in text_field;
+                             file_name : in text_line;
+                             line : in integer) return t_stm_value is
+        variable stmvalue : t_stm_value := to_unsigned(1, c_stm_value_width);
+        variable ci : integer := 1;
+        variable temp_str : text_field;
+    begin
+        if field(1) = '0' and (field(2) = 'x' or field(2) = 'b') then
+            case field(2) is
+                when 'x' =>
+                    ci := 3;
+                    while field(ci) /= nul loop
+                        temp_str(ci - 2) := field(ci);
+                        ci := ci + 1;
+                    end loop;
+                    -- assert(false)
+                    -- report lf & "hex2integer: " & temp_str
+                    -- severity warning;
+                    stmvalue := hex2stm_value(temp_str, file_name, line);
+                when 'b' =>
+                    ci := 3;
+                    while field(ci) /= nul loop
+                        temp_str(ci - 2) := field(ci);
+                        ci := ci + 1;
+                    end loop;
+                    stmvalue := bin2stm_value(temp_str, file_name, line);
+                when others =>
+                    assert false
+                    report lf & "error: strange # found ! " & (integer'image(line)) & " of file " & file_name
+                    severity failure;
+            end case;
+        else
+            stmvalue := str2stm_value(field);
+        end if;
+        return stmvalue;
     end function;
 
     procedure stm_file_append(variable stm_lines : in t_stm_lines_ptr;
@@ -756,7 +932,7 @@ package body tb_base_pkg is
     begin
         valid := 0;
         for j in 0 to stm_array'length - 1 loop
-            value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+            value_std_logic_vector := std_logic_vector(stm_array(j));
             hwrite(std_line, value_std_logic_vector, left, 9);
         end loop;
         if stm_lines.size = 0 then
@@ -895,7 +1071,7 @@ package body tb_base_pkg is
                 while success loop
                     hread(tmp_std_line, value_std_logic_vector, success);
                     if success then
-                        stm_array(array_index) := to_integer(signed(value_std_logic_vector));
+                        stm_array(array_index) := unsigned(value_std_logic_vector);
                         array_index := array_index + 1;
                     end if;
                 end loop;
@@ -963,7 +1139,7 @@ package body tb_base_pkg is
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
                 for j in 0 to stm_array'length - 1 loop
-                    value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+                    value_std_logic_vector := std_logic_vector(stm_array(j));
                     hwrite(tmp_std_line, value_std_logic_vector, left, 9);
                 end loop;
                 -- copy current stm_line to new stmline object
@@ -1056,7 +1232,7 @@ package body tb_base_pkg is
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
                 for j in 0 to stm_array'length - 1 loop
-                    value_std_logic_vector := std_logic_vector(to_signed(stm_array(j), 32));
+                    value_std_logic_vector := std_logic_vector(stm_array(j));
                     hwrite(std_line, value_std_logic_vector, left, 9);
                 end loop;
                 stm_line_ptr.line_content := std_line;
@@ -1164,6 +1340,19 @@ package body tb_base_pkg is
         end loop;
         return rtn;
     end function;
+    
+    function str2stm_value(str : in string) return t_stm_value is
+        variable l : integer;
+        variable j : integer := 1;
+        variable rtn : t_stm_value := to_unsigned(0, c_stm_value_width);
+    begin
+        l := fld_len(str);
+        for i in l downto 1 loop
+            rtn := rtn + (c2int(str(j)) * (10 ** (i - 1)));
+            j := j + 1;
+        end loop;
+        return rtn;
+    end function;
 
     function text_line_crop(txt : in text_line) return string is
         variable l : integer;
@@ -1238,5 +1427,15 @@ package body tb_base_pkg is
     begin
         return ew_to_str(int, dec);
     end function;
+ 
+    function to_str_hex(stmvalue : t_stm_value) return string is
+    begin
+        return ew_to_str(stmvalue, hex);
+    end function;
+
+    function to_str(stmvalue : t_stm_value) return string is
+    begin
+        return ew_to_str(stmvalue, dec);
+    end function;   
 
 end package body;

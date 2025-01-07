@@ -95,6 +95,18 @@ architecture behavioural of tb_simstm is
             end if;
         end loop;
     end function;
+    
+    function ld(m : unsigned) return unsigned is
+    begin
+        if m < 0 then
+            return to_unsigned(m'high, m'length);
+        end if;
+        for n in 0 to m'high loop
+            if (2 ** n >= m) then
+                return to_unsigned(n, m'length);
+            end if;
+        end loop;
+    end function;
 
     procedure line_to_text_field(variable l : in line; variable tf : out text_field) is
     begin
@@ -130,12 +142,12 @@ begin
         variable last_sequ_ptr : stim_line_ptr;
 
         variable instruction : text_field; -- instruction field
-        variable par1 : integer; -- parameter 1
-        variable par2 : integer; -- parameter 2
-        variable par3 : integer; -- parameter 3
-        variable par4 : integer; -- parameter 4
-        variable par5 : integer; -- parameter 5
-        variable par6 : integer; -- parameter 6
+        variable par1 : t_stm_value; -- parameter 1
+        variable par2 : t_stm_value; -- parameter 2
+        variable par3 : t_stm_value; -- parameter 3
+        variable par4 : t_stm_value; -- parameter 4
+        variable par5 : t_stm_value; -- parameter 5
+        variable par6 : t_stm_value; -- parameter 6
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable len : integer; -- length of the instruction field
@@ -156,8 +168,8 @@ begin
         variable stack_loop_line : stack_int_array_array := (others => (others => 0));
         variable stack_loop_if_enter_level : stack_int_array := (others => 0);
 
-        variable loglevel : integer := 0;
-        variable resume : integer := 0;
+        variable loglevel : t_stm_value := to_unsigned(0, c_stm_value_width);
+        variable resume : t_stm_value := to_unsigned(0, c_stm_value_width);
         variable verify_passes_count : integer := 0;
         variable verify_failure_count : integer := 0;
         variable bus_timeout_passes_count : integer := 0;
@@ -183,6 +195,7 @@ begin
         variable tempaddress : std_logic_vector(31 downto 0);
         variable tempdata : std_logic_vector(31 downto 0);
         variable temp_int : integer;
+        variable temp_stm_value : t_stm_value;
         variable number_found : integer;
 
         variable temp_stdvec_a : std_logic_vector(31 downto 0);
@@ -191,7 +204,7 @@ begin
         
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
-        variable trc_on : integer := 0;
+        variable trc_on : t_stm_value := to_unsigned(0, c_stm_value_width);
 
         file stimulus : text; -- file main file
         variable v_stat : file_open_status;
@@ -248,6 +261,8 @@ begin
         variable branch_to_interrupt_v_line : integer := 0;
         
         variable called_label :text_field;
+        
+        variable stmvalue : t_stm_value;
 
     begin
         marker <= (others => '0');
@@ -290,8 +305,7 @@ begin
             end if;
 
             if main_entered = 0 then
-
-                access_variable(defined_vars, main_label_text_field, main_line, valid);
+                access_variable(defined_vars, main_label_text_field, main_line, valid);               
                 assert valid = 1
                 report lf & "error: Entry point proc Main not found !"
                 severity failure;
@@ -337,13 +351,13 @@ begin
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
 
-                if to_signed(trc_on, 32)(3) = '1' then
+                if trc_on(3) = '1' then
                     dump_file_defs(file_list);
                 end if;
-                if to_signed(trc_on, 32)(2) = '1' then
+                if trc_on(2) = '1' then
                     dump_variables(defined_vars);
                 end if;
-                if to_signed(trc_on, 32)(1) = '1' then
+                if trc_on(1) = '1' then
                     print_inst(inst_sequ, v_line, file_list);
                 end if;
 
@@ -351,7 +365,7 @@ begin
                 executing_file <= file_name;
                 wait for 100 ps;
 
-                if to_signed(trc_on, 32)(0) = '1' then
+                if trc_on(0) = '1' then
                     report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 end if;
 
@@ -403,12 +417,12 @@ begin
                 -- equ operand1_and_target $operand2
                 -- add operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_ADD then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " add error: not a valid variable??"
                     severity failure;
-                    temp_int := temp_int + par2;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value + par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " add error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -416,12 +430,12 @@ begin
                 -- equ operand1_and_target $operand2
                 -- sub operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SUB then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " sub error: not a valid variable??"
                     severity failure;
-                    temp_int := temp_int - par2;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value - par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " sub error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -429,12 +443,12 @@ begin
                 -- mul operand1_and_target $operand2
                 -- mul operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_MUL then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_int := temp_int * par2;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value * par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -442,22 +456,12 @@ begin
                 -- div operand1_and_target $operand2
                 -- div operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_DIV then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    if temp_int < 0 then
-                        temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                        temp_stdvec_c := not temp_stdvec_a;
-                        temp_int := to_integer(signed(temp_stdvec_c));
-                        temp_int := temp_int / par2;
-                        temp_stdvec_a := std_logic_vector(to_signed((temp_int), 32));
-                        temp_stdvec_c := not temp_stdvec_a;
-                        temp_int := to_integer(signed(temp_stdvec_c));
-                    else
-                        temp_int := temp_int / par2;
-                    end if;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value / par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " div error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -465,15 +469,12 @@ begin
                 -- and operand1_and_target $operand2
                 -- and operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_AND then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
-                    temp_stdvec_c := temp_stdvec_a and temp_stdvec_b;
-                    temp_int := to_integer(signed(temp_stdvec_c));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value and par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " and error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -481,15 +482,12 @@ begin
                 -- or operand1_and_target $operand2
                 -- or operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_OR then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
-                    temp_stdvec_c := temp_stdvec_a or temp_stdvec_b;
-                    temp_int := to_integer(signed(temp_stdvec_c));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value or par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " or error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -497,15 +495,12 @@ begin
                 -- xor operand1_and_target $operand2
                 -- xor operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_XOR then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
-                    temp_stdvec_c := temp_stdvec_a xor temp_stdvec_b;
-                    temp_int := to_integer(signed(temp_stdvec_c));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := temp_stm_value xor par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " xor error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -513,12 +508,12 @@ begin
                 -- shl operand1_and_target $operand2
                 -- shl operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SHL then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_int := to_integer(shift_left(to_signed(temp_int, 32), par2));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := shift_left(temp_stm_value, to_integer(par2));
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -526,38 +521,36 @@ begin
                 -- shr operand1_and_target $operand2
                 -- shr operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_SHR then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_int := to_integer(shift_right(to_signed(temp_int, 32), par2));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := shift_right(temp_stm_value, to_integer(par2));
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- inv operand1_and_target
                 elsif instruction(1 to len) = INSTR_INV then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_c := not temp_stdvec_a;
-                    temp_int := to_integer(signed(temp_stdvec_c));
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := not temp_stm_value;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " inv error: cannot update variable, it may be a constant ?"
                     severity failure;
 
                 -- ld operand1_and_target
                 elsif instruction(1 to len) = INSTR_LD then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_int := ld(temp_int);
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    temp_stm_value := ld(temp_stm_value);
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " ld error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -574,7 +567,7 @@ begin
                     assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;
-                    var_stm_array(par2) := par3;
+                    var_stm_array(to_integer(par2(30 downto 0))) := par3;
 
                 -- array get an_array $array_position a_varB
                 elsif instruction(1 to len) = INSTR_ARRAY_GET then
@@ -585,8 +578,8 @@ begin
                     assert var_stm_array'length > par2
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;
-                    temp_int := var_stm_array(par2);
-                    update_variable(defined_vars, par3, temp_int, valid);
+                    temp_stm_value := var_stm_array(to_integer(par2(30 downto 0)));
+                    update_variable(defined_vars, par3, temp_stm_value, valid);
                     assert valid /= 0
                     report "array_get error: not a valid variable??"
                     severity failure;
@@ -598,8 +591,8 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    temp_int := var_stm_array'length;
-                    update_variable(defined_vars, par2, temp_int, valid);
+                    temp_stm_value := to_unsigned(var_stm_array'length, c_stm_value_width);
+                    update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "array_size error: not a valid variable??"
                     severity failure;
@@ -628,18 +621,15 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: index is out of array size"
                     severity failure;
                     verify_passes_count := verify_passes_count + 1; 
-                    temp_int := var_stm_array(par2);
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
-                    temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
-                    if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                        if to_signed(resume, 32)(0) = '0' then
+                    temp_stm_value := var_stm_array(to_integer(par2(30 downto 0)));
+                    if (par4 and temp_stm_value) /= (par4 and par3) then                            
+                        if resume(0) = '0' then
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (to_hstring(par2)) & ")=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
                             severity failure;
                         else
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (integer'image(par2)) & ")=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (to_hstring(par2)) & ")=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
                             severity error;
                             verify_failure_count := verify_failure_count + 1;                            
                         end if;
@@ -741,7 +731,7 @@ begin
                     -- if file is already in use, us it
                     if user_file_in_use_0 then
                         if var_stm_text = user_file_name_0 then
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -754,7 +744,7 @@ begin
                     end if;
                     if user_file_in_use_1 then
                         if var_stm_text = user_file_name_1 then
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -767,7 +757,7 @@ begin
                     end if;
                     if user_file_in_use_2 then
                         if var_stm_text = user_file_name_2 then
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -780,7 +770,7 @@ begin
                     end if;
                     if user_file_in_use_3 then
                         if var_stm_text = user_file_name_3 then
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -805,7 +795,7 @@ begin
                             severity failure;
                             user_file_name_0 := var_stm_text;
                             user_file_in_use_0 := true;
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -820,7 +810,7 @@ begin
                             severity failure;
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -835,7 +825,7 @@ begin
                             severity failure;
                             user_file_name_2 := var_stm_text;
                             user_file_in_use_2 := true;
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -850,7 +840,7 @@ begin
                             severity failure;
                             user_file_name_3 := var_stm_text;
                             user_file_in_use_3 := true;
-                            for i in 1 to par3 loop
+                            for i in 1 to to_integer(par3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
                                 stm_lines_append(var_stm_lines, tmp_std_line, stm_lines_append_valid);
@@ -932,7 +922,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_get(var_stm_lines, par2, var_stm_array, number_found, valid);
+                    stm_lines_get(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, number_found, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
                     severity failure;
@@ -956,7 +946,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_set(var_stm_lines, par2, var_stm_array, valid);
+                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not set successfully"
                     severity failure;
@@ -973,7 +963,7 @@ begin
                     stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
-                    stm_lines_set(var_stm_lines, par2, var_stm_text_out, valid);
+                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message not set successfully"
                     severity failure;
@@ -989,7 +979,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_insert(var_stm_lines, par2, var_stm_array, valid);
+                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not inserted successfully"
                     severity failure;
@@ -1006,7 +996,7 @@ begin
                     stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
-                    stm_lines_insert(var_stm_lines, par2, var_stm_text_out, valid);
+                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_text_out, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: message not inserted successfully"
                     severity failure;
@@ -1048,7 +1038,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_lines_delete(var_stm_lines, par2, valid);
+                    stm_lines_delete(var_stm_lines, to_integer(par2(30 downto 0)), valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete not successful"
                     severity failure;
@@ -1093,11 +1083,11 @@ begin
                 elsif instruction(1 to len) = INSTR_IF then
                     if_level := if_level + 1;
                     if_state(if_level) := false;
-                    if to_signed(trc_on, 32)(4) = '1' then
+                    if trc_on(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  incremented if_level " & integer'image(if_level);
                     end if;
-                    case par2 is
+                    case to_integer(par2(30 downto 0)) is
                         when 0 => if (par1 = par3) then
                                 if_state(if_level) := true;
                             end if;
@@ -1121,7 +1111,7 @@ begin
                             report " line " & (integer'image(file_line)) & " error:  if instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                             severity failure;
                     end case;
-                    if to_signed(trc_on, 32)(4) = '1' then  
+                    if trc_on(4) = '1' then  
                         if if_state(if_level) = true then               
                             report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
                         else
@@ -1149,7 +1139,7 @@ begin
                                              par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
-                        if to_signed(trc_on, 32)(4) = '1' then             
+                        if trc_on(4) = '1' then             
                             report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
                         end if;
                         v_line := v_line - 1; -- re-align so it will be operated on.
@@ -1160,7 +1150,7 @@ begin
                 -- $a_varA > 0x09
                 -- elsif 0x0A > 0x09
                 elsif instruction(1 to len) = INSTR_ELSIF then
-                    if to_signed(trc_on, 32)(4) = '1' then
+                    if trc_on(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
                         if if_state(if_level) = true then               
@@ -1185,7 +1175,7 @@ begin
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     else
-                        case par2 is
+                        case to_integer(par2(30 downto 0)) is
                             when 0 => if par1 = par3 then
                                     if_state(if_level) := true;
                                 end if;
@@ -1209,7 +1199,7 @@ begin
                                 report " line " & (integer'image(file_line)) & " error:  elsif instruction got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
                                 severity failure;
                         end case;
-                        if to_signed(trc_on, 32)(4) = '1' then  
+                        if trc_on(4) = '1' then  
                             if if_state(if_level) = true then               
                                 report instruction(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
                             else 
@@ -1237,7 +1227,7 @@ begin
                                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                                  last_sequ_num, last_sequ_ptr);
                             end loop;
-                            if to_signed(trc_on, 32)(4) = '1' then             
+                            if trc_on(4) = '1' then             
                                 report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
                             end if;
                             v_line := v_line - 1; -- re-align so it will be operated on.
@@ -1246,7 +1236,7 @@ begin
 
                 -- else
                 elsif instruction(1 to len) = INSTR_ELSE then
-                    if to_signed(trc_on, 32)(4) = '1' then
+                    if trc_on(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
                         if if_state(if_level) = true then               
@@ -1283,7 +1273,7 @@ begin
                 -- end if
                 elsif instruction(1 to len) = INSTR_END_IF then
                     if_level := if_level - 1;
-                    if to_signed(trc_on, 32)(4) = '1' then
+                    if trc_on(4) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  decremented if_level " & integer'image(if_level);
                     end if;
@@ -1293,7 +1283,7 @@ begin
                 elsif instruction(1 to len) = INSTR_LOOP then
                     stack_loop_if_enter_level(stack_ptr) := if_level;
                     act_loop_num := stack_loop_num(stack_ptr);
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                         report instruction(1 to len) & ":  stack_loop_if_enter_level(" & integer'image(stack_ptr) & ")=" & integer'image(if_level);
@@ -1303,8 +1293,8 @@ begin
                     stack_loop_num(stack_ptr) := act_loop_num;
                     stack_loop_line(stack_ptr)(act_loop_num) := v_line;
                     stack_curr_loop_count(stack_ptr)(act_loop_num) := 0;
-                    stack_term_loop_count(stack_ptr)(act_loop_num) := par1;
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    stack_term_loop_count(stack_ptr)(act_loop_num) := to_integer(par1(30 downto 0));
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  incremented stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
                         report instruction(1 to len) & ":  set to goto v_line: stack_loop_line(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(v_line);
                         report instruction(1 to len) & ":  stack_curr_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(stack_curr_loop_count(stack_ptr)(act_loop_num));
@@ -1318,7 +1308,7 @@ begin
                     act_curr_loop_count := act_curr_loop_count + 1;
                     stack_curr_loop_count(stack_ptr)(act_loop_num) := act_curr_loop_count;
                     act_term_loop_count := stack_term_loop_count(stack_ptr)(act_loop_num);
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                         report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
@@ -1328,12 +1318,12 @@ begin
                     if (act_curr_loop_count = act_term_loop_count) then
                         act_loop_num := act_loop_num - 1;
                         stack_loop_num(stack_ptr) := act_loop_num;
-                        if to_signed(trc_on, 32)(5) = '1' then
+                        if trc_on(5) = '1' then
                             report instruction(1 to len) & ":  expired, set decremented stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
                         end if;
                     else
                         v_line := stack_loop_line(stack_ptr)(act_loop_num);
-                        if to_signed(trc_on, 32)(5) = '1' then
+                        if trc_on(5) = '1' then
                             report instruction(1 to len) & ":  next goto v_line: stack_loop_line(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(v_line);
                         end if;
                     end if;
@@ -1405,7 +1395,7 @@ begin
                 -- end interrupt
                 -- return
                 elsif instruction(1 to len) = INSTR_RETURN or instruction(1 to len) = INSTR_END_PROC or instruction(1 to len) = INSTR_END_INTERRUPT then
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                     end if;
@@ -1432,7 +1422,7 @@ begin
                     end if;
                     -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
                         report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
                         report instruction(1 to len) & ":  decremented stack_ptr:" & integer'image(stack_ptr);
@@ -1442,7 +1432,7 @@ begin
 
                 -- call $some_proc
                 elsif instruction(1 to len) = INSTR_CALL then
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                     end if;
@@ -1454,12 +1444,12 @@ begin
                     stack_called_labels(stack_ptr) := called_label;
                     stack_called_files(stack_ptr) := file_name;
                     stack_called_file_line_numbers(stack_ptr) := file_line; 
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
                     end if;
                     stack_ptr := stack_ptr + 1;
-                    v_line := par1 - 1;
-                    if to_signed(trc_on, 32)(5) = '1' then
+                    v_line := to_integer(par1(30 downto 0)) - 1;
+                    if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
                         report instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
                     end if;
