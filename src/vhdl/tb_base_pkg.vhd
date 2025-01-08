@@ -241,11 +241,25 @@ package tb_base_pkg is
                                          var_stm_text_ptr : inout stm_text_ptr);
 
     --  get a random intetger number
-    procedure getrandint(variable seed1 : inout positive;
-                         variable seed2 : inout positive;
-                         variable lowestvalue : in integer;
-                         variable utmostvalue : in integer;
-                         variable randint : out integer);
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable rand : out real);
+                         
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable lowestvalue : in integer;
+                      variable utmostvalue : in integer;
+                      variable rand : out integer);
+                   
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable rand : out unsigned);
+                      
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable lowestvalue : in unsigned;
+                      variable utmostvalue : in unsigned;
+                      variable rand : out unsigned);                                                     
 
     -- hex2integer    convert hex stimulus field to integer
     --          inputs :  string of type text_field containing only hex numbers

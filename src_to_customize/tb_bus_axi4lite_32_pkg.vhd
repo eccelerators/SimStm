@@ -1,9 +1,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.tb_base_pkg.all;
 
-package tb_bus_axi4lite_pkg is
-    type t_axi4lite_down is record
+package tb_bus_axi4lite_32_pkg is
+    type t_axi4lite_down_32 is record
         awvalid : std_logic;
         awaddr : std_logic_vector(31 downto 0);
         awprot : std_logic_vector(2 downto 0);
@@ -17,7 +18,7 @@ package tb_bus_axi4lite_pkg is
         rready : std_logic;
     end record;
 
-    type t_axi4lite_up is record
+    type t_axi4lite_up_32 is record
         clk : std_logic;
         awready : std_logic;
         wready : std_logic;
@@ -39,53 +40,38 @@ package tb_bus_axi4lite_pkg is
         rinstruction : std_logic;
     end record;
     
-    type t_axi4lite_trace is record
-        axi4lite_down : t_axi4lite_down;
-        axi4lite_up : t_axi4lite_up;
+    type t_axi4lite_trace_32 is record
+        axi4lite_down_32 : t_axi4lite_down_32;
+        axi4lite_up_32 : t_axi4lite_up_32;
         axi4lite_access : t_axi4lite_access;
         hxs_unoccupied_access : std_logic;
         hxs_timeout_access : std_logic;
     end record;
 
-    function axi4lite_down_init return t_axi4lite_down;
-    function axi4lite_up_init return t_axi4lite_up;
+    function axi4lite_down_32_init return t_axi4lite_down_32;
+    function axi4lite_up_32_init return t_axi4lite_up_32;
 
-    procedure write_axi4lite(signal axi4lite_down : out t_axi4lite_down;
-                             signal axi4lite_up : in t_axi4lite_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
+    procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
+                             signal axi4lite_up : in t_axi4lite_up_32;
+                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time);
 
-    procedure read_axi4lite(signal axi4lite_down : out t_axi4lite_down;
-                            signal axi4lite_up : in t_axi4lite_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
+    procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
+                            signal axi4lite_up : in t_axi4lite_up_32;
+                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
+                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time);
 end;
 
-package body tb_bus_axi4lite_pkg is
+package body tb_bus_axi4lite_32_pkg is
 
-    function axi4lite_up_init return t_axi4lite_up is
-        variable init : t_axi4lite_up;
-    begin
-        init.clk := '0';
-        init.awready := '0';
-        init.wready := '0';
-        init.bvalid := '0';
-        init.bresp := (others => '0');
-        init.arready := '0';
-        init.rvalid := '0';
-        init.rdata := (others => '0');
-        init.rresp := (others => '0');
-        return init;
-    end;
-
-    function axi4lite_down_init return t_axi4lite_down is
-        variable init : t_axi4lite_down;
+    function axi4lite_down_32_init return t_axi4lite_down_32 is
+        variable init : t_axi4lite_down_32;
     begin
         init.awvalid := '0';
         init.awaddr := (others => '0');
@@ -101,11 +87,26 @@ package body tb_bus_axi4lite_pkg is
         return init;
     end;
 
-    procedure write_axi4lite(signal axi4lite_down : out t_axi4lite_down;
-                             signal axi4lite_up : in t_axi4lite_up;
-                             variable address : in std_logic_vector(31 downto 0);
-                             variable data : in std_logic_vector(31 downto 0);
-                             variable b_width : in integer;
+    function axi4lite_up_32_init return t_axi4lite_up_32 is
+        variable init : t_axi4lite_up_32;
+    begin
+        init.clk := '0';
+        init.awready := '0';
+        init.wready := '0';
+        init.bvalid := '0';
+        init.bresp := (others => '0');
+        init.arready := '0';
+        init.rvalid := '0';
+        init.rdata := (others => '0');
+        init.rresp := (others => '0');
+        return init;
+    end;
+
+    procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
+                             signal axi4lite_up : in t_axi4lite_up_32;
+                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time) is
 
@@ -117,19 +118,19 @@ package body tb_bus_axi4lite_pkg is
     begin
         successfull := false;
         wait until rising_edge(axi4lite_up.clk);
-        axi4lite_down <= axi4lite_down_init;
-        axi4lite_down.awaddr <= address;
+        axi4lite_down <= axi4lite_down_32_init;
+        axi4lite_down.awaddr <= std_logic_vector(address(31 downto 0));
 
-        case b_width is
+        case access_width is
             when 8 =>
                 byteenable := "0001";
-                data_temp := data and x"000000FF";
+                data_temp := std_logic_vector(data(31 downto 0)) and x"000000FF";
             when 16 =>
                 byteenable := "0011";
-                data_temp := data and x"0000FFFF";
+                data_temp := std_logic_vector(data(31 downto 0)) and x"0000FFFF";
             when 32 =>
                 byteenable := "1111";
-                data_temp := data and x"FFFFFFFF";
+                data_temp := std_logic_vector(data(31 downto 0)) and x"FFFFFFFF";
             when others =>
         end case;
 
@@ -176,16 +177,16 @@ package body tb_bus_axi4lite_pkg is
         end loop;        
 
         axi4lite_down.bready <= '0';
-        axi4lite_down <= axi4lite_down_init;
+        axi4lite_down <= axi4lite_down_32_init;
         wait until rising_edge(axi4lite_up.clk);
         successfull := true;
     end procedure;
 
-    procedure read_axi4lite(signal axi4lite_down : out t_axi4lite_down;
-                            signal axi4lite_up : in t_axi4lite_up;
-                            variable address : in std_logic_vector(31 downto 0);
-                            variable data : out std_logic_vector(31 downto 0);
-                            variable b_width : in integer;
+    procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
+                            signal axi4lite_up : in t_axi4lite_up_32;
+                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
+                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time) is
 
@@ -194,8 +195,8 @@ package body tb_bus_axi4lite_pkg is
     begin
         successfull := false;
         wait until rising_edge(axi4lite_up.clk);        
-        axi4lite_down <= axi4lite_down_init;
-        axi4lite_down.araddr <= address;
+        axi4lite_down <= axi4lite_down_32_init;
+        axi4lite_down.araddr <= std_logic_vector(address(31 downto 0));
 
         axi4lite_down.arvalid <= '1';
         axi4lite_down.rready <= '0';
@@ -217,7 +218,7 @@ package body tb_bus_axi4lite_pkg is
         end loop;           
         
         data_temp := axi4lite_up.rdata;
-        axi4lite_down <= axi4lite_down_init;
+        axi4lite_down <= axi4lite_down_32_init;
         wait until rising_edge(axi4lite_up.clk);
 
         case address(1 downto 0) is
@@ -227,10 +228,10 @@ package body tb_bus_axi4lite_pkg is
             when "11" => data_temp := x"000000" & data_temp(31 downto 24);
             when others =>
         end case;
-        case b_width is
-            when 8 => data := data_temp and x"000000FF";
-            when 16 => data := data_temp and x"0000FFFF";
-            when 32 => data := data_temp and x"FFFFFFFF";
+        case access_width is
+            when 8 => data(31 downto 0) := unsigned(data_temp and x"000000FF");
+            when 16 => data(31 downto 0) := unsigned(data_temp and x"0000FFFF");
+            when 32 => data(31 downto 0) := unsigned(data_temp and x"FFFFFFFF");
             when others =>
         end case;
         successfull := true;

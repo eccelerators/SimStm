@@ -464,20 +464,76 @@ package body tb_base_pkg is
         end loop;
         stm_text_copy_to_ptr(var_stm_text_ptr, var_stm_text);
     end procedure;
-
-    procedure getrandint(variable seed1 : inout positive;
-                         variable seed2 : inout positive;
-                         variable lowestvalue : in integer;
-                         variable utmostvalue : in integer;
-                         variable randint : out integer) is
-        variable randreal : real;
+    
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable rand : out real) is
+    begin
+        uniform(seed1, seed2, rand);
+    end procedure;
+    
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable lowestvalue : in integer;
+                      variable utmostvalue : in integer;
+                      variable rand : out integer) is
+        variable randreal: real;
         variable intdelta : integer;
     begin
         intdelta := utmostvalue - lowestvalue;
         uniform(seed1, seed2, randreal); -- generate random number
-        randint := integer(trunc(randreal * (real(intdelta) + 1.0))) + lowestvalue; -- rescale to delta, find integer part, adjust
+        rand := integer(trunc(randreal * (real(intdelta) + 1.0))) + lowestvalue; -- rescale to delta, find integer part, adjust
     end procedure;
 
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable rand : out unsigned) is
+        constant size : integer := rand'length;
+        -- Populate vector in 30-bit chunks to avoid exceeding the
+        -- range of integer
+        constant seg_size : natural := 30;
+        constant segments : natural := size / seg_size;
+        constant remainder : natural := size - segments * seg_size;
+        variable lowestvalue : integer;
+        variable utmostvalue : integer;
+        variable rand_of_segment : integer;    
+        variable result : unsigned(rand'range);      
+    begin
+        if segments > 0 then
+        for s in 0 to segments-1 loop
+            lowestvalue := 0;
+            utmostvalue := 2**seg_size-1;
+            random(seed1, seed2, lowestvalue, utmostvalue, rand_of_segment);
+            result((s+1) * seg_size - 1 downto s * seg_size) := to_unsigned(rand_of_segment, seg_size);
+        end loop;
+        end if;
+        if remainder > 0 then
+            lowestvalue := 0;
+            utmostvalue := 2**remainder-1;
+            random(seed1, seed2, lowestvalue, utmostvalue, rand_of_segment);
+            result(size-1 downto size-remainder) := to_unsigned(rand_of_segment, remainder);
+        end if;
+        rand := result;
+    end procedure;
+       
+    procedure random( variable seed1 : inout positive;
+                      variable seed2 : inout positive;
+                      variable lowestvalue : in unsigned;
+                      variable utmostvalue : in unsigned;
+                      variable rand : out unsigned) is
+        variable rand_full_range : unsigned(rand'range) := to_unsigned(0, rand'length);
+        variable rand_delta_range : unsigned(rand'length * 2 + 1 downto 0) := to_unsigned(0, rand'length * 2 + 1);             
+        variable delta : unsigned(rand'range) := to_unsigned(0, rand'length);
+        variable product : unsigned(rand'length * 2 + 1 downto 0) := to_unsigned(0, rand'length * 2 + 1);
+
+    begin
+        random(seed1, seed2, lowestvalue, utmostvalue, rand_full_range);
+        delta := utmostvalue - lowestvalue;
+        product := resize(rand_full_range, rand'length * 2 + 1) * resize(delta, rand'length * 2 + 1);
+        rand_delta_range := product / 2**rand'length;
+        rand := lowestvalue + resize(rand_delta_range, rand'length);
+    end procedure;
+    
     function hex2integer(hex_number : in text_field;
                          file_name : in text_line;
                          line : in integer) return integer is
@@ -928,7 +984,7 @@ package body tb_base_pkg is
         variable stm_line_ptr : t_stm_line_ptr;
         variable std_line : line;
         variable stm_next_line_ptr : t_stm_line_ptr;
-        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable value_std_logic_vector : std_logic_vector(c_stm_value_width - 1 downto 0);
     begin
         valid := 0;
         for j in 0 to stm_array'length - 1 loop
@@ -1058,7 +1114,7 @@ package body tb_base_pkg is
                             variable number_found : out integer;
                             variable valid : out integer) is
         variable stm_line_ptr : t_stm_line_ptr;
-        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable value_std_logic_vector : std_logic_vector(c_stm_value_width - 1 downto 0);
         variable success : boolean := true;
         variable array_index : integer := 0;
         variable tmp_std_line : line;
@@ -1132,7 +1188,7 @@ package body tb_base_pkg is
         variable stm_line_ptr : t_stm_line_ptr;
         variable tmp_std_line : line;
         variable stm_line_new : t_stm_line_ptr := new t_stm_line;
-        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable value_std_logic_vector : std_logic_vector(c_stm_value_width - 1 downto 0);
     begin
         valid := 0;
         stm_line_ptr := stm_lines.stm_line_list;
@@ -1225,7 +1281,7 @@ package body tb_base_pkg is
                             variable valid : out integer) is
         variable stm_line_ptr : t_stm_line_ptr;
         variable std_line : line;
-        variable value_std_logic_vector : std_logic_vector(31 downto 0);
+        variable value_std_logic_vector : std_logic_vector(c_stm_value_width - 1 downto 0);
     begin
         valid := 0;
         stm_line_ptr := stm_lines.stm_line_list;

@@ -137,7 +137,7 @@ class GenAntBuildXml:
         echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
         echo.text = "ENDED"        
 
-        t = ET.SubElement(root, "target", name=target_prefix + "simulate-gui-debug", description="simulate start gui")
+        t = ET.SubElement(root, "target", name=target_prefix + "simulate-gui", description="simulate start gui")
         ET.SubElement(t, "delete",  dir=simulation_dir_prefix + "../SimulationResults" )
         ET.SubElement(t, "mkdir",  dir=simulation_dir_prefix + "../SimulationResults" )
         ex = ET.SubElement(t, "exec", executable="${vsim-executable}", dir=simulation_dir_prefix + "work")

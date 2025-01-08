@@ -1494,21 +1494,24 @@ begin
                     assert par1 > 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": seed expects a positive values"
                     severity failure;
-                    seed1 := par1;
-                    seed2 := 1;
+                    seed1 := to_integer(par1(30 downto 0));
+                    if seed1 > 1 then
+                        seed2 := seed1 - 1;
+                    else
+                        seed2 := seed1 + 42;
+                    end if;
 
                 -- random rand_var $rand_min_var $rand_max_var
                 -- random rand_var 0 $rand_max_var
                 -- random rand_var $rand_min_var 9
                 -- random rand_var 3 9
                 elsif instruction(1 to len) = INSTR_RANDOM then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_int := 0;
-                    getrandint(seed1, seed2, par2, par3, temp_int);
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    random(seed1, seed2, par2, par3, temp_stm_value);
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " random error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -1516,7 +1519,7 @@ begin
                 -- wait $time_to_wait
                 -- wait 10000
                 elsif instruction(1 to len) = INSTR_WAIT then
-                    wait for par1 * 1 ns;
+                    wait for to_integer(par1(30 downto 0)) * 1 ns;
 
                 -- marker 5 1 sets marker number 5 to high
                 -- marker 7 0 sets marker number 7 to low
@@ -1542,22 +1545,19 @@ begin
                 -- var verify $a_var $var_expected_value $var_mask_value
                 -- var verify $a_var 0x0002 0x00FF
                 elsif instruction(1 to len) = INSTR_VAR_VERIFY then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     verify_passes_count := verify_passes_count + 1; 
-                    temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                    temp_stdvec_b := std_logic_vector(to_signed(par2, 32));
-                    temp_stdvec_c := std_logic_vector(to_signed(par3, 32));
-                    if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                        if to_signed(resume, 32)(0) = '0' then
+                    if (par3 and temp_stm_value) /= (par3 and par2) then                            
+                        if resume(0) = '0' then
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par2) & ", mask=0x" & to_hstring(par3) & ", file " & text_line_crop(file_name)                       
                             severity failure;
                         else
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par2) & ", mask=0x" & to_hstring(par3) & ", file " & text_line_crop(file_name)                       
                             severity error;
                             verify_failure_count := verify_failure_count + 1;                            
                         end if;
@@ -1566,11 +1566,11 @@ begin
                 -- signal write $a_signal $signal_to_be_set_value
                 -- signal write $a_signal 0x1234
                 elsif instruction(1 to len) = INSTR_SIGNAL_WRITE then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    signal_write(signals_out, temp_int, par2, valid);
+                    signal_write(signals_out, to_integer(temp_stm_value(30 downto 0)), par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": signal not defined"
                     severity failure;
@@ -1581,31 +1581,28 @@ begin
                 -- signal verify $a_signal signal_read_value 0x0002 0x00FF
                 --  signal_read or signal_verify
                 elsif instruction(1 to len) = INSTR_SIGNAL_VERIFY or instruction(1 to len) = INSTR_SIGNAL_READ then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    signal_read(signals_in, temp_int, temp_int, valid);
+                    signal_read(signals_in, to_integer(temp_stm_value(30 downto 0)), temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": signal not defined"
                     severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
+                    update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "get_sig error: not a valid variable??"
                     severity failure;           
                     if (instruction(1 to len) = INSTR_SIGNAL_VERIFY) then
                         verify_passes_count := verify_passes_count + 1; 
-                        temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                        temp_stdvec_b := std_logic_vector(to_signed(par3, 32));
-                        temp_stdvec_c := std_logic_vector(to_signed(par4, 32));
-                        if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then                            
-                            if to_signed(resume, 32)(0) = '0' then
+                        if (par4 and temp_stm_value) /= (par4 and par3) then                            
+                            if resume(0) = '0' then
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
                                 severity failure;
                             else
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)                       
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;                            
                             end if;
@@ -1615,11 +1612,11 @@ begin
 
                 --  signal pointer copy a_signal_target a_signal_source
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_COPY then
-                    index_variable(defined_vars, par2, temp_int, valid);
+                    index_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: signal object not found"
                     severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
@@ -1634,11 +1631,11 @@ begin
 
                 --  signal pointer get a_signal_source a_var
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_GET then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: variable object not found"
                     severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
+                    update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
@@ -1713,7 +1710,7 @@ begin
                         temp_stdvec_b := std_logic_vector(to_signed(par5, 32));
                         temp_stdvec_c := std_logic_vector(to_signed(par6, 32));
                         if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then
-                            if to_signed(resume, 32)(0) = '0' then
+                            if resume(0) = '0' then
                                 assert false
                                 report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
                                 severity failure;
