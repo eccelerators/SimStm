@@ -16,9 +16,6 @@ proc
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test suite Bus Avalon started"
 
-	bus pointer copy busToTest avalon
-	call $testBus
-	
 	call $testSuiteBusAvalon	
 	
 	log message $INFO "Main test suite Bus Avalon ended"

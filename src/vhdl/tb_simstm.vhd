@@ -192,17 +192,11 @@ begin
         variable seed2 : positive := 1;
 
         --  scratchpad variables
-        variable tempaddress : std_logic_vector(31 downto 0);
-        variable tempdata : std_logic_vector(31 downto 0);
         variable temp_int : integer;
         variable temp_stm_value : t_stm_value;
         variable temp_stm_value_b : t_stm_value;
         variable number_found : integer;
-
-        variable temp_stdvec_a : std_logic_vector(31 downto 0);
-        variable temp_stdvec_b : std_logic_vector(31 downto 0);
-        variable temp_stdvec_c : std_logic_vector(31 downto 0);
-        
+       
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
         variable trc_on : t_stm_value := to_unsigned(0, c_stm_value_width);
@@ -263,8 +257,6 @@ begin
         
         variable called_label :text_field;
         
-        variable stmvalue : t_stm_value;
-
     begin
         marker <= (others => '0');
         verify_passes <= (others => '0');
@@ -295,10 +287,10 @@ begin
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
 
-            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));        
-            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
-            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, 32));
-            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
+            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, c_stm_value_width));        
+            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, c_stm_value_width));
+            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, c_stm_value_width));
+            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, c_stm_value_width));
             
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
@@ -448,7 +440,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stm_value := temp_stm_value * par2;
+                    temp_stm_value := resize(resize(temp_stm_value, c_stm_value_width * 2)  * resize(par2, c_stm_value_width * 2), c_stm_value_width);
                     update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
@@ -513,7 +505,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stm_value := shift_left(temp_stm_value, to_integer(par2));
+                    temp_stm_value := shift_left(temp_stm_value, to_integer(par2(30 downto 0)));
                     update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
@@ -526,7 +518,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stm_value := shift_right(temp_stm_value, to_integer(par2));
+                    temp_stm_value := shift_right(temp_stm_value, to_integer(par2(30 downto 0)));
                     update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
@@ -1338,8 +1330,8 @@ begin
 
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
-                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4));
-                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6));
+                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4(30 downto 0)));
+                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6(30 downto 0)));
                     report "Verify passes " & (integer'image(verify_passes_count));
                     report "Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then                       

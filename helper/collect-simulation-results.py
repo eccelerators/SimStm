@@ -55,6 +55,7 @@ class collectTestSuites:
         tsuites_assertions = 0       
         tsuites =  ET.Element("testsuites", name="testSuitesSimulation")
         for test_suite, test_suite_data in test_suite_data_dict.items():
+            print("processing {}".format(test_suite))
             tsuite = ET.SubElement(tsuites, "testsuite", name=test_suite)
             tsuite_system_out = ET.SubElement(tsuite, "system-out")
             sop = inoutdir_simulation_results_dir_path + '/' + test_suite + ".out"

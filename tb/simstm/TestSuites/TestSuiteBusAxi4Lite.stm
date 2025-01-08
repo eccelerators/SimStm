@@ -14,7 +14,8 @@
 		
 testSuiteBusAxi4Lite:
 proc
-    bus pointer copy busToTest wishbone
+	bus pointer copy busToTest axi4lite
+	bus timeout set busToTest 1000
 	call $testCaseBus
 	call $testCaseBusVerifySuccess
 	call $testCaseBusVerifyFail

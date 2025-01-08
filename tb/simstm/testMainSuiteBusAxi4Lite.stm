@@ -16,9 +16,6 @@ proc
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test suite Bus Axi4Lite started"
 
-	bus pointer copy busToTest axi4lite
-	call $testBus
-	
 	call $testSuiteBusAxi4Lite	
 	
 	log message $INFO "Main test suite Bus Axi4Lite ended"

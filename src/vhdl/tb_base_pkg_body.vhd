@@ -343,7 +343,6 @@ package body tb_base_pkg is
         variable pre : string(1 to 2);
         variable ix : integer;
         variable j : integer;
-        variable vec : std_logic_vector(31 downto 0);
         variable cpval : t_stm_value := to_unsigned(0, c_stm_value_width);
     begin
         num := stmvalue;
@@ -477,8 +476,8 @@ package body tb_base_pkg is
                       variable lowestvalue : in integer;
                       variable utmostvalue : in integer;
                       variable rand : out integer) is
-        variable randreal: real;
-        variable intdelta : integer;
+        variable randreal: real := 0.0;
+        variable intdelta : integer := 0;
     begin
         intdelta := utmostvalue - lowestvalue;
         uniform(seed1, seed2, randreal); -- generate random number
@@ -494,10 +493,10 @@ package body tb_base_pkg is
         constant seg_size : natural := 30;
         constant segments : natural := size / seg_size;
         constant remainder : natural := size - segments * seg_size;
-        variable lowestvalue : integer;
-        variable utmostvalue : integer;
-        variable rand_of_segment : integer;    
-        variable result : unsigned(rand'range);      
+        variable lowestvalue : integer := 0;
+        variable utmostvalue : integer := 0;
+        variable rand_of_segment : integer := 0;   
+        variable result : unsigned(rand'range) := (others => '0');      
     begin
         if segments > 0 then
         for s in 0 to segments-1 loop
@@ -522,15 +521,15 @@ package body tb_base_pkg is
                       variable utmostvalue : in unsigned;
                       variable rand : out unsigned) is
         variable rand_full_range : unsigned(rand'range) := to_unsigned(0, rand'length);
-        variable rand_delta_range : unsigned(rand'length * 2 + 1 downto 0) := to_unsigned(0, rand'length * 2 + 1);             
+        variable rand_delta_range : unsigned(rand'length * 2 -1 downto 0) := to_unsigned(0, rand'length * 2);             
         variable delta : unsigned(rand'range) := to_unsigned(0, rand'length);
-        variable product : unsigned(rand'length * 2 + 1 downto 0) := to_unsigned(0, rand'length * 2 + 1);
+        variable product : unsigned(rand'length * 2 -1 downto 0) := to_unsigned(0, rand'length * 2);
 
     begin
-        random(seed1, seed2, lowestvalue, utmostvalue, rand_full_range);
+        random(seed1, seed2, rand_full_range);
         delta := utmostvalue - lowestvalue;
-        product := resize(rand_full_range, rand'length * 2 + 1) * resize(delta, rand'length * 2 + 1);
-        rand_delta_range := product / 2**rand'length;
+        product := rand_full_range * delta;
+        rand_delta_range := shift_right(product, rand'length);
         rand := lowestvalue + resize(rand_delta_range, rand'length);
     end procedure;
     

@@ -1696,7 +1696,7 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index_stm_value, value, valid);
+        update_variable(var_list, index, value, valid);
     end procedure;
     
     procedure update_variable(variable var_list : in var_field_ptr;
@@ -1739,7 +1739,7 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index_stm_value, var_stm_text, valid);                          
+        update_variable(var_list, index, var_stm_text, valid);                          
     end procedure;
     
     procedure update_variable(variable var_list : in var_field_ptr;
@@ -1771,7 +1771,7 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index_stm_value, stm_array, valid);                          
+        update_variable(var_list, index, stm_array, valid);                          
     end procedure;                              
 
     procedure update_variable(variable var_list : in var_field_ptr;
@@ -1804,7 +1804,7 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index_stm_value, stm_lines, valid);                          
+        update_variable(var_list, index, stm_lines, valid);                          
     end procedure; 
     
     procedure update_variable(variable var_list : in var_field_ptr;

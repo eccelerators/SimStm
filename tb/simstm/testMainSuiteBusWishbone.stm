@@ -15,10 +15,7 @@ proc
 	wait 1000
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test suite Bus Wishbone started"
-	
-	bus pointer copy busToTest wishbone
-	call $testBus
-	
+		
 	call $testSuiteBusWishbone	
 	
 	log message $INFO "Main test suite Bus Wishbone ended"

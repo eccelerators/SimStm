@@ -8,6 +8,8 @@ include "Bus/bus.stm"
 include "File/file.stm"
 include "Base/Array.stm"
 
+include "Other/other.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -31,7 +33,9 @@ proc
 	-- call $testSignalWriteReadVerify
 	-- call $testSignalVerifyFail
 	
-	call $testFileReadArray
+	-- call $testFileReadArray
+	
+	call $testOtherRandom
 
 	log message $INFO "Main test finished"
 	wait 1000

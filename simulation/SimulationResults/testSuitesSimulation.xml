@@ -1,0 +1,3193 @@
+<?xml version="1.0" ?>
+<testsuites name="testSuitesSimulation" tests="69" skipped="0" errors="0" failures="15" assertions="346" timestamp="2025-01-08T18:34:40.578497" time="14.135015">
+   <testsuite name="testSuiteConstant" tests="1" skipped="0" errors="0" failures="0" assertions="4" timestamp="2025-01-08T18:34:47.047504" time="0.1" file="TestSuites/TestSuiteConstant.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteConstant.stm -gstimulus_main_entry_label=$testMainSuiteConstant -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Constant/constant.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteConstant.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Constant started
+# **********START*TESTCASE*testSuiteConstant_testCaseConstantAdd**********
+# Started at simulation time of 1002ns
+# testConstantAdd started
+# test_variable_1: 0x1
+# test_variable_2: 0x2
+# test_variable_1: 0x2
+# test_variable_2: 0x4
+# test_variable_1: 0x3
+# test_variable_2: 0x6
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testConstantAdd ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteConstant_testCaseConstantAdd**********
+# Main test suite Constant ended
+# ** Note: Verify passes 4
+#    Time: 2012700 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2012700 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2012700 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2012700 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:47 on Jan 08,2025, Elapsed time: 0:00:07
+# Errors: 0, Warnings: 5
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteConstant_testCaseConstantAdd" assertions="4" classname="testSuiteConstant" file="TestSuites/TestSuiteConstant.stm" line="TestSuites/TestSuiteConstant.stm" time="0.1">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteVariable" tests="10" skipped="0" errors="0" failures="2" assertions="44" timestamp="2025-01-08T18:34:49.977507" time="0.006" file="TestSuites/TestSuiteVariable.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteVariable.stm -gstimulus_main_entry_label=$testMainSuiteVariable -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42870&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Variable/variable.stm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteVariable.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Variable started
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableAdd**********
+# Started at simulation time of 1002ns
+# testVariableAdd started
+# test_variable_1: 1
+# test_variable_2: 2
+# test_variable_1: 11
+# test_variable_2: 22
+# test_variable_1: 12356
+# test_variable_2: 110
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableAdd ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableAdd**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableAnd**********
+# Started at simulation time of 1013ns
+# testVariableAnd started
+# test_variable_1: 0xAAAA
+# test_variable_2: 0x77777777
+# test_variable_1: 0xAA02
+# test_variable_2: 0x70745607
+# test_variable_1: 0xAA02
+# test_variable_2: 0x70745607
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableAnd ended
+# Ended at simulation time of 1021ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableAnd**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableDiv**********
+# Started at simulation time of 1024ns
+# testVariableDiv started
+# test_variable_1: 500
+# test_variable_2: 5000
+# test_variable_1: 50
+# test_variable_2: 250
+# test_variable_1: 10
+# test_variable_2: 2
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableDiv ended
+# Ended at simulation time of 1032ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableDiv**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableEqu**********
+# Started at simulation time of 1035ns
+# testVariableEqu started
+# test_variable_1: 1
+# test_variable_2: 2
+# test_variable_3: 3
+# test_variable_4: 4
+# test_variable_5: 5
+# test_variable_1: 10
+# test_variable_2: 20
+# test_variable_3: 30
+# test_variable_4: 44
+# test_variable_5: 55
+# test_variable_1: 99
+# test_variable_2: 88
+# test_variable_3: 55
+# test_variable_4: 11
+# test_variable_5: 0
+# Passed 10 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableEqu ended
+# Ended at simulation time of 1045ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableEqu**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableMul**********
+# Started at simulation time of 1048ns
+# testVariableMul started
+# test_variable_1: 1
+# test_variable_2: 2
+# test_variable_1: 10
+# test_variable_2: 40
+# test_variable_1: 123450
+# test_variable_2: 3520
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableMul ended
+# Ended at simulation time of 1056ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableMul**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableOr**********
+# Started at simulation time of 1059ns
+# testVariableOr started
+# test_variable_1: 0x1234
+# test_variable_2: 0x80000000
+# test_variable_1: 0x3675
+# test_variable_2: 0x80000001
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1063 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1063200 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 0x3675
+# test_variable_2: 0x80000001
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1063600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableOr ended
+# Ended at simulation time of 1067ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableOr**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableSub**********
+# Started at simulation time of 1070ns
+# testVariableSub started
+# test_variable_1: 12345
+# test_variable_2: 88
+# test_variable_1: 12335
+# test_variable_2: 68
+# test_variable_1: 12333
+# test_variable_2: 67
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableSub ended
+# Ended at simulation time of 1078ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableSub**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableXor**********
+# Started at simulation time of 1081ns
+# testVariableXor started
+# test_variable_1: 0x1FFFFFFF
+# test_variable_2: 0x0
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 1084500 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-3930) Integer exponentiation has overflowed; result is 0.
+#    Time: 1084500 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-3930) Integer exponentiation has overflowed; result is 0.
+#    Time: 1084600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 0x75555555
+# test_variable_2: 0x33333333
+# ** Error:  line 252, var_verify:, var=0x0000000075555555, expected=0x0000000055555555, mask=0xFFFFFFFFFFFFFFFF, file Variable/variable.stm
+#    Time: 1085 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-3930) Integer exponentiation has overflowed; result is 0.
+#    Time: 1085 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1073741824 is not in bounds of subtype NATURAL.
+#    Time: 1085200 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 0x20000000
+# test_variable_2: 0x7FFFFFFF
+# ** Error:  line 260, var_verify:, var=0x0000000020000000, expected=0x0000000000000000, mask=0xFFFFFFFFFFFFFFFF, file Variable/variable.stm
+#    Time: 1085600 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1085600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 261, var_verify:, var=0x000000007FFFFFFF, expected=0x000000001FFFFFFF, mask=0xFFFFFFFFFFFFFFFF, file Variable/variable.stm
+#    Time: 1085700 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Expected 0 verify failures, got 3
+# Failures
+# testVariableXor ended
+# Ended at simulation time of 1089ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableXor**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableInv**********
+# Started at simulation time of 1092ns
+# testVariableInv started
+# test_variable_1: 0x12345678
+# test_variable_2: 0xFEDCBA9
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 0x00000000EDCBA987
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: DIV, MOD, or REM by zero
+#    Time: 1096300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# test_variable_2: 0x00000000F0123456
+# ** Warning: (vsim-86) Argument value -536870912 is not in bounds of subtype NATURAL.
+#    Time: 1096300 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 282, var_verify:, var=0xFFFFFFFFEDCBA987, expected=0x000000002DCBA987, mask=0xFFFFFFFFFFFFFFFF, file Variable/variable.stm
+#    Time: 1096400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1096400 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 283, var_verify:, var=0xFFFFFFFFF0123456, expected=0x0000000010123456, mask=0xFFFFFFFFFFFFFFFF, file Variable/variable.stm
+#    Time: 1096500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 0x12345678
+# test_variable_2: 0xFEDCBA9
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Expected 0 verify failures, got 2
+# Failures
+# testVariableInv ended
+# Ended at simulation time of 1101ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableInv**********
+# **********START*TESTCASE*testSuiteVariable_testCaseVariableLd**********
+# Started at simulation time of 1104ns
+# testVariableLd started
+# test_variable_1: 0x1000
+# test_variable_2: 0x80000000
+# ** Warning: (vsim-3930) Integer exponentiation has overflowed; result is -2147483648.
+#    Time: 1107500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1107500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# test_variable_1: 12
+# test_variable_2: 31
+# Passed 2 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testVariableLd ended
+# Ended at simulation time of 1111ns
+# **********END*TESTCASE*testSuiteVariable_testCaseVariableLd**********
+# Main test suite Variable ended
+# ** Note: Verify passes 44
+#    Time: 2114 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2114 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2114 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2114 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:50 on Jan 08,2025, Elapsed time: 0:00:10
+# Errors: 21, Warnings: 22
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteVariable_testCaseVariableAdd" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableEqu" assertions="10" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="1035"/>
+            <property name="SimulatedEndTime" value="1045"/>
+            <property name="SimulatedDuration" value="10"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableSub" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1070"/>
+            <property name="SimulatedEndTime" value="1078"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableLd" assertions="2" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
+         <properties>
+            <property name="SimulatedStartTime" value="1104"/>
+            <property name="SimulatedEndTime" value="1111"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableDiv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="1024"/>
+            <property name="SimulatedEndTime" value="1032"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableAnd" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1013"/>
+            <property name="SimulatedEndTime" value="1021"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableInv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1092"/>
+            <property name="SimulatedEndTime" value="1101"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+         <failure message=" VariableInv test failed "/>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableOr" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
+         <properties>
+            <property name="SimulatedStartTime" value="1059"/>
+            <property name="SimulatedEndTime" value="1067"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableXor" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="1081"/>
+            <property name="SimulatedEndTime" value="1089"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+         <failure message=" VariableXor test failed "/>
+      </testcase>
+      <testcase name="testSuiteVariable_testCaseVariableMul" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1048"/>
+            <property name="SimulatedEndTime" value="1056"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteLines" tests="11" skipped="0" errors="0" failures="0" assertions="0" timestamp="2025-01-08T18:34:46.023503" time="0.11" file="TestSuites/TestSuiteLines.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteLines.stm -gstimulus_main_entry_label=$testMainSuiteLines -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Array.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Lines/lines.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteLines.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Lines started
+# **********START*TESTCASE*testSuiteLines_testCaseLinesAppendArray**********
+# Started at simulation time of 1002ns
+# testLinesAppendArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1005800 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1005900 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesAppendArray ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesAppendArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesAppendText**********
+# Started at simulation time of 1013ns
+# testLinesAppendText started
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 1
+# line 2
+# line 3
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesAppendText ended
+# Ended at simulation time of 1020ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesAppendText**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesDeleteAllArray**********
+# Started at simulation time of 1023ns
+# testLinesDeleteAllArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1026800 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1026900 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 1
+# line 2
+# line 3
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesDeleteAllArray ended
+# Ended at simulation time of 1031ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesDeleteAllArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesDeleteArray**********
+# Started at simulation time of 1034ns
+# testLinesDeleteArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1038 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1038100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesDeleteArray ended
+# Ended at simulation time of 1043ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesDeleteArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesGetArray**********
+# Started at simulation time of 1046ns
+# testLinesGetArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1049600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1049700 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesGetArray ended
+# Ended at simulation time of 1069ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesGetArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesInsertArray**********
+# Started at simulation time of 1073ns
+# testLinesInsertArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1076400 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1076500 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x5 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesInsertArray ended
+# Ended at simulation time of 1159ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesInsertArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesInsertText**********
+# Started at simulation time of 1162ns
+# testLinesInsertText started
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# line insert 1
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesInsertText ended
+# Ended at simulation time of 1170ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesInsertText**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesPointerCopy**********
+# Started at simulation time of 1173ns
+# testLinesPointerCopy started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1176800 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1176900 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 1178 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesPointerCopy ended
+# Ended at simulation time of 1182ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesPointerCopy**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesSetArray**********
+# Started at simulation time of 1185ns
+# testLinesSetArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1188600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1188700 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 1
+# line insert 0
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# line insert 1
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x0
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# number_of_elements_got 0x8
+# array: dump 
+#  0x3 0x22 0x33 0x0 0x12345678 0x777 0x800 0xFFF
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesSetArray ended
+# Ended at simulation time of 1419ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesSetArray**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesSetText**********
+# Started at simulation time of 1422ns
+# testLinesSetText started
+# line insert 1
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000040000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 1
+# line 2
+# line 3
+# line set 1
+# line set 2
+# line set 3
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 1
+# line 2
+# line 3
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesSetText ended
+# Ended at simulation time of 1429ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesSetText**********
+# **********START*TESTCASE*testSuiteLines_testCaseLinesSize**********
+# Started at simulation time of 1432ns
+# testLinesSize started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1436100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1436200 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# line set 1
+# line set 2
+# line set 3
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line insert 4
+# 00000000000000030000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000050000000000000022000000000000003300000000000000000000000012345678000000000000077700000000000008000000000000000FFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 0
+# line 1
+# line 2
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 000000006FAFAFEE0000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# line 1
+# line 2
+# line 3
+# 00000000000000000000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000010000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# 00000000000000020000000000000001000000000000000A0000000000000002000000000000000B000000007FFFFFFF0000000080000000000000001FFFFFFF
+# lines size is 0x1C
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testLinesSize ended
+# Ended at simulation time of 1440ns
+# **********END*TESTCASE*testSuiteLines_testCaseLinesSize**********
+# Main test suite Lines ended
+# ** Note: Verify passes 0
+#    Time: 2443200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2443200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2443200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2443200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:52 on Jan 08,2025, Elapsed time: 0:00:12
+# Errors: 0, Warnings: 22
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteLines_testCaseLinesSize" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="1432"/>
+            <property name="SimulatedEndTime" value="1440"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesPointerCopy" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.099999">
+         <properties>
+            <property name="SimulatedStartTime" value="1173"/>
+            <property name="SimulatedEndTime" value="1182"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesSetArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="3.946004">
+         <properties>
+            <property name="SimulatedStartTime" value="1185"/>
+            <property name="SimulatedEndTime" value="1419"/>
+            <property name="SimulatedDuration" value="234"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesDeleteArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.096001">
+         <properties>
+            <property name="SimulatedStartTime" value="1034"/>
+            <property name="SimulatedEndTime" value="1043"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesAppendArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.11">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesDeleteAllArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1023"/>
+            <property name="SimulatedEndTime" value="1031"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesSetText" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1422"/>
+            <property name="SimulatedEndTime" value="1429"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesGetArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.398">
+         <properties>
+            <property name="SimulatedStartTime" value="1046"/>
+            <property name="SimulatedEndTime" value="1069"/>
+            <property name="SimulatedDuration" value="23"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesInsertArray" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="1.314001">
+         <properties>
+            <property name="SimulatedStartTime" value="1073"/>
+            <property name="SimulatedEndTime" value="1159"/>
+            <property name="SimulatedDuration" value="86"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesAppendText" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1013"/>
+            <property name="SimulatedEndTime" value="1020"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteLines_testCaseLinesInsertText" assertions="0" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1162"/>
+            <property name="SimulatedEndTime" value="1170"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteInterrupt" tests="1" skipped="0" errors="0" failures="0" assertions="2" timestamp="2025-01-08T18:34:47.784505" time="0.208" file="TestSuites/TestSuiteInterrupt.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteInterrupt.stm -gstimulus_main_entry_label=$testMainSuiteInterrupt -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Interrupt/interrupt.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteInterrupt.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Interrupt started
+# **********START*TESTCASE*testSuiteInterrupt_testCaseInterrupt**********
+# Started at simulation time of 1002ns
+# testInterrupt started
+# InterruptA happened
+# InterruptB happened
+# Passed 2 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testInterrupt ended
+# Ended at simulation time of 3110ns
+# **********END*TESTCASE*testSuiteInterrupt_testCaseInterrupt**********
+# Main test suite Interrupt ended
+# ** Note: Verify passes 2
+#    Time: 4113 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 4113 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 4113 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 4113 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:48 on Jan 08,2025, Elapsed time: 0:00:08
+# Errors: 0, Warnings: 5
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteInterrupt_testCaseInterrupt" assertions="2" classname="testSuiteInterrupt" file="TestSuites/TestSuiteInterrupt.stm" line="TestSuites/TestSuiteInterrupt.stm" time="0.208">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="3110"/>
+            <property name="SimulatedDuration" value="2108"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteBusAvalon" tests="5" skipped="0" errors="0" failures="4" assertions="32" timestamp="2025-01-08T18:34:44.745502" time="0.1" file="TestSuites/TestSuiteBusAvalon.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusAvalon.stm -gstimulus_main_entry_label=$testMainSuiteBusAvalon -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Bus/bus.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteBusAvalon.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Bus Avalon started
+# **********START*TESTCASE*testSuiteBusAvalon_testCaseBus**********
+# Started at simulation time of 1002ns
+# testBus started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2045 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2165 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2165 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 3525 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 4765 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 4925 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 5965100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6005 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6125 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 6125 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6305 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6385 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 6425 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# Passed 20 verify instructions
+# Passed 34 timeout monitored bus access instructions
+# Success
+# testBus ended
+# Ended at simulation time of 6468ns
+# **********END*TESTCASE*testSuiteBusAvalon_testCaseBus**********
+# **********START*TESTCASE*testSuiteBusAvalon_testCaseBusVerifySuccess**********
+# Started at simulation time of 6471ns
+# testBusVerifySuccess started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 7505 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 7545 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 7585 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 7625 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 63, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 7665 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 6 timeout monitored bus access instructions
+# Expected 0 verify failures, got 1
+# Failures
+# testBusVerifySuccess ended
+# Ended at simulation time of 7709ns
+# **********END*TESTCASE*testSuiteBusAvalon_testCaseBusVerifySuccess**********
+# **********START*TESTCASE*testSuiteBusAvalon_testCaseBusVerifyFail**********
+# Started at simulation time of 7712ns
+# testBusVerifyFail started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 8755 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8795 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8835 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 8875 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 80, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 8915 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# bus verify intended error on no match
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8955100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 83, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000001FFFFFFF, file Bus/bus.stm
+#    Time: 8995 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 4 verify instructions
+# Passed 7 timeout monitored bus access instructions
+# Expected 1 verify failures, got 2
+# Failures
+# testBusVerifyFail ended
+# Ended at simulation time of 8999ns
+# **********END*TESTCASE*testSuiteBusAvalon_testCaseBusVerifyFail**********
+# **********START*TESTCASE*testSuiteBusAvalon_testCaseBusTimeOutRead**********
+# Started at simulation time of 9002ns
+# testBusTimeOutRead started
+# ** Error:  line 97, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 10045300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 10045300 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error: Bus Read timeout
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: NUMERIC_STD.&quot;/=&quot;: metavalue detected, returning TRUE
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 98, bus_verify: address=0x0000000000000000, read=0xXXXXXXXXXXXXXXXX, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 103, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 10050800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 2 timeout monitored bus access instructions
+# Expected 0 verify failures, got 3
+# Failures
+# testBusTimeOutRead ended
+# Ended at simulation time of 10054ns
+# **********END*TESTCASE*testSuiteBusAvalon_testCaseBusTimeOutRead**********
+# **********START*TESTCASE*testSuiteBusAvalon_testCaseBusTimeOutWrite**********
+# Started at simulation time of 10058ns
+# testBusTimeOutWrite started
+# ** Error:  line 114, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 11061200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: Bus Write timeout
+#    Time: 11065 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 120, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 11065800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 2 verify instructions
+# Passed 1 timeout monitored bus access instructions
+# Expected 0 verify failures, got 2
+# Failures
+# testBusTimeOutWrite ended
+# Ended at simulation time of 11069ns
+# **********END*TESTCASE*testSuiteBusAvalon_testCaseBusTimeOutWrite**********
+# Main test suite Bus Avalon ended
+# ** Note: Verify passes 32
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 50
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 1 verify failures, got 8
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 2 bus timeout failures, got 2
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: FAILURES
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:45 on Jan 08,2025, Elapsed time: 0:00:05
+# Errors: 10, Warnings: 34
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteBusAvalon_testCaseBusVerifySuccess" assertions="3" classname="testSuiteBusAvalon" file="TestSuites/TestSuiteBusAvalon.stm" line="TestSuites/TestSuiteBusAvalon.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="6471"/>
+            <property name="SimulatedEndTime" value="7709"/>
+            <property name="SimulatedDuration" value="1238"/>
+         </properties>
+         <failure message=" BusVerifySuccess test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAvalon_testCaseBusVerifyFail" assertions="4" classname="testSuiteBusAvalon" file="TestSuites/TestSuiteBusAvalon.stm" line="TestSuites/TestSuiteBusAvalon.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="7712"/>
+            <property name="SimulatedEndTime" value="8999"/>
+            <property name="SimulatedDuration" value="1287"/>
+         </properties>
+         <failure message=" BusVerifyFail test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAvalon_testCaseBusTimeOutWrite" assertions="2" classname="testSuiteBusAvalon" file="TestSuites/TestSuiteBusAvalon.stm" line="TestSuites/TestSuiteBusAvalon.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="10058"/>
+            <property name="SimulatedEndTime" value="11069"/>
+            <property name="SimulatedDuration" value="1011"/>
+         </properties>
+         <failure message=" BusTimeOutWrite test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAvalon_testCaseBus" assertions="20" classname="testSuiteBusAvalon" file="TestSuites/TestSuiteBusAvalon.stm" line="TestSuites/TestSuiteBusAvalon.stm" time="0.1">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="6468"/>
+            <property name="SimulatedDuration" value="5466"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBusAvalon_testCaseBusTimeOutRead" assertions="3" classname="testSuiteBusAvalon" file="TestSuites/TestSuiteBusAvalon.stm" line="TestSuites/TestSuiteBusAvalon.stm" time="0.114">
+         <properties>
+            <property name="SimulatedStartTime" value="9002"/>
+            <property name="SimulatedEndTime" value="10054"/>
+            <property name="SimulatedDuration" value="1052"/>
+         </properties>
+         <failure message=" BusTimeOutRead test failed "/>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteOther" tests="10" skipped="0" errors="0" failures="0" assertions="0" timestamp="2025-01-08T18:34:51.068509" time="0.098" file="TestSuites/TestSuiteOther.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteOther.stm -gstimulus_main_entry_label=$testMainSuiteOther -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42870&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Other/other.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteOther.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Other started
+# **********START*TESTCASE*testSuiteOther_testCaseOtherRandom**********
+# Started at simulation time of 1002ns
+# testOtherRandom started
+# random_number: 0x6
+# random_number: 0x1
+# random_number: 0x1
+# random_number: 0x1
+# random_number: 0x2
+# random_number: 0x9
+# random_number: 0x9
+# random_number: 0x0
+# random_number: 0x8
+# random_number: 0x8
+# random_number: 0x9
+# random_number: 0x1
+# random_number: 0x4
+# random_number: 0x9
+# random_number: 0x2
+# random_number: 0x2
+# random_number: 0x2
+# random_number: 0x7
+# random_number: 0x2
+# random_number: 0x3
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherRandom ended
+# Ended at simulation time of 1014ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherRandom**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherSeed**********
+# Started at simulation time of 1018ns
+# testOtherSeed started
+# random_number: 0x5
+# random_number: 0x3
+# random_number: 0x4
+# random_number: 0x4
+# random_number: 0x8
+# random_number: 0x2
+# random_number: 0x6
+# random_number: 0x6
+# random_number: 0x5
+# random_number: 0x4
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherSeed ended
+# Ended at simulation time of 1027ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherSeed**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherTrace**********
+# Started at simulation time of 1031ns
+# testOtherTrace started
+# ** Note: exec line 49 wait file Other/other.stm
+#    Time: 1034100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 50 marker file Other/other.stm
+#    Time: 1134200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 51 marker file Other/other.stm
+#    Time: 1134300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 52 trace file Other/other.stm
+#    Time: 1134400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 58 wait file Other/other.stm
+#    Time: 2134900 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 59 marker file Other/other.stm
+#    Time: 2235 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 60 marker file Other/other.stm
+#    Time: 2235100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 61 wait file Other/other.stm
+#    Time: 2235200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 62 marker file Other/other.stm
+#    Time: 2335300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 63 marker file Other/other.stm
+#    Time: 2335400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 64 trace file Other/other.stm
+#    Time: 2335500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherTrace ended
+# Ended at simulation time of 2539ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherTrace**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherMarker**********
+# Started at simulation time of 2542ns
+# testOtherMarker started
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherMarker ended
+# Ended at simulation time of 4051ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherMarker**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherWait**********
+# Started at simulation time of 4054ns
+# testOtherWait started
+# ** Note: exec line 109 wait file Other/other.stm
+#    Time: 4057300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: exec line 110 trace file Other/other.stm
+#    Time: 5057400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherWait ended
+# Ended at simulation time of 5061ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherWait**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherLogSubstitutions**********
+# Started at simulation time of 5064ns
+# testOtherLogSubstitutions started
+# test_variable_1: 0xA1
+# test_variable_1: 0xA1 test_variable_2: 0xB2
+# test_variable_1: 0xA1 test_variable_2: 0xB2 test_variable_3: 0xB2
+# test_variable_1: 0xA1 test_variable_2: 0xB2 test_variable_3: 0xC3 test_variable_4: 0xE4
+# test_variable_1: 0xA1 test_variable_2: 0xB2 test_variable_3: 0xC3 test_variable_4: 0xE4 test_variable_5: 0xF5
+# 0xA10xB20xC30xE40xF5
+# test_variable_2: 0xB2
+# test_variable_3: 0xC3
+# test_variable_4: 0xE4
+# test_variable_5: 0xF5
+# Main test call $endStandardTestShelled 0x1E
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherLogSubstitutions ended
+# Ended at simulation time of 6071ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherLogSubstitutions**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherLogFormats**********
+# Started at simulation time of 6075ns
+# testOtherLogFormats started
+# testContent started
+# test_variable_lf_1: 0xA1
+# test_variable_lf_1: 0xA1 test_variable_lf_2: 0xB2
+# test_variable_lf_1: 0xA1 test_variable_lf_2: 0xB2 test_variable_lf_3: 0xB2
+# test_variable_lf_1: 0xA1 test_variable_lf_2: 0xB2 test_variable_lf_3: 0xC3 test_variable_lf_4: 0xE4
+# test_variable_lf_1: 0xA1
+# test_variable_lf_1: 0xA1 test_variable_lf_2: 178 test_variable_lf_3: 0o303 test_variable_lf_4: 0b11100100
+# test_variable_lf_1: 0xA1
+# test_variable_lf_1: 0xA1 test_variable_lf_2: 178 test_variable_lf_3: 0o303 test_variable_lf_4: 0b11100100
+# label: testContent
+# file: 'Other/other.stm', line: '155'
+# file: &quot;Other/other.stm&quot;, line: &quot;155&quot;
+# file: &quot;Other/other.stm&quot;, line: &quot;155&quot;
+# file: 'Other/other.stm', line: '155'
+# Main test call $endStandardTestShelled 0x1E
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherLogFormats ended
+# Ended at simulation time of 7084ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherLogFormats**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherLog**********
+# Started at simulation time of 7087ns
+# testOtherLog started
+# log 0
+# log 1
+# log 2
+# log 0
+# log 1
+# log 2
+# log 0
+# log 0
+# log 1
+# log 0
+# log 1
+# log 2
+# log 0
+# log 1
+# log 2
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherLog ended
+# Ended at simulation time of 7096ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherLog**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherHelloWorld**********
+# Started at simulation time of 7099ns
+# testOtherHelloWorld started
+# Hello World 0x2023-0x11-0x22
+# Hello World 0x2023-0x11-0x22
+# Hello World 0x2023-0x11-0x22
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherHelloWorld ended
+# Ended at simulation time of 10106ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherHelloWorld**********
+# **********START*TESTCASE*testSuiteOther_testCaseOtherCall**********
+# Started at simulation time of 10109ns
+# testOtherHelloWorld started
+# Hello World 0x2023-0x11-0x22
+# Hello World 0x2023-0x11-0x22
+# Hello World 0x2023-0x11-0x22
+# Passed 0 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testOtherHelloWorld ended
+# Ended at simulation time of 13117ns
+# **********END*TESTCASE*testSuiteOther_testCaseOtherCall**********
+# ** Note: Verify passes 0
+#    Time: 14119800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 14119800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 14119800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 14119800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:51 on Jan 08,2025, Elapsed time: 0:00:11
+# Errors: 0, Warnings: 6
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteOther_testCaseOtherRandom" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1014"/>
+            <property name="SimulatedDuration" value="12"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherLogFormats" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.008">
+         <properties>
+            <property name="SimulatedStartTime" value="6075"/>
+            <property name="SimulatedEndTime" value="7084"/>
+            <property name="SimulatedDuration" value="1009"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherSeed" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.007">
+         <properties>
+            <property name="SimulatedStartTime" value="1018"/>
+            <property name="SimulatedEndTime" value="1027"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherHelloWorld" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="7099"/>
+            <property name="SimulatedEndTime" value="10106"/>
+            <property name="SimulatedDuration" value="3007"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherMarker" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="2542"/>
+            <property name="SimulatedEndTime" value="4051"/>
+            <property name="SimulatedDuration" value="1509"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherLog" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="7087"/>
+            <property name="SimulatedEndTime" value="7096"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherLogSubstitutions" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="5064"/>
+            <property name="SimulatedEndTime" value="6071"/>
+            <property name="SimulatedDuration" value="1007"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherTrace" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1031"/>
+            <property name="SimulatedEndTime" value="2539"/>
+            <property name="SimulatedDuration" value="1508"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherCall" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.100001">
+         <properties>
+            <property name="SimulatedStartTime" value="10109"/>
+            <property name="SimulatedEndTime" value="13117"/>
+            <property name="SimulatedDuration" value="3008"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteOther_testCaseOtherWait" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="4054"/>
+            <property name="SimulatedEndTime" value="5061"/>
+            <property name="SimulatedDuration" value="1007"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteFile" tests="6" skipped="0" errors="0" failures="0" assertions="18" timestamp="2025-01-08T18:34:42.854500" time="0.1" file="TestSuites/TestSuiteFile.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteFile.stm -gstimulus_main_entry_label=$testMainSuiteFile -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/File/file.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Array.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteFile.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite File started
+# **********START*TESTCASE*testSuiteFile_testCaseFileAppendArray**********
+# Started at simulation time of 1002ns
+# testFileAppendArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1005800 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1005900 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFileAppendArray ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileAppendArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileReadAllArray**********
+# Started at simulation time of 1014ns
+# testFileReadAllArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1017400 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1017500 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFileReadAllArray ended
+# Ended at simulation time of 1022ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileReadAllArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileReadArray**********
+# Started at simulation time of 1025ns
+# testFileReadArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 1031400 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 1031500 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# array: dump 
+#  0x0 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# array: dump 
+#  0x1 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# array: dump 
+#  0x2 0x1 0xA 0x2 0xB 0x7FFFFFFF 0x80000000 0x1FFFFFFF
+# Passed 10 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFileReadArray ended
+# Ended at simulation time of 2052ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileReadArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileStatus**********
+# Started at simulation time of 2055ns
+# testFileStatus started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 2058600 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2058700 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Check if file is readable, which doesn't exist
+# STATUS_NAME_ERROR
+# Check if file is readable, which exist
+# STATUS_OK
+# Check if file is readable, which exist
+# STATUS_OK
+# Check if file is readable, which exist
+# STATUS_OK
+# Passed 4 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFileStatus ended
+# Ended at simulation time of 2067ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileStatus**********
+# **********START*TESTCASE*testSuiteFile_testCaseFileWriteArray**********
+# Started at simulation time of 2070ns
+# testFileWriteArray started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 2073800 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2073900 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFileWriteArray ended
+# Ended at simulation time of 2078ns
+# **********END*TESTCASE*testSuiteFile_testCaseFileWriteArray**********
+# **********START*TESTCASE*testSuiteFile_testCaseFilePointerCopy**********
+# Started at simulation time of 2081ns
+# testFilePointerCopy started
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 2085300 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2085400 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testFilePointerCopy ended
+# Ended at simulation time of 2090ns
+# **********END*TESTCASE*testSuiteFile_testCaseFilePointerCopy**********
+# Main test suite File ended
+# ** Note: Verify passes 18
+#    Time: 3093100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 3093100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 3093100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 3093100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:43 on Jan 08,2025, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 16
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteFile_testCaseFileAppendArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.1">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileWriteArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="2070"/>
+            <property name="SimulatedEndTime" value="2078"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileReadAllArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.101">
+         <properties>
+            <property name="SimulatedStartTime" value="1014"/>
+            <property name="SimulatedEndTime" value="1022"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileReadArray" assertions="10" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.401">
+         <properties>
+            <property name="SimulatedStartTime" value="1025"/>
+            <property name="SimulatedEndTime" value="2052"/>
+            <property name="SimulatedDuration" value="1027"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFileStatus" assertions="4" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.099">
+         <properties>
+            <property name="SimulatedStartTime" value="2055"/>
+            <property name="SimulatedEndTime" value="2067"/>
+            <property name="SimulatedDuration" value="12"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteFile_testCaseFilePointerCopy" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.099">
+         <properties>
+            <property name="SimulatedStartTime" value="2081"/>
+            <property name="SimulatedEndTime" value="2090"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteBasic" tests="6" skipped="0" errors="0" failures="0" assertions="100" timestamp="2025-01-08T18:34:43.888501" time="0.097" file="TestSuites/TestSuiteBasic.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBasic.stm -gstimulus_main_entry_label=$testMainSuiteBasic -do &quot;run_all.do&quot; 
+# Start time: 18:34:40 on Jan 08,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42684&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Basic/basic.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteBasic.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Basic started
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicConst**********
+# Started at simulation time of 1002ns
+# testBasicConst started
+# test_constant_1: 0x1
+# test_constant_2: 0x2
+# test_constant_3: 0x3
+# test_constant_4: 0x4
+# test_constant_5: 0x5
+# Passed 5 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testBasicConst ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicConst**********
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicIfElseElsif**********
+# Started at simulation time of 1013ns
+# testBasicIfElseElsif started
+# enter if
+# enter if
+# enter if
+# enter else
+# enter else
+# enter elsif
+# enter if
+# enter if
+# enter if
+# enter else
+# enter elsif
+# enter if
+# enter else
+# enter elsif
+# enter if
+# enter if
+# enter if
+# enter if
+# enter else
+# enter elsif
+# enter if
+# enter if
+# enter else
+# enter elsif
+# enter if
+# enter if
+# enter if
+# enter if
+# enter if
+# enter else
+# enter elsif
+# Ended at simulation time of 1045ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicIfElseElsif**********
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicNestedIfElseElsif**********
+# Started at simulation time of 1048ns
+# test multiple if (1)
+# enter multiple if 1
+# enter multiple if 2
+# enter multiple if 3
+# enter multiple if 4
+# test multiple if (2)
+# enter multiple if 1
+# test multiple if (3)
+# enter multiple if 1
+# test multiple if (4)
+# enter multiple else 1
+# test multiple if (5)
+# enter multiple else 1
+# Passed 77 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testBasicNestedIfElseElsif ended
+# Ended at simulation time of 1066ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicNestedIfElseElsif**********
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicLoop**********
+# Started at simulation time of 1069ns
+# testBasicLoop started
+# log 0
+# log 0
+# log 0
+# log 0
+# log 1
+# log 3
+# log 3
+# log 1
+# log 3
+# log 3
+# log 1
+# log 3
+# log 3
+# log 1
+# log 3
+# log 3
+# log 1
+# log 3
+# log 3
+# log 2
+# Passed 3 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testBasicLoop ended
+# Ended at simulation time of 1082ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicLoop**********
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicVar**********
+# Started at simulation time of 1085ns
+# testBasicVar started
+# test_variable_1: 0x1
+# test_variable_2: 0x2
+# test_variable_3: 0x3
+# test_variable_4: 0x4
+# test_variable_5: 0x5
+# Passed 5 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testBasicVar ended
+# Ended at simulation time of 1093ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicVar**********
+# **********START*TESTCASE*testSuiteBasic_testCaseBasicVar3**********
+# Started at simulation time of 1096ns
+# testBasicVar3 started
+# aab: 0x1
+# abb: 0x2
+# bba: 0x3
+# cbb: 0x4
+# aba: 0x5
+# Passed 5 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testBasicVar3 ended
+# Ended at simulation time of 1103ns
+# **********END*TESTCASE*testSuiteBasic_testCaseBasicVar3**********
+# Main test suite Basic ended
+# ** Note: Verify passes 95
+#    Time: 2106400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2106400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2106400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2106400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:44 on Jan 08,2025, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 5
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteBasic_testCaseBasicIfElseElsif" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.106">
+         <properties>
+            <property name="SimulatedStartTime" value="1013"/>
+            <property name="SimulatedEndTime" value="1045"/>
+            <property name="SimulatedDuration" value="32"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBasic_testCaseBasicVar3" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.005">
+         <properties>
+            <property name="SimulatedStartTime" value="1096"/>
+            <property name="SimulatedEndTime" value="1103"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBasic_testCaseBasicLoop" assertions="3" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1069"/>
+            <property name="SimulatedEndTime" value="1082"/>
+            <property name="SimulatedDuration" value="13"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBasic_testCaseBasicNestedIfElseElsif" assertions="77" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.101">
+         <properties>
+            <property name="SimulatedStartTime" value="1048"/>
+            <property name="SimulatedEndTime" value="1066"/>
+            <property name="SimulatedDuration" value="18"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBasic_testCaseBasicConst" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBasic_testCaseBasicVar" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1085"/>
+            <property name="SimulatedEndTime" value="1093"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteArray" tests="5" skipped="0" errors="0" failures="0" assertions="21" timestamp="2025-01-08T18:34:54.305512" time="0.096" file="TestSuites/TestSuiteArray.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteArray.stm -gstimulus_main_entry_label=$testMainSuiteArray -do &quot;run_all.do&quot; 
+# Start time: 18:34:43 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42785&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42877&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_size.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Array/array_pointer.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteArray.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Array started
+# **********START*TESTCASE*testSuiteArray_testCaseArray**********
+# Started at simulation time of 1002ns
+# testArray started
+# Passed 6 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testArray ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteArray_testCaseArray**********
+# **********START*TESTCASE*testSuiteArray_testCaseArrayGet**********
+# Started at simulation time of 1013ns
+# testArrayGet started
+# Passed 3 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testArrayGet ended
+# Ended at simulation time of 1020ns
+# **********END*TESTCASE*testSuiteArray_testCaseArrayGet**********
+# **********START*TESTCASE*testSuiteArray_testCaseArraySet**********
+# Started at simulation time of 1023ns
+# testArraySet started
+# Passed 3 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testArraySet ended
+# Ended at simulation time of 1031ns
+# **********END*TESTCASE*testSuiteArray_testCaseArraySet**********
+# **********START*TESTCASE*testSuiteArray_testCaseArraySize**********
+# Started at simulation time of 1034ns
+# testArraySize started
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testArraySize ended
+# Ended at simulation time of 1040ns
+# **********END*TESTCASE*testSuiteArray_testCaseArraySize**********
+# **********START*TESTCASE*testSuiteArray_testCaseArrayPointerCopy**********
+# Started at simulation time of 1044ns
+# testArrayPointerCopy started
+# Passed 8 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testArrayPointerCopy ended
+# Ended at simulation time of 1052ns
+# **********END*TESTCASE*testSuiteArray_testCaseArrayPointerCopy**********
+# Main test suite Array ended
+# ** Note: Verify passes 21
+#    Time: 2055 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2055 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2055 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2055 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:54 on Jan 08,2025, Elapsed time: 0:00:11
+# Errors: 0, Warnings: 6
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteArray_testCaseArraySet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="1023"/>
+            <property name="SimulatedEndTime" value="1031"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArrayGet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.005">
+         <properties>
+            <property name="SimulatedStartTime" value="1013"/>
+            <property name="SimulatedEndTime" value="1020"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArray" assertions="6" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1010"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArrayPointerCopy" assertions="8" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.096">
+         <properties>
+            <property name="SimulatedStartTime" value="1044"/>
+            <property name="SimulatedEndTime" value="1052"/>
+            <property name="SimulatedDuration" value="8"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteArray_testCaseArraySize" assertions="1" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.095">
+         <properties>
+            <property name="SimulatedStartTime" value="1034"/>
+            <property name="SimulatedEndTime" value="1040"/>
+            <property name="SimulatedDuration" value="6"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteBusAxi4Lite" tests="5" skipped="0" errors="0" failures="5" assertions="32" timestamp="2025-01-08T18:34:53.288511" time="0.1" file="TestSuites/TestSuiteBusAxi4Lite.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusAxi4Lite.stm -gstimulus_main_entry_label=$testMainSuiteBusAxi4Lite -do &quot;run_all.do&quot; 
+# Start time: 18:34:44 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42788&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42927&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Bus/bus.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteBusAxi4Lite.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Bus Axi4Lite started
+# **********START*TESTCASE*testSuiteBusAxi4Lite_testCaseBus**********
+# Started at simulation time of 1002ns
+# testBus started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2105 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 11, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX1FFFFFFF, expected=0x0000000055555555, mask=0x0000000055555555, file Bus/bus.stm
+#    Time: 2405 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2405 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2405 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 12, bus_verify: address=0x0000000000000004, read=0xXXXXXXXX1FFFFFFF, expected=0x000000006AAAAAAA, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 2505 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2505 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2505 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 4305 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 5905 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 6305 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 7405100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 7505 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 7705 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 7705 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 7805 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 7805 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 8105 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 8305 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8405 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# Passed 20 verify instructions
+# Passed 34 timeout monitored bus access instructions
+# Expected 0 verify failures, got 2
+# Failures
+# testBus ended
+# Ended at simulation time of 8509ns
+# **********END*TESTCASE*testSuiteBusAxi4Lite_testCaseBus**********
+# **********START*TESTCASE*testSuiteBusAxi4Lite_testCaseBusVerifySuccess**********
+# Started at simulation time of 8512ns
+# testBusVerifySuccess started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 9615 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 9715 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 9815 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 62, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX1FFFFFFF, expected=0x0000000055555555, mask=0x000000001FFFFFFF, file Bus/bus.stm
+#    Time: 9915 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 9915 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 63, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX1FFFFFFF, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 10015 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 64, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX1FFFFFFF, expected=0x0000000055555555, mask=0x0000000055555555, file Bus/bus.stm
+#    Time: 10115 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 6 timeout monitored bus access instructions
+# Expected 0 verify failures, got 3
+# Failures
+# testBusVerifySuccess ended
+# Ended at simulation time of 10119ns
+# **********END*TESTCASE*testSuiteBusAxi4Lite_testCaseBusVerifySuccess**********
+# **********START*TESTCASE*testSuiteBusAxi4Lite_testCaseBusVerifyFail**********
+# Started at simulation time of 10122ns
+# testBusVerifyFail started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 11165 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 11205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 11245 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 11285 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 80, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 11325 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# bus verify intended error on no match
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 11365100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 83, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000001FFFFFFF, file Bus/bus.stm
+#    Time: 11405 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 4 verify instructions
+# Passed 7 timeout monitored bus access instructions
+# Expected 1 verify failures, got 2
+# Failures
+# testBusVerifyFail ended
+# Ended at simulation time of 11409ns
+# **********END*TESTCASE*testSuiteBusAxi4Lite_testCaseBusVerifyFail**********
+# **********START*TESTCASE*testSuiteBusAxi4Lite_testCaseBusTimeOutRead**********
+# Started at simulation time of 11412ns
+# testBusTimeOutRead started
+# ** Error:  line 97, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 12515300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 12515300 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 98, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 12615 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 103, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 12615800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 2 timeout monitored bus access instructions
+# Expected 0 verify failures, got 3
+# Failures
+# testBusTimeOutRead ended
+# Ended at simulation time of 12619ns
+# **********END*TESTCASE*testSuiteBusAxi4Lite_testCaseBusTimeOutRead**********
+# **********START*TESTCASE*testSuiteBusAxi4Lite_testCaseBusTimeOutWrite**********
+# Started at simulation time of 12623ns
+# testBusTimeOutWrite started
+# ** Error:  line 114, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 13626200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 120, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 13725800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 2 verify instructions
+# Passed 1 timeout monitored bus access instructions
+# Expected 0 verify failures, got 2
+# Failures
+# testBusTimeOutWrite ended
+# Ended at simulation time of 13729ns
+# **********END*TESTCASE*testSuiteBusAxi4Lite_testCaseBusTimeOutWrite**********
+# Main test suite Bus Axi4Lite ended
+# ** Note: Verify passes 32
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 50
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 1 verify failures, got 12
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 2 bus timeout failures, got 0
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: FAILURES
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 14732300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:53 on Jan 08,2025, Elapsed time: 0:00:09
+# Errors: 12, Warnings: 34
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteBusAxi4Lite_testCaseBus" assertions="20" classname="testSuiteBusAxi4Lite" file="TestSuites/TestSuiteBusAxi4Lite.stm" line="TestSuites/TestSuiteBusAxi4Lite.stm" time="0.1">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="8509"/>
+            <property name="SimulatedDuration" value="7507"/>
+         </properties>
+         <failure message=" Bus test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAxi4Lite_testCaseBusVerifyFail" assertions="4" classname="testSuiteBusAxi4Lite" file="TestSuites/TestSuiteBusAxi4Lite.stm" line="TestSuites/TestSuiteBusAxi4Lite.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="10122"/>
+            <property name="SimulatedEndTime" value="11409"/>
+            <property name="SimulatedDuration" value="1287"/>
+         </properties>
+         <failure message=" BusVerifyFail test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAxi4Lite_testCaseBusTimeOutRead" assertions="3" classname="testSuiteBusAxi4Lite" file="TestSuites/TestSuiteBusAxi4Lite.stm" line="TestSuites/TestSuiteBusAxi4Lite.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="11412"/>
+            <property name="SimulatedEndTime" value="12619"/>
+            <property name="SimulatedDuration" value="1207"/>
+         </properties>
+         <failure message=" BusTimeOutRead test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAxi4Lite_testCaseBusVerifySuccess" assertions="3" classname="testSuiteBusAxi4Lite" file="TestSuites/TestSuiteBusAxi4Lite.stm" line="TestSuites/TestSuiteBusAxi4Lite.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="8512"/>
+            <property name="SimulatedEndTime" value="10119"/>
+            <property name="SimulatedDuration" value="1607"/>
+         </properties>
+         <failure message=" BusVerifySuccess test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusAxi4Lite_testCaseBusTimeOutWrite" assertions="2" classname="testSuiteBusAxi4Lite" file="TestSuites/TestSuiteBusAxi4Lite.stm" line="TestSuites/TestSuiteBusAxi4Lite.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="12623"/>
+            <property name="SimulatedEndTime" value="13729"/>
+            <property name="SimulatedDuration" value="1106"/>
+         </properties>
+         <failure message=" BusTimeOutWrite test failed "/>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteSignal" tests="4" skipped="0" errors="0" failures="0" assertions="61" timestamp="2025-01-08T18:34:52.216510" time="0.098" file="TestSuites/TestSuiteSignal.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteSignal.stm -gstimulus_main_entry_label=$testMainSuiteSignal -do &quot;run_all.do&quot; 
+# Start time: 18:34:45 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 42806&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Signal/signal_pointer.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteSignal.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Signal started
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalWriteReadVerify**********
+# Started at simulation time of 1002ns
+# testSignalWriteReadVerify started
+# Passed 12 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testSignalWriteReadVerify ended
+# Ended at simulation time of 1011ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalWriteReadVerify**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalVerifyFail**********
+# Started at simulation time of 1014ns
+# testSignalVerifyFail started
+# signal verify intended error on no match
+# ** Error:  line 58, signal_verify:, read=0x0000000000000000, expected=0x0000000000000001, mask=0x0000000000000001, file Signal/signal.stm
+#    Time: 1017500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 1 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Expected 1 verify failures, ignored
+# Success
+# testSignalVerifyFail ended
+# Ended at simulation time of 1021ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalVerifyFail**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalPointerCopy**********
+# Started at simulation time of 1024ns
+# testSignalPointerCopy started
+# Passed 24 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testSignalPointerCopy ended
+# Ended at simulation time of 1037ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalPointerCopy**********
+# **********START*TESTCASE*testSuiteSignal_testCaseSignalPointerGetSet**********
+# Started at simulation time of 1040ns
+# testSignalPointerGetSet started
+# Passed 24 verify instructions
+# Passed 0 timeout monitored bus access instructions
+# Success
+# testSignalPointerGetSet ended
+# Ended at simulation time of 1052ns
+# **********END*TESTCASE*testSuiteSignal_testCaseSignalPointerGetSet**********
+# Main test suite Signal ended
+# ** Note: Verify passes 61
+#    Time: 2055400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2055400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 1 verify failures, got 1
+#    Time: 2055400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2055400 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:52 on Jan 08,2025, Elapsed time: 0:00:07
+# Errors: 1, Warnings: 5
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="1011"/>
+            <property name="SimulatedDuration" value="9"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalPointerCopy" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.102">
+         <properties>
+            <property name="SimulatedStartTime" value="1024"/>
+            <property name="SimulatedEndTime" value="1037"/>
+            <property name="SimulatedDuration" value="13"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalVerifyFail" assertions="1" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.005">
+         <properties>
+            <property name="SimulatedStartTime" value="1014"/>
+            <property name="SimulatedEndTime" value="1021"/>
+            <property name="SimulatedDuration" value="7"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteSignal_testCaseSignalPointerGetSet" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.101">
+         <properties>
+            <property name="SimulatedStartTime" value="1040"/>
+            <property name="SimulatedEndTime" value="1052"/>
+            <property name="SimulatedDuration" value="12"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteBusWishbone" tests="5" skipped="0" errors="0" failures="4" assertions="32" timestamp="2025-01-08T18:34:48.806506" time="0.101" file="TestSuites/TestSuiteBusWishbone.stm">
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusWishbone.stm -gstimulus_main_entry_label=$testMainSuiteBusWishbone -do &quot;run_all.do&quot; 
+# Start time: 18:34:47 on Jan 08,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg(body)
+# Loading work.tb_bus_wishbone_64_pkg(body)
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# Loading work.ramavalon(simulation)#1
+# 
+# do run_all.do
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ps  Iteration: 0  Instance: /tbtop/i_RamAxi4Lite_32
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Base/Base.stm
+# nested include found in : /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Common/Common.stm
+# nested include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestCase/TestCase.stm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 0 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/Bus/bus.stm
+# include found: loading file /home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/TestSuites/TestSuiteBusWishbone.stm
+# ** Warning: NUMERIC_STD.&quot;&gt;&quot;: metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 2  Instance: /tbtop/i_tb_simstm
+# Main test suite Bus Wishbone started
+# **********START*TESTCASE*testSuiteBusWishbone_testCaseBus**********
+# Started at simulation time of 1002ns
+# testBus started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2045 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2165 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 2165 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 2205 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 3525 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 4765 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 4925 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 5965100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6005 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6085 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6125 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 6125 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6305 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -2147483648 is not in bounds of subtype NATURAL.
+#    Time: 6385 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 6425 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# Passed 20 verify instructions
+# Passed 34 timeout monitored bus access instructions
+# Success
+# testBus ended
+# Ended at simulation time of 6468ns
+# **********END*TESTCASE*testSuiteBusWishbone_testCaseBus**********
+# **********START*TESTCASE*testSuiteBusWishbone_testCaseBusVerifySuccess**********
+# Started at simulation time of 6471ns
+# testBusVerifySuccess started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 7505 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 7545 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 7585 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 7625 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 63, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 7665 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 6 timeout monitored bus access instructions
+# Expected 0 verify failures, got 1
+# Failures
+# testBusVerifySuccess ended
+# Ended at simulation time of 7709ns
+# **********END*TESTCASE*testSuiteBusWishbone_testCaseBusVerifySuccess**********
+# **********START*TESTCASE*testSuiteBusWishbone_testCaseBusVerifyFail**********
+# Started at simulation time of 7712ns
+# testBusVerifyFail started
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 8755 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8795 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8835 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 8875 ns  Iteration: 3  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 80, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 8915 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# bus verify intended error on no match
+# ** Warning: (vsim-86) Argument value -268435456 is not in bounds of subtype NATURAL.
+#    Time: 8955100 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 83, bus_verify: address=0x0000000000000000, read=0xXXXXXXXX55555555, expected=0x0000000000000000, mask=0x000000001FFFFFFF, file Bus/bus.stm
+#    Time: 8995 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# Passed 4 verify instructions
+# Passed 7 timeout monitored bus access instructions
+# Expected 1 verify failures, got 2
+# Failures
+# testBusVerifyFail ended
+# Ended at simulation time of 8999ns
+# **********END*TESTCASE*testSuiteBusWishbone_testCaseBusVerifyFail**********
+# **********START*TESTCASE*testSuiteBusWishbone_testCaseBusTimeOutRead**********
+# Started at simulation time of 9002ns
+# testBusTimeOutRead started
+# ** Error:  line 97, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 10045300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Warning: (vsim-86) Argument value -1610612736 is not in bounds of subtype NATURAL.
+#    Time: 10045300 ps  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error: Bus Read timeout
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Warning: NUMERIC_STD.&quot;/=&quot;: metavalue detected, returning TRUE
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 98, bus_verify: address=0x0000000000000000, read=0xXXXXXXXXXXXXXXXX, expected=0x0000000000000000, mask=0x000000006AAAAAAA, file Bus/bus.stm
+#    Time: 10050 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 103, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 10050800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 3 verify instructions
+# Passed 2 timeout monitored bus access instructions
+# Expected 0 verify failures, got 3
+# Failures
+# testBusTimeOutRead ended
+# Ended at simulation time of 10054ns
+# **********END*TESTCASE*testSuiteBusWishbone_testCaseBusTimeOutRead**********
+# **********START*TESTCASE*testSuiteBusWishbone_testCaseBusTimeOutWrite**********
+# Started at simulation time of 10058ns
+# testBusTimeOutWrite started
+# ** Error:  line 114, var_verify:, var=0x0000000000000000, expected=0x0000000000000001, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 11061200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Error: Bus Write timeout
+#    Time: 11065 ns  Iteration: 1  Instance: /tbtop/i_tb_simstm
+# ** Error:  line 120, var_verify:, var=0x0000000000000000, expected=0x000000003B9ACA00, mask=0xFFFFFFFFFFFFFFFF, file Bus/bus.stm
+#    Time: 11065800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# Passed 2 verify instructions
+# Passed 1 timeout monitored bus access instructions
+# Expected 0 verify failures, got 2
+# Failures
+# testBusTimeOutWrite ended
+# Ended at simulation time of 11069ns
+# **********END*TESTCASE*testSuiteBusWishbone_testCaseBusTimeOutWrite**********
+# Main test suite Bus Wishbone ended
+# ** Note: Verify passes 32
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 50
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 1 verify failures, got 8
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Expected 2 bus timeout failures, got 2
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: FAILURES
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 12072300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 18:34:49 on Jan 08,2025, Elapsed time: 0:00:02
+# Errors: 10, Warnings: 33
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteBusWishbone_testCaseBusVerifySuccess" assertions="3" classname="testSuiteBusWishbone" file="TestSuites/TestSuiteBusWishbone.stm" line="TestSuites/TestSuiteBusWishbone.stm" time="0.097">
+         <properties>
+            <property name="SimulatedStartTime" value="6471"/>
+            <property name="SimulatedEndTime" value="7709"/>
+            <property name="SimulatedDuration" value="1238"/>
+         </properties>
+         <failure message=" BusVerifySuccess test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusWishbone_testCaseBus" assertions="20" classname="testSuiteBusWishbone" file="TestSuites/TestSuiteBusWishbone.stm" line="TestSuites/TestSuiteBusWishbone.stm" time="0.101">
+         <properties>
+            <property name="SimulatedStartTime" value="1002"/>
+            <property name="SimulatedEndTime" value="6468"/>
+            <property name="SimulatedDuration" value="5466"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteBusWishbone_testCaseBusVerifyFail" assertions="4" classname="testSuiteBusWishbone" file="TestSuites/TestSuiteBusWishbone.stm" line="TestSuites/TestSuiteBusWishbone.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="7712"/>
+            <property name="SimulatedEndTime" value="8999"/>
+            <property name="SimulatedDuration" value="1287"/>
+         </properties>
+         <failure message=" BusVerifyFail test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusWishbone_testCaseBusTimeOutWrite" assertions="2" classname="testSuiteBusWishbone" file="TestSuites/TestSuiteBusWishbone.stm" line="TestSuites/TestSuiteBusWishbone.stm" time="0.006">
+         <properties>
+            <property name="SimulatedStartTime" value="10058"/>
+            <property name="SimulatedEndTime" value="11069"/>
+            <property name="SimulatedDuration" value="1011"/>
+         </properties>
+         <failure message=" BusTimeOutWrite test failed "/>
+      </testcase>
+      <testcase name="testSuiteBusWishbone_testCaseBusTimeOutRead" assertions="3" classname="testSuiteBusWishbone" file="TestSuites/TestSuiteBusWishbone.stm" line="TestSuites/TestSuiteBusWishbone.stm" time="0.098">
+         <properties>
+            <property name="SimulatedStartTime" value="9002"/>
+            <property name="SimulatedEndTime" value="10054"/>
+            <property name="SimulatedDuration" value="1052"/>
+         </properties>
+         <failure message=" BusTimeOutRead test failed "/>
+      </testcase>
+   </testsuite>
+</testsuites>

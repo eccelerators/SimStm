@@ -15,6 +15,7 @@
 testSuiteBusWishbone:
 proc
     bus pointer copy busToTest wishbone
+	bus timeout set busToTest 1000
 	call $testCaseBus
 	call $testCaseBusVerifySuccess
 	call $testCaseBusVerifyFail
