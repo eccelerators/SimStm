@@ -196,6 +196,7 @@ begin
         variable tempdata : std_logic_vector(31 downto 0);
         variable temp_int : integer;
         variable temp_stm_value : t_stm_value;
+        variable temp_stm_value_b : t_stm_value;
         variable number_found : integer;
 
         variable temp_stdvec_a : std_logic_vector(31 downto 0);
@@ -1644,18 +1645,16 @@ begin
                 -- bus write $a_bus $bus_width  $bus_address $bus_to_be_set_value
                 -- bus write $a_bus 16 0x00001000 0x1233
                 elsif (instruction(1 to len) = INSTR_BUS_WRITE) then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    tempaddress := std_logic_vector(to_signed(par3, tempaddress'length));
-                    tempdata := std_logic_vector(to_signed(par4, tempdata'length));
-                    bus_write(bus_down, bus_up, tempaddress, tempdata, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
+                    bus_write(bus_down, bus_up, par3, par4, to_integer(par2(30 downto 0)), to_integer(temp_stm_value(30 downto 0)), valid, successfull, bus_timeouts(to_integer(temp_stm_value(30 downto 0))));
                     assert valid /= 0
                     report "Bus number not available"
                     severity failure;
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
-                    if to_signed(resume, 32)(1) = '0' then
+                    if resume(1) = '0' then
                         assert successfull
                         report "Bus Write timeout"
                         severity failure;
@@ -1674,18 +1673,17 @@ begin
                 -- bus verify $a_bus $bus_width  $bus_address bus_read_value $bus_expected_value $bus_mask_value
                 -- bus verify $a_bus 32  0x00001004 bus_read_value 0x00050000 0x000FC000
                 elsif instruction(1 to len) = INSTR_BUS_READ or instruction(1 to len) = INSTR_BUS_VERIFY then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stdvec_a := std_logic_vector(to_signed(par3, tempaddress'length));
-                    temp_stdvec_b := (others => '0');
-                    bus_read(bus_down, bus_up, temp_stdvec_a, temp_stdvec_b, par2, temp_int, valid, successfull, bus_timeouts(temp_int));
+                    temp_stm_value_b := (others => '0');
+                    bus_read(bus_down, bus_up, par3, temp_stm_value_b, to_integer(par2(30 downto 0)), to_integer(temp_stm_value(30 downto 0)), valid, successfull, bus_timeouts(to_integer(temp_stm_value(30 downto 0))));
                     assert valid /= 0
                     report "Bus number not available"
                     severity failure;
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
-                    if to_signed(resume, 32)(1) = '0' then
+                    if resume(1) = '0' then
                         assert successfull
                         report "Bus Read timeout"
                         severity failure;
@@ -1697,8 +1695,7 @@ begin
                         report "Bus Read timeout"
                         severity error;                    
                     end if;
-                    temp_int := to_integer(signed(temp_stdvec_b));
-                    update_variable(defined_vars, par4, temp_int, valid);
+                    update_variable(defined_vars, par4, temp_stm_value_b, valid);
                     if valid = 0 then
                         assert false
                         report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -1706,17 +1703,14 @@ begin
                     end if;
                     if instruction(1 to len) = INSTR_BUS_VERIFY then
                         verify_passes_count := verify_passes_count + 1; 
-                        temp_stdvec_a := std_logic_vector(to_signed(temp_int, 32));
-                        temp_stdvec_b := std_logic_vector(to_signed(par5, 32));
-                        temp_stdvec_c := std_logic_vector(to_signed(par6, 32));
-                        if (temp_stdvec_c and temp_stdvec_a) /= (temp_stdvec_c and temp_stdvec_b) then
+                        if (par6 and temp_stm_value_b) /= (par6 and par5) then
                             if resume(0) = '0' then
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(par3) & ", read=0x" & to_hstring(temp_stm_value_b) & ", expected=0x" & to_hstring(par5) & ", mask=0x" & to_hstring(par6) & ", file " & text_line_crop(file_name)
                                 severity failure;
                             else
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(tempaddress) & ", read=0x" & to_hstring(temp_stdvec_a) & ", expected=0x" & to_hstring(temp_stdvec_b) & ", mask=0x" & to_hstring(temp_stdvec_c) & ", file " & text_line_crop(file_name)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(par3) & ", read=0x" & to_hstring(temp_stm_value_b) & ", expected=0x" & to_hstring(par5) & ", mask=0x" & to_hstring(par6) & ", file " & text_line_crop(file_name)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
                             end if;
@@ -1727,38 +1721,38 @@ begin
                 -- bus timeout $a_bus 1000
                 -- bus timeout a_bus $bus_timeout_value
                 elsif instruction(1 to len) = INSTR_BUS_TIMEOUT then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    bus_timeouts(temp_int) := par2 * 1 ns;
+                    bus_timeouts(to_integer(temp_stm_value(30 downto 0))) := to_integer(par2(30 downto 0)) * 1 ns;
 
                 --  bus pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then
-                    index_variable(defined_vars, par2, temp_int, valid);
+                    index_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
                     severity failure;
-                    update_variable(defined_vars, par1, temp_int, valid);
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report "bus_pointer error: not a bus object name??"
                     severity failure;
                     
                 --  bus pointer set a_bus_target a_var
                 --  bus pointer set a_bus_target 0x01
-                elsif instruction(1 to len) = INSTR_bus_POINTER_SET then
+                elsif instruction(1 to len) = INSTR_BUS_POINTER_SET then
                     update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
                     report "bus_pointer error: not a bus object name??"
                     severity failure;
 
                 --  bus pointer get a_bus_source a_var
-                elsif instruction(1 to len) = INSTR_bus_POINTER_GET then
-                    index_variable(defined_vars, par1, temp_int, valid);
+                elsif instruction(1 to len) = INSTR_BUS_POINTER_GET then
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
                     severity failure;
-                    update_variable(defined_vars, par2, temp_int, valid);
+                    update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "variable error: not a var object name??"
                     severity failure;                    
