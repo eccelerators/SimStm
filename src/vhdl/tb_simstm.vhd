@@ -71,10 +71,10 @@ entity tb_simstm is
     port(
         executing_line : out integer;
         executing_file : out text_line;
-        verify_passes : out std_logic_vector(31 downto 0);
-        verify_failures : out std_logic_vector(31 downto 0);
-        bus_timeout_passes : out std_logic_vector(31 downto 0);
-        bus_timeout_failures : out std_logic_vector(31 downto 0);
+        verify_passes : out std_logic_vector(c_stm_value_width - 1 downto 0);
+        verify_failures : out std_logic_vector(c_stm_value_width - 1 downto 0);
+        bus_timeout_passes : out std_logic_vector(c_stm_value_width - 1 downto 0);
+        bus_timeout_failures : out std_logic_vector(c_stm_value_width - 1 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
         signals_in : in t_signals_in := signals_in_init;
@@ -1720,12 +1720,22 @@ begin
 
                 -- bus timeout $a_bus 1000
                 -- bus timeout a_bus $bus_timeout_value
-                elsif instruction(1 to len) = INSTR_BUS_TIMEOUT then
+                elsif instruction(1 to len) = INSTR_BUS_TIMEOUT_SET then
                     index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     bus_timeouts(to_integer(temp_stm_value(30 downto 0))) := to_integer(par2(30 downto 0)) * 1 ns;
+                    
+                elsif instruction(1 to len) = INSTR_BUS_TIMEOUT_GET then
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
+                    severity failure;
+                    update_variable(defined_vars, par2, temp_stm_value, valid);
+                    assert valid /= 0
+                    report "variable error: not a var object name??"
+                    severity failure;                          
 
                 --  bus pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then

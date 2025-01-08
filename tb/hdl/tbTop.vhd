@@ -54,10 +54,10 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal verify_passes : std_logic_vector(31 downto 0);
-    signal verify_failures : std_logic_vector(31 downto 0);
-    signal bus_timeout_passes : std_logic_vector(31 downto 0);
-    signal bus_timeout_failures : std_logic_vector(31 downto 0);
+    signal verify_passes : std_logic_vector(c_stm_value_width - 1 downto 0);
+    signal verify_failures : std_logic_vector(c_stm_value_width - 1 downto 0);
+    signal bus_timeout_passes : std_logic_vector(c_stm_value_width - 1 downto 0);
+    signal bus_timeout_failures : std_logic_vector(c_stm_value_width - 1 downto 0);
          
     signal signals_in : t_signals_in;
     signal signals_out : t_signals_out;
@@ -72,7 +72,7 @@ begin
 
     -- standard inputs
     -- signals_in.in_signal_0 actual simulation time already supplied by package
-    signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
+    signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, c_stm_value_width));
     -- signals_in.in_signal_2 constant 0 already supplied by package
     signals_in.in_signal_3 <= verify_passes;
     signals_in.in_signal_4 <= verify_failures;
@@ -116,7 +116,7 @@ begin
             bus_up => bus_up
         ); 
         
-    i_RamWishbone : entity work.RamWishbone
+    i_RamWishbone_32 : entity work.RamWishbone
         generic map (
             ADDRESS_WIDTH => 8,
             DATA_WIDTH => 32,
@@ -125,72 +125,98 @@ begin
         port map(
         -- wishbone slave signals.
             i_rst => Rst,
-            i_clk => bus_up.wishbone.clk,
-            i_adr => bus_down.wishbone.adr(9 downto 2),
-            i_dat => bus_down.wishbone.data,
-            i_we  => bus_down.wishbone.we,
-            i_sel => bus_down.wishbone.sel,
-            i_cyc => bus_down.wishbone.cyc,
-            i_stb => bus_down.wishbone.stb,
-            o_dat => bus_up.wishbone.data,
-            o_ack => bus_up.wishbone.ack,
+            i_clk => bus_up.wishbone32.clk,
+            i_adr => bus_down.wishbone32.adr(9 downto 2),
+            i_dat => bus_down.wishbone32.data,
+            i_we  => bus_down.wishbone32.we,
+            i_sel => bus_down.wishbone32.sel,
+            i_cyc => bus_down.wishbone32.cyc,
+            i_stb => bus_down.wishbone32.stb,
+            o_dat => bus_up.wishbone32.data,
+            o_ack => bus_up.wishbone32.ack,
             o_stall => open,
             o_rty => open,
             o_err => open
         );
                
-        bus_up.wishbone.clk <= Clk;      
+        bus_up.wishbone32.clk <= Clk;      
                 
-    i_RamAvalon : entity work.RamAvalon
+    i_RamAvalon_32 : entity work.RamAvalon
         generic map (
             ADDRESS_WIDTH => 8,
             DATA_WIDTH => 32
         )
         port map(
         -- avalon slave signals.
-            clk_i => bus_up.avalonmm.clk,
+            clk_i => bus_up.avalonmm32.clk,
             rst_i => Rst,
-            avm_waitrequest_o => bus_up.avalonmm.waitrequest,
-            avm_write_i => bus_down.avalonmm.write,
-            avm_read_i => bus_down.avalonmm.read,
-            avm_address_i => bus_down.avalonmm.address(9 downto 2),
-            avm_writedata_i => bus_down.avalonmm.writedata,
-            avm_byteenable_i => bus_down.avalonmm.byteenable,
+            avm_waitrequest_o => bus_up.avalonmm32.waitrequest,
+            avm_write_i => bus_down.avalonmm32.write,
+            avm_read_i => bus_down.avalonmm32.read,
+            avm_address_i => bus_down.avalonmm32.address(9 downto 2),
+            avm_writedata_i => bus_down.avalonmm32.writedata,
+            avm_byteenable_i => bus_down.avalonmm32.byteenable,
             avm_burstcount_i => x"01",
-            avm_readdata_o => bus_up.avalonmm.readdata,
+            avm_readdata_o => bus_up.avalonmm32.readdata,
             avm_readdatavalid_o => open
         );
         
-        bus_up.avalonmm.clk <= Clk;
+        bus_up.avalonmm32.clk <= Clk;
                
-    i_RamAxi4Lite : entity work.RamAxi4Lite
+    i_RamAxi4Lite_32 : entity work.RamAxi4Lite
         generic map (
             ADDRESS_WIDTH => 8
         )
         port map (
-            Clk => bus_up.axi4lite.clk,
+            Clk => bus_up.axi4lite32.clk,
             Rst => Rst,
-            AWVALID => bus_down.axi4lite.awvalid,
-            AWADDR => bus_down.axi4lite.awaddr(9 downto 2),
-            AWPROT => bus_down.axi4lite.awprot,
-            AWREADY => bus_up.axi4lite.awready,
-            WVALID => bus_down.axi4lite.wvalid,
-            WDATA => bus_down.axi4lite.wdata,
-            WSTRB => bus_down.axi4lite.wstrb,
-            WREADY => bus_up.axi4lite.wready,
-            BREADY => bus_down.axi4lite.bready,
-            BVALID => bus_up.axi4lite.bvalid,
-            BRESP => bus_up.axi4lite.bresp,
-            ARVALID => bus_down.axi4lite.arvalid,
-            ARADDR => bus_down.axi4lite.araddr(9 downto 2),
-            ARPROT => bus_down.axi4lite.arprot,
-            ARREADY => bus_up.axi4lite.arready,
-            RREADY => bus_down.axi4lite.rready,
-            RVALID => bus_up.axi4lite.rvalid,
-            RDATA => bus_up.axi4lite.rdata,
-            RRESP => bus_up.axi4lite.rresp
+            AWVALID => bus_down.axi4lite32.awvalid,
+            AWADDR => bus_down.axi4lite32.awaddr(9 downto 2),
+            AWPROT => bus_down.axi4lite32.awprot,
+            AWREADY => bus_up.axi4lite32.awready,
+            WVALID => bus_down.axi4lite32.wvalid,
+            WDATA => bus_down.axi4lite32.wdata,
+            WSTRB => bus_down.axi4lite32.wstrb,
+            WREADY => bus_up.axi4lite32.wready,
+            BREADY => bus_down.axi4lite32.bready,
+            BVALID => bus_up.axi4lite32.bvalid,
+            BRESP => bus_up.axi4lite32.bresp,
+            ARVALID => bus_down.axi4lite32.arvalid,
+            ARADDR => bus_down.axi4lite32.araddr(9 downto 2),
+            ARPROT => bus_down.axi4lite32.arprot,
+            ARREADY => bus_up.axi4lite32.arready,
+            RREADY => bus_down.axi4lite32.rready,
+            RVALID => bus_up.axi4lite32.rvalid,
+            RDATA => bus_up.axi4lite32.rdata,
+            RRESP => bus_up.axi4lite32.rresp
         );
         
-    bus_up.axi4lite.clk <= Clk;
+    bus_up.axi4lite32.clk <= Clk;
+    
+    i_RamWishbone_64 : entity work.RamWishbone
+        generic map (
+            ADDRESS_WIDTH => 7,
+            DATA_WIDTH => 64,
+            GRANULARITY => 8
+        )
+        port map(
+        -- wishbone slave signals.
+            i_rst => Rst,
+            i_clk => bus_up.wishbone64.clk,
+            i_adr => bus_down.wishbone64.adr(9 downto 3),
+            i_dat => bus_down.wishbone64.data,
+            i_we  => bus_down.wishbone64.we,
+            i_sel => bus_down.wishbone64.sel,
+            i_cyc => bus_down.wishbone64.cyc,
+            i_stb => bus_down.wishbone64.stb,
+            o_dat => bus_up.wishbone64.data,
+            o_ack => bus_up.wishbone64.ack,
+            o_stall => open,
+            o_rty => open,
+            o_err => open
+        );
+        
+    bus_up.wishbone64.clk <= Clk;
+
                                                                   
 end architecture;

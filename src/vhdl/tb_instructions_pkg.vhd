@@ -93,7 +93,8 @@ package tb_instructions_pkg is
     constant INSTR_BUS_READ : string := "bus_read";
     constant INSTR_BUS_VERIFY : string := "bus_verify";
     constant INSTR_BUS_WRITE : string := "bus_write";
-    constant INSTR_BUS_TIMEOUT : string := "bus_timeout";
+    constant INSTR_BUS_TIMEOUT_SET : string := "bus_timeout_set";
+    constant INSTR_BUS_TIMEOUT_GET : string := "bus_timeout_get";
     constant INSTR_BUS_POINTER_COPY : string := "bus_pointer_copy";
     constant INSTR_BUS_POINTER_SET : string := "bus_pointer_set";
     constant INSTR_BUS_POINTER_GET : string := "bus_pointer_get";
@@ -231,7 +232,8 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_BUS_READ, 4);
         define_instruction(inst_list, INSTR_BUS_VERIFY, 6);
         define_instruction(inst_list, INSTR_BUS_WRITE, 4);
-        define_instruction(inst_list, INSTR_BUS_TIMEOUT, 2);
+        define_instruction(inst_list, INSTR_BUS_TIMEOUT_SET, 2);
+        define_instruction(inst_list, INSTR_BUS_TIMEOUT_GET, 2);
         define_instruction(inst_list, INSTR_BUS_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_BUS_POINTER_SET, 2);
         define_instruction(inst_list, INSTR_BUS_POINTER_GET, 2);
@@ -498,6 +500,13 @@ package body tb_instructions_pkg is
                 elsif token2(1 to 7) = "timeout" then
                     token2_len := 7;
                     token_merge := 2;
+                    if token3(1 to 3) = "set" then
+                        token3_len := 3;
+                        token_merge := 3;
+                    elsif token3(1 to 3) = "get" then
+                        token3_len := 3;
+                        token_merge := 3;
+                    end if;                    
                 elsif token2(1 to 7) = "pointer" then
                     token2_len := 7;
                     token_merge := 2;
