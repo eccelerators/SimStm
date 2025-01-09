@@ -336,9 +336,9 @@ package body tb_base_pkg is
                        b : base) return text_field is
         variable temp : text_field;
         variable temp1 : text_field;
-        variable radix : integer := 0;
+        variable radix : unsigned(c_stm_value_width - 1 downto 0) := to_unsigned(1, c_stm_value_width);
         variable num : t_stm_value := to_unsigned(0, c_stm_value_width);
-        variable power : integer := 1;
+        variable power : unsigned(c_stm_value_width - 1 downto 0) := to_unsigned(1, c_stm_value_width);
         variable len : integer := 1;
         variable pre : string(1 to 2);
         variable ix : integer;
@@ -349,16 +349,16 @@ package body tb_base_pkg is
         temp := (others => nul);
         case b is
             when bin =>
-                radix := 2; -- depending on what
+                radix := to_unsigned(2, c_stm_value_width); -- depending on what
                 pre := "0b";
             when oct =>
-                radix := 8; -- base the number is
+                radix := to_unsigned(8, c_stm_value_width); -- base the number is
                 pre := "0o";
             when hex =>
-                radix := 16; -- to be displayed as
+                radix := to_unsigned(16, c_stm_value_width); -- to be displayed as
                 pre := "0x";
             when dec =>
-                radix := 10; -- choose a radix range
+                radix := to_unsigned(10, c_stm_value_width); -- choose a radix range
                 pre := (others => nul);
         end case;
         while num >= radix loop -- determine how many
@@ -368,7 +368,7 @@ package body tb_base_pkg is
         for i in len downto 1 loop -- convert the number to
             cpval := stmvalue / power mod radix;
             temp(i) := ew_to_char(to_integer(cpval(3 downto 0))); -- a string starting
-            power := power * radix; -- with the right hand
+            power := resize(power * radix, c_stm_value_width); -- with the right hand
         end loop; -- side.
 
         -- add prefix if is one

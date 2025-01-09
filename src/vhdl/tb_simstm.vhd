@@ -615,14 +615,18 @@ begin
                     severity failure;
                     verify_passes_count := verify_passes_count + 1; 
                     temp_stm_value := var_stm_array(to_integer(par2(30 downto 0)));
-                    if (par4 and temp_stm_value) /= (par4 and par3) then                            
+                    if (par4 and temp_stm_value) /= (par4 and par3) then
+                        print("index    = 0x" & to_hstring(par2));
+                        print("read     = 0x" & to_hstring(temp_stm_value));
+                        print("expected = 0x" & to_hstring(par3));
+                        print("mask     = 0x" & to_hstring(par4));                      
                         if resume(0) = '0' then
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (to_hstring(par2)) & ")=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & text_line_crop(file_name)                       
                             severity failure;
                         else
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", array("& (to_hstring(par2)) & ")=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & text_line_crop(file_name)                       
                             severity error;
                             verify_failure_count := verify_failure_count + 1;                            
                         end if;
@@ -1543,14 +1547,17 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     verify_passes_count := verify_passes_count + 1; 
-                    if (par3 and temp_stm_value) /= (par3 and par2) then                            
-                        if resume(0) = '0' then
+                    if (par3 and temp_stm_value) /= (par3 and par2) then
+                        print("read     = 0x" & to_hstring(temp_stm_value));
+                        print("expected = 0x" & to_hstring(par2));
+                        print("mask     = 0x" & to_hstring(par3));                                             
+                        if resume(0) = '0' then                      
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par2) & ", mask=0x" & to_hstring(par3) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)                       
                             severity failure;
                         else
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", var=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par2) & ", mask=0x" & to_hstring(par3) & ", file " & text_line_crop(file_name)                       
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) &  ", file " & text_line_crop(file_name)                       
                             severity error;
                             verify_failure_count := verify_failure_count + 1;                            
                         end if;
@@ -1578,24 +1585,28 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    signal_read(signals_in, to_integer(temp_stm_value(30 downto 0)), temp_stm_value, valid);
+                    signal_read(signals_in, to_integer(temp_stm_value(30 downto 0)), temp_stm_value_b, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": signal not defined"
                     severity failure;
-                    update_variable(defined_vars, par2, temp_stm_value, valid);
+                    update_variable(defined_vars, par2, temp_stm_value_b, valid);
                     assert valid /= 0
                     report "get_sig error: not a valid variable??"
                     severity failure;           
                     if (instruction(1 to len) = INSTR_SIGNAL_VERIFY) then
                         verify_passes_count := verify_passes_count + 1; 
-                        if (par4 and temp_stm_value) /= (par4 and par3) then                            
+                        if (par4 and temp_stm_value) /= (par4 and par3) then
+                            print("signal   = 0x" & to_hstring(temp_stm_value));
+                            print("read     = 0x" & to_hstring(temp_stm_value_b));
+                            print("expected = 0x" & to_hstring(par3));
+                            print("mask     = 0x" & to_hstring(par4));                            
                             if resume(0) = '0' then
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)                       
                                 severity failure;
                             else
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & ", read=0x" & to_hstring(temp_stm_value) & ", expected=0x" & to_hstring(par3) & ", mask=0x" & to_hstring(par4) & ", file " & text_line_crop(file_name)                       
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)                       
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;                            
                             end if;
@@ -1696,13 +1707,18 @@ begin
                     if instruction(1 to len) = INSTR_BUS_VERIFY then
                         verify_passes_count := verify_passes_count + 1; 
                         if (par6 and temp_stm_value_b) /= (par6 and par5) then
+                            print("bus      = 0x" & to_hstring(temp_stm_value));
+                            print("address  = 0x" & to_hstring(par3));
+                            print("read     = 0x" & to_hstring(temp_stm_value_b));
+                            print("expected = 0x" & to_hstring(par5));
+                            print("mask     = 0x" & to_hstring(par6));
                             if resume(0) = '0' then
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(par3) & ", read=0x" & to_hstring(temp_stm_value_b) & ", expected=0x" & to_hstring(par5) & ", mask=0x" & to_hstring(par6) & ", file " & text_line_crop(file_name)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)
                                 severity failure;
                             else
                                 assert false
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ":" & " address=0x" & to_hstring(par3) & ", read=0x" & to_hstring(temp_stm_value_b) & ", expected=0x" & to_hstring(par5) & ", mask=0x" & to_hstring(par6) & ", file " & text_line_crop(file_name)
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
                             end if;

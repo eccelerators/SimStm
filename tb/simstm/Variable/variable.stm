@@ -279,16 +279,16 @@ proc
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_inv_1
 	log message 0 "test_variable_2: {}" $test_variable_inv_2
-	var verify test_variable_inv_1 0xEDCBA987 $MAX
-	var verify test_variable_inv_2 0xF0123456 $MAX
+	var verify test_variable_inv_1 0xEDCBA987 0xFFFFFFFF
+	var verify test_variable_inv_2 0xF0123456 0xFFFFFFFF
 	                                                  
 	inv test_variable_inv_1                          
 	inv test_variable_inv_2                          
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_inv_1
 	log message 0 "test_variable_2: {}" $test_variable_inv_2
-	var verify test_variable_inv_1 0x12345678 $MAX
-	var verify test_variable_inv_2 0x0FEDCBA9 $MAX
+	var verify test_variable_inv_1 0x12345678 0xFFFFFFFF
+	var verify test_variable_inv_2 0x0FEDCBA9 0xFFFFFFFF
 	
 	call $endStandardTestShell
 

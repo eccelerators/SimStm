@@ -9,6 +9,7 @@ include "File/file.stm"
 include "Base/Array.stm"
 
 include "Other/other.stm"
+include "Variable/variable.stm"
 
 file simulation_success "simulation.success"
 lines success_lines
@@ -35,7 +36,9 @@ proc
 	
 	-- call $testFileReadArray
 	
-	call $testOtherRandom
+	-- call $testOtherRandom
+	
+	call $testVariableInv
 
 	log message $INFO "Main test finished"
 	wait 1000
