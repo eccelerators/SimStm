@@ -249,16 +249,16 @@ proc
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_xor_1
 	log message 0 "test_variable_2: {}" $test_variable_xor_2
-	var verify test_variable_xor_1 0x55555555 $MAX
-	var verify test_variable_xor_2 0x333333333 $MAX
+	var verify test_variable_xor_1 0x55555555 0xFFFFFFFF
+	var verify test_variable_xor_2 0x333333333 0xFFFFFFFF
 	                                                  
 	xor test_variable_xor_1 0x55555555                             
 	xor test_variable_xor_2 0xCCCCCCCC                           
 	                                                  
 	log message 0 "test_variable_1: {}" $test_variable_xor_1
 	log message 0 "test_variable_2: {}" $test_variable_xor_2
-	var verify test_variable_xor_1 0 $MAX
-	var verify test_variable_xor_2 0xFFFFFFFF $MAX
+	var verify test_variable_xor_1 0 0xFFFFFFFF
+	var verify test_variable_xor_2 0xFFFFFFFF 0xFFFFFFFF
 	
 	call $endStandardTestShell
 

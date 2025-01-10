@@ -215,6 +215,8 @@ package body tb_bus_wishbone_32_pkg is
             when "11" => data_temp := x"000000" & wishbone_up.data(31 downto 24);
             when others =>
         end case;
+        
+        data := (others => '0');
         case access_width is
             when 8 => data(31 downto 0) := unsigned(data_temp and x"000000FF");
             when 16 => data(31 downto 0) := unsigned(data_temp and x"0000FFFF");

@@ -26,19 +26,15 @@ proc
 	signal write out_signal_init_dut 0
 	log message $INFO "Main test started"
 	
-	-- bus timeout axi4lite 1000
-	
-	--	bus pointer copy busToTest axi4lite
-	--	call $testBusVerifyFail
-	--	call $testBusVerifyFail
 	-- call $testSignalWriteReadVerify
 	-- call $testSignalVerifyFail
-	
 	-- call $testFileReadArray
-	
+	-- call $testVariableInv	
 	-- call $testOtherRandom
 	
-	call $testVariableInv
+	bus pointer copy busToTest axi4lite
+	bus timeout set busToTest 1000
+	call $testBusVerifySuccess
 
 	log message $INFO "Main test finished"
 	wait 1000

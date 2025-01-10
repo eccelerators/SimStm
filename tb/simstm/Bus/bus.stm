@@ -5,6 +5,7 @@ testBus:
 proc
     call $startStandardTestShell
 	wait 1000
+
 	bus write busToTest 32 0 0x55555555
 	bus write busToTest 32 4 0xaaaaaaaa
 	bus write busToTest 32 8 0xffffffff
@@ -60,8 +61,8 @@ proc
 	bus write busToTest  32 8 0xffffffff
 	
 	bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff	
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0xaaaaaaaa	
-	bus verify busToTest 32 0 valBusWishbone 0x55555555 0x55555555
+	bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa	
+	bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
 	
 	call $endStandardTestShell
 end proc
@@ -76,9 +77,9 @@ proc
 	bus write wb_bus 32 0 0x55555555
 	bus write wb_bus 32 4 0xaaaaaaaa
 	bus write wb_bus 32 8 0xffffffff
-	bus verify wb_bus 32 0 wb_value 0x55555555 0xffffffff
-	bus verify wb_bus 32 0 wb_value 0x00000000 0xaaaaaaaa
-	bus verify wb_bus 32 0 wb_value 0x55555555 0x55555555
+	bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff	
+	bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa	
+	bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
 	log message $ALLWAYS "bus verify intended error on no match"	
 	bus verify wb_bus 32 0 wb_value 0x00000000 0xffffffff
 	call $incExpectedStandardTestVerifyFailureCount
@@ -95,7 +96,7 @@ proc
 	bus timeout set wb_bus 1
 	bus timeout get wb_bus wb_value
 	var verify wb_value 1 $MAX
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0xaaaaaaaa
+	bus read busToTest 32 0 valBusWishbone
 	call $incExpectedStandardTestBusTimeoutFailureCount
 	
     bus timeout set wb_bus 1000000000

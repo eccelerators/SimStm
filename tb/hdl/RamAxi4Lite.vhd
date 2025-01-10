@@ -217,7 +217,7 @@ begin
     begin
         if rising_edge(Clk) then
             for i in 0 to RamByteSelect'left loop   
-                if RamByteSelect(i) = '1' then
+                if RamByteSelect(i) = '1' and DelWriteDiffRam = '1' then
                     Ram(to_integer(unsigned(RamAddress)))(i * 8 + 7 downto i * 8) <= DataWritten(i * 8 + 7 downto i * 8);
                 end if;
             end loop;

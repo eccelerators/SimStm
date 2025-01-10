@@ -1595,7 +1595,7 @@ begin
                     severity failure;           
                     if (instruction(1 to len) = INSTR_SIGNAL_VERIFY) then
                         verify_passes_count := verify_passes_count + 1; 
-                        if (par4 and temp_stm_value) /= (par4 and par3) then
+                        if (par4 and temp_stm_value_b) /= (par4 and par3) then
                             print("signal   = 0x" & to_hstring(temp_stm_value));
                             print("read     = 0x" & to_hstring(temp_stm_value_b));
                             print("expected = 0x" & to_hstring(par3));
@@ -1740,7 +1740,8 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
                     severity failure;
-                    update_variable(defined_vars, par2, temp_stm_value, valid);
+                    temp_stm_value_b := to_unsigned(bus_timeouts(to_integer(temp_stm_value(30 downto 0))) / 1 ns, c_stm_value_width);                   
+                    update_variable(defined_vars, par2, temp_stm_value_b, valid);
                     assert valid /= 0
                     report "variable error: not a var object name??"
                     severity failure;                          

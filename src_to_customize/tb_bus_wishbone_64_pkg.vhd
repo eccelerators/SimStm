@@ -242,6 +242,7 @@ package body tb_bus_wishbone_64_pkg is
             when "111" => data_temp := x"00000000000000" & wishbone_up.data(63 downto 56);            
             when others =>
         end case;
+        data := (others => '0');
         case access_width is
             when 8 => data(63 downto 0) := unsigned(data_temp and x"00000000000000FF");
             when 16 => data(63 downto 0) := unsigned(data_temp and x"000000000000FFFF");

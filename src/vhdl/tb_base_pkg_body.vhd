@@ -82,26 +82,23 @@ package body tb_base_pkg is
                          file_name : in text_line;
                          line : in integer) return t_stm_value is
         variable len : integer;
-        variable temp_stm_value : t_stm_value;
-        variable power : integer;
-        variable int_number : integer;
+        variable temp_stm_value : t_stm_value;       
+        variable vec_number : std_logic;
     begin
         len := fld_len(bin_number);
-        power := 0;
         temp_stm_value := to_unsigned(0, c_stm_value_width);
-        for i in len downto 1 loop
+        for i in 1 to len loop
             case bin_number(i) is
                 when '0' =>
-                    int_number := 0;
+                    vec_number := '0';
                 when '1' =>
-                    int_number := 1;
+                    vec_number := '1';
                 when others =>
                     assert false
-                    report lf & "error: bin2integer found non binary digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "error: bin2stm_value found non binary digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
-            temp_stm_value := temp_stm_value + (int_number * (2 ** power));
-            power := power + 1;
+            temp_stm_value := temp_stm_value(c_stm_value_width - 2 downto 0) & vec_number;
         end loop;
         return temp_stm_value;
     end function;
@@ -593,54 +590,52 @@ package body tb_base_pkg is
                          file_name : in text_line;
                          line : in integer) return t_stm_value is
         variable len : integer;
-        variable temp_t_stm_value : t_stm_value;
-        variable power : integer;
-        variable int_number : integer;
+        variable temp_t_stm_value : t_stm_value;      
+        variable vec_number : unsigned(3 downto 0);
     begin
         len := fld_len(hex_number);
-        power := 0;
         temp_t_stm_value := to_unsigned(0, c_stm_value_width);
-        for i in len downto 1 loop
+        for i in 1 to len loop
             case hex_number(i) is
                 when '0' =>
-                    int_number := 0;
+                    vec_number := x"0";
                 when '1' =>
-                    int_number := 1;
+                    vec_number := x"1";
                 when '2' =>
-                    int_number := 2;
+                    vec_number := x"2";
                 when '3' =>
-                    int_number := 3;
+                    vec_number := x"3";
                 when '4' =>
-                    int_number := 4;
+                    vec_number := x"4";
                 when '5' =>
-                    int_number := 5;
+                    vec_number := x"5";
                 when '6' =>
-                    int_number := 6;
+                    vec_number := x"6";
                 when '7' =>
-                    int_number := 7;
+                    vec_number := x"7";
                 when '8' =>
-                    int_number := 8;
+                    vec_number := x"8";
                 when '9' =>
-                    int_number := 9;
+                    vec_number := x"9";
                 when 'a' | 'A' =>
-                    int_number := 10;
+                    vec_number := x"A";
                 when 'b' | 'B' =>
-                    int_number := 11;
+                    vec_number := x"B";
                 when 'c' | 'C' =>
-                    int_number := 12;
+                    vec_number := x"C";
                 when 'd' | 'D' =>
-                    int_number := 13;
+                    vec_number := x"D";
                 when 'e' | 'E' =>
-                    int_number := 14;
+                    vec_number := x"E";
                 when 'f' | 'F' =>
-                    int_number := 15;
+                    vec_number := x"F";
                 when others =>
                     assert false
-                    report lf & "error: hex2integer found non hex digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "error: hex2stm_value found non hex digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
-            temp_t_stm_value := temp_t_stm_value + (int_number * (16 ** power));
-            power := power + 1;
+            temp_t_stm_value := temp_t_stm_value(c_stm_value_width - 5 downto 0) & vec_number;
+            
         end loop;
         return temp_t_stm_value;
     end function;
@@ -1398,13 +1393,11 @@ package body tb_base_pkg is
     
     function str2stm_value(str : in string) return t_stm_value is
         variable l : integer;
-        variable j : integer := 1;
         variable rtn : t_stm_value := to_unsigned(0, c_stm_value_width);
     begin
         l := fld_len(str);
-        for i in l downto 1 loop
-            rtn := rtn + (c2int(str(j)) * (10 ** (i - 1)));
-            j := j + 1;
+        for i in 1 to l loop
+            rtn := resize(rtn * 10 + c2int(str(i)), c_stm_value_width);
         end loop;
         return rtn;
     end function;
