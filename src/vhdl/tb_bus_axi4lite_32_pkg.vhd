@@ -112,12 +112,16 @@ package body tb_bus_axi4lite_32_pkg is
 
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
-        constant start_time : time := now;
         variable awready_present : boolean := false;
         variable wready_present : boolean := false;
+        constant start_time : time := now;
     begin
         successfull := false;
-        wait until rising_edge(axi4lite_up.clk);
+        wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            axi4lite_down <= axi4lite_down_32_init;
+            return;
+        end if;        
         axi4lite_down <= axi4lite_down_32_init;
         axi4lite_down.awaddr <= std_logic_vector(address(31 downto 0));
 
@@ -154,7 +158,11 @@ package body tb_bus_axi4lite_32_pkg is
         axi4lite_down.wvalid <= '1';
         axi4lite_down.bready <= '0';
         loop
-        	wait until rising_edge(axi4lite_up.clk);
+            wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                axi4lite_down <= axi4lite_down_32_init;
+                return;
+            end if; 
 	        if axi4lite_up.awready then
 	         	axi4lite_down.awvalid <= '0';
 	        	awready_present := true;
@@ -170,7 +178,11 @@ package body tb_bus_axi4lite_32_pkg is
 
         axi4lite_down.bready <= '1';
         loop
-        	wait until rising_edge(axi4lite_up.clk);
+            wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                axi4lite_down <= axi4lite_down_32_init;
+                return;
+            end if; 
         	if axi4lite_up.bvalid then
         		exit;
         	end if;
@@ -178,7 +190,6 @@ package body tb_bus_axi4lite_32_pkg is
 
         axi4lite_down.bready <= '0';
         axi4lite_down <= axi4lite_down_32_init;
-        wait until rising_edge(axi4lite_up.clk);
         successfull := true;
     end procedure;
 
@@ -194,7 +205,11 @@ package body tb_bus_axi4lite_32_pkg is
         constant start_time : time := now;
     begin
         successfull := false;
-        wait until rising_edge(axi4lite_up.clk);        
+        wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            axi4lite_down <= axi4lite_down_32_init;
+            return;
+        end if;      
         axi4lite_down <= axi4lite_down_32_init;
         axi4lite_down.araddr <= std_logic_vector(address(31 downto 0));
 
@@ -211,7 +226,11 @@ package body tb_bus_axi4lite_32_pkg is
         axi4lite_down.arvalid <= '0';
         axi4lite_down.rready <= '1';   
         loop
-        	wait until rising_edge(axi4lite_up.clk);
+            wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                axi4lite_down <= axi4lite_down_32_init;
+                return;
+            end if; 
         	if axi4lite_up.rvalid then
         		exit;
         	end if;
@@ -219,7 +238,11 @@ package body tb_bus_axi4lite_32_pkg is
         
         data_temp := axi4lite_up.rdata;
         axi4lite_down <= axi4lite_down_32_init;
-        wait until rising_edge(axi4lite_up.clk);
+        wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
+        if now > start_time + timeout then
+            axi4lite_down <= axi4lite_down_32_init;
+            return;
+        end if; 
 
         case address(1 downto 0) is
             when "00" => data_temp := data_temp;

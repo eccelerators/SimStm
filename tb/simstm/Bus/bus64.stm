@@ -1,0 +1,138 @@
+var valBus64Wishbone 0
+
+testBus64:
+proc
+    call $startStandardTestShell
+	wait 1000
+
+	bus write busToTest 64 0 0x5555555555555555
+	bus write busToTest 64 8 0xaaaaaaaaaaaaaaaa
+	bus write busToTest 64 16 0xffffffffffffffff
+	bus verify busToTest 64 0 valBus64Wishbone 0x5555555555555555 0x5555555555555555
+	bus verify busToTest 64 8 valBus64Wishbone 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
+	bus verify busToTest 64 16 valBus64Wishbone 0xffffffffffffffff 0xffffffffffffffff
+	
+	wait 1000
+	bus write busToTest 64 0 0x0
+	bus write busToTest  8 0 0x12
+	bus write busToTest  8 1 0x34
+	bus write busToTest  8 2 0x56
+	bus write busToTest  8 3 0x78
+	bus write busToTest  8 4 0xab
+	bus write busToTest  8 5 0xcd
+	bus write busToTest  8 6 0xef
+	bus write busToTest  8 7 0xfe
+	bus verify busToTest 8 0 valBus64Wishbone 0x12 0xff
+	bus verify busToTest 8 1 valBus64Wishbone 0x34 0xff
+	bus verify busToTest 8 2 valBus64Wishbone 0x56 0xff
+	bus verify busToTest 8 3 valBus64Wishbone 0x78 0xff
+	bus verify busToTest 8 4 valBus64Wishbone 0xab 0xff
+	bus verify busToTest 8 5 valBus64Wishbone 0xcd 0xff
+	bus verify busToTest 8 6 valBus64Wishbone 0xef 0xff
+	bus verify busToTest 8 7 valBus64Wishbone 0xfe 0xff
+	bus verify busToTest 64 0 valBus64Wishbone 0xfeefcdab78563412 0xffffffffffffffff
+	
+	wait 1000
+	bus write busToTest  64 0 0x0
+	bus write busToTest  16 0 0x1234
+	bus write busToTest  16 2 0x4567
+	bus write busToTest  16 4 0x89ab
+	bus write busToTest  16 6 0xcdef
+	bus verify busToTest 16 0 valBus64Wishbone 0x1234 0xffff
+	bus verify busToTest 16 2 valBus64Wishbone 0x4567 0xffff
+	bus verify busToTest 16 4 valBus64Wishbone 0x89ab 0xffff
+	bus verify busToTest 16 6 valBus64Wishbone 0xcdef 0xffff
+	bus verify busToTest 64 0 valBus64Wishbone 0xcdef89ab45671234 0xffffffffffffffff
+	bus write busToTest  64 4 0x0
+	bus write busToTest  16 5 0x1234
+	bus verify busToTest 16 5 valBus64Wishbone 0x1234 0xffff
+	bus verify busToTest 64 4 valBus64Wishbone 0x00123400 0xffffffffffffffff
+	
+	wait 1000
+	bus write busToTest  64 0 0x8000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x8000000000000000 0x0000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0x0000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x8000000000000000 0x8000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x8000000000000000 0xffffffffffffffff
+	
+	wait 100
+	bus write busToTest  64 0 0x0000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x8000000000000000 0x0000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0x0000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0x8000000000000000
+	bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0xffffffffffffffff
+
+	call $endStandardTestShell
+end proc
+
+testBus64VerifySuccess:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write busToTest  64 0 0x5555555555555555
+	bus write busToTest  64 8 0xaaaaaaaaaaaaaaaa
+	bus write busToTest  64 16 0xffffffffffffffff
+	
+	bus verify busToTest 64 0 valBus64Wishbone 0x5555555555555555 0xffffffffffffffff	
+	bus verify busToTest 64 8 valBus64Wishbone 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa	
+	bus verify busToTest 64 16 valBus64Wishbone 0x0000000000000000 0x0000000000000000
+	
+	call $endStandardTestShell
+end proc
+
+var wb_value64 0
+bus wb_bus64 0
+
+testBus64VerifyFail:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write wb_bus64 64 0 0x5555555555555555
+	bus write wb_bus64 64 8 0xaaaaaaaaaaaaaaaa
+	bus write wb_bus64 64 16 0xffffffffffffffff
+	bus verify busToTest 64 0 valBus64Wishbone 0x5555555555555555 0xffffffffffffffff	
+	bus verify busToTest 64 8 valBus64Wishbone 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa	
+	bus verify busToTest 64 16 valBus64Wishbone 0x0000000000000000 0x0000000000000000
+	log message $ALLWAYS "bus verify intended error on no match"	
+	bus verify wb_bus64 64 0 wb_value64 0x00000000 0xffffffff
+	call $incExpectedStandardTestVerifyFailureCount
+    
+	call $endStandardTestShell
+end proc
+
+
+testBus64TimeOutRead:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write busToTest 64 0 0x5555555555555555
+	bus timeout set wb_bus64 1
+	bus timeout get wb_bus64 wb_value64
+	var verify wb_value64 1 $MAX
+	bus read busToTest 64 0 valBus64Wishbone
+	call $incExpectedStandardTestBusTimeoutFailureCount
+	
+    bus timeout set wb_bus64 1000000000
+	bus timeout get wb_bus64 wb_value64
+	var verify wb_value64 1000000000 $MAX
+
+	call $endStandardTestShell
+end proc
+
+testBus64TimeOutWrite:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus timeout set wb_bus64 1
+	bus timeout get wb_bus64 wb_value64
+	var verify wb_value64 1 $MAX
+	bus write busToTest 64 0 0x5555555555555555
+	call $incExpectedStandardTestBusTimeoutFailureCount
+	
+    bus timeout set wb_bus64 1000000000
+	bus timeout get wb_bus64 wb_value64
+	var verify wb_value64 1000000000 $MAX
+
+	call $endStandardTestShell
+end proc
+

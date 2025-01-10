@@ -116,19 +116,24 @@ package body tb_bus_avalon_32_pkg is
 
         avalonmm_down.read <= '0';
         avalonmm_down.write <= '1';
-        wait until (rising_edge(avalonmm_up.clk) and avalonmm_up.waitrequest = '0') or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_32_init;
-            return;
-        end if;
-
-        avalonmm_down <= avalonmm_down_32_init;
         wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             avalonmm_down <= avalonmm_down_32_init;
             return;
         end if;
 
+        loop
+            wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                avalonmm_down <= avalonmm_down_32_init;
+                return;
+            end if;
+            if avalonmm_up.waitrequest then
+                exit;
+            end if;
+        end loop; 
+        
+        avalonmm_down <= avalonmm_down_32_init;
         successfull := true;
     end procedure;
 
@@ -180,14 +185,17 @@ package body tb_bus_avalon_32_pkg is
             avalonmm_down <= avalonmm_down_32_init;
             return;
         end if;
-
-        wait until (rising_edge(avalonmm_up.clk) and avalonmm_up.waitrequest = '0') or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_32_init;
-            return;
-        end if;
-
-        avalonmm_down <= avalonmm_down_32_init;
+       
+        loop
+            wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                avalonmm_down <= avalonmm_down_32_init;
+                return;
+            end if;
+            if avalonmm_up.waitrequest = '0' then
+                exit;
+            end if;
+        end loop; 
 
         case address(1 downto 0) is
             when "00" => data_temp := avalonmm_up.readdata;
@@ -210,7 +218,8 @@ package body tb_bus_avalon_32_pkg is
             avalonmm_down <= avalonmm_down_32_init;
             return;
         end if;
-
+        
+        avalonmm_down <= avalonmm_down_32_init;
         successfull := true;
     end procedure;
 

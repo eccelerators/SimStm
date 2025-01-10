@@ -90,13 +90,13 @@ package body tb_bus_wishbone_64_pkg is
         wishbone_down.adr <= std_logic_vector(address(31 downto 0));
         case access_width is
             when 8 =>
-                sel := "0001";
+                sel := "00000001";
                 data_temp := std_logic_vector(data(63 downto 0)) and x"00000000000000FF";
             when 16 =>
-                sel := "0011";
+                sel := "00000011";
                 data_temp := std_logic_vector(data(63 downto 0)) and x"000000000000FFFF";
             when 32 =>
-                sel := "1111";
+                sel := "00001111";
                 data_temp := std_logic_vector(data(63 downto 0)) and x"00000000FFFFFFFF";
              when 64 =>
                 sel := "11111111";
@@ -141,21 +141,17 @@ package body tb_bus_wishbone_64_pkg is
             return;
         end if;
 
-        wait on wishbone_up.ack until wishbone_up.ack = '1'or (now > start_time + timeout);
-        
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_64_init;
-            return;
-        end if;
-
+        loop
+            wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                wishbone_down <= wishbone_down_64_init;
+                return;
+            end if;
+            if wishbone_up.ack then
+                exit;
+            end if;
+        end loop;  
         wishbone_down <= wishbone_down_64_init;
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_64_init;
-            return;
-        end if;
-
         successfull := true;
     end procedure;
 
@@ -180,10 +176,14 @@ package body tb_bus_wishbone_64_pkg is
         wishbone_down.adr <= std_logic_vector(address(31 downto 0));
 
         case access_width is
-            when 8 => sel := "00000001";
-            when 16 => sel := "00000011";
-            when 32 => sel := "00001111";
-            when 64 => sel := "11111111";
+            when 8 => 
+                sel := "00000001";
+            when 16 => 
+                sel := "00000011";
+            when 32 => 
+                sel := "00001111";
+            when 64 => 
+                sel := "11111111";
             when others =>
         end case;
 
@@ -217,17 +217,16 @@ package body tb_bus_wishbone_64_pkg is
             return;
         end if;
 
-        wait on wishbone_up.ack until wishbone_up.ack = '1' or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_64_init;
-            return;
-        end if;
-
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_64_init;
-            return;
-        end if;
+        loop
+            wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                wishbone_down <= wishbone_down_64_init;
+                return;
+            end if;
+            if wishbone_up.ack then
+                exit;
+            end if;
+        end loop;  
 
         wishbone_down <= wishbone_down_64_init;
 
@@ -251,11 +250,7 @@ package body tb_bus_wishbone_64_pkg is
             when others =>
         end case;
 
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_64_init;
-            return;
-        end if;
+        wishbone_down <= wishbone_down_64_init;
         successfull := true;
 
     end procedure;

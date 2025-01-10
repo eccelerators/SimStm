@@ -34,19 +34,19 @@ library ieee;
 use work.tb_base_pkg.all;    
 use work.tb_bus_pkg.all;
 use work.tb_signals_pkg.all;
+use work.basic.all;
 
 entity tbTop is
     generic (
         stimulus_path : string := "tb/simstm/";
         stimulus_file : string := "testMain.stm";
         stimulus_main_entry_label : string := "$testMain";
-        stimulus_test_suite_index : integer := 255
+        stimulus_test_suite_index : integer := 255;
+        Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA")
     );
 end;
 
 architecture behavioural of tbTop is
-
-    constant NsPerClk : natural := 10;
 
     signal Clk : std_logic := '0';
     signal Rst : std_logic := '1';
@@ -217,6 +217,43 @@ begin
         );
         
     bus_up.wishbone64.clk <= Clk;
+    
+    i_RamAvalon_64 : entity work.RamAvalon
+        generic map (
+            ADDRESS_WIDTH => 7,
+            DATA_WIDTH => 64
+        )
+        port map(
+        -- avalon slave signals.
+            clk_i => bus_up.avalonmm64.clk,
+            rst_i => Rst,
+            avm_waitrequest_o => bus_up.avalonmm64.waitrequest,
+            avm_write_i => bus_down.avalonmm64.write,
+            avm_read_i => bus_down.avalonmm64.read,
+            avm_address_i => bus_down.avalonmm64.address(9 downto 3),
+            avm_writedata_i => bus_down.avalonmm64.writedata,
+            avm_byteenable_i => bus_down.avalonmm64.byteenable,
+            avm_burstcount_i => x"01",
+            avm_readdata_o => bus_up.avalonmm64.readdata,
+            avm_readdatavalid_o => open
+        );
+        
+        bus_up.avalonmm64.clk <= Clk;
+        
+        
+    i_Ram32 : entity work.Ram
+    generic map(
+        InitialCellValues => Ram32InitialCellValues
+    ) 
+    port map(
+        Clk => bus_up.ram32.clk,
+        WriteEnable => bus_down.ram32.write_enable,
+        Address => bus_down.ram32.address(9 downto 2),
+        WriteData => bus_down.ram32.write_data,
+        ReadData => bus_up.ram32.read_data
+    );
+
+    bus_up.ram32.clk <= Clk;
 
                                                                   
 end architecture;

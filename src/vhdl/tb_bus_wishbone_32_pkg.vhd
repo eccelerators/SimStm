@@ -127,21 +127,17 @@ package body tb_bus_wishbone_32_pkg is
             return;
         end if;
 
-        wait on wishbone_up.ack until wishbone_up.ack = '1'or (now > start_time + timeout);
-        
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_32_init;
-            return;
-        end if;
-
+        loop
+            wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                wishbone_down <= wishbone_down_32_init;
+                return;
+            end if;
+            if wishbone_up.ack then
+                exit;
+            end if;
+        end loop;  
         wishbone_down <= wishbone_down_32_init;
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_32_init;
-            return;
-        end if;
-
         successfull := true;
     end procedure;
 
@@ -166,9 +162,12 @@ package body tb_bus_wishbone_32_pkg is
         wishbone_down.adr <= std_logic_vector(address(31 downto 0));
 
         case access_width is
-            when 8 => sel := "0001";
-            when 16 => sel := "0011";
-            when 32 => sel := "1111";
+            when 8 => 
+                sel := "0001";
+            when 16 => 
+                sel := "0011";
+            when 32 => 
+                sel := "1111";
             when others =>
         end case;
 
@@ -194,19 +193,16 @@ package body tb_bus_wishbone_32_pkg is
             return;
         end if;
 
-        wait on wishbone_up.ack until wishbone_up.ack = '1' or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_32_init;
-            return;
-        end if;
-
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_32_init;
-            return;
-        end if;
-
-        wishbone_down <= wishbone_down_32_init;
+        loop
+            wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                wishbone_down <= wishbone_down_32_init;
+                return;
+            end if;
+            if wishbone_up.ack then
+                exit;
+            end if;
+        end loop;  
 
         case address(1 downto 0) is
             when "00" => data_temp := wishbone_up.data;
@@ -223,14 +219,8 @@ package body tb_bus_wishbone_32_pkg is
             when 32 => data(31 downto 0) := unsigned(data_temp and x"FFFFFFFF");
             when others =>
         end case;
-
-        wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            wishbone_down <= wishbone_down_32_init;
-            return;
-        end if;
+        wishbone_down <= wishbone_down_32_init;
         successfull := true;
-
     end procedure;
 
 end package body;

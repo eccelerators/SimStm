@@ -6,6 +6,8 @@ use work.tb_bus_avalon_32_pkg.all;
 use work.tb_bus_axi4lite_32_pkg.all;
 use work.tb_bus_wishbone_32_pkg.all;
 use work.tb_bus_wishbone_64_pkg.all;
+use work.tb_bus_avalon_64_pkg.all;
+use work.tb_bus_ram_32_pkg.all;
 use work.tb_base_pkg.all;
 
 package tb_bus_pkg is
@@ -15,6 +17,8 @@ package tb_bus_pkg is
         avalonmm32 : t_avalonmm_down_32;
         axi4lite32 : t_axi4lite_down_32;
         wishbone64 : t_wishbone_down_64;
+        avalonmm64 : t_avalonmm_down_64;
+        ram32 : t_ram_down_32;
     end record;
 
     type t_bus_up is record
@@ -22,6 +26,8 @@ package tb_bus_pkg is
         avalonmm32 : t_avalonmm_up_32;
         axi4lite32 : t_axi4lite_up_32;
         wishbone64 : t_wishbone_up_64;
+        avalonmm64 : t_avalonmm_up_64;
+        ram32 : t_ram_up_32;
     end record;
     
     type t_bus_trace is record
@@ -29,6 +35,8 @@ package tb_bus_pkg is
         avalonmm32_trace : t_avalonmm_trace_32;
         axi4lite32_trace : t_axi4lite_trace_32;
         wishbone64_trace : t_wishbone_trace_64;
+        avalonmm64_trace : t_avalonmm_trace_64;
+        ram32_trace : t_ram_trace_32;
     end record;
 
     function bus_down_init return t_bus_down;
@@ -64,6 +72,8 @@ package body tb_bus_pkg is
         init.avalonmm32 := avalonmm_down_32_init;
         init.axi4lite32 := axi4lite_down_32_init;
         init.wishbone64 := wishbone_down_64_init;
+        init.avalonmm64 := avalonmm_down_64_init;
+        init.ram32 := ram_down_32_init;
         return init;
     end;
     
@@ -74,6 +84,8 @@ package body tb_bus_pkg is
         init.avalonmm32 := avalonmm_up_32_init;
         init.axi4lite32 := axi4lite_up_32_init;
         init.wishbone64 := wishbone_up_64_init;
+        init.avalonmm64 := avalonmm_up_64_init;
+        init.ram32 := ram_up_32_init;
         return init;
     end;
 
@@ -127,6 +139,25 @@ package body tb_bus_pkg is
                                access_width,
                                successfull,
                                timeout);
+                               
+            when 4 =>
+                write_avalonmm_64(
+                               bus_down.avalonmm64,
+                               bus_up.avalonmm64,
+                               address,
+                               data,
+                               access_width,
+                               successfull,
+                               timeout);       
+            when 5 =>                   
+                write_ram_32(
+                               bus_down.ram32,
+                               bus_up.ram32,
+                               address,
+                               data,
+                               access_width,
+                               successfull,
+                               timeout);                                                      
                             
             when others =>
                 valid := 0;
@@ -186,6 +217,25 @@ package body tb_bus_pkg is
                               access_width,
                               successfull,
                               timeout);
+            when 4 =>
+                read_avalonmm_64(
+                              bus_down.avalonmm64,
+                              bus_up.avalonmm64,
+                              address,
+                              data,
+                              access_width,
+                              successfull,
+                              timeout);     
+                              
+            when 5 =>
+                read_ram_32(
+                              bus_down.ram32,
+                              bus_up.ram32,
+                              address,
+                              data,
+                              access_width,
+                              successfull,
+                              timeout);                                                      
                                                             
             when others =>
                 valid := 0;

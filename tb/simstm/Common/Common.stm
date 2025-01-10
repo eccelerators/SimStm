@@ -1,9 +1,17 @@
 include "Base/Base.stm"
 include "TestCase/TestCase.stm"
 
-bus wishbone 0
-bus avalon 1
-bus axi4lite 2
+bus wishbone32 0
+bus avalon32 1
+bus axi4lite32 2
+
+bus wishbone64 3
+bus avalon64 4
+
+bus ram32 5
+
+bus busToTest 0
+
 var WaitTimeOut 100000 -- ms
 
 signal out_signal_init_dut 0

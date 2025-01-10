@@ -3,7 +3,8 @@ include "Common/Common.stm"
 include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
 
-include "Bus/bus.stm"
+include "Bus/bus32.stm"
+include "Bus/bus64.stm"
 
 include "File/file.stm"
 include "Base/Array.stm"
@@ -32,9 +33,9 @@ proc
 	-- call $testVariableInv	
 	-- call $testOtherRandom
 	
-	bus pointer copy busToTest axi4lite
+	bus pointer copy busToTest ram32
 	bus timeout set busToTest 1000
-	call $testBusVerifySuccess
+	call $testBus32VerifySuccess
 
 	log message $INFO "Main test finished"
 	wait 1000
