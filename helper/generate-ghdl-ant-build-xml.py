@@ -94,7 +94,7 @@ class GenAntBuildXml:
         ET.SubElement(
             root, "target", 
             name=target_prefix + "all", description="all from scratch until interactive simulation",
-            depends=" ghdl-clean, ghdl-prepare, ghdl-compile, ghdl-elaborate, ghdl-simulate-suites")
+            depends=" ghdl-clean, ghdl-prepare, ghdl-compile, ghdl-elaborate, ghdl-simulate-suites, ghdl-exit-on-junit-errors-or-failures")
 
 
         s = ' '
@@ -233,7 +233,19 @@ class GenAntBuildXml:
                     for o in shf['ghdl_options']:
                          ET.SubElement(ex, "arg", value=o)
                 ET.SubElement(ex, "arg", value='${basedir}/' + shf['file'])
-            ET.SubElement(t, "touch", file='${basedir}/' + time_stamps_prefix + shf['file'].replace('/', '_'))   
+            ET.SubElement(t, "touch", file='${basedir}/' + time_stamps_prefix + shf['file'].replace('/', '_'))
+            
+        t = ET.SubElement(root, "target", name=target_prefix + "exit-on-junit-errors-or-failures")
+        ET.SubElement(t, "xmlproperty",  file="simulation/ghdl/../SimulationResults/testSuitesSimulation.xml", keepRoot="true" )
+        c = ET.SubElement(t, "condition",  property="no-failures")
+        ET.SubElement(c, "equals",   arg1="${testsuites(failures)}", arg2="0")
+        c = ET.SubElement(t, "condition",  property="no-errors")
+        ET.SubElement(c, "equals",   arg1="${testsuites(errors)}", arg2="0")
+        c = ET.SubElement(t, "condition",  property="no-errors-or-failures")
+        a = ET.SubElement(c, "and")
+        ET.SubElement(a, "isset", property="no-failures")
+        ET.SubElement(a, "isset", property="no-errors")
+        f = ET.SubElement(t, "fail",  unless="no-errors-or-failures", message="Testsuites report errors or failures") 
                                    
         tree = ET.ElementTree(root)
   

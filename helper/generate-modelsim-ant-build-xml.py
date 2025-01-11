@@ -104,7 +104,7 @@ class GenAntBuildXml:
         ET.SubElement(
             root, "target", 
             name=target_prefix + "all", description="all from scratch until interactive simulation",
-            depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-suites")
+            depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-suites, modelsim-exit-on-junit-errors-or-failures")
 
         ET.SubElement(
             root, "target", 
@@ -264,7 +264,19 @@ class GenAntBuildXml:
                     ET.SubElement(ex, "arg", value="-O0")
                     ET.SubElement(ex, "arg", value="-2008")
                 ET.SubElement(ex, "arg", value="${basedir}/" + shf['file'])
-            ET.SubElement(t, "touch", file="${basedir}/" + time_stamps_prefix + shf['file'].replace('/', '_'))   
+            ET.SubElement(t, "touch", file="${basedir}/" + time_stamps_prefix + shf['file'].replace('/', '_'))
+            
+        t = ET.SubElement(root, "target", name=target_prefix + "exit-on-junit-errors-or-failures")
+        ET.SubElement(t, "xmlproperty",  file="simulation/modelsim/../SimulationResults/testSuitesSimulation.xml", keepRoot="true" )
+        c = ET.SubElement(t, "condition",  property="no-failures")
+        ET.SubElement(c, "equals",   arg1="${testsuites(failures)}", arg2="0")
+        c = ET.SubElement(t, "condition",  property="no-errors")
+        ET.SubElement(c, "equals",   arg1="${testsuites(errors)}", arg2="0")
+        c = ET.SubElement(t, "condition",  property="no-errors-or-failures")
+        a = ET.SubElement(c, "and")
+        ET.SubElement(a, "isset", property="no-failures")
+        ET.SubElement(a, "isset", property="no-errors")
+        f = ET.SubElement(t, "fail",  unless="no-errors-or-failures", message="Testsuites report errors or failures")
                                    
         tree = ET.ElementTree(root)
         

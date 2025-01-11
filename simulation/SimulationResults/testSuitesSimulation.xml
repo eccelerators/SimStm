@@ -1,9 +1,14 @@
 <?xml version="1.0" ?>
-<testsuites name="testSuitesSimulation" tests="84" skipped="0" errors="0" failures="0" assertions="626" timestamp="2025-01-11T07:56:42.678741" time="14.364">
-   <testsuite name="testSuiteConstant" tests="1" skipped="0" errors="0" failures="0" assertions="4" timestamp="2025-01-11T07:56:43.847741" time="0.097" file="TestSuites/TestSuiteConstant.stm">
+<testsuites name="testSuitesSimulation" tests="84" skipped="0" errors="0" failures="0" assertions="626" timestamp="2025-01-11T08:29:17.426015" time="16.647298">
+   <testsuite name="testSuiteConstant" tests="1" skipped="0" errors="0" failures="0" assertions="4" timestamp="2025-01-11T08:29:28.122563" time="0.003999" file="TestSuites/TestSuiteConstant.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteConstant.stm -gstimulus_main_entry_label=$testMainSuiteConstant -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Start time: 08:29:17 on Jan 11,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61622&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -80,11 +85,11 @@
 #    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:43 on Jan 11,2025, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 3
+# End time: 08:29:28 on Jan 11,2025, Elapsed time: 0:00:11
+# Errors: 0, Warnings: 6
 </system-out>
       <system-err/>
-      <testcase name="testSuiteConstant_testCaseConstantAdd" assertions="4" classname="testSuiteConstant" file="TestSuites/TestSuiteConstant.stm" line="TestSuites/TestSuiteConstant.stm" time="0.097">
+      <testcase name="testSuiteConstant_testCaseConstantAdd" assertions="4" classname="testSuiteConstant" file="TestSuites/TestSuiteConstant.stm" line="TestSuites/TestSuiteConstant.stm" time="0.003999">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1010"/>
@@ -92,11 +97,11 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteVariable" tests="10" skipped="0" errors="0" failures="0" assertions="44" timestamp="2025-01-11T07:56:47.406741" time="0.006" file="TestSuites/TestSuiteVariable.stm">
+   <testsuite name="testSuiteVariable" tests="10" skipped="0" errors="0" failures="0" assertions="44" timestamp="2025-01-11T08:29:20.056903" time="0.006" file="TestSuites/TestSuiteVariable.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteVariable.stm -gstimulus_main_entry_label=$testMainSuiteVariable -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51406&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -322,7 +327,7 @@
 #    Time: 2113300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 2113300 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:48 on Jan 11,2025, Elapsed time: 0:00:06
+# End time: 08:29:20 on Jan 11,2025, Elapsed time: 0:00:03
 # Errors: 0, Warnings: 7
 </system-out>
       <system-err/>
@@ -333,63 +338,63 @@
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableEqu" assertions="10" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.004">
+      <testcase name="testSuiteVariable_testCaseVariableEqu" assertions="10" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005999">
          <properties>
             <property name="SimulatedStartTime" value="1035"/>
             <property name="SimulatedEndTime" value="1045"/>
             <property name="SimulatedDuration" value="10"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableSub" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.105">
+      <testcase name="testSuiteVariable_testCaseVariableSub" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1070"/>
             <property name="SimulatedEndTime" value="1078"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableLd" assertions="2" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.123">
+      <testcase name="testSuiteVariable_testCaseVariableLd" assertions="2" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1103"/>
             <property name="SimulatedEndTime" value="1110"/>
             <property name="SimulatedDuration" value="7"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableDiv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
+      <testcase name="testSuiteVariable_testCaseVariableDiv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.094996">
          <properties>
             <property name="SimulatedStartTime" value="1024"/>
             <property name="SimulatedEndTime" value="1032"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableAnd" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.099">
+      <testcase name="testSuiteVariable_testCaseVariableAnd" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1013"/>
             <property name="SimulatedEndTime" value="1021"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableInv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.001">
+      <testcase name="testSuiteVariable_testCaseVariableInv" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.096996">
          <properties>
             <property name="SimulatedStartTime" value="1092"/>
             <property name="SimulatedEndTime" value="1100"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableOr" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.006">
+      <testcase name="testSuiteVariable_testCaseVariableOr" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1059"/>
             <property name="SimulatedEndTime" value="1067"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableXor" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.002">
+      <testcase name="testSuiteVariable_testCaseVariableXor" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.097996">
          <properties>
             <property name="SimulatedStartTime" value="1081"/>
             <property name="SimulatedEndTime" value="1089"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteVariable_testCaseVariableMul" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.103">
+      <testcase name="testSuiteVariable_testCaseVariableMul" assertions="4" classname="testSuiteVariable" file="TestSuites/TestSuiteVariable.stm" line="TestSuites/TestSuiteVariable.stm" time="0.003999">
          <properties>
             <property name="SimulatedStartTime" value="1048"/>
             <property name="SimulatedEndTime" value="1056"/>
@@ -397,11 +402,11 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteLines" tests="11" skipped="0" errors="0" failures="0" assertions="172" timestamp="2025-01-11T07:56:50.063741" time="0.003" file="TestSuites/TestSuiteLines.stm">
+   <testsuite name="testSuiteLines" tests="11" skipped="0" errors="0" failures="0" assertions="172" timestamp="2025-01-11T08:29:23.367763" time="0.004" file="TestSuites/TestSuiteLines.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteLines.stm -gstimulus_main_entry_label=$testMainSuiteLines -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51406&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -721,81 +726,81 @@
 #    Time: 2256800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 2256800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:52 on Jan 11,2025, Elapsed time: 0:00:10
+# End time: 08:29:26 on Jan 11,2025, Elapsed time: 0:00:09
 # Errors: 0, Warnings: 5
 </system-out>
       <system-err/>
-      <testcase name="testSuiteLines_testCaseLinesSize" assertions="3" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.006">
+      <testcase name="testSuiteLines_testCaseLinesSize" assertions="3" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.105996">
          <properties>
             <property name="SimulatedStartTime" value="1245"/>
             <property name="SimulatedEndTime" value="1254"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesPointerCopy" assertions="6" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.101">
+      <testcase name="testSuiteLines_testCaseLinesPointerCopy" assertions="6" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.101996">
          <properties>
             <property name="SimulatedStartTime" value="1157"/>
             <property name="SimulatedEndTime" value="1166"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesSetArray" assertions="50" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.543">
+      <testcase name="testSuiteLines_testCaseLinesSetArray" assertions="50" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.900961">
          <properties>
             <property name="SimulatedStartTime" value="1170"/>
             <property name="SimulatedEndTime" value="1231"/>
             <property name="SimulatedDuration" value="61"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesDeleteArray" assertions="4" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.152">
+      <testcase name="testSuiteLines_testCaseLinesDeleteArray" assertions="4" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.129995">
          <properties>
             <property name="SimulatedStartTime" value="1035"/>
             <property name="SimulatedEndTime" value="1044"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesAppendArray" assertions="1" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.003">
+      <testcase name="testSuiteLines_testCaseLinesAppendArray" assertions="1" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.004">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1010"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesDeleteAllArray" assertions="2" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.003">
+      <testcase name="testSuiteLines_testCaseLinesDeleteAllArray" assertions="2" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1023"/>
             <property name="SimulatedEndTime" value="1032"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesSetText" assertions="2" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.119">
+      <testcase name="testSuiteLines_testCaseLinesSetText" assertions="2" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1234"/>
             <property name="SimulatedEndTime" value="1242"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesGetArray" assertions="25" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.328">
+      <testcase name="testSuiteLines_testCaseLinesGetArray" assertions="25" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.342985">
          <properties>
             <property name="SimulatedStartTime" value="1047"/>
             <property name="SimulatedEndTime" value="1074"/>
             <property name="SimulatedDuration" value="27"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesInsertArray" assertions="74" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.765">
+      <testcase name="testSuiteLines_testCaseLinesInsertArray" assertions="74" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.897962">
          <properties>
             <property name="SimulatedStartTime" value="1077"/>
             <property name="SimulatedEndTime" value="1142"/>
             <property name="SimulatedDuration" value="65"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesAppendText" assertions="1" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.131">
+      <testcase name="testSuiteLines_testCaseLinesAppendText" assertions="1" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.104995">
          <properties>
             <property name="SimulatedStartTime" value="1013"/>
             <property name="SimulatedEndTime" value="1020"/>
             <property name="SimulatedDuration" value="7"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteLines_testCaseLinesInsertText" assertions="4" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.097">
+      <testcase name="testSuiteLines_testCaseLinesInsertText" assertions="4" classname="testSuiteLines" file="TestSuites/TestSuiteLines.stm" line="TestSuites/TestSuiteLines.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1145"/>
             <property name="SimulatedEndTime" value="1153"/>
@@ -803,14 +808,13 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteInterrupt" tests="1" skipped="0" errors="0" failures="0" assertions="2" timestamp="2025-01-11T07:56:45.656741" time="0.213" file="TestSuites/TestSuiteInterrupt.stm">
+   <testsuite name="testSuiteInterrupt" tests="1" skipped="0" errors="0" failures="0" assertions="2" timestamp="2025-01-11T08:29:18.855954" time="0.23699" file="TestSuites/TestSuiteInterrupt.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteInterrupt.stm -gstimulus_main_entry_label=$testMainSuiteInterrupt -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51406&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -883,11 +887,11 @@
 #    Time: 4113100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 4113100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:45 on Jan 11,2025, Elapsed time: 0:00:03
-# Errors: 0, Warnings: 5
+# End time: 08:29:19 on Jan 11,2025, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 4
 </system-out>
       <system-err/>
-      <testcase name="testSuiteInterrupt_testCaseInterrupt" assertions="2" classname="testSuiteInterrupt" file="TestSuites/TestSuiteInterrupt.stm" line="TestSuites/TestSuiteInterrupt.stm" time="0.213">
+      <testcase name="testSuiteInterrupt_testCaseInterrupt" assertions="2" classname="testSuiteInterrupt" file="TestSuites/TestSuiteInterrupt.stm" line="TestSuites/TestSuiteInterrupt.stm" time="0.23699">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="3110"/>
@@ -895,12 +899,12 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusAvalon32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T07:56:54.532741" time="0.008" file="TestSuites/TestSuiteBusAvalon32.stm">
+   <testsuite name="testSuiteBusAvalon32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T08:29:27.313596" time="0.099996" file="TestSuites/TestSuiteBusAvalon32.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusAvalon32.stm -gstimulus_main_entry_label=$testMainSuiteBusAvalon32 -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51406&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51823&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61622&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
@@ -1028,7 +1032,7 @@
 #    Time: 11642 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: SUCCESS
 #    Time: 11642 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:54 on Jan 11,2025, Elapsed time: 0:00:12
+# End time: 08:29:27 on Jan 11,2025, Elapsed time: 0:00:10
 # Errors: 3, Warnings: 6
 </system-out>
       <system-err/>
@@ -1039,28 +1043,28 @@
             <property name="SimulatedDuration" value="1208"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon32_testCaseBus32" assertions="21" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.008">
+      <testcase name="testSuiteBusAvalon32_testCaseBus32" assertions="21" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.099996">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="6188"/>
             <property name="SimulatedDuration" value="5186"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.145">
+      <testcase name="testSuiteBusAvalon32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="9627"/>
             <property name="SimulatedEndTime" value="10639"/>
             <property name="SimulatedDuration" value="1012"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.126">
+      <testcase name="testSuiteBusAvalon32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.006">
          <properties>
             <property name="SimulatedStartTime" value="6191"/>
             <property name="SimulatedEndTime" value="7368"/>
             <property name="SimulatedDuration" value="1177"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.0">
+      <testcase name="testSuiteBusAvalon32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusAvalon32" file="TestSuites/TestSuiteBusAvalon32.stm" line="TestSuites/TestSuiteBusAvalon32.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="8582"/>
             <property name="SimulatedEndTime" value="9624"/>
@@ -1068,13 +1072,14 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteOther" tests="10" skipped="0" errors="0" failures="0" assertions="0" timestamp="2025-01-11T07:56:44.739741" time="0.007" file="TestSuites/TestSuiteOther.stm">
+   <testsuite name="testSuiteOther" tests="10" skipped="0" errors="0" failures="0" assertions="0" timestamp="2025-01-11T08:29:21.119858" time="0.007" file="TestSuites/TestSuiteOther.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteOther.stm -gstimulus_main_entry_label=$testMainSuiteOther -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -1328,8 +1333,8 @@
 #    Time: 14119900 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 14119900 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:45 on Jan 11,2025, Elapsed time: 0:00:03
-# Errors: 0, Warnings: 4
+# End time: 08:29:21 on Jan 11,2025, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 5
 </system-out>
       <system-err/>
       <testcase name="testSuiteOther_testCaseOtherRandom" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.007">
@@ -1339,63 +1344,63 @@
             <property name="SimulatedDuration" value="13"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherLogFormats" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.101">
+      <testcase name="testSuiteOther_testCaseOtherLogFormats" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.007">
          <properties>
             <property name="SimulatedStartTime" value="6075"/>
             <property name="SimulatedEndTime" value="7084"/>
             <property name="SimulatedDuration" value="1009"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherSeed" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.199">
+      <testcase name="testSuiteOther_testCaseOtherSeed" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1018"/>
             <property name="SimulatedEndTime" value="1028"/>
             <property name="SimulatedDuration" value="10"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherHelloWorld" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.111">
+      <testcase name="testSuiteOther_testCaseOtherHelloWorld" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.004999">
          <properties>
             <property name="SimulatedStartTime" value="7099"/>
             <property name="SimulatedEndTime" value="10106"/>
             <property name="SimulatedDuration" value="3007"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherMarker" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.103">
+      <testcase name="testSuiteOther_testCaseOtherMarker" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.004999">
          <properties>
             <property name="SimulatedStartTime" value="2543"/>
             <property name="SimulatedEndTime" value="4051"/>
             <property name="SimulatedDuration" value="1508"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherLog" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.005">
+      <testcase name="testSuiteOther_testCaseOtherLog" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.094996">
          <properties>
             <property name="SimulatedStartTime" value="7087"/>
             <property name="SimulatedEndTime" value="7096"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherLogSubstitutions" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.006">
+      <testcase name="testSuiteOther_testCaseOtherLogSubstitutions" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.097996">
          <properties>
             <property name="SimulatedStartTime" value="5064"/>
             <property name="SimulatedEndTime" value="6071"/>
             <property name="SimulatedDuration" value="1007"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherTrace" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.006">
+      <testcase name="testSuiteOther_testCaseOtherTrace" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1031"/>
             <property name="SimulatedEndTime" value="2539"/>
             <property name="SimulatedDuration" value="1508"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherCall" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.103">
+      <testcase name="testSuiteOther_testCaseOtherCall" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.008">
          <properties>
             <property name="SimulatedStartTime" value="10110"/>
             <property name="SimulatedEndTime" value="13117"/>
             <property name="SimulatedDuration" value="3007"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteOther_testCaseOtherWait" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.099">
+      <testcase name="testSuiteOther_testCaseOtherWait" assertions="0" classname="testSuiteOther" file="TestSuites/TestSuiteOther.stm" line="TestSuites/TestSuiteOther.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="4054"/>
             <property name="SimulatedEndTime" value="5061"/>
@@ -1403,10 +1408,15 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteFile" tests="6" skipped="0" errors="0" failures="0" assertions="18" timestamp="2025-01-11T07:56:43.688741" time="0.1" file="TestSuites/TestSuiteFile.stm">
+   <testsuite name="testSuiteFile" tests="6" skipped="0" errors="0" failures="0" assertions="18" timestamp="2025-01-11T08:29:25.365679" time="0.100995" file="TestSuites/TestSuiteFile.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteFile.stm -gstimulus_main_entry_label=$testMainSuiteFile -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
-# ** Note: (vsim-8009) Loading existing optimized design _opt2
+# Start time: 08:29:17 on Jan 11,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61622&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -1537,46 +1547,46 @@
 #    Time: 3093200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 3093200 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:44 on Jan 11,2025, Elapsed time: 0:00:02
-# Errors: 0, Warnings: 3
+# End time: 08:29:26 on Jan 11,2025, Elapsed time: 0:00:09
+# Errors: 0, Warnings: 6
 </system-out>
       <system-err/>
-      <testcase name="testSuiteFile_testCaseFileAppendArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.1">
+      <testcase name="testSuiteFile_testCaseFileAppendArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.100995">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1010"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteFile_testCaseFileWriteArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.098">
+      <testcase name="testSuiteFile_testCaseFileWriteArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="2070"/>
             <property name="SimulatedEndTime" value="2078"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteFile_testCaseFileReadAllArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.1">
+      <testcase name="testSuiteFile_testCaseFileReadAllArray" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1014"/>
             <property name="SimulatedEndTime" value="1022"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteFile_testCaseFileReadArray" assertions="10" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.4">
+      <testcase name="testSuiteFile_testCaseFileReadArray" assertions="10" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.397983">
          <properties>
             <property name="SimulatedStartTime" value="1025"/>
             <property name="SimulatedEndTime" value="2052"/>
             <property name="SimulatedDuration" value="1027"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteFile_testCaseFileStatus" assertions="4" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.007">
+      <testcase name="testSuiteFile_testCaseFileStatus" assertions="4" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.108996">
          <properties>
             <property name="SimulatedStartTime" value="2055"/>
             <property name="SimulatedEndTime" value="2067"/>
             <property name="SimulatedDuration" value="12"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteFile_testCaseFilePointerCopy" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.098">
+      <testcase name="testSuiteFile_testCaseFilePointerCopy" assertions="1" classname="testSuiteFile" file="TestSuites/TestSuiteFile.stm" line="TestSuites/TestSuiteFile.stm" time="0.096996">
          <properties>
             <property name="SimulatedStartTime" value="2082"/>
             <property name="SimulatedEndTime" value="2090"/>
@@ -1584,11 +1594,11 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusRam32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T07:56:46.673741" time="0.103" file="TestSuites/TestSuiteBusRam32.stm">
+   <testsuite name="testSuiteBusRam32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T08:29:22.285809" time="0.101996" file="TestSuites/TestSuiteBusRam32.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusRam32.stm -gstimulus_main_entry_label=$testMainSuiteBusRam32 -do &quot;run_all.do&quot; 
-# Start time: 07:56:42 on Jan 11,2025
+# Start time: 08:29:17 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51406&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60872&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -1714,39 +1724,39 @@
 #    Time: 11492 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 11492 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:47 on Jan 11,2025, Elapsed time: 0:00:05
+# End time: 08:29:22 on Jan 11,2025, Elapsed time: 0:00:05
 # Errors: 1, Warnings: 5
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBusRam32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.001">
+      <testcase name="testSuiteBusRam32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="6041"/>
             <property name="SimulatedEndTime" value="7188"/>
             <property name="SimulatedDuration" value="1147"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusRam32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.123">
+      <testcase name="testSuiteBusRam32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.096996">
          <properties>
             <property name="SimulatedStartTime" value="8402"/>
             <property name="SimulatedEndTime" value="9459"/>
             <property name="SimulatedDuration" value="1057"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusRam32_testCaseBus32" assertions="21" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.103">
+      <testcase name="testSuiteBusRam32_testCaseBus32" assertions="21" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.101996">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="6038"/>
             <property name="SimulatedDuration" value="5036"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusRam32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.0">
+      <testcase name="testSuiteBusRam32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.006">
          <properties>
             <property name="SimulatedStartTime" value="7191"/>
             <property name="SimulatedEndTime" value="8399"/>
             <property name="SimulatedDuration" value="1208"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusRam32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.117">
+      <testcase name="testSuiteBusRam32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusRam32" file="TestSuites/TestSuiteBusRam32.stm" line="TestSuites/TestSuiteBusRam32.stm" time="0.094996">
          <properties>
             <property name="SimulatedStartTime" value="9462"/>
             <property name="SimulatedEndTime" value="10489"/>
@@ -1754,15 +1764,16 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBasic" tests="6" skipped="0" errors="0" failures="0" assertions="100" timestamp="2025-01-11T07:56:55.637741" time="0.003" file="TestSuites/TestSuiteBasic.stm">
+   <testsuite name="testSuiteBasic" tests="6" skipped="0" errors="0" failures="0" assertions="100" timestamp="2025-01-11T08:29:33.560335" time="0.005999" file="TestSuites/TestSuiteBasic.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBasic.stm -gstimulus_main_entry_label=$testMainSuiteBasic -do &quot;run_all.do&quot; 
-# Start time: 07:56:44 on Jan 11,2025
+# Start time: 08:29:19 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51411&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51591&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60910&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61006&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61965&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=4.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -1952,46 +1963,46 @@
 #    Time: 2106500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 2106500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:56 on Jan 11,2025, Elapsed time: 0:00:12
-# Errors: 0, Warnings: 6
+# End time: 08:29:34 on Jan 11,2025, Elapsed time: 0:00:15
+# Errors: 0, Warnings: 7
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBasic_testCaseBasicIfElseElsif" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.131">
+      <testcase name="testSuiteBasic_testCaseBasicIfElseElsif" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.103996">
          <properties>
             <property name="SimulatedStartTime" value="1013"/>
             <property name="SimulatedEndTime" value="1045"/>
             <property name="SimulatedDuration" value="32"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBasic_testCaseBasicVar3" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.005">
+      <testcase name="testSuiteBasic_testCaseBasicVar3" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1096"/>
             <property name="SimulatedEndTime" value="1104"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBasic_testCaseBasicLoop" assertions="3" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.097">
+      <testcase name="testSuiteBasic_testCaseBasicLoop" assertions="3" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1069"/>
             <property name="SimulatedEndTime" value="1082"/>
             <property name="SimulatedDuration" value="13"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBasic_testCaseBasicNestedIfElseElsif" assertions="77" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.099">
+      <testcase name="testSuiteBasic_testCaseBasicNestedIfElseElsif" assertions="77" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.099996">
          <properties>
             <property name="SimulatedStartTime" value="1048"/>
             <property name="SimulatedEndTime" value="1066"/>
             <property name="SimulatedDuration" value="18"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBasic_testCaseBasicConst" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.003">
+      <testcase name="testSuiteBasic_testCaseBasicConst" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.005999">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1010"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBasic_testCaseBasicVar" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.108">
+      <testcase name="testSuiteBasic_testCaseBasicVar" assertions="5" classname="testSuiteBasic" file="TestSuites/TestSuiteBasic.stm" line="TestSuites/TestSuiteBasic.stm" time="0.004">
          <properties>
             <property name="SimulatedStartTime" value="1086"/>
             <property name="SimulatedEndTime" value="1093"/>
@@ -1999,14 +2010,15 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteArray" tests="5" skipped="0" errors="0" failures="0" assertions="21" timestamp="2025-01-11T07:56:49.104741" time="0.004" file="TestSuites/TestSuiteArray.stm">
+   <testsuite name="testSuiteArray" tests="5" skipped="0" errors="0" failures="0" assertions="21" timestamp="2025-01-11T08:29:31.272430" time="0.095996" file="TestSuites/TestSuiteArray.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteArray.stm -gstimulus_main_entry_label=$testMainSuiteArray -do &quot;run_all.do&quot; 
-# Start time: 07:56:44 on Jan 11,2025
+# Start time: 08:29:20 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51411&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60971&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61100&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -2115,25 +2127,25 @@
 #    Time: 2055100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 2055100 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:49 on Jan 11,2025, Elapsed time: 0:00:05
-# Errors: 0, Warnings: 5
+# End time: 08:29:31 on Jan 11,2025, Elapsed time: 0:00:11
+# Errors: 0, Warnings: 6
 </system-out>
       <system-err/>
-      <testcase name="testSuiteArray_testCaseArraySet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.004">
+      <testcase name="testSuiteArray_testCaseArraySet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.094996">
          <properties>
             <property name="SimulatedStartTime" value="1023"/>
             <property name="SimulatedEndTime" value="1031"/>
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteArray_testCaseArrayGet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.095">
+      <testcase name="testSuiteArray_testCaseArrayGet" assertions="3" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="1013"/>
             <property name="SimulatedEndTime" value="1020"/>
             <property name="SimulatedDuration" value="7"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteArray_testCaseArray" assertions="6" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.004">
+      <testcase name="testSuiteArray_testCaseArray" assertions="6" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1010"/>
@@ -2147,7 +2159,7 @@
             <property name="SimulatedDuration" value="8"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteArray_testCaseArraySize" assertions="1" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.095">
+      <testcase name="testSuiteArray_testCaseArraySize" assertions="1" classname="testSuiteArray" file="TestSuites/TestSuiteArray.stm" line="TestSuites/TestSuiteArray.stm" time="0.097996">
          <properties>
             <property name="SimulatedStartTime" value="1034"/>
             <property name="SimulatedEndTime" value="1040"/>
@@ -2155,14 +2167,15 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusWishbone32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T07:56:48.215741" time="0.114" file="TestSuites/TestSuiteBusWishbone32.stm">
+   <testsuite name="testSuiteBusWishbone32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T08:29:32.448381" time="0.113995" file="TestSuites/TestSuiteBusWishbone32.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusWishbone32.stm -gstimulus_main_entry_label=$testMainSuiteBusWishbone32 -do &quot;run_all.do&quot; 
-# Start time: 07:56:45 on Jan 11,2025
+# Start time: 08:29:21 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51429&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 60949&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61103&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -2287,39 +2300,39 @@
 #    Time: 11642 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: SUCCESS
 #    Time: 11642 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:48 on Jan 11,2025, Elapsed time: 0:00:03
-# Errors: 3, Warnings: 5
+# End time: 08:29:32 on Jan 11,2025, Elapsed time: 0:00:11
+# Errors: 3, Warnings: 6
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBusWishbone32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.098">
+      <testcase name="testSuiteBusWishbone32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="6191"/>
             <property name="SimulatedEndTime" value="7368"/>
             <property name="SimulatedDuration" value="1177"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.006">
+      <testcase name="testSuiteBusWishbone32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="7371"/>
             <property name="SimulatedEndTime" value="8579"/>
             <property name="SimulatedDuration" value="1208"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone32_testCaseBus32" assertions="21" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.114">
+      <testcase name="testSuiteBusWishbone32_testCaseBus32" assertions="21" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.113995">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="6188"/>
             <property name="SimulatedDuration" value="5186"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.096">
+      <testcase name="testSuiteBusWishbone32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.006">
          <properties>
             <property name="SimulatedStartTime" value="9627"/>
             <property name="SimulatedEndTime" value="10639"/>
             <property name="SimulatedDuration" value="1012"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.095">
+      <testcase name="testSuiteBusWishbone32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusWishbone32" file="TestSuites/TestSuiteBusWishbone32.stm" line="TestSuites/TestSuiteBusWishbone32.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="8582"/>
             <property name="SimulatedEndTime" value="9624"/>
@@ -2327,14 +2340,13 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusWishbone64" tests="5" skipped="0" errors="0" failures="0" assertions="38" timestamp="2025-01-11T07:56:52.521741" time="0.146" file="TestSuites/TestSuiteBusWishbone64.stm">
+   <testsuite name="testSuiteBusWishbone64" tests="5" skipped="0" errors="0" failures="0" assertions="38" timestamp="2025-01-11T08:29:24.157730" time="0.127994" file="TestSuites/TestSuiteBusWishbone64.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusWishbone64.stm -gstimulus_main_entry_label=$testMainSuiteBusWishbone64 -do &quot;run_all.do&quot; 
-# Start time: 07:56:46 on Jan 11,2025
+# Start time: 08:29:22 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51421&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -2450,39 +2462,39 @@
 #    Time: 12052 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 12052 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:52 on Jan 11,2025, Elapsed time: 0:00:06
-# Errors: 0, Warnings: 5
+# End time: 08:29:24 on Jan 11,2025, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 4
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBusWishbone64_testCaseBus64VerifyFail" assertions="4" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.002">
+      <testcase name="testSuiteBusWishbone64_testCaseBus64VerifyFail" assertions="4" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.0">
          <properties>
             <property name="SimulatedStartTime" value="7731"/>
             <property name="SimulatedEndTime" value="8939"/>
             <property name="SimulatedDuration" value="1208"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone64_testCaseBus64VerifySuccess" assertions="3" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.0">
+      <testcase name="testSuiteBusWishbone64_testCaseBus64VerifySuccess" assertions="3" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="6551"/>
             <property name="SimulatedEndTime" value="7728"/>
             <property name="SimulatedDuration" value="1177"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone64_testCaseBus64TimeOutRead" assertions="2" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.124">
+      <testcase name="testSuiteBusWishbone64_testCaseBus64TimeOutRead" assertions="2" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.111995">
          <properties>
             <property name="SimulatedStartTime" value="8942"/>
             <property name="SimulatedEndTime" value="10009"/>
             <property name="SimulatedDuration" value="1067"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone64_testCaseBus64TimeOutWrite" assertions="2" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.005">
+      <testcase name="testSuiteBusWishbone64_testCaseBus64TimeOutWrite" assertions="2" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.094996">
          <properties>
             <property name="SimulatedStartTime" value="10012"/>
             <property name="SimulatedEndTime" value="11049"/>
             <property name="SimulatedDuration" value="1037"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusWishbone64_testCaseBus64" assertions="27" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.146">
+      <testcase name="testSuiteBusWishbone64_testCaseBus64" assertions="27" classname="testSuiteBusWishbone64" file="TestSuites/TestSuiteBusWishbone64.stm" line="TestSuites/TestSuiteBusWishbone64.stm" time="0.127994">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="6548"/>
@@ -2490,14 +2502,13 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteSignal" tests="4" skipped="0" errors="0" failures="0" assertions="61" timestamp="2025-01-11T07:56:53.452741" time="0.116" file="TestSuites/TestSuiteSignal.stm">
+   <testsuite name="testSuiteSignal" tests="4" skipped="0" errors="0" failures="0" assertions="61" timestamp="2025-01-11T08:29:26.057649" time="0.098996" file="TestSuites/TestSuiteSignal.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteSignal.stm -gstimulus_main_entry_label=$testMainSuiteSignal -do &quot;run_all.do&quot; 
-# Start time: 07:56:47 on Jan 11,2025
+# Start time: 08:29:24 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51972&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -2604,32 +2615,32 @@
 #    Time: 2055500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: SUCCESS
 #    Time: 2055500 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:53 on Jan 11,2025, Elapsed time: 0:00:06
-# Errors: 1, Warnings: 5
+# End time: 08:29:26 on Jan 11,2025, Elapsed time: 0:00:02
+# Errors: 1, Warnings: 4
 </system-out>
       <system-err/>
-      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.116">
+      <testcase name="testSuiteSignal_testCaseSignalWriteReadVerify" assertions="12" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.098996">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="1011"/>
             <property name="SimulatedDuration" value="9"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteSignal_testCaseSignalPointerCopy" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.006">
+      <testcase name="testSuiteSignal_testCaseSignalPointerCopy" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.100996">
          <properties>
             <property name="SimulatedStartTime" value="1025"/>
             <property name="SimulatedEndTime" value="1037"/>
             <property name="SimulatedDuration" value="12"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteSignal_testCaseSignalVerifyFail" assertions="1" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.005">
+      <testcase name="testSuiteSignal_testCaseSignalVerifyFail" assertions="1" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="1014"/>
             <property name="SimulatedEndTime" value="1021"/>
             <property name="SimulatedDuration" value="7"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteSignal_testCaseSignalPointerGetSet" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.205">
+      <testcase name="testSuiteSignal_testCaseSignalPointerGetSet" assertions="24" classname="testSuiteSignal" file="TestSuites/TestSuiteSignal.stm" line="TestSuites/TestSuiteSignal.stm" time="0.102995">
          <properties>
             <property name="SimulatedStartTime" value="1040"/>
             <property name="SimulatedEndTime" value="1053"/>
@@ -2637,15 +2648,14 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusAvalon64" tests="5" skipped="0" errors="0" failures="0" assertions="38" timestamp="2025-01-11T07:56:56.768741" time="0.123" file="TestSuites/TestSuiteBusAvalon64.stm">
+   <testsuite name="testSuiteBusAvalon64" tests="5" skipped="0" errors="0" failures="0" assertions="38" timestamp="2025-01-11T08:29:30.064481" time="0.098996" file="TestSuites/TestSuiteBusAvalon64.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusAvalon64.stm -gstimulus_main_entry_label=$testMainSuiteBusAvalon64 -do &quot;run_all.do&quot; 
-# Start time: 07:56:48 on Jan 11,2025
+# Start time: 08:29:26 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51823&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51552&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61100&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=3.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -2761,39 +2771,39 @@
 #    Time: 12052 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 12052 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:57 on Jan 11,2025, Elapsed time: 0:00:09
-# Errors: 0, Warnings: 6
+# End time: 08:29:30 on Jan 11,2025, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 5
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBusAvalon64_testCaseBus64" assertions="27" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.123">
+      <testcase name="testSuiteBusAvalon64_testCaseBus64" assertions="27" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.098996">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="6548"/>
             <property name="SimulatedDuration" value="5546"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon64_testCaseBus64TimeOutWrite" assertions="2" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.01">
+      <testcase name="testSuiteBusAvalon64_testCaseBus64TimeOutWrite" assertions="2" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="10012"/>
             <property name="SimulatedEndTime" value="11049"/>
             <property name="SimulatedDuration" value="1037"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon64_testCaseBus64TimeOutRead" assertions="2" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.0">
+      <testcase name="testSuiteBusAvalon64_testCaseBus64TimeOutRead" assertions="2" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.004999">
          <properties>
             <property name="SimulatedStartTime" value="8942"/>
             <property name="SimulatedEndTime" value="10009"/>
             <property name="SimulatedDuration" value="1067"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon64_testCaseBus64VerifyFail" assertions="4" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.125">
+      <testcase name="testSuiteBusAvalon64_testCaseBus64VerifyFail" assertions="4" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.094995">
          <properties>
             <property name="SimulatedStartTime" value="7731"/>
             <property name="SimulatedEndTime" value="8939"/>
             <property name="SimulatedDuration" value="1208"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAvalon64_testCaseBus64VerifySuccess" assertions="3" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.0">
+      <testcase name="testSuiteBusAvalon64_testCaseBus64VerifySuccess" assertions="3" classname="testSuiteBusAvalon64" file="TestSuites/TestSuiteBusAvalon64.stm" line="TestSuites/TestSuiteBusAvalon64.stm" time="0.004">
          <properties>
             <property name="SimulatedStartTime" value="6551"/>
             <property name="SimulatedEndTime" value="7728"/>
@@ -2801,11 +2811,11 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteBusAxi4Lite32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T07:56:51.343741" time="0.101" file="TestSuites/TestSuiteBusAxi4Lite32.stm">
+   <testsuite name="testSuiteBusAxi4Lite32" tests="5" skipped="0" errors="0" failures="0" assertions="32" timestamp="2025-01-11T08:29:28.828533" time="0.194992" file="TestSuites/TestSuiteBusAxi4Lite32.stm">
       <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/tb/simstm/ -gstimulus_file=testMainSuiteBusAxi4Lite32.stm -gstimulus_main_entry_label=$testMainSuiteBusAxi4Lite32 -do &quot;run_all.do&quot; 
-# Start time: 07:56:48 on Jan 11,2025
+# Start time: 08:29:26 on Jan 11,2025
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 51591&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 61100&quot;. Lockfile is &quot;/home/vagrant/git/tutorial/tutorial-hxs-bitfield-register-pulse-generator-plain/submodules/simstm/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -2930,39 +2940,39 @@
 #    Time: 14852 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
 # ** Note: Test finished
 #    Time: 14852 ns  Iteration: 0  Instance: /tbtop/i_tb_simstm
-# End time: 07:56:51 on Jan 11,2025, Elapsed time: 0:00:03
+# End time: 08:29:29 on Jan 11,2025, Elapsed time: 0:00:03
 # Errors: 1, Warnings: 5
 </system-out>
       <system-err/>
-      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.004">
+      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32VerifySuccess" assertions="3" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.097995">
          <properties>
             <property name="SimulatedStartTime" value="8561"/>
             <property name="SimulatedEndTime" value="10128"/>
             <property name="SimulatedDuration" value="1567"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.097">
+      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32TimeOutWrite" assertions="2" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="12752"/>
             <property name="SimulatedEndTime" value="13849"/>
             <property name="SimulatedDuration" value="1097"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.101">
+      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32TimeOutRead" assertions="2" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.095996">
          <properties>
             <property name="SimulatedStartTime" value="11552"/>
             <property name="SimulatedEndTime" value="12749"/>
             <property name="SimulatedDuration" value="1197"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32" assertions="21" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.101">
+      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32" assertions="21" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.194992">
          <properties>
             <property name="SimulatedStartTime" value="1002"/>
             <property name="SimulatedEndTime" value="8558"/>
             <property name="SimulatedDuration" value="7556"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.006">
+      <testcase name="testSuiteBusAxi4Lite32_testCaseBus32VerifyFail" assertions="4" classname="testSuiteBusAxi4Lite32" file="TestSuites/TestSuiteBusAxi4Lite32.stm" line="TestSuites/TestSuiteBusAxi4Lite32.stm" time="0.005">
          <properties>
             <property name="SimulatedStartTime" value="10131"/>
             <property name="SimulatedEndTime" value="11549"/>
