@@ -69,11 +69,15 @@ var TestSuiteIndex 255
 signal sigInZero 2
 var BasicZero 0
 
+signal sigMachineValueWidth 7
+var MachineValueWidth 0
+
 var MAX 0
 
 initBase:
 proc
     sub MAX 1
+    signal read sigMachineValueWidth MachineValueWidth
 end proc	
 
 var FileStatus 0

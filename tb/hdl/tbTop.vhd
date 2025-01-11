@@ -78,6 +78,7 @@ begin
     signals_in.in_signal_4 <= verify_failures;
     signals_in.in_signal_5 <= bus_timeout_passes;
     signals_in.in_signal_6 <= bus_timeout_failures;
+    -- signals_in.in_signal_7 Machine value width 
     
     -- standard outputs
     InitDut <= signals_out.out_signal_0;

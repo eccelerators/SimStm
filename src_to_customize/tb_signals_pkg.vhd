@@ -140,7 +140,9 @@ package body tb_signals_pkg is
             when 5 =>
                 value(signals.in_signal_5'left downto 0) := unsigned(signals.in_signal_5);
             when 6 =>
-                value(signals.in_signal_6'left downto 0) := unsigned(signals.in_signal_6); 
+                value(signals.in_signal_6'left downto 0) := unsigned(signals.in_signal_6);
+            when 7 =>
+                value := to_unsigned(c_stm_value_width, c_stm_value_width);                  
                 
             when 1000 =>
                 value(0) := signals.in_signal_1000;

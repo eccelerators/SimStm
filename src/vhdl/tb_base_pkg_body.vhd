@@ -983,7 +983,7 @@ package body tb_base_pkg is
         valid := 0;
         for j in 0 to stm_array'length - 1 loop
             value_std_logic_vector := std_logic_vector(stm_array(j));
-            hwrite(std_line, value_std_logic_vector, left, 9);
+            hwrite(std_line, value_std_logic_vector, left, c_stm_value_width / 4 + 1);
         end loop;
         if stm_lines.size = 0 then
             stm_line_ptr := new t_stm_line;
@@ -1190,7 +1190,7 @@ package body tb_base_pkg is
             if i = position then
                 for j in 0 to stm_array'length - 1 loop
                     value_std_logic_vector := std_logic_vector(stm_array(j));
-                    hwrite(tmp_std_line, value_std_logic_vector, left, 9);
+                    hwrite(tmp_std_line, value_std_logic_vector, left, c_stm_value_width / 4 + 1);
                 end loop;
                 -- copy current stm_line to new stmline object
                 stm_line_new.line_content := stm_line_ptr.line_content;
@@ -1283,7 +1283,7 @@ package body tb_base_pkg is
             if i = position then
                 for j in 0 to stm_array'length - 1 loop
                     value_std_logic_vector := std_logic_vector(stm_array(j));
-                    hwrite(std_line, value_std_logic_vector, left, 9);
+                    hwrite(std_line, value_std_logic_vector, left, c_stm_value_width / 4 + 1);
                 end loop;
                 stm_line_ptr.line_content := std_line;
                 valid := 1;
