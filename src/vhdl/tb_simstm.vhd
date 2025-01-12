@@ -66,7 +66,8 @@ entity tb_simstm is
     generic(
         stimulus_path : in string;
         stimulus_file : in string;
-        stimulus_main_entry_label : in string := "$testMain"
+        stimulus_main_entry_label : in string := "$testMain";
+        c_stm_value_width : integer := 64
     );
     port(
         executing_line : out integer;
@@ -193,8 +194,8 @@ begin
 
         --  scratchpad variables
         variable temp_int : integer;
-        variable temp_stm_value : t_stm_value;
-        variable temp_stm_value_b : t_stm_value;
+        variable temp_stm_value : unsigned (c_stm_value_width - 1 downto 0);
+        variable temp_stm_value_b : unsigned (c_stm_value_width - 1 downto 0);
         variable number_found : integer;
        
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
@@ -919,7 +920,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_get(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, number_found, valid);
+                    stm_lines_get(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, number_found, valid, c_stm_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
                     severity failure;
@@ -943,7 +944,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid);
+                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, c_stm_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not set successfully"
                     severity failure;
@@ -976,7 +977,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid);
+                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, c_stm_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not inserted successfully"
                     severity failure;
@@ -1008,7 +1009,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_append(var_stm_lines, var_stm_array, valid);
+                    stm_lines_append(var_stm_lines, var_stm_array, valid, c_stm_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
                     severity failure;

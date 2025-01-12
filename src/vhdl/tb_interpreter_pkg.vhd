@@ -84,7 +84,8 @@ package tb_interpreter_pkg is
                               variable sequ_num : inout integer;
                               variable line_num : in integer;
                               variable file_name : in text_line;
-                              variable file_idx : in integer);
+                              variable file_idx : in integer;
+                              constant stm_value_width : in integer);
 
     procedure add_variable(variable var_list : inout var_field_ptr;
                            variable p1 : in text_field; -- should be var name
@@ -93,9 +94,10 @@ package tb_interpreter_pkg is
                            variable line_num : in integer;
                            variable name : in text_line;
                            variable length : in integer;
-                           constant var_stm_type : in t_stm_var_type;
+                           constant var_stm_type : in t_stm_var_type;       
                            variable str_ptr : in stm_text_ptr;
-                           variable txt_enclosing_quote : in character);
+                           variable txt_enclosing_quote : in character;
+                           constant stm_value_width : in integer);
 
     --  access_variable
     --     inputs:
@@ -107,7 +109,7 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
-                              variable value : out t_stm_value;
+                              variable value : out unsigned;
                               variable valid : out integer);
                               
     procedure access_variable(variable var_list : in var_field_ptr;

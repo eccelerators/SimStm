@@ -65,7 +65,8 @@ package body tb_interpreter_pkg is
                               variable sequ_num : inout integer;
                               variable line_num : in integer;
                               variable file_name : in text_line;
-                              variable file_idx : in integer) is
+                              variable file_idx : in integer;
+                              constant stm_value_width : in integer) is
         variable temp_stim_line : stim_line_ptr;
         variable temp_current : stim_line_ptr;
         variable valid : integer;
@@ -97,9 +98,9 @@ package body tb_interpreter_pkg is
             --  add the variable to the variable pool, not considered an instruction
             if stm_var_type /= STM_LABEL_TYPE then
                 l := fld_len(p1);
-                add_variable(var_list, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote);
+                add_variable(var_list, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
             else
-                add_variable(var_list, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote);
+                add_variable(var_list, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
             end if;
             valid := 0; --removes this from the instruction list
         end if;
@@ -144,17 +145,17 @@ package body tb_interpreter_pkg is
                            variable length : in integer;
                            constant var_stm_type : in t_stm_var_type;       
                            variable str_ptr : in stm_text_ptr;
-                           variable txt_enclosing_quote : in character
-                          ) is
+                           variable txt_enclosing_quote : in character;
+                           constant stm_value_width : in integer) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;
 
         procedure init_stm_lines_var is
         begin
-            temp_var := new var_field;
+            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
-            temp_var.var_value := to_unsigned(0, c_stm_value_width);
+            temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
@@ -170,13 +171,13 @@ package body tb_interpreter_pkg is
             assert stim_to_integer(p2, name, line_num) > 0
             report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;
-            temp_var := new var_field;
+            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := to_unsigned(0, c_stm_value_width);
+            temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1);
+            temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width downto 0);
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
@@ -186,10 +187,10 @@ package body tb_interpreter_pkg is
             assert str_ptr /= null
             report lf & "error: missing file name in file declaration " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;
-            temp_var := new var_field;
+            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := to_unsigned(0, c_stm_value_width);
+            temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_stm_text := str_ptr;
             temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
             temp_var.var_stm_array := null;
@@ -199,10 +200,10 @@ package body tb_interpreter_pkg is
 
         procedure init_non_inline_var is
         begin
-            temp_var := new var_field;
+            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := stim_to_stm_value(p2, name, line_num); -- convert text_field to integer
+            temp_var.var_value := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to integer
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
@@ -212,10 +213,10 @@ package body tb_interpreter_pkg is
 
         procedure init_inline_var is
         begin
-            temp_var := new var_field;
+            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name(1 to (length - 1)) := p1(1 to (length - 1));
             temp_var.var_index := index;
-            temp_var.var_value := to_unsigned(sequ_num, c_stm_value_width);
+            temp_var.var_value := to_unsigned(sequ_num, stm_value_width);
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
@@ -288,7 +289,7 @@ package body tb_interpreter_pkg is
 
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
-                              variable value : out t_stm_value;
+                              variable value : out unsigned;
                               variable valid : out integer) is
         variable l : integer;
         variable var_ptr : var_field_ptr;
@@ -300,22 +301,22 @@ package body tb_interpreter_pkg is
         valid := 0;
         -- if the variable is a special
         if var(1) = '=' then
-            value := to_unsigned(0, c_stm_value_width);
+            value := to_unsigned(0, value'length);
             valid := 1;
         elsif var(1 to 2) = ">=" then
-            value := to_unsigned(4, c_stm_value_width);
+            value := to_unsigned(4, value'length);
             valid := 1;
         elsif var(1 to 2) = "<=" then
-            value := to_unsigned(5, c_stm_value_width);
+            value := to_unsigned(5, value'length);
             valid := 1;
         elsif var(1) = '>' then
-            value := to_unsigned(1, c_stm_value_width);
+            value := to_unsigned(1, value'length);
             valid := 1;
         elsif var(1) = '<' then
-            value := to_unsigned(2, c_stm_value_width);
+            value := to_unsigned(2, value'length);
             valid := 1;
         elsif var(1 to 2) = "!=" then
-            value := to_unsigned(3, c_stm_value_width);
+            value := to_unsigned(3, value'length);
             valid := 1;
         else
             if var(1) = '$' then
@@ -338,7 +339,7 @@ package body tb_interpreter_pkg is
                         valid := 1;
                         is_defined := true;
                     else
-                        value := to_unsigned(var_ptr.var_index, c_stm_value_width);
+                        value := to_unsigned(var_ptr.var_index, value'length);
                         valid := 1;
                         is_defined := true;
                     end if;
@@ -354,7 +355,7 @@ package body tb_interpreter_pkg is
                         valid := 1;
                         is_defined := true;
                     else
-                        value := to_unsigned(var_ptr.var_index, c_stm_value_width);
+                        value := to_unsigned(var_ptr.var_index, value'length);
                         valid := 1;
                         is_defined := true;
                     end if;
@@ -441,7 +442,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_1;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p1 := stim_to_stm_value(temp_text_field, file_name, line);
+                p1 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p1, valid);
                 assert valid = 1
@@ -453,7 +454,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_2;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p2 := stim_to_stm_value(temp_text_field, file_name, line);
+                p2 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p2, valid);
                 assert valid = 1
@@ -465,7 +466,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_3;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p3 := stim_to_stm_value(temp_text_field, file_name, line);
+                p3 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p3, valid);
                 assert valid = 1
@@ -477,7 +478,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_4;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p4 := stim_to_stm_value(temp_text_field, file_name, line);
+                p4 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p4, valid);
                 assert valid = 1
@@ -489,7 +490,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_5;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p5 := stim_to_stm_value(temp_text_field, file_name, line);
+                p5 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p5, valid);
                 assert (valid = 1)
@@ -501,7 +502,7 @@ package body tb_interpreter_pkg is
         temp_text_field := inst_ptr.inst_field_6;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
-                p6 := stim_to_stm_value(temp_text_field, file_name, line);
+                p6 := stim_to_stm_value(temp_text_field, file_name, line, c_stm_value_width);
             else
                 access_variable(var_list, temp_text_field, p6, valid);
                 assert valid = 1
@@ -979,7 +980,7 @@ package body tb_interpreter_pkg is
             elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
                 add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7,
-                                t_txt, txt_enclosing_quote, sequ_line, l_num, name, v_new_fn);
+                                t_txt, txt_enclosing_quote, sequ_line, l_num, name, v_new_fn, c_stm_value_width);
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file
@@ -1092,7 +1093,7 @@ package body tb_interpreter_pkg is
             elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);
                 add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
-                                sequ_line, l_num, v_name, v_fn_idx);
+                                sequ_line, l_num, v_name, v_fn_idx, c_stm_value_width);
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file

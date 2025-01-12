@@ -53,13 +53,11 @@ package tb_base_pkg is
     constant max_str_len : integer := 512;
     constant max_field_len : integer := 128;
     constant c_stm_text_len : integer := 500;
-    constant c_stm_value_width : integer := 64;
 
     -- file handles
     file stimulus : text; -- file main file
 
     -- type def's
-    subtype t_stm_value is unsigned (c_stm_value_width - 1 downto 0);
     type base is (bin, oct, hex, dec);
     type stack_register is array (31 downto 0) of integer;
     type state_register is array (7 downto 0) of boolean;
@@ -117,7 +115,7 @@ package tb_base_pkg is
         next_rec : file_def_ptr;
     end record;
 
-    type t_stm_array is array (natural range <>) of unsigned(c_stm_value_width - 1 downto 0);
+    type t_stm_array is array (natural range <>) of unsigned;
     type t_stm_array_ptr is access t_stm_array;
 
     type t_stm_line_type is (STM_LINE_TEXT_TYPE,
@@ -159,7 +157,7 @@ package tb_base_pkg is
     type var_field is record
         var_name : text_field;
         var_index : integer;
-        var_value : t_stm_value;
+        var_value : unsigned;
         var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_text_enclosing_quote : character;
@@ -177,10 +175,11 @@ package tb_base_pkg is
  
      -- bin2t_stm_value    convert bin stimulus field to t_stm_value
     --          inputs :  string of type text_field containing only binary numbers
-    --          return :  t_stm_value value                        
+    --          return :  unsigned value                        
     function bin2stm_value(bin_number : in text_field;
                          file_name : in text_line;
-                         line : in integer) return t_stm_value;                        
+                         line : in integer;
+                         stm_value_width : in integer) return unsigned;                        
 
     function c2int(c : in character) return integer;
 
@@ -214,7 +213,7 @@ package tb_base_pkg is
 
     --  to_str function  with base parameter
     --     convert t_stm_value to number base                       
-    function ew_to_str(stmvalue : t_stm_value;
+    function ew_to_str(stmvalue : unsigned;
                        b : base) return text_field;                       
 
     -- fld_equal  check text field for equality
@@ -273,7 +272,8 @@ package tb_base_pkg is
     --          return :  t_stm_value value
     function hex2stm_value(hex_number : in text_field;
                          file_name : in text_line;
-                         line : in integer) return t_stm_value;
+                         line : in integer;
+                         stm_value_width : in integer) return unsigned;
                          
 
     function is_digit(constant c : in character) return boolean;
@@ -306,7 +306,8 @@ package tb_base_pkg is
     --          return :  t_stm_value value                             
     function stim_to_stm_value(field : in text_field;
                              file_name : in text_line;
-                             line : in integer) return t_stm_value;                                                        
+                             line : in integer;
+                             stm_value_width  : in integer) return unsigned;                                                        
 
     procedure stm_file_append(variable stm_lines : in t_stm_lines_ptr;
                               variable file_path : in stm_text_ptr;
@@ -337,11 +338,12 @@ package tb_base_pkg is
 
     procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
                                variable stm_array : in t_stm_array_ptr;
-                               variable valid : out integer);
-
+                               variable valid : out integer;
+                               constant stm_value_width : in integer);
+                               
     procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
                                variable var_stm_text : in stm_text_ptr;
-                               variable valid : out integer);
+                               variable valid : out integer);                               
 
     procedure stm_lines_delete(variable stm_lines : inout t_stm_lines_ptr;
                                variable position : in integer;
@@ -356,7 +358,8 @@ package tb_base_pkg is
                             variable position : in integer;
                             variable stm_array : inout t_stm_array_ptr;
                             variable number_found : out integer;
-                            variable valid : out integer);
+                            variable valid : out integer;
+                            constant stm_value_width : in integer);
 
     procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
                                variable position : in integer;
@@ -366,7 +369,8 @@ package tb_base_pkg is
     procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
                                variable position : integer;
                                variable stm_array : in t_stm_array_ptr;
-                               variable valid : out integer);
+                               variable valid : out integer;
+                               constant stm_value_width : in integer);
 
     procedure stm_lines_print(variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);
@@ -379,7 +383,8 @@ package tb_base_pkg is
     procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
                             variable position : integer;
                             variable stm_array : in t_stm_array_ptr;
-                            variable valid : out integer);
+                            variable valid : out integer;
+                            constant stm_value_width : in integer);
 
     --  procedure copy stm_text into an existing pointer
     procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
@@ -411,7 +416,7 @@ package tb_base_pkg is
     -- str2integer   convert a string to integer number.
     --   inputs  :  string
     --   output  :  stm_value
-    function str2stm_value(str : in string) return t_stm_value;
+    function str2stm_value(str : in string; stm_value_width : in integer) return unsigned;
 
     --  function short text_line (remove 'nul')
     function text_line_crop(txt : in text_line) return string;
@@ -437,8 +442,8 @@ package tb_base_pkg is
 
     function to_str(int : integer) return string;
     
-    function to_str_hex(stmvalue : t_stm_value) return string;
+    function to_str_hex(stmvalue : unsigned) return string;
     
-    function to_str(stmvalue : t_stm_value) return string;
+    function to_str(stmvalue : unsigned) return string;
 
 end package;
