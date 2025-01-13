@@ -4,11 +4,10 @@ include "TestCase/TestCase.stm"
 bus wishbone32 0
 bus avalon32 1
 bus axi4lite32 2
-
 bus wishbone64 3
 bus avalon64 4
-
 bus ram32 5
+bus wishbone128 6
 
 bus busToTest 0
 

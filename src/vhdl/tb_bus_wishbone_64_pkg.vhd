@@ -32,30 +32,22 @@ package tb_bus_wishbone_64_pkg is
 
     procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
                              signal wishbone_up : in t_wishbone_up_64;
-                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable address : in unsigned;
+                             variable data : in unsigned;
                              variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time);
 
     procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
                             signal wishbone_up : in t_wishbone_up_64;
-                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable address : in unsigned;
+                            variable data : out unsigned;
                             variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time);
 end;
 
 package body tb_bus_wishbone_64_pkg is
-    function wishbone_up_64_init return t_wishbone_up_64 is
-        variable init : t_wishbone_up_64;
-    begin
-        init.clk := '0';
-        init.data := (others => '0');
-        init.ack := '0';
-        return init;
-    end;
 
     function wishbone_down_64_init return t_wishbone_down_64 is
         variable init : t_wishbone_down_64;
@@ -68,11 +60,20 @@ package body tb_bus_wishbone_64_pkg is
         init.cyc := '0';
         return init;
     end;
+    
+    function wishbone_up_64_init return t_wishbone_up_64 is
+        variable init : t_wishbone_up_64;
+    begin
+        init.clk := '0';
+        init.data := (others => '0');
+        init.ack := '0';
+        return init;
+    end;
 
     procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
                              signal wishbone_up : in t_wishbone_up_64;
-                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable address : in unsigned;
+                             variable data : in unsigned;
                              variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time) is
@@ -157,8 +158,8 @@ package body tb_bus_wishbone_64_pkg is
 
     procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
                             signal wishbone_up : in t_wishbone_up_64;
-                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable address : in unsigned;
+                            variable data : out unsigned;
                             variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time) is
@@ -241,7 +242,7 @@ package body tb_bus_wishbone_64_pkg is
             when "111" => data_temp := x"00000000000000" & wishbone_up.data(63 downto 56);            
             when others =>
         end case;
-        data := (others => '0');
+        data := to_unsigned(0, data'length);
         case access_width is
             when 8 => data(63 downto 0) := unsigned(data_temp and x"00000000000000FF");
             when 16 => data(63 downto 0) := unsigned(data_temp and x"000000000000FFFF");

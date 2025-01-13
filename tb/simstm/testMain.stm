@@ -5,6 +5,7 @@ include "Signal/signal_pointer.stm"
 
 include "Bus/bus32.stm"
 include "Bus/bus64.stm"
+include "Bus/bus128.stm"
 
 -- include "File/file.stm"
 include "Base/Array.stm"
@@ -35,11 +36,11 @@ proc
 	-- call $testVariableInv	
 	-- call $testOtherRandom
 	
-	--	bus pointer copy busToTest ram32
-	--	bus timeout set busToTest 1000
-	--	call $testBus32VerifySuccess
+	bus pointer copy busToTest wishbone128
+	bus timeout set busToTest 1000
+	call $testBus128
 	
-	call $testLinesSize
+	-- call $testLinesSize
 
 	log message $INFO "Main test finished"
 	wait 1000

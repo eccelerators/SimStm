@@ -109,12 +109,13 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
-                              variable value : out unsigned;
-                              variable valid : out integer);
+                              variable value : out integer;
+                              variable valid : out integer;
+                              constant stm_value_width : in integer);
                               
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
-                              variable value : out integer;
+                              variable value : out unsigned;
                               variable valid : out integer);                              
 
     -- access_inst_sequ
@@ -127,12 +128,12 @@ package tb_interpreter_pkg is
     --            sequ_num   the sequence number to recover
     --
     --  outputs:  inst                 instruction text
-    --            p1                   parameter 1 in t_stm_value form
-    --            p2                   parameter 2 in t_stm_value form
-    --            p3                   parameter 3 in t_stm_value form
-    --            p4                   parameter 4 in t_stm_value form
-    --            p5                   parameter 5 in t_stm_value form
-    --            p6                   parameter 6 in t_stm_value form
+    --            p1                   parameter 1 in unsigned form
+    --            p2                   parameter 2 in unsigned form
+    --            p3                   parameter 3 in unsigned form
+    --            p4                   parameter 4 in unsigned form
+    --            p5                   parameter 5 in unsigned form
+    --            p6                   parameter 6 in unsigned form
     --            txt                  pointer to any text string of this sequence
     --            txt_enclosing_quote  enclosing quote of text string of this sequence
     --            inst_len             the lenth of inst in characters
@@ -144,12 +145,12 @@ package tb_interpreter_pkg is
                                variable file_list : in file_def_ptr;
                                variable sequ_num : in integer;
                                variable inst : out text_field;
-                               variable p1 : out t_stm_value;
-                               variable p2 : out t_stm_value;
-                               variable p3 : out t_stm_value;
-                               variable p4 : out t_stm_value;
-                               variable p5 : out t_stm_value;
-                               variable p6 : out t_stm_value;
+                               variable p1 : out unsigned;
+                               variable p2 : out unsigned;
+                               variable p3 : out unsigned;
+                               variable p4 : out unsigned;
+                               variable p5 : out unsigned;
+                               variable p6 : out unsigned;
                                variable txt : out stm_text_ptr;
                                variable txt_enclosing_quote : out character;
                                variable inst_len : out integer;
@@ -165,11 +166,13 @@ package tb_interpreter_pkg is
     procedure dump_inst_sequ(variable inst_sequ : in stim_line_ptr; file_list : inout file_def_ptr);
 
     -- dump all variables
-    procedure dump_variables(variable var_list : in var_field_ptr);
+    procedure dump_variables(variable var_list : in var_field_ptr; 
+                             constant stm_value_width : in integer);
 
     procedure dump_file_defs(file_list : inout file_def_ptr);
 
-    procedure dump_var_field(variable ptr : var_field_ptr);
+    procedure dump_var_field(variable ptr : var_field_ptr; 
+                             constant stm_value_width : in integer);
         
     procedure file_read_line(file file_name : text;
                              variable file_line : out text_line);
@@ -182,12 +185,12 @@ package tb_interpreter_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
-                             variable value : out t_stm_value;
+                             variable value : out unsigned;
                              variable valid : out integer);
                              
     procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in t_stm_value;
-                             variable value : out t_stm_value;
+                             variable index_stm_value : in unsigned;
+                             variable value : out unsigned;
                              variable valid : out integer);                             
 
     --  index_variable
@@ -203,7 +206,7 @@ package tb_interpreter_pkg is
                              variable valid : out integer);
                              
     procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in t_stm_value;
+                             variable index_stm_value : in unsigned;
                              variable var_stm_text : out stm_text_ptr;
                              variable var_stm_text_enclosing_quote : out character;
                              variable valid : out integer);                             
@@ -220,7 +223,7 @@ package tb_interpreter_pkg is
                              variable valid : out integer);
 
     procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in t_stm_value;
+                             variable index_stm_value : in unsigned;
                              variable stm_array : out t_stm_array_ptr;
                              variable valid : out integer);
                              
@@ -236,7 +239,7 @@ package tb_interpreter_pkg is
                              variable valid : out integer);
                              
     procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in t_stm_value;
+                             variable index_stm_value : in unsigned;
                              variable stm_lines : out t_stm_lines_ptr;
                              variable valid : out integer);                             
 
@@ -255,7 +258,8 @@ package tb_interpreter_pkg is
                                 variable inst_set : inout inst_def_ptr;
                                 variable var_list : inout var_field_ptr;
                                 variable inst_sequ : inout stim_line_ptr;
-                                variable status : inout integer);
+                                variable status : inout integer;
+                                constant stm_value_width : in integer);
                                 
     -- read_instruction_file
     --  this procedure reads the instruction file, name passed throught file_name.
@@ -268,7 +272,8 @@ package tb_interpreter_pkg is
                                     variable inst_set : inout inst_def_ptr;
                                     variable var_list : inout var_field_ptr;
                                     variable inst_sequ : inout stim_line_ptr;
-                                    variable file_list : inout file_def_ptr);
+                                    variable file_list : inout file_def_ptr;
+                                    constant stm_value_width : in integer);
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable ptr : in stm_text_ptr;
@@ -277,11 +282,13 @@ package tb_interpreter_pkg is
                                        variable stack_called_files : stack_text_line_array;
                                        variable stack_called_file_line_numbers: stack_numbers_array;
                                        variable stack_called_labels : stack_text_field_array;
-                                       variable stm_text_substituded : out stm_text);
+                                       variable stm_text_substituded : out stm_text;
+                                       constant stm_value_width : in integer);
 
     procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
                              variable file_list : in file_def_ptr;
-                             variable var_list : in var_field_ptr);
+                             variable var_list : in var_field_ptr;
+                             constant stm_value_width : in integer);
 
     --  tokenize_line
     --    this procedure takes a type text_line in and returns up to 6
@@ -306,7 +313,8 @@ package tb_interpreter_pkg is
                              variable stack_ptr : integer;
                              variable stack_called_files : stack_text_line_array;
                              variable stack_called_file_line_numbers: stack_numbers_array;
-                             variable stack_called_labels : stack_text_field_array);
+                             variable stack_called_labels : stack_text_field_array;
+                             constant stm_value_width : in integer);
 
     --  update_variable
     --     inputs:
@@ -316,16 +324,16 @@ package tb_interpreter_pkg is
     --               valid  is 1 if valid 0 if not
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
-                              variable value : in t_stm_value;
+                              variable value : in unsigned;
                               variable valid : out integer);
                               
     procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in t_stm_value;
-                              variable value : in t_stm_value;
+                              variable index_stm_value : in unsigned;
+                              variable value : in unsigned;
                               variable valid : out integer);
                               
     procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in t_stm_value;
+                              variable index_stm_value : in unsigned;
                               variable integer_value : in integer;
                               variable valid : out integer);                                                                                  
 
@@ -340,7 +348,7 @@ package tb_interpreter_pkg is
                               variable valid : out integer);
                               
     procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in t_stm_value;
+                              variable index_stm_value : in unsigned;
                               variable var_stm_text : in stm_text_ptr;
                               variable valid : out integer);                              
 
@@ -356,7 +364,7 @@ package tb_interpreter_pkg is
                               variable valid : out integer);
                               
     procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in t_stm_value;
+                              variable index_stm_value : in unsigned;
                               variable stm_array : in t_stm_array_ptr;
                               variable valid : out integer);                              
 
@@ -372,7 +380,7 @@ package tb_interpreter_pkg is
                               variable valid : out integer);
                               
     procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in t_stm_value;
+                              variable index_stm_value : in unsigned;
                               variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);                              
                               

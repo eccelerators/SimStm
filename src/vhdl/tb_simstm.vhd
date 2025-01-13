@@ -67,15 +67,16 @@ entity tb_simstm is
         stimulus_path : in string;
         stimulus_file : in string;
         stimulus_main_entry_label : in string := "$testMain";
-        c_stm_value_width : integer := 64
+        machine_value_width : integer := 64;
+        machine_address_width : integer := 31
     );
     port(
         executing_line : out integer;
         executing_file : out text_line;
-        verify_passes : out std_logic_vector(c_stm_value_width - 1 downto 0);
-        verify_failures : out std_logic_vector(c_stm_value_width - 1 downto 0);
-        bus_timeout_passes : out std_logic_vector(c_stm_value_width - 1 downto 0);
-        bus_timeout_failures : out std_logic_vector(c_stm_value_width - 1 downto 0);
+        verify_passes : out std_logic_vector(31 downto 0);
+        verify_failures : out std_logic_vector(31 downto 0);
+        bus_timeout_passes : out std_logic_vector(31 downto 0);
+        bus_timeout_failures : out std_logic_vector(31 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
         signals_in : in t_signals_in := signals_in_init;
@@ -143,12 +144,12 @@ begin
         variable last_sequ_ptr : stim_line_ptr;
 
         variable instruction : text_field; -- instruction field
-        variable par1 : t_stm_value; -- parameter 1
-        variable par2 : t_stm_value; -- parameter 2
-        variable par3 : t_stm_value; -- parameter 3
-        variable par4 : t_stm_value; -- parameter 4
-        variable par5 : t_stm_value; -- parameter 5
-        variable par6 : t_stm_value; -- parameter 6
+        variable par1 : unsigned(machine_value_width - 1 downto 0); -- parameter 1
+        variable par2 : unsigned(machine_value_width - 1 downto 0); -- parameter 2
+        variable par3 : unsigned(machine_value_width - 1 downto 0); -- parameter 3
+        variable par4 : unsigned(machine_value_width - 1 downto 0); -- parameter 4
+        variable par5 : unsigned(machine_value_width - 1 downto 0); -- parameter 5
+        variable par6 : unsigned(machine_value_width - 1 downto 0); -- parameter 6
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable len : integer; -- length of the instruction field
@@ -169,8 +170,8 @@ begin
         variable stack_loop_line : stack_int_array_array := (others => (others => 0));
         variable stack_loop_if_enter_level : stack_int_array := (others => 0);
 
-        variable loglevel : t_stm_value := to_unsigned(0, c_stm_value_width);
-        variable resume : t_stm_value := to_unsigned(0, c_stm_value_width);
+        variable loglevel : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
+        variable resume : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
         variable verify_passes_count : integer := 0;
         variable verify_failure_count : integer := 0;
         variable bus_timeout_passes_count : integer := 0;
@@ -194,13 +195,13 @@ begin
 
         --  scratchpad variables
         variable temp_int : integer;
-        variable temp_stm_value : unsigned (c_stm_value_width - 1 downto 0);
-        variable temp_stm_value_b : unsigned (c_stm_value_width - 1 downto 0);
+        variable temp_stm_value : unsigned (machine_value_width - 1 downto 0);
+        variable temp_stm_value_b : unsigned (machine_value_width - 1 downto 0);
         variable number_found : integer;
        
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
-        variable trc_on : t_stm_value := to_unsigned(0, c_stm_value_width);
+        variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
 
         file stimulus : text; -- file main file
         variable v_stat : file_open_status;
@@ -278,7 +279,7 @@ begin
         file_close(stimulus);
 
         -- read, test, and load the stimulus file
-        read_instruction_file(stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list);
+        read_instruction_file(stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
 
         -- initialize last info
         last_sequ_num := 0;
@@ -288,10 +289,10 @@ begin
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
 
-            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, c_stm_value_width));        
-            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, c_stm_value_width));
-            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, c_stm_value_width));
-            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, c_stm_value_width));
+            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));        
+            verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
+            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, 32));
+            bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
             
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
@@ -299,7 +300,7 @@ begin
             end if;
 
             if main_entered = 0 then
-                access_variable(defined_vars, main_label_text_field, main_line, valid);               
+                access_variable(defined_vars, main_label_text_field, main_line, valid, machine_value_width);            
                 assert valid = 1
                 report lf & "error: Entry point proc Main not found !"
                 severity failure;
@@ -325,7 +326,7 @@ begin
                 stack(stack_ptr) := v_line;
                 stack_ptr := stack_ptr + 1;
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
-                access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid);
+                access_variable(defined_vars, branch_to_interrupt_label, branch_to_interrupt_v_line, valid, machine_value_width);
                 assert valid = 1
                 report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !"
                 severity failure;
@@ -349,7 +350,7 @@ begin
                     dump_file_defs(file_list);
                 end if;
                 if trc_on(2) = '1' then
-                    dump_variables(defined_vars);
+                    dump_variables(defined_vars, machine_value_width);
                 end if;
                 if trc_on(1) = '1' then
                     print_inst(inst_sequ, v_line, file_list);
@@ -441,7 +442,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stm_value := resize(resize(temp_stm_value, c_stm_value_width * 2)  * resize(par2, c_stm_value_width * 2), c_stm_value_width);
+                    temp_stm_value := resize(resize(temp_stm_value, machine_value_width * 2)  * resize(par2, machine_value_width * 2), machine_value_width);
                     update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
@@ -585,7 +586,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    temp_stm_value := to_unsigned(var_stm_array'length, c_stm_value_width);
+                    temp_stm_value := to_unsigned(var_stm_array'length, machine_value_width);
                     update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "array_size error: not a valid variable??"
@@ -639,7 +640,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_readable(var_stm_text_substituded_ptr, temp_int);
@@ -654,7 +655,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_writeable(var_stm_text_substituded_ptr, temp_int);
@@ -669,7 +670,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_appendable(var_stm_text_substituded_ptr, temp_int);
@@ -688,7 +689,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);             
                     stm_file_write(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -706,7 +707,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);                  
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);              
                     stm_file_append(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -781,7 +782,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                        stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);                  
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -859,7 +860,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);  
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -890,7 +891,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);                   
+                    stm_text_substitude_wvar(defined_vars, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);                   
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);   
                     stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -920,7 +921,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_get(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, number_found, valid, c_stm_value_width);
+                    stm_lines_get(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, number_found, valid, machine_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
                     severity failure;
@@ -944,7 +945,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, c_stm_value_width);
+                    stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, machine_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not set successfully"
                     severity failure;
@@ -958,7 +959,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_set(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_text_out, valid);
@@ -977,7 +978,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, c_stm_value_width);
+                    stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_array, valid, machine_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not inserted successfully"
                     severity failure;
@@ -991,7 +992,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_insert(var_stm_lines, to_integer(par2(30 downto 0)), var_stm_text_out, valid);
@@ -1009,7 +1010,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not found"
                     severity failure;
-                    stm_lines_append(var_stm_lines, var_stm_array, valid, c_stm_value_width);
+                    stm_lines_append(var_stm_lines, var_stm_array, valid, machine_value_width);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines append not successful"
                     severity failure;
@@ -1021,7 +1022,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded);
+                    stm_text_substitude_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out, valid);
@@ -1456,7 +1457,7 @@ begin
                 -- log message  $INFO "misc_proc severity: {}" $INFO
                 elsif instruction(1 to len) = INSTR_LOG_MESSAGE then
                     if par1 <= loglevel then
-                        txt_print_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels);
+                        txt_print_wvar(defined_vars, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, machine_value_width);
                     end if;
 
                 -- log lines $INFO a_lines
@@ -1741,7 +1742,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
                     severity failure;
-                    temp_stm_value_b := to_unsigned(bus_timeouts(to_integer(temp_stm_value(30 downto 0))) / 1 ns, c_stm_value_width);                   
+                    temp_stm_value_b := to_unsigned(bus_timeouts(to_integer(temp_stm_value(30 downto 0))) / 1 ns, machine_value_width);                   
                     update_variable(defined_vars, par2, temp_stm_value_b, valid);
                     assert valid /= 0
                     report "variable error: not a var object name??"

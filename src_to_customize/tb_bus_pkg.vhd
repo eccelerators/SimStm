@@ -6,6 +6,7 @@ use work.tb_bus_avalon_32_pkg.all;
 use work.tb_bus_axi4lite_32_pkg.all;
 use work.tb_bus_wishbone_32_pkg.all;
 use work.tb_bus_wishbone_64_pkg.all;
+use work.tb_bus_wishbone_128_pkg.all;
 use work.tb_bus_avalon_64_pkg.all;
 use work.tb_bus_ram_32_pkg.all;
 use work.tb_base_pkg.all;
@@ -19,6 +20,7 @@ package tb_bus_pkg is
         wishbone64 : t_wishbone_down_64;
         avalonmm64 : t_avalonmm_down_64;
         ram32 : t_ram_down_32;
+        wishbone128 : t_wishbone_down_128;
     end record;
 
     type t_bus_up is record
@@ -28,6 +30,7 @@ package tb_bus_pkg is
         wishbone64 : t_wishbone_up_64;
         avalonmm64 : t_avalonmm_up_64;
         ram32 : t_ram_up_32;
+        wishbone128 : t_wishbone_up_128;
     end record;
     
     type t_bus_trace is record
@@ -37,6 +40,7 @@ package tb_bus_pkg is
         wishbone64_trace : t_wishbone_trace_64;
         avalonmm64_trace : t_avalonmm_trace_64;
         ram32_trace : t_ram_trace_32;
+        wishbone128_trace : t_wishbone_trace_128;
     end record;
 
     function bus_down_init return t_bus_down;
@@ -44,8 +48,8 @@ package tb_bus_pkg is
 
     procedure bus_write(signal bus_down : out t_bus_down;
                         signal bus_up : in t_bus_up;
-                        variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                        variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                        variable address : in unsigned;
+                        variable data : in unsigned;
                         variable access_width : in integer;
                         variable bus_number : in integer;
                         variable valid : out integer;
@@ -54,8 +58,8 @@ package tb_bus_pkg is
 
     procedure bus_read(signal bus_down : out t_bus_down;
                        signal bus_up : in t_bus_up;
-                       variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                       variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                       variable address : in unsigned;
+                       variable data : out unsigned;
                        variable access_width : in integer;
                        variable bus_number : in integer;
                        variable valid : out integer;
@@ -74,6 +78,7 @@ package body tb_bus_pkg is
         init.wishbone64 := wishbone_down_64_init;
         init.avalonmm64 := avalonmm_down_64_init;
         init.ram32 := ram_down_32_init;
+        init.wishbone128 := wishbone_down_128_init;
         return init;
     end;
     
@@ -86,13 +91,14 @@ package body tb_bus_pkg is
         init.wishbone64 := wishbone_up_64_init;
         init.avalonmm64 := avalonmm_up_64_init;
         init.ram32 := ram_up_32_init;
+        init.wishbone128 := wishbone_up_128_init;
         return init;
     end;
 
     procedure bus_write(signal bus_down : out t_bus_down;
                         signal bus_up : in t_bus_up;
-                        variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                        variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                        variable address : in unsigned;
+                        variable data : in unsigned;
                         variable access_width : in integer;
                         variable bus_number : in integer;
                         variable valid : out integer;
@@ -157,8 +163,18 @@ package body tb_bus_pkg is
                                data,
                                access_width,
                                successfull,
-                               timeout);                                                      
-                            
+                               timeout); 
+                                                                                    
+            when 6 =>                   
+                write_wishbone_128(
+                               bus_down.wishbone128,
+                               bus_up.wishbone128,
+                               address,
+                               data,
+                               access_width,
+                               successfull,
+                               timeout);
+                                                           
             when others =>
                 valid := 0;
         end case;
@@ -168,8 +184,8 @@ package body tb_bus_pkg is
     procedure bus_read(
                        signal bus_down : out t_bus_down;
                        signal bus_up : in t_bus_up;
-                       variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                       variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                       variable address : in unsigned;
+                       variable data : out unsigned;
                        variable access_width : in integer;
                        variable bus_number : in integer;
                        variable valid : out integer;
@@ -235,8 +251,17 @@ package body tb_bus_pkg is
                               data,
                               access_width,
                               successfull,
-                              timeout);                                                      
-                                                            
+                              timeout);    
+                                                                                
+            when 6 =>
+                read_wishbone_128(
+                              bus_down.wishbone128,
+                              bus_up.wishbone128,
+                              address,
+                              data,
+                              access_width,
+                              successfull,
+                              timeout);                                                            
             when others =>
                 valid := 0;
         end case;

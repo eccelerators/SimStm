@@ -42,7 +42,9 @@ entity tbTop is
         stimulus_file : string := "testMain.stm";
         stimulus_main_entry_label : string := "$testMain";
         stimulus_test_suite_index : integer := 255;
-        Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA")
+        Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
+        machine_value_width : integer := 128;
+        machine_address_width : integer := 31
     );
 end;
 
@@ -54,10 +56,10 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal verify_passes : std_logic_vector(c_stm_value_width - 1 downto 0);
-    signal verify_failures : std_logic_vector(c_stm_value_width - 1 downto 0);
-    signal bus_timeout_passes : std_logic_vector(c_stm_value_width - 1 downto 0);
-    signal bus_timeout_failures : std_logic_vector(c_stm_value_width - 1 downto 0);
+    signal verify_passes : std_logic_vector(31 downto 0);
+    signal verify_failures : std_logic_vector(31 downto 0);
+    signal bus_timeout_passes : std_logic_vector(31 downto 0);
+    signal bus_timeout_failures : std_logic_vector(31 downto 0);
          
     signal signals_in : t_signals_in;
     signal signals_out : t_signals_out;
@@ -72,7 +74,7 @@ begin
 
     -- standard inputs
     -- signals_in.in_signal_0 actual simulation time already supplied by package
-    signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, c_stm_value_width));
+    signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
     -- signals_in.in_signal_2 constant 0 already supplied by package
     signals_in.in_signal_3 <= verify_passes;
     signals_in.in_signal_4 <= verify_failures;
@@ -101,7 +103,9 @@ begin
         generic map (
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
-            stimulus_main_entry_label => stimulus_main_entry_label          
+            stimulus_main_entry_label => stimulus_main_entry_label,
+            machine_value_width => machine_value_width,
+            machine_address_width => machine_address_width     
         )
         port map (
             executing_line => executing_line,
@@ -140,7 +144,57 @@ begin
             o_err => open
         );
                
-        bus_up.wishbone32.clk <= Clk;      
+        bus_up.wishbone32.clk <= Clk; 
+        
+    i_RamWishbone_64 : entity work.RamWishbone
+        generic map (
+            ADDRESS_WIDTH => 7,
+            DATA_WIDTH => 64,
+            GRANULARITY => 8
+        )
+        port map(
+        -- wishbone slave signals.
+            i_rst => Rst,
+            i_clk => bus_up.wishbone64.clk,
+            i_adr => bus_down.wishbone64.adr(9 downto 3),
+            i_dat => bus_down.wishbone64.data,
+            i_we  => bus_down.wishbone64.we,
+            i_sel => bus_down.wishbone64.sel,
+            i_cyc => bus_down.wishbone64.cyc,
+            i_stb => bus_down.wishbone64.stb,
+            o_dat => bus_up.wishbone64.data,
+            o_ack => bus_up.wishbone64.ack,
+            o_stall => open,
+            o_rty => open,
+            o_err => open
+        );
+        
+    bus_up.wishbone64.clk <= Clk;
+        
+    i_RamWishbone_128 : entity work.RamWishbone
+        generic map (
+            ADDRESS_WIDTH => 6,
+            DATA_WIDTH => 128,
+            GRANULARITY => 8
+        )
+        port map(
+        -- wishbone slave signals.
+            i_rst => Rst,
+            i_clk => bus_up.wishbone128.clk,
+            i_adr => bus_down.wishbone128.adr(9 downto 4),
+            i_dat => bus_down.wishbone128.data,
+            i_we  => bus_down.wishbone128.we,
+            i_sel => bus_down.wishbone128.sel,
+            i_cyc => bus_down.wishbone128.cyc,
+            i_stb => bus_down.wishbone128.stb,
+            o_dat => bus_up.wishbone128.data,
+            o_ack => bus_up.wishbone128.ack,
+            o_stall => open,
+            o_rty => open,
+            o_err => open
+        );
+        
+    bus_up.wishbone128.clk <= Clk;     
                 
     i_RamAvalon_32 : entity work.RamAvalon
         generic map (
@@ -163,6 +217,28 @@ begin
         );
         
         bus_up.avalonmm32.clk <= Clk;
+        
+    i_RamAvalon_64 : entity work.RamAvalon
+        generic map (
+            ADDRESS_WIDTH => 7,
+            DATA_WIDTH => 64
+        )
+        port map(
+        -- avalon slave signals.
+            clk_i => bus_up.avalonmm64.clk,
+            rst_i => Rst,
+            avm_waitrequest_o => bus_up.avalonmm64.waitrequest,
+            avm_write_i => bus_down.avalonmm64.write,
+            avm_read_i => bus_down.avalonmm64.read,
+            avm_address_i => bus_down.avalonmm64.address(9 downto 3),
+            avm_writedata_i => bus_down.avalonmm64.writedata,
+            avm_byteenable_i => bus_down.avalonmm64.byteenable,
+            avm_burstcount_i => x"01",
+            avm_readdata_o => bus_up.avalonmm64.readdata,
+            avm_readdatavalid_o => open
+        );
+        
+        bus_up.avalonmm64.clk <= Clk;
                
     i_RamAxi4Lite_32 : entity work.RamAxi4Lite
         generic map (
@@ -193,54 +269,6 @@ begin
         );
         
     bus_up.axi4lite32.clk <= Clk;
-    
-    i_RamWishbone_64 : entity work.RamWishbone
-        generic map (
-            ADDRESS_WIDTH => 7,
-            DATA_WIDTH => 64,
-            GRANULARITY => 8
-        )
-        port map(
-        -- wishbone slave signals.
-            i_rst => Rst,
-            i_clk => bus_up.wishbone64.clk,
-            i_adr => bus_down.wishbone64.adr(9 downto 3),
-            i_dat => bus_down.wishbone64.data,
-            i_we  => bus_down.wishbone64.we,
-            i_sel => bus_down.wishbone64.sel,
-            i_cyc => bus_down.wishbone64.cyc,
-            i_stb => bus_down.wishbone64.stb,
-            o_dat => bus_up.wishbone64.data,
-            o_ack => bus_up.wishbone64.ack,
-            o_stall => open,
-            o_rty => open,
-            o_err => open
-        );
-        
-    bus_up.wishbone64.clk <= Clk;
-    
-    i_RamAvalon_64 : entity work.RamAvalon
-        generic map (
-            ADDRESS_WIDTH => 7,
-            DATA_WIDTH => 64
-        )
-        port map(
-        -- avalon slave signals.
-            clk_i => bus_up.avalonmm64.clk,
-            rst_i => Rst,
-            avm_waitrequest_o => bus_up.avalonmm64.waitrequest,
-            avm_write_i => bus_down.avalonmm64.write,
-            avm_read_i => bus_down.avalonmm64.read,
-            avm_address_i => bus_down.avalonmm64.address(9 downto 3),
-            avm_writedata_i => bus_down.avalonmm64.writedata,
-            avm_byteenable_i => bus_down.avalonmm64.byteenable,
-            avm_burstcount_i => x"01",
-            avm_readdata_o => bus_up.avalonmm64.readdata,
-            avm_readdatavalid_o => open
-        );
-        
-        bus_up.avalonmm64.clk <= Clk;
-        
         
     i_Ram32 : entity work.Ram
     generic map(

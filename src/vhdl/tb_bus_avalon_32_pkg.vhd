@@ -30,30 +30,22 @@ package tb_bus_avalon_32_pkg is
 
     procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
                              signal avalonmm_up : in t_avalonmm_up_32;
-                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable address : in unsigned;
+                             variable data : in unsigned;
                              variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time);
 
     procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
                             signal avalonmm_up : in t_avalonmm_up_32;
-                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable address : in unsigned;
+                            variable data : out unsigned;
                             variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time);
 end;
 
 package body tb_bus_avalon_32_pkg is
-    function avalonmm_up_32_init return t_avalonmm_up_32 is
-        variable init : t_avalonmm_up_32;
-    begin
-        init.clk := '0';
-        init.readdata := (others => '0');
-        init.waitrequest := '0';
-        return init;
-    end;
 
     function avalonmm_down_32_init return t_avalonmm_down_32 is
         variable init : t_avalonmm_down_32;
@@ -65,11 +57,20 @@ package body tb_bus_avalon_32_pkg is
         init.write := '0';
         return init;
     end;
+    
+    function avalonmm_up_32_init return t_avalonmm_up_32 is
+        variable init : t_avalonmm_up_32;
+    begin
+        init.clk := '0';
+        init.readdata := (others => '0');
+        init.waitrequest := '0';
+        return init;
+    end;
 
     procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
                              signal avalonmm_up : in t_avalonmm_up_32;
-                             variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                             variable data : in unsigned(c_stm_value_width - 1 downto 0);
+                             variable address : in unsigned;
+                             variable data : in unsigned;
                              variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time) is
@@ -139,8 +140,8 @@ package body tb_bus_avalon_32_pkg is
 
     procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
                             signal avalonmm_up : in t_avalonmm_up_32;
-                            variable address : in unsigned(c_stm_value_width - 1 downto 0);
-                            variable data : out unsigned(c_stm_value_width - 1 downto 0);
+                            variable address : in unsigned;
+                            variable data : out unsigned;
                             variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time) is
@@ -205,7 +206,7 @@ package body tb_bus_avalon_32_pkg is
             when others =>
         end case;
         
-        data := (others => '0');
+        data := to_unsigned(0, data'length);
         case access_width is
             when 8 => data(31 downto 0) := unsigned(data_temp and x"000000FF");
             when 16 => data(31 downto 0) := unsigned(data_temp and x"0000FFFF");

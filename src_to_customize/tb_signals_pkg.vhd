@@ -12,11 +12,11 @@ package tb_signals_pkg is
     type t_signals_in is record
     
         -- TODO: Add here all your inputs        
-        in_signal_1 : std_logic_vector(c_stm_value_width - 1 downto 0); -- stimulus_test_suite_index       
-        in_signal_3 : std_logic_vector(c_stm_value_width - 1 downto 0); -- standard_test_verify_passes_count
-        in_signal_4 : std_logic_vector(c_stm_value_width - 1 downto 0); -- standard_test_verify_failure_count
-        in_signal_5 : std_logic_vector(c_stm_value_width - 1 downto 0); -- bus_timeout_passes_count
-        in_signal_6 : std_logic_vector(c_stm_value_width - 1 downto 0); -- bus_timeout_failure_count
+        in_signal_1 : std_logic_vector(31 downto 0); -- stimulus_test_suite_index       
+        in_signal_3 : std_logic_vector(31 downto 0); -- standard_test_verify_passes_count
+        in_signal_4 : std_logic_vector(31 downto 0); -- standard_test_verify_failure_count
+        in_signal_5 : std_logic_vector(31 downto 0); -- bus_timeout_passes_count
+        in_signal_6 : std_logic_vector(31 downto 0); -- bus_timeout_failure_count
         
         in_signal_1000 : std_logic;
         in_signal_1001 : std_logic;
@@ -32,8 +32,8 @@ package tb_signals_pkg is
     
         -- TODO: Add here all your outputs 
         out_signal_0 : std_logic; -- init dut
-        out_signal_4 : std_logic_vector(c_stm_value_width - 1 downto 0); -- expected standard_test_error_count    
-        out_signal_6 : std_logic_vector(c_stm_value_width - 1 downto 0); -- expected bus_timeout_test_error_count    
+        out_signal_4 : std_logic_vector(31 downto 0); -- expected standard_test_error_count    
+        out_signal_6 : std_logic_vector(31 downto 0); -- expected bus_timeout_test_error_count    
         out_signal_3000 : std_logic;
         out_signal_3001 : std_logic_vector(7 downto 0);
         out_signal_3002 : std_logic;
@@ -51,12 +51,12 @@ package tb_signals_pkg is
 
     procedure signal_read(signal signals : in t_signals_in;
                           variable signal_number : in integer;
-                          variable value : out unsigned(c_stm_value_width - 1 downto 0);
+                          variable value : out unsigned;
                           variable valid : out integer);
 
     procedure signal_write(signal signals : out t_signals_out;
                            variable signal_number : in integer;
-                           variable value : in unsigned(c_stm_value_width - 1 downto 0);
+                           variable value : in unsigned;
                            variable valid : out integer);
 
     procedure get_interrupt_requests(signal signals : in t_signals_in;
@@ -118,21 +118,21 @@ package body tb_signals_pkg is
     -- SimStm Mapping for input signals
     procedure signal_read(signal signals : in t_signals_in;
                           variable signal_number : in integer;
-                          variable value : out unsigned(c_stm_value_width - 1 downto 0);
+                          variable value : out unsigned;
                           variable valid : out integer) is
     begin
         valid := 1;
-        value := (others => '0');
+        value := to_unsigned(0, value'length);
 
         case signal_number is
-
+        
             -- TODO: add here your SimStm mapping
             when 0 =>
-                value := to_unsigned((now / 1 ns), c_stm_value_width);
+                value := to_unsigned((now / 1 ns), value'length);
             when 1 =>
                 value(signals.in_signal_1'left downto 0) := unsigned(signals.in_signal_1);
             when 2 =>
-                value := (others => '0');
+                value := to_unsigned(0 , value'length);
             when 3 =>
                 value(signals.in_signal_3'left downto 0) := unsigned(signals.in_signal_3);
             when 4 =>
@@ -142,7 +142,7 @@ package body tb_signals_pkg is
             when 6 =>
                 value(signals.in_signal_6'left downto 0) := unsigned(signals.in_signal_6);
             when 7 =>
-                value := to_unsigned(c_stm_value_width, c_stm_value_width);                  
+                value := to_unsigned(value'length, value'length);                  
                 
             when 1000 =>
                 value(0) := signals.in_signal_1000;
@@ -160,6 +160,7 @@ package body tb_signals_pkg is
                           
             when others =>
                 valid := 0;
+                
         end case;
 
     end procedure;
@@ -167,11 +168,11 @@ package body tb_signals_pkg is
     -- SimStm Mapping for output signals
     procedure signal_write(signal signals : out t_signals_out;
                            variable signal_number : in integer;
-                           variable value : in unsigned(c_stm_value_width - 1 downto 0);
+                           variable value : in unsigned;
                            variable valid : out integer) is
     begin
         valid := 1;
-
+       
         case signal_number is
         
             -- TODO: add here your SimStm mapping
@@ -193,6 +194,7 @@ package body tb_signals_pkg is
                                 
             when others =>
                 valid := 0;
+                
         end case;
         wait for 0 ps;
     end procedure;
