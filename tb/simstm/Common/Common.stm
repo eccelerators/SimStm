@@ -8,6 +8,7 @@ bus wishbone64 3
 bus avalon64 4
 bus ram32 5
 bus wishbone128 6
+bus wishbone256 7
 
 bus busToTest 0
 

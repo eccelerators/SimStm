@@ -1,0 +1,145 @@
+
+	-- intern
+	file TestCaseBus256StartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBus256File "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseBus256VerifySuccessStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBus256VerifySuccessFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseBus256VerifyFailStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBus256VerifyFailFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseBus256TimeOutReadStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBus256TimeOutReadFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	file TestCaseBus256TimeOutWriteStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseBus256TimeOutWriteFile "../../SimulationResults/{@c3}_{@c2}.xml"
+		
+testSuiteBusWishbone256:
+proc
+    bus pointer copy busToTest wishbone256
+	bus timeout set busToTest 1000
+	call $testCaseBus256
+	call $testCaseBus256VerifySuccess
+	call $testCaseBus256VerifyFail
+	call $testCaseBus256TimeOutRead
+	call $testCaseBus256TimeOutWrite
+end proc
+
+
+testCaseBus256:
+proc
+    file pointer copy TestCaseStartFile TestCaseBus256StartFile
+    file pointer copy TestCaseFile TestCaseBus256File
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBus256
+
+ 	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Bus256 test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBus256VerifySuccess:
+proc
+    file pointer copy TestCaseStartFile TestCaseBus256VerifySuccessStartFile
+    file pointer copy TestCaseFile TestCaseBus256VerifySuccessFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBus256VerifySuccess
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Bus256VerifySuccess test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBus256VerifyFail:
+proc
+    file pointer copy TestCaseStartFile TestCaseBus256VerifyFailStartFile
+    file pointer copy TestCaseFile TestCaseBus256VerifyFailFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBus256VerifyFail
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Bus256VerifyFail test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBus256TimeOutRead:
+proc
+    file pointer copy TestCaseStartFile TestCaseBus256TimeOutReadStartFile
+    file pointer copy TestCaseFile TestCaseBus256TimeOutReadFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBus256TimeOutRead
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Bus256TimeOutRead test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseBus256TimeOutWrite:
+proc
+    file pointer copy TestCaseStartFile TestCaseBus256TimeOutWriteStartFile
+    file pointer copy TestCaseFile TestCaseBus256TimeOutWriteFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testBus256TimeOutWrite
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Bus256TimeOutWrite test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc

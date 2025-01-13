@@ -1,0 +1,212 @@
+var valBus256Wishbone 0
+
+testBus256:
+proc
+    call $startStandardTestShell
+	wait 1000
+
+	bus write busToTest 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
+	bus write busToTest 256 32 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bus write busToTest 256 64 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	bus verify busToTest 256 0 valBus256Wishbone 0x5555555555555555555555555555555555555555555555555555555555555555 0x5555555555555555555555555555555555555555555555555555555555555555
+	bus verify busToTest 256 32 valBus256Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bus verify busToTest 256 64 valBus256Wishbone 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	
+	wait 1000
+	bus write busToTest 256 0 0x0
+	bus write busToTest  8 0 0x12
+	bus write busToTest  8 1 0x34
+	bus write busToTest  8 2 0x56
+	bus write busToTest  8 3 0x78
+	bus write busToTest  8 4 0xab
+	bus write busToTest  8 5 0xcd
+	bus write busToTest  8 6 0xef
+	bus write busToTest  8 7 0xfe
+	bus write busToTest  8 8 0x22
+	bus write busToTest  8 9 0x44
+	bus write busToTest  8 10 0x66
+	bus write busToTest  8 11 0x88
+	bus write busToTest  8 12 0xbb
+	bus write busToTest  8 13 0xdd
+	bus write busToTest  8 14 0xff
+	bus write busToTest  8 15 0x0e
+	bus write busToTest  8 16 0x13
+	bus write busToTest  8 17 0x35
+	bus write busToTest  8 18 0x57
+	bus write busToTest  8 19 0x79
+	bus write busToTest  8 20 0xac
+	bus write busToTest  8 21 0xce
+	bus write busToTest  8 22 0xe0
+	bus write busToTest  8 23 0xff
+	bus write busToTest  8 24 0x23
+	bus write busToTest  8 25 0x45
+	bus write busToTest  8 26 0x67
+	bus write busToTest  8 27 0x89
+	bus write busToTest  8 28 0xbc
+	bus write busToTest  8 29 0xde
+	bus write busToTest  8 30 0xf0
+	bus write busToTest  8 31 0x0f	
+		
+	bus verify busToTest 8 0 valBus256Wishbone 0x12 0xff
+	bus verify busToTest 8 1 valBus256Wishbone 0x34 0xff
+	bus verify busToTest 8 2 valBus256Wishbone 0x56 0xff
+	bus verify busToTest 8 3 valBus256Wishbone 0x78 0xff
+	bus verify busToTest 8 4 valBus256Wishbone 0xab 0xff
+	bus verify busToTest 8 5 valBus256Wishbone 0xcd 0xff
+	bus verify busToTest 8 6 valBus256Wishbone 0xef 0xff
+	bus verify busToTest 8 7 valBus256Wishbone 0xfe 0xff
+	bus verify busToTest 8 8 valBus256Wishbone 0x22 0xff
+	bus verify busToTest 8 9 valBus256Wishbone 0x44 0xff
+	bus verify busToTest 8 10 valBus256Wishbone 0x66 0xff
+	bus verify busToTest 8 11 valBus256Wishbone 0x88 0xff
+	bus verify busToTest 8 12 valBus256Wishbone 0xbb 0xff
+	bus verify busToTest 8 13 valBus256Wishbone 0xdd 0xff
+	bus verify busToTest 8 14 valBus256Wishbone 0xff 0xff
+	bus verify busToTest 8 15 valBus256Wishbone 0x0e 0xff
+	bus verify busToTest 8 16 valBus256Wishbone 0x13 0xff
+	bus verify busToTest 8 17 valBus256Wishbone 0x35 0xff
+	bus verify busToTest 8 18 valBus256Wishbone 0x57 0xff
+	bus verify busToTest 8 19 valBus256Wishbone 0x79 0xff
+	bus verify busToTest 8 20 valBus256Wishbone 0xac 0xff
+	bus verify busToTest 8 21 valBus256Wishbone 0xce 0xff
+	bus verify busToTest 8 22 valBus256Wishbone 0xe0 0xff
+	bus verify busToTest 8 23 valBus256Wishbone 0xff 0xff
+	bus verify busToTest 8 24 valBus256Wishbone 0x23 0xff
+	bus verify busToTest 8 25 valBus256Wishbone 0x45 0xff
+	bus verify busToTest 8 26 valBus256Wishbone 0x67 0xff
+	bus verify busToTest 8 27 valBus256Wishbone 0x89 0xff
+	bus verify busToTest 8 28 valBus256Wishbone 0xbc 0xff
+	bus verify busToTest 8 29 valBus256Wishbone 0xde 0xff
+	bus verify busToTest 8 30 valBus256Wishbone 0xf0 0xff
+	bus verify busToTest 8 31 valBus256Wishbone 0x0f 0xff	
+	
+	bus verify busToTest 256 0 valBus256Wishbone 0x0ff0debc89674523ffe0ceac795735130effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	
+	wait 1000
+	bus write busToTest  256 0 0x0
+	bus write busToTest  16 0 0x1234
+	bus write busToTest  16 2 0x4567
+	bus write busToTest  16 4 0x89ab
+	bus write busToTest  16 6 0xcdef
+	bus write busToTest  16 8 0x2234
+	bus write busToTest  16 10 0x5567
+	bus write busToTest  16 12 0x99ab
+	bus write busToTest  16 14 0xddef
+	bus write busToTest  16 16 0x1235
+	bus write busToTest  16 18 0x4568
+	bus write busToTest  16 20 0x89ac
+	bus write busToTest  16 22 0xcde0
+	bus write busToTest  16 24 0x2235
+	bus write busToTest  16 26 0x5568
+	bus write busToTest  16 28 0x99ac
+	bus write busToTest  16 30 0xdde0		
+	bus verify busToTest 16 0 valBus256Wishbone 0x1234 0xffff
+	bus verify busToTest 16 2 valBus256Wishbone 0x4567 0xffff
+	bus verify busToTest 16 4 valBus256Wishbone 0x89ab 0xffff
+	bus verify busToTest 16 6 valBus256Wishbone 0xcdef 0xffff
+	bus verify busToTest 16 8 valBus256Wishbone 0x2234 0xffff
+	bus verify busToTest 16 10 valBus256Wishbone 0x5567 0xffff
+	bus verify busToTest 16 12 valBus256Wishbone 0x99ab 0xffff
+	bus verify busToTest 16 14 valBus256Wishbone 0xddef 0xffff
+	bus verify busToTest 16 16 valBus256Wishbone 0x1235 0xffff
+	bus verify busToTest 16 18 valBus256Wishbone 0x4568 0xffff
+	bus verify busToTest 16 20 valBus256Wishbone 0x89ac 0xffff
+	bus verify busToTest 16 22 valBus256Wishbone 0xcde0 0xffff
+	bus verify busToTest 16 24 valBus256Wishbone 0x2235 0xffff
+	bus verify busToTest 16 26 valBus256Wishbone 0x5568 0xffff
+	bus verify busToTest 16 28 valBus256Wishbone 0x99ac 0xffff
+	bus verify busToTest 16 30 valBus256Wishbone 0xdde0 0xffff	
+	bus verify busToTest 256 0 valBus256Wishbone 0xdde099ac55682235cde089ac45681235ddef99ab55672234cdef89ab45671234 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	bus write busToTest  256 4 0x0
+	bus write busToTest  16 5 0x1234
+	bus verify busToTest 16 5 valBus256Wishbone 0x1234 0xffff
+	bus verify busToTest 256 4 valBus256Wishbone 0x00123400 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	
+	wait 1000
+	bus write busToTest  256 0 0x8000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x8000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x8000000000000000000000000000000000000000000000000000000000000000 0x8000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x8000000000000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	
+	wait 100
+	bus write busToTest  256 0 0x0000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x8000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0x8000000000000000000000000000000000000000000000000000000000000000
+	bus verify busToTest 256 0 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+
+	call $endStandardTestShell
+end proc
+
+testBus256VerifySuccess:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write busToTest  256 0 0x5555555555555555555555555555555555555555555555555555555555555555
+	bus write busToTest  256 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bus write busToTest  256 32 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	
+	bus verify busToTest 256 0 valBus256Wishbone 0x5555555555555555555555555555555555555555555555555555555555555555 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff	
+	bus verify busToTest 256 16 valBus256Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	
+	bus verify busToTest 256 32 valBus256Wishbone 0x000000000000000000000000000000000000000000000000 0x000000000000000000000000000000000000000000000000
+	
+	call $endStandardTestShell
+end proc
+
+var wb_value256 0
+bus wb_bus256 0
+
+testBus256VerifyFail:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write wb_bus256 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
+	bus write wb_bus256 256 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	bus write wb_bus256 256 32 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	bus verify busToTest 256 0 valBus256Wishbone 0x5555555555555555555555555555555555555555555555555555555555555555 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff	
+	bus verify busToTest 256 16 valBus256Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	
+	bus verify busToTest 256 32 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
+	log message $ALLWAYS "bus verify intended error on no match"	
+	bus verify wb_bus256 256 0 wb_value256 0x00000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	call $incExpectedStandardTestVerifyFailureCount
+    
+	call $endStandardTestShell
+end proc
+
+
+testBus256TimeOutRead:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus write busToTest 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
+	bus timeout set wb_bus256 1
+	bus timeout get wb_bus256 wb_value256
+	var verify wb_value256 1 $MAX
+	bus read busToTest 256 0 valBus256Wishbone
+	call $incExpectedStandardTestBusTimeoutFailureCount
+	
+    bus timeout set wb_bus256 1000000000
+	bus timeout get wb_bus256 wb_value256
+	var verify wb_value256 1000000000 $MAX
+
+	call $endStandardTestShell
+end proc
+
+testBus256TimeOutWrite:
+proc
+    call $startStandardTestShell
+	wait 1000
+	bus timeout set wb_bus256 1
+	bus timeout get wb_bus256 wb_value256
+	var verify wb_value256 1 $MAX
+	bus write busToTest 256 0 0x55555555555555555555555555555555
+	call $incExpectedStandardTestBusTimeoutFailureCount
+	
+    bus timeout set wb_bus256 1000000000
+	bus timeout get wb_bus256 wb_value256
+	var verify wb_value256 1000000000 $MAX
+
+	call $endStandardTestShell
+end proc
+

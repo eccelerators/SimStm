@@ -7,6 +7,7 @@ use work.tb_bus_axi4lite_32_pkg.all;
 use work.tb_bus_wishbone_32_pkg.all;
 use work.tb_bus_wishbone_64_pkg.all;
 use work.tb_bus_wishbone_128_pkg.all;
+use work.tb_bus_wishbone_256_pkg.all;
 use work.tb_bus_avalon_64_pkg.all;
 use work.tb_bus_ram_32_pkg.all;
 use work.tb_base_pkg.all;
@@ -21,6 +22,7 @@ package tb_bus_pkg is
         avalonmm64 : t_avalonmm_down_64;
         ram32 : t_ram_down_32;
         wishbone128 : t_wishbone_down_128;
+        wishbone256 : t_wishbone_down_256;
     end record;
 
     type t_bus_up is record
@@ -31,6 +33,7 @@ package tb_bus_pkg is
         avalonmm64 : t_avalonmm_up_64;
         ram32 : t_ram_up_32;
         wishbone128 : t_wishbone_up_128;
+        wishbone256 : t_wishbone_up_256;
     end record;
     
     type t_bus_trace is record
@@ -41,6 +44,7 @@ package tb_bus_pkg is
         avalonmm64_trace : t_avalonmm_trace_64;
         ram32_trace : t_ram_trace_32;
         wishbone128_trace : t_wishbone_trace_128;
+        wishbone256_trace : t_wishbone_trace_256;
     end record;
 
     function bus_down_init return t_bus_down;
@@ -79,6 +83,7 @@ package body tb_bus_pkg is
         init.avalonmm64 := avalonmm_down_64_init;
         init.ram32 := ram_down_32_init;
         init.wishbone128 := wishbone_down_128_init;
+        init.wishbone256 := wishbone_down_256_init;
         return init;
     end;
     
@@ -92,6 +97,7 @@ package body tb_bus_pkg is
         init.avalonmm64 := avalonmm_up_64_init;
         init.ram32 := ram_up_32_init;
         init.wishbone128 := wishbone_up_128_init;
+        init.wishbone256 := wishbone_up_256_init;
         return init;
     end;
 
@@ -174,7 +180,17 @@ package body tb_bus_pkg is
                                access_width,
                                successfull,
                                timeout);
-                                                           
+
+            when 7 =>                   
+                write_wishbone_256(
+                               bus_down.wishbone256,
+                               bus_up.wishbone256,
+                               address,
+                               data,
+                               access_width,
+                               successfull,
+                               timeout);
+                                                                                          
             when others =>
                 valid := 0;
         end case;
@@ -261,7 +277,17 @@ package body tb_bus_pkg is
                               data,
                               access_width,
                               successfull,
-                              timeout);                                                            
+                              timeout);
+            when 7 =>
+                read_wishbone_256(
+                              bus_down.wishbone256,
+                              bus_up.wishbone256,
+                              address,
+                              data,
+                              access_width,
+                              successfull,
+                              timeout);     
+                                                                                                                        
             when others =>
                 valid := 0;
         end case;

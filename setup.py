@@ -36,6 +36,7 @@ static_setup_data = {
             {"testsuite-name":"testSuiteLines", "file":"TestSuites/TestSuiteLines.stm", "entry-file":"testMainSuiteLines.stm", "entry-label":"$testMainSuiteLines"},
             {"testsuite-name":"testSuiteInterrupt", "file":"TestSuites/TestSuiteInterrupt.stm", "entry-file":"testMainSuiteInterrupt.stm", "entry-label":"$testMainSuiteInterrupt"},
             {"testsuite-name":"testSuiteBusAvalon32", "file":"TestSuites/TestSuiteBusAvalon32.stm", "entry-file":"testMainSuiteBusAvalon32.stm", "entry-label":"$testMainSuiteBusAvalon32"},
+            {"testsuite-name":"testSuiteBusWishbone256", "file":"TestSuites/TestSuiteBusWishbone256.stm", "entry-file":"testMainSuiteBusWishbone256.stm", "entry-label":"$testMainSuiteBusWishbone256"},
             {"testsuite-name":"testSuiteOther", "file":"TestSuites/TestSuiteOther.stm", "entry-file":"testMainSuiteOther.stm", "entry-label":"$testMainSuiteOther"},
             {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"$testMainSuiteFile"},
             {"testsuite-name":"testSuiteBusRam32", "file":"TestSuites/TestSuiteBusRam32.stm", "entry-file":"testMainSuiteBusRam32.stm", "entry-label":"$testMainSuiteBusRam32"},
@@ -68,30 +69,31 @@ static_setup_data = {
     ],
     "src_data_files" : [(
         "simstm/src_to_customize", [
-            {"file":"src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
+            {"file":"src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00150"},
             {"file":"src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060"}
         ]),(
         "simstm/src/vhdl", [
-            {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
-            {"file":"src/vhdl/tb_bus_ram_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
-            {"file":"src/vhdl/tb_bus_axi4lite_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110"},
+            {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
+            {"file":"src/vhdl/tb_bus_ram_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110"},
+            {"file":"src/vhdl/tb_bus_axi4lite_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00120"},
+            {"file":"src/vhdl/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
             {"file":"src/vhdl/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050"},
-            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"},
-            {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00161"},
-            {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00120"},
-            {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
+            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
+            {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00171"},
+            {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
+            {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
             {"file":"src/vhdl/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00051"},
             {"file":"src/vhdl/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070"},
             {"file":"src/vhdl/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"},
-            {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00150"},
-            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"}
+            {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"},
+            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"}
         ])
     ],
     "tb_data_files" : [(
         "simstm/tb/hdl", [
             {"file":"tb/hdl/RamWishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00010", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/Ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00180", "ghdl_options":["-frelaxed"]},
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00190", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAvalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAxi4Lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00020", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]}
@@ -131,6 +133,7 @@ static_setup_data = {
         ]),(
         "simstm/tb/simstm/Bus", [
             {"file":"tb/simstm/Bus/bus64.stm"},
+            {"file":"tb/simstm/Bus/bus256.stm"},
             {"file":"tb/simstm/Bus/bus128.stm"},
             {"file":"tb/simstm/Bus/bus32.stm"}
         ]),(
@@ -140,6 +143,7 @@ static_setup_data = {
             {"file":"tb/simstm/TestSuites/TestSuiteLines.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteInterrupt.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusAvalon32.stm"},
+            {"file":"tb/simstm/TestSuites/TestSuiteBusWishbone256.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteOther.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteFile.stm"},
             {"file":"tb/simstm/TestSuites/TestSuiteBusRam32.stm"},
@@ -202,6 +206,7 @@ static_setup_data = {
             {"file":"tb/simstm/testMainLabArrayGetOutPos.stm"},
             {"file":"tb/simstm/testMainLabBasicIncludeFlat.stm"},
             {"file":"tb/simstm/testMainSuiteBusAxi4Lite32.stm"},
+            {"file":"tb/simstm/testMainSuiteBusWishbone256.stm"},
             {"file":"tb/simstm/testMainLabBasicAbort.stm"},
             {"file":"tb/simstm/testMainSuiteConstant.stm"},
             {"file":"tb/simstm/testMainLabBasicDoubleVar.stm"},

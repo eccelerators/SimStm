@@ -43,7 +43,7 @@ entity tbTop is
         stimulus_main_entry_label : string := "$testMain";
         stimulus_test_suite_index : integer := 255;
         Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
-        machine_value_width : integer := 128;
+        machine_value_width : integer := 256;
         machine_address_width : integer := 31
     );
 end;
@@ -194,7 +194,32 @@ begin
             o_err => open
         );
         
-    bus_up.wishbone128.clk <= Clk;     
+    bus_up.wishbone128.clk <= Clk;    
+    
+    i_RamWishbone_256 : entity work.RamWishbone
+        generic map (
+            ADDRESS_WIDTH => 5,
+            DATA_WIDTH => 256,
+            GRANULARITY => 8
+        )
+        port map(
+        -- wishbone slave signals.
+            i_rst => Rst,
+            i_clk => bus_up.wishbone256.clk,
+            i_adr => bus_down.wishbone256.adr(9 downto 5),
+            i_dat => bus_down.wishbone256.data,
+            i_we  => bus_down.wishbone256.we,
+            i_sel => bus_down.wishbone256.sel,
+            i_cyc => bus_down.wishbone256.cyc,
+            i_stb => bus_down.wishbone256.stb,
+            o_dat => bus_up.wishbone256.data,
+            o_ack => bus_up.wishbone256.ack,
+            o_stall => open,
+            o_rty => open,
+            o_err => open
+        );
+        
+    bus_up.wishbone256.clk <= Clk;     
                 
     i_RamAvalon_32 : entity work.RamAvalon
         generic map (
