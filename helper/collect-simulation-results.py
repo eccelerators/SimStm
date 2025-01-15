@@ -76,6 +76,7 @@ class collectTestSuites:
             tsuite_end = None
             test_cases_dict = test_suite_data["test_cases_dict"]
             for k, test_cases_dict in test_cases_dict.items():
+                print("processing {}".format(k))
                 tsuite_tests += 1
                 p = inoutdir_simulation_results_dir_path + '/' + k
                 tcaseTree = ET.parse(p)

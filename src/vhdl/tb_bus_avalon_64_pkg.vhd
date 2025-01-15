@@ -138,12 +138,16 @@ package body tb_bus_avalon_64_pkg is
             return;
         end if;
 
-        avalonmm_down <= avalonmm_down_64_init;
-        wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
-        if now > start_time + timeout then
-            avalonmm_down <= avalonmm_down_64_init;
-            return;
-        end if;
+        loop
+            wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
+            if now > start_time + timeout then
+                avalonmm_down <= avalonmm_down_64_init;
+                return;
+            end if;
+            if avalonmm_up.waitrequest = '0' then
+                exit;
+            end if;
+        end loop; 
 
         successfull := true;
     end procedure;

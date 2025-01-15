@@ -30,7 +30,7 @@ proc
     lines size TestCaseLines TestCaseLinesPosition
     equ TestCaseAssertionsInsertionPoint $TestCaseLinesPosition     
         
-    lines append message TestCaseLines ' classname="{@c3}_{:d}' $TestSuiteIndex    
+    lines append message TestCaseLines ' classname="{@c3}_{:d}"' $TestSuiteIndex    
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"' 
     lines append message TestCaseLines '>'

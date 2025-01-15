@@ -129,7 +129,7 @@ package body tb_bus_avalon_32_pkg is
                 avalonmm_down <= avalonmm_down_32_init;
                 return;
             end if;
-            if avalonmm_up.waitrequest then
+            if avalonmm_up.waitrequest = '0' then
                 exit;
             end if;
         end loop; 
