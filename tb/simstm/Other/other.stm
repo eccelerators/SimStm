@@ -9,7 +9,7 @@ proc
     call $startStandardTestShell
 	loop 20
 	    random random_number 0 10
-	    log message 0 "random_number: {}" $random_number
+	    log message 0 "random_number: {:d}" $random_number
 	end loop
 	
 	call $endStandardTestShell
@@ -21,13 +21,13 @@ proc
 	seed 1
 	loop 5
 	    random random_number 0 10
-	    log message 0 "random_number: {}" $random_number
+	    log message 0 "random_number: {:d}" $random_number
 	end loop
 	
 	seed $seed_set
 	loop 5
 	    random random_number $random_min $random_max
-	    log message 0 "random_number: {}" $random_number
+	    log message 0 "random_number: {:d}" $random_number
 	end loop	
 	
 	call $endStandardTestShell
