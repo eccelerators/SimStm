@@ -461,6 +461,19 @@ begin
                     report " line " & (integer'image(file_line)) & " div error: cannot update variable, it may be a constant ?"
                     severity failure;
 
+                -- rem operand1_and_target $operand2
+                -- rem operand1_and_target 0xF0
+                elsif instruction(1 to len) = INSTR_REM then
+                    index_variable(defined_vars, par1, temp_stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
+                    severity failure;
+                    temp_stm_value := temp_stm_value rem par2;
+                    update_variable(defined_vars, par1, temp_stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " div error: cannot update variable, it may be a constant ?"
+                    severity failure;
+
                 -- and operand1_and_target $operand2
                 -- and operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_AND then

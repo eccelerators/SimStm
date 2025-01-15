@@ -7,7 +7,7 @@ include "Bus/bus256.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
 
-const testMainSuiteIndexedBusMaximumIndex 8
+const testMainSuiteIndexedBusMaximumIndex 32
 
 testMainSuiteIndexedBus:
 proc

@@ -43,7 +43,7 @@ entity tbTop is
         stimulus_main_entry_label : string := "$testMain";
         stimulus_test_suite_index : integer := 255;
         Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
-        machine_value_width : integer := 256;
+        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32;
         machine_address_width : integer := 31
     );
 end;

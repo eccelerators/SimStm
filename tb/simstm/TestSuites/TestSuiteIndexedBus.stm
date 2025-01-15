@@ -48,14 +48,16 @@
 	file TestCaseBus256TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
 	file TestCaseBus256TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
 
+    var RepeatedTestSuiteIndex 0
 	
 testSuiteIndexedBus:
 proc
-    if $TestSuiteIndex <= 3
+    equ RepeatedTestSuiteIndex $TestSuiteIndex
+    rem RepeatedTestSuiteIndex 8
+    if $RepeatedTestSuiteIndex <= 3
 		if $MachineValueWidth >= 32
 		    bus pointer copy busToTest wishbone32
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus32Index		    
 			call $testCaseBus32
 			call $testCaseBus32VerifySuccess
@@ -67,7 +69,6 @@ proc
 		if $MachineValueWidth >= 64
 		    bus pointer copy busToTest wishbone64
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus64Index		    	    
 			call $testCaseBus64
 			call $testCaseBus64VerifySuccess
@@ -79,7 +80,6 @@ proc
 		if $MachineValueWidth >= 128
 		    bus pointer copy busToTest wishbone128
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus128Index		    		    
 			call $testCaseBus128
 			call $testCaseBus128VerifySuccess
@@ -91,7 +91,6 @@ proc
 		if $MachineValueWidth >= 256
 		    bus pointer copy busToTest wishbone256
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus256Index	   		    
 			call $testCaseBus256
 			call $testCaseBus256VerifySuccess
@@ -100,11 +99,10 @@ proc
 			call $testCaseBus256TimeOutWrite
 			add TestCaseBus256Index 1
 		end if
-	elsif $TestSuiteIndex <= 5	
+	elsif $RepeatedTestSuiteIndex <= 5	
 		if $MachineValueWidth >= 32
 		    bus pointer copy busToTest avalon32
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus32Index	    	    
 			call $testCaseBus32
 			call $testCaseBus32VerifySuccess
@@ -116,7 +114,6 @@ proc
 		if $MachineValueWidth >= 64
 		    bus pointer copy busToTest avalon64
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus64Index	    			    
 			call $testCaseBus64
 			call $testCaseBus64VerifySuccess
@@ -125,11 +122,10 @@ proc
 			call $testCaseBus64TimeOutWrite
 			add TestCaseBus64Index 1
 		end if		
-	elsif $TestSuiteIndex = 6	
+	elsif $RepeatedTestSuiteIndex = 6	
 		if $MachineValueWidth >= 32
 		    bus pointer copy busToTest axi4lite32
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
 		    equ TestCaseIndex $TestCaseBus32Index	        
 			call $testCaseBus32
 			call $testCaseBus32VerifySuccess
@@ -138,11 +134,11 @@ proc
 			call $testCaseBus32TimeOutWrite
 			add TestCaseBus32Index 1		
 		end if
-	elsif $TestSuiteIndex = 7	
+	elsif $RepeatedTestSuiteIndex = 7	
 		if $MachineValueWidth >= 32
 		    bus pointer copy busToTest ram32
 		    bus timeout set busToTest 1000
-		    call $logBusToTest
+		    equ TestCaseIndex $TestCaseBus32Index	    
 			call $testCaseBus32
 			call $testCaseBus32VerifySuccess
 			call $testCaseBus32VerifyFail
@@ -167,6 +163,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus32
 
  	if $StandardTestFailure != 0
@@ -191,6 +188,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus32VerifySuccess
 
 	if $StandardTestFailure != 0
@@ -215,6 +213,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus32VerifyFail
 
 	if $StandardTestFailure != 0
@@ -239,6 +238,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus32TimeOutRead
 
 	if $StandardTestFailure != 0
@@ -263,6 +263,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus32TimeOutWrite
 
 	if $StandardTestFailure != 0
@@ -287,6 +288,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus64
 
  	if $StandardTestFailure != 0
@@ -311,6 +313,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus64VerifySuccess
 
 	if $StandardTestFailure != 0
@@ -335,6 +338,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus64VerifyFail
 
 	if $StandardTestFailure != 0
@@ -359,6 +363,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus64TimeOutRead
 
 	if $StandardTestFailure != 0
@@ -383,6 +388,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus64TimeOutWrite
 
 	if $StandardTestFailure != 0
@@ -407,6 +413,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus128
 
  	if $StandardTestFailure != 0
@@ -431,6 +438,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus128VerifySuccess
 
 	if $StandardTestFailure != 0
@@ -455,6 +463,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus128VerifyFail
 
 	if $StandardTestFailure != 0
@@ -479,6 +488,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus128TimeOutRead
 
 	if $StandardTestFailure != 0
@@ -503,6 +513,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus128TimeOutWrite
 
 	if $StandardTestFailure != 0
@@ -527,6 +538,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus256
 
  	if $StandardTestFailure != 0
@@ -551,6 +563,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus256VerifySuccess
 
 	if $StandardTestFailure != 0
@@ -575,6 +588,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus256VerifyFail
 
 	if $StandardTestFailure != 0
@@ -599,6 +613,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus256TimeOutRead
 
 	if $StandardTestFailure != 0
@@ -623,6 +638,7 @@ proc
 	    return   
     end if
     
+    call $logBusToTest
     call $testBus256TimeOutWrite
 
 	if $StandardTestFailure != 0

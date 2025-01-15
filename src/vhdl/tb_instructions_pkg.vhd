@@ -68,6 +68,7 @@ package tb_instructions_pkg is
     constant INSTR_ADD : string := "add";
     constant INSTR_AND : string := "and";
     constant INSTR_DIV : string := "div";
+    constant INSTR_REM : string := "rem";
     constant INSTR_EQU : string := "equ";
     constant INSTR_MUL : string := "mul";
     constant INSTR_SHL : string := "shl";
@@ -209,6 +210,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_ADD, 2);
         define_instruction(inst_list, INSTR_AND, 2);
         define_instruction(inst_list, INSTR_DIV, 2);
+        define_instruction(inst_list, INSTR_REM, 2);        
         define_instruction(inst_list, INSTR_EQU, 2);
         define_instruction(inst_list, INSTR_MUL, 2);
         define_instruction(inst_list, INSTR_SHL, 2);

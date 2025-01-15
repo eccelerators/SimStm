@@ -39,7 +39,7 @@ static_setup_data = {
             {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"$testMainSuiteFile"},
             {"testsuite-name":"testSuiteBasic", "file":"TestSuites/TestSuiteBasic.stm", "entry-file":"testMainSuiteBasic.stm", "entry-label":"$testMainSuiteBasic"},
             {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"$testMainSuiteArray"},
-            {"testsuite-name":"testSuiteIndexedBus", "file":"TestSuites/TestSuiteIndexedBus.stm", "testsuite-indexes":"8", "entry-file":"testMainSuiteIndexedBus.stm", "entry-label":"$testMainSuiteIndexedBus"},
+            {"testsuite-name":"testSuiteIndexedBus", "file":"TestSuites/TestSuiteIndexedBus.stm", "testsuite-indexes":"32", "entry-file":"testMainSuiteIndexedBus.stm", "entry-label":"$testMainSuiteIndexedBus"},
             {"testsuite-name":"testSuiteSignal", "file":"TestSuites/TestSuiteSignal.stm", "entry-file":"testMainSuiteSignal.stm", "entry-label":"$testMainSuiteSignal"}
     ],
     "test_labs" : [
