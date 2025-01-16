@@ -116,7 +116,7 @@ The following picture illustrates how the `tb_simstm` module is integrated into 
 The `tb_simstm` module should not be changed by the user. The signals and interrupts that the user wants 
 to control the DUT or the Mocks shall be defined in `tb_signals_pkg`. The buses the user wants to connect 
 to the DUT or the Mocks shall be defined in `tb_bus_pkg`, and eventually, a new bus type package if the predefined 
-buses aren't sufficient. All other packages shall not be changed.
+busses aren't sufficient. All other packages shall not be changed.
 
 ![simstm-overview](https://github.com/eccelerators/simstm/assets/124497409/1f15e6b8-1587-4bd7-96a7-8ad51ebe7d05)
 
@@ -132,7 +132,7 @@ Eccelerators may accept pull requests for small improvements.
 
 ### General
 
-In SimStm instructions a line is a instruction, except empty lines or comment only lines. 
+In SimStm a line is an instruction, except empty lines or comment only lines. 
 Subroutine labels are considered as instruction in this manner too.
 
 The colon postfix of a subroutine label must end with a colon. No space is allowed between the label ID and the colon.
