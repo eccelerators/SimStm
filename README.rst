@@ -1,22 +1,6 @@
-.. raw:: html
-
-    <style> .red {color:#aa0060; font-weight:bold; font-size:16px} </style>
-
-.. role:: red
-
-:red:`test - this text should be red``
-
 
 SimStm
 ======
-
-.. raw:: html
-
-   <p align="center">
-
-.. raw:: html
-
-   </p>
 
 SimStm is a VHDL testbench designed to facilitate testing driven by
 external stimulus files with a “.stm” extension. This testbench is
