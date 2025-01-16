@@ -1,3 +1,7 @@
+.. raw:: html
+
+    <style> .red {color:red} </style>
+
 .. role:: red
 
 An example of using :red:`interpreted text`
