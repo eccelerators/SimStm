@@ -1,10 +1,10 @@
 .. raw:: html
 
-    <style> .red {color:red} </style>
+    <style> .red {color:#aa0060; font-weight:bold; font-size:16px} </style>
 
 .. role:: red
 
-An example of using :red:`interpreted text`
+:red:`test - this text should be red``
 
 
 SimStm
