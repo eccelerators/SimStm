@@ -61,7 +61,15 @@ proc
 end proc
 
 var position 0
+var expected_value 0
+var mask_value 0
 array another_array 16
+
+VarVerify:
+proc
+	var verify position $expected_value $mask_value
+    var verify position 8 0xFF
+end proc
 
 array_proc:
 proc 	
@@ -71,6 +79,9 @@ proc
 	array set an_array 3 $a_varA
 	
 	array get an_array $position a_varB
+	
+	array verify an_array $position $expected_value $mask_value
+    array verify an_array $position 0x07 0xFF
 	
 	array size an_array a_varB
 				
@@ -87,6 +98,8 @@ proc
 	file read all a_fileA a_lines
     file read a_fileA a_lines 5
     file read end a_fileA
+    
+    file pointer copy a_fileA a_fileB
 end proc
  
 lines a_lines_target
@@ -257,7 +270,10 @@ end proc
 
 signal target_signal 0
 signal source_signal 0
+var signal_pointer_absolut 0
 signal pointer copy target_signal source_signal
+signal pointer set target_signal 5
+signal pointer get a_signal signal_pointer_absolut
 
 bus a_bus 10
 var bus_width 32
@@ -283,8 +299,10 @@ end proc
 
 bus target_bus 0
 bus source_bus 0
+var bus_pointer_absolut 0
 bus pointer copy target_bus source_bus
-
+bus pointer set target_bus 5
+bus pointer get a_bus bus_pointer_absolut
 
 
 

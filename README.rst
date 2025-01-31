@@ -621,6 +621,24 @@ The ``finish`` instruction exits the simulation with severity note or error. The
 if resume has been set to other values than 0, and there were verify
 errors in verify instructions.
 
+Var Access
+~~~~~~~~~~~~
+
+Var Verify
+^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ var verify a_var $evar $mvar
+ var verify a_var 0x01 0x0F
+
+The ``var verify`` instruction reads the value of a signal and compares it to an expected
+value with a given mask. 
+
+The expected value and mask can be variables,
+constants, or numeric values. On mismatch, the simulation stops with
+severity failure if the global resume is set to 0.
+
 Array Access
 ~~~~~~~~~~~~
 
@@ -650,6 +668,21 @@ Array Get
 
 The ``array get`` instruction gets the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
 
+Array Verify
+^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ array verify barray $pvar $evar $mvar
+ array verify barray $pvar 0x01 0x0F
+
+The ``array verify`` instruction reads the value of an array at a position and compares it to an expected
+value with a given mask. 
+
+The expected value and mask can be variables,
+constants, or numeric values. On mismatch, the simulation stops with
+severity failure if the global resume is set to 0.
+
 Array Size
 ^^^^^^^^^^
 
@@ -664,9 +697,9 @@ Array Pointer Copy
 
 .. code-block:: none
 
- array pointer tarray sarray
+ array pointer copy tarray sarray
 
-The ``array pointer`` instruction copies an array pointer; for example, ``tarray`` pointer is a copy of
+The ``array pointer copy`` instruction copies an array pointer; for example, ``tarray`` pointer is a copy of
 ``sarray`` pointer after the execution of the instruction. Used, for
 instance, to hand over an array to a subroutine. Changes to the source
 array happen in the target array too.
@@ -768,9 +801,9 @@ File Pointer Copy
 
 .. code-block:: none
 
-   file pointer tfile sfile
+   file pointer copy tfile sfile
 
-The ``file pointer`` instruction copies a file pointer; for example, ``tfile`` pointer is a copy of
+The ``file pointer copy`` instruction copies a file pointer; for example, ``tfile`` pointer is a copy of
 ``sfile`` pointer after the execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
 file happen in the target file too.
@@ -868,9 +901,9 @@ Lines Pointer Copy
 
 .. code-block:: none
 
- lines pointer tlines slines
+ lines pointer copy tlines slines
 
-The ``lines pointer`` instruction copies a lines pointer; for example, ``tlines`` pointer is a copy of
+The ``lines pointer copy`` instruction copies a lines pointer; for example, ``tlines`` pointer is a copy of
 ``slines``
 
 Log
@@ -1030,6 +1063,35 @@ The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
 severity failure if the global resume is set to 0.
 
+Signal Pointer Copy
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ signal pointer copy tsignal ssignal
+
+The ``signal pointer copy`` instruction copies a signal pointer; for example, ``tsignal`` pointer is a copy of
+``ssignal``
+
+Signal Pointer Set
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ signal pointer set tsignal 5
+ signal pointer set tsignal $ptvar
+
+The ``signal pointer set`` instruction sets a signal pointer; for example, ``tsignal`` pointer absolutely.
+
+Signal Pointer Get
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ signal pointer get ssignal ptvar
+
+The ``signal pointer get`` instruction gets a signal pointer; for example, ``tsignal`` pointer absolutely into e.g. ptvar.
+
 Bus Write
 ^^^^^^^^^
 
@@ -1063,16 +1125,54 @@ constants, or numeric values. On mismatch, the simulation stops with
 severity failure if the global resume is set to 0; otherwise, it
 continues and reports an error.
 
-Bus Timeout
-^^^^^^^^^^^
+Bus Pointer Copy
+^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus timeout abus $svar
- bus timeout abus 1000*
+ bus pointer copy tsignal ssignal
+
+The ``bus pointer copy`` instruction copies a bus pointer; for example, ``tbus`` pointer is a copy of
+``sbus``
+
+Bus Pointer Set
+^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ bus pointer set tbus 5
+ bus pointer set tbus $ptvar
+
+The ``bus pointer set`` instruction sets a bus pointer; for example, ``tbus`` pointer absolutely.
+
+Bus Pointer Get
+^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ bus pointer get sbus ptvar
+
+The ``bus pointer get`` instruction gets a bus pointer; for example, ``tbus`` pointer absolutely into e.g. ptvar.
+
+Bus Timeout Set
+^^^^^^^^^^^^^^^ 
+
+.. code-block:: none
+
+ bus timeout set abus $svar
+ bus timeout set abus 1000*
 
 The ``bus timeout`` instruction sets the timeout in nanoseconds to wait for a bus access to end. On
 violation, the simulation stops with severity failure always.
+
+Bus Timeout Get
+^^^^^^^^^^^^^^^
+
+.. code-block:: none
+
+ bus timeout get sbus tovar
+
+The ``bus timeout get`` instruction gets a bus timeout; for example, ``tbus`` pointer absolutely into e.g. tovar.
 
 Resume
 ^^^^^^
@@ -1123,9 +1223,8 @@ Unit Tests
 The test folder contains unittest for all commands. Thus all commands
 are verified for each release by regression tests.
 
-SPI Controller
-~~~~~~~~~~~~~~
+Real-World Examples
+~~~~~~~~~~~~~~~~~~~
 
-A complex real-world example is found in the eccelerators spi_controller
-repository on GitHub, see
-https://github.com/eccelerators/spi-controller.
+A complex real-world example is found in the eccelerators 
+repository on GitHub.
