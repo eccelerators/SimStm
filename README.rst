@@ -211,8 +211,10 @@ SimStm code for the simulator.
 Comments
 ~~~~~~~~
 
-   | :math:`{\color{green}\texttt{-- This is a full line comment}}`
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03} \color{green}\texttt{ -- This is an appended line comment}}`
+.. code-block:: none
+
+ *-- This is a full line comment*
+ **const** aconst 0x03 *-- This is an appended line comment*
 
 | Comments in a line start with two hyphens.
 | There are only line comments but no block comments.
@@ -223,12 +225,14 @@ Includes, Language Objects, and Declarations
 Include
 ^^^^^^^
 
-   :math:`{\color{purple}\texttt{include} \space \color{blue}\texttt{"aninclude.stm"}}`
+.. code-block:: none
 
-Include another child \*.stm file.
+ **include** "aninclude.stm"
+   
+Include another child ``\*.stm file``.
 
-Include instructions should be the first instructions of a *.stm file.
-An included file can include further*.stm files, thus nested includes
+Include instructions should be the first instructions of a ``\*.stm file``.
+An included file can include further ``\*.stm files``, thus nested includes
 are possible. The file path to be given is relative to the file with the
 respective include instruction. Nested includes of files from the same
 folder or in child folders are predictable; nested includes to files in
@@ -237,9 +241,11 @@ parent folders would be bad practice.
 Const
 ^^^^^
 
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{aconst 0x03}}`
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{bconst 0b011}}`
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{cconst 3}}`
+.. code-block:: none
+
+ **const** aconst 0x03
+ **const** bconst 0b011
+ **const** cconst 3
 
 | Declare and define a constant with ID and hex, binary, or decimal
   unsigned 32-bit integer value.
@@ -249,20 +255,24 @@ Const
 Var
 ^^^
 
-   | :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{avar 0x03}}`
-   | :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{bvar 0b011}}`
-   | :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{cvar 3}}`
+.. code-block:: none
+
+ **var** avar 0x03
+ **var** bvar 0b011
+ **var** cvar 3
 
 | Declare and define a variable with ID and initial hex, binary, or
   decimal unsigned 32-bit integer value.
 | It isn’t possible to initialize a variable by referencing another
-  variable or constant yet. The :math:`{\color{purple}\texttt{equ}}`
+  variable or constant yet. The ``**equ**``
   instruction must be used within a procedure for this purpose.
 
 Array
 ^^^^^
 
-   :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{barray 16}}`
+.. code-block:: none
+
+ **var** barray 16
 
 | Declare an array with ID and an unsigned 32-bit integer length.
 | Only arrays with one dimension are possible; the length must be fixed.
@@ -270,10 +280,10 @@ Array
 File
 ^^^^
 
-   | :math:`{\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename.stm"}}`
-   | :math:`{\color{purple}\texttt{file} \space \color{black}\texttt{afile} \space \color{blue}\texttt{"filename\\{\\}\\{\\}.stm"} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{index1}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{index2}}`
+.. code-block:: none
+
+ **file** afile "filename.stm"
+ **file** afile "filename{:d}{:d}.stm"} $index1 $index2
 
 Declare a file with ID and file name.
 
@@ -281,24 +291,27 @@ The latter must be a relative path to the location of the main.stm file.
 Text substitution by variables is allowed in file names. Thus, files can
 be accessed in an indexed manner. The variables are evaluated each time
 when a reference to a file is used in another instruction accessing a
-file, e.g.,
-:math:`{\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}`.
+file, e.g., ``**file read all** afile alines``.
 
 Lines
 ^^^^^
 
-   :math:`{\color{purple}\texttt{lines} \space \color{black}\texttt{alines}}`
+.. code-block:: none
+
+ **lines** alines
 
 | Declare a lines object with ID.
 | The lines object contains an arbitrary number of line objects. It is
   defined to have no content when it is declared by default. It can grow
   or shrink dynamically by lines instructions accessing it, e.g.,
-  :math:`{\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{barray}}`.
+  ``**lines insert array** alines 9 barray``.
 
 Signal
 ^^^^^^
 
-   :math:`{\color{purple}\texttt{signal} \space \color{black}\texttt{asignal}}`
+.. code-block:: none
+
+ **signal** asignal
 
 Declare a signal object with ID.
 
@@ -309,7 +322,9 @@ customization and attached to a signal.
 Bus
 ^^^
 
-   :math:`{\color{purple}\texttt{bus} \space \color{black}\texttt{abus}}`
+.. code-block:: none
+
+ **bus** abus
 
 Declare a bus object with ID.
 
@@ -323,9 +338,10 @@ Equations and Arithmetic Operations
 equ
 ^^^
 
-   | :math:`{\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{equ} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **equ** operand1 $operand2
+ **equ** operand1 0xF0
 
 Copy the value of operand2 variable, constant, or numeric value into
 variable operand1 value or copy the value 0xF0 into variable operand1
@@ -334,9 +350,10 @@ value.
 add
 ^^^
 
-   | :math:`{\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{add} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **add** operand1 $operand2
+ **add** operand1 0xF0
 
 Add variable or constant operand2 value to variable operand1 value or
 add value 0xF0 to variable operand1 value. The resulting value of the
@@ -345,9 +362,10 @@ addition is in variable operand1 value after the operation.
 sub
 ^^^
 
-   | :math:`{\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{sub} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **sub** operand1 $operand2
+ **sub** operand1 0xF0`
 
 Subtract variable or constant operand2 value from variable operand1
 value or subtract value 0xF0 from variable operand1 value. The resulting
@@ -357,9 +375,10 @@ operation.
 mul
 ^^^
 
-   | :math:`{\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{mul} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **mul** operand1 $operand2
+ **mul** operand1 0xF0
 
 Multiply variable or constant operand2 value with variable operand1
 value or multiply value 0xF0 with variable operand1 value. The resulting
@@ -369,9 +388,10 @@ operation.
 div
 ^^^
 
-   | :math:`{\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{div} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **div** operand1 $operand2
+ **div** operand1 0xF0
 
 Divide variable operand1 value by variable or constant operand2 value or
 divide variable operand1 value by value 0xF0. The resulting value of the
@@ -380,9 +400,10 @@ division is in variable operand1 value after the operation.
 and
 ^^^
 
-   | :math:`{\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{and} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **and** operand1 $operand2
+ **and** operand1 0xF0
 
 Bitwise and variable or constant operand2 value with variable operand1
 value or bitwise and value 0xF0 with variable operand1 value. The
@@ -392,9 +413,10 @@ the operation.
 or
 ^^
 
-   | :math:`{\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{or} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **or** operand1 $operand2
+ **or** operand1 0xF0
 
 Bitwise or variable or constant operand2 value with variable operand1
 value or bitwise or value 0xF0 with variable operand1 value. The
@@ -404,9 +426,10 @@ the operation.
 xor
 ^^^
 
-   | :math:`{\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{xor} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **xor** operand1 $operand2
+ **xor** operand1 0xF0
 
 Bitwise xor variable or constant operand2 value with variable operand1
 value or bitwise xor value 0xF0 with variable operand1 value. The
@@ -416,9 +439,10 @@ the operation.
 shl
 ^^^
 
-   | :math:`{\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{shl} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **shl** operand1 $operand2
+ **shl** operand1 0xF0
 
 Bitwise shift left variable or constant operand2 value with variable
 operand1 value or bitwise shift left value 0xF0 with variable operand1
@@ -428,9 +452,10 @@ operand1 value after the operation.
 shr
 ^^^
 
-   | :math:`{\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{shr} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **shr** operand1 $operand2
+ **shr** operand1 0xF0
 
 Bitwise shift right variable or constant operand2 value with variable
 operand1 value or bitwise shift right value 0xF0 with variable operand1
@@ -440,9 +465,9 @@ operand1 value after the operation.
 inv
 ^^^
 
-   | :math:`{\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{operand2}`}$
-   | :math:`{\color{purple}\texttt{inv} \space \color{black}\texttt{operand1} \space \color{black}\texttt{0xF0}}`
+.. code-block:: none
+
+ **inv** operand1
 
 Bitwise invert variable operand1 value. The resulting value of the
 bitwise invert is in variable operand1 value after the operation.
@@ -450,7 +475,9 @@ bitwise invert is in variable operand1 value after the operation.
 ld
 ^^
 
-:math:`{\color{purple}\texttt{ld} \space \color{black}\texttt{operand1}}`
+.. code-block:: none
+
+ **ld** operand1
 
 Calculate logarithmus dualis of variable operand1 value. The resulting
 value is in variable operand1 value after the operation. The function
@@ -465,48 +492,55 @@ Subroutines, Branches, and Loops
 proc and end proc
 ^^^^^^^^^^^^^^^^^
 
-   | :math:`{\color{black}\texttt{aproc} \space \color{grey}\texttt{:}}`
-   | :math:`{\color{purple}\texttt{proc}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{black}\texttt{subroutine code}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{end proc}}`
+.. code-block:: none
 
-Code of a subroutine is placed between a proc and end proc instruction.
-The subroutine name is a label placed on the line before the proc
+ aproc:
+ **proc**`
+     *--...*
+     *-- subroutine code*
+     *--...*
+ **end proc**
+
+Code of a subroutine is placed between a ``**proc**`` and ``**end proc**`` instruction.
+The subroutine name is a label placed on the line before the ``**proc**``
 instruction, e.g., aproc. The label ends with a colon as a label
 indicator.
 
 call
 ^^^^
 
-   :math:`{\color{purple}\texttt{call} \space \color{grey}\texttt{\\`}
-   :raw-latex:`\color{black}`:raw-latex:`\texttt{aproc}`}$
+.. code-block:: none
+
+ **call** $aproc
 
 Branches execution to the subroutine with the label aproc and continues
 execution with the next line when it returns from the subroutine after
-it has reached an end proc or return instruction there.
+it has reached an ``**end proc**`` or ``**return**`` instruction there.
 
 return
 ^^^^^^
 
-   :math:`{\color{purple}\texttt{return}}`
+.. code-block:: none
+
+ **return**
 
 Returns to calling code from a subroutine.
 
 interrupt and end interrupt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   | :math:`{\color{black}\texttt{ainterrupt} \space \color{grey}\texttt{:}}`
-   | :math:`{\color{purple}\texttt{proc} \space \color{black}\texttt{ainterrupt}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{black}\texttt{subroutine code}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{end proc}}`
+.. code-block:: none
 
-Code of an interrupt subroutine is placed between an interrupt and end
-interrupt instruction. The interrupt subroutine name is a label placed
-on the line before the proc instruction, e.g., ainterrupt. The label
+ aninterrupt:
+ **interrupt**`
+     *--...*
+     *-- interrupt subroutine code*
+     *--...*
+ **end interrupt**
+
+Code of an interrupt subroutine is placed between an ``**interrupt**`` 
+and ``**end interrupt instruction**``. The interrupt subroutine name is a label placed
+on the line before the ``**interrupt**`` instruction, e.g., aninterrupt. The label
 ends with a colon as a label indicator. The label must be given in the
 tbsignal package by customization and attached to a signal triggering
 the interrupt. If necessary, the handling of nested interrupts must be
@@ -515,62 +549,63 @@ resolved there too.
 if, elsif, else, and end if
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{if} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{avar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`:raw-latex:`\texttt{=}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{bvar}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{elsif} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{avar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`:raw-latex:`\texttt{>}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{0xABC}`}$
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{elsif} \space \color{black}\texttt{0x123} \space \color{grey}\texttt{<=} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{bvar}`}$
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{else}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{end if}}`
+.. code-block:: none
+
+ **if** $avar **=** $bvar
+     *-- ... some code*
+ **elsif** $avar 0xABC
+     *-- ... some code*
+ **elsif** 0x123} $bvar
+     *-- ... some code*
+ **else**`
+     *-- ... some code*
+ **end if**
 
 Possible comparison operators are:
-:math:`{\space \color{grey}\texttt{>= <= > < != =}}`
+``**>= <= > < != =**``.
 
 Compares 2 variables, constants, or numeric values and branches
 execution to the next line if resolving to true. Otherwise, it branches
-to the next elsif or else or end if instruction. The if instructions can
-be nested.
+to the next ``**elsif**`` or ``**else**`` or ``**end if**`` instruction. 
+The ``**if**`` instructions can be nested.
 
 loop
 ^^^^
 
-   | :math:`{\color{purple}\texttt{loop} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{lvar}`}$
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{end loop}}`
-   | :math:`{\color{purple}\texttt{loop} \space \color{black}\texttt{32}}`
-   | :math:`{\color{black}\texttt{...}}`
-   | :math:`{\color{purple}\texttt{end loop} \space }`
+.. code-block:: none
 
-Executes a loop of the code between the loop and end loop instruction.
-The number of times the loop should be executed is given after the loop
+ **loop** $lvar
+     *-- ... some code*
+ **end loop**
+ 
+ **loop**32**`
+     *-- ... some code*
+ **end loop**
+
+Executes a loop of the code between the ``**loop**`` and end ``**loop**`` instruction.
+The number of times the loop should be executed is given after the ``**loop**``
 keyword. It can be a numeric value, a variable, or a constant. In case
 of a variable, this number can be changed by code within the loop, e.g.,
 to skip loops or end the loop earlier, due to the global nature of all
 variables. No break or continue instructions are supported therefore.
-The loop can be terminated by a return instruction too at any time,
+The loop can be terminated by a ``**return**`` instruction too at any time,
 which is a good practice.
 
 abort
 ^^^^^
 
-   :math:`{\color{purple}\texttt{abort}}`
+.. code-block:: none
+
+ **abort**
 
 Aborts the simulation with severity failure.
 
 finish
 ^^^^^^
 
-   :math:`{\color{purple}\texttt{abort}}`
+.. code-block:: none
+
+ **finish**
 
 Exits the simulation with severity note or error. The latter occurs only
 if resume has been set to other values than 0, and there were verify
@@ -582,40 +617,43 @@ Array Access
 Array Set
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{avar}}`
-   | :math:`{\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{avar}`}$
-   | :math:`{\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{5}`}$
-   | :math:`{\color{purple}\texttt{array set} \space \color{black}\texttt{barray} \space \color{black}\texttt{3} \space \color{black}\texttt{5}}`
+.. code-block:: none
 
-Set the value of an array at a position.
+ **array set** barray $pvar $avar
+ **array set** barray 3 $avar
+ **array set** barray $pvar 5
+ **array set** barray 3 4
+
+Set the value of ``barray`` at position ``pvar``to the value of ``avar`` or
+``5``.
+Set the value of ``barray`` at position ``3``to the value of ``avar`` or
+``4``.
 
 Array Get
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{tvar}`}$
-   | :math:`{\color{purple}\texttt{array get} \space \color{black}\texttt{barray} \space \color{black}\texttt{5} \space \color{black}\texttt{tvar}}`
+.. code-block:: none
 
-Get the value of an array from a position.
+ **array get** barray $pvar tvar
+ **array get** barray 5  tvar
+
+Get the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
 
 Array Size
 ^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{array size} \space \color{black}\texttt{barray} \space \color{grey}\texttt{\\`}
-   :raw-latex:`\color{black}`:raw-latex:`\texttt{tvar}`}$
+.. code-block:: none
+
+ **array size** barray tvar
 
 Get the size of an array.
 
 Array Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{array pointer copy} \space \color{black}\texttt{tarray} \space \color{black}\texttt{sarray}}`
+.. code-block:: none
+
+ **array pointer** tarray sarray
 
 Copy an array pointer; for example, ``tarray`` pointer is a copy of
 ``sarray`` pointer after the execution of the instruction. Used, for
@@ -628,7 +666,9 @@ File Access
 File Writeable
 ^^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file writeable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}`
+.. code-block:: none
+
+ **file writeable** afile rvar
 
 Test if a file is writable. If the file is not present, it is created
 without having content. The result is for STATUSOK 0, STATUSERROR 1,
@@ -638,7 +678,9 @@ on the operating system.
 File Readable
 ^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file readable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}`
+.. code-block:: none
+
+ **file readable** afile rvar
 
 Test if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
@@ -647,7 +689,9 @@ on the operating system.
 File Appendable
 ^^^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file appendable} \space \color{black}\texttt{afile} \space \color{black}\texttt{rvar}}`
+.. code-block:: none
+
+ **file appendable** afile rvar
 
 Test if a file is appendable. The result is for STATUSOK 0, STATUSERROR
 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
@@ -656,7 +700,9 @@ depend on the operating system.
 File Write
 ^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}`
+.. code-block:: none
+
+ **file write** afile alines
 
 Write all lines of an ``alines`` object to a file. The file is
 overwritten if it exists.
@@ -664,7 +710,9 @@ overwritten if it exists.
 File Append
 ^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file write} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}`
+.. code-block:: none
+
+ **file write** afile alines
 
 Append all lines of an ``alines`` object to a file. The method will fail
 if the file doesn’t exist.
@@ -672,16 +720,19 @@ if the file doesn’t exist.
 File Read All
 ^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file read all} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines}}`
+.. code-block:: none
+
+ **file read all** afile alines
 
 Read all lines of a file into an ``alines`` object.
 
 File Read
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{nvar}`}$
-   | :math:`{\color{purple}\texttt{file read} \space \color{black}\texttt{afile} \space \color{black}\texttt{alines} \space \color{black}\texttt{10}}`
+.. code-block:: none
+
+   **file read** afile alines $nvar
+   **file read** afile alines 10
 
 Read a number of lines from a file into an ``alines`` object. The first
 read opens the file for read, following reads start at the line after
@@ -694,14 +745,18 @@ limited to 4.
 File Read End
 ^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file read end} \space \color{black}\texttt{afile}}`
+.. code-block:: none
+
+   **file read end** afile
 
 End the piecewise read process of a file.
 
 File Pointer Copy
 ^^^^^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{file pointer copy} \space \color{black}\texttt{tfile} \space \color{black}\texttt{sfile}}`
+.. code-block:: none
+
+   **file pointer** tfile sfile
 
 Copy a file pointer; for example, ``tfile`` pointer is a copy of
 ``sfile`` pointer after the execution of the instruction. Used, for
@@ -714,11 +769,10 @@ Lines Access
 Lines Get
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{lines get array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{tarray}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{rvar}`}$
-   | :math:`{\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{tarray} \space \color{black}\texttt{rvar}}`
+.. code-block:: none
+
+ **lines get array** alines $pvar tarray rvar
+ **lines set array** alines 9 tarray rvar
 
 Get a line from a lines object at a given position and write its content
 into an array. The line is expected to hold hex numbers (without 0x
@@ -732,18 +786,12 @@ mismatch.
 
 Lines Set
 ^^^^^^^^^
+.. code-block:: none
 
-   | :math:`{\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{sarray}`}$
-   | :math:`{\color{purple}\texttt{lines set array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}`
-   | :math:`{\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"Some message to be written to a file later"}`}$
-   | :math:`{\color{purple}\texttt{lines set message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}`:raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{mvar2}`}$
+ **lines set array** alines $pvar sarray
+ **lines set array** alines 9 sarray
+ **lines set message** alines $pvar "Some message to be written to a file later"
+ **lines set message** alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Set a line at a given position of a lines object. The line currently at
 this position is overwritten. The line can be derived from an array or a
@@ -753,18 +801,12 @@ by values of variables given after the message string.
 Lines Insert
 ^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{sarray}`}$
-   | :math:`{\color{purple}\texttt{lines insert array} \space \color{black}\texttt{alines} \space \color{black}\texttt{9} \space \color{black}\texttt{sarray}}`
-   | :math:`{\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"Some message to be written to a file later"}`}$
-   | :math:`{\color{purple}\texttt{lines insert message} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{mvar2}`}$
+.. code-block:: none
+
+ **lines insert array** alines $pvar sarray
+ **lines insert array** alines 9 sarray
+ **lines insert message** alines $pvar "Some message to be written to a file later"
+ **lines insert message** alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Insert a line at a given position of a lines object. The line currently
 at this position is moved to the next position. The line can be derived
@@ -775,11 +817,11 @@ message string.
 Lines Append
 ^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{lines append array} \space \color{black}\texttt{alines} \space \color{black}\texttt{sarray}}`
-   | :math:`{\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Some message to be written to a file later"}}`
-   | :math:`{\color{purple}\texttt{lines append message} \space \color{black}\texttt{alines} \space \color{blue}\texttt{"Value1: \\{\\} Value2: \\{\\} to be written to a file later"}\space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{mvar1}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar2}}`
+.. code-block:: none
+
+ **lines append array** alines sarray
+ **lines append message** alines "Some message to be written to a file later"
+ **lines append message** alines "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Append a line at the end of a lines object. The line can be derived from
 an array or a message. The message string can contain {} placeholders
@@ -788,9 +830,10 @@ which are filled by values of variables given after the message string.
 Lines Delete
 ^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{pvar}`}$
-   | :math:`{\color{purple}\texttt{lines delete} \space \color{black}\texttt{alines} \space \color{black}\texttt{3}}`
+.. code-block:: none
+
+ **lines delete** alines $pvar
+ **lines delete** alines 3
 
 Delete a line at a given position of a lines object. The next line is
 moved to the given position if it exists.
@@ -798,7 +841,9 @@ moved to the given position if it exists.
 Lines Size
 ^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{lines size} \space \color{black}\texttt{alines} \space \color{black}\texttt{rvar}}`
+.. code-block:: none
+
+ **lines size** alines rvar
 
 Get the size of a lines object, which is the number of lines it contains
 currently.
@@ -806,7 +851,9 @@ currently.
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{lines pointer copy} \space \color{black}\texttt{tlines} \space \color{black}\texttt{slines}}`
+.. code-block:: none
+
+ **lines pointer** tlines slines
 
 Copy a lines pointer; for example, ``tlines`` pointer is a copy of
 ``slines``
@@ -817,14 +864,10 @@ Log
 Log Message
 ^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{log message} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{vvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"A message to the console"}`}$
-   | :math:`{\color{purple}\texttt{log message} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{vvar}`
-     :raw-latex:`\space `:raw-latex:`\color{blue}`:raw-latex:`\texttt{"A message to the console\\{\\}\\{\\}"}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar1} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{mvar2}`}$
+.. code-block:: none
+
+ **log message $vvar "A message to the console"
+ **log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
 
 Print a message at a given verbosity level to the console. The message
 string can contain {} placeholders which are filled by values of
@@ -833,24 +876,27 @@ variables given after the message string.
 Log Lines
 ^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{log lines} \space \color{grey}\texttt{\\`}
-   :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{vvar}`
-   :raw-latex:`\space `:raw-latex:`\color{black}`:raw-latex:`\texttt{slines}`}$
+.. code-block:: none
+
+ **log lines} $vvar slines
 
 Dump a lines object at a given verbosity level to the console.
 
 Verbosity
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{verbosity} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{vvar}`}$
-   | :math:`{\color{purple}\texttt{verbosity} \space \color{black}\texttt{20}}`
+.. code-block:: none
+
+ **verbosity** $vvar
+ **verbosity** 20
 
 Usual practice is to use the following constants to set verbosity:
 
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{FAILURE} \space \color{black}\texttt{0}}`
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{WARNING} \space \color{black}\texttt{10}}`
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{INFO} \space \color{black}\texttt{20}}`
+.. code-block:: none
+
+ **const** FAILURE 0
+ **const** WARNING 10
+ **const** INFO 20
 
 Sets the global verbosity for log messages. Log messages with a
 verbosity level greater than the globally set verbosity are not printed
@@ -860,9 +906,10 @@ point in the execution flow.
 Wait
 ~~~~
 
-   | :math:`{\color{purple}\texttt{wait} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{wvar}`}$
-   | :math:`{\color{purple}\texttt{wait} \space \color{black}\texttt{10000}}`
+.. code-block:: none
+
+ **wait** $wvar
+ **wait** 10000
 
 Waits for the given number of nanoseconds.
 
@@ -872,10 +919,10 @@ Random Numbers
 Random
 ^^^^^^
 
-   | :math:`{\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{minvar}`
-     :raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \space \color{black}\texttt{maxvar}}`
-   | :math:`{\color{purple}\texttt{random} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0} \space \color{black}\texttt{10}}`
+.. code-block:: none
+
+ **random** tvar $minvar $maxvar
+ **random** tvar 0 10
 
 Generates a random number greater or equal to the min value given and
 less than the maximum number given.
@@ -883,9 +930,10 @@ less than the maximum number given.
 Seed
 ^^^^
 
-   | :math:`{\color{purple}\texttt{seed} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`}$
-   | :math:`{\color{purple}\texttt{seed} \space \color{black}\texttt{10}}`
+.. code-block:: none
+
+ **seed** $svar
+ **seed** 10
 
 Set the internal start value for the random number generator.
 
@@ -895,9 +943,10 @@ Debug
 Trace
 ^^^^^
 
-   | :math:`{\color{purple}\texttt{trace} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`}$
-   | :math:`{\color{purple}\texttt{trace} \space \color{black}\texttt{0b111}}`
+.. code-block:: none
+
+ **trace $tvar
+ **trace** 0b111
 
 The trace instruction enables or disables the output of trace
 information when it is set at some point during the SimStm code
@@ -912,10 +961,10 @@ shown.
 Marker
 ^^^^^^
 
-   | :math:`{\color{purple}\texttt{marker} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{lvar}}`
-   | :math:`{\color{purple}\texttt{marker} \space \color{black}\texttt{0xF} \space \color{black}\texttt{0b1}}`
+.. code-block:: none
+
+ **marker** $nvar $mvar
+ **marker** 0xF 0b1
 
 The ``tb_simstm`` entity has an output signal marker which is a
 ``std_logic_vector(15 downto 0)``. Thus there are 16 markers which can
@@ -931,26 +980,29 @@ Signal and Bus Access
 Signal Write
 ^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`}$
-   | :math:`{\color{purple}\texttt{signal write} \space \color{black}\texttt{asignal} \space \color{black}\texttt{0b11}}`
+.. code-block:: none
+
+ **signal write** asignal $svar
+ **signal write** asignal 0b11
 
 Write variable, constant, or numeric value to a signal.
 
 Signal Read
 ^^^^^^^^^^^
 
-   :math:`{\color{purple}\texttt{signal read} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar}}`
+.. code-block:: none
+
+ **signal read** asignal tvar
 
 Read the value of a signal into a variable.
 
 Signal Verify
 ^^^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{evar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar}}`
-   | :math:`{\color{purple}\texttt{signal verify} \space \color{black}\texttt{asignal} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}`
+.. code-block:: none
+
+ **signal verify** asignal tvar $evar $mvar
+ **signal verify** asignal tvar 0x01 0x0F
 
 Read the value of a signal into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
@@ -960,26 +1012,29 @@ severity failure if the global resume is set to 0.
 Bus Write
 ^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`}$
-   | :math:`{\color{purple}\texttt{bus write} \space \color{black}\texttt{abus} \space \color{black}\texttt{0b11}}`
+.. code-block:: none
+
+ **bus write** abus $width $address $wvar
+ **bus write** abus 32 0x0004 0x12345678
 
 Write a variable, constant, or numeric value to a bus.
 
 Bus Read
 ^^^^^^^^
 
-   :math:`{\color{purple}\texttt{bus read} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar}}`
+.. code-block:: none
+
+ **bus read** abus $width $address tvar
 
 Read the value of a bus into a variable.
 
 Bus Verify
 ^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{evar}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{mvar}}`
-   | :math:`{\color{purple}\texttt{bus verify} \space \color{black}\texttt{abus} \space \color{black}\texttt{tvar} \space \color{black}\texttt{0x01} \space \color{black}\texttt{0x0F}}`
+.. code-block:: none
+
+ **bus verify** abus $width $address tvar $evar $mvar
+ **bus verify** abus $width $address tva r0x01 0x0F
 
 Read the value of a bus into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
@@ -990,9 +1045,10 @@ continues and reports an error.
 Bus Timeout
 ^^^^^^^^^^^
 
-   | :math:`{\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{svar}`}$
-   | :math:`{\color{purple}\texttt{bus timeout} \space \color{black}\texttt{abus} \space \color{black}\texttt{1000}}`
+.. code-block:: none
+
+ **bus timeout** abus $svar
+ **bus timeout** abus 1000*
 
 Sets the timeout in nanoseconds to wait for a bus access to end. On
 violation, the simulation stops with severity failure always.
@@ -1000,13 +1056,14 @@ violation, the simulation stops with severity failure always.
 Resume
 ^^^^^^
 
-   | :math:`{\color{purple}\texttt{resume} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{EXIT\\_ON\\_VERIFY\\_ERROR}`}$
-   | :math:`{\color{purple}\texttt{resume} \space \color{black}\texttt{0}}`
+.. code-block:: none
+
+ **resume** $EXIT_ON_VERIFY_ERROR
+ **resume** 0
 
 | Usual practice is to use the following constants to set verbosity:
-| :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{RESUME\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{1}}`
-| :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{EXIT\\_ON\\_VERIFY\\_ERROR} \space \color{black}\texttt{0}}`
+| ``**const**`` ``RESUME_ON_VERIFY_ERROR 1``
+| ``**const**`` ``EXIT_ON_VERIFY_ERROR 0``
 
 Sets the global resume behavior for verify instructions. On a verify
 mismatch, the simulation stops with severity failure if the global
@@ -1018,22 +1075,19 @@ Examples
 Hello World
 ~~~~~~~~~~~
 
-   | :math:`{\color{purple}\texttt{const} \space \color{black}\texttt{YEAR} \space \color{black}\texttt{0x2023} }`
-   | :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{month} \space \color{black}\texttt{0x11}}`
-   | :math:`{\color{purple}\texttt{var} \space \color{black}\texttt{day} \space \color{black}\texttt{0x22}}`
+.. code-block:: none
 
-   | :math:`{\color{black}\texttt{Main} \space \color{grey}\texttt{:}}`
-   | :math:`{\color{purple}\texttt{proc}}`
-   | :math:`{\space \space \space \space \color{purple}\texttt{loop} \space \color{black}\texttt{3} }`
-   | :math:`{\space \space \space \space \space \space \space \space \color{green}\texttt{-- currently values are printed in hex format only}}`
-   | :math:`{\space \space \space \space \space \space \space \space \color{purple}\texttt{log message} \space \color{black}\texttt{0} \space \color{blue}\texttt{"Hello World \\{\\}-\\{\\}-\\{\\}"} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{YEAR}`
-     :raw-latex:`\space `:raw-latex:`\color{grey}`\\texttt{\\\ :math:`} \color{black}\texttt{month} \space \color{grey}\texttt{\\`}
-     :raw-latex:`\color{black}`:raw-latex:`\texttt{day}`}$
-   | :math:`{\space \space \space \space \color{purple}\texttt{end loop}}`
+ **const** YEAR 2023
+ **var** month 11
+ **var** day 22
 
-   | :math:`{\color{purple}\texttt{finish}}`
-   | :math:`{\color{purple}\texttt{end proc}}`
+ testMain:
+ **proc**`
+     **loop** 3
+       **log message** 0 "Hello World {:d}-{:d}-{:d}" $YEAR $month $day
+     **end loop**`
+     **finish**
+ **end proc**
 
 This example is a unit test too and can be found in the repository
 folder `test/others/hello_world <./test/others/hello_world>`__.
