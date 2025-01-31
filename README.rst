@@ -1071,7 +1071,7 @@ Bus Timeout
  bus timeout abus $svar
  bus timeout abus 1000*
 
-Sets the timeout in nanoseconds to wait for a bus access to end. On
+The ``bus timeout`` instruction sets the timeout in nanoseconds to wait for a bus access to end. On
 violation, the simulation stops with severity failure always.
 
 Resume
@@ -1086,7 +1086,7 @@ Resume
 | ``const`` ``RESUME_ON_VERIFY_ERROR 1``
 | ``const`` ``EXIT_ON_VERIFY_ERROR 0``
 
-Sets the global resume behavior for verify instructions. On a verify
+The ``resume`` instruction sets the global resume behavior for verify instructions. On a verify
 mismatch, the simulation stops with severity failure if the global
 resume is set to 0; otherwise, it continues and reports an error.
 
