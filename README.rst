@@ -213,8 +213,8 @@ Comments
 
 .. code-block:: none
 
- *-- This is a full line comment*
- **const** aconst 0x03 *-- This is an appended line comment*
+ -- This is a full line comment*
+ const aconst 0x03 -- This is an appended line comment
 
 | Comments in a line start with two hyphens.
 | There are only line comments but no block comments.
@@ -227,7 +227,7 @@ Include
 
 .. code-block:: none
 
- **include** "aninclude.stm"
+ include "aninclude.stm"
    
 Include another child ``\*.stm file``.
 
@@ -243,9 +243,9 @@ Const
 
 .. code-block:: none
 
- **const** aconst 0x03
- **const** bconst 0b011
- **const** cconst 3
+ const aconst 0x03
+ const bconst 0b011
+ const cconst 3
 
 | Declare and define a constant with ID and hex, binary, or decimal
   unsigned 32-bit integer value.
@@ -257,14 +257,14 @@ Var
 
 .. code-block:: none
 
- **var** avar 0x03
- **var** bvar 0b011
- **var** cvar 3
+ var avar 0x03
+ var bvar 0b011
+ var cvar 3
 
 | Declare and define a variable with ID and initial hex, binary, or
   decimal unsigned 32-bit integer value.
 | It isn’t possible to initialize a variable by referencing another
-  variable or constant yet. The ``**equ**``
+  variable or constant yet. The ``equ``
   instruction must be used within a procedure for this purpose.
 
 Array
@@ -272,7 +272,7 @@ Array
 
 .. code-block:: none
 
- **var** barray 16
+ var barray 16
 
 | Declare an array with ID and an unsigned 32-bit integer length.
 | Only arrays with one dimension are possible; the length must be fixed.
@@ -282,8 +282,8 @@ File
 
 .. code-block:: none
 
- **file** afile "filename.stm"
- **file** afile "filename{:d}{:d}.stm"} $index1 $index2
+ file afile "filename.stm"
+ file afile "filename{:d}{:d}.stm"} $index1 $index2
 
 Declare a file with ID and file name.
 
@@ -291,27 +291,27 @@ The latter must be a relative path to the location of the main.stm file.
 Text substitution by variables is allowed in file names. Thus, files can
 be accessed in an indexed manner. The variables are evaluated each time
 when a reference to a file is used in another instruction accessing a
-file, e.g., ``**file read all** afile alines``.
+file, e.g., ``file read all afile alines``.
 
 Lines
 ^^^^^
 
 .. code-block:: none
 
- **lines** alines
+ lines alines
 
 | Declare a lines object with ID.
 | The lines object contains an arbitrary number of line objects. It is
   defined to have no content when it is declared by default. It can grow
   or shrink dynamically by lines instructions accessing it, e.g.,
-  ``**lines insert array** alines 9 barray``.
+  ``lines insert array alines 9 barray``.
 
 Signal
 ^^^^^^
 
 .. code-block:: none
 
- **signal** asignal
+ signal asignal
 
 Declare a signal object with ID.
 
@@ -324,7 +324,7 @@ Bus
 
 .. code-block:: none
 
- **bus** abus
+ bus abus
 
 Declare a bus object with ID.
 
@@ -340,8 +340,8 @@ equ
 
 .. code-block:: none
 
- **equ** operand1 $operand2
- **equ** operand1 0xF0
+ equ operand1 $operand2
+ equ operand1 0xF0
 
 Copy the value of operand2 variable, constant, or numeric value into
 variable operand1 value or copy the value 0xF0 into variable operand1
@@ -352,8 +352,8 @@ add
 
 .. code-block:: none
 
- **add** operand1 $operand2
- **add** operand1 0xF0
+ add operand1 $operand2
+ add operand1 0xF0
 
 Add variable or constant operand2 value to variable operand1 value or
 add value 0xF0 to variable operand1 value. The resulting value of the
@@ -364,8 +364,8 @@ sub
 
 .. code-block:: none
 
- **sub** operand1 $operand2
- **sub** operand1 0xF0`
+ sub operand1 $operand2
+ sub operand1 0xF0`
 
 Subtract variable or constant operand2 value from variable operand1
 value or subtract value 0xF0 from variable operand1 value. The resulting
@@ -377,8 +377,8 @@ mul
 
 .. code-block:: none
 
- **mul** operand1 $operand2
- **mul** operand1 0xF0
+ mul operand1 $operand2
+ mul operand1 0xF0
 
 Multiply variable or constant operand2 value with variable operand1
 value or multiply value 0xF0 with variable operand1 value. The resulting
@@ -390,8 +390,8 @@ div
 
 .. code-block:: none
 
- **div** operand1 $operand2
- **div** operand1 0xF0
+ div operand1 $operand2
+ div operand1 0xF0
 
 Divide variable operand1 value by variable or constant operand2 value or
 divide variable operand1 value by value 0xF0. The resulting value of the
@@ -402,8 +402,8 @@ and
 
 .. code-block:: none
 
- **and** operand1 $operand2
- **and** operand1 0xF0
+ and operand1 $operand2
+ and operand1 0xF0
 
 Bitwise and variable or constant operand2 value with variable operand1
 value or bitwise and value 0xF0 with variable operand1 value. The
@@ -415,8 +415,8 @@ or
 
 .. code-block:: none
 
- **or** operand1 $operand2
- **or** operand1 0xF0
+ or operand1 $operand2
+ or operand1 0xF0
 
 Bitwise or variable or constant operand2 value with variable operand1
 value or bitwise or value 0xF0 with variable operand1 value. The
@@ -428,8 +428,8 @@ xor
 
 .. code-block:: none
 
- **xor** operand1 $operand2
- **xor** operand1 0xF0
+ xor operand1 $operand2
+ xor operand1 0xF0
 
 Bitwise xor variable or constant operand2 value with variable operand1
 value or bitwise xor value 0xF0 with variable operand1 value. The
@@ -441,8 +441,8 @@ shl
 
 .. code-block:: none
 
- **shl** operand1 $operand2
- **shl** operand1 0xF0
+ shl operand1 $operand2
+ shl operand1 0xF0
 
 Bitwise shift left variable or constant operand2 value with variable
 operand1 value or bitwise shift left value 0xF0 with variable operand1
@@ -454,8 +454,8 @@ shr
 
 .. code-block:: none
 
- **shr** operand1 $operand2
- **shr** operand1 0xF0
+ shr operand1 $operand2
+ shr operand1 0xF0
 
 Bitwise shift right variable or constant operand2 value with variable
 operand1 value or bitwise shift right value 0xF0 with variable operand1
@@ -467,7 +467,7 @@ inv
 
 .. code-block:: none
 
- **inv** operand1
+ inv operand1
 
 Bitwise invert variable operand1 value. The resulting value of the
 bitwise invert is in variable operand1 value after the operation.
@@ -477,7 +477,7 @@ ld
 
 .. code-block:: none
 
- **ld** operand1
+ ld operand1
 
 Calculate logarithmus dualis of variable operand1 value. The resulting
 value is in variable operand1 value after the operation. The function
@@ -495,14 +495,14 @@ proc and end proc
 .. code-block:: none
 
  aproc:
- **proc**`
-     *--...*
-     *-- subroutine code*
-     *--...*
- **end proc**
+ proc
+     --...
+     -- subroutine code
+     --...
+ end proc
 
-Code of a subroutine is placed between a ``**proc**`` and ``**end proc**`` instruction.
-The subroutine name is a label placed on the line before the ``**proc**``
+Code of a subroutine is placed between a ``proc`` and ``end proc`` instruction.
+The subroutine name is a label placed on the line before the ``proc``
 instruction, e.g., aproc. The label ends with a colon as a label
 indicator.
 
@@ -511,18 +511,18 @@ call
 
 .. code-block:: none
 
- **call** $aproc
+ call $aproc
 
 Branches execution to the subroutine with the label aproc and continues
 execution with the next line when it returns from the subroutine after
-it has reached an ``**end proc**`` or ``**return**`` instruction there.
+it has reached an ``end proc`` or ``return`` instruction there.
 
 return
 ^^^^^^
 
 .. code-block:: none
 
- **return**
+ return
 
 Returns to calling code from a subroutine.
 
@@ -532,15 +532,15 @@ interrupt and end interrupt
 .. code-block:: none
 
  aninterrupt:
- **interrupt**`
-     *--...*
-     *-- interrupt subroutine code*
-     *--...*
- **end interrupt**
+ interrupt
+     --...
+     -- interrupt subroutine code
+     --...
+ end interrupt
 
-Code of an interrupt subroutine is placed between an ``**interrupt**`` 
-and ``**end interrupt instruction**``. The interrupt subroutine name is a label placed
-on the line before the ``**interrupt**`` instruction, e.g., aninterrupt. The label
+Code of an interrupt subroutine is placed between an ``interrupt`` 
+and ``end interrupt instruction``. The interrupt subroutine name is a label placed
+on the line before the ``interrupt`` instruction, e.g., aninterrupt. The label
 ends with a colon as a label indicator. The label must be given in the
 tbsignal package by customization and attached to a signal triggering
 the interrupt. If necessary, the handling of nested interrupts must be
@@ -551,44 +551,44 @@ if, elsif, else, and end if
 
 .. code-block:: none
 
- **if** $avar **=** $bvar
-     *-- ... some code*
- **elsif** $avar 0xABC
-     *-- ... some code*
- **elsif** 0x123} $bvar
-     *-- ... some code*
- **else**`
-     *-- ... some code*
- **end if**
+ if $avar = $bvar
+     -- ... some code
+ elsif $avar 0xABC
+     -- ... some code
+ elsif 0x123} $bvar
+     -- ... some code
+ else
+     -- ... some code
+ end if
 
 Possible comparison operators are:
-``**>= <= > < != =**``.
+``>= <= > < != =``.
 
 Compares 2 variables, constants, or numeric values and branches
 execution to the next line if resolving to true. Otherwise, it branches
-to the next ``**elsif**`` or ``**else**`` or ``**end if**`` instruction. 
-The ``**if**`` instructions can be nested.
+to the next ``elsif`` or ``else`` or ``end if`` instruction. 
+The ``if`` instructions can be nested.
 
 loop
 ^^^^
 
 .. code-block:: none
 
- **loop** $lvar
-     *-- ... some code*
- **end loop**
+ loop $lvar
+     -- ... some code
+ end loop
  
- **loop**32**`
-     *-- ... some code*
- **end loop**
+ loop32
+     -- ... some code
+ end loop
 
-Executes a loop of the code between the ``**loop**`` and end ``**loop**`` instruction.
-The number of times the loop should be executed is given after the ``**loop**``
+Executes a loop of the code between the ``loop`` and end ``loop`` instruction.
+The number of times the loop should be executed is given after the ``loop``
 keyword. It can be a numeric value, a variable, or a constant. In case
 of a variable, this number can be changed by code within the loop, e.g.,
 to skip loops or end the loop earlier, due to the global nature of all
 variables. No break or continue instructions are supported therefore.
-The loop can be terminated by a ``**return**`` instruction too at any time,
+The loop can be terminated by a ``return`` instruction too at any time,
 which is a good practice.
 
 abort
@@ -596,7 +596,7 @@ abort
 
 .. code-block:: none
 
- **abort**
+ abort
 
 Aborts the simulation with severity failure.
 
@@ -605,7 +605,7 @@ finish
 
 .. code-block:: none
 
- **finish**
+ finish
 
 Exits the simulation with severity note or error. The latter occurs only
 if resume has been set to other values than 0, and there were verify
@@ -619,10 +619,10 @@ Array Set
 
 .. code-block:: none
 
- **array set** barray $pvar $avar
- **array set** barray 3 $avar
- **array set** barray $pvar 5
- **array set** barray 3 4
+ array set barray $pvar $avar
+ array set barray 3 $avar
+ array set barray $pvar 5
+ array set barray 3 4
 
 Set the value of ``barray`` at position ``pvar``to the value of ``avar`` or
 ``5``.
@@ -634,8 +634,8 @@ Array Get
 
 .. code-block:: none
 
- **array get** barray $pvar tvar
- **array get** barray 5  tvar
+ array get barray $pvar tvar
+ array get barray 5  tvar
 
 Get the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
 
@@ -644,7 +644,7 @@ Array Size
 
 .. code-block:: none
 
- **array size** barray tvar
+ array size barray tvar
 
 Get the size of an array.
 
@@ -653,7 +653,7 @@ Array Pointer Copy
 
 .. code-block:: none
 
- **array pointer** tarray sarray
+ array pointer tarray sarray
 
 Copy an array pointer; for example, ``tarray`` pointer is a copy of
 ``sarray`` pointer after the execution of the instruction. Used, for
@@ -668,7 +668,7 @@ File Writeable
 
 .. code-block:: none
 
- **file writeable** afile rvar
+ file writeable afile rvar
 
 Test if a file is writable. If the file is not present, it is created
 without having content. The result is for STATUSOK 0, STATUSERROR 1,
@@ -680,7 +680,7 @@ File Readable
 
 .. code-block:: none
 
- **file readable** afile rvar
+ file readable afile rvar
 
 Test if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
@@ -691,7 +691,7 @@ File Appendable
 
 .. code-block:: none
 
- **file appendable** afile rvar
+ file appendable afile rvar
 
 Test if a file is appendable. The result is for STATUSOK 0, STATUSERROR
 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
@@ -702,7 +702,7 @@ File Write
 
 .. code-block:: none
 
- **file write** afile alines
+ file write afile alines
 
 Write all lines of an ``alines`` object to a file. The file is
 overwritten if it exists.
@@ -712,7 +712,7 @@ File Append
 
 .. code-block:: none
 
- **file write** afile alines
+ file write afile alines
 
 Append all lines of an ``alines`` object to a file. The method will fail
 if the file doesn’t exist.
@@ -722,7 +722,7 @@ File Read All
 
 .. code-block:: none
 
- **file read all** afile alines
+ file read all afile alines
 
 Read all lines of a file into an ``alines`` object.
 
@@ -731,8 +731,8 @@ File Read
 
 .. code-block:: none
 
-   **file read** afile alines $nvar
-   **file read** afile alines 10
+   file read afile alines $nvar
+   file read afile alines 10
 
 Read a number of lines from a file into an ``alines`` object. The first
 read opens the file for read, following reads start at the line after
@@ -747,7 +747,7 @@ File Read End
 
 .. code-block:: none
 
-   **file read end** afile
+   file read end afile
 
 End the piecewise read process of a file.
 
@@ -756,7 +756,7 @@ File Pointer Copy
 
 .. code-block:: none
 
-   **file pointer** tfile sfile
+   file pointer tfile sfile
 
 Copy a file pointer; for example, ``tfile`` pointer is a copy of
 ``sfile`` pointer after the execution of the instruction. Used, for
@@ -771,8 +771,8 @@ Lines Get
 
 .. code-block:: none
 
- **lines get array** alines $pvar tarray rvar
- **lines set array** alines 9 tarray rvar
+ lines get array alines $pvar tarray rvar
+ lines set array alines 9 tarray rvar
 
 Get a line from a lines object at a given position and write its content
 into an array. The line is expected to hold hex numbers (without 0x
@@ -788,10 +788,10 @@ Lines Set
 ^^^^^^^^^
 .. code-block:: none
 
- **lines set array** alines $pvar sarray
- **lines set array** alines 9 sarray
- **lines set message** alines $pvar "Some message to be written to a file later"
- **lines set message** alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines set array alines $pvar sarray
+ lines set array alines 9 sarray
+ lines set message alines $pvar "Some message to be written to a file later"
+ lines set message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Set a line at a given position of a lines object. The line currently at
 this position is overwritten. The line can be derived from an array or a
@@ -803,10 +803,10 @@ Lines Insert
 
 .. code-block:: none
 
- **lines insert array** alines $pvar sarray
- **lines insert array** alines 9 sarray
- **lines insert message** alines $pvar "Some message to be written to a file later"
- **lines insert message** alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines insert array alines $pvar sarray
+ lines insert array alines 9 sarray
+ lines insert message alines $pvar "Some message to be written to a file later"
+ lines insert message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Insert a line at a given position of a lines object. The line currently
 at this position is moved to the next position. The line can be derived
@@ -819,9 +819,9 @@ Lines Append
 
 .. code-block:: none
 
- **lines append array** alines sarray
- **lines append message** alines "Some message to be written to a file later"
- **lines append message** alines "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines append array alines sarray
+ lines append message alines "Some message to be written to a file later"
+ lines append message alines "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
 Append a line at the end of a lines object. The line can be derived from
 an array or a message. The message string can contain {} placeholders
@@ -832,8 +832,8 @@ Lines Delete
 
 .. code-block:: none
 
- **lines delete** alines $pvar
- **lines delete** alines 3
+ lines delete alines $pvar
+ lines delete alines 3
 
 Delete a line at a given position of a lines object. The next line is
 moved to the given position if it exists.
@@ -843,7 +843,7 @@ Lines Size
 
 .. code-block:: none
 
- **lines size** alines rvar
+ lines size alines rvar
 
 Get the size of a lines object, which is the number of lines it contains
 currently.
@@ -853,7 +853,7 @@ Lines Pointer Copy
 
 .. code-block:: none
 
- **lines pointer** tlines slines
+ lines pointer tlines slines
 
 Copy a lines pointer; for example, ``tlines`` pointer is a copy of
 ``slines``
@@ -866,8 +866,8 @@ Log Message
 
 .. code-block:: none
 
- **log message $vvar "A message to the console"
- **log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
+ log message $vvar "A message to the console"
+ log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
 
 Print a message at a given verbosity level to the console. The message
 string can contain {} placeholders which are filled by values of
@@ -878,7 +878,7 @@ Log Lines
 
 .. code-block:: none
 
- **log lines} $vvar slines
+ log lines} $vvar slines
 
 Dump a lines object at a given verbosity level to the console.
 
@@ -887,16 +887,16 @@ Verbosity
 
 .. code-block:: none
 
- **verbosity** $vvar
- **verbosity** 20
+ verbosity $vvar
+ verbosity 20
 
 Usual practice is to use the following constants to set verbosity:
 
 .. code-block:: none
 
- **const** FAILURE 0
- **const** WARNING 10
- **const** INFO 20
+ const FAILURE 0
+ const WARNING 10
+ const INFO 20
 
 Sets the global verbosity for log messages. Log messages with a
 verbosity level greater than the globally set verbosity are not printed
@@ -908,8 +908,8 @@ Wait
 
 .. code-block:: none
 
- **wait** $wvar
- **wait** 10000
+ wait $wvar
+ wait 10000
 
 Waits for the given number of nanoseconds.
 
@@ -921,8 +921,8 @@ Random
 
 .. code-block:: none
 
- **random** tvar $minvar $maxvar
- **random** tvar 0 10
+ random tvar $minvar $maxvar
+ random tvar 0 10
 
 Generates a random number greater or equal to the min value given and
 less than the maximum number given.
@@ -932,8 +932,8 @@ Seed
 
 .. code-block:: none
 
- **seed** $svar
- **seed** 10
+ seed $svar
+ seed 10
 
 Set the internal start value for the random number generator.
 
@@ -945,8 +945,8 @@ Trace
 
 .. code-block:: none
 
- **trace $tvar
- **trace** 0b111
+ trace $tvar
+ trace 0b111
 
 The trace instruction enables or disables the output of trace
 information when it is set at some point during the SimStm code
@@ -963,8 +963,8 @@ Marker
 
 .. code-block:: none
 
- **marker** $nvar $mvar
- **marker** 0xF 0b1
+ marker $nvar $mvar
+ marker 0xF 0b1
 
 The ``tb_simstm`` entity has an output signal marker which is a
 ``std_logic_vector(15 downto 0)``. Thus there are 16 markers which can
@@ -982,8 +982,8 @@ Signal Write
 
 .. code-block:: none
 
- **signal write** asignal $svar
- **signal write** asignal 0b11
+ signal write asignal $svar
+ signal write asignal 0b11
 
 Write variable, constant, or numeric value to a signal.
 
@@ -992,7 +992,7 @@ Signal Read
 
 .. code-block:: none
 
- **signal read** asignal tvar
+ signal read asignal tvar
 
 Read the value of a signal into a variable.
 
@@ -1001,8 +1001,8 @@ Signal Verify
 
 .. code-block:: none
 
- **signal verify** asignal tvar $evar $mvar
- **signal verify** asignal tvar 0x01 0x0F
+ signal verify asignal tvar $evar $mvar
+ signal verify asignal tvar 0x01 0x0F
 
 Read the value of a signal into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
@@ -1014,8 +1014,8 @@ Bus Write
 
 .. code-block:: none
 
- **bus write** abus $width $address $wvar
- **bus write** abus 32 0x0004 0x12345678
+ bus write abus $width $address $wvar
+ bus write abus 32 0x0004 0x12345678
 
 Write a variable, constant, or numeric value to a bus.
 
@@ -1024,7 +1024,7 @@ Bus Read
 
 .. code-block:: none
 
- **bus read** abus $width $address tvar
+ bus read abus $width $address tvar
 
 Read the value of a bus into a variable.
 
@@ -1033,8 +1033,8 @@ Bus Verify
 
 .. code-block:: none
 
- **bus verify** abus $width $address tvar $evar $mvar
- **bus verify** abus $width $address tva r0x01 0x0F
+ bus verify abus $width $address tvar $evar $mvar
+ bus verify abus $width $address tva r0x01 0x0F
 
 Read the value of a bus into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
@@ -1047,8 +1047,8 @@ Bus Timeout
 
 .. code-block:: none
 
- **bus timeout** abus $svar
- **bus timeout** abus 1000*
+ bus timeout abus $svar
+ bus timeout abus 1000*
 
 Sets the timeout in nanoseconds to wait for a bus access to end. On
 violation, the simulation stops with severity failure always.
@@ -1058,12 +1058,12 @@ Resume
 
 .. code-block:: none
 
- **resume** $EXIT_ON_VERIFY_ERROR
- **resume** 0
+ resume $EXIT_ON_VERIFY_ERROR
+ resume 0
 
 | Usual practice is to use the following constants to set verbosity:
-| ``**const**`` ``RESUME_ON_VERIFY_ERROR 1``
-| ``**const**`` ``EXIT_ON_VERIFY_ERROR 0``
+| ``const`` ``RESUME_ON_VERIFY_ERROR 1``
+| ``const`` ``EXIT_ON_VERIFY_ERROR 0``
 
 Sets the global resume behavior for verify instructions. On a verify
 mismatch, the simulation stops with severity failure if the global
@@ -1077,17 +1077,17 @@ Hello World
 
 .. code-block:: none
 
- **const** YEAR 2023
- **var** month 11
- **var** day 22
+ const YEAR 2023
+ var month 11
+ var day 22
 
  testMain:
- **proc**`
-     **loop** 3
-       **log message** 0 "Hello World {:d}-{:d}-{:d}" $YEAR $month $day
-     **end loop**`
-     **finish**
- **end proc**
+ proc`
+     loop 3
+       log message 0 "Hello World {:d}-{:d}-{:d}" $YEAR $month $day
+     end loop`
+     finish
+ end proc
 
 This example is a unit test too and can be found in the repository
 folder `test/others/hello_world <./test/others/hello_world>`__.
