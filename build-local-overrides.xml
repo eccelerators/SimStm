@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="local-overrides">
+	<!-- Will adapt properties for local purposes,  build-local-overrides.xml is ignored by git -->
+	
+	<!-- overide python executable -->
+	<property name="python-executable" value="/usr/bin/python"/>
+	<property name="hxsc-executable-linux" value="/home/vagrant/.hxs/hxsc"/>
+	<property name="ghdl-executable" value="/home/vagrant/ghdl/bin/ghdl"/>
+	
+    <property name="vlib-executable" value="/home/vagrant/intelFPGA_lite/23.1std/questa_fse/bin/vlib"/>
+    <property name="vmap-executable" value="/home/vagrant/intelFPGA_lite/23.1std/questa_fse/bin/vmap"/>
+    <property name="vcom-executable" value="/home/vagrant/intelFPGA_lite/23.1std/questa_fse/bin/vcom"/>
+    <property name="vsim-executable" value="/home/vagrant/intelFPGA_lite/23.1std/questa_fse/bin/vsim"/>
+
+	
+
+		
+</project>
+	
+

@@ -1,0 +1,29 @@
+include "Common/CommonLabs.stm"
+include "TestLabs/TestLabBasicDoubleVar.stm"
+
+include "Basic/basic_labs_double_var.stm"
+
+
+file simulation_success "simulation.success"
+lines success_lines
+
+testMainLabBasicDoubleVar:
+proc
+    call $initBase
+
+	verbosity $INFO_2
+	trace 0
+	resume 1
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+	log message $INFO "Main test started"
+
+	call $testLabBasicDoubleVar
+
+	log message $INFO "Main test finished"
+	wait 1000
+	lines append message success_lines "SUCCESS"
+	file write simulation_success success_lines
+	finish
+end proc

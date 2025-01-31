@@ -1,4 +1,0 @@
-testMain:
-proc
-	abort
-end proc

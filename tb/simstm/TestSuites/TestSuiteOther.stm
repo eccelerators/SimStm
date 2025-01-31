@@ -1,0 +1,287 @@
+
+	-- intern
+	file TestCaseOtherRandomStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherRandomFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherSeedStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherSeedFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherTraceStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherTraceFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherMarkerStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherMarkerFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherWaitStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherWaitFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherLogSubstitutionsStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherLogSubstitutionsFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherLogFormatsStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherLogFormatsFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+	file TestCaseOtherLogStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherLogFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	
+	file TestCaseOtherHelloWorldStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherHelloWorldFile "../../SimulationResults/{@c3}_{@c2}.xml"
+	
+	file TestCaseOtherCallStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseOtherCallFile "../../SimulationResults/{@c3}_{@c2}.xml"
+			
+testSuiteOther:
+proc
+	call $testCaseOtherRandom
+	call $testCaseOtherSeed
+	call $testCaseOtherTrace
+	call $testCaseOtherMarker
+	call $testCaseOtherWait
+	call $testCaseOtherLogSubstitutions
+	call $testCaseOtherLogFormats
+	call $testCaseOtherLog
+	call $testCaseOtherHelloWorld
+	call $testCaseOtherCall
+end proc
+
+testCaseOtherRandom:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherRandomStartFile
+    file pointer copy TestCaseFile TestCaseOtherRandomFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherRandom
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherRandom test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherSeed:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherSeedStartFile
+    file pointer copy TestCaseFile TestCaseOtherSeedFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherSeed
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherSeed test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherTrace:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherTraceStartFile
+    file pointer copy TestCaseFile TestCaseOtherTraceFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherTrace
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherTrace test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherMarker:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherMarkerStartFile
+    file pointer copy TestCaseFile TestCaseOtherMarkerFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherMarker
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherMarker test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherWait:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherWaitStartFile
+    file pointer copy TestCaseFile TestCaseOtherWaitFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherWait
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherWait test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+
+testCaseOtherLogSubstitutions:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherLogSubstitutionsStartFile
+    file pointer copy TestCaseFile TestCaseOtherLogSubstitutionsFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherLogSubstitutions
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherLogSubstitutions test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherLogFormats:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherLogFormatsStartFile
+    file pointer copy TestCaseFile TestCaseOtherLogFormatsFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherLogFormats
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherLogFormats test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+
+testCaseOtherLog:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherLogStartFile
+    file pointer copy TestCaseFile TestCaseOtherLogFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherLog
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherLog test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherHelloWorld:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherHelloWorldStartFile
+    file pointer copy TestCaseFile TestCaseOtherHelloWorldFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherHelloWorld
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherHelloWorld test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc
+
+testCaseOtherCall:
+proc
+    file pointer copy TestCaseStartFile TestCaseOtherCallStartFile
+    file pointer copy TestCaseFile TestCaseOtherCallFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testOtherHelloWorld
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "OtherHelloWorld test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc

@@ -1,0 +1,10 @@
+
+
+testLabConstantEqu:
+proc
+	call $testConstantEqu
+end proc
+
+
+
+

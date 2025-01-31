@@ -1,0 +1,209 @@
+
+var val_signal_pointer_read_back 0xffff
+signal a_in_signal_pointer 0
+signal b_in_signal_pointer 0
+signal a_out_signal_pointer 0
+signal b_out_signal_pointer 0
+
+testSignalPointerCopy:
+proc
+    call $startStandardTestShell
+    
+    signal pointer copy a_in_signal_pointer in_signal_2000
+    signal pointer copy b_in_signal_pointer in_signal_2001
+    signal pointer copy in_signal_2001 a_in_signal_pointer
+    signal pointer copy in_signal_2000 b_in_signal_pointer
+	
+    signal pointer copy a_out_signal_pointer out_signal_3000
+    signal pointer copy b_out_signal_pointer out_signal_3001
+    signal pointer copy out_signal_3001 a_out_signal_pointer
+    signal pointer copy out_signal_3000 b_out_signal_pointer	
+
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX	
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 $MAX
+	
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0xff $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0xff $MAX
+	
+    signal pointer copy in_signal_2000 a_in_signal_pointer
+    signal pointer copy in_signal_2001 b_in_signal_pointer
+	
+    signal pointer copy out_signal_3000 a_out_signal_pointer
+    signal pointer copy out_signal_3001 b_out_signal_pointer	
+    
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX	
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 $MAX
+	
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0xff $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0xff $MAX
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+var a_in_signal_pointer_value_absolut 0
+var b_in_signal_pointer_value_absolut 0
+var a_out_signal_pointer_value_absolut 0
+var b_out_signal_pointer_value_absolut 0
+
+testSignalPointerGetSet:
+proc
+    call $startStandardTestShell
+    
+	signal pointer get in_signal_2000 a_in_signal_pointer_value_absolut
+	signal pointer get in_signal_2001 b_in_signal_pointer_value_absolut	
+	signal pointer set in_signal_2000 $b_in_signal_pointer_value_absolut
+	signal pointer set in_signal_2001 $a_in_signal_pointer_value_absolut
+	
+	signal pointer get out_signal_3000 a_out_signal_pointer_value_absolut
+	signal pointer get out_signal_3001 b_out_signal_pointer_value_absolut	
+	signal pointer set out_signal_3000 $b_out_signal_pointer_value_absolut
+	signal pointer set out_signal_3001 $a_out_signal_pointer_value_absolut		
+
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX	
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 $MAX
+	
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0xff $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0xff $MAX
+	
+
+	signal pointer set in_signal_2000 $a_in_signal_pointer_value_absolut
+	signal pointer set in_signal_2001 $b_in_signal_pointer_value_absolut
+	
+	signal pointer set out_signal_3000 $a_out_signal_pointer_value_absolut
+	signal pointer set out_signal_3001 $b_out_signal_pointer_value_absolut	
+	
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+	var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX	
+	signal verify in_signal_2000 val_signal_pointer_read_back 1 $MAX
+	
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 1 $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_pointer_read_back
+	
+    var verify val_signal_pointer_read_back 0xff $MAX
+	signal verify in_signal_2001 val_signal_pointer_read_back 0xff $MAX
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+
+

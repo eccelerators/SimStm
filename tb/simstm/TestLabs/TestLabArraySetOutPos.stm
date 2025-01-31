@@ -1,0 +1,6 @@
+
+
+testLabArraySetOutPos:
+proc
+	call $testArraySetOutPos
+end proc

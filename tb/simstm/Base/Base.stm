@@ -1,0 +1,236 @@
+-- ******************************************************************************
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+--  This file is an Eccelerators GmbH sample project.
+-- 
+--  MIT License:
+--  Copyright (c) 2023 Eccelerators GmbH
+-- 
+--  Permission is hereby granted, free of charge, to any person obtaining a copy
+--  of this software and associated documentation files (the "Software"), to deal
+--  in the Software without restriction, including without limitation the rights
+--  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--  copies of the Software, and to permit persons to whom the Software is
+--  furnished to do so, subject to the following conditions:
+-- 
+--  The above copyright notice and this permission notice shall be included in all
+--  copies or substantial portions of the Software.
+-- 
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+--  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+--  SOFTWARE.
+-- ******************************************************************************
+
+-- parameter
+const ALLWAYS 0
+const FAILURE 0
+const ERROR 10
+const WARNING 20
+const INFO 30
+const INFO_1 31
+const INFO_2 32
+const INFO_3 33
+const INFO_4 34
+const INFO_5 35
+
+const SKIP 1    
+const SKIPPED 1
+const NOT_SKIPPED 0
+
+const RESUME_NEVER 0b00
+const RESUME_ON_VERIFY_ERROR 0b01
+const RESUME_ON_BUS_TIMEOUT_ERROR 0b10
+const RESUME_ON_ALL_ERRORS 0b11
+
+const TRACE_OFF 0b000
+const TRACE_INSTRUCTIONS 0b001
+const TRACE_VARIABLES 0b010
+const TRACE_FILES 0b100
+const TRACE_ALL 0b111
+
+const FILE_STATUS_OK 0
+const FILE_STATUS_ERROR 1
+const FILE_STATUS_NAME_ERROR 2
+const FILE_STATUS_MODE_ERROR 3
+
+signal sigInSimulatedTimeNow 0
+var SimulatedTimeNow 0
+
+signal sigInTestSuiteIndex 1
+var TestSuiteIndex 255
+
+signal sigInZero 2
+var BasicZero 0
+
+signal sigMachineValueWidth 7
+var MachineValueWidth 0
+
+var MAX 0
+
+initBase:
+proc
+    sub MAX 1
+    signal read sigMachineValueWidth MachineValueWidth
+end proc	
+
+var FileStatus 0
+
+printFileStatus:
+proc
+	if $FileStatus = $FILE_STATUS_OK
+		log message 0 "STATUS_OK"
+	elsif $FileStatus = $FILE_STATUS_ERROR
+		log message 0 "STATUS_ERROR"
+	elsif $FileStatus = $FILE_STATUS_NAME_ERROR
+		log message 0 "STATUS_NAME_ERROR"
+	elsif $FileStatus = $FILE_STATUS_MODE_ERROR
+		log message 0 "STATUS_MODE_ERROR"
+	else
+		log message 0 "Other status: {}" $FileStatus
+	end if
+end proc
+
+signal sigInStandardTestVerifyPassCount 3
+signal sigInStandardTestVerifyFailureCount 4
+signal sigOutExpectedStandardTestVerifyFailureCount 4
+
+signal sigInStandardTestBusTimeoutPassCount 5
+signal sigInStandardTestBusTimeoutFailureCount 6
+signal sigOutExpectedStandardTestBusTimeoutFailureCount 6
+
+var StandardTestVerifyFailureCountStartSnapShot 0
+var StandardTestVerifyFailureCountResult 0
+
+var StandardTestBusTimeoutFailureCountStartSnapShot 0
+var StandardTestBusTimeoutFailureCountResult 0
+
+var ExpectedStandardTestVerifyFailureCountStartSnapShot 0
+var ExpectedStandardTestVerifyFailureCount 0
+var ExpectedStandardTestVerifyFailureCountResult 0
+
+var ExpectedStandardTestBusTimeoutFailureCountStartSnapShot 0
+var ExpectedStandardTestBusTimeoutFailureCount 0
+var ExpectedStandardTestBusTimeoutFailureCountResult 0
+
+var StandardTestFailure 0
+
+var StandardTestVerifyPassCountStartSnapShot 0
+var StandardTestVerifyPassCountResult 0
+
+var StandardTestBusTimeoutPassCountStartSnapShot 0
+var StandardTestBusTimeoutPassCountResult 0
+
+-- A standard test is usually wrapped by a 
+--
+--  call$ startStandardTestShell at its begin
+--   producing a standard message that the test has been started
+--   and recording the standard verify and but timeout failure counters state before the test
+--
+--  call$ endStandardTestShell at its end
+--   producing a standard message that the test has ended successfully or with failures
+--   returning the StandardTestVerifyFailureCountResult and StandardTestBusTimeoutFailureCountResult 
+--   the number of respective failures occurred within the test shell
+--
+--  Each verify instruction with non success increments the StandardTestVerifyFailure count automatically.
+--  Each bus access instruction with non success increments the StandardTestBusTimeoutFailure count automatically.
+-- 
+--  In case a failure is intended the respective expected failure count may be incremented to tolerate the failure
+
+
+startStandardTestShell:
+proc
+	signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountStartSnapShot
+	equ ExpectedStandardTestVerifyFailureCountStartSnapShot $ExpectedStandardTestVerifyFailureCount
+	equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot $ExpectedStandardTestBusTimeoutFailureCount
+
+	signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountStartSnapShot	
+	
+	log message 0 "{@c2} started" 
+end proc	
+
+endStandardTestShell:
+proc
+	signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountResult
+	sub StandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountResult
+	sub StandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountStartSnapShot	
+	equ ExpectedStandardTestVerifyFailureCountResult $ExpectedStandardTestVerifyFailureCount
+	sub ExpectedStandardTestVerifyFailureCountResult $ExpectedStandardTestVerifyFailureCountStartSnapShot
+	equ ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCount
+	sub ExpectedStandardTestBusTimeoutFailureCountResult $ExpectedStandardTestBusTimeoutFailureCountStartSnapShot	
+	
+	signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountResult
+	sub StandardTestVerifyPassCountResult $StandardTestVerifyPassCountStartSnapShot
+	signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountResult
+	sub StandardTestBusTimeoutPassCountResult $StandardTestBusTimeoutPassCountStartSnapShot	
+	
+	log message 0 "Passed {:d} verify instructions" $StandardTestVerifyPassCountResult
+	log message 0 "Passed {:d} timeout monitored bus access instructions" $StandardTestBusTimeoutPassCountResult
+	
+	if $StandardTestVerifyFailureCountResult > $ExpectedStandardTestVerifyFailureCountResult
+		if $StandardTestBusTimeoutFailureCountResult > $ExpectedStandardTestBusTimeoutFailureCountResult		    
+			log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
+			log message 0 "Expected {:d} bus timeout failures, got {:d}" $ExpectedStandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountResult
+			log message 0 "Failures"
+			log message 0 "{@c2} ended" 
+			equ StandardTestFailure 1
+			return
+		end if
+	end if	
+	if $StandardTestVerifyFailureCountResult > $ExpectedStandardTestVerifyFailureCountResult    
+		log message 0 "Expected {:d} verify failures, got {:d}" $ExpectedStandardTestVerifyFailureCountResult $StandardTestVerifyFailureCountResult
+		log message 0 "Failures"
+		log message 0 "{@c2} ended" 
+		equ StandardTestFailure 1
+		return
+	end if	
+	if $StandardTestBusTimeoutFailureCountResult > $ExpectedStandardTestBusTimeoutFailureCountResult
+		log message 0 "Expected {:d} bus timeout failures, got {:d}" $ExpectedStandardTestBusTimeoutFailureCountResult $StandardTestBusTimeoutFailureCountResult
+		log message 0 "Failures"
+		log message 0 "{@c2} ended" 
+		equ StandardTestFailure 1
+		return
+	end if
+	if $ExpectedStandardTestVerifyFailureCountResult > 0
+		log message 0 "Expected {:d} verify failures, ignored" $ExpectedStandardTestVerifyFailureCountResult
+	end if
+	if $ExpectedStandardTestBusTimeoutFailureCountResult > 0
+		log message 0 "Expected {:d} bus timeout failures, ignored" $ExpectedStandardTestBusTimeoutFailureCountResult
+	end if
+	log message 0 "Success"
+    log message 0 "{@c2} ended"  
+    equ StandardTestFailure 0  
+end proc
+
+-- method to increment the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally	
+incExpectedStandardTestVerifyFailureCount:
+proc
+	add ExpectedStandardTestVerifyFailureCount 1
+	signal write sigOutExpectedStandardTestVerifyFailureCount $ExpectedStandardTestVerifyFailureCount
+end proc
+
+-- method to increment the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally	
+incExpectedStandardTestBusTimeoutFailureCount:
+proc
+	add ExpectedStandardTestBusTimeoutFailureCount 1
+	signal write sigOutExpectedStandardTestBusTimeoutFailureCount $ExpectedStandardTestBusTimeoutFailureCount
+end proc	
+		
+	
+-- manual method to increment the StandardTestVerifyFailureCount based on if instruction decisions	
+incStandardTestVerifyFailureCount:
+proc
+	signal verify sigInZero BasicZero 1 1 
+	-- fail intentionally thus incrementing standard error counter
+	-- shown when a test ends with a finish instruction
+end proc	
+	

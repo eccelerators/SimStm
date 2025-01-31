@@ -1,0 +1,66 @@
+
+var val_signal_read_back 0xffff
+
+testSignalWriteReadVerify:
+proc
+    call $startStandardTestShell
+
+	signal write out_signal_3000 0
+	signal read in_signal_2000 val_signal_read_back
+	
+	var verify val_signal_read_back 0 $MAX
+	signal verify in_signal_2000 val_signal_read_back 0 1
+	
+	signal write out_signal_3000 1
+	signal read in_signal_2000 val_signal_read_back
+	
+	var verify val_signal_read_back 1 $MAX
+	signal verify in_signal_2000 val_signal_read_back 1 1
+	
+	signal write out_signal_3000 0xffff
+	signal read in_signal_2000 val_signal_read_back
+	
+    var verify val_signal_read_back 1 $MAX	
+	signal verify in_signal_2000 val_signal_read_back 1 $MAX
+	
+	signal write out_signal_3001 0
+	signal read in_signal_2001 val_signal_read_back
+	
+    var verify val_signal_read_back 0 $MAX
+	signal verify in_signal_2001 val_signal_read_back 0 1
+	
+	signal write out_signal_3001 1
+	signal read in_signal_2001 val_signal_read_back
+	
+    var verify val_signal_read_back 1 $MAX
+	signal verify in_signal_2001 val_signal_read_back 1 1
+	
+	signal write out_signal_3001 0xffff
+	signal read in_signal_2001 val_signal_read_back
+	
+    var verify val_signal_read_back 0xff $MAX
+	signal verify in_signal_2001 val_signal_read_back 0xff $MAX
+	
+	call $endStandardTestShell
+	
+end proc
+
+
+
+testSignalVerifyFail:
+proc
+
+    call $startStandardTestShell
+
+	signal write out_signal_3000 0
+		
+	log message $ALLWAYS "signal verify intended error on no match"	
+	signal verify in_signal_2000 val_signal_read_back 1 1
+    call $incExpectedStandardTestVerifyFailureCount
+    
+	call $endStandardTestShell
+
+end proc
+
+
+

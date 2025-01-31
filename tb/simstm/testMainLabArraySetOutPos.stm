@@ -1,0 +1,29 @@
+include "Common/CommonLabs.stm"
+
+include "TestLabs/TestLabArraySetOutPos.stm"
+
+include "Array/array_labs.stm"
+
+file simulation_success "simulation.success"
+lines success_lines
+
+testMainLabArraySetOutPos:
+proc
+    call $initBase
+
+	verbosity $INFO_2
+	trace 0
+	resume 1
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+	log message $INFO "Main test started"
+
+	call $testLabArraySetOutPos
+
+	log message $INFO "Main test finished"
+	wait 1000
+	lines append message success_lines "SUCCESS"
+	file write simulation_success success_lines
+	finish
+end proc

@@ -1,0 +1,34 @@
+
+	-- intern
+	file TestCaseInterruptStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseInterruptFile "../../SimulationResults/{@c3}_{@c2}.xml"
+		
+testSuiteInterrupt:
+proc
+	call $testCaseInterrupt
+end proc
+
+
+testCaseInterrupt:
+proc
+    file pointer copy TestCaseStartFile TestCaseInterruptStartFile
+    file pointer copy TestCaseFile TestCaseInterruptFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testInterrupt
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "Interrupt test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc

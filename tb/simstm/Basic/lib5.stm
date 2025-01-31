@@ -1,0 +1,7 @@
+include "Basic/lib6.stm"
+
+
+Lib5:
+proc
+	log message 0 "load file lib5.stm"
+end proc

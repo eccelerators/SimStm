@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SimStm" xmlns:if="ant:if" xmlns:unless="ant:unless" >
+	
+    <property environment="env" />
+    
+    <condition property="is_windows">
+        <os family="windows" />
+    </condition>
+    
+    <condition property="drawio-executable" value="submodules/pacusc_drawio/runner.sh">
+        <istrue value="${env.CI}"/>
+    </condition>
+    
+    <condition property="drawio-executable" value="draw.io.exe">
+        <and>
+            <os family="windows" />
+            <not>
+                <istrue value="${env.CI}"/>
+            </not>
+        </and>
+    </condition>
+    
+    <condition property="drawio-executable" value="drawio">
+        <and>
+            <not>
+                <os family="windows" />
+            </not>
+            <not>
+                <istrue value="${env.CI}"/>
+            </not>
+        </and>
+    </condition>
+	
+	<property name="ip.name" value="SimStm"/>
+    
+    <!-- To adapt properties for local purposes put a file build-local-overrides.xml beneath this file -->
+	<!-- It is ignored by git -->
+    <!-- e.g. to overide python executable used deeper in build-hxs.xml, put following line into build-local-overrides.xml: -->
+    <!-- <property name="python-executable" value="C:\Users\E212566412\AppData\Local\Programs\Python\Python38\python.exe"/> -->
+	<!-- or -->
+	<!-- to set and fix a Flavour Number, put following line into build-local-overrides.xml:-->
+	<!-- <property name="flavour.number" value="0" /> -->
+    <import file="build-local-overrides.xml" optional="true"/>
+
+	<import file="helper/build-helper.xml" optional="true"/>   
+	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
+	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>
+	
+</project>

@@ -1,0 +1,7 @@
+const test_double_constant_1 1
+const test_double_constant_1 1
+
+testBasicDoubleConst:
+proc
+	finish
+end proc

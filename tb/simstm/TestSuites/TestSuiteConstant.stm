@@ -1,0 +1,33 @@
+
+	-- intern
+	file TestCaseConstantAddStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+	file TestCaseConstantAddFile "../../SimulationResults/{@c3}_{@c2}.xml"
+			
+testSuiteConstant:
+proc
+	call $testCaseConstantAdd
+end proc
+
+testCaseConstantAdd:
+proc
+    file pointer copy TestCaseStartFile TestCaseConstantAddStartFile
+    file pointer copy TestCaseFile TestCaseConstantAddFile
+    call $beginTestCase
+    
+    if $SKIP = $NOT_SKIPPED
+	    lines append message TestCaseLines "TestCase not implemented yet"
+	    call $skipTestCase
+	    call $endTestCase
+	    return   
+    end if
+    
+    call $testConstantAdd
+
+	if $StandardTestFailure != 0
+        lines append message TestCaseLines "ConstantAdd test failed"
+        call $failureTestCase
+    end if
+    
+    call $endTestCase
+    
+end proc

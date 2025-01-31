@@ -1,0 +1,95 @@
+-- ******************************************************************************
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+--  This file is an Eccelerators GmbH sample project.
+-- 
+--  MIT License:
+--  Copyright (c) 2023 Eccelerators GmbH
+-- 
+--  Permission is hereby granted, free of charge, to any person obtaining a copy
+--  of this software and associated documentation files (the "Software"), to deal
+--  in the Software without restriction, including without limitation the rights
+--  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--  copies of the Software, and to permit persons to whom the Software is
+--  furnished to do so, subject to the following conditions:
+-- 
+--  The above copyright notice and this permission notice shall be included in all
+--  copies or substantial portions of the Software.
+-- 
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+--  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+--  SOFTWARE.
+-- ******************************************************************************
+
+    -- parameter
+    bus ReadModifyWriteBus32 0
+    var ReadModifyWriteAdr32 0
+    var ReadModifyWriteMask32 0
+    var ReadModifyWriteData32 0
+    -- intern variables
+    var ReadModifyReadData32 0
+    var ReadModifyWriteMaskInv32 0
+
+
+readModifyWrite32:
+proc
+    equ ReadModifyReadData32 0
+    equ ReadModifyWriteMaskInv32 $ReadModifyWriteMask32
+    xor ReadModifyWriteMaskInv32 0xFFFFFFFF -- invert
+    bus read ReadModifyWriteBus32 32 $ReadModifyWriteAdr32 ReadModifyReadData32
+    and ReadModifyReadData32 $ReadModifyWriteMaskInv32 -- keep bits which aren't not impacted
+    and ReadModifyWriteData32 $ReadModifyWriteMask32   -- take only bits which are impacted
+    or ReadModifyReadData32 $ReadModifyWriteData32     -- combine to new value
+    bus write ReadModifyWriteBus32 32 $ReadModifyWriteAdr32 $ReadModifyReadData32
+end proc
+
+    -- parameter
+    bus ReadModifyWriteBus16 0
+    var ReadModifyWriteAdr16 0
+    var ReadModifyWriteMask16 0
+    var ReadModifyWriteData16 0
+    -- intern variables
+    var ReadModifyReadData16 0
+    var ReadModifyWriteMaskInv16 0
+
+readModifyWrite16:
+proc
+    equ ReadModifyReadData16 0
+    equ ReadModifyWriteMaskInv16 $ReadModifyWriteMask16
+    -- xor ReadModifyWriteMaskInv16 0xFFFF -- invert
+    inv ReadModifyWriteMaskInv16
+    bus read ReadModifyWriteBus16 16 $ReadModifyWriteAdr16 ReadModifyReadData16
+    and ReadModifyReadData16 $ReadModifyWriteMaskInv16 -- keep bits which aren't not impacted
+    and ReadModifyWriteData16 $ReadModifyWriteMask16   -- take only bits which are impacted
+    or ReadModifyReadData16 $ReadModifyWriteData16     -- combine to new value
+    bus write ReadModifyWriteBus16 16 $ReadModifyWriteAdr16 $ReadModifyReadData16
+end proc
+
+    -- parameter
+    bus ReadModifyWriteBus8 0
+    var ReadModifyWriteAdr8 0
+    var ReadModifyWriteMask8 0
+    var ReadModifyWriteData8 0
+    -- intern variables
+    var ReadModifyReadData8 0
+    var ReadModifyWriteMaskInv8 0
+
+
+readModifyWrite8:
+proc
+    equ ReadModifyReadData8 0
+    equ ReadModifyWriteMaskInv8 $ReadModifyWriteMask8
+    xor ReadModifyWriteMaskInv8 0xFFFF -- invert
+    bus read ReadModifyWriteBus8 8 $ReadModifyWriteAdr8 ReadModifyReadData8
+    and ReadModifyReadData8 $ReadModifyWriteMaskInv8 -- keep bits which aren't not impacted
+    and ReadModifyWriteData8 $ReadModifyWriteMask8   -- take only bits which are impacted
+    or ReadModifyReadData8 $ReadModifyWriteData8     -- combine to new value
+    bus write ReadModifyWriteBus8 8 $ReadModifyWriteAdr8 $ReadModifyReadData8
+end proc

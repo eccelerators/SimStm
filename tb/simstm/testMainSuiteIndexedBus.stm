@@ -1,0 +1,30 @@
+include "Common/Common.stm"
+
+include "Bus/bus32.stm"
+include "Bus/bus64.stm"
+include "Bus/bus128.stm"
+include "Bus/bus256.stm"
+
+include "TestSuites/TestSuiteIndexedBus.stm"
+
+const testMainSuiteIndexedBusMaximumIndex 32
+
+testMainSuiteIndexedBus:
+proc
+    call $initBase
+        	
+	verbosity $INFO_2
+	trace $TRACE_OFF
+	resume $RESUME_ON_ALL_ERRORS
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+    signal read sigInTestSuiteIndex TestSuiteIndex
+    log message $INFO "Main test main suite indexed Bus {:d} started" $TestSuiteIndex
+				
+	call $testSuiteIndexedBus
+	
+	log message $INFO "Main test main suite indexed Bus {:d} ended" $TestSuiteIndex
+	wait 1000
+	finish
+end proc

@@ -1,0 +1,751 @@
+var tmp_variable 0
+
+const test_constant_1 1
+const test_constant_2 2
+const test_constant_3 3
+const test_constant_4 4
+const test_constant_5 5
+
+testBasicConst:
+proc
+    call $startStandardTestShell
+
+	log message 0 "test_constant_1: {}" $test_constant_1
+	equ tmp_variable $test_constant_1
+	var verify tmp_variable 1 $MAX
+	log message 0 "test_constant_2: {}" $test_constant_2
+	equ tmp_variable $test_constant_2
+	var verify tmp_variable 2 $MAX
+	log message 0 "test_constant_3: {}" $test_constant_3
+	equ tmp_variable $test_constant_3
+	var verify tmp_variable 3 $MAX
+	log message 0 "test_constant_4: {}" $test_constant_4
+	equ tmp_variable $test_constant_4
+	var verify tmp_variable 4 $MAX
+	log message 0 "test_constant_5: {}" $test_constant_5
+	equ tmp_variable $test_constant_5
+	var verify tmp_variable 5 $MAX
+	
+	call $endStandardTestShell
+
+end proc
+
+var test_variable_1 0b1
+var test_variable_2 0x2
+var test_variable_3 3
+var test_variable_4 4
+var test_variable_5 5
+
+testBasicVar:
+proc
+    call $startStandardTestShell
+    
+	log message 0 "test_variable_1: {}" $test_variable_1
+	var verify test_variable_1 0b1 $MAX
+	log message 0 "test_variable_2: {}" $test_variable_2
+	var verify test_variable_2 0x2 $MAX
+	log message 0 "test_variable_3: {}" $test_variable_3
+	var verify test_variable_3 3 $MAX
+	log message 0 "test_variable_4: {}" $test_variable_4
+	var verify test_variable_4 4 $MAX
+	log message 0 "test_variable_5: {}" $test_variable_5
+	var verify test_variable_5 5 $MAX
+
+	call $endStandardTestShell
+end proc
+
+var aab 1
+var abb 2
+var bba 3
+var cbb 4
+var aba 5
+
+testBasicVar3:
+proc
+    call $startStandardTestShell
+    
+	log message 0 "aab: {}" $aab
+	var verify test_variable_1 1 $MAX
+	log message 0 "abb: {}" $abb
+	var verify test_variable_2 2 $MAX
+	log message 0 "bba: {}" $bba
+	var verify test_variable_3 3 $MAX
+	log message 0 "cbb: {}" $cbb
+	var verify test_variable_4 4 $MAX
+	log message 0 "aba: {}" $aba
+	var verify test_variable_5 5 $MAX
+	
+	call $endStandardTestShell
+
+end proc
+
+var loop_counta 0
+var loop_countb 0
+
+testBasicLoop:
+proc
+    call $startStandardTestShell
+    equ loop_counta 0
+	loop 4
+	    log message 0 "log 0"
+	    add loop_counta 1
+	end loop
+	var verify loop_counta 4 $MAX
+	
+	equ loop_counta 0
+	equ loop_countb 0
+	loop 5
+	    log message 0 "log 1"
+	    add loop_counta 1
+	    loop 2
+	        log message 0 "log 3"
+	        add loop_countb 1
+	    end loop
+	end loop
+	var verify loop_counta 5 $MAX
+	var verify loop_countb 10 $MAX
+	
+	log message 0 "log 2"
+	
+	call $endStandardTestShell
+end proc
+
+var resulta 0
+var resultb 0
+var resultc 0
+var resultd 0
+var resulte 0
+var resultf 0
+var resultg 0
+var resulth 0
+var resulti 0
+
+testBasicNestedIfElseElsif:	
+proc
+	
+	log message 0 "test multiple if (1)"
+	equ resulta 0
+	equ resultb 0
+	equ resultc 0
+	equ resultd 0
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multiple if 1"
+	                equ resulta 2
+	            end if
+	            log message 0 "enter multiple if 2"
+	            equ resultb 3
+	        end if
+	        log message 0 "enter multiple if 3"
+	        equ resultc 4
+	    end if
+	    log message 0 "enter multiple if 4"
+	    equ resultd 5
+	end if
+	var verify resulta 2 $MAX
+	var verify resultb 3 $MAX
+	var verify resultc 4 $MAX
+	var verify resultd 5 $MAX
+
+
+	log message 0 "test multiple if (2)"
+	equ resulta 0
+	equ resultb 0
+	equ resultc 0
+	equ resultd 0
+	equ resulte 0
+	equ resultf 0
+	equ resultg 0
+	equ resulth 0
+	equ resulti 0
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multiple if 1"
+	                equ resulta 2
+	            elsif 1 = 1
+	                log message 0 "no enter multiple elsif"
+	                equ resultb 3
+	            else
+	                log message 0 "no enter multiple else"
+	                equ resultc 4
+	            end if
+	        elsif 1 = 1
+	            log message 0 "no enter multiple elsif"
+	            equ resultd 5
+	        else
+	            log message 0 "no enter multiple else"
+	            equ resulte 6
+	        end if
+	    elsif 1 = 1
+	        log message 0 "no enter multiple elsif"
+	        equ resultf 7
+	    else
+	        log message 0 "no enter multiple else"
+	        equ resultg 8
+	    end if
+	elsif 1 = 1
+	    log message 0 "no enter multiple elsif"
+	    equ resulth 9
+	else
+	    log message 0 "no enter multiple else"
+	    equ resulti 10
+	end if
+	var verify resulta 2 $MAX
+	var verify resultb 0 $MAX
+	var verify resultc 0 $MAX
+	var verify resultd 0 $MAX
+	var verify resulte 0 $MAX
+	var verify resultf 0 $MAX
+	var verify resultg 0 $MAX
+	var verify resulth 0 $MAX
+	var verify resulti 0 $MAX	
+	
+	
+	log message 0 "test multiple if (3)"
+	equ resulta 0
+	equ resultb 0
+	equ resultc 0
+	equ resultd 0
+	equ resulte 0
+	if 0 = 0
+	    if 0 = 0
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "enter multiple if 1"
+	                equ resulta 2
+	            else
+	                log message 0 "no enter multiple else"
+	                equ resultb 3
+	            end if
+	        else
+	            log message 0 "no enter multiple else"
+	            equ resultc 4
+	        end if
+	    else
+	        log message 0 "no enter multiple else"
+	        equ resultd 5
+	    end if
+	else
+	    log message 0 "no enter multiple else"
+	    equ resulte 6
+	end if
+	var verify resulta 2 $MAX
+	var verify resultb 0 $MAX
+	var verify resultc 0 $MAX
+	var verify resultd 0 $MAX
+	var verify resulte 0 $MAX	
+	
+	
+	
+	log message 0 "test multiple if (4)"
+	equ resulta 0
+	equ resultb 0
+	equ resultc 0
+	equ resultd 0
+	equ resulte 0
+	if 0 = 0
+	    if 0 = 1
+	        if 0 = 0
+	            if 0 = 0
+	                log message 0 "no enter multiple if"
+	                equ resulta 2
+	            else
+	                log message 0 "no enter multiple else"
+	                equ resultb 3
+	            end if
+	        else
+	            log message 0 "no enter multiple else"
+	            equ resultc 4
+	        end if
+	    else
+	        log message 0 "enter multiple else 1"
+	        equ resultd 5
+	    end if
+	else
+	    log message 0 "no enter multiple else"
+	    equ resulte 6
+	end if
+	var verify resulta 0 $MAX
+	var verify resultb 0 $MAX
+	var verify resultc 0 $MAX
+	var verify resultd 5 $MAX
+	var verify resulte 0 $MAX
+	
+	
+	log message 0 "test multiple if (5)"
+	equ resulta 0
+	equ resultb 0
+	equ resultc 0
+	equ resultd 0
+	equ resulte 0
+	equ result 0
+	if 0 = 0
+	    if 1 = 1
+	        if 0 = 1
+	            log message 0 "no enter multiple if"
+	            equ resulta 2
+	        else
+	            log message 0 "enter multiple else 1"
+	            equ resultb 3
+	        end if
+	    else
+	        if 1 = 1
+	            if 0 = 1
+	                log message 0 "no enter multiple if"
+	                equ resultc 4
+	            else
+	                log message 0 "enter multiple else 2"
+	                equ resultd 5
+	            end if
+	        else
+	            log message 0 "no enter multiple else"
+	            equ resulte 6
+	        end if
+	    end if
+	end if
+	var verify resulta 0 $MAX
+	var verify resultb 3 $MAX
+	var verify resultc 0 $MAX
+	var verify resultd 0 $MAX
+	var verify resulte 0 $MAX
+	
+	call $endStandardTestShell
+	
+end proc
+
+var result 0
+var zero 0
+var one  1
+
+testBasicIfElseElsif:
+proc
+    call $startStandardTestShell
+
+	-- equal
+	
+	equ result 0
+	if 0 = 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 0 = 2
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 2 = 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	if $zero = 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero = $zero
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero = $one
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero = $one
+	    log message 0 "no enter if"
+	else
+	    log message 0 "enter else"
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 = 1
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 = 0
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 0 = 1
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 0 = 0
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+	-- not equal
+	equ result 0
+	if 0 != 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 != 2
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 2 != 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero != 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero != $zero
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero != $one
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 0 != 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 != 1
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 0 != 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 0 != 1
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+	-- greater
+	equ result 0
+	if 0 > 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 > 2
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 2 > 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero > 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero > $zero
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero > $one
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 > 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 > 1
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 0 > 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 > 0
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+	-- greater or equal
+	equ result 0
+	if 0 >= 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 0 >= 2
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 2 >= 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero >= 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero >= $zero
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero >= $one
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 >= 1
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 >= 2
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 0 >= 1
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 >= 1
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+	-- smaller
+	equ result 0
+	if 0 < 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if 0 < 2
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 2 < 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero < 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero < $zero
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero < $one
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+
+    equ result 0	
+	if 0 < 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 < 1
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 0 < 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 0 < 1
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+	-- smaller or equal
+	equ result 0
+	if 0 <= 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 0 <= 2
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 2 <= 0
+	    log message 0 "no enter if"
+	    equ result 1
+	end if
+	var verify result 0 $MAX
+	
+	equ result 0
+	if $zero <= 0
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero <= $zero
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if $zero <= $one
+	    log message 0 "enter if"
+	    equ result 1
+	end if
+	var verify result 1 $MAX
+	
+	equ result 0
+	if 1 <= 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 2 <= 1
+	    log message 0 "no enter elsif"
+	    equ result 3
+	else
+	    log message 0 "enter else"
+	    equ result 4
+	end if
+	var verify result 4 $MAX
+	
+	equ result 0
+	if 1 <= 0
+	    log message 0 "no enter if"
+	    equ result 2
+	elsif 1 <= 1
+	    log message 0 "enter elsif"
+	    equ result 3
+	else
+	    log message 0 "no enter else"
+	    equ result 4
+	end if
+	var verify result 3 $MAX
+	
+end proc
+

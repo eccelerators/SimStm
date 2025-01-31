@@ -1,0 +1,27 @@
+include "Common/Common.stm"
+
+include "Other/other.stm"
+
+include "TestSuites/TestSuiteIndexedSampleSuiteAndCaseIndex.stm"
+
+const testMainSuiteIndexedSampleSuiteAndCaseIndexMaximumIndex 7
+
+testMainSuiteIndexedSampleSuiteAndCaseIndex:
+proc
+    call $initBase
+        	
+	verbosity $INFO_2
+	trace $TRACE_OFF
+	resume $RESUME_ON_ALL_ERRORS
+	signal write out_signal_init_dut 1
+	wait 1000
+	signal write out_signal_init_dut 0
+    signal read sigInTestSuiteIndex TestSuiteIndex
+    log message $INFO "Main test main suite indexed SampleSuiteSuiteAndCase {:d} started" $TestSuiteIndex
+				
+	call $testSuiteIndexedSampleSuiteAndCaseIndex
+	
+	log message $INFO "Main test main suite indexed SampleSuiteSuiteAndCase {:d} ended" $TestSuiteIndex
+	wait 1000
+	finish
+end proc

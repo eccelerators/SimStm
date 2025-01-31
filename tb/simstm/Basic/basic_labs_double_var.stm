@@ -1,0 +1,11 @@
+
+var test_variable_1 1
+var test_variable_1 1
+
+testBasicDoubleVar:
+proc
+	finish
+end proc
+
+	
+

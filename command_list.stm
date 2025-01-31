@@ -276,8 +276,9 @@ proc
 	bus read  a_bus 16 0x00001000  bus_read_value
 	bus verify a_bus $bus_width  $bus_address bus_read_value $bus_expected_value $bus_mask_value
 	bus verify a_bus 32  0x00001004 bus_read_value 0x00050000 0x000FC000
-	bus timeout a_bus 1000
-	bus timeout a_bus $bus_timeout_value
+	bus timeout set a_bus 1000
+	bus timeout set a_bus $bus_timeout_value
+	bus timeout get a_bus bus_timeout_value
 end proc
 
 bus target_bus 0
