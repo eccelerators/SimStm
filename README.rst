@@ -205,7 +205,7 @@ passed by unique global objects. This is an accommodation to having a
 simple SimStm interpreter and develops its own charm when using and
 debugging it.
 
-The subroutine with the label ``Main:``\ is the entry point into the
+The subroutine with the label ``testMain:``\ is the entry point into the
 SimStm code for the simulator.
 
 Comments
@@ -231,7 +231,7 @@ Include
    
 Include another child ``\*.stm file``.
 
-Include instructions should be the first instructions of a ``\*.stm file``.
+The ``include`` instructions should be the first instructions of a ``\*.stm file``.
 An included file can include further ``\*.stm files``, thus nested includes
 are possible. The file path to be given is relative to the file with the
 respective include instruction. Nested includes of files from the same
@@ -247,10 +247,11 @@ Const
  const bconst 0b011
  const cconst 3
 
-| Declare and define a constant with ID and hex, binary, or decimal
-  unsigned 32-bit integer value.
-| It isn’t possible to initialize a constant by referencing another
-  constant or variable.
+The ``const`` instruction declares and define a constant with ID and hex, binary, or decimal
+unsigned 32-bit integer value.
+
+It **isn’t possible** to initialize a constant by referencing another
+constant.
 
 Var
 ^^^
@@ -261,21 +262,23 @@ Var
  var bvar 0b011
  var cvar 3
 
-| Declare and define a variable with ID and initial hex, binary, or
-  decimal unsigned 32-bit integer value.
-| It isn’t possible to initialize a variable by referencing another
-  variable or constant yet. The ``equ``
-  instruction must be used within a procedure for this purpose.
+The ``var`` instruction declares and define a variable with ID and initial hex, binary, or
+decimal unsigned 32-bit integer value.
+
+It **isn’t possible** to initialize a variable by referencing another
+variable or constant yet. The ``equ``
+instruction must be used within a procedure for this purpose.
 
 Array
 ^^^^^
 
 .. code-block:: none
 
- var barray 16
+ barray 16
 
-| Declare an array with ID and an unsigned 32-bit integer length.
-| Only arrays with one dimension are possible; the length must be fixed.
+The ``array`` instruction declares an array with ID and an unsigned 32-bit integer length.
+
+Only arrays with one dimension are possible; the length must be fixed.
 
 File
 ^^^^
@@ -285,7 +288,7 @@ File
  file afile "filename.stm"
  file afile "filename{:d}{:d}.stm"} $index1 $index2
 
-Declare a file with ID and file name.
+The ``file`` instruction declares a file with ID and file name.
 
 The latter must be a relative path to the location of the main.stm file.
 Text substitution by variables is allowed in file names. Thus, files can
@@ -300,11 +303,12 @@ Lines
 
  lines alines
 
-| Declare a lines object with ID.
-| The lines object contains an arbitrary number of line objects. It is
-  defined to have no content when it is declared by default. It can grow
-  or shrink dynamically by lines instructions accessing it, e.g.,
-  ``lines insert array alines 9 barray``.
+The ``lines`` instruction declares a lines object with ID.
+
+The lines object contains an arbitrary number of line objects. It is
+defined to have no content when it is declared by default. It can grow
+or shrink dynamically by lines instructions accessing it, e.g.,
+``lines insert array alines 9 barray``.
 
 Signal
 ^^^^^^
@@ -313,7 +317,7 @@ Signal
 
  signal asignal
 
-Declare a signal object with ID.
+The ``signal`` instruction declares a signal object with ID.
 
 The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
@@ -326,7 +330,7 @@ Bus
 
  bus abus
 
-Declare a bus object with ID.
+The ``bus`` instruction declares a bus object with ID.
 
 The signal object associates a SimStm bus name with a bus number. This
 bus number must be given in the tb_bus package by customization and
@@ -343,7 +347,7 @@ equ
  equ operand1 $operand2
  equ operand1 0xF0
 
-Copy the value of operand2 variable, constant, or numeric value into
+The ``equ`` instruction copies the value of operand2 variable, constant, or numeric value into
 variable operand1 value or copy the value 0xF0 into variable operand1
 value.
 
@@ -355,7 +359,7 @@ add
  add operand1 $operand2
  add operand1 0xF0
 
-Add variable or constant operand2 value to variable operand1 value or
+The ``add`` instruction adds variable or constant operand2 value to variable operand1 value or
 add value 0xF0 to variable operand1 value. The resulting value of the
 addition is in variable operand1 value after the operation.
 
@@ -367,7 +371,7 @@ sub
  sub operand1 $operand2
  sub operand1 0xF0`
 
-Subtract variable or constant operand2 value from variable operand1
+The ``sub`` instruction subtracts variable or constant operand2 value from variable operand1
 value or subtract value 0xF0 from variable operand1 value. The resulting
 value of the subtraction is in variable operand1 value after the
 operation.
@@ -380,7 +384,7 @@ mul
  mul operand1 $operand2
  mul operand1 0xF0
 
-Multiply variable or constant operand2 value with variable operand1
+The ``mul`` instruction multiplies variable or constant operand2 value with variable operand1
 value or multiply value 0xF0 with variable operand1 value. The resulting
 value of the multiplication is in variable operand1 value after the
 operation.
@@ -393,7 +397,7 @@ div
  div operand1 $operand2
  div operand1 0xF0
 
-Divide variable operand1 value by variable or constant operand2 value or
+The ``div`` instruction divides variable operand1 value by variable or constant operand2 value or
 divide variable operand1 value by value 0xF0. The resulting value of the
 division is in variable operand1 value after the operation.
 
@@ -405,7 +409,7 @@ and
  and operand1 $operand2
  and operand1 0xF0
 
-Bitwise and variable or constant operand2 value with variable operand1
+The ``and`` instruction does a bitwise and of variable or constant operand2 value with variable operand1
 value or bitwise and value 0xF0 with variable operand1 value. The
 resulting value of the bitwise and is in variable operand1 value after
 the operation.
@@ -418,7 +422,7 @@ or
  or operand1 $operand2
  or operand1 0xF0
 
-Bitwise or variable or constant operand2 value with variable operand1
+The ``or`` instruction does a bitwise or of variable or constant operand2 value with variable operand1
 value or bitwise or value 0xF0 with variable operand1 value. The
 resulting value of the bitwise or is in variable operand1 value after
 the operation.
@@ -431,7 +435,7 @@ xor
  xor operand1 $operand2
  xor operand1 0xF0
 
-Bitwise xor variable or constant operand2 value with variable operand1
+The ``xor`` instruction does a bitwise xor of variable or constant operand2 value with variable operand1
 value or bitwise xor value 0xF0 with variable operand1 value. The
 resulting value of the bitwise xor is in variable operand1 value after
 the operation.
@@ -444,7 +448,7 @@ shl
  shl operand1 $operand2
  shl operand1 0xF0
 
-Bitwise shift left variable or constant operand2 value with variable
+The ``shl`` instruction does a bitwise shift left of variable or constant operand2 value with variable
 operand1 value or bitwise shift left value 0xF0 with variable operand1
 value. The resulting value of the bitwise shift left is in variable
 operand1 value after the operation.
@@ -457,7 +461,7 @@ shr
  shr operand1 $operand2
  shr operand1 0xF0
 
-Bitwise shift right variable or constant operand2 value with variable
+The ``shr`` instruction does a bitwise shift right of variable or constant operand2 value with variable
 operand1 value or bitwise shift right value 0xF0 with variable operand1
 value. The resulting value of the bitwise shift right is in variable
 operand1 value after the operation.
@@ -469,7 +473,7 @@ inv
 
  inv operand1
 
-Bitwise invert variable operand1 value. The resulting value of the
+The ``or`` instruction does a bitwise invert of variable operand1 value. The resulting value of the
 bitwise invert is in variable operand1 value after the operation.
 
 ld
@@ -479,7 +483,7 @@ ld
 
  ld operand1
 
-Calculate logarithmus dualis of variable operand1 value. The resulting
+The ``ld`` instruction does calculates logarithmus dualis of variable operand1 value. The resulting
 value is in variable operand1 value after the operation. The function
 returns the number of the utmost set bit, e.g., 4 for the input 16. It
 returns 0 for the input 0 too since this is the best approximation in a
@@ -501,9 +505,9 @@ proc and end proc
      --...
  end proc
 
-Code of a subroutine is placed between a ``proc`` and ``end proc`` instruction.
+Code of a subroutine is placed between  ``proc`` and ``end proc`` instructions.
 The subroutine name is a label placed on the line before the ``proc``
-instruction, e.g., aproc. The label ends with a colon as a label
+instruction, e.g., ``aproc``. The label ends with a colon as a label
 indicator.
 
 call
@@ -513,7 +517,7 @@ call
 
  call $aproc
 
-Branches execution to the subroutine with the label aproc and continues
+The ``call`` instruction branches execution to the subroutine with the label ``aproc`` and continues
 execution with the next line when it returns from the subroutine after
 it has reached an ``end proc`` or ``return`` instruction there.
 
@@ -524,7 +528,7 @@ return
 
  return
 
-Returns to calling code from a subroutine.
+The ``return`` instruction returns to calling code from a subroutine.
 
 interrupt and end interrupt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -538,8 +542,8 @@ interrupt and end interrupt
      --...
  end interrupt
 
-Code of an interrupt subroutine is placed between an ``interrupt`` 
-and ``end interrupt instruction``. The interrupt subroutine name is a label placed
+Code of an interrupt subroutine is placed between ``interrupt`` 
+and ``end interrupt`` instructions. The interrupt subroutine name is a label placed
 on the line before the ``interrupt`` instruction, e.g., aninterrupt. The label
 ends with a colon as a label indicator. The label must be given in the
 tbsignal package by customization and attached to a signal triggering
@@ -560,14 +564,17 @@ if, elsif, else, and end if
  else
      -- ... some code
  end if
+ 
+
 
 Possible comparison operators are:
 ``>= <= > < != =``.
 
-Compares 2 variables, constants, or numeric values and branches
+The ``if`` or ``elsif`` instructions compares 2 variables, constants, or numeric values and branches
 execution to the next line if resolving to true. Otherwise, it branches
 to the next ``elsif`` or ``else`` or ``end if`` instruction. 
-The ``if`` instructions can be nested.
+
+The ``if`` ``elsif`` or ``else`` instructions can be nested.
 
 loop
 ^^^^
@@ -582,12 +589,15 @@ loop
      -- ... some code
  end loop
 
-Executes a loop of the code between the ``loop`` and end ``loop`` instruction.
+The ``loop`` instruction executes a loop of the code between the ``loop`` and end ``loop`` instruction.
+
 The number of times the loop should be executed is given after the ``loop``
-keyword. It can be a numeric value, a variable, or a constant. In case
-of a variable, this number can be changed by code within the loop, e.g.,
+keyword. It can be a numeric value, a variable, or a constant. 
+
+In case of a variable, this number can be changed by code within the loop, e.g.,
 to skip loops or end the loop earlier, due to the global nature of all
 variables. No break or continue instructions are supported therefore.
+
 The loop can be terminated by a ``return`` instruction too at any time,
 which is a good practice.
 
@@ -598,7 +608,7 @@ abort
 
  abort
 
-Aborts the simulation with severity failure.
+The ``abort`` instruction aborts the simulation with severity failure.
 
 finish
 ^^^^^^
@@ -607,7 +617,7 @@ finish
 
  finish
 
-Exits the simulation with severity note or error. The latter occurs only
+The ``finish`` instruction exits the simulation with severity note or error. The latter occurs only
 if resume has been set to other values than 0, and there were verify
 errors in verify instructions.
 
@@ -624,9 +634,10 @@ Array Set
  array set barray $pvar 5
  array set barray 3 4
 
-Set the value of ``barray`` at position ``pvar``to the value of ``avar`` or
+The ``array set`` instruction sets the value of ``barray`` at position ``pvar``to the value of ``avar`` or
 ``5``.
-Set the value of ``barray`` at position ``3``to the value of ``avar`` or
+
+The ``array set`` instruction the value of ``barray`` at position ``3``to the value of ``avar`` or
 ``4``.
 
 Array Get
@@ -637,7 +648,7 @@ Array Get
  array get barray $pvar tvar
  array get barray 5  tvar
 
-Get the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
+The ``array get`` instruction gets the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
 
 Array Size
 ^^^^^^^^^^
@@ -646,7 +657,7 @@ Array Size
 
  array size barray tvar
 
-Get the size of an array.
+The ``array size`` instruction gets the size of an array.
 
 Array Pointer Copy
 ^^^^^^^^^^^^^^^^^^
@@ -655,7 +666,7 @@ Array Pointer Copy
 
  array pointer tarray sarray
 
-Copy an array pointer; for example, ``tarray`` pointer is a copy of
+The ``array pointer`` instruction copies an array pointer; for example, ``tarray`` pointer is a copy of
 ``sarray`` pointer after the execution of the instruction. Used, for
 instance, to hand over an array to a subroutine. Changes to the source
 array happen in the target array too.
@@ -670,7 +681,7 @@ File Writeable
 
  file writeable afile rvar
 
-Test if a file is writable. If the file is not present, it is created
+The ``file writeable`` instruction tests if a file is writable. If the file is not present, it is created
 without having content. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
 on the operating system.
@@ -682,7 +693,7 @@ File Readable
 
  file readable afile rvar
 
-Test if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
+The ``file readable`` instruction tests if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
 on the operating system.
 
@@ -693,7 +704,7 @@ File Appendable
 
  file appendable afile rvar
 
-Test if a file is appendable. The result is for STATUSOK 0, STATUSERROR
+The ``file appendable`` instruction tests if a file is appendable. The result is for STATUSOK 0, STATUSERROR
 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
 depend on the operating system.
 
@@ -704,7 +715,7 @@ File Write
 
  file write afile alines
 
-Write all lines of an ``alines`` object to a file. The file is
+The ``file write`` instruction writes all lines of an ``alines`` object to a file. The file is
 overwritten if it exists.
 
 File Append
@@ -712,9 +723,9 @@ File Append
 
 .. code-block:: none
 
- file write afile alines
+ file append afile alines
 
-Append all lines of an ``alines`` object to a file. The method will fail
+The ``file append`` instruction appends all lines of an ``alines`` object to a file. The method will fail
 if the file doesn’t exist.
 
 File Read All
@@ -724,7 +735,7 @@ File Read All
 
  file read all afile alines
 
-Read all lines of a file into an ``alines`` object.
+The ``file read all`` instruction reads all lines of a file into an ``alines`` object.
 
 File Read
 ^^^^^^^^^
@@ -734,8 +745,9 @@ File Read
    file read afile alines $nvar
    file read afile alines 10
 
-Read a number of lines from a file into an ``alines`` object. The first
-read opens the file for read, following reads start at the line after
+The ``file read`` instruction reads a number of lines from a file into an ``alines`` object. 
+
+The first read opens the file for read, following reads start at the line after
 the last line which has been read by the previous read. Thus a file can
 be read piecewise similar as it can be written piecewise by file append.
 The piecewise read process of the file must be terminated by a file read
@@ -749,7 +761,7 @@ File Read End
 
    file read end afile
 
-End the piecewise read process of a file.
+The ``file read end `` instruction ends the piecewise read process of a file.
 
 File Pointer Copy
 ^^^^^^^^^^^^^^^^^
@@ -758,7 +770,7 @@ File Pointer Copy
 
    file pointer tfile sfile
 
-Copy a file pointer; for example, ``tfile`` pointer is a copy of
+The ``file pointer`` instruction copies a file pointer; for example, ``tfile`` pointer is a copy of
 ``sfile`` pointer after the execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
 file happen in the target file too.
@@ -772,10 +784,12 @@ Lines Get
 .. code-block:: none
 
  lines get array alines $pvar tarray rvar
- lines set array alines 9 tarray rvar
+ lines get array alines 9 tarray rvar
 
-Get a line from a lines object at a given position and write its content
-into an array. The line is expected to hold hex numbers (without 0x
+The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
+into an array. 
+
+The line is expected to hold hex numbers (without 0x
 prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
 numbers). The given array must be able to hold the number of found hex
 numbers. It will not be filled completely if fewer than its size are
@@ -793,8 +807,9 @@ Lines Set
  lines set message alines $pvar "Some message to be written to a file later"
  lines set message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
-Set a line at a given position of a lines object. The line currently at
-this position is overwritten. The line can be derived from an array or a
+The ``lines get array`` instruction sets a line at a given position of a lines object. 
+
+The line currently at this position is overwritten. The line can be derived from an array or a
 message. The message string can contain {} placeholders which are filled
 by values of variables given after the message string.
 
@@ -808,7 +823,7 @@ Lines Insert
  lines insert message alines $pvar "Some message to be written to a file later"
  lines insert message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
-Insert a line at a given position of a lines object. The line currently
+The ``lines insert array`` instruction inserts a line at a given position of a lines object. The line currently
 at this position is moved to the next position. The line can be derived
 from an array or a message. The message string can contain {}
 placeholders which are filled by values of variables given after the
@@ -823,7 +838,7 @@ Lines Append
  lines append message alines "Some message to be written to a file later"
  lines append message alines "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
-Append a line at the end of a lines object. The line can be derived from
+The ``lines append array`` instruction appends a line at the end of a lines object. The line can be derived from
 an array or a message. The message string can contain {} placeholders
 which are filled by values of variables given after the message string.
 
@@ -835,7 +850,7 @@ Lines Delete
  lines delete alines $pvar
  lines delete alines 3
 
-Delete a line at a given position of a lines object. The next line is
+The ``lines delete`` instruction deletes a line at a given position of a lines object. The next line is
 moved to the given position if it exists.
 
 Lines Size
@@ -845,7 +860,7 @@ Lines Size
 
  lines size alines rvar
 
-Get the size of a lines object, which is the number of lines it contains
+The ``lines size`` instruction gets the size of a lines object, which is the number of lines it contains
 currently.
 
 Lines Pointer Copy
@@ -855,7 +870,7 @@ Lines Pointer Copy
 
  lines pointer tlines slines
 
-Copy a lines pointer; for example, ``tlines`` pointer is a copy of
+The ``lines pointer`` instruction copies a lines pointer; for example, ``tlines`` pointer is a copy of
 ``slines``
 
 Log
@@ -869,8 +884,9 @@ Log Message
  log message $vvar "A message to the console"
  log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
 
-Print a message at a given verbosity level to the console. The message
-string can contain {} placeholders which are filled by values of
+The ``log message`` instruction prints a message at a given verbosity level to the console. 
+
+The message string can contain {} placeholders which are filled by values of
 variables given after the message string.
 
 Log Lines
@@ -880,7 +896,7 @@ Log Lines
 
  log lines} $vvar slines
 
-Dump a lines object at a given verbosity level to the console.
+The ``log lines`` instruction dumps a lines object at a given verbosity level to the console.
 
 Verbosity
 ^^^^^^^^^
@@ -898,7 +914,7 @@ Usual practice is to use the following constants to set verbosity:
  const WARNING 10
  const INFO 20
 
-Sets the global verbosity for log messages. Log messages with a
+The ``verbosity`` instruction sets the global verbosity for log messages. Log messages with a
 verbosity level greater than the globally set verbosity are not printed
 to the console. Of course, the global verbosity can be changed at any
 point in the execution flow.
@@ -911,7 +927,7 @@ Wait
  wait $wvar
  wait 10000
 
-Waits for the given number of nanoseconds.
+The ``wait`` instruction waits for the given number of nanoseconds.
 
 Random Numbers
 ~~~~~~~~~~~~~~
@@ -924,7 +940,7 @@ Random
  random tvar $minvar $maxvar
  random tvar 0 10
 
-Generates a random number greater or equal to the min value given and
+The ``random`` instruction generates a random number greater or equal to the min value given and
 less than the maximum number given.
 
 Seed
@@ -935,7 +951,7 @@ Seed
  seed $svar
  seed 10
 
-Set the internal start value for the random number generator.
+The ``seed`` instruction sets the internal start value for the random number generator.
 
 Debug
 ~~~~~
@@ -948,7 +964,7 @@ Trace
  trace $tvar
  trace 0b111
 
-The trace instruction enables or disables the output of trace
+The ``trace`` instruction enables or disables the output of trace
 information when it is set at some point during the SimStm code
 execution. Thus, e.g., the flow through complex if, elsif … trees can be
 shown.
@@ -965,6 +981,9 @@ Marker
 
  marker $nvar $mvar
  marker 0xF 0b1
+
+The ``marker`` instruction sets a marker at a given number used to mark 
+interesting points of time in the simulation wavefrom.
 
 The ``tb_simstm`` entity has an output signal marker which is a
 ``std_logic_vector(15 downto 0)``. Thus there are 16 markers which can
@@ -985,7 +1004,7 @@ Signal Write
  signal write asignal $svar
  signal write asignal 0b11
 
-Write variable, constant, or numeric value to a signal.
+The ``signal write`` instruction writes variable, constant, or numeric value to a signal.
 
 Signal Read
 ^^^^^^^^^^^
@@ -994,7 +1013,7 @@ Signal Read
 
  signal read asignal tvar
 
-Read the value of a signal into a variable.
+The ``signal read`` instruction reads the value of a signal into a variable.
 
 Signal Verify
 ^^^^^^^^^^^^^
@@ -1004,8 +1023,10 @@ Signal Verify
  signal verify asignal tvar $evar $mvar
  signal verify asignal tvar 0x01 0x0F
 
-Read the value of a signal into a variable and compare it to an expected
-value with a given mask. The expected value and mask can be variables,
+The ``signal verify`` instruction reads the value of a signal into a variable and compares it to an expected
+value with a given mask. 
+
+The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
 severity failure if the global resume is set to 0.
 
@@ -1017,7 +1038,7 @@ Bus Write
  bus write abus $width $address $wvar
  bus write abus 32 0x0004 0x12345678
 
-Write a variable, constant, or numeric value to a bus.
+The ``bus write`` instruction writes a variable, constant, or numeric value to a bus with a given width and address.
 
 Bus Read
 ^^^^^^^^
@@ -1026,7 +1047,7 @@ Bus Read
 
  bus read abus $width $address tvar
 
-Read the value of a bus into a variable.
+The ``bus read`` instruction reads the value of a bus with a given width and address into a variable.
 
 Bus Verify
 ^^^^^^^^^^
@@ -1036,7 +1057,7 @@ Bus Verify
  bus verify abus $width $address tvar $evar $mvar
  bus verify abus $width $address tva r0x01 0x0F
 
-Read the value of a bus into a variable and compare it to an expected
+The ``bus verify`` instruction reads the value of a bus with a given width and address into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
 severity failure if the global resume is set to 0; otherwise, it
