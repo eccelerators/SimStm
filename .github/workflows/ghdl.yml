@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  unittest-ghdl:
     runs-on: ubuntu-latest
     container:
       image: ghdl/ghdl:5.0.0-dev-gcc-ubuntu-24.04
