@@ -17,7 +17,7 @@ package tb_bus_avalon_64_pkg is
         readdata : std_logic_vector(63 downto 0);
         waitrequest : std_logic;
     end record;
-    
+
     type t_avalonmm_trace_64 is record
         avalonmm_down : t_avalonmm_down_64;
         avalonmm_up : t_avalonmm_up_64;
@@ -29,20 +29,20 @@ package tb_bus_avalon_64_pkg is
     function avalonmm_up_64_init return t_avalonmm_up_64;
 
     procedure write_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                             signal avalonmm_up : in t_avalonmm_up_64;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+                                signal avalonmm_up : in t_avalonmm_up_64;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time);
 
     procedure read_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                            signal avalonmm_up : in t_avalonmm_up_64;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+                               signal avalonmm_up : in t_avalonmm_up_64;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time);
 end;
 
 package body tb_bus_avalon_64_pkg is
@@ -57,7 +57,7 @@ package body tb_bus_avalon_64_pkg is
         init.write := '0';
         return init;
     end;
-    
+
     function avalonmm_up_64_init return t_avalonmm_up_64 is
         variable init : t_avalonmm_up_64;
     begin
@@ -68,12 +68,12 @@ package body tb_bus_avalon_64_pkg is
     end;
 
     procedure write_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                             signal avalonmm_up : in t_avalonmm_up_64;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+                                signal avalonmm_up : in t_avalonmm_up_64;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time) is
 
         variable byteenable : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
@@ -85,7 +85,7 @@ package body tb_bus_avalon_64_pkg is
             avalonmm_down <= avalonmm_down_64_init;
             return;
         end if;
-        avalonmm_down.address <= std_logic_vector(address(31 downto 0));       
+        avalonmm_down.address <= std_logic_vector(address(31 downto 0));
         case access_width is
             when 8 =>
                 byteenable := "00000001";
@@ -96,12 +96,12 @@ package body tb_bus_avalon_64_pkg is
             when 32 =>
                 byteenable := "00001111";
                 data_temp := std_logic_vector(data(63 downto 0)) and x"00000000FFFFFFFF";
-             when 64 =>
+            when 64 =>
                 byteenable := "11111111";
-                data_temp := std_logic_vector(data(63 downto 0)) and x"FFFFFFFFFFFFFFFF";               
+                data_temp := std_logic_vector(data(63 downto 0)) and x"FFFFFFFFFFFFFFFF";
             when others =>
         end case;
-       
+
         case address(2 downto 0) is
             when "000" =>
                 avalonmm_down.byteenable <= byteenable;
@@ -126,7 +126,7 @@ package body tb_bus_avalon_64_pkg is
                 avalonmm_down.writedata <= data_temp(15 downto 0) & x"000000000000";
             when "111" =>
                 avalonmm_down.byteenable <= byteenable(0) & "0000000";
-                avalonmm_down.writedata <= data_temp(7 downto 0) & x"00000000000000";                
+                avalonmm_down.writedata <= data_temp(7 downto 0) & x"00000000000000";
             when others =>
         end case;
 
@@ -147,18 +147,18 @@ package body tb_bus_avalon_64_pkg is
             if avalonmm_up.waitrequest = '0' then
                 exit;
             end if;
-        end loop; 
+        end loop;
 
         successfull := true;
     end procedure;
 
     procedure read_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                            signal avalonmm_up : in t_avalonmm_up_64;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+                               signal avalonmm_up : in t_avalonmm_up_64;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time) is
 
         variable byteenable : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
@@ -180,7 +180,7 @@ package body tb_bus_avalon_64_pkg is
             when 32 =>
                 byteenable := "00001111";
             when 64 =>
-                byteenable := "11111111";            
+                byteenable := "11111111";
             when others =>
         end case;
 
@@ -200,9 +200,9 @@ package body tb_bus_avalon_64_pkg is
             when "110" =>
                 avalonmm_down.byteenable <= byteenable(1 downto 0) & "000000";
             when "111" =>
-                avalonmm_down.byteenable <= byteenable(0) & "0000000";               
+                avalonmm_down.byteenable <= byteenable(0) & "0000000";
             when others =>
-        end case;        
+        end case;
 
         avalonmm_down.writedata <= (others => '0');
         avalonmm_down.read <= '1';
@@ -230,10 +230,10 @@ package body tb_bus_avalon_64_pkg is
             when "100" => data_temp := x"00000000" & avalonmm_up.readdata(63 downto 32);
             when "101" => data_temp := x"0000000000" & avalonmm_up.readdata(63 downto 40);
             when "110" => data_temp := x"000000000000" & avalonmm_up.readdata(63 downto 48);
-            when "111" => data_temp := x"00000000000000" & avalonmm_up.readdata(63 downto 56);            
+            when "111" => data_temp := x"00000000000000" & avalonmm_up.readdata(63 downto 56);
             when others =>
         end case;
-        
+
         data := to_unsigned(0, data'length);
         case access_width is
             when 8 => data(63 downto 0) := unsigned(data_temp and x"00000000000000FF");

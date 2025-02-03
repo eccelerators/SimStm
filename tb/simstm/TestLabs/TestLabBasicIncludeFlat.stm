@@ -1,10 +1,5 @@
 
-
 testLabBasicIncludeFlat:
 proc
-	call $testBasicIncludeFlat
+    call $testBasicIncludeFlat
 end proc
-
-
-
-

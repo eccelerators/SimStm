@@ -9,19 +9,19 @@ const testMainSuiteIndexedSampleSuiteOnlyIndexMaximumIndex 4
 testMainSuiteIndexedSampleSuiteOnlyIndex:
 proc
     call $initBase
-        	
-	verbosity $INFO_2
-	trace $TRACE_OFF
-	resume $RESUME_ON_ALL_ERRORS
-	signal write out_signal_init_dut 1
-	wait 1000
-	signal write out_signal_init_dut 0
+            
+    verbosity $INFO_2
+    trace $TRACE_OFF
+    resume $RESUME_ON_ALL_ERRORS
+    signal write out_signal_init_dut 1
+    wait 1000
+    signal write out_signal_init_dut 0
     signal read sigInTestSuiteIndex TestSuiteIndex
     log message $INFO "Main test main suite indexed SampleSuiteOnlyIndex {:d} started" $TestSuiteIndex
-				
-	call $testSuiteIndexedSampleSuiteOnlyIndex
-	
-	log message $INFO "Main test main suite indexed SampleSuiteOnlyIndex {:d} ended" $TestSuiteIndex
-	wait 1000
-	finish
+                
+    call $testSuiteIndexedSampleSuiteOnlyIndex
+    
+    log message $INFO "Main test main suite indexed SampleSuiteOnlyIndex {:d} ended" $TestSuiteIndex
+    wait 1000
+    finish
 end proc

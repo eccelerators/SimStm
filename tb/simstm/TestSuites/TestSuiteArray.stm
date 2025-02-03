@@ -1,33 +1,33 @@
 
-	-- intern
-	file TestCaseArrayStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	
-	file TestCaseArrayGetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayGetFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	file TestCaseArrayGetOutPosStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayGetOutPosFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	
-	file TestCaseArraySetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArraySetFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	file TestCaseArraySetOutPosStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArraySetOutPosFile "../../SimulationResults/{@c3}_{@c2}.xml"		
-	
-	file TestCaseArraySizeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArraySizeFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	file TestCaseArrayZeroSizeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayZeroSizeFile "../../SimulationResults/{@c3}_{@c2}.xml"	
-	
-	file TestCaseArrayPointerCopyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseArrayPointerCopyFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	
+-- intern
+file TestCaseArrayStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArrayFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+file TestCaseArrayGetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArrayGetFile "../../SimulationResults/{@c3}_{@c2}.xml"
+file TestCaseArrayGetOutPosStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArrayGetOutPosFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+file TestCaseArraySetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArraySetFile "../../SimulationResults/{@c3}_{@c2}.xml"
+file TestCaseArraySetOutPosStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArraySetOutPosFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+file TestCaseArraySizeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArraySizeFile "../../SimulationResults/{@c3}_{@c2}.xml"
+file TestCaseArrayZeroSizeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArrayZeroSizeFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+file TestCaseArrayPointerCopyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseArrayPointerCopyFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
 testSuiteArray:
 proc
-	call $testCaseArray
-	call $testCaseArrayGet
-	call $testCaseArraySet
-	call $testCaseArraySize
-	call $testCaseArrayPointerCopy	
+    call $testCaseArray
+    call $testCaseArrayGet
+    call $testCaseArraySet
+    call $testCaseArraySize
+    call $testCaseArrayPointerCopy
 end proc
 
 
@@ -36,23 +36,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseArrayStartFile
     file pointer copy TestCaseFile TestCaseArrayFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testArray
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "Array test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseArrayGet:
@@ -60,23 +60,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseArrayGetStartFile
     file pointer copy TestCaseFile TestCaseArrayGetFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testArrayGet
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "ArrayGet test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseArraySet:
@@ -84,23 +84,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseArraySetStartFile
     file pointer copy TestCaseFile TestCaseArraySetFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testArraySet
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySet test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseArraySize:
@@ -108,23 +108,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseArraySizeStartFile
     file pointer copy TestCaseFile TestCaseArraySizeFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testArraySize
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "ArraySize test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseArrayPointerCopy:
@@ -132,23 +132,21 @@ proc
     file pointer copy TestCaseStartFile TestCaseArrayPointerCopyStartFile
     file pointer copy TestCaseFile TestCaseArrayPointerCopyFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testArrayPointerCopy
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "ArrayPointer test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
-
-

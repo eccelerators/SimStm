@@ -1,4 +1,5 @@
+
 Lib4:
 proc
-	log message 0 "load file lib4.stm"
+    log message 0 "load file lib4.stm"
 end proc

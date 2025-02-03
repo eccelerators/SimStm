@@ -23,29 +23,29 @@ testMain:
 proc
     call $initBase
 
-	verbosity $INFO_2
-	trace $TRACE_OFF
-	resume $RESUME_ON_ALL_ERRORS
-	signal write out_signal_init_dut 1
-	wait 1000
-	signal write out_signal_init_dut 0
-	log message $INFO "Main test started"
-	
-	-- call $testSignalWriteReadVerify
-	-- call $testSignalVerifyFail
-	-- call $testFileReadArray
-	-- call $testVariableInv	
-	-- call $testOtherRandom
-	
-	bus pointer copy busToTest wishbone256
-	bus timeout set busToTest 1000
-	call $testBus256
-	
-	-- call $testLinesSize
+    verbosity $INFO_2
+    trace $TRACE_OFF
+    resume $RESUME_ON_ALL_ERRORS
+    signal write out_signal_init_dut 1
+    wait 1000
+    signal write out_signal_init_dut 0
+    log message $INFO "Main test started"
 
-	log message $INFO "Main test finished"
-	wait 1000
-	lines append message success_lines "SUCCESS"
-	file write simulation_success success_lines
-	finish
+    -- call $testSignalWriteReadVerify
+    -- call $testSignalVerifyFail
+    -- call $testFileReadArray
+    -- call $testVariableInv
+    -- call $testOtherRandom
+
+    bus pointer copy busToTest wishbone256
+    bus timeout set busToTest 1000
+    call $testBus256
+
+    -- call $testLinesSize
+
+    log message $INFO "Main test finished"
+    wait 1000
+    lines append message success_lines "SUCCESS"
+    file write simulation_success success_lines
+    finish
 end proc

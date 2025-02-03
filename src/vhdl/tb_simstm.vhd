@@ -51,7 +51,6 @@ library std;
 use std.textio.all;
 use std.env.all;
 
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -97,7 +96,6 @@ architecture behavioural of tb_simstm is
             end if;
         end loop;
     end function;
-
 
     -- LD function
     --          0 => as best approximation => 0 + Warning
@@ -204,8 +202,8 @@ begin
         --  scratchpad variables
         variable temp_int : integer;
         variable temp_int_b : integer;
-        variable temp_stm_value : unsigned (machine_value_width - 1 downto 0);
-        variable temp_stm_value_b : unsigned (machine_value_width - 1 downto 0);
+        variable temp_stm_value : unsigned(machine_value_width - 1 downto 0);
+        variable temp_stm_value_b : unsigned(machine_value_width - 1 downto 0);
         variable number_found : integer;
 
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
@@ -266,7 +264,7 @@ begin
         variable branch_to_interrupt_label_std_txt_io_line : line;
         variable branch_to_interrupt_v_line : integer := 0;
 
-        variable called_label :text_field;
+        variable called_label : text_field;
 
     begin
         marker <= (others => '0');
@@ -451,7 +449,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
-                    temp_stm_value := resize(resize(temp_stm_value, machine_value_width * 2)  * resize(par2, machine_value_width * 2), machine_value_width);
+                    temp_stm_value := resize(resize(temp_stm_value, machine_value_width * 2) * resize(par2, machine_value_width * 2), machine_value_width);
                     update_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " mul error: cannot update variable, it may be a constant ?"
@@ -1513,7 +1511,7 @@ begin
                 -- resume ON_VERIFY (Flag Bit0) or BUS_TIMEOUT (Flag Bit1) failure
                 -- if respective flag in resume value is set
                 elsif instruction(1 to len) = INSTR_RESUME then
-                   resume := par1;
+                    resume := par1;
 
                 -- seed $seed_var
                 -- seed 1397
@@ -1587,7 +1585,7 @@ begin
                             severity failure;
                         else
                             assert false
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) &  ", file " & text_line_crop(file_name)
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ", file " & text_line_crop(file_name)
                             severity error;
                             verify_failure_count := verify_failure_count + 1;
                         end if;
@@ -1676,7 +1674,6 @@ begin
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
 
-
                 -- bus write $a_bus $bus_width  $bus_address $bus_to_be_set_value
                 -- bus write $a_bus 16 0x00001000 0x1233
                 elsif (instruction(1 to len) = INSTR_BUS_WRITE) then
@@ -1701,9 +1698,9 @@ begin
                         end if;
                         assert successfull
                         report "Bus Write timeout"
-                        severity error;                    
+                        severity error;
                     end if;
-                    wait for 0 ns; 
+                    wait for 0 ns;
 
                 -- bus read  $a_bus $bus_width  $bus_address  bus_read_value
                 -- bus read  $a_bus 16 0x00001000  bus_read_value
@@ -1732,7 +1729,7 @@ begin
                         end if;
                         assert successfull
                         report "Bus Read timeout"
-                        severity error;                    
+                        severity error;
                     end if;
                     update_variable(defined_vars, par4, temp_stm_value_b, valid);
                     if valid = 0 then
@@ -1741,7 +1738,7 @@ begin
                         severity failure;
                     end if;
                     if instruction(1 to len) = INSTR_BUS_VERIFY then
-                        verify_passes_count := verify_passes_count + 1; 
+                        verify_passes_count := verify_passes_count + 1;
                         if (par6 and temp_stm_value_b) /= (par6 and par5) then
                             print("bus      = 0x" & to_hstring(temp_stm_value));
                             print("address  = 0x" & to_hstring(par3));
@@ -1770,17 +1767,17 @@ begin
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
                     severity failure;
                     bus_timeouts(to_integer(temp_stm_value(30 downto 0))) := to_integer(par2(30 downto 0)) * 1 ns;
-                    
+
                 elsif instruction(1 to len) = INSTR_BUS_TIMEOUT_GET then
                     index_variable(defined_vars, par1, temp_stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
                     severity failure;
-                    temp_stm_value_b := to_unsigned(bus_timeouts(to_integer(temp_stm_value(30 downto 0))) / 1 ns, machine_value_width);                   
+                    temp_stm_value_b := to_unsigned(bus_timeouts(to_integer(temp_stm_value(30 downto 0))) / 1 ns, machine_value_width);
                     update_variable(defined_vars, par2, temp_stm_value_b, valid);
                     assert valid /= 0
                     report "variable error: not a var object name??"
-                    severity failure;                          
+                    severity failure;
 
                 --  bus pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then
@@ -1792,7 +1789,7 @@ begin
                     assert valid /= 0
                     report "bus_pointer error: not a bus object name??"
                     severity failure;
-                    
+
                 --  bus pointer set a_bus_target a_var
                 --  bus pointer set a_bus_target 0x01
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_SET then
@@ -1810,7 +1807,7 @@ begin
                     update_variable(defined_vars, par2, temp_stm_value, valid);
                     assert valid /= 0
                     report "variable error: not a var object name??"
-                    severity failure;                    
+                    severity failure;
 
                 -- undefined instructions
                 else

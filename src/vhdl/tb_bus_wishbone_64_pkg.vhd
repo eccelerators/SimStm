@@ -19,7 +19,7 @@ package tb_bus_wishbone_64_pkg is
         data : std_logic_vector(63 downto 0);
         ack : std_logic;
     end record;
-    
+
     type t_wishbone_trace_64 is record
         wishbone_down : t_wishbone_down_64;
         wishbone_up : t_wishbone_up_64;
@@ -31,20 +31,20 @@ package tb_bus_wishbone_64_pkg is
     function wishbone_up_64_init return t_wishbone_up_64;
 
     procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                             signal wishbone_up : in t_wishbone_up_64;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+                                signal wishbone_up : in t_wishbone_up_64;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time);
 
     procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                            signal wishbone_up : in t_wishbone_up_64;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+                               signal wishbone_up : in t_wishbone_up_64;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time);
 end;
 
 package body tb_bus_wishbone_64_pkg is
@@ -60,7 +60,7 @@ package body tb_bus_wishbone_64_pkg is
         init.cyc := '0';
         return init;
     end;
-    
+
     function wishbone_up_64_init return t_wishbone_up_64 is
         variable init : t_wishbone_up_64;
     begin
@@ -71,12 +71,12 @@ package body tb_bus_wishbone_64_pkg is
     end;
 
     procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                             signal wishbone_up : in t_wishbone_up_64;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+                                signal wishbone_up : in t_wishbone_up_64;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time) is
 
         variable sel : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
@@ -99,9 +99,9 @@ package body tb_bus_wishbone_64_pkg is
             when 32 =>
                 sel := "00001111";
                 data_temp := std_logic_vector(data(63 downto 0)) and x"00000000FFFFFFFF";
-             when 64 =>
+            when 64 =>
                 sel := "11111111";
-                data_temp := std_logic_vector(data(63 downto 0)) and x"FFFFFFFFFFFFFFFF";               
+                data_temp := std_logic_vector(data(63 downto 0)) and x"FFFFFFFFFFFFFFFF";
             when others =>
         end case;
 
@@ -129,7 +129,7 @@ package body tb_bus_wishbone_64_pkg is
                 wishbone_down.data <= data_temp(15 downto 0) & x"000000000000";
             when "111" =>
                 wishbone_down.sel <= sel(0) & "0000000";
-                wishbone_down.data <= data_temp(7 downto 0) & x"00000000000000";                
+                wishbone_down.data <= data_temp(7 downto 0) & x"00000000000000";
             when others =>
         end case;
 
@@ -151,39 +151,39 @@ package body tb_bus_wishbone_64_pkg is
             if wishbone_up.ack then
                 exit;
             end if;
-        end loop;  
+        end loop;
         wishbone_down <= wishbone_down_64_init;
         successfull := true;
     end procedure;
 
     procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                            signal wishbone_up : in t_wishbone_up_64;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+                               signal wishbone_up : in t_wishbone_up_64;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time) is
 
         variable sel : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
         constant start_time : time := now;
     begin
-        successfull := false;       
+        successfull := false;
         wait until rising_edge(wishbone_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             wishbone_down <= wishbone_down_64_init;
             return;
-        end if;        
+        end if;
         wishbone_down.adr <= std_logic_vector(address(31 downto 0));
 
         case access_width is
-            when 8 => 
+            when 8 =>
                 sel := "00000001";
-            when 16 => 
+            when 16 =>
                 sel := "00000011";
-            when 32 => 
+            when 32 =>
                 sel := "00001111";
-            when 64 => 
+            when 64 =>
                 sel := "11111111";
             when others =>
         end case;
@@ -204,7 +204,7 @@ package body tb_bus_wishbone_64_pkg is
             when "110" =>
                 wishbone_down.sel <= sel(1 downto 0) & "000000";
             when "111" =>
-                wishbone_down.sel <= sel(0) & "0000000";            
+                wishbone_down.sel <= sel(0) & "0000000";
             when others =>
         end case;
 
@@ -227,7 +227,7 @@ package body tb_bus_wishbone_64_pkg is
             if wishbone_up.ack then
                 exit;
             end if;
-        end loop;  
+        end loop;
 
         wishbone_down <= wishbone_down_64_init;
 
@@ -239,7 +239,7 @@ package body tb_bus_wishbone_64_pkg is
             when "100" => data_temp := x"00000000" & wishbone_up.data(63 downto 32);
             when "101" => data_temp := x"0000000000" & wishbone_up.data(63 downto 40);
             when "110" => data_temp := x"000000000000" & wishbone_up.data(63 downto 48);
-            when "111" => data_temp := x"00000000000000" & wishbone_up.data(63 downto 56);            
+            when "111" => data_temp := x"00000000000000" & wishbone_up.data(63 downto 56);
             when others =>
         end case;
         data := to_unsigned(0, data'length);

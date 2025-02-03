@@ -8,24 +8,24 @@ testConstantAdd:
 proc
     call $startStandardTestShell
 
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
-	                                                  
-	add test_variable_add_1 $test_constant_add_1                            
-	add test_variable_add_2 $test_constant_add_2 
-	var verify test_variable_add_1 2 $MAX
-	var verify test_variable_add_2 4 $MAX                        
-	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
-	                                                  
-	add test_variable_add_1 $test_constant_add_1                         
-	add test_variable_add_2 $test_constant_add_2 
-	var verify test_variable_add_1 3 $MAX
-	var verify test_variable_add_2 6 $MAX                           
-	                                                  
-	log message 0 "test_variable_1: {}" $test_variable_add_1
-	log message 0 "test_variable_2: {}" $test_variable_add_2
+    log message 0 "test_variable_1: {}" $test_variable_add_1
+    log message 0 "test_variable_2: {}" $test_variable_add_2
+
+    add test_variable_add_1 $test_constant_add_1
+    add test_variable_add_2 $test_constant_add_2
+    var verify test_variable_add_1 2 $MAX
+    var verify test_variable_add_2 4 $MAX
+
+    log message 0 "test_variable_1: {}" $test_variable_add_1
+    log message 0 "test_variable_2: {}" $test_variable_add_2
+
+    add test_variable_add_1 $test_constant_add_1
+    add test_variable_add_2 $test_constant_add_2
+    var verify test_variable_add_1 3 $MAX
+    var verify test_variable_add_2 6 $MAX
+
+    log message 0 "test_variable_1: {}" $test_variable_add_1
+    log message 0 "test_variable_2: {}" $test_variable_add_2
 
 call $endStandardTestShell
 

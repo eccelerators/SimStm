@@ -1,6 +1,6 @@
 library ieee;
-    use ieee.std_logic_1164.all;
-    use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity RamAxi4Lite is
     generic(
@@ -39,7 +39,7 @@ architecture Behavioural of RamAxi4Lite is
         Axi4LiteWriteStateIdle,
         Axi4LiteWriteStateAddress,
         Axi4LiteWriteStateData,
-        Axi4LiteWriteStateResp,        
+        Axi4LiteWriteStateResp,
         Axi4LiteWriteStateDone
     );
 
@@ -62,14 +62,14 @@ architecture Behavioural of RamAxi4Lite is
     signal WriteAddress : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
     signal WriteData : std_logic_vector(31 downto 0);
     signal WriteStrobe : std_logic_vector(3 downto 0);
-    
+
     type T_Ram is array (0 to 2 ** ADDRESS_WIDTH - 1) of std_logic_vector(WriteData'range);
-            
+
     signal Ram : T_Ram := (0 to 2 ** ADDRESS_WIDTH - 1 => (others => '0'));
     signal RamAddress : std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
     signal RamReadAddress : std_logic_vector(RamAddress'range);
     signal RamByteSelect : std_logic_vector(3 downto 0);
-    
+
     signal WriteDiffRam : std_logic;
     signal ReadDiffRam : std_logic;
     signal DelWriteDiffRam : std_logic;
@@ -103,7 +103,7 @@ begin
                     ARREADY <= '1';
                     Axi4LiteReadState <= Axi4LiteReadStateData;
                     Read <= '1';
-                when Axi4LiteReadStateData =>                   
+                when Axi4LiteReadStateData =>
                     RDATA <= ReadData;
                     if ReadAck = '1' then
                         RVALID <= '1';
@@ -120,7 +120,7 @@ begin
             end case;
         end if;
     end process;
-    
+
     RRESP <= "00";
 
     prcAxi4LiteWrite : process(Clk, Rst) is
@@ -169,38 +169,46 @@ begin
                 when Axi4LiteWriteStateDone =>
                     BVALID <= '1';
                     if BREADY = '1' then
-                        WriteAddress <= (WriteAddress'range => '0');                      
+                        WriteAddress <= (WriteAddress'range => '0');
                         BVALID <= '0';
                         Axi4LiteWriteState <= Axi4LiteWriteStateIdle;
                     end if;
             end case;
         end if;
     end process;
-    
+
     BRESP <= "00";
-   
-    prcRamCtrl : process (Clk, Rst)
+
+    prcRamCtrl : process(Clk, Rst)
     begin
         if (Rst = '1') then
             ReadDecRam <= (others => '0');
             WriteDecRam <= (others => '0');
-            DelWriteDiffRam <= '0'; 
+            DelWriteDiffRam <= '0';
             ReadAck <= '0';
             WriteAck <= '0';
             DataWritten <= (others => '0');
             RamAddress <= (RamAddress'range => '0');
             RamByteSelect <= (others => '0');
         elsif rising_edge(Clk) then
-            ReadDecRam <= Read & ReadDecRam(2 downto 1); 
+            ReadDecRam <= Read & ReadDecRam(2 downto 1);
             WriteDecRam <= Write & WriteDecRam(1);
             DelWriteDiffRam <= WriteDiffRam;
             ReadAck <= ReadDecRam(0);
             WriteAck <= WriteDecRam(0);
             if (WriteDiffRam = '1') then
-                if (WriteStrobe(3) = '1') then DataWritten(31 downto 24) <= WriteData(31 downto 24); end if;
-                if (WriteStrobe(2) = '1') then DataWritten(23 downto 16) <= WriteData(23 downto 16); end if;
-                if (WriteStrobe(1) = '1') then DataWritten(15 downto 8) <= WriteData(15 downto 8); end if;
-                if (WriteStrobe(0) = '1') then DataWritten(7 downto 0) <= WriteData(7 downto 0); end if;
+                if (WriteStrobe(3) = '1') then
+                    DataWritten(31 downto 24) <= WriteData(31 downto 24);
+                end if;
+                if (WriteStrobe(2) = '1') then
+                    DataWritten(23 downto 16) <= WriteData(23 downto 16);
+                end if;
+                if (WriteStrobe(1) = '1') then
+                    DataWritten(15 downto 8) <= WriteData(15 downto 8);
+                end if;
+                if (WriteStrobe(0) = '1') then
+                    DataWritten(7 downto 0) <= WriteData(7 downto 0);
+                end if;
                 RamAddress <= WriteAddress;
                 RamByteSelect <= WriteStrobe;
             end if;
@@ -209,14 +217,14 @@ begin
             end if;
         end if;
     end process;
-    
+
     WriteDiffRam <= WriteDecRam(1) and not WriteDecRam(0);
     ReadDiffRam <= ReadDecRam(2) and not ReadDecRam(1);
 
     prcRam : process(Clk) is
     begin
         if rising_edge(Clk) then
-            for i in 0 to RamByteSelect'left loop   
+            for i in 0 to RamByteSelect'left loop
                 if RamByteSelect(i) = '1' and DelWriteDiffRam = '1' then
                     Ram(to_integer(unsigned(RamAddress)))(i * 8 + 7 downto i * 8) <= DataWritten(i * 8 + 7 downto i * 8);
                 end if;
@@ -228,4 +236,3 @@ begin
     ReadData <= Ram(to_integer(unsigned(RamReadAddress)));
 
 end architecture;
-

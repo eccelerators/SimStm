@@ -37,21 +37,21 @@ use ieee.numeric_std.all;
 
 entity RamWishbone is
   generic(
-    ADDRESS_WIDTH : positive;  -- Determines the size of the RAM (num. of words = 2**ADDRESS_WIDTH)
-    DATA_WIDTH : positive := 32;  -- -- Number of data bits, must be a multiple of GRANULARITY
-    GRANULARITY : positive := 8  -- Usually 8 (for byte granularity)
+    ADDRESS_WIDTH : positive; -- Determines the size of the RAM (num. of words = 2**ADDRESS_WIDTH)
+    DATA_WIDTH : positive := 32; -- -- Number of data bits, must be a multiple of GRANULARITY
+    GRANULARITY : positive := 8 -- Usually 8 (for byte granularity)
   );
   port(
     -- Wishbone SLAVE signals.
     i_rst : in std_logic;
     i_clk : in std_logic;
-    i_adr : in std_logic_vector(ADDRESS_WIDTH-1 downto 0);
-    i_dat : in std_logic_vector(DATA_WIDTH-1 downto 0);
+    i_adr : in std_logic_vector(ADDRESS_WIDTH - 1 downto 0);
+    i_dat : in std_logic_vector(DATA_WIDTH - 1 downto 0);
     i_we : in std_logic;
-    i_sel : in std_logic_vector(DATA_WIDTH/GRANULARITY-1 downto 0);
+    i_sel : in std_logic_vector(DATA_WIDTH / GRANULARITY - 1 downto 0);
     i_cyc : in std_logic;
     i_stb : in std_logic;
-    o_dat : out std_logic_vector(DATA_WIDTH-1 downto 0);
+    o_dat : out std_logic_vector(DATA_WIDTH - 1 downto 0);
     o_ack : out std_logic;
     o_stall : out std_logic;
     o_rty : out std_logic;
@@ -60,20 +60,20 @@ entity RamWishbone is
 end entity;
 
 architecture rtl of RamWishbone is
-  constant C_NUM_WORDS : positive := 2**ADDRESS_WIDTH;
+  constant C_NUM_WORDS : positive := 2 ** ADDRESS_WIDTH;
   constant C_PARTS_PER_WORD : positive := DATA_WIDTH / GRANULARITY;
 
-  subtype T_PART is std_logic_vector(GRANULARITY-1 downto 0);
-  type T_PART_ARRAY is array (0 to C_NUM_WORDS-1) of T_PART;
-  type T_MEM is array (0 to C_PARTS_PER_WORD-1) of T_PART_ARRAY;
+  subtype T_PART is std_logic_vector(GRANULARITY - 1 downto 0);
+  type T_PART_ARRAY is array (0 to C_NUM_WORDS - 1) of T_PART;
+  type T_MEM is array (0 to C_PARTS_PER_WORD - 1) of T_PART_ARRAY;
 
-  signal s_mem : T_MEM := (others => ( others => (others => '0')));
+  signal s_mem : T_MEM := (others => (others => (others => '0')));
   signal pre_ack : std_logic := '0';
 begin
   o_ack <= pre_ack;
 
   process(i_rst, i_clk)
-    variable v_adr : integer range 0 to C_NUM_WORDS-1;
+    variable v_adr : integer range 0 to C_NUM_WORDS - 1;
     variable v_req : std_logic;
   begin
     if i_rst = '1' then
@@ -88,16 +88,16 @@ begin
 
       -- Write?
       if v_req = '1' and i_we = '1' then
-        for k in 0 to C_PARTS_PER_WORD-1 loop
+        for k in 0 to C_PARTS_PER_WORD - 1 loop
           if i_sel(k) = '1' then
-            s_mem(k)(v_adr) <= i_dat(GRANULARITY*(k+1)-1 downto GRANULARITY*k);
+            s_mem(k)(v_adr) <= i_dat(GRANULARITY * (k + 1) - 1 downto GRANULARITY * k);
           end if;
         end loop;
       end if;
 
       -- We always read.
-      for k in 0 to C_PARTS_PER_WORD-1 loop
-        o_dat(GRANULARITY*(k+1)-1 downto GRANULARITY*k) <= s_mem(k)(v_adr);
+      for k in 0 to C_PARTS_PER_WORD - 1 loop
+        o_dat(GRANULARITY * (k + 1) - 1 downto GRANULARITY * k) <= s_mem(k)(v_adr);
       end loop;
 
       -- Ack that we have dealt with the request.

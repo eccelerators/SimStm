@@ -4,8 +4,5 @@ var test_variable_1 1
 
 testBasicDoubleVar:
 proc
-	finish
+    finish
 end proc
-
-	
-
