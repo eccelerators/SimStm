@@ -38,7 +38,7 @@ and extension. The command set is focused on the tasks currently being
 solved.
 
 The general advantage of this technique is that the VHDL code of the
-testbench doesn’t need to be changed and recompiled for different
+testbench doesn't need to be changed and recompiled for different
 stimuli command sets. Different command set files can be presented to
 the VHDL testbench, or command files can be interactively changed during
 debugging.
@@ -135,7 +135,7 @@ Visual Studio Code
 -  Go to the Extensions Marketplace.
 -  Search for “SimStm” and install the plugin.
 -  Create or open a “.stm” test script file.
--  Leverage the plugin’s IDE features to enhance your testing workflow.
+-  Leverage the plugin's IDE features to enhance your testing workflow.
 
 Eclipse
 ~~~~~~~
@@ -150,7 +150,7 @@ Eclipse
 -  Browse to the folder you have unpacked as the location.
 -  Press the “Install” button.
 -  Create or open a “.stm” test script file within a project.
--  Leverage the plugin’s IDE features to enhance your testing workflow.
+-  Leverage the plugin's IDE features to enhance your testing workflow.
 
 Overview and Integration into User Testbench
 --------------------------------------------
@@ -161,7 +161,7 @@ be changed by the user. The signals and interrupts that the user wants
 to control the DUT or the Mocks shall be defined in ``tb_signals_pkg``.
 The buses the user wants to connect to the DUT or the Mocks shall be
 defined in ``tb_bus_pkg``, and eventually, a new bus type package if the
-predefined buses aren’t sufficient. All other packages shall not be
+predefined buses aren't sufficient. All other packages shall not be
 changed.
 
 .. figure:: https://github.com/eccelerators/simstm/assets/124497409/1f15e6b8-1587-4bd7-96a7-8ad51ebe7d05
@@ -191,7 +191,7 @@ this manner too.
 
 The colon postfix of a subroutine label must end with a colon. No space
 is allowed between the label ID and the colon. A dollar sign as prefix
-is used to reference to object content e.g. variables. No space is
+is used to reference to object content e.g. variables. No space is
 allowed between the dollar sign and referenced object ID. Otherwise the
 SimStm language is not white space sensitive.
 
@@ -228,7 +228,7 @@ Include
 .. code-block:: none
 
  include "aninclude.stm"
-   
+
 Include another child ``\*.stm file``.
 
 The ``include`` instructions should be the first instructions of a ``\*.stm file``.
@@ -250,7 +250,7 @@ Const
 The ``const`` instruction declares and define a constant with ID and hex, binary, or decimal
 unsigned 32-bit integer value.
 
-It **isn’t possible** to initialize a constant by referencing another
+It **isn't possible** to initialize a constant by referencing another
 constant.
 
 Var
@@ -265,7 +265,7 @@ Var
 The ``var`` instruction declares and define a variable with ID and initial hex, binary, or
 decimal unsigned 32-bit integer value.
 
-It **isn’t possible** to initialize a variable by referencing another
+It **isn't possible** to initialize a variable by referencing another
 variable or constant yet. The ``equ``
 instruction must be used within a procedure for this purpose.
 
@@ -542,7 +542,7 @@ interrupt and end interrupt
      --...
  end interrupt
 
-Code of an interrupt subroutine is placed between ``interrupt`` 
+Code of an interrupt subroutine is placed between ``interrupt``
 and ``end interrupt`` instructions. The interrupt subroutine name is a label placed
 on the line before the ``interrupt`` instruction, e.g., aninterrupt. The label
 ends with a colon as a label indicator. The label must be given in the
@@ -564,7 +564,7 @@ if, elsif, else, and end if
  else
      -- ... some code
  end if
- 
+
 
 
 Possible comparison operators are:
@@ -572,7 +572,7 @@ Possible comparison operators are:
 
 The ``if`` or ``elsif`` instructions compares 2 variables, constants, or numeric values and branches
 execution to the next line if resolving to true. Otherwise, it branches
-to the next ``elsif`` or ``else`` or ``end if`` instruction. 
+to the next ``elsif`` or ``else`` or ``end if`` instruction.
 
 The ``if`` ``elsif`` or ``else`` instructions can be nested.
 
@@ -584,7 +584,7 @@ loop
  loop $lvar
      -- ... some code
  end loop
- 
+
  loop32
      -- ... some code
  end loop
@@ -592,7 +592,7 @@ loop
 The ``loop`` instruction executes a loop of the code between the ``loop`` and end ``loop`` instruction.
 
 The number of times the loop should be executed is given after the ``loop``
-keyword. It can be a numeric value, a variable, or a constant. 
+keyword. It can be a numeric value, a variable, or a constant.
 
 In case of a variable, this number can be changed by code within the loop, e.g.,
 to skip loops or end the loop earlier, due to the global nature of all
@@ -633,7 +633,7 @@ Var Verify
  var verify a_var 0x01 0x0F
 
 The ``var verify`` instruction reads the value of a signal and compares it to an expected
-value with a given mask. 
+value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
@@ -677,7 +677,7 @@ Array Verify
  array verify barray $pvar 0x01 0x0F
 
 The ``array verify`` instruction reads the value of an array at a position and compares it to an expected
-value with a given mask. 
+value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
@@ -759,7 +759,7 @@ File Append
  file append afile alines
 
 The ``file append`` instruction appends all lines of an ``alines`` object to a file. The method will fail
-if the file doesn’t exist.
+if the file doesn't exist.
 
 File Read All
 ^^^^^^^^^^^^^
@@ -778,7 +778,7 @@ File Read
    file read afile alines $nvar
    file read afile alines 10
 
-The ``file read`` instruction reads a number of lines from a file into an ``alines`` object. 
+The ``file read`` instruction reads a number of lines from a file into an ``alines`` object.
 
 The first read opens the file for read, following reads start at the line after
 the last line which has been read by the previous read. Thus a file can
@@ -820,7 +820,7 @@ Lines Get
  lines get array alines 9 tarray rvar
 
 The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
-into an array. 
+into an array.
 
 The line is expected to hold hex numbers (without 0x
 prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
@@ -840,7 +840,7 @@ Lines Set
  lines set message alines $pvar "Some message to be written to a file later"
  lines set message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
 
-The ``lines get array`` instruction sets a line at a given position of a lines object. 
+The ``lines get array`` instruction sets a line at a given position of a lines object.
 
 The line currently at this position is overwritten. The line can be derived from an array or a
 message. The message string can contain {} placeholders which are filled
@@ -917,7 +917,7 @@ Log Message
  log message $vvar "A message to the console"
  log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
 
-The ``log message`` instruction prints a message at a given verbosity level to the console. 
+The ``log message`` instruction prints a message at a given verbosity level to the console.
 
 The message string can contain {} placeholders which are filled by values of
 variables given after the message string.
@@ -1015,7 +1015,7 @@ Marker
  marker $nvar $mvar
  marker 0xF 0b1
 
-The ``marker`` instruction sets a marker at a given number used to mark 
+The ``marker`` instruction sets a marker at a given number used to mark
 interesting points of time in the simulation wavefrom.
 
 The ``tb_simstm`` entity has an output signal marker which is a
@@ -1057,7 +1057,7 @@ Signal Verify
  signal verify asignal tvar 0x01 0x0F
 
 The ``signal verify`` instruction reads the value of a signal into a variable and compares it to an expected
-value with a given mask. 
+value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
@@ -1155,7 +1155,7 @@ Bus Pointer Get
 The ``bus pointer get`` instruction gets a bus pointer; for example, ``tbus`` pointer absolutely into e.g. ptvar.
 
 Bus Timeout Set
-^^^^^^^^^^^^^^^ 
+^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
@@ -1223,8 +1223,19 @@ Unit Tests
 The test folder contains unittest for all commands. Thus all commands
 are verified for each release by regression tests.
 
+.. code-block:: none
+    pip3 install click jinja2
+    ant _helper-generate-ghdl-ant-build-xml
+    ant ghdl-all
+
+.. code-block:: none
+    pip3 install click jinja2
+    ant _helper-generate-modelsim-ant-build-xml
+    ant modelsim-all
+
+
 Real-World Examples
 ~~~~~~~~~~~~~~~~~~~
 
-A complex real-world example is found in the eccelerators 
+A complex real-world example is found in the eccelerators
 repository on GitHub.
