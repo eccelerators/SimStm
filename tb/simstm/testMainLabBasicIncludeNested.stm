@@ -3,7 +3,6 @@ include "TestLabs/TestLabBasicIncludeNested.stm"
 
 include "Basic/basic_labs.stm"
 
-
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -11,19 +10,19 @@ testMainLabBasicIncludeNested:
 proc
     call $initBase
 
-	verbosity $INFO_2
-	trace 0
-	resume 1
-	signal write out_signal_init_dut 1
-	wait 1000
-	signal write out_signal_init_dut 0
-	log message $INFO "Main test started"
+    verbosity $INFO_2
+    trace 0
+    resume 1
+    signal write out_signal_init_dut 1
+    wait 1000
+    signal write out_signal_init_dut 0
+    log message $INFO "Main test started"
 
-	call $testLabBasicIncludeNested
+    call $testLabBasicIncludeNested
 
-	log message $INFO "Main test finished"
-	wait 1000
-	lines append message success_lines "SUCCESS"
-	file write simulation_success success_lines
-	finish
+    log message $INFO "Main test finished"
+    wait 1000
+    lines append message success_lines "SUCCESS"
+    file write simulation_success success_lines
+    finish
 end proc

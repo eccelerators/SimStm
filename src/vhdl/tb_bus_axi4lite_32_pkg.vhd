@@ -29,9 +29,8 @@ package tb_bus_axi4lite_32_pkg is
         rdata : std_logic_vector(31 downto 0);
         rresp : std_logic_vector(1 downto 0);
     end record;
-    
-    type t_axi4lite_access is
-    record
+
+    type t_axi4lite_access is record
         wprivileged : std_logic;
         wsecure : std_logic;
         winstruction : std_logic;
@@ -39,7 +38,7 @@ package tb_bus_axi4lite_32_pkg is
         rsecure : std_logic;
         rinstruction : std_logic;
     end record;
-    
+
     type t_axi4lite_trace_32 is record
         axi4lite_down_32 : t_axi4lite_down_32;
         axi4lite_up_32 : t_axi4lite_up_32;
@@ -52,20 +51,20 @@ package tb_bus_axi4lite_32_pkg is
     function axi4lite_up_32_init return t_axi4lite_up_32;
 
     procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                             signal axi4lite_up : in t_axi4lite_up_32;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+                                signal axi4lite_up : in t_axi4lite_up_32;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time);
 
     procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                            signal axi4lite_up : in t_axi4lite_up_32;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+                               signal axi4lite_up : in t_axi4lite_up_32;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time);
 end;
 
 package body tb_bus_axi4lite_32_pkg is
@@ -103,12 +102,12 @@ package body tb_bus_axi4lite_32_pkg is
     end;
 
     procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                             signal axi4lite_up : in t_axi4lite_up_32;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+                                signal axi4lite_up : in t_axi4lite_up_32;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time) is
 
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
@@ -121,7 +120,7 @@ package body tb_bus_axi4lite_32_pkg is
         if now > start_time + timeout then
             axi4lite_down <= axi4lite_down_32_init;
             return;
-        end if;        
+        end if;
         axi4lite_down <= axi4lite_down_32_init;
         axi4lite_down.awaddr <= std_logic_vector(address(31 downto 0));
 
@@ -162,18 +161,18 @@ package body tb_bus_axi4lite_32_pkg is
             if now > start_time + timeout then
                 axi4lite_down <= axi4lite_down_32_init;
                 return;
-            end if; 
-	        if axi4lite_up.awready then
-	         	axi4lite_down.awvalid <= '0';
-	        	awready_present := true;
-	        end if;
-	        if axi4lite_up.wready then
-	            axi4lite_down.wvalid <= '0';
-	        	wready_present := true;
-	        end if;
-        	if awready_present and wready_present then
-        		exit;
-        	end if;    
+            end if;
+            if axi4lite_up.awready then
+                axi4lite_down.awvalid <= '0';
+                awready_present := true;
+            end if;
+            if axi4lite_up.wready then
+                axi4lite_down.wvalid <= '0';
+                wready_present := true;
+            end if;
+            if awready_present and wready_present then
+                exit;
+            end if;
         end loop;
 
         axi4lite_down.bready <= '1';
@@ -182,11 +181,11 @@ package body tb_bus_axi4lite_32_pkg is
             if now > start_time + timeout then
                 axi4lite_down <= axi4lite_down_32_init;
                 return;
-            end if; 
-        	if axi4lite_up.bvalid then
-        		exit;
-        	end if;
-        end loop;        
+            end if;
+            if axi4lite_up.bvalid then
+                exit;
+            end if;
+        end loop;
 
         axi4lite_down.bready <= '0';
         axi4lite_down <= axi4lite_down_32_init;
@@ -194,12 +193,12 @@ package body tb_bus_axi4lite_32_pkg is
     end procedure;
 
     procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                            signal axi4lite_up : in t_axi4lite_up_32;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+                               signal axi4lite_up : in t_axi4lite_up_32;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time) is
 
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -209,40 +208,40 @@ package body tb_bus_axi4lite_32_pkg is
         if now > start_time + timeout then
             axi4lite_down <= axi4lite_down_32_init;
             return;
-        end if;      
+        end if;
         axi4lite_down <= axi4lite_down_32_init;
         axi4lite_down.araddr <= std_logic_vector(address(31 downto 0));
 
         axi4lite_down.arvalid <= '1';
         axi4lite_down.rready <= '0';
-        
+
         loop
-        	wait until rising_edge(axi4lite_up.clk);
-        	if axi4lite_up.arready then
-        		exit;
-        	end if;
-        end loop;   
+            wait until rising_edge(axi4lite_up.clk);
+            if axi4lite_up.arready then
+                exit;
+            end if;
+        end loop;
 
         axi4lite_down.arvalid <= '0';
-        axi4lite_down.rready <= '1';   
+        axi4lite_down.rready <= '1';
         loop
             wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
             if now > start_time + timeout then
                 axi4lite_down <= axi4lite_down_32_init;
                 return;
-            end if; 
-        	if axi4lite_up.rvalid then
-        		exit;
-        	end if;
-        end loop;           
-        
+            end if;
+            if axi4lite_up.rvalid then
+                exit;
+            end if;
+        end loop;
+
         data_temp := axi4lite_up.rdata;
         axi4lite_down <= axi4lite_down_32_init;
         wait until rising_edge(axi4lite_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
             axi4lite_down <= axi4lite_down_32_init;
             return;
-        end if; 
+        end if;
 
         case address(1 downto 0) is
             when "00" => data_temp := data_temp;
@@ -251,7 +250,7 @@ package body tb_bus_axi4lite_32_pkg is
             when "11" => data_temp := x"000000" & data_temp(31 downto 24);
             when others =>
         end case;
-        
+
         data := to_unsigned(0, data'length);
         case access_width is
             when 8 => data(31 downto 0) := unsigned(data_temp and x"000000FF");

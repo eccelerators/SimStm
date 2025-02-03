@@ -10,32 +10,31 @@ bus avalon64 5
 bus axi4lite32 6
 bus ram32 7
 
-
 bus busToTest 0
 var valBusToTest 0
 
 logBusToTest:
 proc
     bus pointer get busToTest valBusToTest
-	if $valBusToTest = 0
-		log message $ALLWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 1
-		log message $ALLWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 2
-		log message $ALLWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 3
-		log message $ALLWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 4
-		log message $ALLWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 5
-		log message $ALLWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 6
-		log message $ALLWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	elsif $valBusToTest = 7
-		log message $ALLWAYS "Testing bus({:d}) ram32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-	else
-		log message $ALLWAYS "Testing bus({:d}) unknown with machine value width {:d}" $valBusToTest $MachineValueWidth
-	end if
+    if $valBusToTest = 0
+        log message $ALLWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 1
+        log message $ALLWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 2
+        log message $ALLWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 3
+        log message $ALLWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 4
+        log message $ALLWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 5
+        log message $ALLWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 6
+        log message $ALLWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    elsif $valBusToTest = 7
+        log message $ALLWAYS "Testing bus({:d}) ram32 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    else
+        log message $ALLWAYS "Testing bus({:d}) unknown with machine value width {:d}" $valBusToTest $MachineValueWidth
+    end if
 end proc
 
 var WaitTimeOut 100000 -- ms
@@ -54,4 +53,3 @@ signal out_signal_3000 3000
 signal out_signal_3001 3001
 signal out_signal_3002 3002
 signal out_signal_3003 3003
-

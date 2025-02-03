@@ -3,107 +3,107 @@ var valBus128Wishbone 0
 testBus128:
 proc
     call $startStandardTestShell
-	wait 1000
+    wait 1000
 
-	bus write busToTest 128 0 0x55555555555555555555555555555555
-	bus write busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	bus write busToTest 128 32 0xffffffffffffffffffffffffffffffff
-	bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0x55555555555555555555555555555555
-	bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	bus verify busToTest 128 32 valBus128Wishbone 0xffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffff
-	
-	wait 1000
-	bus write busToTest 128 0 0x0
-	bus write busToTest  8 0 0x12
-	bus write busToTest  8 1 0x34
-	bus write busToTest  8 2 0x56
-	bus write busToTest  8 3 0x78
-	bus write busToTest  8 4 0xab
-	bus write busToTest  8 5 0xcd
-	bus write busToTest  8 6 0xef
-	bus write busToTest  8 7 0xfe
-	bus write busToTest  8 8 0x22
-	bus write busToTest  8 9 0x44
-	bus write busToTest  8 10 0x66
-	bus write busToTest  8 11 0x88
-	bus write busToTest  8 12 0xbb
-	bus write busToTest  8 13 0xdd
-	bus write busToTest  8 14 0xff
-	bus write busToTest  8 15 0x0e
-		
-	bus verify busToTest 8 0 valBus128Wishbone 0x12 0xff
-	bus verify busToTest 8 1 valBus128Wishbone 0x34 0xff
-	bus verify busToTest 8 2 valBus128Wishbone 0x56 0xff
-	bus verify busToTest 8 3 valBus128Wishbone 0x78 0xff
-	bus verify busToTest 8 4 valBus128Wishbone 0xab 0xff
-	bus verify busToTest 8 5 valBus128Wishbone 0xcd 0xff
-	bus verify busToTest 8 6 valBus128Wishbone 0xef 0xff
-	bus verify busToTest 8 7 valBus128Wishbone 0xfe 0xff
-	bus verify busToTest 8 8 valBus128Wishbone 0x22 0xff
-	bus verify busToTest 8 9 valBus128Wishbone 0x44 0xff
-	bus verify busToTest 8 10 valBus128Wishbone 0x66 0xff
-	bus verify busToTest 8 11 valBus128Wishbone 0x88 0xff
-	bus verify busToTest 8 12 valBus128Wishbone 0xbb 0xff
-	bus verify busToTest 8 13 valBus128Wishbone 0xdd 0xff
-	bus verify busToTest 8 14 valBus128Wishbone 0xff 0xff
-	bus verify busToTest 8 15 valBus128Wishbone 0x0e 0xff
-	
-	bus verify busToTest 128 0 valBus128Wishbone 0x0effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffff
-	
-	wait 1000
-	bus write busToTest  128 0 0x0
-	bus write busToTest  16 0 0x1234
-	bus write busToTest  16 2 0x4567
-	bus write busToTest  16 4 0x89ab
-	bus write busToTest  16 6 0xcdef
-	bus write busToTest  16 8 0x2234
-	bus write busToTest  16 10 0x5567
-	bus write busToTest  16 12 0x99ab
-	bus write busToTest  16 14 0xddef	
-	bus verify busToTest 16 0 valBus128Wishbone 0x1234 0xffff
-	bus verify busToTest 16 2 valBus128Wishbone 0x4567 0xffff
-	bus verify busToTest 16 4 valBus128Wishbone 0x89ab 0xffff
-	bus verify busToTest 16 6 valBus128Wishbone 0xcdef 0xffff
-	bus verify busToTest 16 8 valBus128Wishbone 0x2234 0xffff
-	bus verify busToTest 16 10 valBus128Wishbone 0x5567 0xffff
-	bus verify busToTest 16 12 valBus128Wishbone 0x99ab 0xffff
-	bus verify busToTest 16 14 valBus128Wishbone 0xddef 0xffff	
-	bus verify busToTest 128 0 valBus128Wishbone 0xddef99ab55672234cdef89ab45671234 0xffffffffffffffffffffffffffffffff
-	bus write busToTest  128 4 0x0
-	bus write busToTest  16 5 0x1234
-	bus verify busToTest 16 5 valBus128Wishbone 0x1234 0xffff
-	bus verify busToTest 128 4 valBus128Wishbone 0x00123400 0xffffffffffffffffffffffffffffffff
-	
-	wait 1000
-	bus write busToTest  128 0 0x80000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x00000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x80000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
-	
-	wait 100
-	bus write busToTest  128 0 0x00000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x00000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x80000000000000000000000000000000
-	bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
+    bus write busToTest 128 0 0x55555555555555555555555555555555
+    bus write busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus write busToTest 128 32 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0x55555555555555555555555555555555
+    bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 valBus128Wishbone 0xffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffff
 
-	call $endStandardTestShell
+    wait 1000
+    bus write busToTest 128 0 0x0
+    bus write busToTest  8 0 0x12
+    bus write busToTest  8 1 0x34
+    bus write busToTest  8 2 0x56
+    bus write busToTest  8 3 0x78
+    bus write busToTest  8 4 0xab
+    bus write busToTest  8 5 0xcd
+    bus write busToTest  8 6 0xef
+    bus write busToTest  8 7 0xfe
+    bus write busToTest  8 8 0x22
+    bus write busToTest  8 9 0x44
+    bus write busToTest  8 10 0x66
+    bus write busToTest  8 11 0x88
+    bus write busToTest  8 12 0xbb
+    bus write busToTest  8 13 0xdd
+    bus write busToTest  8 14 0xff
+    bus write busToTest  8 15 0x0e
+
+    bus verify busToTest 8 0 valBus128Wishbone 0x12 0xff
+    bus verify busToTest 8 1 valBus128Wishbone 0x34 0xff
+    bus verify busToTest 8 2 valBus128Wishbone 0x56 0xff
+    bus verify busToTest 8 3 valBus128Wishbone 0x78 0xff
+    bus verify busToTest 8 4 valBus128Wishbone 0xab 0xff
+    bus verify busToTest 8 5 valBus128Wishbone 0xcd 0xff
+    bus verify busToTest 8 6 valBus128Wishbone 0xef 0xff
+    bus verify busToTest 8 7 valBus128Wishbone 0xfe 0xff
+    bus verify busToTest 8 8 valBus128Wishbone 0x22 0xff
+    bus verify busToTest 8 9 valBus128Wishbone 0x44 0xff
+    bus verify busToTest 8 10 valBus128Wishbone 0x66 0xff
+    bus verify busToTest 8 11 valBus128Wishbone 0x88 0xff
+    bus verify busToTest 8 12 valBus128Wishbone 0xbb 0xff
+    bus verify busToTest 8 13 valBus128Wishbone 0xdd 0xff
+    bus verify busToTest 8 14 valBus128Wishbone 0xff 0xff
+    bus verify busToTest 8 15 valBus128Wishbone 0x0e 0xff
+
+    bus verify busToTest 128 0 valBus128Wishbone 0x0effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffff
+
+    wait 1000
+    bus write busToTest  128 0 0x0
+    bus write busToTest  16 0 0x1234
+    bus write busToTest  16 2 0x4567
+    bus write busToTest  16 4 0x89ab
+    bus write busToTest  16 6 0xcdef
+    bus write busToTest  16 8 0x2234
+    bus write busToTest  16 10 0x5567
+    bus write busToTest  16 12 0x99ab
+    bus write busToTest  16 14 0xddef
+    bus verify busToTest 16 0 valBus128Wishbone 0x1234 0xffff
+    bus verify busToTest 16 2 valBus128Wishbone 0x4567 0xffff
+    bus verify busToTest 16 4 valBus128Wishbone 0x89ab 0xffff
+    bus verify busToTest 16 6 valBus128Wishbone 0xcdef 0xffff
+    bus verify busToTest 16 8 valBus128Wishbone 0x2234 0xffff
+    bus verify busToTest 16 10 valBus128Wishbone 0x5567 0xffff
+    bus verify busToTest 16 12 valBus128Wishbone 0x99ab 0xffff
+    bus verify busToTest 16 14 valBus128Wishbone 0xddef 0xffff
+    bus verify busToTest 128 0 valBus128Wishbone 0xddef99ab55672234cdef89ab45671234 0xffffffffffffffffffffffffffffffff
+    bus write busToTest  128 4 0x0
+    bus write busToTest  16 5 0x1234
+    bus verify busToTest 16 5 valBus128Wishbone 0x1234 0xffff
+    bus verify busToTest 128 4 valBus128Wishbone 0x00123400 0xffffffffffffffffffffffffffffffff
+
+    wait 1000
+    bus write busToTest  128 0 0x80000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x80000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
+
+    wait 100
+    bus write busToTest  128 0 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x80000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x80000000000000000000000000000000
+    bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
+
+    call $endStandardTestShell
 end proc
 
 testBus128VerifySuccess:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write busToTest  128 0 0x55555555555555555555555555555555
-	bus write busToTest  128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	bus write busToTest  128 32 0xffffffffffffffffffffffffffffffff
-	
-	bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff	
-	bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	
-	bus verify busToTest 128 32 valBus128Wishbone 0x0000000000000000 0x0000000000000000
-	
-	call $endStandardTestShell
+    wait 1000
+    bus write busToTest  128 0 0x55555555555555555555555555555555
+    bus write busToTest  128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus write busToTest  128 32 0xffffffffffffffffffffffffffffffff
+
+    bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 valBus128Wishbone 0x0000000000000000 0x0000000000000000
+
+    call $endStandardTestShell
 end proc
 
 var wb_value128 0
@@ -112,53 +112,51 @@ bus wb_bus128 0
 testBus128VerifyFail:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write wb_bus128 128 0 0x55555555555555555555555555555555
-	bus write wb_bus128 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	bus write wb_bus128 128 32 0xffffffffffffffffffffffffffffffff
-	bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff	
-	bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	
-	bus verify busToTest 128 32 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-	log message $ALLWAYS "bus verify intended error on no match"	
-	bus verify wb_bus128 128 0 wb_value128 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
-	call $incExpectedStandardTestVerifyFailureCount
-    
-	call $endStandardTestShell
-end proc
+    wait 1000
+    bus write wb_bus128 128 0 0x55555555555555555555555555555555
+    bus write wb_bus128 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus write wb_bus128 128 32 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    log message $ALLWAYS "bus verify intended error on no match"
+    bus verify wb_bus128 128 0 wb_value128 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
+    call $incExpectedStandardTestVerifyFailureCount
 
+    call $endStandardTestShell
+end proc
 
 testBus128TimeOutRead:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write busToTest 128 0 0x55555555555555555555555555555555
-	bus timeout set wb_bus128 1
-	bus timeout get wb_bus128 wb_value128
-	var verify wb_value128 1 $MAX
-	bus read busToTest 128 0 valBus128Wishbone
-	call $incExpectedStandardTestBusTimeoutFailureCount
-	
-    bus timeout set wb_bus128 1000000000
-	bus timeout get wb_bus128 wb_value128
-	var verify wb_value128 1000000000 $MAX
+    wait 1000
+    bus write busToTest 128 0 0x55555555555555555555555555555555
+    bus timeout set wb_bus128 1
+    bus timeout get wb_bus128 wb_value128
+    var verify wb_value128 1 $MAX
+    bus read busToTest 128 0 valBus128Wishbone
+    call $incExpectedStandardTestBusTimeoutFailureCount
 
-	call $endStandardTestShell
+    bus timeout set wb_bus128 1000000000
+    bus timeout get wb_bus128 wb_value128
+    var verify wb_value128 1000000000 $MAX
+
+    call $endStandardTestShell
 end proc
 
 testBus128TimeOutWrite:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus timeout set wb_bus128 1
-	bus timeout get wb_bus128 wb_value128
-	var verify wb_value128 1 $MAX
-	bus write busToTest 128 0 0x55555555555555555555555555555555
-	call $incExpectedStandardTestBusTimeoutFailureCount
-	
+    wait 1000
+    bus timeout set wb_bus128 1
+    bus timeout get wb_bus128 wb_value128
+    var verify wb_value128 1 $MAX
+    bus write busToTest 128 0 0x55555555555555555555555555555555
+    call $incExpectedStandardTestBusTimeoutFailureCount
+
     bus timeout set wb_bus128 1000000000
-	bus timeout get wb_bus128 wb_value128
-	var verify wb_value128 1000000000 $MAX
+    bus timeout get wb_bus128 wb_value128
+    var verify wb_value128 1000000000 $MAX
 
-	call $endStandardTestShell
+    call $endStandardTestShell
 end proc
-

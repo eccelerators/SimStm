@@ -1,24 +1,24 @@
 -- ******************************************************************************
--- 
+--
 --                   /------o
 --             eccelerators
 --          o------/
--- 
+--
 --  This file is an Eccelerators GmbH sample project.
--- 
+--
 --  MIT License:
---  Copyright (c) 2023 Eccelerators GmbH
--- 
+--  Copyright (c) 2025 Eccelerators GmbH
+--
 --  Permission is hereby granted, free of charge, to any person obtaining a copy
 --  of this software and associated documentation files (the "Software"), to deal
 --  in the Software without restriction, including without limitation the rights
 --  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 --  copies of the Software, and to permit persons to whom the Software is
 --  furnished to do so, subject to the following conditions:
--- 
+--
 --  The above copyright notice and this permission notice shall be included in all
 --  copies or substantial portions of the Software.
--- 
+--
 --  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 --  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 --  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,8 +31,8 @@
 -- parameter variables
 array ArrayToFill 1
 var ArrayFillVal 0
-var ArrayFillValIncrement 0	
-var ArrayFillValMaximum 0	
+var ArrayFillValIncrement 0
+var ArrayFillValMaximum 0
 -- intern variables
 var ArrayFillIndex 0
 var ArrayFillSize 0
@@ -43,16 +43,16 @@ var ArrayFillTmpVal 0
 arrayFill:
 proc
     equ ArrayFillIndex 0
-    equ ArrayFillTmpVal $ArrayFillVal   
+    equ ArrayFillTmpVal $ArrayFillVal
     array size ArrayToFill ArrayFillSize
     loop $ArrayFillSize
         array set ArrayToFill $ArrayFillIndex $ArrayFillTmpVal
         add ArrayFillTmpVal $ArrayFillValIncrement
         if $ArrayFillTmpVal > $ArrayFillValMaximum
-        	equ ArrayFillTmpVal 0
+            equ ArrayFillTmpVal 0
         end if
-        add ArrayFillIndex 1    
-    end loop        
+        add ArrayFillIndex 1
+    end loop
 end proc
 
 
@@ -63,7 +63,7 @@ var ArrayFillCount 0
 -- array ArrayToFill
 -- var ArrayFillVal
 -- var ArrayFillValIncrement
--- var ArrayFillValMaximum	
+-- var ArrayFillValMaximum
 -- intern variables
 -- together with arrayCompare:
 -- var ArrayFillIndex
@@ -74,15 +74,15 @@ var ArrayFillCount 0
 arrayFillSlice:
 proc
     equ ArrayFillIndex $ArrayFillSliceStartIndex
-    equ ArrayFillTmpVal $ArrayFillVal   
+    equ ArrayFillTmpVal $ArrayFillVal
     loop $ArrayFillCount
         array set ArrayToFill $ArrayFillIndex $ArrayFillTmpVal
         add ArrayFillTmpVal $ArrayFillValIncrement
         if $ArrayFillTmpVal > $ArrayFillValMaximum
-        	equ ArrayFillTmpVal 0
+            equ ArrayFillTmpVal 0
         end if
-        add ArrayFillIndex 1    
-    end loop        
+        add ArrayFillIndex 1
+    end loop
 end proc
 
 
@@ -98,7 +98,7 @@ var ArrayCompareTmpVal0 0
 var ArrayCompareTmpVal1 0
 -- result variables
 var ArrayCompareEquality 0
-	
+
 arrayCompare:
 proc
     equ ArrayCompareIndex 0
@@ -106,21 +106,20 @@ proc
     array size ArrayCompare0 ArrayCompareSize0
     array size ArrayCompare1 ArrayCompareSize1
     if $ArrayCompareSize0 != $ArrayCompareSize1
-    	log message $ArrayCompareVerbosity "arrayCompare: arrays differ in size, size0:{}, size1{}" $ArrayCompareSize0 $ArrayCompareSize1
-    	equ ArrayCompareEquality 0
-	else
-	    loop $ArrayCompareSize0
-	        array get ArrayCompare0 $ArrayCompareIndex ArrayCompareTmpVal0
-	        array get ArrayCompare1 $ArrayCompareIndex ArrayCompareTmpVal1
-		    if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
-		    	log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index:{}, value0:{}, value1:{}" $ArrayCompareIndex $ArrayCompareTmpVal0 $ArrayCompareTmpVal1
-		    	equ ArrayCompareEquality 0
-		    end if
-	        add ArrayCompareIndex 1    
-	    end loop
+        log message $ArrayCompareVerbosity "arrayCompare: arrays differ in size, size0:{}, size1{}" $ArrayCompareSize0 $ArrayCompareSize1
+        equ ArrayCompareEquality 0
+    else
+        loop $ArrayCompareSize0
+            array get ArrayCompare0 $ArrayCompareIndex ArrayCompareTmpVal0
+            array get ArrayCompare1 $ArrayCompareIndex ArrayCompareTmpVal1
+            if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
+                log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index:{}, value0:{}, value1:{}" $ArrayCompareIndex $ArrayCompareTmpVal0 $ArrayCompareTmpVal1
+                equ ArrayCompareEquality 0
+            end if
+            add ArrayCompareIndex 1
+        end loop
     end if
 end proc
-
 
 -- parameter variables
 var ArrayCompare0SliceStartIndex 0
@@ -150,39 +149,38 @@ proc
     loop $ArrayCompareCount
         array get ArrayCompare0 $ArrayCmp0Idx ArrayCompareTmpVal0
         array get ArrayCompare1 $ArrayCmp1Idx ArrayCompareTmpVal1
-	    if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
-	    	log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index0:{}, value0:{}, index1:{}, value1:{}" $ArrayCmp0Idx $ArrayCompareTmpVal0 $ArrayCmp1Idx $ArrayCompareTmpVal1
-	    	equ ArrayCompareEquality 0
-	    end if
-        add ArrayCompareIndex 1    
+        if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
+            log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index0:{}, value0:{}, index1:{}, value1:{}" $ArrayCmp0Idx $ArrayCompareTmpVal0 $ArrayCmp1Idx $ArrayCompareTmpVal1
+            equ ArrayCompareEquality 0
+        end if
+        add ArrayCompareIndex 1
     end loop
 end proc
 
- 
-    -- global
-	-- parameter variables
-	array ArrayToDump 1
-	var ArrayDumpVerbosity 20
-	-- intern variables
-	var ArrayDumpIndex 0
-	var ArrayDumpSize 0
-	var ArrayDumpVal0 0
-	var ArrayDumpVal1 0
-	var ArrayDumpVal2 0
-	var ArrayDumpVal3 0
-	var ArrayDumpVal4 0
-	var ArrayDumpVal5 0
-	var ArrayDumpVal6 0
-	var ArrayDumpVal7 0
-	var ArrayDumpLoopNumber 0
-	var ArrayDumpRemaining 0
-	var ArrayDumpDoneInLoop 0
-	-- result variables 
+-- global
+-- parameter variables
+array ArrayToDump 1
+var ArrayDumpVerbosity 20
+-- intern variables
+var ArrayDumpIndex 0
+var ArrayDumpSize 0
+var ArrayDumpVal0 0
+var ArrayDumpVal1 0
+var ArrayDumpVal2 0
+var ArrayDumpVal3 0
+var ArrayDumpVal4 0
+var ArrayDumpVal5 0
+var ArrayDumpVal6 0
+var ArrayDumpVal7 0
+var ArrayDumpLoopNumber 0
+var ArrayDumpRemaining 0
+var ArrayDumpDoneInLoop 0
+-- result variables
 
 arrayDump:
 proc
     equ ArrayDumpIndex 0
-    array size ArrayToDump ArrayDumpSize 
+    array size ArrayToDump ArrayDumpSize
     equ ArrayDumpLoopNumber $ArrayDumpSize
     div ArrayDumpLoopNumber 8
     equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
@@ -191,7 +189,7 @@ proc
     sub ArrayDumpRemaining $ArrayDumpDoneInLoop
     log message $ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex 0
-    loop $ArrayDumpLoopNumber        
+    loop $ArrayDumpLoopNumber
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
@@ -207,9 +205,9 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
-        add ArrayDumpIndex 1      
+        add ArrayDumpIndex 1
         log message $ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
-    end loop  
+    end loop
     if $ArrayDumpRemaining = 7
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -223,7 +221,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6 
+        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         log message $ArrayDumpVerbosity " {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
     end if
     if $ArrayDumpRemaining = 6
@@ -238,7 +236,7 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5    
+        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
     end if
     if $ArrayDumpRemaining = 5
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
@@ -251,7 +249,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         log message $ArrayDumpVerbosity " {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
-    end if    
+    end if
     if $ArrayDumpRemaining = 4
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -279,38 +277,36 @@ proc
     if $ArrayDumpRemaining = 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         log message $ArrayDumpVerbosity " {}" $ArrayDumpVal0
-    end if             
+    end if
 end proc
 
-
-
-    -- global
-	-- parameter variables
-	var ArrayDumpSliceStartIndex 0
-	var ArrayDumpSliceCount 0
-    -- together with arrayDump:
-	-- array ArrayToDump 1
-	-- var ArrayDumpVerbosity 20
-	-- intern variables
-	-- together with arrayDump:
-	-- var ArrayDumpIndex 0
-	-- var ArrayDumpSize 0
-	-- var ArrayDumpVal0 0
-	-- var ArrayDumpVal1 0
-	-- var ArrayDumpVal2 0
-	-- var ArrayDumpVal3 0
-	-- var ArrayDumpVal4 0
-	-- var ArrayDumpVal5 0
-	-- var ArrayDumpVal6 0
-	-- var ArrayDumpVal7 0
-	-- var ArrayDumpLoopNumber 0
-	-- var ArrayDumpRemaining 0
-	-- var ArrayDumpDoneInLoop 0
+-- global
+-- parameter variables
+var ArrayDumpSliceStartIndex 0
+var ArrayDumpSliceCount 0
+-- together with arrayDump:
+-- array ArrayToDump 1
+-- var ArrayDumpVerbosity 20
+-- intern variables
+-- together with arrayDump:
+-- var ArrayDumpIndex 0
+-- var ArrayDumpSize 0
+-- var ArrayDumpVal0 0
+-- var ArrayDumpVal1 0
+-- var ArrayDumpVal2 0
+-- var ArrayDumpVal3 0
+-- var ArrayDumpVal4 0
+-- var ArrayDumpVal5 0
+-- var ArrayDumpVal6 0
+-- var ArrayDumpVal7 0
+-- var ArrayDumpLoopNumber 0
+-- var ArrayDumpRemaining 0
+-- var ArrayDumpDoneInLoop 0
 
 arrayDumpSlice:
 proc
     equ ArrayDumpIndex 0
-    array size ArrayToDump ArrayDumpSize 
+    array size ArrayToDump ArrayDumpSize
     equ ArrayDumpLoopNumber $ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
     equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
@@ -319,7 +315,7 @@ proc
     sub ArrayDumpRemaining $ArrayDumpDoneInLoop
     log message $ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber        
+    loop $ArrayDumpLoopNumber
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
@@ -335,9 +331,9 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
-        add ArrayDumpIndex 1      
+        add ArrayDumpIndex 1
         log message $ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
-    end loop  
+    end loop
     if $ArrayDumpRemaining = 7
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -351,7 +347,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6 
+        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         log message $ArrayDumpVerbosity " {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
     end if
     if $ArrayDumpRemaining = 6
@@ -366,7 +362,7 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5    
+        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
     end if
     if $ArrayDumpRemaining = 5
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
@@ -379,7 +375,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         log message $ArrayDumpVerbosity " {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
-    end if    
+    end if
     if $ArrayDumpRemaining = 4
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -407,14 +403,13 @@ proc
     if $ArrayDumpRemaining = 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         log message $ArrayDumpVerbosity " {}" $ArrayDumpVal0
-    end if             
+    end if
 end proc
-
 
 arrayDumpSliceDec:
 proc
     equ ArrayDumpIndex 0
-    array size ArrayToDump ArrayDumpSize 
+    array size ArrayToDump ArrayDumpSize
     equ ArrayDumpLoopNumber $ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
     equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
@@ -423,7 +418,7 @@ proc
     sub ArrayDumpRemaining $ArrayDumpDoneInLoop
     log message $ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber        
+    loop $ArrayDumpLoopNumber
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
@@ -439,9 +434,9 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
-        add ArrayDumpIndex 1      
+        add ArrayDumpIndex 1
         log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
-    end loop  
+    end loop
     if $ArrayDumpRemaining = 7
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -455,7 +450,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6 
+        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
     end if
     if $ArrayDumpRemaining = 6
@@ -470,7 +465,7 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5    
+        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
     end if
     if $ArrayDumpRemaining = 5
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
@@ -483,7 +478,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
-    end if    
+    end if
     if $ArrayDumpRemaining = 4
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -511,14 +506,13 @@ proc
     if $ArrayDumpRemaining = 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         log message $ArrayDumpVerbosity " {:d}" $ArrayDumpVal0
-    end if             
+    end if
 end proc
-
 
 arrayDumpSliceBin:
 proc
     equ ArrayDumpIndex 0
-    array size ArrayToDump ArrayDumpSize 
+    array size ArrayToDump ArrayDumpSize
     equ ArrayDumpLoopNumber $ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
     equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
@@ -527,7 +521,7 @@ proc
     sub ArrayDumpRemaining $ArrayDumpDoneInLoop
     log message $ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber        
+    loop $ArrayDumpLoopNumber
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
@@ -543,9 +537,9 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
-        add ArrayDumpIndex 1      
+        add ArrayDumpIndex 1
         log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
-    end loop  
+    end loop
     if $ArrayDumpRemaining = 7
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -559,7 +553,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6 
+        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
     end if
     if $ArrayDumpRemaining = 6
@@ -574,7 +568,7 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5    
+        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
     end if
     if $ArrayDumpRemaining = 5
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
@@ -587,7 +581,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
-    end if    
+    end if
     if $ArrayDumpRemaining = 4
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -615,14 +609,13 @@ proc
     if $ArrayDumpRemaining = 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         log message $ArrayDumpVerbosity " {:b}" $ArrayDumpVal0
-    end if             
+    end if
 end proc
-
 
 arrayDumpSliceOct:
 proc
     equ ArrayDumpIndex 0
-    array size ArrayToDump ArrayDumpSize 
+    array size ArrayToDump ArrayDumpSize
     equ ArrayDumpLoopNumber $ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
     equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
@@ -631,7 +624,7 @@ proc
     sub ArrayDumpRemaining $ArrayDumpDoneInLoop
     log message $ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber        
+    loop $ArrayDumpLoopNumber
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
@@ -647,9 +640,9 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
-        add ArrayDumpIndex 1      
+        add ArrayDumpIndex 1
         log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
-    end loop  
+    end loop
     if $ArrayDumpRemaining = 7
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -663,7 +656,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6 
+        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
         log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
     end if
     if $ArrayDumpRemaining = 6
@@ -678,7 +671,7 @@ proc
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5    
+        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
     end if
     if $ArrayDumpRemaining = 5
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
@@ -691,7 +684,7 @@ proc
         add ArrayDumpIndex 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
         log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
-    end if    
+    end if
     if $ArrayDumpRemaining = 4
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
@@ -719,8 +712,5 @@ proc
     if $ArrayDumpRemaining = 1
         array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
         log message $ArrayDumpVerbosity " {:o}" $ArrayDumpVal0
-    end if             
+    end if
 end proc
-
-
-    

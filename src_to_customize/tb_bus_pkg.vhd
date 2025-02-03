@@ -35,7 +35,7 @@ package tb_bus_pkg is
         wishbone128 : t_wishbone_up_128;
         wishbone256 : t_wishbone_up_256;
     end record;
-    
+
     type t_bus_trace is record
         wishbone32_trace : t_wishbone_trace_32;
         avalonmm32_trace : t_avalonmm_trace_32;
@@ -86,7 +86,7 @@ package body tb_bus_pkg is
         init.wishbone256 := wishbone_down_256_init;
         return init;
     end;
-    
+
     function bus_up_init return t_bus_up is
         variable init : t_bus_up;
     begin
@@ -115,84 +115,84 @@ package body tb_bus_pkg is
         case bus_number is
             when 0 =>
                 write_wishbone_32(
-                               bus_down.wishbone32,
-                               bus_up.wishbone32,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);
+                    bus_down.wishbone32,
+                    bus_up.wishbone32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
-            when 1 =>                   
+            when 1 =>
                 write_wishbone_64(
-                               bus_down.wishbone64,
-                               bus_up.wishbone64,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);
-                               
-            when 2 =>                   
-                write_wishbone_128(
-                               bus_down.wishbone128,
-                               bus_up.wishbone128,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);
+                    bus_down.wishbone64,
+                    bus_up.wishbone64,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
-            when 3 =>                   
+            when 2 =>
+                write_wishbone_128(
+                    bus_down.wishbone128,
+                    bus_up.wishbone128,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
+            when 3 =>
                 write_wishbone_256(
-                               bus_down.wishbone256,
-                               bus_up.wishbone256,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);                               
+                    bus_down.wishbone256,
+                    bus_up.wishbone256,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
             when 4 =>
                 write_avalonmm_32(
-                               bus_down.avalonmm32,
-                               bus_up.avalonmm32,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);
+                    bus_down.avalonmm32,
+                    bus_up.avalonmm32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
             when 5 =>
                 write_avalonmm_64(
-                               bus_down.avalonmm64,
-                               bus_up.avalonmm64,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);  
+                    bus_down.avalonmm64,
+                    bus_up.avalonmm64,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
             when 6 =>
                 write_axi4lite_32(
-                               bus_down.axi4lite32,
-                               bus_up.axi4lite32,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout);
-                                    
-            when 7 =>                   
+                    bus_down.axi4lite32,
+                    bus_up.axi4lite32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
+            when 7 =>
                 write_ram_32(
-                               bus_down.ram32,
-                               bus_up.ram32,
-                               address,
-                               data,
-                               access_width,
-                               successfull,
-                               timeout); 
-                                                                                                                                                                            
+                    bus_down.ram32,
+                    bus_up.ram32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
             when others =>
                 valid := 0;
         end case;
@@ -200,96 +200,96 @@ package body tb_bus_pkg is
     end procedure;
 
     procedure bus_read(
-                       signal bus_down : out t_bus_down;
-                       signal bus_up : in t_bus_up;
-                       variable address : in unsigned;
-                       variable data : out unsigned;
-                       variable access_width : in integer;
-                       variable bus_number : in integer;
-                       variable valid : out integer;
-                       variable successfull : out boolean;
-                       variable timeout : in time) is
+        signal bus_down : out t_bus_down;
+        signal bus_up : in t_bus_up;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable bus_number : in integer;
+        variable valid : out integer;
+        variable successfull : out boolean;
+        variable timeout : in time) is
     begin
         valid := 1;
         case bus_number is
             when 0 =>
                 read_wishbone_32(
-                              bus_down.wishbone32,
-                              bus_up.wishbone32,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);
+                    bus_down.wishbone32,
+                    bus_up.wishbone32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
             when 1 =>
                 read_wishbone_64(
-                              bus_down.wishbone64,
-                              bus_up.wishbone64,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);
-                                                            
+                    bus_down.wishbone64,
+                    bus_up.wishbone64,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
             when 2 =>
                 read_wishbone_128(
-                              bus_down.wishbone128,
-                              bus_up.wishbone128,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);
+                    bus_down.wishbone128,
+                    bus_up.wishbone128,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
             when 3 =>
                 read_wishbone_256(
-                              bus_down.wishbone256,
-                              bus_up.wishbone256,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);                                   
+                    bus_down.wishbone256,
+                    bus_up.wishbone256,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
             when 4 =>
                 read_avalonmm_32(
-                              bus_down.avalonmm32,
-                              bus_up.avalonmm32,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);
+                    bus_down.avalonmm32,
+                    bus_up.avalonmm32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
 
             when 5 =>
                 read_avalonmm_64(
-                              bus_down.avalonmm64,
-                              bus_up.avalonmm64,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout); 
-                              
+                    bus_down.avalonmm64,
+                    bus_up.avalonmm64,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
             when 6 =>
                 read_axi4lite_32(
-                              bus_down.axi4lite32,
-                              bus_up.axi4lite32,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);
-                 
+                    bus_down.axi4lite32,
+                    bus_up.axi4lite32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
             when 7 =>
                 read_ram_32(
-                              bus_down.ram32,
-                              bus_up.ram32,
-                              address,
-                              data,
-                              access_width,
-                              successfull,
-                              timeout);    
-                                                                                                                                                                                                       
+                    bus_down.ram32,
+                    bus_up.ram32,
+                    address,
+                    data,
+                    access_width,
+                    successfull,
+                    timeout);
+
             when others =>
                 valid := 0;
         end case;

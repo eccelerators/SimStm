@@ -3,10 +3,10 @@ var var_name_pos 0
 
 testArrayGetOutPos:
 proc
-	array get array_name_pos 3 var_name_pos
+    array get array_name_pos 3 var_name_pos
 end proc
 
 testArraySetOutPos:
 proc
-	array set array_name_pos 3 $var_name_pos
+    array set array_name_pos 3 $var_name_pos
 end proc

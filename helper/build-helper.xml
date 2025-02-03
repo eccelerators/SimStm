@@ -1,33 +1,32 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <project name="helper">
 
-    <property name="python-executable" value="python"/>
-			
-	<target name="_helper-clean-project" description="remove all generated folders">	
-		<delete dir="simulation"/>	
+    <property name="python-executable" value="python3"/>
+
+	<target name="_helper-clean-project" description="remove all generated folders">
+		<delete dir="simulation"/>
 	</target>
-	
-	<target name="_helper-remove-ghdl" description="remove ghdl">	
-		<delete dir="simulation/ghdl"/>	
-	</target>	
-	
-	<target name="_helper-remove-modelsim" description="remove modelsim">	
-		<delete dir="simulation/modelsim"/>	
+
+	<target name="_helper-remove-ghdl" description="remove ghdl">
+		<delete dir="simulation/ghdl"/>
 	</target>
-				
-	
+
+	<target name="_helper-remove-modelsim" description="remove modelsim">
+		<delete dir="simulation/modelsim"/>
+	</target>
+
 	<target name="_helper-generate-modelsim-ant-build-xml" description="generate ant build file for modelsim axi4lite case">
-	    <delete dir="simulation/modelsim"/>	  
-	    <mkdir dir="simulation/modelsim"/>	
+	    <delete dir="simulation/modelsim"/>
+	    <mkdir dir="simulation/modelsim"/>
 		<exec executable="${python-executable}">
 			<arg value="helper/generate-modelsim-ant-build-xml.py" />
 			<arg value="--infile" />
 			<arg value="setup.py" />
 			<arg value="--outdir_simulation_subdir" />
 			<arg value="simulation/modelsim" />
-		</exec>  	
+		</exec>
 	</target>
-	
+
 	<target name="_helper-generate-ghdl-ant-build-xml" description="generate ant build file for ghdl axi4lite case">
 	    <delete dir="simulation/ghdl"/>
 	    <mkdir dir="simulation/ghdl"/>
@@ -37,9 +36,9 @@
 			<arg value="setup.py" />
 			<arg value="--outdir_simulation_subdir" />
 			<arg value="simulation/ghdl" />
-		</exec>  	
+		</exec>
 	</target>
-	
+
 	<target name="_helper-generate-proposal-for-setup-py" description="generate a proposal for setup.py">
 	    <delete dir="setup_proposal.py"/>
 		<exec executable="${python-executable}">
@@ -50,8 +49,7 @@
 			<arg value="helper/templates/setup_template.py" />
 			<arg value="--outfile_setup_proposal" />
 			<arg value="setup.py" />
-		</exec>  	
+		</exec>
 	</target>
 
 </project>
-

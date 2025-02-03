@@ -1,10 +1,5 @@
 
-
 testLabBasicAbort:
 proc
-	call $testBasicAbort
+    call $testBasicAbort
 end proc
-
-
-
-

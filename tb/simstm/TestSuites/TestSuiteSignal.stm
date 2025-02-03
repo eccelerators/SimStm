@@ -1,46 +1,45 @@
 
-	-- intern
-	file TestCaseSignalWriteReadVerifyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSignalWriteReadVerifyFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	file TestCaseSignalVerifyFailStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSignalVerifyFailFile "../../SimulationResults/{@c3}_{@c2}.xml"
+-- intern
+file TestCaseSignalWriteReadVerifyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseSignalWriteReadVerifyFile "../../SimulationResults/{@c3}_{@c2}.xml"
+file TestCaseSignalVerifyFailStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseSignalVerifyFailFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
-	file TestCaseSignalPointerCopyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSignalPointerCopyFile "../../SimulationResults/{@c3}_{@c2}.xml"
-	file TestCaseSignalPointerGetSetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSignalPointerGetSetFile "../../SimulationResults/{@c3}_{@c2}.xml"
-		
+file TestCaseSignalPointerCopyStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseSignalPointerCopyFile "../../SimulationResults/{@c3}_{@c2}.xml"
+file TestCaseSignalPointerGetSetStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseSignalPointerGetSetFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
 testSuiteSignal:
 proc
-	call $testCaseSignalWriteReadVerify
-	call $testCaseSignalVerifyFail
-	call $testCaseSignalPointerCopy
-	call $testCaseSignalPointerGetSet
+    call $testCaseSignalWriteReadVerify
+    call $testCaseSignalVerifyFail
+    call $testCaseSignalPointerCopy
+    call $testCaseSignalPointerGetSet
 end proc
-
 
 testCaseSignalWriteReadVerify:
 proc
     file pointer copy TestCaseStartFile TestCaseSignalWriteReadVerifyStartFile
     file pointer copy TestCaseFile TestCaseSignalWriteReadVerifyFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testSignalWriteReadVerify
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalWriteReadVerify test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseSignalVerifyFail:
@@ -48,23 +47,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseSignalVerifyFailStartFile
     file pointer copy TestCaseFile TestCaseSignalVerifyFailFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testSignalVerifyFail
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalVerifyFail test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseSignalPointerCopy:
@@ -72,23 +71,23 @@ proc
     file pointer copy TestCaseStartFile TestCaseSignalPointerCopyStartFile
     file pointer copy TestCaseFile TestCaseSignalPointerCopyFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testSignalPointerCopy
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalPointerCopy test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
 
 testCaseSignalPointerGetSet:
@@ -96,21 +95,21 @@ proc
     file pointer copy TestCaseStartFile TestCaseSignalPointerGetSetStartFile
     file pointer copy TestCaseFile TestCaseSignalPointerGetSetFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-    
+
     call $testSignalPointerGetSet
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SignalPointerGetSet test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc

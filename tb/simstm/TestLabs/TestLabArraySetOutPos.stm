@@ -1,6 +1,5 @@
 
-
 testLabArraySetOutPos:
 proc
-	call $testArraySetOutPos
+    call $testArraySetOutPos
 end proc

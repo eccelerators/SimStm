@@ -32,12 +32,12 @@
 -- POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------------
 -- Changes:
--- 
+--
 -- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl 
--- 
+-- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
+--
 -- Adapt to new fix SimStm language
--- 
+--
 -- ----------------------------------------------------------------------------
 
 library std;
@@ -210,7 +210,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_ADD, 2);
         define_instruction(inst_list, INSTR_AND, 2);
         define_instruction(inst_list, INSTR_DIV, 2);
-        define_instruction(inst_list, INSTR_REM, 2);        
+        define_instruction(inst_list, INSTR_REM, 2);
         define_instruction(inst_list, INSTR_EQU, 2);
         define_instruction(inst_list, INSTR_MUL, 2);
         define_instruction(inst_list, INSTR_SHL, 2);
@@ -249,7 +249,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
         define_instruction(inst_list, INSTR_FILE_APPEND, 2);
-        define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);              
+        define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
         define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
@@ -508,7 +508,7 @@ package body tb_instructions_pkg is
                     elsif token3(1 to 3) = "get" then
                         token3_len := 3;
                         token_merge := 3;
-                    end if;                    
+                    end if;
                 elsif token2(1 to 7) = "pointer" then
                     token2_len := 7;
                     token_merge := 2;
@@ -572,8 +572,7 @@ package body tb_instructions_pkg is
         variable v_dup_error : boolean;
     begin
         assert (inst'high <= max_field_len)
-        report lf & "error: creation of instruction of length greater than max_field_len attemped!!" &
-             lf & "this max is currently set to " & (integer'image(max_field_len))
+        report lf & "error: creation of instruction of length greater than max_field_len attemped!!" & lf & "this max is currently set to " & (integer'image(max_field_len))
         severity failure;
         -- get to the last element and test is not exsiting
         v_temp_inst := inst_set;
@@ -665,14 +664,12 @@ package body tb_instructions_pkg is
         -- if we had a match, check the number of paramiters
         if match = 1 and ilv = 0 then
             assert seti.params = (token_num - 1)
-            report lf & "error: undefined instruction was found, incorrect number of fields passed!" & lf &
-                    "this is found on line " & (integer'image(line_num)) & " in file " & name & lf
+            report lf & "error: undefined instruction was found, incorrect number of fields passed!" & lf & "this is found on line " & (integer'image(line_num)) & " in file " & name & lf
             severity failure;
         end if;
         -- if we find a duplicate, die
         assert match = 1
-        report lf & "error: undefined instruction on line " & (integer'image(line_num)) &
-                  " found in input file " & name & lf
+        report lf & "error: undefined instruction on line " & (integer'image(line_num)) & " found in input file " & name & lf
         severity failure;
     end procedure;
 

@@ -1,26 +1,25 @@
-	-- intern
-	file TestCaseSampleSuiteAndCaseIndexAStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $sampleCaseIndexA
-	file TestCaseSampleSuiteAndCaseIndexAFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $sampleCaseIndexA
+-- intern
+file TestCaseSampleSuiteAndCaseIndexAStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $sampleCaseIndexA
+file TestCaseSampleSuiteAndCaseIndexAFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $sampleCaseIndexA
 
-	file TestCaseSampleSuiteAndCaseIndexBStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $sampleCaseIndexB
-	file TestCaseSampleSuiteAndCaseIndexBFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $sampleCaseIndexB
-
+file TestCaseSampleSuiteAndCaseIndexBStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $sampleCaseIndexB
+file TestCaseSampleSuiteAndCaseIndexBFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $sampleCaseIndexB
 
 var sampleCaseIndexA 0
 var sampleCaseIndexB 0
-	
+
 testSuiteIndexedSampleSuiteAndCaseIndex:
 proc
     equ sampleCaseIndexA 0
     equ sampleCaseIndexB 0
     loop 3
-		call $testCaseSampleSuiteAndCaseIndexA
-		add sampleCaseIndexA 5
-	end loop
-	loop 4
-		call $testCaseSampleSuiteAndCaseIndexB
-		add sampleCaseIndexB 10
-	end loop
+        call $testCaseSampleSuiteAndCaseIndexA
+        add sampleCaseIndexA 5
+    end loop
+    loop 4
+        call $testCaseSampleSuiteAndCaseIndexB
+        add sampleCaseIndexB 10
+    end loop
 end proc
 
 var tmpSampleSuiteAndCaseIndexA 0
@@ -30,29 +29,28 @@ proc
     file pointer copy TestCaseStartFile TestCaseSampleSuiteAndCaseIndexAStartFile
     file pointer copy TestCaseFile TestCaseSampleSuiteAndCaseIndexAFile
     call $beginTestCaseIndexedSuiteIndexed
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
 
     equ tmpSampleSuiteAndCaseIndexA $TestSuiteIndex
-    add tmpSampleSuiteAndCaseIndexA 1  
-    add tmpSampleSuiteAndCaseIndexA $TestSuiteIndex  
+    add tmpSampleSuiteAndCaseIndexA 1
+    add tmpSampleSuiteAndCaseIndexA $TestSuiteIndex
     seed $tmpSampleSuiteAndCaseIndexA
     call $testOtherRandom
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SampleSuiteAndCaseIndexA test failed"
         call $failureTestCase
     end if
-    
-    call $endTestCase
-    
-end proc
 
+    call $endTestCase
+
+end proc
 
 var tmpSampleSuiteAndCaseIndexB 0
 
@@ -61,25 +59,25 @@ proc
     file pointer copy TestCaseStartFile TestCaseSampleSuiteAndCaseIndexBStartFile
     file pointer copy TestCaseFile TestCaseSampleSuiteAndCaseIndexBFile
     call $beginTestCaseIndexedSuiteIndexed
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
     equ tmpSampleSuiteAndCaseIndexB $TestSuiteIndex
     add tmpSampleSuiteAndCaseIndexB 100000
-    add tmpSampleSuiteAndCaseIndexB $TestSuiteIndex  
-    
+    add tmpSampleSuiteAndCaseIndexB $TestSuiteIndex
+
     seed $tmpSampleSuiteAndCaseIndexB
     call $testOtherRandom
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SampleSuiteAndCaseIndexB test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc

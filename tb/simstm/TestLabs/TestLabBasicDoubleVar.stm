@@ -1,10 +1,5 @@
 
-
 testLabBasicDoubleVar:
 proc
-	call $testBasicDoubleVar
+    call $testBasicDoubleVar
 end proc
-
-
-
-
