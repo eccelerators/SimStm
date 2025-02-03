@@ -1,0 +1,30 @@
+name: GHDL
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghdl/ghdl:5.0.0-dev-gcc-ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup and Run Build
+        run: |
+          apt update && apt install -y ant python3 python3-pip python3-virtualenv
+          virtualenv --download .venv && source .venv/bin/activate
+          pip3 install click jinja2
+          ant _helper-generate-ghdl-ant-build-xml ghdl-all
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghdl-test-results
+          path: simulation/SimulationResults/
