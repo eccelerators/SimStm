@@ -19,3 +19,8 @@ test/**/tb_top
 !run.sh
 !test.sh
 /build-local-overrides.xml
+
+# python
+*.pyc
+
+simulation/SimulationResults/*
