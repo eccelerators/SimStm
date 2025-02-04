@@ -24,7 +24,7 @@ var FileTmpResult 0
 
 testFileWriteArray:
 proc
-    call $startStandardTestShell      
+    call $startStandardTestShell
 
     array set a_array 0 0
     array set a_array 1 1
@@ -36,26 +36,26 @@ proc
     array set a_array 7 0xFFFFFFFF
     lines delete all a_lines
     lines append array a_lines a_array
-    
+
     array set a_array 0 1
-    lines append array a_lines a_array    
-    
+    lines append array a_lines a_array
+
     array set a_array 0 2
-    lines append array a_lines a_array    
-    	
-	file write user_data_out_write_array a_lines
-	
-	lines delete all b_lines
-	file read all user_data_out_write_array b_lines
-	lines size b_lines FileTmpResult 
-	var verify FileTmpResult 3 $MAX
-	
-	call $endStandardTestShell
+    lines append array a_lines a_array
+
+    file write user_data_out_write_array a_lines
+
+    lines delete all b_lines
+    file read all user_data_out_write_array b_lines
+    lines size b_lines FileTmpResult
+    var verify FileTmpResult 3 $MAX
+
+    call $endStandardTestShell
 end proc
 
 testFileAppendArray:
 proc
-    call $startStandardTestShell     
+    call $startStandardTestShell
 
     array set a_array 0 0
     array set a_array 1 1
@@ -67,30 +67,30 @@ proc
     array set a_array 7 0xFFFFFFFF
     lines delete all a_lines
     lines append array a_lines a_array
-    
-    array set a_array 0 1
-    lines append array a_lines a_array    
-    
-    array set a_array 0 2
-    lines append array a_lines a_array    
-    	
-	file write user_data_out_append_array a_lines
-	
-	file append user_data_out_append_array a_lines
-	
-	lines delete all b_lines
-	file read all user_data_out_append_array b_lines
-	lines size b_lines FileTmpResult 
-	var verify FileTmpResult 6 $MAX
 
-	call $endStandardTestShell
+    array set a_array 0 1
+    lines append array a_lines a_array
+
+    array set a_array 0 2
+    lines append array a_lines a_array
+
+    file write user_data_out_append_array a_lines
+
+    file append user_data_out_append_array a_lines
+
+    lines delete all b_lines
+    file read all user_data_out_append_array b_lines
+    lines size b_lines FileTmpResult
+    var verify FileTmpResult 6 $MAX
+
+    call $endStandardTestShell
 end proc
 
 
 testFileReadAllArray:
 proc
-    call $startStandardTestShell      
- 
+    call $startStandardTestShell
+
     array set a_array 0 0
     array set a_array 1 1
     array set a_array 2 0xA
@@ -101,21 +101,21 @@ proc
     array set a_array 7 0xFFFFFFFF
     lines delete all a_lines
     lines append array a_lines a_array
-    
-    array set a_array 0 1
-    lines append array a_lines a_array    
-    
-    array set a_array 0 2
-    lines append array a_lines a_array    
-    	
-	file write user_data_out_read_all_array a_lines
-	
-	lines delete all b_lines
-	file read all user_data_out_read_all_array b_lines
-	lines size b_lines FileTmpResult 
-	var verify FileTmpResult 3 $MAX
 
-	call $endStandardTestShell
+    array set a_array 0 1
+    lines append array a_lines a_array
+
+    array set a_array 0 2
+    lines append array a_lines a_array
+
+    file write user_data_out_read_all_array a_lines
+
+    lines delete all b_lines
+    file read all user_data_out_read_all_array b_lines
+    lines size b_lines FileTmpResult
+    var verify FileTmpResult 3 $MAX
+
+    call $endStandardTestShell
 end proc
 
 var read_elements_got 0
@@ -123,7 +123,6 @@ var read_elements_got 0
 testFileReadArray:
 proc
     call $startStandardTestShell
-
 
     array set a_read_array 0 0
     array set a_read_array 1 0
@@ -133,9 +132,9 @@ proc
     array set a_read_array 5 0
     array set a_read_array 6 0
     array set a_read_array 7 0
-    
+
     array verify a_read_array 0 0 $MAX
-    
+
     array set b_read_array 0 0
     array set b_read_array 1 0
     array set b_read_array 2 0
@@ -144,7 +143,7 @@ proc
     array set b_read_array 5 0
     array set b_read_array 6 0
     array set b_read_array 7 0
-    
+
     array set c_read_array 0 0
     array set c_read_array 1 0
     array set c_read_array 2 0
@@ -153,7 +152,7 @@ proc
     array set c_read_array 5 0
     array set c_read_array 6 0
     array set c_read_array 7 0
-    
+
     array set a_array 0 0
     array set a_array 1 1
     array set a_array 2 0xA
@@ -163,54 +162,53 @@ proc
     array set a_array 6 0x80000000
     array set a_array 7 0xFFFFFFFF
     lines delete all a_lines
-    
+
     lines append array a_lines a_array
-    
+
     array set a_array 0 1
-    lines append array a_lines a_array    
-    
+    lines append array a_lines a_array
+
     array set a_array 0 2
-    lines append array a_lines a_array    
-    	
-	file write user_data_out_read_array a_lines
-	
-	wait 1000
-	
-	file read user_data_out_read_array a_read_lines 1
-	lines size a_read_lines FileTmpResult
-	var verify FileTmpResult 1 $MAX
-	
-	file read user_data_out_read_array b_read_lines 1
-	lines size b_read_lines FileTmpResult
-	var verify FileTmpResult 1 $MAX
-	
-	file read user_data_out_read_array c_read_lines 1
-	lines size c_read_lines FileTmpResult
-	var verify FileTmpResult 1 $MAX
-	
-	file read end user_data_out_read_array
-	
-	lines get array a_read_lines 0 a_read_array read_elements_got
-	var verify read_elements_got 8 $MAX
-	lines get array b_read_lines 0 b_read_array read_elements_got
-	var verify read_elements_got 8 $MAX
-	lines get array c_read_lines 0 c_read_array read_elements_got
-	var verify read_elements_got 8 $MAX
-	
-	array pointer copy ArrayToDump a_read_array
-	call $arrayDump
-	array pointer copy ArrayToDump b_read_array
-	call $arrayDump
-	array pointer copy ArrayToDump c_read_array
-	call $arrayDump
-	
-	array verify a_read_array 0 0 $MAX
-	array verify b_read_array 0 1 $MAX
-	array verify c_read_array 0 2 $MAX
+    lines append array a_lines a_array
 
-	call $endStandardTestShell
+    file write user_data_out_read_array a_lines
+
+    wait 1000
+
+    file read user_data_out_read_array a_read_lines 1
+    lines size a_read_lines FileTmpResult
+    var verify FileTmpResult 1 $MAX
+
+    file read user_data_out_read_array b_read_lines 1
+    lines size b_read_lines FileTmpResult
+    var verify FileTmpResult 1 $MAX
+
+    file read user_data_out_read_array c_read_lines 1
+    lines size c_read_lines FileTmpResult
+    var verify FileTmpResult 1 $MAX
+
+    file read end user_data_out_read_array
+
+    lines get array a_read_lines 0 a_read_array read_elements_got
+    var verify read_elements_got 8 $MAX
+    lines get array b_read_lines 0 b_read_array read_elements_got
+    var verify read_elements_got 8 $MAX
+    lines get array c_read_lines 0 c_read_array read_elements_got
+    var verify read_elements_got 8 $MAX
+
+    array pointer copy ArrayToDump a_read_array
+    call $arrayDump
+    array pointer copy ArrayToDump b_read_array
+    call $arrayDump
+    array pointer copy ArrayToDump c_read_array
+    call $arrayDump
+
+    array verify a_read_array 0 0 $MAX
+    array verify b_read_array 0 1 $MAX
+    array verify c_read_array 0 2 $MAX
+
+    call $endStandardTestShell
 end proc
-
 
 testFileStatus:
 proc
@@ -233,44 +231,44 @@ proc
     array set a_array 0 2
     lines append array a_lines a_array
 
-	log message 0 "Check if file is readable, which doesn't exist"
-	file readable user_data_out_not_present FileStatus
-	call $printFileStatus
-	var verify FileStatus $FILE_STATUS_NAME_ERROR $MAX
+    log message 0 "Check if file is readable, which doesn't exist"
+    file readable user_data_out_not_present FileStatus
+    call $printFileStatus
+    var verify FileStatus $FILE_STATUS_NAME_ERROR $MAX
 
     -- No means to delete a file with VHDL, thus not testable since file is constructed if it doesn't exist by writable test
     -- Would only fail if file is write protected by OS
-	-- log message 0 "Check if file is writeable, which doesn't exist"
-	-- file writeable user_data_not_present FileStatus
-	-- call $printFileStatus
+    -- log message 0 "Check if file is writeable, which doesn't exist"
+    -- file writeable user_data_not_present FileStatus
+    -- call $printFileStatus
 
     -- No means to delete a file with VHDL, thus not testable since file is constructed if it doesn't exist by appendable test
     -- Would only fail if file is write protected by OS
-	-- log message 0 "Check if file is appendable, which doesn't exist"
-	-- file appendable user_data_not_present FileStatus
-	-- call $printFileStatus
+    -- log message 0 "Check if file is appendable, which doesn't exist"
+    -- file appendable user_data_not_present FileStatus
+    -- call $printFileStatus
 
-	log message 0 "Check if file is readable, which exist"
-	file writeable user_data_out_present FileStatus -- constructs file
-	call $printFileStatus	
-	var verify FileStatus $FILE_STATUS_OK $MAX
-	
-	log message 0 "Check if file is readable, which exist"
-	file appendable user_data_out_present FileStatus
-	call $printFileStatus	
-	var verify FileStatus $FILE_STATUS_OK $MAX
-	
-	log message 0 "Check if file is readable, which exist"
-	file readable user_data_out_present FileStatus
-	call $printFileStatus	
-	var verify FileStatus $FILE_STATUS_OK $MAX
+    log message 0 "Check if file is readable, which exist"
+    file writeable user_data_out_present FileStatus -- constructs file
+    call $printFileStatus
+    var verify FileStatus $FILE_STATUS_OK $MAX
 
-	call $endStandardTestShell
+    log message 0 "Check if file is readable, which exist"
+    file appendable user_data_out_present FileStatus
+    call $printFileStatus
+    var verify FileStatus $FILE_STATUS_OK $MAX
+
+    log message 0 "Check if file is readable, which exist"
+    file readable user_data_out_present FileStatus
+    call $printFileStatus
+    var verify FileStatus $FILE_STATUS_OK $MAX
+
+    call $endStandardTestShell
 end proc
 
 testFilePointerCopy:
 proc
-    call $startStandardTestShell     
+    call $startStandardTestShell
 
     array set a_array 0 0
     array set a_array 1 1
@@ -282,27 +280,27 @@ proc
     array set a_array 7 0xFFFFFFFF
     lines delete all a_lines
     lines append array a_lines a_array
-    
-    array set a_array 0 1
-    lines append array a_lines a_array    
-    
-    array set a_array 0 2
-    lines append array a_lines a_array    
-    
-	-- log lines 0 a_lines
-	
-	file pointer copy tmp_file user_data_out_pointer_copy
-	call $WriteFile
-	
-	lines delete all b_lines
-	file read all user_data_out_pointer_copy b_lines
-	lines size b_lines FileTmpResult 
-	var verify FileTmpResult 3 $MAX
 
-	call $endStandardTestShell
+    array set a_array 0 1
+    lines append array a_lines a_array
+
+    array set a_array 0 2
+    lines append array a_lines a_array
+
+    -- log lines 0 a_lines
+
+    file pointer copy tmp_file user_data_out_pointer_copy
+    call $WriteFile
+
+    lines delete all b_lines
+    file read all user_data_out_pointer_copy b_lines
+    lines size b_lines FileTmpResult
+    var verify FileTmpResult 3 $MAX
+
+    call $endStandardTestShell
 end proc
 
 WriteFile:
 proc
-	file write tmp_file a_lines
+    file write tmp_file a_lines
 end proc

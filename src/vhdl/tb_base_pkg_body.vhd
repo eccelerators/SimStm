@@ -32,12 +32,12 @@
 -- POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------------
 -- Changes:
--- 
+--
 -- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl 
--- 
+-- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
+--
 -- Adapt to new fix SimStm language
--- 
+--
 -- ----------------------------------------------------------------------------
 
 library std;
@@ -77,13 +77,13 @@ package body tb_base_pkg is
         end loop;
         return temp_int;
     end function;
-    
+
     function bin2stm_value(bin_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer;
-                         stm_value_width : in integer) return unsigned is
+                           file_name : in text_line;
+                           line : in integer;
+                           stm_value_width : in integer) return unsigned is
         variable len : integer;
-        variable temp_stm_value : unsigned(stm_value_width - 1 downto 0);       
+        variable temp_stm_value : unsigned(stm_value_width - 1 downto 0);
         variable vec_number : std_logic;
     begin
         len := fld_len(bin_number);
@@ -191,7 +191,7 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
-    
+
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;
                         s3 : integer) return stm_text is
@@ -212,11 +212,11 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
-    
+
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;
                         s3 : integer;
-                        s4 : character ) return stm_text is
+                        s4 : character) return stm_text is
         variable i : integer;
         variable j : integer;
         variable sc : stm_text;
@@ -329,7 +329,7 @@ package body tb_base_pkg is
         end if;
         return temp;
     end function;
-    
+
     function ew_to_str(stmvalue : unsigned;
                        b : base) return text_field is
         variable temp : text_field;
@@ -461,20 +461,20 @@ package body tb_base_pkg is
         end loop;
         stm_text_copy_to_ptr(var_stm_text_ptr, var_stm_text);
     end procedure;
-    
-    procedure random( variable seed1 : inout positive;
-                      variable seed2 : inout positive;
-                      variable rand : out real) is
+
+    procedure random(variable seed1 : inout positive;
+                     variable seed2 : inout positive;
+                     variable rand : out real) is
     begin
         uniform(seed1, seed2, rand);
     end procedure;
-    
-    procedure random( variable seed1 : inout positive;
-                      variable seed2 : inout positive;
-                      variable lowestvalue : in integer;
-                      variable utmostvalue : in integer;
-                      variable rand : out integer) is
-        variable randreal: real := 0.0;
+
+    procedure random(variable seed1 : inout positive;
+                     variable seed2 : inout positive;
+                     variable lowestvalue : in integer;
+                     variable utmostvalue : in integer;
+                     variable rand : out integer) is
+        variable randreal : real := 0.0;
         variable intdelta : integer := 0;
     begin
         intdelta := utmostvalue - lowestvalue;
@@ -482,9 +482,9 @@ package body tb_base_pkg is
         rand := integer(trunc(randreal * (real(intdelta) + 1.0))) + lowestvalue; -- rescale to delta, find integer part, adjust
     end procedure;
 
-    procedure random( variable seed1 : inout positive;
-                      variable seed2 : inout positive;
-                      variable rand : out unsigned) is
+    procedure random(variable seed1 : inout positive;
+                     variable seed2 : inout positive;
+                     variable rand : out unsigned) is
         constant size : integer := rand'length;
         -- Populate vector in 30-bit chunks to avoid exceeding the
         -- range of integer
@@ -493,35 +493,35 @@ package body tb_base_pkg is
         constant remainder : natural := size - segments * seg_size;
         variable lowestvalue : integer := 0;
         variable utmostvalue : integer := 0;
-        variable rand_of_segment : integer := 0;   
-        variable result : unsigned(rand'range) := (others => '0');      
+        variable rand_of_segment : integer := 0;
+        variable result : unsigned(rand'range) := (others => '0');
     begin
         if segments > 0 then
-        for s in 0 to segments-1 loop
-            lowestvalue := 0;
-            utmostvalue := 2**seg_size-1;
-            random(seed1, seed2, lowestvalue, utmostvalue, rand_of_segment);
-            result((s+1) * seg_size - 1 downto s * seg_size) := to_unsigned(rand_of_segment, seg_size);
-        end loop;
+            for s in 0 to segments - 1 loop
+                lowestvalue := 0;
+                utmostvalue := 2 ** seg_size - 1;
+                random(seed1, seed2, lowestvalue, utmostvalue, rand_of_segment);
+                result((s + 1) * seg_size - 1 downto s * seg_size) := to_unsigned(rand_of_segment, seg_size);
+            end loop;
         end if;
         if remainder > 0 then
             lowestvalue := 0;
-            utmostvalue := 2**remainder-1;
+            utmostvalue := 2 ** remainder - 1;
             random(seed1, seed2, lowestvalue, utmostvalue, rand_of_segment);
-            result(size-1 downto size-remainder) := to_unsigned(rand_of_segment, remainder);
+            result(size - 1 downto size - remainder) := to_unsigned(rand_of_segment, remainder);
         end if;
         rand := result;
     end procedure;
-       
-    procedure random( variable seed1 : inout positive;
-                      variable seed2 : inout positive;
-                      variable lowestvalue : in unsigned;
-                      variable utmostvalue : in unsigned;
-                      variable rand : out unsigned) is
+
+    procedure random(variable seed1 : inout positive;
+                     variable seed2 : inout positive;
+                     variable lowestvalue : in unsigned;
+                     variable utmostvalue : in unsigned;
+                     variable rand : out unsigned) is
         variable rand_full_range : unsigned(rand'range) := to_unsigned(0, rand'length);
-        variable rand_delta_range : unsigned(rand'length * 2 -1 downto 0) := to_unsigned(0, rand'length * 2);             
+        variable rand_delta_range : unsigned(rand'length * 2 - 1 downto 0) := to_unsigned(0, rand'length * 2);
         variable delta : unsigned(rand'range) := to_unsigned(0, rand'length);
-        variable product : unsigned(rand'length * 2 -1 downto 0) := to_unsigned(0, rand'length * 2);
+        variable product : unsigned(rand'length * 2 - 1 downto 0) := to_unsigned(0, rand'length * 2);
 
     begin
         random(seed1, seed2, rand_full_range);
@@ -530,7 +530,7 @@ package body tb_base_pkg is
         rand_delta_range := shift_right(product, rand'length);
         rand := lowestvalue + resize(rand_delta_range, rand'length);
     end procedure;
-    
+
     function hex2integer(hex_number : in text_field;
                          file_name : in text_line;
                          line : in integer) return integer is
@@ -586,13 +586,13 @@ package body tb_base_pkg is
         end loop;
         return temp_int;
     end function;
-    
+
     function hex2stm_value(hex_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer;
-                         stm_value_width : in integer) return unsigned is
+                           file_name : in text_line;
+                           line : in integer;
+                           stm_value_width : in integer) return unsigned is
         variable len : integer;
-        variable temp_stm_value : unsigned(stm_value_width - 1 downto 0);      
+        variable temp_stm_value : unsigned(stm_value_width - 1 downto 0);
         variable vec_number : unsigned(3 downto 0);
     begin
         len := fld_len(hex_number);
@@ -637,7 +637,7 @@ package body tb_base_pkg is
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(stm_value_width - 5 downto 0) & vec_number;
-            
+
         end loop;
         return temp_stm_value;
     end function;
@@ -675,9 +675,9 @@ package body tb_base_pkg is
             destfield(i) := tempfield(i);
         end loop;
     end procedure;
-    
+
     procedure init_const_text_field(constant sourcestr : in string;
-                              variable destfield : out text_field) is
+                                    variable destfield : out text_field) is
         variable tempfield : text_field;
     begin
         for i in 1 to sourcestr'length loop
@@ -761,11 +761,11 @@ package body tb_base_pkg is
         end if;
         return value;
     end function;
-    
+
     function stim_to_stm_value(field : in text_field;
-                             file_name : in text_line;
-                             line : in integer;
-                             stm_value_width  : in integer) return unsigned is
+                               file_name : in text_line;
+                               line : in integer;
+                               stm_value_width : in integer) return unsigned is
         variable stmvalue : unsigned(stm_value_width - 1 downto 0) := to_unsigned(1, stm_value_width);
         variable ci : integer := 1;
         variable temp_str : text_field;
@@ -1348,40 +1348,40 @@ package body tb_base_pkg is
         variable i : integer := 1;
         variable o : integer := 1;
     begin
-        while si(i) /= nul and i /= max_str_len loop 
-            if i+1 /= max_str_len then
-                if si(i+1) /= nul then            
-                    if si(i) = '\' and si(i+1) = '"' then -- "  
+        while si(i) /= nul and i /= max_str_len loop
+            if i + 1 /= max_str_len then
+                if si(i + 1) /= nul then
+                    if si(i) = '\' and si(i + 1) = '"' then -- "
                         -- skip '/' before '"'    "
                         i := i + 1;
                         so(o) := si(i);
                         i := i + 1;
-                        o := o + 1;       
+                        o := o + 1;
                     else
-                       -- don't skip '/' before others but '"'    "
-                       if si(i) = '"' then -- this is the trailing '"'    "
-                               exit;
-                       end if;
-                       so(o) := si(i);   
-                       i := i + 1;
-                       o := o + 1;            
+                        -- don't skip '/' before others but '"'    "
+                        if si(i) = '"' then -- this is the trailing '"'    "
+                            exit;
+                        end if;
+                        so(o) := si(i);
+                        i := i + 1;
+                        o := o + 1;
                     end if;
                 else
                     if si(i) = '"' then -- this is the trailing '"'    "
                         exit;
                     end if;
-                    so(o) := si(i);   
+                    so(o) := si(i);
                     i := i + 1;
-                    o := o + 1;        
+                    o := o + 1;
                 end if;
             else
                 if si(i) = '"' then -- this is the trailing '"'    "
                     exit;
                 end if;
-                so(o) := si(i);   
+                so(o) := si(i);
                 i := i + 1;
-                o := o + 1;                          
-            end if;        
+                o := o + 1;
+            end if;
         end loop;
     end procedure;
 
@@ -1397,7 +1397,7 @@ package body tb_base_pkg is
         end loop;
         return rtn;
     end function;
-    
+
     function str2stm_value(str : in string; stm_value_width : in integer) return unsigned is
         variable l : integer;
         variable rtn : unsigned(stm_value_width - 1 downto 0) := to_unsigned(0, stm_value_width);
@@ -1482,7 +1482,7 @@ package body tb_base_pkg is
     begin
         return ew_to_str(int, dec);
     end function;
- 
+
     function to_str_hex(stmvalue : unsigned) return string is
     begin
         return ew_to_str(stmvalue, hex);
@@ -1491,6 +1491,6 @@ package body tb_base_pkg is
     function to_str(stmvalue : unsigned) return string is
     begin
         return ew_to_str(stmvalue, dec);
-    end function;   
+    end function;
 
 end package body;

@@ -5,44 +5,39 @@ var var_name_p 0
 
 testArrayPointerCopy:
 proc
-	call $startStandardTestShell
+    call $startStandardTestShell
 
-	array size src_array var_name_p
-	var verify var_name_p 10 $MAX
-	
-	
-	array size des_array var_name_p
-	var verify var_name_p 1 $MAX
-	
-	
-	array set src_array 0 10
-	array set src_array 1 11
-	array set src_array 2 12
-	
-	array pointer copy des_array src_array 
-	
-	array size src_array var_name_p
-	var verify var_name_p 10 $MAX
-	
-	array size des_array var_name_p
-	var verify var_name_p 10 $MAX
-	
-	
-	array get des_array 0 var_name_p
-	var verify var_name_p 10 $MAX
-	
-	array get des_array 1 var_name_p
-	var verify var_name_p 11 $MAX
-	
-	array get des_array 2 var_name_p
-	var verify var_name_p 12 $MAX
-	
-	
-	array set des_array 5 55
-	
-	array get src_array 5 var_name_p
-	var verify var_name_p 55 $MAX
-	
-	call $endStandardTestShell
+    array size src_array var_name_p
+    var verify var_name_p 10 $MAX
+
+    array size des_array var_name_p
+    var verify var_name_p 1 $MAX
+
+    array set src_array 0 10
+    array set src_array 1 11
+    array set src_array 2 12
+
+    array pointer copy des_array src_array
+
+    array size src_array var_name_p
+    var verify var_name_p 10 $MAX
+
+    array size des_array var_name_p
+    var verify var_name_p 10 $MAX
+
+    array get des_array 0 var_name_p
+    var verify var_name_p 10 $MAX
+
+    array get des_array 1 var_name_p
+    var verify var_name_p 11 $MAX
+
+    array get des_array 2 var_name_p
+    var verify var_name_p 12 $MAX
+
+    array set des_array 5 55
+
+    array get src_array 5 var_name_p
+    var verify var_name_p 55 $MAX
+
+    call $endStandardTestShell
 end proc
-

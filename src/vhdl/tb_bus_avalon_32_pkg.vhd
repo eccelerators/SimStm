@@ -17,7 +17,7 @@ package tb_bus_avalon_32_pkg is
         readdata : std_logic_vector(31 downto 0);
         waitrequest : std_logic;
     end record;
-    
+
     type t_avalonmm_trace_32 is record
         avalonmm_down : t_avalonmm_down_32;
         avalonmm_up : t_avalonmm_up_32;
@@ -29,20 +29,20 @@ package tb_bus_avalon_32_pkg is
     function avalonmm_up_32_init return t_avalonmm_up_32;
 
     procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                             signal avalonmm_up : in t_avalonmm_up_32;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time);
+                                signal avalonmm_up : in t_avalonmm_up_32;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time);
 
     procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                            signal avalonmm_up : in t_avalonmm_up_32;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time);
+                               signal avalonmm_up : in t_avalonmm_up_32;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time);
 end;
 
 package body tb_bus_avalon_32_pkg is
@@ -57,7 +57,7 @@ package body tb_bus_avalon_32_pkg is
         init.write := '0';
         return init;
     end;
-    
+
     function avalonmm_up_32_init return t_avalonmm_up_32 is
         variable init : t_avalonmm_up_32;
     begin
@@ -68,12 +68,12 @@ package body tb_bus_avalon_32_pkg is
     end;
 
     procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                             signal avalonmm_up : in t_avalonmm_up_32;
-                             variable address : in unsigned;
-                             variable data : in unsigned;
-                             variable access_width : in integer;
-                             variable successfull : out boolean;
-                             variable timeout : in time) is
+                                signal avalonmm_up : in t_avalonmm_up_32;
+                                variable address : in unsigned;
+                                variable data : in unsigned;
+                                variable access_width : in integer;
+                                variable successfull : out boolean;
+                                variable timeout : in time) is
 
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
@@ -132,19 +132,19 @@ package body tb_bus_avalon_32_pkg is
             if avalonmm_up.waitrequest = '0' then
                 exit;
             end if;
-        end loop; 
-        
+        end loop;
+
         avalonmm_down <= avalonmm_down_32_init;
         successfull := true;
     end procedure;
 
     procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                            signal avalonmm_up : in t_avalonmm_up_32;
-                            variable address : in unsigned;
-                            variable data : out unsigned;
-                            variable access_width : in integer;
-                            variable successfull : out boolean;
-                            variable timeout : in time) is
+                               signal avalonmm_up : in t_avalonmm_up_32;
+                               variable address : in unsigned;
+                               variable data : out unsigned;
+                               variable access_width : in integer;
+                               variable successfull : out boolean;
+                               variable timeout : in time) is
 
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
@@ -186,7 +186,7 @@ package body tb_bus_avalon_32_pkg is
             avalonmm_down <= avalonmm_down_32_init;
             return;
         end if;
-       
+
         loop
             wait until rising_edge(avalonmm_up.clk) or (now > start_time + timeout);
             if now > start_time + timeout then
@@ -196,7 +196,7 @@ package body tb_bus_avalon_32_pkg is
             if avalonmm_up.waitrequest = '0' then
                 exit;
             end if;
-        end loop; 
+        end loop;
 
         case address(1 downto 0) is
             when "00" => data_temp := avalonmm_up.readdata;
@@ -205,7 +205,7 @@ package body tb_bus_avalon_32_pkg is
             when "11" => data_temp := x"000000" & avalonmm_up.readdata(31 downto 24);
             when others =>
         end case;
-        
+
         data := to_unsigned(0, data'length);
         case access_width is
             when 8 => data(31 downto 0) := unsigned(data_temp and x"000000FF");
@@ -219,7 +219,7 @@ package body tb_bus_avalon_32_pkg is
             avalonmm_down <= avalonmm_down_32_init;
             return;
         end if;
-        
+
         avalonmm_down <= avalonmm_down_32_init;
         successfull := true;
     end procedure;

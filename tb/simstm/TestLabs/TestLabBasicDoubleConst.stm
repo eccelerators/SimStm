@@ -1,10 +1,5 @@
 
-
 testLabBasicDoubleConst:
 proc
-	call $testBasicDoubleConst
+    call $testBasicDoubleConst
 end proc
-
-
-
-

@@ -3,36 +3,35 @@ var InterruptHappenedB 0
 
 testInterrupt:
 proc
- 	call $startStandardTestShell
- 	
- 	equ InterruptHappenedA 0
- 	equ InterruptHappenedB 0
- 	
-	wait 1000
-	signal write out_signal_3002 1
-    wait 1000 
+     call $startStandardTestShell
+
+     equ InterruptHappenedA 0
+     equ InterruptHappenedB 0
+
+    wait 1000
+    signal write out_signal_3002 1
+    wait 1000
     signal write out_signal_3003 1
-    
+
     loop 1000
     end loop
-    
+
     var verify InterruptHappenedA 1 $MAX
     var verify InterruptHappenedB 1 $MAX
-    
-	call $endStandardTestShell
-end proc
 
+    call $endStandardTestShell
+end proc
 
 InterruptA:
 interrupt
     log message 0 "InterruptA happened"
-	signal write out_signal_3002 0
-	equ InterruptHappenedA 1
+    signal write out_signal_3002 0
+    equ InterruptHappenedA 1
 end interrupt
 
 InterruptB:
 interrupt
     log message 0 "InterruptB happened"
-	signal write out_signal_3003 0
-	equ InterruptHappenedB 1
+    signal write out_signal_3003 0
+    equ InterruptHappenedB 1
 end interrupt

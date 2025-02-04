@@ -1,10 +1,5 @@
 
-
 testLabBasicFinish:
 proc
-	call $testBasicFinish
+    call $testBasicFinish
 end proc
-
-
-
-

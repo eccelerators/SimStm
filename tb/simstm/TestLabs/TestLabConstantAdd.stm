@@ -1,10 +1,5 @@
 
-
 testLabConstantAdd:
 proc
-	call $testConstantAdd
+    call $testConstantAdd
 end proc
-
-
-
-

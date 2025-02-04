@@ -3,69 +3,69 @@ var valBusWishbone 0
 testBus32:
 proc
     call $startStandardTestShell
-	wait 1000
+    wait 1000
 
-	bus write busToTest 32 0 0x55555555
-	bus write busToTest 32 4 0xaaaaaaaa
-	bus write busToTest 32 8 0xffffffff
-	bus verify busToTest 32 0 valBusWishbone 0x55555555 0x55555555
-	bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa
-	bus verify busToTest 32 8 valBusWishbone 0xffffffff 0xffffffff
-	
-	wait 1000
-	bus write busToTest 32 0 0x0
-	bus write busToTest  8 0 0x12
-	bus write busToTest  8 1 0x34
-	bus write busToTest  8 2 0x56
-	bus write busToTest  8 3 0x78
-	bus verify busToTest 8 0 valBusWishbone 0x12 0xff
-	bus verify busToTest 8 1 valBusWishbone 0x34 0xff
-	bus verify busToTest 8 2 valBusWishbone 0x56 0xff
-	bus verify busToTest 8 3 valBusWishbone 0x78 0xff
-	bus verify busToTest 32 0 valBusWishbone 0x78563412 0xffffffff
-	
-	wait 1000
-	bus write busToTest  32 0 0x0
-	bus write busToTest  16 0 0x1234
-	bus write busToTest  16 2 0x4567
-	bus verify busToTest 16 0 valBusWishbone 0x1234 0xffff
-	bus verify busToTest 16 2 valBusWishbone 0x4567 0xffff
-	bus verify busToTest 32 0 valBusWishbone 0x45671234 0xffffffff
-	bus write busToTest  32 4 0x0
-	bus write busToTest  16 5 0x1234
-	bus verify busToTest 16 5 valBusWishbone 0x1234 0xffff
-	bus verify busToTest 32 4 valBusWishbone 0x00123400 0xffffffff
-	
-	wait 1000
-	bus write busToTest  32 0 0x80000000
-	bus verify busToTest 32 0 valBusWishbone 0x80000000 0x00000000
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0x00000000
-	bus verify busToTest 32 0 valBusWishbone 0x80000000 0x80000000
-	bus verify busToTest 32 0 valBusWishbone 0x80000000 0xffffffff
-	
-	wait 100
-	bus write busToTest  32 0 0x00000000
-	bus verify busToTest 32 0 valBusWishbone 0x80000000 0x00000000
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0x00000000
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0x80000000
-	bus verify busToTest 32 0 valBusWishbone 0x00000000 0xffffffff
+    bus write busToTest 32 0 0x55555555
+    bus write busToTest 32 4 0xaaaaaaaa
+    bus write busToTest 32 8 0xffffffff
+    bus verify busToTest 32 0 valBusWishbone 0x55555555 0x55555555
+    bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 valBusWishbone 0xffffffff 0xffffffff
 
-	call $endStandardTestShell
+    wait 1000
+    bus write busToTest 32 0 0x0
+    bus write busToTest  8 0 0x12
+    bus write busToTest  8 1 0x34
+    bus write busToTest  8 2 0x56
+    bus write busToTest  8 3 0x78
+    bus verify busToTest 8 0 valBusWishbone 0x12 0xff
+    bus verify busToTest 8 1 valBusWishbone 0x34 0xff
+    bus verify busToTest 8 2 valBusWishbone 0x56 0xff
+    bus verify busToTest 8 3 valBusWishbone 0x78 0xff
+    bus verify busToTest 32 0 valBusWishbone 0x78563412 0xffffffff
+
+    wait 1000
+    bus write busToTest  32 0 0x0
+    bus write busToTest  16 0 0x1234
+    bus write busToTest  16 2 0x4567
+    bus verify busToTest 16 0 valBusWishbone 0x1234 0xffff
+    bus verify busToTest 16 2 valBusWishbone 0x4567 0xffff
+    bus verify busToTest 32 0 valBusWishbone 0x45671234 0xffffffff
+    bus write busToTest  32 4 0x0
+    bus write busToTest  16 5 0x1234
+    bus verify busToTest 16 5 valBusWishbone 0x1234 0xffff
+    bus verify busToTest 32 4 valBusWishbone 0x00123400 0xffffffff
+
+    wait 1000
+    bus write busToTest  32 0 0x80000000
+    bus verify busToTest 32 0 valBusWishbone 0x80000000 0x00000000
+    bus verify busToTest 32 0 valBusWishbone 0x00000000 0x00000000
+    bus verify busToTest 32 0 valBusWishbone 0x80000000 0x80000000
+    bus verify busToTest 32 0 valBusWishbone 0x80000000 0xffffffff
+
+    wait 100
+    bus write busToTest  32 0 0x00000000
+    bus verify busToTest 32 0 valBusWishbone 0x80000000 0x00000000
+    bus verify busToTest 32 0 valBusWishbone 0x00000000 0x00000000
+    bus verify busToTest 32 0 valBusWishbone 0x00000000 0x80000000
+    bus verify busToTest 32 0 valBusWishbone 0x00000000 0xffffffff
+
+    call $endStandardTestShell
 end proc
 
 testBus32VerifySuccess:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write busToTest  32 0 0x55555555
-	bus write busToTest  32 4 0xaaaaaaaa
-	bus write busToTest  32 8 0xffffffff
-	
-	bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff	
-	bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa	
-	bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
-	
-	call $endStandardTestShell
+    wait 1000
+    bus write busToTest  32 0 0x55555555
+    bus write busToTest  32 4 0xaaaaaaaa
+    bus write busToTest  32 8 0xffffffff
+
+    bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff
+    bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
+
+    call $endStandardTestShell
 end proc
 
 var wb_value32 0
@@ -74,53 +74,52 @@ bus wb_bus32 0
 testBus32VerifyFail:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write wb_bus32 32 0 0x55555555
-	bus write wb_bus32 32 4 0xaaaaaaaa
-	bus write wb_bus32 32 8 0xffffffff
-	bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff	
-	bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa	
-	bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
-	log message $ALLWAYS "bus verify intended error on no match"	
-	bus verify wb_bus32 32 0 wb_value32 0x00000000 0xffffffff
-	call $incExpectedStandardTestVerifyFailureCount
-    
-	call $endStandardTestShell
+    wait 1000
+    bus write wb_bus32 32 0 0x55555555
+    bus write wb_bus32 32 4 0xaaaaaaaa
+    bus write wb_bus32 32 8 0xffffffff
+    bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff
+    bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
+    log message $ALLWAYS "bus verify intended error on no match"
+    bus verify wb_bus32 32 0 wb_value32 0x00000000 0xffffffff
+    call $incExpectedStandardTestVerifyFailureCount
+
+    call $endStandardTestShell
 end proc
 
 
 testBus32TimeOutRead:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus write busToTest 32 0 0x55555555
-	bus timeout set wb_bus32 1
-	bus timeout get wb_bus32 wb_value32
-	var verify wb_value32 1 $MAX
-	bus read busToTest 32 0 valBusWishbone
-	call $incExpectedStandardTestBusTimeoutFailureCount
-	
-    bus timeout set wb_bus32 1000000000
-	bus timeout get wb_bus32 wb_value32
-	var verify wb_value32 1000000000 $MAX
+    wait 1000
+    bus write busToTest 32 0 0x55555555
+    bus timeout set wb_bus32 1
+    bus timeout get wb_bus32 wb_value32
+    var verify wb_value32 1 $MAX
+    bus read busToTest 32 0 valBusWishbone
+    call $incExpectedStandardTestBusTimeoutFailureCount
 
-	call $endStandardTestShell
+    bus timeout set wb_bus32 1000000000
+    bus timeout get wb_bus32 wb_value32
+    var verify wb_value32 1000000000 $MAX
+
+    call $endStandardTestShell
 end proc
 
 testBus32TimeOutWrite:
 proc
     call $startStandardTestShell
-	wait 1000
-	bus timeout set wb_bus32 1
-	bus timeout get wb_bus32 wb_value32
-	var verify wb_value32 1 $MAX
-	bus write busToTest 32 0 0x55555555
-	call $incExpectedStandardTestBusTimeoutFailureCount
-	
+    wait 1000
+    bus timeout set wb_bus32 1
+    bus timeout get wb_bus32 wb_value32
+    var verify wb_value32 1 $MAX
+    bus write busToTest 32 0 0x55555555
+    call $incExpectedStandardTestBusTimeoutFailureCount
+
     bus timeout set wb_bus32 1000000000
-	bus timeout get wb_bus32 wb_value32
-	var verify wb_value32 1000000000 $MAX
+    bus timeout get wb_bus32 wb_value32
+    var verify wb_value32 1000000000 $MAX
 
-	call $endStandardTestShell
+    call $endStandardTestShell
 end proc
-

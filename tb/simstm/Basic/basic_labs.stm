@@ -1,12 +1,12 @@
 
 testBasicAbort:
 proc
-	abort
+    abort
 end proc
 
 testBasicFinish:
 proc
-	finish
+    finish
 end proc
 
 include "Basic/lib1.stm"
@@ -22,13 +22,12 @@ proc
     call $Lib1
     call $Lib2
     call $Lib3
-	finish
+    finish
 
 end proc
 
 include "Basic/lib4.stm"
 include "Basic/lib5.stm"
-
 
 testBasicIncludeNested:
 proc
@@ -37,12 +36,6 @@ proc
     call $Lib4
     call $Lib5
     call $Lib6
-	finish
+    finish
 
 end proc
-
-
-
-
-	
-

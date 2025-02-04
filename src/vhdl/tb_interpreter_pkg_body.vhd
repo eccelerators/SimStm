@@ -32,12 +32,12 @@
 -- POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------------
 -- Changes:
--- 
+--
 -- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl 
--- 
+-- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
+--
 -- Adapt to new fix SimStm language
--- 
+--
 -- ----------------------------------------------------------------------------
 
 library std;
@@ -143,7 +143,7 @@ package body tb_interpreter_pkg is
                            variable line_num : in integer;
                            variable name : in text_line;
                            variable length : in integer;
-                           constant var_stm_type : in t_stm_var_type;       
+                           constant var_stm_type : in t_stm_var_type;
                            variable str_ptr : in stm_text_ptr;
                            variable txt_enclosing_quote : in character;
                            constant stm_value_width : in integer) is
@@ -231,16 +231,14 @@ package body tb_interpreter_pkg is
             while current_ptr.next_rec /= null loop
                 -- if we have defined the current before then die
                 assert current_ptr.var_name /= p1
-                report lf & "error: attemping to add a duplicate variable definition " &
-                    " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
+                report lf & "error: attemping to add a duplicate variable definition " & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
                 severity failure;
                 current_ptr := current_ptr.next_rec;
                 index := index + 1;
             end loop;
             -- if we have defined the current before then die. this checks the last one
             assert current_ptr.var_name /= p1
-            report lf & "error: attemping to add a duplicate variable definition " &
-                " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
+            report lf & "error: attemping to add a duplicate variable definition " & " on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;
             if var_stm_type = STM_LINES_TYPE then
                 init_stm_lines_var;
@@ -274,19 +272,17 @@ package body tb_interpreter_pkg is
             var_list := temp_var;
         end if;
     end procedure;
-    
-    
+
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
                               variable value : out integer;
                               variable valid : out integer;
                               constant stm_value_width : in integer) is
         variable stmvalue : unsigned(stm_value_width - 1 downto 0) := to_unsigned(0, stm_value_width);
-    begin                          
+    begin
         access_variable(var_list, var, stmvalue, valid);
-        value := to_integer(stmvalue(30 downto 0));                                             
-    end procedure;                          
-                              
+        value := to_integer(stmvalue(30 downto 0));
+    end procedure;
 
     procedure access_variable(variable var_list : in var_field_ptr;
                               variable var : in text_field;
@@ -447,8 +443,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p1, valid);
                 assert valid = 1
-                report lf & "error: first variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: first variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -459,8 +454,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p2, valid);
                 assert valid = 1
-                report lf & "error: second variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: second variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -471,8 +465,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p3, valid);
                 assert valid = 1
-                report lf & "error: third variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: third variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -483,8 +476,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p4, valid);
                 assert valid = 1
-                report lf & "error: forth variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: forth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -495,8 +487,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p5, valid);
                 assert (valid = 1)
-                report lf & "error: fifth variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: fifth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -507,8 +498,7 @@ package body tb_interpreter_pkg is
             else
                 access_variable(var_list, temp_text_field, p6, valid);
                 assert valid = 1
-                report lf & "error: sixth variable on stimulus line " & (integer'image(line)) &
-                    " is not valid!!" & lf & "in file " & file_name
+                report lf & "error: sixth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
@@ -547,7 +537,7 @@ package body tb_interpreter_pkg is
         dump;
     end procedure;
 
-    procedure dump_variables(variable var_list : in var_field_ptr; 
+    procedure dump_variables(variable var_list : in var_field_ptr;
                              constant stm_value_width : in integer) is
         variable ptr : var_field_ptr;
     begin
@@ -579,7 +569,7 @@ package body tb_interpreter_pkg is
         print_file_def(file_list, index);
     end procedure;
 
-    procedure dump_var_field(variable ptr : var_field_ptr; 
+    procedure dump_var_field(variable ptr : var_field_ptr;
                              constant stm_value_width : in integer) is
         variable std_line : line;
         variable tmp_str : stm_text;
@@ -674,17 +664,16 @@ package body tb_interpreter_pkg is
         end if;
     end procedure;
 
-
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index_stm_value : in unsigned;
                              variable value : out unsigned;
                              variable valid : out integer) is
         variable index : integer;
     begin
-        index := to_integer(index_stm_value(30 downto 0));                            
-        index_variable(var_list, index, value, valid);                     
+        index := to_integer(index_stm_value(30 downto 0));
+        index_variable(var_list, index, value, valid);
     end procedure;
-    
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable value : out unsigned;
@@ -706,7 +695,7 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index_stm_value : in unsigned;
                              variable var_stm_text : out stm_text_ptr;
@@ -714,10 +703,9 @@ package body tb_interpreter_pkg is
                              variable valid : out integer) is
         variable index : integer;
     begin
-        index := to_integer(index_stm_value(30 downto 0));                            
-        index_variable(var_list, index, var_stm_text, var_stm_text_enclosing_quote, valid);                     
+        index := to_integer(index_stm_value(30 downto 0));
+        index_variable(var_list, index, var_stm_text, var_stm_text_enclosing_quote, valid);
     end procedure;
-    
 
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
@@ -742,17 +730,17 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
-  
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index_stm_value : in unsigned;
                              variable stm_array : out t_stm_array_ptr;
                              variable valid : out integer) is
         variable index : integer;
     begin
-        index := to_integer(index_stm_value(30 downto 0));                            
-        index_variable(var_list, index, stm_array, valid);                     
-    end procedure;                             
-                                                            
+        index := to_integer(index_stm_value(30 downto 0));
+        index_variable(var_list, index, stm_array, valid);
+    end procedure;
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable stm_array : out t_stm_array_ptr;
@@ -774,17 +762,17 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index_stm_value : in unsigned;
                              variable stm_lines : out t_stm_lines_ptr;
                              variable valid : out integer) is
         variable index : integer;
     begin
-        index := to_integer(index_stm_value(30 downto 0));                            
-        index_variable(var_list, index, stm_lines, valid);                     
-    end procedure;                               
-                                 
+        index := to_integer(index_stm_value(30 downto 0));
+        index_variable(var_list, index, stm_lines, valid);
+    end procedure;
+
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable stm_lines : out t_stm_lines_ptr;
@@ -853,7 +841,7 @@ package body tb_interpreter_pkg is
         get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
     end procedure;
-    
+
     procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field) is
         variable inst_ptr : stim_line_ptr;
     begin
@@ -866,8 +854,7 @@ package body tb_interpreter_pkg is
             end if;
         end loop;
         inst_field_1 := inst_ptr.inst_field_1;
-    end procedure;   
-    
+    end procedure;
 
     procedure read_include_file(constant path_name : string;
                                 variable name : text_line;
@@ -904,7 +891,7 @@ package body tb_interpreter_pkg is
         variable include_file_path_name : text_line;
         variable v_ostat : integer;
         file include_file : text; -- file declaration for includes
-       
+
     begin
         sequ_line := sequ_numb;
         v_tmp_fn_ptr := file_list;
@@ -964,8 +951,7 @@ package body tb_interpreter_pkg is
                     end loop;
                 else
                     assert false
-                    report lf & "error:  include instruction is missing included file name paramater , found at:" & lf &
-                        "line " & (integer'image(l_num)) & " in file " & include_file_path_name & lf
+                    report lf & "error:  include instruction is missing included file name paramater , found at:" & lf & "line " & (integer'image(l_num)) & " in file " & include_file_path_name & lf
                     severity failure;
                 end if;
                 print("nested include found in : " & include_file_path_name);
@@ -1077,15 +1063,14 @@ package body tb_interpreter_pkg is
                     v_iname := (others => nul);
                     for i in 1 to c_stm_text_len loop
                         v_iname(i) := t_txt(i);
-                        if t_txt(i) = txt_enclosing_quote then 
+                        if t_txt(i) = txt_enclosing_quote then
                             v_iname(i) := nul;
                             exit;
                         end if;
                     end loop;
                 else
                     assert false
-                    report lf & "error:  include instruction has not file name included.  found on" & lf &
-                        "line " & (integer'image(l_num)) & " in file " & path_name & file_name & lf
+                    report lf & "error:  include instruction has not file name included.  found on" & lf & "line " & (integer'image(l_num)) & " in file " & path_name & file_name & lf
                     severity failure;
                 end if;
                 print("include found: loading file " & path_name & v_iname);
@@ -1104,9 +1089,7 @@ package body tb_interpreter_pkg is
         end loop; -- end loop read file
         file_close(stimulus); -- close the file when done
         assert v_ostat = 0
-        report lf & "include file specified on line " & (integer'image(l_num)) &
-            " in file " & path_name & file_name &
-            " was not found! test terminated" & lf
+        report lf & "include file specified on line " & (integer'image(l_num)) & " in file " & path_name & file_name & " was not found! test terminated" & lf
         severity failure;
         inst_set := v_inst_ptr;
         var_list := v_var_prt;
@@ -1121,7 +1104,7 @@ package body tb_interpreter_pkg is
                                        variable txt_enclosing_quote : in character;
                                        variable stack_ptr : integer;
                                        variable stack_called_files : stack_text_line_array;
-                                       variable stack_called_file_line_numbers: stack_numbers_array;
+                                       variable stack_called_file_line_numbers : stack_numbers_array;
                                        variable stack_called_labels : stack_text_field_array;
                                        variable stm_text_substituded : out stm_text;
                                        constant stm_value_width : in integer) is
@@ -1139,35 +1122,35 @@ package body tb_interpreter_pkg is
         variable tmp_field : text_field;
         variable tmp_i : integer;
         variable input_txt : stm_text;
-        
+
         variable insert_var : boolean;
-        variable format : base;    
+        variable format : base;
         variable insert_call_stack_label : boolean;
-        variable previous_level : integer;       
-        variable insert_call_stack_file : boolean;    
+        variable previous_level : integer;
+        variable insert_call_stack_file : boolean;
         variable insert_call_stack_line_number : boolean;
         variable stack_called_file : text_field;
-        variable stack_called_file_line_number: integer;
+        variable stack_called_file_line_number : integer;
         variable stack_called_label : text_field;
-        
+
     begin
         if ptr = null then
             return;
         end if;
-        txt_to_string(ptr, input_txt);        
+        txt_to_string(ptr, input_txt);
         -- determine variables tail_start in src string
         src_i := 1;
         src_tail_begin := 0;
         while src_i <= c_stm_text_len loop
             if src_i > 1 then
-                if ptr(src_i-1) = '\' and ptr(src_i) = txt_enclosing_quote then  
+                if ptr(src_i - 1) = '\' and ptr(src_i) = txt_enclosing_quote then
                     src_i := src_i + 1;
                 else
                     if ptr(src_i) = txt_enclosing_quote then
                         src_tail_begin := src_i;
                         exit;
-                    end if;    
-                    src_i := src_i + 1;              
+                    end if;
+                    src_i := src_i + 1;
                 end if;
             else
                 if ptr(src_i) = txt_enclosing_quote then
@@ -1182,12 +1165,12 @@ package body tb_interpreter_pkg is
         dest_i := 1;
         dest_txt_str := (others => nul);
         while src_i <= src_tail_begin and dest_i <= c_stm_text_len loop
-            if src_i < src_tail_begin then 
-                if ptr(src_i) = '\' and ptr(src_i+1)= txt_enclosing_quote then 
+            if src_i < src_tail_begin then
+                if ptr(src_i) = '\' and ptr(src_i + 1) = txt_enclosing_quote then
                     src_i := src_i + 1;
                 end if;
             end if;
-        
+
             -- copy until next '{'
             while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
                 if ptr(src_i) = '{' then
@@ -1202,32 +1185,32 @@ package body tb_interpreter_pkg is
                 -- src end reached
                 f_src_i := 1;
                 f_dest_i := 1;
-                f_dest_txt_str := (others => nul);                
+                f_dest_txt_str := (others => nul);
                 while f_src_i < dest_i loop
-                    if f_src_i+1 < dest_i then
-                        if dest_txt_str(f_src_i) = '\' and dest_txt_str(f_src_i+1) = txt_enclosing_quote then 
-                            -- skip '/' before txt_enclosing_quote 
+                    if f_src_i + 1 < dest_i then
+                        if dest_txt_str(f_src_i) = '\' and dest_txt_str(f_src_i + 1) = txt_enclosing_quote then
+                            -- skip '/' before txt_enclosing_quote
                             f_src_i := f_src_i + 1;
                             f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
                             f_src_i := f_src_i + 1;
-                            f_dest_i := f_dest_i + 1;       
+                            f_dest_i := f_dest_i + 1;
                         else
-                           -- don't skip '/' before others but txt_enclosing_quote    
+                            -- don't skip '/' before others but txt_enclosing_quote
                             f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
                             f_src_i := f_src_i + 1;
-                            f_dest_i := f_dest_i + 1;              
+                            f_dest_i := f_dest_i + 1;
                         end if;
                     else
                         f_dest_txt_str(f_dest_i) := dest_txt_str(f_src_i);
                         f_src_i := f_src_i + 1;
-                        f_dest_i := f_dest_i + 1;                
+                        f_dest_i := f_dest_i + 1;
                     end if;
                 end loop;
                 stm_text_substituded := f_dest_txt_str;
                 return;
             end if;
             -- place to embed a var found
-            insert_call_stack_label := false;  
+            insert_call_stack_label := false;
             insert_call_stack_file := false;
             insert_call_stack_line_number := false;
             if ptr(src_i) = '{' then
@@ -1240,54 +1223,54 @@ package body tb_interpreter_pkg is
                         exit;
                     else
                         -- skip until next '}'
-                        if ptr(src_i) = ':' then 
+                        if ptr(src_i) = ':' then
                             -- insert variable decimal, binary or octal
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
                                 exit;
-                            end if;                       
+                            end if;
                             if ptr(src_i) = 'd' then
-                                format := dec;                               
+                                format := dec;
                             elsif ptr(src_i) = 'b' then
                                 format := bin;
                             elsif ptr(src_i) = 'o' then
                                 format := oct;
-                            end if;              
+                            end if;
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
                                 exit;
                             end if;
-                        elsif ptr(src_i) = '@' then 
+                        elsif ptr(src_i) = '@' then
                             insert_var := false;
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
                                 exit;
-                            end if;                        
-                            if ptr(src_i) = 'c' then 
-                                insert_call_stack_label := true;  
-                            elsif ptr(src_i) = 'f' then 
+                            end if;
+                            if ptr(src_i) = 'c' then
+                                insert_call_stack_label := true;
+                            elsif ptr(src_i) = 'f' then
                                 insert_call_stack_file := true;
-                            elsif ptr(src_i) = 'l' then 
+                            elsif ptr(src_i) = 'l' then
                                 insert_call_stack_line_number := true;
                             else
                                 assert (false)
                                 report lf & "error: wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
-                                severity failure;                          
+                                severity failure;
                             end if;
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
                                 exit;
-                            end if;             
-                            previous_level := c2int(ptr(src_i));                                 
+                            end if;
+                            previous_level := c2int(ptr(src_i));
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
                                 exit;
-                            end if; 
-                        else 
+                            end if;
+                        else
                             assert (false)
                             report lf & "error: wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
-                            severity failure;                          
-                        end if; 
+                            severity failure;
+                        end if;
                     end if;
                 end loop;
             end if;
@@ -1298,8 +1281,8 @@ package body tb_interpreter_pkg is
                 report lf & "error: missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;
             end if;
-            
-            if insert_var then  
+
+            if insert_var then
                 while src_tail_i <= c_stm_text_len loop
                     if ptr(src_tail_i) = '$' then
                         exit;
@@ -1334,15 +1317,15 @@ package body tb_interpreter_pkg is
                     dest_i := k;
                 end if;
             elsif insert_call_stack_file then
-                stack_called_file := stack_called_files(stack_ptr - previous_level)(1 to max_field_len);               
+                stack_called_file := stack_called_files(stack_ptr - previous_level)(1 to max_field_len);
                 dest_txt_str := ew_str_cat(dest_txt_str, stack_called_file);
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
                 end loop;
-                dest_i := k;          
+                dest_i := k;
             elsif insert_call_stack_line_number then
-                stack_called_file_line_number := stack_called_file_line_numbers(stack_ptr - previous_level);   
+                stack_called_file_line_number := stack_called_file_line_numbers(stack_ptr - previous_level);
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(stack_called_file_line_number, dec));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -1350,7 +1333,7 @@ package body tb_interpreter_pkg is
                 end loop;
                 dest_i := k;
             elsif insert_call_stack_label then
-                stack_called_label := stack_called_labels(stack_ptr - previous_level); 
+                stack_called_label := stack_called_labels(stack_ptr - previous_level);
                 dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label, 2);
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -1388,8 +1371,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: first variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: first variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1400,8 +1382,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: second variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: second variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1412,8 +1393,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: third variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: third variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1424,8 +1404,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: forth variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: forth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1436,8 +1415,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: fifth variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: fifth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1448,8 +1426,7 @@ package body tb_interpreter_pkg is
                 else
                     access_variable(var_list, temp_text_field, v_p, valid);
                     assert valid = 1
-                    report lf & "error: sixth variable on stimulus line " & (integer'image(line))
-                      & " is not valid!!" & lf & "in file " & file_name
+                    report lf & "error: sixth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
@@ -1487,8 +1464,8 @@ package body tb_interpreter_pkg is
         variable token8 : text_field;
         variable token9 : text_field;
         variable valid : integer := 0;
-        constant SINGLE_QUOTE: character := character'val(39);
-        constant DOUBLE_QUOTE: character := character'val(34);
+        constant SINGLE_QUOTE : character := character'val(39);
+        constant DOUBLE_QUOTE : character := character'val(34);
 
     begin
         -- null outputs
@@ -1516,7 +1493,7 @@ package body tb_interpreter_pkg is
                 comment_found := 1;
                 exit;
             end if;
-            -- if is begin text char 
+            -- if is begin text char
             if txt_found = 0 and (c(1) = DOUBLE_QUOTE or c(1) = SINGLE_QUOTE) then
                 txt_found := 1;
                 txt_enclosing_quote := c(1);
@@ -1689,7 +1666,7 @@ package body tb_interpreter_pkg is
                              variable txt_enclosing_quote : in character;
                              variable stack_ptr : integer;
                              variable stack_called_files : stack_text_line_array;
-                             variable stack_called_file_line_numbers: stack_numbers_array;
+                             variable stack_called_file_line_numbers : stack_numbers_array;
                              variable stack_called_labels : stack_text_field_array;
                              constant stm_value_width : in integer) is
         variable stm_text_substituded : stm_text;
@@ -1697,7 +1674,7 @@ package body tb_interpreter_pkg is
         stm_text_substitude_wvar(var_list, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded, stm_value_width);
         print(stm_text_substituded);
     end procedure;
-    
+
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index_stm_value : in unsigned;
                               variable value : in unsigned;
@@ -1707,12 +1684,12 @@ package body tb_interpreter_pkg is
         index := to_integer(index_stm_value(30 downto 0));
         update_variable(var_list, index, value, valid);
     end procedure;
-    
+
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index_stm_value : in unsigned;
                               variable integer_value : in integer;
                               variable valid : out integer) is
-        variable stm_value : unsigned(index_stm_value'length - 1 downto 0) := to_unsigned(0, index_stm_value'length);                       
+        variable stm_value : unsigned(index_stm_value'length - 1 downto 0) := to_unsigned(0, index_stm_value'length);
     begin
         stm_value := to_unsigned(integer_value, index_stm_value'length);
         update_variable(var_list, index_stm_value, stm_value, valid);
@@ -1748,9 +1725,9 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index, var_stm_text, valid);                          
+        update_variable(var_list, index, var_stm_text, valid);
     end procedure;
-    
+
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable var_stm_text : in stm_text_ptr;
@@ -1780,8 +1757,8 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index, stm_array, valid);                          
-    end procedure;                              
+        update_variable(var_list, index, stm_array, valid);
+    end procedure;
 
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
@@ -1813,9 +1790,9 @@ package body tb_interpreter_pkg is
         variable index : integer;
     begin
         index := to_integer(index_stm_value(30 downto 0));
-        update_variable(var_list, index, stm_lines, valid);                          
-    end procedure; 
-    
+        update_variable(var_list, index, stm_lines, valid);
+    end procedure;
+
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable stm_lines : in t_stm_lines_ptr;

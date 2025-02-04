@@ -1,15 +1,15 @@
-	-- intern
-	file TestCaseSampleCaseOnlyIndexAStartFile "../../SimulationResults/{@c3}_{@c2}_{:d}.start" $sampleCaseOnlyIndexA
-	file TestCaseSampleCaseOnlyIndexAFile "../../SimulationResults/{@c3}_{@c2}_{:d}.xml" $sampleCaseOnlyIndexA
+-- intern
+file TestCaseSampleCaseOnlyIndexAStartFile "../../SimulationResults/{@c3}_{@c2}_{:d}.start" $sampleCaseOnlyIndexA
+file TestCaseSampleCaseOnlyIndexAFile "../../SimulationResults/{@c3}_{@c2}_{:d}.xml" $sampleCaseOnlyIndexA
 
 var sampleCaseOnlyIndexA 1
-	
+
 testSuiteSampleCaseOnlyIndex:
 proc
     loop 5
-		call $testCaseSampleCaseOnlyIndexA
-		add sampleCaseOnlyIndexA 1
-	end loop
+        call $testCaseSampleCaseOnlyIndexA
+        add sampleCaseOnlyIndexA 1
+    end loop
 end proc
 
 testCaseSampleCaseOnlyIndexA:
@@ -17,22 +17,22 @@ proc
     file pointer copy TestCaseStartFile TestCaseSampleCaseOnlyIndexAStartFile
     file pointer copy TestCaseFile TestCaseSampleCaseOnlyIndexAFile
     call $beginTestCaseIndexed
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-  
+
     seed $sampleCaseOnlyIndexA
     call $testOtherRandom
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SampleCaseOnlyIndexA test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc

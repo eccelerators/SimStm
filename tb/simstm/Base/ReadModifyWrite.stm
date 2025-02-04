@@ -1,24 +1,24 @@
 -- ******************************************************************************
--- 
+--
 --                   /------o
 --             eccelerators
 --          o------/
--- 
+--
 --  This file is an Eccelerators GmbH sample project.
--- 
+--
 --  MIT License:
---  Copyright (c) 2023 Eccelerators GmbH
--- 
+--  Copyright (c) 2025 Eccelerators GmbH
+--
 --  Permission is hereby granted, free of charge, to any person obtaining a copy
 --  of this software and associated documentation files (the "Software"), to deal
 --  in the Software without restriction, including without limitation the rights
 --  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 --  copies of the Software, and to permit persons to whom the Software is
 --  furnished to do so, subject to the following conditions:
--- 
+--
 --  The above copyright notice and this permission notice shall be included in all
 --  copies or substantial portions of the Software.
--- 
+--
 --  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 --  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 --  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,15 +28,14 @@
 --  SOFTWARE.
 -- ******************************************************************************
 
-    -- parameter
-    bus ReadModifyWriteBus32 0
-    var ReadModifyWriteAdr32 0
-    var ReadModifyWriteMask32 0
-    var ReadModifyWriteData32 0
-    -- intern variables
-    var ReadModifyReadData32 0
-    var ReadModifyWriteMaskInv32 0
-
+-- parameter
+bus ReadModifyWriteBus32 0
+var ReadModifyWriteAdr32 0
+var ReadModifyWriteMask32 0
+var ReadModifyWriteData32 0
+-- intern variables
+var ReadModifyReadData32 0
+var ReadModifyWriteMaskInv32 0
 
 readModifyWrite32:
 proc
@@ -50,14 +49,14 @@ proc
     bus write ReadModifyWriteBus32 32 $ReadModifyWriteAdr32 $ReadModifyReadData32
 end proc
 
-    -- parameter
-    bus ReadModifyWriteBus16 0
-    var ReadModifyWriteAdr16 0
-    var ReadModifyWriteMask16 0
-    var ReadModifyWriteData16 0
-    -- intern variables
-    var ReadModifyReadData16 0
-    var ReadModifyWriteMaskInv16 0
+-- parameter
+bus ReadModifyWriteBus16 0
+var ReadModifyWriteAdr16 0
+var ReadModifyWriteMask16 0
+var ReadModifyWriteData16 0
+-- intern variables
+var ReadModifyReadData16 0
+var ReadModifyWriteMaskInv16 0
 
 readModifyWrite16:
 proc
@@ -72,15 +71,14 @@ proc
     bus write ReadModifyWriteBus16 16 $ReadModifyWriteAdr16 $ReadModifyReadData16
 end proc
 
-    -- parameter
-    bus ReadModifyWriteBus8 0
-    var ReadModifyWriteAdr8 0
-    var ReadModifyWriteMask8 0
-    var ReadModifyWriteData8 0
-    -- intern variables
-    var ReadModifyReadData8 0
-    var ReadModifyWriteMaskInv8 0
-
+-- parameter
+bus ReadModifyWriteBus8 0
+var ReadModifyWriteAdr8 0
+var ReadModifyWriteMask8 0
+var ReadModifyWriteData8 0
+-- intern variables
+var ReadModifyReadData8 0
+var ReadModifyWriteMaskInv8 0
 
 readModifyWrite8:
 proc

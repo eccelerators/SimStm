@@ -1,11 +1,10 @@
-	-- intern
-	file TestCaseSampleAStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-	file TestCaseSampleAFile "../../SimulationResults/{@c3}_{@c2}.xml"
+-- intern
+file TestCaseSampleAStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseSampleAFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
-	
 testSuiteSample:
 proc
-	call $testCaseSampleA
+    call $testCaseSampleA
 end proc
 
 testCaseSampleA:
@@ -13,21 +12,21 @@ proc
     file pointer copy TestCaseStartFile TestCaseSampleAStartFile
     file pointer copy TestCaseFile TestCaseSampleAFile
     call $beginTestCase
-    
+
     if $SKIP = $NOT_SKIPPED
-	    lines append message TestCaseLines "TestCase not implemented yet"
-	    call $skipTestCase
-	    call $endTestCase
-	    return   
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call $skipTestCase
+        call $endTestCase
+        return
     end if
-  
+
     call $testOtherRandom
 
-	if $StandardTestFailure != 0
+    if $StandardTestFailure != 0
         lines append message TestCaseLines "SampleA test failed"
         call $failureTestCase
     end if
-    
+
     call $endTestCase
-    
+
 end proc
