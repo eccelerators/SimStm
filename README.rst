@@ -74,15 +74,10 @@ The SimStm instructions are purposely very close to HW to avoid
 debugging through too much overhead. All objects declared, such as
 variables, constants, arrays, implicit labels, etc., are global within
 one SimStm project. All objects representing values consider the values
-to be unsigned 32-bit integer values.
-
-Future development steps of SimStm may introduce larger unsigned integer
-values, e.g., 64-bit, 128-bit, if specified in a new package to be
-customized by the user. Other parameters may be opened to the user, such
-as the maximum object ID string length, and others, once their
-modification has been tested to work as expected. Further development
-steps may introduce namespaces together with the abilities of the IDE
-plugins.
+to be unsigned integer values. The values are 64-bit wide by default but 
+can be customized to be any width by setting the **machine_value_width** 
+generic when instanciating the **tb_simstm** top entity, individually 
+for each instance.
 
 The SimStm testbench presents a bus and a signal package source file to
 the user. These packages can be customized by the user to add busses,
@@ -213,7 +208,7 @@ Comments
 
 .. code-block:: none
 
- -- This is a full line comment*
+ -- This is a full line comment
  const aconst 0x03 -- This is an appended line comment
 
 | Comments in a line start with two hyphens.
@@ -247,8 +242,8 @@ Const
  const bconst 0b011
  const cconst 3
 
-The ``const`` instruction declares and define a constant with ID and hex, binary, or decimal
-unsigned 32-bit integer value.
+The ``const`` instruction declares and defines a constant with ID and hex, binary,
+decimal unsigned value.
 
 It **isn’t possible** to initialize a constant by referencing another
 constant.
@@ -262,8 +257,8 @@ Var
  var bvar 0b011
  var cvar 3
 
-The ``var`` instruction declares and define a variable with ID and initial hex, binary, or
-decimal unsigned 32-bit integer value.
+The ``var`` instruction declares and defines a variable with ID and initial hex, binary, or
+decimal unsigned value.
 
 It **isn’t possible** to initialize a variable by referencing another
 variable or constant yet. The ``equ``
@@ -286,7 +281,7 @@ File
 .. code-block:: none
 
  file afile "filename.stm"
- file afile "filename{:d}{:d}.stm"} $index1 $index2
+ file afile "filename{:d}{:d}.stm" $index1 $index2
 
 The ``file`` instruction declares a file with ID and file name.
 
@@ -585,7 +580,7 @@ loop
      -- ... some code
  end loop
  
- loop32
+ loop 32
      -- ... some code
  end loop
 
@@ -915,7 +910,7 @@ Log Message
 .. code-block:: none
 
  log message $vvar "A message to the console"
- log message} $vvar "A message to the console{}{}" $mvar1 $mvar2
+ log message $vvar "A message to the console{}{}" $mvar1 $mvar2
 
 The ``log message`` instruction prints a message at a given verbosity level to the console. 
 
@@ -1117,7 +1112,7 @@ Bus Verify
 .. code-block:: none
 
  bus verify abus $width $address tvar $evar $mvar
- bus verify abus $width $address tva r0x01 0x0F
+ bus verify abus $width $address tvar 0x01 0x0F
 
 The ``bus verify`` instruction reads the value of a bus with a given width and address into a variable and compare it to an expected
 value with a given mask. The expected value and mask can be variables,
@@ -1160,7 +1155,7 @@ Bus Timeout Set
 .. code-block:: none
 
  bus timeout set abus $svar
- bus timeout set abus 1000*
+ bus timeout set abus 1000
 
 The ``bus timeout`` instruction sets the timeout in nanoseconds to wait for a bus access to end. On
 violation, the simulation stops with severity failure always.

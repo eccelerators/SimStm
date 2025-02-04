@@ -36,7 +36,7 @@
     <!-- To adapt properties for local purposes put a file build-local-overrides.xml beneath this file -->
 	<!-- It is ignored by git -->
     <!-- e.g. to overide python executable used deeper in build-hxs.xml, put following line into build-local-overrides.xml: -->
-    <!-- <property name="python-executable" value="C:\Users\E212566412\AppData\Local\Programs\Python\Python38\python.exe"/> -->
+    <!-- <property name="python-executable" value="/bin/python38"/> -->
 	<!-- or -->
 	<!-- to set and fix a Flavour Number, put following line into build-local-overrides.xml:-->
 	<!-- <property name="flavour.number" value="0" /> -->
