@@ -113,12 +113,16 @@ Features and Advantages
 -  Abstraction of test code by SimStm language
 -  State-of-the-art SimStm language IDE support for rapid test case
    creation
--  Test case code change and test without recompilation
+-  Test case code change and test without re-compilation
 -  SimStm language transpiles to Python or C, thus simulation code can
    be reused for the test of real target HW
 -  Easily customizable to support user-defined busses, signals, and
    interrupts
--  Standard busses Axi4Lite, Avalon, and Wishbone are included
+-  Standard busses Axi4Lite, Avalon, Wishbone and direct synchronous RAM are included
+-  High coverage of functional verification of all connected IPs via
+   multiple busses
+-  Supports JUnit test reports
+
 
 Installation and Usage of the Plugins
 -------------------------------------
@@ -173,6 +177,45 @@ bug are highly appreciated. In the case of email, please send it to
 ``support@eccelerators.com``.
 
 Eccelerators may accept pull requests for small improvements.
+
+
+Repository Guide
+----------------
+The repository contend needed by the user:
+
+- ``src``: The main folder containing the VHDL code of the testbench not to be modified by the user.
+- ``src/vhdl/tb_simstm``: The testbench top entity and architecture to be instanciated in the the user testbench.
+- ``src_to_customize``: The folder containing the packages to be customized by the user.
+
+All Eccelerators IP repositories are aimed to be presented as Python Packages in future. 
+SimStm though not a syntheziable IP, is presented in the same manner. 
+SimStm tests itself by its own means.
+
+- ``helper``: The helper folder containing helper scripts only needed the SimStm selftest.
+- ``helper/proposal_for_setup_py.py``: Generating ``setup.py`` based on Eccelerators conventions.
+- ``helper/generate-ghdl-ant-build-xml.py``: Generating ``simulation/ghdl/build-ghdl.xml`` based on ``setup.py``.
+- ``helper/generate-modelsim-ant-build-xml.py``: Generating ``simulation/modelsim/build-modelsim.xml`` based on ``setup.py``.
+- ``helper/collect-simulation-results.py``: Generating JUnit test result ``simulation/SimulationResults/testSuitesSimulation.xml`` 
+  called by ant controlled test flow.
+  
+All Eccelerators IP repositories are build by **ant**. The ant build scripts are organized hierarchically. 
+The top build script is build.xml in the repository root. It imports ``helper/build-helper.xml``. 
+This presents the initial workflow target **_helper-gnerate-proposal-for-setup-py** to generate ``setup.py``.
+As a next step the target **_helper-generate-ghdl-ant-build-xml** is called to generate the ghdl build script.
+Once you refresh the list of shown ant targets in your IDE, you will see the new ghdl targets.
+The target **ghdl-all** is the one to be called to run the simulation. Similar it would be if you decide for modelsim.
+
+- ``simulation``: The simulation folder containing the generated preparations and the simulation results.
+- ``tb/hdl``: The (self)test bench hdl sources and tbTop.vhd with the top entity and architecture.
+- ``tb/simstm``: The (self)test bench simstm sources following Eccelerators conventions to produce a selftest result as JUnit test result.
+
+Beneath the simstm sefttest sources in tb/simstm subfolders which of course test every simstm instruction, extensively the ``command_list.stm`` 
+in the repository root  can be used as a comprehensive list for instruction examples. 
+
+The main purpose of this repository is to provide and test SimStm. 
+Complex real-world examples how it is used are found in the eccelerators group of
+repositories on `GitHub <https://github.com/eccelerators>`__.
+
 
 SimStm language instructions
 ----------------------------
@@ -1206,7 +1249,8 @@ Hello World
  end proc
 
 This example is a unit test too and can be found in the repository
-folder `test/others/hello_world <./test/others/hello_world>`__.
+folder `tb/simstm/others <./tb/simstm/others>`__. 
+The file others.stm contains the testOtherHelloWorld test subroutine.
 
 An demonstration of all commands is in the file
 `command_list.stm <./command_list.stm>`__ in the repository root
@@ -1232,5 +1276,5 @@ are verified for each release by regression tests.
 Real-World Examples
 ~~~~~~~~~~~~~~~~~~~
 
-A complex real-world example is found in the eccelerators
-repository on GitHub.
+Complex real-world example are found in the eccelerators group of
+repositories on `GitHub <https://github.com/eccelerators>`__.
