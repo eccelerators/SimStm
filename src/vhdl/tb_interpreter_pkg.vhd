@@ -72,6 +72,7 @@ package tb_interpreter_pkg is
     --               none.  error will terminate sim
     procedure add_instruction(variable inst_list : inout stim_line_ptr;
                               variable var_list : inout var_field_ptr;
+                              variable scope : in text_field;
                               variable inst : in text_field;
                               variable p1 : in text_field;
                               variable p2 : in text_field;
@@ -88,6 +89,7 @@ package tb_interpreter_pkg is
                               constant stm_value_width : in integer);
 
     procedure add_variable(variable var_list : inout var_field_ptr;
+                           variable scope : in text_field;
                            variable p1 : in text_field; -- should be var name
                            variable p2 : in text_field; -- should be value
                            variable sequ_num : in integer;
@@ -108,18 +110,20 @@ package tb_interpreter_pkg is
     --
     --               valid is 1, not valid is 0
     procedure access_variable(variable var_list : in var_field_ptr;
+                              variable scope : in text_field; 
                               variable var : in text_field;
                               variable value : out integer;
                               variable valid : out integer;
                               constant stm_value_width : in integer);
 
     procedure access_variable(variable var_list : in var_field_ptr;
+                              variable scope : in text_field; 
                               variable var : in text_field;
                               variable value : out unsigned;
                               variable valid : out integer);
 
     -- access_inst_sequ
-    --   this procedure retreeves an instruction from the sequence of instructions.
+    --   this procedure retrieves an instruction from the sequence of instructions.
     --   based on the line number you pass to it, it returns the instruction with
     --   any variables substituted as integers.
     --  inputs:   inst_sequ  link list of instructions from stimulus
@@ -145,8 +149,10 @@ package tb_interpreter_pkg is
                                variable file_list : in file_def_ptr;
                                variable sequ_num : in integer;
                                variable inst : out text_field;
+                               variable scope : in text_field; 
                                variable p1 : out unsigned;
                                variable p2 : out unsigned;
+                               variable p2_text : out text_field;
                                variable p3 : out unsigned;
                                variable p4 : out unsigned;
                                variable p5 : out unsigned;
@@ -276,6 +282,7 @@ package tb_interpreter_pkg is
                                     constant stm_value_width : in integer);
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+                                       variable scope : in text_field; 
                                        variable ptr : in stm_text_ptr;
                                        variable txt_enclosing_quote : in character;
                                        variable stack_ptr : integer;
@@ -286,6 +293,7 @@ package tb_interpreter_pkg is
                                        constant stm_value_width : in integer);
 
     procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
+                             variable scope : in text_field; 
                              variable file_list : in file_def_ptr;
                              variable var_list : in var_field_ptr;
                              constant stm_value_width : in integer);
@@ -308,6 +316,7 @@ package tb_interpreter_pkg is
 
     --procedure print stim txt sub variables found
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
+                             variable scope : in text_field;
                              variable ptr : in stm_text_ptr;
                              variable txt_enclosing_quote : in character;
                              variable stack_ptr : integer;

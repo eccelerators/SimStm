@@ -37,10 +37,11 @@ proc
     -- call $testVariableInv
     -- call $testOtherRandom
 
-    bus pointer copy busToTest wishbone256
-    bus timeout set busToTest 1000
-    call $testBus256
+    -- bus pointer copy busToTest wishbone256
+    -- bus timeout set busToTest 1000
+    -- call $testBus256
 
+    call $testVariableScope
     -- call $testLinesSize
 
     log message $INFO "Main test finished"

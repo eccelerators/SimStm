@@ -59,6 +59,7 @@ package tb_base_pkg is
 
     -- type def's
     type base is (bin, oct, hex, dec);
+    type stack_boolean is array (31 downto 0) of boolean;
     type stack_register is array (31 downto 0) of integer;
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
@@ -156,6 +157,7 @@ package tb_base_pkg is
     type var_field_ptr is access var_field; -- pointer to var_field
     type var_field is record
         var_name : text_field;
+        var_scope : text_field;
         var_index : integer;
         var_value : unsigned;
         var_stm_type : t_stm_var_type;
@@ -194,6 +196,9 @@ package tb_base_pkg is
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field) return stm_text;
+                        
+    function scope_str_cat(s1 : text_field;
+                           s2 : text_field) return text_field;
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;

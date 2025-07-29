@@ -191,6 +191,30 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
+    
+    function scope_str_cat(s1 : text_field;
+                           s2 : text_field) return text_field is
+        variable i : integer;
+        variable j : integer;
+        variable sc : text_field;
+    begin
+        sc := s1;
+        i := 1;
+        while sc(i) /= nul loop
+            i := i + 1;
+        end loop;
+        if s2(1) /= nul then
+            sc(i) := '.';
+            i := i + 1;
+            j := 1;
+            while s2(j) /= nul loop
+                sc(i) := s2(j);
+                i := i + 1;
+                j := j + 1;
+            end loop;
+        end if;
+        return sc;
+    end function;
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;

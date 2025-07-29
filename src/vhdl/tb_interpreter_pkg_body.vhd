@@ -53,6 +53,7 @@ package body tb_interpreter_pkg is
 
     procedure add_instruction(variable inst_list : inout stim_line_ptr;
                               variable var_list : inout var_field_ptr;
+                              variable scope : in text_field;
                               variable inst : in text_field;
                               variable p1 : in text_field;
                               variable p2 : in text_field;
@@ -98,9 +99,9 @@ package body tb_interpreter_pkg is
             --  add the variable to the variable pool, not considered an instruction
             if stm_var_type /= STM_LABEL_TYPE then
                 l := fld_len(p1);
-                add_variable(var_list, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
             else
-                add_variable(var_list, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                add_variable(var_list, scope, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
             end if;
             valid := 0; --removes this from the instruction list
         end if;
@@ -137,6 +138,7 @@ package body tb_interpreter_pkg is
     end procedure;
 
     procedure add_variable(variable var_list : inout var_field_ptr;
+                           variable scope : in text_field;
                            variable p1 : in text_field; -- should be var name
                            variable p2 : in text_field; -- should be value
                            variable sequ_num : in integer;
@@ -155,6 +157,7 @@ package body tb_interpreter_pkg is
         begin
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
+            temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
@@ -173,6 +176,7 @@ package body tb_interpreter_pkg is
             severity failure;
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
+            temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_stm_text := null;
@@ -189,6 +193,7 @@ package body tb_interpreter_pkg is
             severity failure;
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
+            temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := to_unsigned(0, stm_value_width);
             temp_var.var_stm_text := str_ptr;
@@ -202,6 +207,7 @@ package body tb_interpreter_pkg is
         begin
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
+            temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to integer
             temp_var.var_stm_text := null;
@@ -215,6 +221,7 @@ package body tb_interpreter_pkg is
         begin
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name(1 to (length - 1)) := p1(1 to (length - 1));
+            temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := to_unsigned(sequ_num, stm_value_width);
             temp_var.var_stm_text := null;
@@ -272,25 +279,28 @@ package body tb_interpreter_pkg is
             var_list := temp_var;
         end if;
     end procedure;
-
+    
     procedure access_variable(variable var_list : in var_field_ptr;
+                              variable scope : in text_field; 
                               variable var : in text_field;
                               variable value : out integer;
                               variable valid : out integer;
                               constant stm_value_width : in integer) is
         variable stmvalue : unsigned(stm_value_width - 1 downto 0) := to_unsigned(0, stm_value_width);
     begin
-        access_variable(var_list, var, stmvalue, valid);
+        access_variable(var_list, scope, var, stmvalue, valid);
         value := to_integer(stmvalue(30 downto 0));
     end procedure;
 
     procedure access_variable(variable var_list : in var_field_ptr;
+                              variable scope : in text_field;
                               variable var : in text_field;
                               variable value : out unsigned;
                               variable valid : out integer) is
         variable l : integer;
         variable var_ptr : var_field_ptr;
         variable temp_field : text_field;
+        variable temp_scope_field : text_field;
         variable ptr : integer := 0; -- 0 is index, 1 is pointer
         variable is_defined : boolean := false;
     begin
@@ -324,40 +334,82 @@ package body tb_interpreter_pkg is
             else
                 temp_field := var;
             end if;
-            assert var_list /= null
-            report lf & "error: no variables are defined." & lf
-            severity failure;
-            var_ptr := var_list;
-            while var_ptr.next_rec /= null loop
-                -- if we have a match
-                if fld_equal(temp_field, var_ptr.var_name) then
-                    if ptr = 1 then
-                        value := var_ptr.var_value;
-                        valid := 1;
-                        is_defined := true;
-                    else
-                        value := to_unsigned(var_ptr.var_index, value'length);
-                        valid := 1;
-                        is_defined := true;
+            if scope(1) /= nul then
+                -- if there is a scope try to find local or parameter variable with scope 
+                temp_scope_field := scope_str_cat(scope, temp_field);
+                assert var_list /= null
+                report lf & "error: no variables are defined." & lf
+                severity failure;
+                var_ptr := var_list;
+                while var_ptr.next_rec /= null loop
+                    -- if we have a match
+                    if fld_equal(temp_scope_field, var_ptr.var_name) then
+                        if ptr = 1 then
+                            value := var_ptr.var_value;
+                            valid := 1;
+                            is_defined := true;
+                        else
+                            value := to_unsigned(var_ptr.var_index, value'length);
+                            valid := 1;
+                            is_defined := true;
+                        end if;
+                        exit;
                     end if;
-                    exit;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end loop;
-            -- if we have a match and was the last record
-            if var_ptr.next_rec = null then
-                if fld_equal(temp_field, var_ptr.var_name) then
-                    if ptr = 1 then
-                        value := var_ptr.var_value;
-                        valid := 1;
-                        is_defined := true;
-                    else
-                        value := to_unsigned(var_ptr.var_index, value'length);
-                        valid := 1;
-                        is_defined := true;
+                    var_ptr := var_ptr.next_rec;
+                end loop;
+                -- if we have a match and was the last record
+                if var_ptr.next_rec = null then
+                    if fld_equal(temp_scope_field, var_ptr.var_name) then
+                        if ptr = 1 then
+                            value := var_ptr.var_value;
+                            valid := 1;
+                            is_defined := true;
+                        else
+                            value := to_unsigned(var_ptr.var_index, value'length);
+                            valid := 1;
+                            is_defined := true;
+                        end if;
                     end if;
                 end if;
-            end if;
+            end if;                 
+            if not is_defined then
+                -- if there is no scope or try to find local or parameter variable with scope wasn't successful
+                -- try to find global variable 
+                assert var_list /= null
+                report lf & "error: no variables are defined." & lf
+                severity failure;
+                var_ptr := var_list;
+                while var_ptr.next_rec /= null loop
+                    -- if we have a match
+                    if fld_equal(temp_field, var_ptr.var_name) then
+                        if ptr = 1 then
+                            value := var_ptr.var_value;
+                            valid := 1;
+                            is_defined := true;
+                        else
+                            value := to_unsigned(var_ptr.var_index, value'length);
+                            valid := 1;
+                            is_defined := true;
+                        end if;
+                        exit;
+                    end if;
+                    var_ptr := var_ptr.next_rec;
+                end loop;
+                -- if we have a match and was the last record
+                if var_ptr.next_rec = null then
+                    if fld_equal(temp_field, var_ptr.var_name) then
+                        if ptr = 1 then
+                            value := var_ptr.var_value;
+                            valid := 1;
+                            is_defined := true;
+                        else
+                            value := to_unsigned(var_ptr.var_index, value'length);
+                            valid := 1;
+                            is_defined := true;
+                        end if;
+                    end if;
+                end if;                    
+            end if;    
             assert is_defined
             report lf & "error: variable is not defined " & temp_field & lf
             severity failure;
@@ -369,8 +421,10 @@ package body tb_interpreter_pkg is
                                variable file_list : in file_def_ptr;
                                variable sequ_num : in integer;
                                variable inst : out text_field;
+                               variable scope : in text_field; 
                                variable p1 : out unsigned;
                                variable p2 : out unsigned;
+                               variable p2_text : out text_field;
                                variable p3 : out unsigned;
                                variable p4 : out unsigned;
                                variable p5 : out unsigned;
@@ -441,18 +495,19 @@ package body tb_interpreter_pkg is
             if is_digit(temp_text_field(1)) then
                 p1 := stim_to_stm_value(temp_text_field, file_name, line, p1'length);
             else
-                access_variable(var_list, temp_text_field, p1, valid);
+                access_variable(var_list, scope, temp_text_field, p1, valid);
                 assert valid = 1
                 report lf & "error: first variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
             end if;
         end if;
         temp_text_field := inst_ptr.inst_field_2;
+        p2_text := inst_ptr.inst_field_2;
         if temp_text_field(1) /= nul then
             if is_digit(temp_text_field(1)) then
                 p2 := stim_to_stm_value(temp_text_field, file_name, line, p2'length);
             else
-                access_variable(var_list, temp_text_field, p2, valid);
+                access_variable(var_list, scope, temp_text_field, p2, valid);
                 assert valid = 1
                 report lf & "error: second variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -463,7 +518,7 @@ package body tb_interpreter_pkg is
             if is_digit(temp_text_field(1)) then
                 p3 := stim_to_stm_value(temp_text_field, file_name, line, p3'length);
             else
-                access_variable(var_list, temp_text_field, p3, valid);
+                access_variable(var_list, scope, temp_text_field, p3, valid);
                 assert valid = 1
                 report lf & "error: third variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -474,7 +529,7 @@ package body tb_interpreter_pkg is
             if is_digit(temp_text_field(1)) then
                 p4 := stim_to_stm_value(temp_text_field, file_name, line, p4'length);
             else
-                access_variable(var_list, temp_text_field, p4, valid);
+                access_variable(var_list, scope, temp_text_field, p4, valid);
                 assert valid = 1
                 report lf & "error: forth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -485,7 +540,7 @@ package body tb_interpreter_pkg is
             if is_digit(temp_text_field(1)) then
                 p5 := stim_to_stm_value(temp_text_field, file_name, line, p5'length);
             else
-                access_variable(var_list, temp_text_field, p5, valid);
+                access_variable(var_list, scope, temp_text_field, p5, valid);
                 assert (valid = 1)
                 report lf & "error: fifth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -496,7 +551,7 @@ package body tb_interpreter_pkg is
             if is_digit(temp_text_field(1)) then
                 p6 := stim_to_stm_value(temp_text_field, file_name, line, p6'length);
             else
-                access_variable(var_list, temp_text_field, p6, valid);
+                access_variable(var_list, scope, temp_text_field, p6, valid);
                 assert valid = 1
                 report lf & "error: sixth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                 severity failure;
@@ -891,6 +946,8 @@ package body tb_interpreter_pkg is
         variable include_file_path_name : text_line;
         variable v_ostat : integer;
         file include_file : text; -- file declaration for includes
+        variable t1_len: integer;
+        variable scope : text_field;
 
     begin
         sequ_line := sequ_numb;
@@ -926,6 +983,7 @@ package body tb_interpreter_pkg is
         v_inst_ptr := inst_set;
         v_var_prt := var_list;
         v_sequ_ptr := inst_sequ;
+        scope(1) := nul;
         -- while not the end of file read it
         while not endfile(include_file) loop
             file_read_line(include_file, l);
@@ -968,9 +1026,22 @@ package body tb_interpreter_pkg is
                 end if;
             -- if there was valid tokens
             elsif valid /= 0 then
-                check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
-                add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7,
-                                t_txt, txt_enclosing_quote, sequ_line, l_num, name, v_new_fn, stm_value_width);
+                check_valid_inst(t1, v_inst_ptr, valid, l_num, name);               
+                t1_len := fld_len(t1);
+                -- proc_(
+                -- proc_() 
+                -- proc_(_) 
+                if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
+                    scope := t2;
+                end if;
+                -- end proc
+                -- end interrupt
+                -- return
+                if t1(1 to t1_len) = INSTR_RETURN or t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
+                    scope(1) := nul;
+                end if; 
+                add_instruction(v_sequ_ptr, v_var_prt, scope, t1, t2, t3, t4, t5, t6, t7,
+                                t_txt, txt_enclosing_quote, sequ_line, l_num, name, v_new_fn, stm_value_width);                                                                       
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file
@@ -1011,6 +1082,9 @@ package body tb_interpreter_pkg is
         variable v_iname : text_line;
         variable v_tmp_fn : file_def_ptr;
         variable v_fn_idx : integer;
+        variable t1_len: integer;
+        variable scope : text_field;
+
     begin
         -- open the stimulus_file and check
         file_open(v_stat, stimulus, path_name & file_name, read_mode);
@@ -1044,6 +1118,7 @@ package body tb_interpreter_pkg is
         v_inst_ptr := inst_set;
         v_var_prt := var_list;
         v_sequ_ptr := inst_sequ;
+        scope(1) := nul;
         -- while not the end of file read it
         while not endfile(stimulus) loop
             file_read_line(stimulus, l);
@@ -1082,7 +1157,20 @@ package body tb_interpreter_pkg is
             -- if there was valid tokens
             elsif valid /= 0 then
                 check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);
-                add_instruction(v_sequ_ptr, v_var_prt, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
+                t1_len := fld_len(t1);
+                -- proc_(
+                -- proc_() 
+                -- proc_(_) 
+                if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
+                    scope := t2;
+                end if;
+                -- end proc
+                -- end interrupt
+                -- return
+                if t1(1 to t1_len) = INSTR_RETURN or t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
+                    scope(1) := nul;
+                end if;
+                add_instruction(v_sequ_ptr, v_var_prt, scope, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
                                 sequ_line, l_num, v_name, v_fn_idx, stm_value_width);
             end if;
             l_num := l_num + 1;
@@ -1096,10 +1184,11 @@ package body tb_interpreter_pkg is
         inst_sequ := v_sequ_ptr;
         file_list := v_tmp_fn;
         --  now that all the stimulus is loaded, test for invalid variables
-        test_inst_sequ(inst_sequ, v_tmp_fn, var_list, stm_value_width);
+        test_inst_sequ(inst_sequ, scope, v_tmp_fn, var_list, stm_value_width);
     end procedure;
 
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+                                       variable scope : in text_field; 
                                        variable ptr : in stm_text_ptr;
                                        variable txt_enclosing_quote : in character;
                                        variable stack_ptr : integer;
@@ -1304,7 +1393,7 @@ package body tb_interpreter_pkg is
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;
                 end loop;
-                access_variable(var_list, tmp_field, v1, valid);
+                access_variable(var_list, scope, tmp_field, v1, valid);
                 assert (valid = 1)
                 report lf & "invalid variable found in stm_text_ptr: ignoring."
                 severity warning;
@@ -1348,6 +1437,7 @@ package body tb_interpreter_pkg is
     end procedure;
 
     procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
+                             variable scope : in text_field; 
                              variable file_list : in file_def_ptr;
                              variable var_list : in var_field_ptr;
                              constant stm_value_width : in integer) is
@@ -1369,7 +1459,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: first variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1380,7 +1470,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: second variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1391,7 +1481,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: third variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1402,7 +1492,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: forth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1413,7 +1503,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: fifth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1424,7 +1514,7 @@ package body tb_interpreter_pkg is
                 if is_digit(temp_text_field(1)) then
                     null;
                 else
-                    access_variable(var_list, temp_text_field, v_p, valid);
+                    access_variable(var_list, scope, temp_text_field, v_p, valid);
                     assert valid = 1
                     report lf & "error: sixth variable on stimulus line " & (integer'image(line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -1662,6 +1752,7 @@ package body tb_interpreter_pkg is
     end procedure;
 
     procedure txt_print_wvar(variable var_list : in var_field_ptr;
+                             variable scope : in text_field;
                              variable ptr : in stm_text_ptr;
                              variable txt_enclosing_quote : in character;
                              variable stack_ptr : integer;
@@ -1671,7 +1762,7 @@ package body tb_interpreter_pkg is
                              constant stm_value_width : in integer) is
         variable stm_text_substituded : stm_text;
     begin
-        stm_text_substitude_wvar(var_list, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded, stm_value_width);
+        stm_text_substitude_wvar(var_list, scope, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, stm_text_substituded, stm_value_width);
         print(stm_text_substituded);
     end procedure;
 
