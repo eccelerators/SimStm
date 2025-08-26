@@ -165,7 +165,7 @@ begin
         variable file_name : text_line; -- the file name the line came from
         variable v_line : integer := 0; -- sequence number
         variable stack : stack_register; -- call stack
-        variable stack_called_scopes : stack_text_field_array; -- called scopes
+        variable stack_current_scopes : stack_text_field_array; -- called scopes
         variable stack_called_labels : stack_text_field_array; -- called labels
         variable stack_called_files : stack_text_line_array; -- called files
         variable stack_called_file_line_numbers : stack_numbers_array; -- called line numbers
@@ -254,7 +254,7 @@ begin
         variable var_stm_lines : t_stm_lines_ptr;
 
         variable main_label_text_field : text_field;
-        -- variable main_label_string : string := stimulus_main_entry_label;
+        variable nul_text_field : text_field;
         variable main_line : integer := 0;
         variable main_entered : integer := 0;
 
@@ -268,8 +268,8 @@ begin
         variable branch_to_interrupt_v_line : integer := 0;
 
         variable called_label : text_field;
-        variable no_label : text_field;
-        variable called_scope : text_field;
+        variable current_scope : text_field;
+        variable current_par_scope : text_field;
         
         variable in_call_advanced_par : boolean := false;
 
@@ -282,7 +282,6 @@ begin
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
         
-        no_label(1) := nul;
         wait for 0 ns;
 
         init_const_text_field(stimulus_main_entry_label, main_label_text_field);
@@ -316,15 +315,25 @@ begin
             end if;
 
             if main_entered = 0 then
-                called_scope := stack_called_scopes(stack_ptr);
-                access_variable(defined_vars, called_scope, main_label_text_field, main_line, valid, machine_value_width);
+                current_scope(1) := nul;           
+                access_variable(defined_vars, current_scope, main_label_text_field, main_line, valid, machine_value_width);
                 assert valid = 1
-                report lf & "error: Entry point proc Main not found !"
+                report lf & "error: Entry point proc Main:'" & main_label_text_field(1 to fld_len(main_label_text_field)) & "' scope:'" & current_scope(1 to fld_len(current_scope)) & "' not found !"
                 severity failure;
                 v_line := main_line;
+                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
+                                 par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                 last_sequ_num, last_sequ_ptr);
                 main_entered := 1;
+                stack(stack_ptr) := v_line;
+                stack_called_labels(stack_ptr) := main_label_text_field;
+                stack_called_files(stack_ptr) := file_name;
+                stack_called_file_line_numbers(stack_ptr) := file_line;                  
+                in_call_advanced_par := false;
+                stack_current_scopes(stack_ptr) := current_scope;
 
             elsif branch_to_interrupt then
+                current_scope(1) := nul; 
                 if (stack_ptr >= 31) then
                     assert false
                     report " line " & (integer'image(file_line)) & " interrupt enter error: stack over run, calls to deeply nested!!"
@@ -343,26 +352,26 @@ begin
                 stack(stack_ptr) := v_line;
                 stack_ptr := stack_ptr + 1;
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
-                called_scope := stack_called_scopes(stack_ptr);
-                access_variable(defined_vars, called_scope, branch_to_interrupt_label, branch_to_interrupt_v_line, valid, machine_value_width);
+                access_variable(defined_vars, current_scope, branch_to_interrupt_label, branch_to_interrupt_v_line, valid, machine_value_width);
                 assert valid = 1
                 report lf & "error: Interrupt entry point $branch_to_interrupt_label not found !"
                 severity failure;
-                stack_called_labels(stack_ptr) := branch_to_interrupt_label;
+
                 v_line := branch_to_interrupt_v_line;
-                called_scope := stack_called_scopes(stack_ptr);
-                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope, 
+                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
                                  par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
+                stack_called_labels(stack_ptr) := branch_to_interrupt_label;
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line;
+                in_call_advanced_par := false;
+                stack_current_scopes(stack_ptr) := current_scope;
                 wait for 0 ns;
 
             else
 
                 v_line := v_line + 1;
-                called_scope := stack_called_scopes(stack_ptr);
-                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope, 
+                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
                                  par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
 
@@ -425,12 +434,11 @@ begin
                 -- equ operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_EQU then                  
                     if in_call_advanced_par and par2_text(1) = '$' then
-                        called_scope := stack_called_scopes(stack_ptr);
-                        access_variable(defined_vars, called_scope, par2_text, par2_substituted, valid);
+                        access_variable(defined_vars, current_par_scope, par2_text, temp_stm_value, valid);
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & " equ error: cannot access  variable, it may be a constant ?"
                         severity failure;                    
-                        update_variable(defined_vars, par1, par2_substituted, valid);
+                        update_variable(defined_vars, par1, temp_stm_value, valid);
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                         severity failure;
@@ -685,8 +693,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_readable(var_stm_text_substituded_ptr, temp_int);
@@ -701,8 +708,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_writeable(var_stm_text_substituded_ptr, temp_int);
@@ -717,8 +723,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_appendable(var_stm_text_substituded_ptr, temp_int);
@@ -737,8 +742,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_write(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -756,8 +760,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_append(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -832,8 +835,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        called_scope := stack_called_scopes(stack_ptr);
-                        stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                        stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -911,8 +913,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -943,8 +944,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: position object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -1014,8 +1014,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par2(30 downto 0));
@@ -1050,8 +1049,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par2(30 downto 0));
@@ -1082,8 +1080,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    called_scope := stack_called_scopes(stack_ptr);
-                    stm_text_substitude_wvar(defined_vars, called_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(defined_vars, current_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out, valid);
@@ -1181,8 +1178,7 @@ begin
                     end if;
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
-                        called_scope := stack_called_scopes(stack_ptr);
-                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                          par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
@@ -1197,7 +1193,7 @@ begin
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             v_line := v_line + 1;
-                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                              par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
@@ -1223,8 +1219,7 @@ begin
                     end if;
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
-                        called_scope := stack_called_scopes(stack_ptr);
-                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                          par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         while (instruction(1 to len) /= INSTR_IF) and instruction(1 to len) /= INSTR_END_IF loop
@@ -1232,8 +1227,7 @@ begin
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             v_line := v_line + 1;
-                            called_scope := stack_called_scopes(stack_ptr);
-                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                              par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
@@ -1272,8 +1266,7 @@ begin
                         end if;
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
-                            called_scope := stack_called_scopes(stack_ptr);
-                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                              par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                             num_of_if_in_false_if_leave(if_level) := 0;
@@ -1288,7 +1281,7 @@ begin
                                 report " line " & (integer'image(file_line)) & " error:  elsif instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                                 severity failure;
                                 v_line := v_line + 1;
-                                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                                access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                                  par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                                  last_sequ_num, last_sequ_ptr);
                             end loop;
@@ -1312,8 +1305,7 @@ begin
                     end if;
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
-                        called_scope := stack_called_scopes(stack_ptr);
-                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                        access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                          par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
@@ -1328,8 +1320,7 @@ begin
                             report " line " & (integer'image(file_line)) & " error:  else instruction unable to find terminating" & lf & "    end_if statement."
                             severity failure;
                             v_line := v_line + 1;
-                            called_scope := stack_called_scopes(stack_ptr);
-                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, called_scope,
+                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
                                              par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
@@ -1453,14 +1444,18 @@ begin
                     report "Test finished";
                     wait for 1000 ns;
                     finish;
-            
+                    
+                -- proc
+                elsif instruction(1 to len) = INSTR_PROC 
+                      or instruction(1 to len) = INSTR_PROC_PAR_OPEN
+                      or instruction(1 to len) = INSTR_PROC_PAR_NOPAR_0
+                      or instruction(1 to len) = INSTR_PROC_PAR_NOPAR_1 then
+                    null; -- no action necessary
+                                
                 -- end proc
                 -- end interrupt
                 -- return
                 elsif instruction(1 to len) = INSTR_RETURN or instruction(1 to len) = INSTR_END_PROC or instruction(1 to len) = INSTR_END_INTERRUPT then
-                    if in_call_advanced_par then
-                        in_call_advanced_par := false;
-                    end if;
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
@@ -1488,6 +1483,12 @@ begin
                     end if;
                     -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
+                    current_scope := stack_current_scopes(stack_ptr);
+                    if stack_ptr > 0 then
+                        current_par_scope := stack_current_scopes(stack_ptr - 1);
+                    else 
+                        current_par_scope(1) := nul;
+                    end if;
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
                         report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
@@ -1511,15 +1512,17 @@ begin
                     stack(stack_ptr) := v_line;
                     get_inst_field_1(inst_sequ, v_line, called_label);
                     stack_called_labels(stack_ptr) := called_label;
+                    stack_current_scopes(stack_ptr) :=  current_scope;
                     stack_called_files(stack_ptr) := file_name;
                     stack_called_file_line_numbers(stack_ptr) := file_line;                  
                     if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
                         in_call_advanced_par := true;
-                        stack_called_scopes(stack_ptr) :=  called_label;
+                        current_par_scope := current_scope;
+                        current_scope :=  called_label;
                     elsif instruction(1 to len) = INSTR_CALL_PAR_NOPAR_0 or instruction(1 to len) = INSTR_CALL_PAR_NOPAR_1 then
-                        stack_called_scopes(stack_ptr) :=  called_label;
+                        current_scope :=  called_label;
                     else
-                        stack_called_scopes(stack_ptr) := no_label;
+                        current_scope(1):= nul;
                     end if;                                     
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
@@ -1540,9 +1543,8 @@ begin
                 -- log message $INFO "some message"
                 -- log message  $INFO "misc_proc severity: {}" $INFO
                 elsif instruction(1 to len) = INSTR_LOG_MESSAGE then
-                    if par1 <= loglevel then
-                        called_scope := stack_called_scopes(stack_ptr);
-                        txt_print_wvar(defined_vars, called_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, machine_value_width);
+                    if par1 <= loglevel then                        
+                        txt_print_wvar(defined_vars, current_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, machine_value_width);
                     end if;
 
                 -- log lines $INFO a_lines

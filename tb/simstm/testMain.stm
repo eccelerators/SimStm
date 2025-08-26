@@ -1,18 +1,17 @@
-include "Common/Common.stm"
+include "Variable/variable_scope.stm"
 
+include "Common/Common.stm"
 include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
-
 include "Bus/bus32.stm"
 include "Bus/bus64.stm"
 include "Bus/bus128.stm"
 include "Bus/bus256.stm"
-
--- include "File/file.stm"
 include "Base/Array.stm"
 
 include "Other/other.stm"
 include "Variable/variable.stm"
+
 include "Array/array.stm"
 include "Lines/lines.stm"
 

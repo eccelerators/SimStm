@@ -217,6 +217,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_VAR, 2);
         define_instruction(inst_list, INSTR_VAR_PAR_CLOSE, 2);
         -- variable
+        define_instruction(inst_list, INSTR_VAR_VERIFY, 3);
         define_instruction(inst_list, INSTR_ADD, 2);
         define_instruction(inst_list, INSTR_AND, 2);
         define_instruction(inst_list, INSTR_DIV, 2);
@@ -231,7 +232,6 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_SUB, 2);
         define_instruction(inst_list, INSTR_XOR, 2);
         define_instruction(inst_list, INSTR_LD, 1);
-        define_instruction(inst_list, INSTR_VAR_VERIFY, 3);
         -- signal
         define_instruction(inst_list, INSTR_SIGNAL, 2);
         define_instruction(inst_list, INSTR_SIGNAL_READ, 2);
@@ -283,9 +283,9 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_ARRAY_VERIFY, 4);
         -- others
         define_instruction(inst_list, INSTR_PROC, 0);
-        define_instruction(inst_list, INSTR_PROC_PAR_OPEN, 0);
-        define_instruction(inst_list, INSTR_PROC_PAR_NOPAR_0, 0);
-        define_instruction(inst_list, INSTR_PROC_PAR_NOPAR_1, 0);
+        define_instruction(inst_list, INSTR_PROC_PAR_OPEN, 1);
+        define_instruction(inst_list, INSTR_PROC_PAR_NOPAR_0, 1);
+        define_instruction(inst_list, INSTR_PROC_PAR_NOPAR_1, 1);
         define_instruction(inst_list, INSTR_CALL, 1);
         define_instruction(inst_list, INSTR_CALL_PAR_OPEN, 1);
         define_instruction(inst_list, INSTR_CALL_PAR_NOPAR_0, 1);
@@ -356,12 +356,6 @@ package body tb_instructions_pkg is
                     token2_len := 5;
                     token_merge := 12;
                 end if;
-            elsif token1(1 to 3) = "var" then
-                token1_len := 3;
-                if token4(1 to 1) = "(" then
-                    token4_len := 1;
-                    token_merge := 14;
-                end if;
             elsif token1(1 to 3) = "equ" then
                 token1_len := 3;
                 if token4(1 to 1) = "(" then
@@ -370,27 +364,27 @@ package body tb_instructions_pkg is
                 end if;
             elsif token1(1 to 4) = "call" then
                 token1_len := 4;
-                if token3(1 to 1) = "(" then
-                    token3_len := 1;
-                    token_merge := 13;
-                elsif token3(1 to 2) = "()" then
-                    token3_len := 1;
-                    token_merge := 13;
-                elsif token4(1 to 1) = ")" then
-                    token4_len := 1;
-                    token_merge := 134; 
+                if token3(1 to 1) = "(" then    
+                    if token3(2 to 2) = ")" then                         
+                        token3_len := 2;
+                        token_merge := 13;
+                    elsif token4(1 to 1) = ")" then
+                        token3_len := 1;
+                        token4_len := 1;
+                        token_merge := 134;
+                    end if;
                 end if;
             elsif token1(1 to 4) = "proc" then
                 token1_len := 4;
                 if token3(1 to 1) = "(" then
-                    token3_len := 1;
-                    token_merge := 13;
-                elsif token3(1 to 2) = "()" then
-                    token3_len := 1;
-                    token_merge := 13;
-                elsif token4(1 to 1) = ")" then
-                    token4_len := 1;
-                    token_merge := 134; 
+                    if token3(2 to 2) = ")" then                         
+                        token3_len := 2;
+                        token_merge := 13;
+                    elsif token4(1 to 1) = ")" then
+                        token3_len := 1;
+                        token4_len := 1;
+                        token_merge := 134;
+                    end if;
                 end if;
             elsif token1(1 to 4) = "file" then
                 token1_len := 4;
@@ -517,7 +511,10 @@ package body tb_instructions_pkg is
                 if token2(1 to 6) = "verify" then
                     token2_len := 6;
                     token_merge := 12;
-                end if;
+                elsif token4(1 to 1) = "(" then
+                    token4_len := 1;
+                    token_merge := 14;
+                end if;           
             elsif token1(1 to 6) = "signal" then
                 token1_len := 6;
                 if token2(1 to 6) = "verify" then

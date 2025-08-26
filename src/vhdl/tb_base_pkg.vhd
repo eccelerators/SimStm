@@ -82,6 +82,7 @@ package tb_base_pkg is
     type stim_line_ptr is access stim_line; -- pointer to stim_line record
     type stim_line is record
         instruction : text_field;
+        inst_scope : text_field;
         inst_field_1 : text_field;
         inst_field_2 : text_field;
         inst_field_3 : text_field;
@@ -93,7 +94,7 @@ package tb_base_pkg is
         line_number : integer; -- sequence line
         num_of_lines : integer; -- total number of lines
         file_line : integer; -- file line number
-        file_idx : integer;
+        file_idx : integer;      
         next_rec : stim_line_ptr;
     end record;
 
@@ -197,8 +198,8 @@ package tb_base_pkg is
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field) return stm_text;
                         
-    function scope_str_cat(s1 : text_field;
-                           s2 : text_field) return text_field;
+    function str_cat(s1 : text_field;
+                     s2 : text_field) return text_field;
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;

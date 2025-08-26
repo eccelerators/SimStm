@@ -192,8 +192,8 @@ package body tb_base_pkg is
         return sc;
     end function;
     
-    function scope_str_cat(s1 : text_field;
-                           s2 : text_field) return text_field is
+    function str_cat(s1 : text_field;
+                     s2 : text_field) return text_field is
         variable i : integer;
         variable j : integer;
         variable sc : text_field;

@@ -293,7 +293,6 @@ package tb_interpreter_pkg is
                                        constant stm_value_width : in integer);
 
     procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
-                             variable scope : in text_field; 
                              variable file_list : in file_def_ptr;
                              variable var_list : in var_field_ptr;
                              constant stm_value_width : in integer);

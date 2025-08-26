@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<testsuites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../schemas/JUnit.xsd">
+   <testsuite name="testSuiteConstant" package="basic" id="0" tests="1" skipped="0" errors="0" failures="0" time="0.006487" hostname="eccelerators.com" timestamp="2025-08-25T08:26:12">
+      <properties></properties>
+      <testcase name="testSuiteConstant_testCaseConstantAdd" classname="testSuiteConstant" time="0.006487">
+      </testcase>
+      <system-out># vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/vagrant/git/simstm_release/tb/simstm/ -gstimulus_file=testMainSuiteConstant.stm -gstimulus_main_entry_label=$testMainSuiteConstant -do &quot;run_all.do&quot; 
+# Start time: 08:25:59 on Aug 25,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;unknown (empty read)&quot;. Lockfile is &quot;/home/vagrant/git/simstm_release/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 8122&quot;. Lockfile is &quot;/home/vagrant/git/simstm_release/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;vagrant@vagrant-box, pid = 8120&quot;. Lockfile is &quot;/home/vagrant/git/simstm_release/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=4.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# Success
+# testConstantAdd ended
+# Ended at simulation time of 1010ns
+# **********END*TESTCASE*testSuiteConstant_testCaseConstantAdd**********
+# Main test suite Constant ended
+# ** Note: Verify passes 4
+#    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Timeout monitored bus access passes 0
+#    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: SUCCESS
+#    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# ** Note: Test finished
+#    Time: 2012800 ps  Iteration: 0  Instance: /tbtop/i_tb_simstm
+# End time: 08:26:12 on Aug 25,2025, Elapsed time: 0:00:13
+# Errors: 0, Warnings: 7
+</system-out>
+      <system-err/>
+   </testsuite>
+</testsuites>
