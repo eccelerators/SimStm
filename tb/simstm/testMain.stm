@@ -1,4 +1,4 @@
-include "Variable/variable_scope.stm"
+include "Variable/variable_parameter.stm"
 
 include "Common/Common.stm"
 include "Signal/signal.stm"
@@ -11,6 +11,8 @@ include "Base/Array.stm"
 
 include "Other/other.stm"
 include "Variable/variable.stm"
+include "Variable/variable_scope.stm"
+
 
 include "Array/array.stm"
 include "Lines/lines.stm"
@@ -20,10 +22,13 @@ lines success_lines
 
 testMain:
 proc
+    trace $TRACE_EXECUTED_LINES
     call $initBase
 
     verbosity $INFO_2
-    trace $TRACE_OFF
+    -- trace $TRACE_OFF
+    -- trace $TRACE_CALLS
+    trace $TRACE_EXECUTED_LINES
     resume $RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
@@ -40,7 +45,8 @@ proc
     -- bus timeout set busToTest 1000
     -- call $testBus256
 
-    call $testVariableScope
+    -- call $testVariableScope ()
+    call $testVariableParameter ()
     -- call $testLinesSize
 
     log message $INFO "Main test finished"

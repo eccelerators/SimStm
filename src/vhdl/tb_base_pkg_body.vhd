@@ -1336,14 +1336,29 @@ package body tb_base_pkg is
             end loop;
         end if;
     end procedure;
-
+    
+    function strip_leading_dollar(itxt : in text_field) return text_field is
+        variable l : integer;
+        variable otxt : text_field;
+    begin
+        if itxt(1) = '$' then
+            l := fld_len(itxt);
+            for i in 2 to l loop
+                otxt(i - 1) := itxt(i);
+            end loop;
+        else
+            otxt := itxt;
+        end if;    
+        return otxt;
+    end function;
+    
     function stm_text_crop(txt : in stm_text) return string is
         variable l : integer;
     begin
         l := stm_text_len(txt);
         return txt(1 to l);
     end function;
-
+         
     function stm_text_len(s : in stm_text) return integer is
         variable i : integer := 1;
     begin

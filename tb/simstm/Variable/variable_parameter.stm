@@ -1,0 +1,21 @@
+
+proc testVariableParameter ()
+
+    call $startStandardTestShell
+    
+    call $checkParameterInput ( 
+    	equ par_in 0xAA
+    )
+
+    call $endStandardTestShell
+
+end proc
+
+
+proc checkParameterInput ( 
+	var par_in 0
+)
+	var verify par_in 0xAA $MAX
+end proc
+
+

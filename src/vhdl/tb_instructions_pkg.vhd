@@ -372,6 +372,9 @@ package body tb_instructions_pkg is
                         token3_len := 1;
                         token4_len := 1;
                         token_merge := 134;
+                    else
+                        token3_len := 1;
+                        token_merge := 13;
                     end if;
                 end if;
             elsif token1(1 to 4) = "proc" then
@@ -384,6 +387,9 @@ package body tb_instructions_pkg is
                         token3_len := 1;
                         token4_len := 1;
                         token_merge := 134;
+                    else
+                        token3_len := 1;
+                        token_merge := 13;
                     end if;
                 end if;
             elsif token1(1 to 4) = "file" then
@@ -717,7 +723,7 @@ package body tb_instructions_pkg is
         seti := inst_set;
         -- count up the characters in inst
         l := fld_len(inst);
-        -- if this is a referance variable -- handle in add variable proc
+        -- if this is a  variable reference -- handle in add variable proc
         if inst(l) = ':' then
             match := 1;
             ilv := 1;
@@ -748,7 +754,7 @@ package body tb_instructions_pkg is
                 end loop;
             end if;
         end if;
-        -- if we had a match, check the number of paramiters
+        -- if we had a match, check the number of parameters
         if match = 1 and ilv = 0 then
             assert seti.params = (token_num - 1)
             report lf & "error: undefined instruction was found, incorrect number of fields passed!" & lf & "this is found on line " & (integer'image(line_num)) & " in file " & name & lf

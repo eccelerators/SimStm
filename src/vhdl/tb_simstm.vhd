@@ -141,7 +141,7 @@ begin
     --! records are drawn from the user instruction list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_file : process
+    read_files : process
         variable inst_list : inst_def_ptr; -- the instruction list
         variable defined_vars : var_field_ptr; -- defined variables
         variable inst_sequ : stim_line_ptr; -- the instruction sequence
@@ -162,10 +162,13 @@ begin
         variable txt_enclosing_quote : character;
         variable len : integer; -- length of the instruction field
         variable file_line : integer; -- line number in the stimulus file
+        variable tmp_file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
+        variable tmp_file_name : text_line; -- the file name the line came from
         variable v_line : integer := 0; -- sequence number
         variable stack : stack_register; -- call stack
-        variable stack_current_scopes : stack_text_field_array; -- called scopes
+        variable stack_scopes : stack_text_field_array; -- called scopes
+        variable stack_par_scopes : stack_text_field_array; -- called scopes
         variable stack_called_labels : stack_text_field_array; -- called labels
         variable stack_called_files : stack_text_line_array; -- called files
         variable stack_called_file_line_numbers : stack_numbers_array; -- called line numbers
@@ -254,7 +257,6 @@ begin
         variable var_stm_lines : t_stm_lines_ptr;
 
         variable main_label_text_field : text_field;
-        variable nul_text_field : text_field;
         variable main_line : integer := 0;
         variable main_entered : integer := 0;
 
@@ -268,6 +270,8 @@ begin
         variable branch_to_interrupt_v_line : integer := 0;
 
         variable called_label : text_field;
+        variable tmp_called_label : text_field;
+        variable nul_scope : text_field;
         variable current_scope : text_field;
         variable current_par_scope : text_field;
         
@@ -315,7 +319,8 @@ begin
             end if;
 
             if main_entered = 0 then
-                current_scope(1) := nul;           
+                current_scope := nul_scope; 
+                current_par_scope := nul_scope;           
                 access_variable(defined_vars, current_scope, main_label_text_field, main_line, valid, machine_value_width);
                 assert valid = 1
                 report lf & "error: Entry point proc Main:'" & main_label_text_field(1 to fld_len(main_label_text_field)) & "' scope:'" & current_scope(1 to fld_len(current_scope)) & "' not found !"
@@ -324,16 +329,21 @@ begin
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
                                  par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
+                                 
+                report "exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 main_entered := 1;
                 stack(stack_ptr) := v_line;
                 stack_called_labels(stack_ptr) := main_label_text_field;
+                stack_scopes(stack_ptr) := current_scope;
+                stack_par_scopes(stack_ptr) := current_par_scope;
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line;                  
                 in_call_advanced_par := false;
-                stack_current_scopes(stack_ptr) := current_scope;
+                stack_scopes(stack_ptr) := current_scope;
 
             elsif branch_to_interrupt then
-                current_scope(1) := nul; 
+                current_scope := nul_scope;
+                current_par_scope := nul_scope;
                 if (stack_ptr >= 31) then
                     assert false
                     report " line " & (integer'image(file_line)) & " interrupt enter error: stack over run, calls to deeply nested!!"
@@ -361,11 +371,14 @@ begin
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
                                  par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
+                report "exec interrupt entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 stack_called_labels(stack_ptr) := branch_to_interrupt_label;
+                stack_scopes(stack_ptr) := current_scope;
+                stack_par_scopes(stack_ptr) := current_par_scope;
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line;
                 in_call_advanced_par := false;
-                stack_current_scopes(stack_ptr) := current_scope;
+                stack_scopes(stack_ptr) := current_scope;
                 wait for 0 ns;
 
             else
@@ -389,9 +402,9 @@ begin
                 executing_file <= file_name;
                 wait for 100 ps;
 
-                if trc_on(0) = '1' then
+                --if trc_on(0) = '1' then
                     report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
-                end if;
+                --end if;
 
                 -- include "an_include.stm"
                 if instruction(1 to len) = INSTR_INCLUDE then
@@ -1481,19 +1494,24 @@ begin
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
                     end if;
-                    -- report " line " & (integer'image(file_line)) & "return_call stack_ptr decremented to = " & integer'image(stack_ptr);
                     v_line := stack(stack_ptr);
-                    current_scope := stack_current_scopes(stack_ptr);
-                    if stack_ptr > 0 then
-                        current_par_scope := stack_current_scopes(stack_ptr - 1);
-                    else 
-                        current_par_scope(1) := nul;
-                    end if;
+                    current_scope := stack_scopes(stack_ptr);
+                    current_par_scope := stack_par_scopes(stack_ptr);
                     if trc_on(5) = '1' then
-                        report instruction(1 to len) & ":  if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
-                        report instruction(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
-                        report instruction(1 to len) & ":  decremented stack_ptr:" & integer'image(stack_ptr);
-                        report instruction(1 to len) & ":  set to goto v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report instruction(1 to len) & ":  decremented stack_ptr is:" & integer'image(stack_ptr);
+                        report instruction(1 to len) & ":  restored if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
+                        report instruction(1 to len) & ":  restored act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
+                        report instruction(1 to len) & ":  restored v_line to goto: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report instruction(1 to len) & ":  restored current_scope: stack(" & integer'image(stack_ptr) & ") = " & current_scope;
+                        report instruction(1 to len) & ":  restored current_par_scope: stack(" & integer'image(stack_ptr) & ") = " & current_par_scope;
+                        tmp_called_label := stack_called_labels(stack_ptr);
+                        report instruction(1 to len) & ":  restored called_label: stack(" & integer'image(stack_ptr) & ") = " & tmp_called_label; 
+                        tmp_file_name := stack_called_files(stack_ptr) ;
+                        tmp_file_line := stack_called_file_line_numbers(stack_ptr);   
+                        report instruction(1 to len) & ":  restored file_name: stack(" & integer'image(stack_ptr) & ") = " & tmp_file_name;
+                        report instruction(1 to len) & ":  restored file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(tmp_file_line);                        
+                        
+                        
                     end if;
                     wait for 0 ns;
 
@@ -1511,21 +1529,29 @@ begin
                     severity failure;
                     stack(stack_ptr) := v_line;
                     get_inst_field_1(inst_sequ, v_line, called_label);
-                    stack_called_labels(stack_ptr) := called_label;
-                    stack_current_scopes(stack_ptr) :=  current_scope;
+                    stack_called_labels(stack_ptr) := called_label;                                     
+                    stack_scopes(stack_ptr) := current_scope;
+                    stack_par_scopes(stack_ptr) := current_par_scope;
                     stack_called_files(stack_ptr) := file_name;
-                    stack_called_file_line_numbers(stack_ptr) := file_line;                  
+                    stack_called_file_line_numbers(stack_ptr) := file_line;              
                     if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
-                        in_call_advanced_par := true;
-                        current_par_scope := current_scope;
-                        current_scope :=  called_label;
+                        in_call_advanced_par := true;     
+                        current_par_scope := current_scope;                                                           
+                        current_scope := strip_leading_dollar(called_label);                       
                     elsif instruction(1 to len) = INSTR_CALL_PAR_NOPAR_0 or instruction(1 to len) = INSTR_CALL_PAR_NOPAR_1 then
-                        current_scope :=  called_label;
+                        current_par_scope := nul_scope;  
+                        current_scope := strip_leading_dollar(called_label);
                     else
-                        current_scope(1):= nul;
+                        current_par_scope := nul_scope; 
+                        current_scope := nul_scope;
                     end if;                                     
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
+                        report instruction(1 to len) & ":  push current_scope: stack(" & integer'image(stack_ptr) & ") = " & current_scope;
+                        report instruction(1 to len) & ":  push current_par_scope: stack(" & integer'image(stack_ptr) & ") = " & current_par_scope;
+                        report instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
+                        report instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
                     end if;
                     stack_ptr := stack_ptr + 1;
                     v_line := to_integer(par1(30 downto 0)) - 1;

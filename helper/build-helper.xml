@@ -54,7 +54,7 @@
 	
 	<target name="_helper-run-junit-sample-transformation" description="run junit sample transformation">
 		<xslt in="helper/junit-support/xml/testSuitesSimulation-Corrected.xml" out="helper/junit-support/html/testSuitesSimulation-Corrected.html"
-		      style="helper/junit-support/styles/junit-noframes.xsl">
+		      style="helper/junit-support/styles/junit-frames.xsl">
 		</xslt>
 	</target>
 

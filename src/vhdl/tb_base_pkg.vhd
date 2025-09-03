@@ -394,6 +394,8 @@ package tb_base_pkg is
     --  procedure copy stm_text into an existing pointer
     procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
                                    variable txt_str : in stm_text);
+                                   
+    function strip_leading_dollar(itxt : in text_field) return text_field;
 
     --  function short text_line (remove 'nul')
     function stm_text_crop(txt : in stm_text) return string;
