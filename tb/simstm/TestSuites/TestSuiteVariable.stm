@@ -30,6 +30,12 @@ file TestCaseVariableInvFile "../../SimulationResults/{@c3}_{@c2}.xml"
 file TestCaseVariableLdStartFile "../../SimulationResults/{@c3}_{@c2}.start"
 file TestCaseVariableLdFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
+file TestCaseVariableParameterStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseVariableParameterFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
+file TestCaseVariableScopeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
+file TestCaseVariableScopeFile "../../SimulationResults/{@c3}_{@c2}.xml"
+
 testSuiteVariable:
 proc
     call $testCaseVariableAdd
@@ -42,6 +48,19 @@ proc
     call $testCaseVariableXor
     call $testCaseVariableInv
     call $testCaseVariableLd
+    call $testCaseVariableScope
+    call $testCaseVariableParameter
+end proc
+
+
+testCaseVariableParameter:
+proc
+    call $testVariableParameter ()
+end proc
+
+testCaseVariableScope:
+proc
+    call $testVariableScope ()
 end proc
 
 testCaseVariableLd:

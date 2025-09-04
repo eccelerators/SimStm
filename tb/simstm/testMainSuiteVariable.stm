@@ -1,6 +1,8 @@
 include "Common/Common.stm"
 
 include "Variable/variable.stm"
+include "Variable/variable_scope.stm"
+include "Variable/variable_parameter.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
 

@@ -203,6 +203,9 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
+            for i in 0 to stim_to_integer(p2, name, line_num)-1 loop
+                temp_var.var_stm_array(i) := to_unsigned(0, stm_value_width);
+            end loop;
             temp_var.var_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
@@ -1000,6 +1003,7 @@ package body tb_interpreter_pkg is
         
     begin
         sequ_line := sequ_numb;
+        nul_scope(1) := nul;
         v_tmp_fn_ptr := file_list;
         for i in 1 to path_name'high loop
             include_file_path_name(i) := path_name(i);
@@ -1149,6 +1153,7 @@ package body tb_interpreter_pkg is
         variable in_call_par : boolean := false;
 
     begin
+        nul_scope(1) := nul;
         -- open the stimulus_file and check
         file_open(v_stat, stimulus, path_name & file_name, read_mode);
         assert v_stat = open_ok
@@ -1522,13 +1527,12 @@ package body tb_interpreter_pkg is
         variable line : integer; -- value of the file_line
         variable file_name : text_line;
         variable tmp_file_list : file_def_ptr := file_list;
-        variable tmp_scope : text_field;
         
     begin
         inst_ptr := inst_sequ;
         -- go through all the instructions
-        dump_variables(var_list, stm_value_width); --TODO: remove
-        dump_inst_sequ(inst_sequ, tmp_file_list); --TODO: remove
+        -- dump_variables(var_list, stm_value_width); --TODO: remove
+        -- dump_inst_sequ(inst_sequ, tmp_file_list); --TODO: remove
         while inst_ptr.next_rec /= null loop
             line := inst_ptr.file_line;
             get_instruction_file_name(tmp_file_list, inst_ptr.file_idx, file_name);

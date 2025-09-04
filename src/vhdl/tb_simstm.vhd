@@ -150,10 +150,10 @@ begin
         variable last_sequ_ptr : stim_line_ptr;
 
         variable instruction : text_field; -- instruction field
+        variable tmp_instruction : text_field; -- remembered instruction field
         variable par1 : unsigned(machine_value_width - 1 downto 0); -- parameter 1
         variable par2 : unsigned(machine_value_width - 1 downto 0); -- parameter 2
-        variable par2_text : text_field; -- parameter 2 text
-        variable par2_substituted : unsigned(machine_value_width - 1 downto 0); -- parameter 2 substituted         
+        variable par2_text : text_field; -- parameter 2 text        
         variable par3 : unsigned(machine_value_width - 1 downto 0); -- parameter 3
         variable par4 : unsigned(machine_value_width - 1 downto 0); -- parameter 4
         variable par5 : unsigned(machine_value_width - 1 downto 0); -- parameter 5
@@ -166,6 +166,7 @@ begin
         variable file_name : text_line; -- the file name the line came from
         variable tmp_file_name : text_line; -- the file name the line came from
         variable v_line : integer := 0; -- sequence number
+        variable tmp_v_line : integer := 0; -- remembered sequence number
         variable stack : stack_register; -- call stack
         variable stack_scopes : stack_text_field_array; -- called scopes
         variable stack_par_scopes : stack_text_field_array; -- called scopes
@@ -273,11 +274,10 @@ begin
         variable tmp_called_label : text_field;
         variable nul_scope : text_field;
         variable current_scope : text_field;
-        variable current_par_scope : text_field;
-        
-        variable in_call_advanced_par : boolean := false;
+        variable current_par_scope : text_field;        
 
     begin
+        nul_scope(1) := nul;
         marker <= (others => '0');
         verify_passes <= (others => '0');
         verify_failures <= (others => '0');
@@ -338,7 +338,6 @@ begin
                 stack_par_scopes(stack_ptr) := current_par_scope;
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line;                  
-                in_call_advanced_par := false;
                 stack_scopes(stack_ptr) := current_scope;
 
             elsif branch_to_interrupt then
@@ -377,7 +376,6 @@ begin
                 stack_par_scopes(stack_ptr) := current_par_scope;
                 stack_called_files(stack_ptr) := file_name;
                 stack_called_file_line_numbers(stack_ptr) := file_line;
-                in_call_advanced_par := false;
                 stack_scopes(stack_ptr) := current_scope;
                 wait for 0 ns;
 
@@ -402,9 +400,9 @@ begin
                 executing_file <= file_name;
                 wait for 100 ps;
 
-                --if trc_on(0) = '1' then
+                if trc_on(0) = '1' then
                     report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
-                --end if;
+                end if;
 
                 -- include "an_include.stm"
                 if instruction(1 to len) = INSTR_INCLUDE then
@@ -446,21 +444,10 @@ begin
                 -- equ operand1_and_target $operand2
                 -- equ operand1_and_target 0xF0
                 elsif instruction(1 to len) = INSTR_EQU then                  
-                    if in_call_advanced_par and par2_text(1) = '$' then
-                        access_variable(defined_vars, current_par_scope, par2_text, temp_stm_value, valid);
-                        assert valid /= 0
-                        report " line " & (integer'image(file_line)) & " equ error: cannot access  variable, it may be a constant ?"
-                        severity failure;                    
-                        update_variable(defined_vars, par1, temp_stm_value, valid);
-                        assert valid /= 0
-                        report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
-                        severity failure;
-                    else
-                        update_variable(defined_vars, par1, par2, valid);
-                        assert valid /= 0
-                        report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
-                        severity failure;                    
-                    end if;
+                    update_variable(defined_vars, par1, par2, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
+                    severity failure;                    
 
                 -- add operand1_and_target $operand2
                 -- add operand1_and_target 0xF0
@@ -1509,9 +1496,7 @@ begin
                         tmp_file_name := stack_called_files(stack_ptr) ;
                         tmp_file_line := stack_called_file_line_numbers(stack_ptr);   
                         report instruction(1 to len) & ":  restored file_name: stack(" & integer'image(stack_ptr) & ") = " & tmp_file_name;
-                        report instruction(1 to len) & ":  restored file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(tmp_file_line);                        
-                        
-                        
+                        report instruction(1 to len) & ":  restored file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(tmp_file_line);                                                                     
                     end if;
                     wait for 0 ns;
 
@@ -1528,16 +1513,62 @@ begin
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;
                     stack(stack_ptr) := v_line;
+                    tmp_v_line := to_integer(par1(30 downto 0)) - 1; 
+                    tmp_instruction := instruction;
                     get_inst_field_1(inst_sequ, v_line, called_label);
                     stack_called_labels(stack_ptr) := called_label;                                     
                     stack_scopes(stack_ptr) := current_scope;
                     stack_par_scopes(stack_ptr) := current_par_scope;
                     stack_called_files(stack_ptr) := file_name;
                     stack_called_file_line_numbers(stack_ptr) := file_line;              
-                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
-                        in_call_advanced_par := true;     
+                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then    
                         current_par_scope := current_scope;                                                           
-                        current_scope := strip_leading_dollar(called_label);                       
+                        current_scope := strip_leading_dollar(called_label);     
+                        while true loop
+                            v_line := v_line + 1;
+                            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
+                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             last_sequ_num, last_sequ_ptr);
+                            if trc_on(2) = '1' then
+                                dump_variables(defined_vars, machine_value_width);
+                            end if;
+                            if trc_on(1) = '1' then
+                                print_inst(inst_sequ, v_line, file_list);
+                            end if;            
+                            executing_line <= file_line;
+                            executing_file <= file_name;
+                            wait for 100 ps;           
+                            if trc_on(0) = '1' then
+                                report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
+                            end if;
+                            -- equ operand1_and_target $operand2
+                            -- equ operand1_and_target 0xF0
+                            if instruction(1 to len) = INSTR_EQU or instruction(1 to len) = INSTR_EQU_PAR_CLOSE then                  
+                                if par2_text(1) = '$' then
+                                    access_variable(defined_vars, current_par_scope, par2_text, temp_stm_value, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot access  variable, it may be a constant ?"
+                                    severity failure;                    
+                                    update_variable(defined_vars, par1, temp_stm_value, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
+                                    severity failure;
+                                else
+                                    update_variable(defined_vars, par1, par2, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
+                                    severity failure;                    
+                                end if;    
+                            -- ) 
+                            -- equ operand1_and_target $operand2 )
+                            -- equ operand1_and_target 0xF0 )
+                            elsif instruction(1 to len) = INSTR_PAR_CLOSE or instruction(1 to len) = INSTR_EQU_PAR_CLOSE then
+                                current_par_scope := nul_scope; 
+                                exit;
+                            end if;               
+                       end loop; 
+                       stack(stack_ptr) := v_line;                         
+                                          
                     elsif instruction(1 to len) = INSTR_CALL_PAR_NOPAR_0 or instruction(1 to len) = INSTR_CALL_PAR_NOPAR_1 then
                         current_par_scope := nul_scope;  
                         current_scope := strip_leading_dollar(called_label);
@@ -1546,26 +1577,24 @@ begin
                         current_scope := nul_scope;
                     end if;                                     
                     if trc_on(5) = '1' then
-                        report instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
-                        report instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
-                        report instruction(1 to len) & ":  push current_scope: stack(" & integer'image(stack_ptr) & ") = " & current_scope;
-                        report instruction(1 to len) & ":  push current_par_scope: stack(" & integer'image(stack_ptr) & ") = " & current_par_scope;
-                        report instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
-                        report instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
+                        report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
+                        report tmp_instruction(1 to len) & ":  push current_scope: stack(" & integer'image(stack_ptr) & ") = " & current_scope;
+                        report tmp_instruction(1 to len) & ":  push current_par_scope: stack(" & integer'image(stack_ptr) & ") = " & current_par_scope;
+                        report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
+                        report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
                     end if;
                     stack_ptr := stack_ptr + 1;
-                    v_line := to_integer(par1(30 downto 0)) - 1;
+                    v_line := tmp_v_line;
                     if trc_on(5) = '1' then
-                        report instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
-                        report instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                        report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                        report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
                     end if;
                     
-                -- )  
+                -- ) 
                 elsif instruction(1 to len) = INSTR_PAR_CLOSE then
-                    if in_call_advanced_par then
-                        in_call_advanced_par := false;
-                    end if;
-                    
+                    null;           
+                                        
                 -- log message $INFO "some message"
                 -- log message  $INFO "misc_proc severity: {}" $INFO
                 elsif instruction(1 to len) = INSTR_LOG_MESSAGE then

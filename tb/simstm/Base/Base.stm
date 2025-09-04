@@ -29,7 +29,7 @@
 -- ******************************************************************************
 
 -- parameter
-const ALLWAYS 0
+const ALWAYS 0
 const FAILURE 0
 const ERROR 10
 const WARNING 20

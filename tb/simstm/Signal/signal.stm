@@ -52,7 +52,7 @@ proc
 
     signal write out_signal_3000 0
 
-    log message $ALLWAYS "signal verify intended error on no match"
+    log message $ALWAYS "signal verify intended error on no match"
     signal verify in_signal_2000 val_signal_read_back 1 1
     call $incExpectedStandardTestVerifyFailureCount
 

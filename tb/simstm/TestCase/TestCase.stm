@@ -17,7 +17,7 @@ var TestCaseSimulatedDurationTime 0
 
 beginTestCaseIndexedSuiteIndexed:
 proc
-    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
+    log message $ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
@@ -41,7 +41,7 @@ end proc
 
 beginTestCaseSuiteIndexed:
 proc
-    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
+    log message $ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 0
     lines delete all TestCaseLines
@@ -65,7 +65,7 @@ end proc
 
 beginTestCaseIndexed:
 proc
-    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
+    log message $ALWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
@@ -89,12 +89,12 @@ end proc
 
 beginTestCase:
 proc
-    log message $ALLWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
+    log message $ALWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 0
     lines delete all TestCaseLines
     signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
-    log message $ALLWAYS "Started at simulation time of {:d}ns" $TestCaseSimulatedStartTime
+    log message $ALWAYS "Started at simulation time of {:d}ns" $TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
     file write TestCaseStartFile TestCaseStartLines
 
@@ -115,7 +115,7 @@ end proc
 endTestCase:
 proc
     signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
-    log message $ALLWAYS "Ended at simulation time of {:d}ns" $TestCaseSimulatedEndTime
+    log message $ALWAYS "Ended at simulation time of {:d}ns" $TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime $TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime $TestCaseSimulatedStartTime
     lines insert message TestCaseLines $TestCaseAssertionsInsertionPoint' assertions="{:d}"' $StandardTestVerifyPassCountResult
@@ -130,15 +130,15 @@ proc
      file append TestCaseFile TestCaseLines
      if $TestSuiteHasIndex = 1
          if $TestCaseHasIndex = 1
-             log message $ALLWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
+             log message $ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" $TestSuiteIndex $TestCaseIndex
          else
-             log message $ALLWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
+             log message $ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" $TestSuiteIndex
          end if
      else
          if $TestCaseHasIndex = 1
-             log message $ALLWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
+             log message $ALWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" $TestCaseIndex
          else
-             log message $ALLWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
+             log message $ALWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
          end if
      end if
 end proc

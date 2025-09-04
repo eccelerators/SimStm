@@ -81,7 +81,7 @@ proc
     bus verify busToTest 32 0 valBusWishbone 0x55555555 0xffffffff
     bus verify busToTest 32 4 valBusWishbone 0xaaaaaaaa 0xaaaaaaaa
     bus verify busToTest 32 8 valBusWishbone 0x00000000 0x00000000
-    log message $ALLWAYS "bus verify intended error on no match"
+    log message $ALWAYS "bus verify intended error on no match"
     bus verify wb_bus32 32 0 wb_value32 0x00000000 0xffffffff
     call $incExpectedStandardTestVerifyFailureCount
 

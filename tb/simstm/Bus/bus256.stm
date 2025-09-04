@@ -167,7 +167,7 @@ proc
     bus verify busToTest 256 0 valBus256Wishbone 0x5555555555555555555555555555555555555555555555555555555555555555 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     bus verify busToTest 256 32 valBus256Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 256 64 valBus256Wishbone 0x0000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
-    log message $ALLWAYS "bus verify intended error on no match"
+    log message $ALWAYS "bus verify intended error on no match"
     bus verify wb_bus256 256 0 wb_value256 0x00000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     call $incExpectedStandardTestVerifyFailureCount
 
