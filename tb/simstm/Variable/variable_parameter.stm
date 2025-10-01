@@ -1,10 +1,12 @@
 
 proc testVariableParameter ()
+    
+    var par_out 0
 
     call $startStandardTestShell
     
     call $checkParameterInput ( 
-    	equ par_in 0xAA
+    	var pointer copy par_in par_out
     )
 
     call $endStandardTestShell
@@ -15,6 +17,7 @@ end proc
 proc checkParameterInput ( 
 	var par_in 0
 )
+    equ par_out 0xab
 	var verify par_in 0xAA $MAX
 end proc
 

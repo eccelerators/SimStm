@@ -179,7 +179,7 @@ package body tb_interpreter_pkg is
             temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
-            temp_var.var_value := to_unsigned(0, stm_value_width);
+            temp_var.var_value := null;
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
@@ -199,7 +199,7 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := to_unsigned(0, stm_value_width);
+            temp_var.var_value := null;
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
@@ -219,7 +219,7 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := to_unsigned(0, stm_value_width);
+            temp_var.var_value := null;
             temp_var.var_stm_text := str_ptr;
             temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
             temp_var.var_stm_array := null;
@@ -233,7 +233,8 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
-            temp_var.var_value := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to integer
+            temp_var.var_value := new unsigned;
+            temp_var.var_value := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
@@ -247,6 +248,7 @@ package body tb_interpreter_pkg is
             temp_var.var_name(1 to (length - 1)) := p1(1 to (length - 1));
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
+            temp_var.var_value := new t_stm_value;
             temp_var.var_value := to_unsigned(sequ_num, stm_value_width);
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);

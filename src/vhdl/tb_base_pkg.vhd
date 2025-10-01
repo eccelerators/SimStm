@@ -77,6 +77,9 @@ package tb_base_pkg is
     type stack_text_line_array is array (31 downto 0) of text_line;
     type stack_numbers_array is array (31 downto 0) of integer;
 
+    type t_stm_value is array (natural range <>) of unsigned;
+    type t_stm_value_ptr is access t_stm_value;
+
     -- define the stimulus line record and access
     type stim_line;
     type stim_line_ptr is access stim_line; -- pointer to stim_line record

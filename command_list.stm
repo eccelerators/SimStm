@@ -64,6 +64,62 @@ var expected_value 0
 var mask_value 0
 array another_array 16
 
+-- advanced
+VarPointer:
+proc
+    var pointer copy a_varA a_varB
+end proc
+
+proc procNoPar1 ()
+	var test_variable_scope_add_1 1
+end proc
+
+proc procNoPar2 ( )
+	var test_variable_scope_add_1 1
+end proc
+
+callNoPar1:
+proc 
+	call $procNoPar1 ()
+end proc
+
+callNoPar2:
+proc 
+	call $procNoPar2 ( )
+end proc
+
+proc procPar1 (
+	var parA 0
+	var parB 0
+)
+	 add a_varC $parA
+	 add a_varC $parB
+end proc
+
+proc procPar2 (
+	var parA 0
+	var parB 0 )
+	 add a_varC $parA
+	 add a_varC $parB
+end proc
+
+callPar1:
+proc 
+	call $procPar1 (
+		equ parA 0
+		var pointer copy parB a_varC
+	)
+end proc
+
+callPar2:
+proc 
+	call $procPar2 ( 
+		equ parA 0
+		var pointer copy parB a_varC )
+end proc
+
+
+
 VarVerify:
 proc
     var verify position $expected_value $mask_value
@@ -89,7 +145,7 @@ end proc
 
 file_proc:
 proc
-    file writeable a_fileA result
+    file writable a_fileA result
     file readable a_fileA result
     file appendable a_fileA result
     file write a_fileA a_lines

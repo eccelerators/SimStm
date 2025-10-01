@@ -447,7 +447,18 @@ begin
                     update_variable(defined_vars, par1, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
-                    severity failure;                    
+                    severity failure;
+                    
+                -- d_var s_var
+                elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY then
+                    index_variable(defined_vars, par2, temp_stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
+                    severity failure;
+                    update_variable(defined_vars, par1, var_stm_array, valid);
+                    assert valid /= 0
+                    report "var_pointer error: not a var name??"
+                    severity failure;                
 
                 -- add operand1_and_target $operand2
                 -- add operand1_and_target 0xF0
@@ -1558,11 +1569,25 @@ begin
                                     assert valid /= 0
                                     report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                                     severity failure;                    
-                                end if;    
+                                end if; 
+                            -- var pointer copy d_var s_var
+                            elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY or instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
+                                index_variable(defined_vars, par2, var_stm_array, valid);
+                                assert valid /= 0
+                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
+                                severity failure;
+                                update_variable(defined_vars, par1, var_stm_array, valid);
+                                assert valid /= 0
+                                report "var_pointer error: not a var name??"
+                                severity failure;          
+                                   
                             -- ) 
                             -- equ operand1_and_target $operand2 )
                             -- equ operand1_and_target 0xF0 )
-                            elsif instruction(1 to len) = INSTR_PAR_CLOSE or instruction(1 to len) = INSTR_EQU_PAR_CLOSE then
+                            -- var pointer copy d_var s_var )
+                            elsif instruction(1 to len) = INSTR_PAR_CLOSE 
+                                  or instruction(1 to len) = INSTR_EQU_PAR_CLOSE
+                                  or instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
                                 current_par_scope := nul_scope; 
                                 exit;
                             end if;               

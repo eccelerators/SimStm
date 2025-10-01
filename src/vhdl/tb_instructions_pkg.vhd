@@ -72,6 +72,8 @@ package tb_instructions_pkg is
     constant INSTR_REM : string := "rem";
     constant INSTR_EQU : string := "equ";
     constant INSTR_EQU_PAR_CLOSE : string := "equ_)";
+    constant INSTR_VAR_POINTER_COPY : string := "var_pointer_copy";
+    constant INSTR_VAR_POINTER_COPY_PAR_CLOSE : string := "var_pointer_copy_)";
     constant INSTR_MUL : string := "mul";
     constant INSTR_SHL : string := "shl";
     constant INSTR_SHR : string := "shr";
@@ -215,7 +217,6 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_INCLUDE, 1);
         define_instruction(inst_list, INSTR_LOOP, 1);
         define_instruction(inst_list, INSTR_VAR, 2);
-        define_instruction(inst_list, INSTR_VAR_PAR_CLOSE, 2);
         -- variable
         define_instruction(inst_list, INSTR_VAR_VERIFY, 3);
         define_instruction(inst_list, INSTR_ADD, 2);
@@ -224,6 +225,8 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_REM, 2);
         define_instruction(inst_list, INSTR_EQU, 2);
         define_instruction(inst_list, INSTR_EQU_PAR_CLOSE, 2);
+        define_instruction(inst_list, INSTR_VAR_POINTER_COPY, 2);
+        define_instruction(inst_list, INSTR_VAR_POINTER_COPY_PAR_CLOSE, 2);
         define_instruction(inst_list, INSTR_MUL, 2);
         define_instruction(inst_list, INSTR_SHL, 2);
         define_instruction(inst_list, INSTR_SHR, 2);
@@ -330,7 +333,9 @@ package body tb_instructions_pkg is
         variable token3_len : integer;
         variable token4_len : integer;
         variable token : text_field := token1;
+        variable no_token : text_field;
     begin
+        no_token(1) := nul;
         if valid > 1 then
             if token1(1 to 3) = "end" then
                 token1_len := 3;
@@ -358,7 +363,7 @@ package body tb_instructions_pkg is
                 end if;
             elsif token1(1 to 3) = "equ" then
                 token1_len := 3;
-                if token4(1 to 1) = "(" then
+                if token4(1 to 1) = ")" then
                     token4_len := 1;
                     token_merge := 14;
                 end if;
@@ -517,9 +522,17 @@ package body tb_instructions_pkg is
                 if token2(1 to 6) = "verify" then
                     token2_len := 6;
                     token_merge := 12;
-                elsif token4(1 to 1) = "(" then
-                    token4_len := 1;
-                    token_merge := 14;
+                elsif token2(1 to 7) = "pointer" then
+                    token2_len := 7;
+                    if token3(1 to 4) = "copy" then
+                        if token4(1 to 1) = ")" then
+                            token4_len := 1;
+                            token_merge := 1234;  
+                        else
+                            token3_len := 4;
+                            token_merge := 123;
+                        end if;                    
+                    end if;
                 end if;           
             elsif token1(1 to 6) = "signal" then
                 token1_len := 6;
@@ -631,6 +644,21 @@ package body tb_instructions_pkg is
             otoken6 := token8;
             otoken7 := token9;
             ovalid := valid - 2;
+        elsif token_merge = 1234 then
+            token(token1_len + 2 to token1_len + token2_len + 1) := token2(1 to token2_len);
+            token(token1_len + 1) := '_';
+            token(token1_len + token2_len + 3 to token1_len + token2_len + token3_len + 2) := token3(1 to token3_len);
+            token(token1_len + 1 + token2_len + 1) := '_';
+            token(token1_len + token2_len + token3_len + 4 to token1_len + token2_len + token3_len + token4_len + 3) := token4(1 to token4_len);
+            token(token1_len + 1 + token2_len + 1 + token3_len + 1) := '_';
+            otoken1 := token;
+            otoken2 := token5;
+            otoken3 := token6;
+            otoken4 := token7;
+            otoken5 := token8;
+            otoken6 := token9;
+            otoken7 := no_token;
+            ovalid := valid - 2;
         elsif token_merge = 12 then
             token(token1_len + 2 to token1_len + token2_len + 1) := token2(1 to token2_len);
             token(token1_len + 1) := '_';
@@ -667,7 +695,7 @@ package body tb_instructions_pkg is
         assert (inst'high <= max_field_len)
         report lf & "error: creation of instruction of length greater than max_field_len attemped!!" & lf & "this max is currently set to " & (integer'image(max_field_len))
         severity failure;
-        -- get to the last element and test is not exsiting
+        -- get to the last element and test it is not existing
         v_temp_inst := inst_set;
         v_inst_ptr := inst_set;
         -- zero the size
