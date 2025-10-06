@@ -64,7 +64,8 @@ var expected_value 0
 var mask_value 0
 array another_array 16
 
--- advanced
+-------------------------------------------
+-- begin advanced
 VarPointer:
 proc
     var pointer copy a_varA a_varB
@@ -118,7 +119,8 @@ proc
 		var pointer copy parB a_varC )
 end proc
 
-
+-- end advanced
+-------------------------------------------
 
 VarVerify:
 proc

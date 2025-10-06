@@ -722,6 +722,15 @@ package body tb_base_pkg is
         end loop;
         writeline(output, l);
     end procedure;
+    
+    function txt_field_to_string(s : in text_field) return string is
+        variable os : string(1 to fld_len(s));
+    begin
+        for i in 1 to fld_len(s) loop
+            os(i) := s(i);
+        end loop;
+        return os;
+    end function;
 
     function std_vec2c(vec : in std_logic_vector(3 downto 0)) return character is
     begin

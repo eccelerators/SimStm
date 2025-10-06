@@ -152,6 +152,7 @@ begin
         variable instruction : text_field; -- instruction field
         variable tmp_instruction : text_field; -- remembered instruction field
         variable par1 : unsigned(machine_value_width - 1 downto 0); -- parameter 1
+        variable par1_text : text_field; -- parameter 1 text 
         variable par2 : unsigned(machine_value_width - 1 downto 0); -- parameter 2
         variable par2_text : text_field; -- parameter 2 text        
         variable par3 : unsigned(machine_value_width - 1 downto 0); -- parameter 3
@@ -212,6 +213,7 @@ begin
         variable temp_stm_value : unsigned(machine_value_width - 1 downto 0);
         variable temp_stm_value_b : unsigned(machine_value_width - 1 downto 0);
         variable number_found : integer;
+        variable temp_stm_value_ptr : t_stm_value_ptr;
 
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
@@ -327,7 +329,7 @@ begin
                 severity failure;
                 v_line := main_line;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
-                                 par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                 par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                                  
                 report "exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
@@ -368,7 +370,7 @@ begin
 
                 v_line := branch_to_interrupt_v_line;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
-                                 par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                 par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                 report "exec interrupt entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 stack_called_labels(stack_ptr) := branch_to_interrupt_label;
@@ -383,7 +385,7 @@ begin
 
                 v_line := v_line + 1;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope, 
-                                 par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                 par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
 
                 if trc_on(3) = '1' then
@@ -451,11 +453,11 @@ begin
                     
                 -- d_var s_var
                 elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY then
-                    index_variable(defined_vars, par2, temp_stm_value, valid);
+                    index_variable_value_ptr(defined_vars, par2, temp_stm_value_ptr, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
                     severity failure;
-                    update_variable(defined_vars, par1, var_stm_array, valid);
+                    update_variable_value_ptr(defined_vars, par1, temp_stm_value_ptr, valid);
                     assert valid /= 0
                     report "var_pointer error: not a var name??"
                     severity failure;                
@@ -1190,7 +1192,7 @@ begin
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                         par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                         par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
@@ -1205,7 +1207,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
                         if trc_on(4) = '1' then
@@ -1231,7 +1233,7 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                         par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                         par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         while (instruction(1 to len) /= INSTR_IF) and instruction(1 to len) /= INSTR_END_IF loop
                             assert v_line < inst_sequ.num_of_lines
@@ -1239,7 +1241,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
@@ -1278,7 +1280,7 @@ begin
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
@@ -1293,7 +1295,7 @@ begin
                                 severity failure;
                                 v_line := v_line + 1;
                                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                                 par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                                 par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                                  last_sequ_num, last_sequ_ptr);
                             end loop;
                             if trc_on(4) = '1' then
@@ -1317,7 +1319,7 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                         par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                         par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                          last_sequ_num, last_sequ_ptr);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or instruction(1 to len) /= INSTR_END_IF loop
@@ -1332,7 +1334,7 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                         end loop;
 
@@ -1538,7 +1540,7 @@ begin
                         while true loop
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, current_scope,
-                                             par1, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                                             par1, par1_text, par2, par2_text, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                              last_sequ_num, last_sequ_ptr);
                             if trc_on(2) = '1' then
                                 dump_variables(defined_vars, machine_value_width);
@@ -1571,15 +1573,38 @@ begin
                                     severity failure;                    
                                 end if; 
                             -- var pointer copy d_var s_var
-                            elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY or instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
-                                index_variable(defined_vars, par2, var_stm_array, valid);
+                            elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY or instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then     
+                                access_variable_value_ptr(defined_vars, current_scope, par2_text, temp_stm_value_ptr, valid);
                                 assert valid /= 0
-                                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
-                                severity failure;
-                                update_variable(defined_vars, par1, var_stm_array, valid);
-                                assert valid /= 0
-                                report "var_pointer error: not a var name??"
-                                severity failure;          
+                                report " line " & (integer'image(file_line)) & " equ error: cannot access variable pointer, it may be a constant ?"
+                                severity failure;                               
+                                if valid = 1 then
+                                    -- par2 source is called procedure
+                                    -- par1 destination is caller or global
+                                    access_variable_value_ptr(defined_vars, current_par_scope, par1_text, temp_stm_value_ptr, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot access variable pointer, it may be a constant ?"
+                                    severity failure;                   
+                                    update_variable_value_ptr(defined_vars, par1, temp_stm_value_ptr, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable pointer, it may be a constant ?"
+                                    severity failure;
+                               else
+                                    -- par2 source is caller or global
+                                    -- par1 destination is called procedure
+                                    access_variable_value_ptr(defined_vars, current_par_scope, par2_text, temp_stm_value_ptr, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot access variable pointer, it may be a constant ?"
+                                    severity failure; 
+                                    access_variable_value_ptr(defined_vars, current_scope, par1_text, temp_stm_value_ptr, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot access variable pointer, it may be a constant ?"
+                                    severity failure;                   
+                                    update_variable_value_ptr(defined_vars, par1, temp_stm_value_ptr, valid);
+                                    assert valid /= 0
+                                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable pointer, it may be a constant ?"
+                                    severity failure;                               
+                               end if;                              
                                    
                             -- ) 
                             -- equ operand1_and_target $operand2 )

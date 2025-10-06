@@ -163,7 +163,7 @@ package tb_base_pkg is
         var_name : text_field;
         var_scope : text_field;
         var_index : integer;
-        var_value : unsigned;
+        var_value : t_stm_value_ptr;
         var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_text_enclosing_quote : character;
@@ -447,6 +447,9 @@ package tb_base_pkg is
     --  procedure to get string of the txt pointer
     procedure txt_to_string(variable ptr : in stm_text_ptr;
                             variable str : out stm_text);
+                            
+    -- function to get string of the txt field                     
+    function txt_field_to_string(s : in text_field) return string;
 
     function to_str_hex(int : integer) return string;
 

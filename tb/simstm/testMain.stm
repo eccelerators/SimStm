@@ -12,6 +12,8 @@ include "Base/Array.stm"
 include "Other/other.stm"
 include "Variable/variable.stm"
 include "Variable/variable_scope.stm"
+include "Variable/variable_local.stm"
+include "Variable/variable_pointer.stm"
 
 
 include "Array/array.stm"
@@ -43,9 +45,11 @@ proc
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
     -- call $testBus256
-
+    -- call $testVariableLocal ()
     -- call $testVariableScope ()
-    call $testVariableParameter ()
+    call $testVariablePointer ()
+    -- call $testVariableParameterIn ()
+    -- call $testVariableParameterOut ()
     -- call $testLinesSize
 
     log message $INFO "Main test finished"
