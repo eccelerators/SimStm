@@ -144,7 +144,7 @@ class GenerateProposalForSetupPy:
                                     testsuite_name = l.split(':')[0]
                                     break
                             entry_file = "testMainSuite" + TestSuiteObjectName + ".stm"
-                            entry_label = "$testMainSuite" + TestSuiteObjectName
+                            entry_label = "testMainSuite" + TestSuiteObjectName
                         if isIndexedTestSuite:
                             tsmf = open(project_folder_path + '/tb/simstm/' + entry_file, 'r')
                             tsmf_lines = tsmf.readlines()
@@ -187,7 +187,7 @@ class GenerateProposalForSetupPy:
                                     testlab_name = l.split(':')[0]
                                     break
                             entry_file = "testMainLab" + TestLabObjectName + ".stm"
-                            entry_label = "$testMainLab" + TestLabObjectName
+                            entry_label = "testMainLab" + TestLabObjectName
                         TestLabFileDictList.append({"testlab-name": testlab_name,
                                                     "file": "TestLabs/" + f,
                                                     "entry-file": entry_file,

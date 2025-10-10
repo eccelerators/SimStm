@@ -55,7 +55,7 @@ end proc
 
 testCaseVariableParameter:
 proc
-    call testVariableParameter ()
+    call testVariableParameterIn ()
 end proc
 
 testCaseVariableScope:

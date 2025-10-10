@@ -1596,7 +1596,7 @@ package body tb_interpreter_pkg is
                 dest_i := k;
             elsif insert_call_stack_label then
                 stack_called_label := stack_called_labels(stack_ptr - previous_level);
-                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label, 2);
+                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_label);
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
