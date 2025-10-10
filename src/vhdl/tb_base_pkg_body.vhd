@@ -2,7 +2,7 @@
 --             Copyright 2023  Ken Campbell
 --               All rights reserved.
 -------------------------------------------------------------------------------
--- $Author: sckoarn $
+-- Author: sckoarn
 --
 -- Description :  The the testbench package header file.
 --
@@ -670,6 +670,21 @@ package body tb_base_pkg is
         variable rtn : boolean;
     begin
         if c >= '0' and c <= '9' then
+            rtn := true;
+        else
+            rtn := false;
+        end if;
+        return rtn;
+    end function;
+    
+    function is_txt_var_first_character(constant c : in character) return boolean is
+        variable rtn : boolean;
+    begin
+        if c >= '0' and c <= '9' then
+            rtn := true;
+        elsif c >= 'A' and c <= 'Z' then
+            rtn := true;
+        elsif c >= 'a' and c <= 'z' then
             rtn := true;
         else
             rtn := false;
@@ -1345,22 +1360,7 @@ package body tb_base_pkg is
             end loop;
         end if;
     end procedure;
-    
-    function strip_leading_dollar(itxt : in text_field) return text_field is
-        variable l : integer;
-        variable otxt : text_field;
-    begin
-        if itxt(1) = '$' then
-            l := fld_len(itxt);
-            for i in 2 to l loop
-                otxt(i - 1) := itxt(i);
-            end loop;
-        else
-            otxt := itxt;
-        end if;    
-        return otxt;
-    end function;
-    
+        
     function stm_text_crop(txt : in stm_text) return string is
         variable l : integer;
     begin

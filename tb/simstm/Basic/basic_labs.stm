@@ -19,9 +19,9 @@ include "Basic/lib6.stm"
 testBasicIncludeFlat:
 proc
     log message 0 "load file test.stm"
-    call $Lib1
-    call $Lib2
-    call $Lib3
+    call Lib1
+    call Lib2
+    call Lib3
     finish
 
 end proc
@@ -33,9 +33,9 @@ testBasicIncludeNested:
 proc
 
     log message 0 "load file test.stm"
-    call $Lib4
-    call $Lib5
-    call $Lib6
+    call Lib4
+    call Lib5
+    call Lib6
     finish
 
 end proc

@@ -2,7 +2,7 @@ var valBus128Wishbone 0
 
 testBus128:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
 
     bus write busToTest 128 0 0x55555555555555555555555555555555
@@ -88,12 +88,12 @@ proc
     bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0x80000000000000000000000000000000
     bus verify busToTest 128 0 valBus128Wishbone 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testBus128VerifySuccess:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write busToTest  128 0 0x55555555555555555555555555555555
     bus write busToTest  128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -103,7 +103,7 @@ proc
     bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 128 32 valBus128Wishbone 0x0000000000000000 0x0000000000000000
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var wb_value128 0
@@ -111,7 +111,7 @@ bus wb_bus128 0
 
 testBus128VerifyFail:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write wb_bus128 128 0 0x55555555555555555555555555555555
     bus write wb_bus128 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -119,44 +119,44 @@ proc
     bus verify busToTest 128 0 valBus128Wishbone 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
     bus verify busToTest 128 16 valBus128Wishbone 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 128 32 valBus128Wishbone 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-    log message $ALWAYS "bus verify intended error on no match"
+    log message ALWAYS "bus verify intended error on no match"
     bus verify wb_bus128 128 0 wb_value128 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
-    call $incExpectedStandardTestVerifyFailureCount
+    call incExpectedStandardTestVerifyFailureCount
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testBus128TimeOutRead:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write busToTest 128 0 0x55555555555555555555555555555555
     bus timeout set wb_bus128 1
     bus timeout get wb_bus128 wb_value128
-    var verify wb_value128 1 $MAX
+    var verify wb_value128 1 MAX
     bus read busToTest 128 0 valBus128Wishbone
-    call $incExpectedStandardTestBusTimeoutFailureCount
+    call incExpectedStandardTestBusTimeoutFailureCount
 
     bus timeout set wb_bus128 1000000000
     bus timeout get wb_bus128 wb_value128
-    var verify wb_value128 1000000000 $MAX
+    var verify wb_value128 1000000000 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testBus128TimeOutWrite:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus timeout set wb_bus128 1
     bus timeout get wb_bus128 wb_value128
-    var verify wb_value128 1 $MAX
+    var verify wb_value128 1 MAX
     bus write busToTest 128 0 0x55555555555555555555555555555555
-    call $incExpectedStandardTestBusTimeoutFailureCount
+    call incExpectedStandardTestBusTimeoutFailureCount
 
     bus timeout set wb_bus128 1000000000
     bus timeout get wb_bus128 wb_value128
-    var verify wb_value128 1000000000 $MAX
+    var verify wb_value128 1000000000 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc

@@ -43,12 +43,12 @@ var ArrayFillTmpVal 0
 arrayFill:
 proc
     equ ArrayFillIndex 0
-    equ ArrayFillTmpVal $ArrayFillVal
+    equ ArrayFillTmpVal ArrayFillVal
     array size ArrayToFill ArrayFillSize
-    loop $ArrayFillSize
-        array set ArrayToFill $ArrayFillIndex $ArrayFillTmpVal
-        add ArrayFillTmpVal $ArrayFillValIncrement
-        if $ArrayFillTmpVal > $ArrayFillValMaximum
+    loop ArrayFillSize
+        array set ArrayToFill ArrayFillIndex ArrayFillTmpVal
+        add ArrayFillTmpVal ArrayFillValIncrement
+        if ArrayFillTmpVal > ArrayFillValMaximum
             equ ArrayFillTmpVal 0
         end if
         add ArrayFillIndex 1
@@ -73,12 +73,12 @@ var ArrayFillCount 0
 
 arrayFillSlice:
 proc
-    equ ArrayFillIndex $ArrayFillSliceStartIndex
-    equ ArrayFillTmpVal $ArrayFillVal
-    loop $ArrayFillCount
-        array set ArrayToFill $ArrayFillIndex $ArrayFillTmpVal
-        add ArrayFillTmpVal $ArrayFillValIncrement
-        if $ArrayFillTmpVal > $ArrayFillValMaximum
+    equ ArrayFillIndex ArrayFillSliceStartIndex
+    equ ArrayFillTmpVal ArrayFillVal
+    loop ArrayFillCount
+        array set ArrayToFill ArrayFillIndex ArrayFillTmpVal
+        add ArrayFillTmpVal ArrayFillValIncrement
+        if ArrayFillTmpVal > ArrayFillValMaximum
             equ ArrayFillTmpVal 0
         end if
         add ArrayFillIndex 1
@@ -105,15 +105,15 @@ proc
     equ ArrayCompareEquality 1
     array size ArrayCompare0 ArrayCompareSize0
     array size ArrayCompare1 ArrayCompareSize1
-    if $ArrayCompareSize0 != $ArrayCompareSize1
-        log message $ArrayCompareVerbosity "arrayCompare: arrays differ in size, size0:{}, size1{}" $ArrayCompareSize0 $ArrayCompareSize1
+    if ArrayCompareSize0 != ArrayCompareSize1
+        log message ArrayCompareVerbosity "arrayCompare: arrays differ in size, size0:{}, size1{}" ArrayCompareSize0 ArrayCompareSize1
         equ ArrayCompareEquality 0
     else
-        loop $ArrayCompareSize0
-            array get ArrayCompare0 $ArrayCompareIndex ArrayCompareTmpVal0
-            array get ArrayCompare1 $ArrayCompareIndex ArrayCompareTmpVal1
-            if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
-                log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index:{}, value0:{}, value1:{}" $ArrayCompareIndex $ArrayCompareTmpVal0 $ArrayCompareTmpVal1
+        loop ArrayCompareSize0
+            array get ArrayCompare0 ArrayCompareIndex ArrayCompareTmpVal0
+            array get ArrayCompare1 ArrayCompareIndex ArrayCompareTmpVal1
+            if ArrayCompareTmpVal0 != ArrayCompareTmpVal1
+                log message ArrayCompareVerbosity "arrayCompare: arrays differ at index:{}, value0:{}, value1:{}" ArrayCompareIndex ArrayCompareTmpVal0 ArrayCompareTmpVal1
                 equ ArrayCompareEquality 0
             end if
             add ArrayCompareIndex 1
@@ -143,14 +143,14 @@ var ArrayCmp1Idx 0
 
 arrayCompareSlice:
 proc
-    equ ArrayCmp0Idx $ArrayCompare0SliceStartIndex
-    equ ArrayCmp1Idx $ArrayCompare1SliceStartIndex
+    equ ArrayCmp0Idx ArrayCompare0SliceStartIndex
+    equ ArrayCmp1Idx ArrayCompare1SliceStartIndex
     equ ArrayCompareEquality 1
-    loop $ArrayCompareCount
-        array get ArrayCompare0 $ArrayCmp0Idx ArrayCompareTmpVal0
-        array get ArrayCompare1 $ArrayCmp1Idx ArrayCompareTmpVal1
-        if $ArrayCompareTmpVal0 != $ArrayCompareTmpVal1
-            log message $ArrayCompareVerbosity "arrayCompare: arrays differ at index0:{}, value0:{}, index1:{}, value1:{}" $ArrayCmp0Idx $ArrayCompareTmpVal0 $ArrayCmp1Idx $ArrayCompareTmpVal1
+    loop ArrayCompareCount
+        array get ArrayCompare0 ArrayCmp0Idx ArrayCompareTmpVal0
+        array get ArrayCompare1 ArrayCmp1Idx ArrayCompareTmpVal1
+        if ArrayCompareTmpVal0 != ArrayCompareTmpVal1
+            log message ArrayCompareVerbosity "arrayCompare: arrays differ at index0:{}, value0:{}, index1:{}, value1:{}" ArrayCmp0Idx ArrayCompareTmpVal0 ArrayCmp1Idx ArrayCompareTmpVal1
             equ ArrayCompareEquality 0
         end if
         add ArrayCompareIndex 1
@@ -181,102 +181,102 @@ arrayDump:
 proc
     equ ArrayDumpIndex 0
     array size ArrayToDump ArrayDumpSize
-    equ ArrayDumpLoopNumber $ArrayDumpSize
+    equ ArrayDumpLoopNumber ArrayDumpSize
     div ArrayDumpLoopNumber 8
-    equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
+    equ ArrayDumpDoneInLoop ArrayDumpLoopNumber
     mul ArrayDumpDoneInLoop 8
-    equ ArrayDumpRemaining $ArrayDumpSize
-    sub ArrayDumpRemaining $ArrayDumpDoneInLoop
-    log message $ArrayDumpVerbosity "array: dump "
+    equ ArrayDumpRemaining ArrayDumpSize
+    sub ArrayDumpRemaining ArrayDumpDoneInLoop
+    log message ArrayDumpVerbosity "array: dump "
     equ ArrayDumpIndex 0
-    loop $ArrayDumpLoopNumber
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    loop ArrayDumpLoopNumber
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal7
         add ArrayDumpIndex 1
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
+        log message ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6 ArrayDumpVal7
     end loop
-    if $ArrayDumpRemaining = 7
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
+        log message ArrayDumpVerbosity " {} {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6
     end if
-    if $ArrayDumpRemaining = 6
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
+        log message ArrayDumpVerbosity " {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5
     end if
-    if $ArrayDumpRemaining = 5
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
-        log message $ArrayDumpVerbosity " {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
+        log message ArrayDumpVerbosity " {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4
     end if
-    if $ArrayDumpRemaining = 4
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
-        log message $ArrayDumpVerbosity " {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
+        log message ArrayDumpVerbosity " {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3
     end if
-    if $ArrayDumpRemaining = 3
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
-        log message $ArrayDumpVerbosity " {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
+        log message ArrayDumpVerbosity " {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2
     end if
-    if $ArrayDumpRemaining = 2
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
-        log message $ArrayDumpVerbosity " {} {}" $ArrayDumpVal0 $ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
+        log message ArrayDumpVerbosity " {} {}" ArrayDumpVal0 ArrayDumpVal1
     end if
-    if $ArrayDumpRemaining = 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
-        log message $ArrayDumpVerbosity " {}" $ArrayDumpVal0
+    if ArrayDumpRemaining = 1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
+        log message ArrayDumpVerbosity " {}" ArrayDumpVal0
     end if
 end proc
 
@@ -307,102 +307,102 @@ arrayDumpSlice:
 proc
     equ ArrayDumpIndex 0
     array size ArrayToDump ArrayDumpSize
-    equ ArrayDumpLoopNumber $ArrayDumpSliceCount
+    equ ArrayDumpLoopNumber ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
-    equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
+    equ ArrayDumpDoneInLoop ArrayDumpLoopNumber
     mul ArrayDumpDoneInLoop 8
-    equ ArrayDumpRemaining $ArrayDumpSliceCount
-    sub ArrayDumpRemaining $ArrayDumpDoneInLoop
-    log message $ArrayDumpVerbosity "array: dump "
-    equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    equ ArrayDumpRemaining ArrayDumpSliceCount
+    sub ArrayDumpRemaining ArrayDumpDoneInLoop
+    log message ArrayDumpVerbosity "array: dump "
+    equ ArrayDumpIndex ArrayDumpSliceStartIndex
+    loop ArrayDumpLoopNumber
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal7
         add ArrayDumpIndex 1
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
+        log message ArrayDumpVerbosity " {} {} {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6 ArrayDumpVal7
     end loop
-    if $ArrayDumpRemaining = 7
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
+        log message ArrayDumpVerbosity " {} {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6
     end if
-    if $ArrayDumpRemaining = 6
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {} {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
+        log message ArrayDumpVerbosity " {} {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5
     end if
-    if $ArrayDumpRemaining = 5
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
-        log message $ArrayDumpVerbosity " {} {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
+        log message ArrayDumpVerbosity " {} {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4
     end if
-    if $ArrayDumpRemaining = 4
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
-        log message $ArrayDumpVerbosity " {} {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
+        log message ArrayDumpVerbosity " {} {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3
     end if
-    if $ArrayDumpRemaining = 3
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
-        log message $ArrayDumpVerbosity " {} {} {}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
+        log message ArrayDumpVerbosity " {} {} {}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2
     end if
-    if $ArrayDumpRemaining = 2
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
-        log message $ArrayDumpVerbosity " {} {}" $ArrayDumpVal0 $ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
+        log message ArrayDumpVerbosity " {} {}" ArrayDumpVal0 ArrayDumpVal1
     end if
-    if $ArrayDumpRemaining = 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
-        log message $ArrayDumpVerbosity " {}" $ArrayDumpVal0
+    if ArrayDumpRemaining = 1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
+        log message ArrayDumpVerbosity " {}" ArrayDumpVal0
     end if
 end proc
 
@@ -410,102 +410,102 @@ arrayDumpSliceDec:
 proc
     equ ArrayDumpIndex 0
     array size ArrayToDump ArrayDumpSize
-    equ ArrayDumpLoopNumber $ArrayDumpSliceCount
+    equ ArrayDumpLoopNumber ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
-    equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
+    equ ArrayDumpDoneInLoop ArrayDumpLoopNumber
     mul ArrayDumpDoneInLoop 8
-    equ ArrayDumpRemaining $ArrayDumpSliceCount
-    sub ArrayDumpRemaining $ArrayDumpDoneInLoop
-    log message $ArrayDumpVerbosity "array: dump "
-    equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    equ ArrayDumpRemaining ArrayDumpSliceCount
+    sub ArrayDumpRemaining ArrayDumpDoneInLoop
+    log message ArrayDumpVerbosity "array: dump "
+    equ ArrayDumpIndex ArrayDumpSliceStartIndex
+    loop ArrayDumpLoopNumber
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal7
         add ArrayDumpIndex 1
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
+        log message ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6 ArrayDumpVal7
     end loop
-    if $ArrayDumpRemaining = 7
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
+        log message ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6
     end if
-    if $ArrayDumpRemaining = 6
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
+        log message ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5
     end if
-    if $ArrayDumpRemaining = 5
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
+        log message ArrayDumpVerbosity " {:d} {:d} {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4
     end if
-    if $ArrayDumpRemaining = 4
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
+        log message ArrayDumpVerbosity " {:d} {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3
     end if
-    if $ArrayDumpRemaining = 3
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
-        log message $ArrayDumpVerbosity " {:d} {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
+        log message ArrayDumpVerbosity " {:d} {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2
     end if
-    if $ArrayDumpRemaining = 2
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
-        log message $ArrayDumpVerbosity " {:d} {:d}" $ArrayDumpVal0 $ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
+        log message ArrayDumpVerbosity " {:d} {:d}" ArrayDumpVal0 ArrayDumpVal1
     end if
-    if $ArrayDumpRemaining = 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
-        log message $ArrayDumpVerbosity " {:d}" $ArrayDumpVal0
+    if ArrayDumpRemaining = 1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
+        log message ArrayDumpVerbosity " {:d}" ArrayDumpVal0
     end if
 end proc
 
@@ -513,102 +513,102 @@ arrayDumpSliceBin:
 proc
     equ ArrayDumpIndex 0
     array size ArrayToDump ArrayDumpSize
-    equ ArrayDumpLoopNumber $ArrayDumpSliceCount
+    equ ArrayDumpLoopNumber ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
-    equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
+    equ ArrayDumpDoneInLoop ArrayDumpLoopNumber
     mul ArrayDumpDoneInLoop 8
-    equ ArrayDumpRemaining $ArrayDumpSliceCount
-    sub ArrayDumpRemaining $ArrayDumpDoneInLoop
-    log message $ArrayDumpVerbosity "array: dump "
-    equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    equ ArrayDumpRemaining ArrayDumpSliceCount
+    sub ArrayDumpRemaining ArrayDumpDoneInLoop
+    log message ArrayDumpVerbosity "array: dump "
+    equ ArrayDumpIndex ArrayDumpSliceStartIndex
+    loop ArrayDumpLoopNumber
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal7
         add ArrayDumpIndex 1
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
+        log message ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6 ArrayDumpVal7
     end loop
-    if $ArrayDumpRemaining = 7
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
+        log message ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6
     end if
-    if $ArrayDumpRemaining = 6
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
+        log message ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5
     end if
-    if $ArrayDumpRemaining = 5
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
+        log message ArrayDumpVerbosity " {:b} {:b} {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4
     end if
-    if $ArrayDumpRemaining = 4
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
+        log message ArrayDumpVerbosity " {:b} {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3
     end if
-    if $ArrayDumpRemaining = 3
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
-        log message $ArrayDumpVerbosity " {:b} {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
+        log message ArrayDumpVerbosity " {:b} {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2
     end if
-    if $ArrayDumpRemaining = 2
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
-        log message $ArrayDumpVerbosity " {:b} {:b}" $ArrayDumpVal0 $ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
+        log message ArrayDumpVerbosity " {:b} {:b}" ArrayDumpVal0 ArrayDumpVal1
     end if
-    if $ArrayDumpRemaining = 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
-        log message $ArrayDumpVerbosity " {:b}" $ArrayDumpVal0
+    if ArrayDumpRemaining = 1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
+        log message ArrayDumpVerbosity " {:b}" ArrayDumpVal0
     end if
 end proc
 
@@ -616,101 +616,101 @@ arrayDumpSliceOct:
 proc
     equ ArrayDumpIndex 0
     array size ArrayToDump ArrayDumpSize
-    equ ArrayDumpLoopNumber $ArrayDumpSliceCount
+    equ ArrayDumpLoopNumber ArrayDumpSliceCount
     div ArrayDumpLoopNumber 8
-    equ ArrayDumpDoneInLoop $ArrayDumpLoopNumber
+    equ ArrayDumpDoneInLoop ArrayDumpLoopNumber
     mul ArrayDumpDoneInLoop 8
-    equ ArrayDumpRemaining $ArrayDumpSliceCount
-    sub ArrayDumpRemaining $ArrayDumpDoneInLoop
-    log message $ArrayDumpVerbosity "array: dump "
-    equ ArrayDumpIndex $ArrayDumpSliceStartIndex
-    loop $ArrayDumpLoopNumber
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    equ ArrayDumpRemaining ArrayDumpSliceCount
+    sub ArrayDumpRemaining ArrayDumpDoneInLoop
+    log message ArrayDumpVerbosity "array: dump "
+    equ ArrayDumpIndex ArrayDumpSliceStartIndex
+    loop ArrayDumpLoopNumber
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal7
         add ArrayDumpIndex 1
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6 $ArrayDumpVal7
+        log message ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6 ArrayDumpVal7
     end loop
-    if $ArrayDumpRemaining = 7
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 7
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal6
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5 $ArrayDumpVal6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal6
+        log message ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5 ArrayDumpVal6
     end if
-    if $ArrayDumpRemaining = 6
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 6
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal5
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4 $ArrayDumpVal5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal5
+        log message ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4 ArrayDumpVal5
     end if
-    if $ArrayDumpRemaining = 5
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 5
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal4
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3 $ArrayDumpVal4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal4
+        log message ArrayDumpVerbosity " {:o} {:o} {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3 ArrayDumpVal4
     end if
-    if $ArrayDumpRemaining = 4
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 4
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal3
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2 $ArrayDumpVal3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal3
+        log message ArrayDumpVerbosity " {:o} {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2 ArrayDumpVal3
     end if
-    if $ArrayDumpRemaining = 3
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 3
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal2
-        log message $ArrayDumpVerbosity " {:o} {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1 $ArrayDumpVal2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal2
+        log message ArrayDumpVerbosity " {:o} {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1 ArrayDumpVal2
     end if
-    if $ArrayDumpRemaining = 2
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
+    if ArrayDumpRemaining = 2
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
         add ArrayDumpIndex 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal1
-        log message $ArrayDumpVerbosity " {:o} {:o}" $ArrayDumpVal0 $ArrayDumpVal1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal1
+        log message ArrayDumpVerbosity " {:o} {:o}" ArrayDumpVal0 ArrayDumpVal1
     end if
-    if $ArrayDumpRemaining = 1
-        array get ArrayToDump $ArrayDumpIndex ArrayDumpVal0
-        log message $ArrayDumpVerbosity " {:o}" $ArrayDumpVal0
+    if ArrayDumpRemaining = 1
+        array get ArrayToDump ArrayDumpIndex ArrayDumpVal0
+        log message ArrayDumpVerbosity " {:o}" ArrayDumpVal0
     end if
 end proc

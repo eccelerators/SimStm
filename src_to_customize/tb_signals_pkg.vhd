@@ -217,8 +217,8 @@ package body tb_signals_pkg is
         variable empty_label : line := new string'("");
         variable interrupt_labels : t_interrupt_labels := (
             -- TODO: Add here all your simstm interrupt entry procedure labels
-            new string'("$InterruptB"),
-            new string'("$InterruptA")
+            new string'("InterruptB"),
+            new string'("InterruptA")
         );
     begin
         interrupt_number := -1;

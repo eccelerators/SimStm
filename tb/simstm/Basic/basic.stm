@@ -8,25 +8,25 @@ const test_constant_5 5
 
 testBasicConst:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    log message 0 "test_constant_1: {}" $test_constant_1
-    equ tmp_variable $test_constant_1
-    var verify tmp_variable 1 $MAX
-    log message 0 "test_constant_2: {}" $test_constant_2
-    equ tmp_variable $test_constant_2
-    var verify tmp_variable 2 $MAX
-    log message 0 "test_constant_3: {}" $test_constant_3
-    equ tmp_variable $test_constant_3
-    var verify tmp_variable 3 $MAX
-    log message 0 "test_constant_4: {}" $test_constant_4
-    equ tmp_variable $test_constant_4
-    var verify tmp_variable 4 $MAX
-    log message 0 "test_constant_5: {}" $test_constant_5
-    equ tmp_variable $test_constant_5
-    var verify tmp_variable 5 $MAX
+    log message 0 "test_constant_1: {}" test_constant_1
+    equ tmp_variable test_constant_1
+    var verify tmp_variable 1 MAX
+    log message 0 "test_constant_2: {}" test_constant_2
+    equ tmp_variable test_constant_2
+    var verify tmp_variable 2 MAX
+    log message 0 "test_constant_3: {}" test_constant_3
+    equ tmp_variable test_constant_3
+    var verify tmp_variable 3 MAX
+    log message 0 "test_constant_4: {}" test_constant_4
+    equ tmp_variable test_constant_4
+    var verify tmp_variable 4 MAX
+    log message 0 "test_constant_5: {}" test_constant_5
+    equ tmp_variable test_constant_5
+    var verify tmp_variable 5 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 
 end proc
 
@@ -38,20 +38,20 @@ var test_variable_5 5
 
 testBasicVar:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    log message 0 "test_variable_1: {}" $test_variable_1
-    var verify test_variable_1 0b1 $MAX
-    log message 0 "test_variable_2: {}" $test_variable_2
-    var verify test_variable_2 0x2 $MAX
-    log message 0 "test_variable_3: {}" $test_variable_3
-    var verify test_variable_3 3 $MAX
-    log message 0 "test_variable_4: {}" $test_variable_4
-    var verify test_variable_4 4 $MAX
-    log message 0 "test_variable_5: {}" $test_variable_5
-    var verify test_variable_5 5 $MAX
+    log message 0 "test_variable_1: {}" test_variable_1
+    var verify test_variable_1 0b1 MAX
+    log message 0 "test_variable_2: {}" test_variable_2
+    var verify test_variable_2 0x2 MAX
+    log message 0 "test_variable_3: {}" test_variable_3
+    var verify test_variable_3 3 MAX
+    log message 0 "test_variable_4: {}" test_variable_4
+    var verify test_variable_4 4 MAX
+    log message 0 "test_variable_5: {}" test_variable_5
+    var verify test_variable_5 5 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var aab 1
@@ -62,20 +62,20 @@ var aba 5
 
 testBasicVar3:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    log message 0 "aab: {}" $aab
-    var verify test_variable_1 1 $MAX
-    log message 0 "abb: {}" $abb
-    var verify test_variable_2 2 $MAX
-    log message 0 "bba: {}" $bba
-    var verify test_variable_3 3 $MAX
-    log message 0 "cbb: {}" $cbb
-    var verify test_variable_4 4 $MAX
-    log message 0 "aba: {}" $aba
-    var verify test_variable_5 5 $MAX
+    log message 0 "aab: {}" aab
+    var verify test_variable_1 1 MAX
+    log message 0 "abb: {}" abb
+    var verify test_variable_2 2 MAX
+    log message 0 "bba: {}" bba
+    var verify test_variable_3 3 MAX
+    log message 0 "cbb: {}" cbb
+    var verify test_variable_4 4 MAX
+    log message 0 "aba: {}" aba
+    var verify test_variable_5 5 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 
 end proc
 
@@ -84,13 +84,13 @@ var loop_countb 0
 
 testBasicLoop:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     equ loop_counta 0
     loop 4
         log message 0 "log 0"
         add loop_counta 1
     end loop
-    var verify loop_counta 4 $MAX
+    var verify loop_counta 4 MAX
 
     equ loop_counta 0
     equ loop_countb 0
@@ -102,12 +102,12 @@ proc
             add loop_countb 1
         end loop
     end loop
-    var verify loop_counta 5 $MAX
-    var verify loop_countb 10 $MAX
+    var verify loop_counta 5 MAX
+    var verify loop_countb 10 MAX
 
     log message 0 "log 2"
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var resulta 0
@@ -144,10 +144,10 @@ proc
         log message 0 "enter multiple if 4"
         equ resultd 5
     end if
-    var verify resulta 2 $MAX
-    var verify resultb 3 $MAX
-    var verify resultc 4 $MAX
-    var verify resultd 5 $MAX
+    var verify resulta 2 MAX
+    var verify resultb 3 MAX
+    var verify resultc 4 MAX
+    var verify resultd 5 MAX
 
     log message 0 "test multiple if (2)"
     equ resulta 0
@@ -193,15 +193,15 @@ proc
         log message 0 "no enter multiple else"
         equ resulti 10
     end if
-    var verify resulta 2 $MAX
-    var verify resultb 0 $MAX
-    var verify resultc 0 $MAX
-    var verify resultd 0 $MAX
-    var verify resulte 0 $MAX
-    var verify resultf 0 $MAX
-    var verify resultg 0 $MAX
-    var verify resulth 0 $MAX
-    var verify resulti 0 $MAX
+    var verify resulta 2 MAX
+    var verify resultb 0 MAX
+    var verify resultc 0 MAX
+    var verify resultd 0 MAX
+    var verify resulte 0 MAX
+    var verify resultf 0 MAX
+    var verify resultg 0 MAX
+    var verify resulth 0 MAX
+    var verify resulti 0 MAX
 
     log message 0 "test multiple if (3)"
     equ resulta 0
@@ -231,11 +231,11 @@ proc
         log message 0 "no enter multiple else"
         equ resulte 6
     end if
-    var verify resulta 2 $MAX
-    var verify resultb 0 $MAX
-    var verify resultc 0 $MAX
-    var verify resultd 0 $MAX
-    var verify resulte 0 $MAX
+    var verify resulta 2 MAX
+    var verify resultb 0 MAX
+    var verify resultc 0 MAX
+    var verify resultd 0 MAX
+    var verify resulte 0 MAX
 
     log message 0 "test multiple if (4)"
     equ resulta 0
@@ -265,11 +265,11 @@ proc
         log message 0 "no enter multiple else"
         equ resulte 6
     end if
-    var verify resulta 0 $MAX
-    var verify resultb 0 $MAX
-    var verify resultc 0 $MAX
-    var verify resultd 5 $MAX
-    var verify resulte 0 $MAX
+    var verify resulta 0 MAX
+    var verify resultb 0 MAX
+    var verify resultc 0 MAX
+    var verify resultd 5 MAX
+    var verify resulte 0 MAX
 
     log message 0 "test multiple if (5)"
     equ resulta 0
@@ -302,13 +302,13 @@ proc
             end if
         end if
     end if
-    var verify resulta 0 $MAX
-    var verify resultb 3 $MAX
-    var verify resultc 0 $MAX
-    var verify resultd 0 $MAX
-    var verify resulte 0 $MAX
+    var verify resulta 0 MAX
+    var verify resultb 3 MAX
+    var verify resultc 0 MAX
+    var verify resultd 0 MAX
+    var verify resulte 0 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 
 end proc
 
@@ -318,7 +318,7 @@ var one  1
 
 testBasicIfElseElsif:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
     -- equal
 
@@ -327,49 +327,49 @@ proc
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 0 = 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 2 = 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
-    if $zero = 0
+    if zero = 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero = $zero
+    if zero = zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero = $one
+    if zero = one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero = $one
+    if zero = one
         log message 0 "no enter if"
     else
         log message 0 "enter else"
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 = 1
@@ -382,7 +382,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 0 = 1
@@ -395,7 +395,7 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
     -- not equal
     equ result 0
@@ -403,42 +403,42 @@ proc
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 != 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 2 != 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero != 0
+    if zero != 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero != $zero
+    if zero != zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero != $one
+    if zero != one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 0 != 0
@@ -451,7 +451,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 0 != 0
@@ -464,7 +464,7 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
     -- greater
     equ result 0
@@ -472,42 +472,42 @@ proc
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 > 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 2 > 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero > 0
+    if zero > 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero > $zero
+    if zero > zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero > $one
+    if zero > one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 > 0
@@ -520,7 +520,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 0 > 0
@@ -533,7 +533,7 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
     -- greater or equal
     equ result 0
@@ -541,42 +541,42 @@ proc
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 0 >= 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 2 >= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero >= 0
+    if zero >= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero >= $zero
+    if zero >= zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero >= $one
+    if zero >= one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 >= 1
@@ -589,7 +589,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 0 >= 1
@@ -602,7 +602,7 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
     -- smaller
     equ result 0
@@ -610,42 +610,42 @@ proc
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
     if 0 < 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 2 < 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero < 0
+    if zero < 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero < $zero
+    if zero < zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero < $one
+    if zero < one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 0 < 0
@@ -658,7 +658,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 0 < 0
@@ -671,7 +671,7 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
     -- smaller or equal
     equ result 0
@@ -679,42 +679,42 @@ proc
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 0 <= 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 2 <= 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 $MAX
+    var verify result 0 MAX
 
     equ result 0
-    if $zero <= 0
+    if zero <= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero <= $zero
+    if zero <= zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
-    if $zero <= $one
+    if zero <= one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 $MAX
+    var verify result 1 MAX
 
     equ result 0
     if 1 <= 0
@@ -727,7 +727,7 @@ proc
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 $MAX
+    var verify result 4 MAX
 
     equ result 0
     if 1 <= 0
@@ -740,6 +740,6 @@ proc
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 $MAX
+    var verify result 3 MAX
 
 end proc

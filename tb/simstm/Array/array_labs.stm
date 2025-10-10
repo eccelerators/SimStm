@@ -8,5 +8,5 @@ end proc
 
 testArraySetOutPos:
 proc
-    array set array_name_pos 3 $var_name_pos
+    array set array_name_pos 3 var_name_pos
 end proc

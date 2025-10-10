@@ -4,8 +4,8 @@ const test_constant_2 2
 testConstantAdd:
 proc
 
-    log message 0 "test_variable_1: {}" $test_constant_1
-    log message 0 "test_variable_2: {}" $test_constant_2
+    log message 0 "test_variable_1: {}" test_constant_1
+    log message 0 "test_variable_2: {}" test_constant_2
 
     add test_constant_1 10
     add test_constant_2 20

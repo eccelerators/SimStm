@@ -16,24 +16,24 @@ var valBusToTest 0
 logBusToTest:
 proc
     bus pointer get busToTest valBusToTest
-    if $valBusToTest = 0
-        log message $ALWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 1
-        log message $ALWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 2
-        log message $ALWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 3
-        log message $ALWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 4
-        log message $ALWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 5
-        log message $ALWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 6
-        log message $ALWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" $valBusToTest $MachineValueWidth
-    elsif $valBusToTest = 7
-        log message $ALWAYS "Testing bus({:d}) ram32 with machine value width {:d}" $valBusToTest $MachineValueWidth
+    if valBusToTest = 0
+        log message ALWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 1
+        log message ALWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 2
+        log message ALWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 3
+        log message ALWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 4
+        log message ALWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 5
+        log message ALWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 6
+        log message ALWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" valBusToTest MachineValueWidth
+    elsif valBusToTest = 7
+        log message ALWAYS "Testing bus({:d}) ram32 with machine value width {:d}" valBusToTest MachineValueWidth
     else
-        log message $ALWAYS "Testing bus({:d}) unknown with machine value width {:d}" $valBusToTest $MachineValueWidth
+        log message ALWAYS "Testing bus({:d}) unknown with machine value width {:d}" valBusToTest MachineValueWidth
     end if
 end proc
 

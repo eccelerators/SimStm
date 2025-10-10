@@ -38,52 +38,52 @@ file TestCaseVariableScopeFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
 testSuiteVariable:
 proc
-    call $testCaseVariableAdd
-    call $testCaseVariableAnd
-    call $testCaseVariableDiv
-    call $testCaseVariableEqu
-    call $testCaseVariableMul
-    call $testCaseVariableOr
-    call $testCaseVariableSub
-    call $testCaseVariableXor
-    call $testCaseVariableInv
-    call $testCaseVariableLd
-    call $testCaseVariableScope
-    call $testCaseVariableParameter
+    call testCaseVariableAdd
+    call testCaseVariableAnd
+    call testCaseVariableDiv
+    call testCaseVariableEqu
+    call testCaseVariableMul
+    call testCaseVariableOr
+    call testCaseVariableSub
+    call testCaseVariableXor
+    call testCaseVariableInv
+    call testCaseVariableLd
+    call testCaseVariableScope
+    call testCaseVariableParameter
 end proc
 
 
 testCaseVariableParameter:
 proc
-    call $testVariableParameter ()
+    call testVariableParameter ()
 end proc
 
 testCaseVariableScope:
 proc
-    call $testVariableScope ()
+    call testVariableScope ()
 end proc
 
 testCaseVariableLd:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableLdStartFile
     file pointer copy TestCaseFile TestCaseVariableLdFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableLd
+    call testVariableLd
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableLd test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -91,23 +91,23 @@ testCaseVariableInv:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableInvStartFile
     file pointer copy TestCaseFile TestCaseVariableInvFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableInv
+    call testVariableInv
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableInv test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -115,23 +115,23 @@ testCaseVariableXor:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableXorStartFile
     file pointer copy TestCaseFile TestCaseVariableXorFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableXor
+    call testVariableXor
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableXor test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -139,23 +139,23 @@ testCaseVariableSub:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableSubStartFile
     file pointer copy TestCaseFile TestCaseVariableSubFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableSub
+    call testVariableSub
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableSub test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -163,23 +163,23 @@ testCaseVariableOr:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableOrStartFile
     file pointer copy TestCaseFile TestCaseVariableOrFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableOr
+    call testVariableOr
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableOr test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -187,23 +187,23 @@ testCaseVariableMul:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableMulStartFile
     file pointer copy TestCaseFile TestCaseVariableMulFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableMul
+    call testVariableMul
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableMul test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -211,23 +211,23 @@ testCaseVariableEqu:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableEquStartFile
     file pointer copy TestCaseFile TestCaseVariableEquFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableEqu
+    call testVariableEqu
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableEqu test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -235,23 +235,23 @@ testCaseVariableDiv:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableDivStartFile
     file pointer copy TestCaseFile TestCaseVariableDivFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableDiv
+    call testVariableDiv
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableDiv test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -259,23 +259,23 @@ testCaseVariableAnd:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableAndStartFile
     file pointer copy TestCaseFile TestCaseVariableAndFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableAnd
+    call testVariableAnd
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableAnd test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -283,22 +283,22 @@ testCaseVariableAdd:
 proc
     file pointer copy TestCaseStartFile TestCaseVariableAddStartFile
     file pointer copy TestCaseFile TestCaseVariableAddFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testVariableAdd
+    call testVariableAdd
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "VariableAdd test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc

@@ -4,146 +4,146 @@
    var TestCaseBus256Index 0
 
 -- intern
-file TestCaseBus32StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus32Index
-file TestCaseBus32TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus32Index
+file TestCaseBus32StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
+file TestCaseBus32TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
 
-file TestCaseBus64StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus64Index
-file TestCaseBus64TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus64Index
+file TestCaseBus64StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
+file TestCaseBus64TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
 
-file TestCaseBus128StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus128Index
-file TestCaseBus128TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus128Index
+file TestCaseBus128StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
+file TestCaseBus128TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
 
-file TestCaseBus256StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" $TestSuiteIndex $TestCaseBus256Index
-file TestCaseBus256TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" $TestSuiteIndex $TestCaseBus256Index
+file TestCaseBus256StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
+file TestCaseBus256TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
 
 var RepeatedTestSuiteIndex 0
 
 testSuiteIndexedBus:
 proc
-    equ RepeatedTestSuiteIndex $TestSuiteIndex
+    equ RepeatedTestSuiteIndex TestSuiteIndex
     rem RepeatedTestSuiteIndex 8
-    if $RepeatedTestSuiteIndex <= 3
-        if $MachineValueWidth >= 32
+    if RepeatedTestSuiteIndex <= 3
+        if MachineValueWidth >= 32
             bus pointer copy busToTest wishbone32
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus32Index
-            call $testCaseBus32
-            call $testCaseBus32VerifySuccess
-            call $testCaseBus32VerifyFail
-            call $testCaseBus32TimeOutRead
-            call $testCaseBus32TimeOutWrite
+            equ TestCaseIndex TestCaseBus32Index
+            call testCaseBus32
+            call testCaseBus32VerifySuccess
+            call testCaseBus32VerifyFail
+            call testCaseBus32TimeOutRead
+            call testCaseBus32TimeOutWrite
             add TestCaseBus32Index 1
         end if
-        if $MachineValueWidth >= 64
+        if MachineValueWidth >= 64
             bus pointer copy busToTest wishbone64
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus64Index
-            call $testCaseBus64
-            call $testCaseBus64VerifySuccess
-            call $testCaseBus64VerifyFail
-            call $testCaseBus64TimeOutRead
-            call $testCaseBus64TimeOutWrite
+            equ TestCaseIndex TestCaseBus64Index
+            call testCaseBus64
+            call testCaseBus64VerifySuccess
+            call testCaseBus64VerifyFail
+            call testCaseBus64TimeOutRead
+            call testCaseBus64TimeOutWrite
             add TestCaseBus64Index 1
         end if
-        if $MachineValueWidth >= 128
+        if MachineValueWidth >= 128
             bus pointer copy busToTest wishbone128
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus128Index
-            call $testCaseBus128
-            call $testCaseBus128VerifySuccess
-            call $testCaseBus128VerifyFail
-            call $testCaseBus128TimeOutRead
-            call $testCaseBus128TimeOutWrite
+            equ TestCaseIndex TestCaseBus128Index
+            call testCaseBus128
+            call testCaseBus128VerifySuccess
+            call testCaseBus128VerifyFail
+            call testCaseBus128TimeOutRead
+            call testCaseBus128TimeOutWrite
             add TestCaseBus128Index 1
         end if
-        if $MachineValueWidth >= 256
+        if MachineValueWidth >= 256
             bus pointer copy busToTest wishbone256
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus256Index
-            call $testCaseBus256
-            call $testCaseBus256VerifySuccess
-            call $testCaseBus256VerifyFail
-            call $testCaseBus256TimeOutRead
-            call $testCaseBus256TimeOutWrite
+            equ TestCaseIndex TestCaseBus256Index
+            call testCaseBus256
+            call testCaseBus256VerifySuccess
+            call testCaseBus256VerifyFail
+            call testCaseBus256TimeOutRead
+            call testCaseBus256TimeOutWrite
             add TestCaseBus256Index 1
         end if
-    elsif $RepeatedTestSuiteIndex <= 5
-        if $MachineValueWidth >= 32
+    elsif RepeatedTestSuiteIndex <= 5
+        if MachineValueWidth >= 32
             bus pointer copy busToTest avalon32
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus32Index
-            call $testCaseBus32
-            call $testCaseBus32VerifySuccess
-            call $testCaseBus32VerifyFail
-            call $testCaseBus32TimeOutRead
-            call $testCaseBus32TimeOutWrite
+            equ TestCaseIndex TestCaseBus32Index
+            call testCaseBus32
+            call testCaseBus32VerifySuccess
+            call testCaseBus32VerifyFail
+            call testCaseBus32TimeOutRead
+            call testCaseBus32TimeOutWrite
             add TestCaseBus32Index 1
         end if
-        if $MachineValueWidth >= 64
+        if MachineValueWidth >= 64
             bus pointer copy busToTest avalon64
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus64Index
-            call $testCaseBus64
-            call $testCaseBus64VerifySuccess
-            call $testCaseBus64VerifyFail
-            call $testCaseBus64TimeOutRead
-            call $testCaseBus64TimeOutWrite
+            equ TestCaseIndex TestCaseBus64Index
+            call testCaseBus64
+            call testCaseBus64VerifySuccess
+            call testCaseBus64VerifyFail
+            call testCaseBus64TimeOutRead
+            call testCaseBus64TimeOutWrite
             add TestCaseBus64Index 1
         end if
-    elsif $RepeatedTestSuiteIndex = 6
-        if $MachineValueWidth >= 32
+    elsif RepeatedTestSuiteIndex = 6
+        if MachineValueWidth >= 32
             bus pointer copy busToTest axi4lite32
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus32Index
-            call $testCaseBus32
-            call $testCaseBus32VerifySuccess
-            call $testCaseBus32VerifyFail
-            call $testCaseBus32TimeOutRead
-            call $testCaseBus32TimeOutWrite
+            equ TestCaseIndex TestCaseBus32Index
+            call testCaseBus32
+            call testCaseBus32VerifySuccess
+            call testCaseBus32VerifyFail
+            call testCaseBus32TimeOutRead
+            call testCaseBus32TimeOutWrite
             add TestCaseBus32Index 1
         end if
-    elsif $RepeatedTestSuiteIndex = 7
-        if $MachineValueWidth >= 32
+    elsif RepeatedTestSuiteIndex = 7
+        if MachineValueWidth >= 32
             bus pointer copy busToTest ram32
             bus timeout set busToTest 1000
-            equ TestCaseIndex $TestCaseBus32Index
-            call $testCaseBus32
-            call $testCaseBus32VerifySuccess
-            call $testCaseBus32VerifyFail
-            call $testCaseBus32TimeOutRead
-            call $testCaseBus32TimeOutWrite
+            equ TestCaseIndex TestCaseBus32Index
+            call testCaseBus32
+            call testCaseBus32VerifySuccess
+            call testCaseBus32VerifyFail
+            call testCaseBus32TimeOutRead
+            call testCaseBus32TimeOutWrite
             add TestCaseBus32Index 1
         end if
     end if
@@ -153,24 +153,24 @@ testCaseBus32:
 proc
     file pointer copy TestCaseStartFile TestCaseBus32StartFile
     file pointer copy TestCaseFile TestCaseBus32File
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus32
+    call logBusToTest
+    call testBus32
 
-     if $StandardTestFailure != 0
+     if StandardTestFailure != 0
         lines append message TestCaseLines "Bus32 test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -178,24 +178,24 @@ testCaseBus32VerifySuccess:
 proc
     file pointer copy TestCaseStartFile TestCaseBus32VerifySuccessStartFile
     file pointer copy TestCaseFile TestCaseBus32VerifySuccessFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus32VerifySuccess
+    call logBusToTest
+    call testBus32VerifySuccess
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus32VerifySuccess test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -203,24 +203,24 @@ testCaseBus32VerifyFail:
 proc
     file pointer copy TestCaseStartFile TestCaseBus32VerifyFailStartFile
     file pointer copy TestCaseFile TestCaseBus32VerifyFailFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus32VerifyFail
+    call logBusToTest
+    call testBus32VerifyFail
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus32VerifyFail test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -228,24 +228,24 @@ testCaseBus32TimeOutRead:
 proc
     file pointer copy TestCaseStartFile TestCaseBus32TimeOutReadStartFile
     file pointer copy TestCaseFile TestCaseBus32TimeOutReadFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus32TimeOutRead
+    call logBusToTest
+    call testBus32TimeOutRead
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus32TimeOutRead test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -253,24 +253,24 @@ testCaseBus32TimeOutWrite:
 proc
     file pointer copy TestCaseStartFile TestCaseBus32TimeOutWriteStartFile
     file pointer copy TestCaseFile TestCaseBus32TimeOutWriteFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus32TimeOutWrite
+    call logBusToTest
+    call testBus32TimeOutWrite
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus32TimeOutWrite test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -278,24 +278,24 @@ testCaseBus64:
 proc
     file pointer copy TestCaseStartFile TestCaseBus64StartFile
     file pointer copy TestCaseFile TestCaseBus64File
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus64
+    call logBusToTest
+    call testBus64
 
-     if $StandardTestFailure != 0
+     if StandardTestFailure != 0
         lines append message TestCaseLines "Bus64 test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -303,24 +303,24 @@ testCaseBus64VerifySuccess:
 proc
     file pointer copy TestCaseStartFile TestCaseBus64VerifySuccessStartFile
     file pointer copy TestCaseFile TestCaseBus64VerifySuccessFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus64VerifySuccess
+    call logBusToTest
+    call testBus64VerifySuccess
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus64VerifySuccess test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -328,24 +328,24 @@ testCaseBus64VerifyFail:
 proc
     file pointer copy TestCaseStartFile TestCaseBus64VerifyFailStartFile
     file pointer copy TestCaseFile TestCaseBus64VerifyFailFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus64VerifyFail
+    call logBusToTest
+    call testBus64VerifyFail
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus64VerifyFail test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -353,24 +353,24 @@ testCaseBus64TimeOutRead:
 proc
     file pointer copy TestCaseStartFile TestCaseBus64TimeOutReadStartFile
     file pointer copy TestCaseFile TestCaseBus64TimeOutReadFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus64TimeOutRead
+    call logBusToTest
+    call testBus64TimeOutRead
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus64TimeOutRead test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -378,24 +378,24 @@ testCaseBus64TimeOutWrite:
 proc
     file pointer copy TestCaseStartFile TestCaseBus64TimeOutWriteStartFile
     file pointer copy TestCaseFile TestCaseBus64TimeOutWriteFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus64TimeOutWrite
+    call logBusToTest
+    call testBus64TimeOutWrite
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus64TimeOutWrite test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -403,24 +403,24 @@ testCaseBus128:
 proc
     file pointer copy TestCaseStartFile TestCaseBus128StartFile
     file pointer copy TestCaseFile TestCaseBus128File
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus128
+    call logBusToTest
+    call testBus128
 
-     if $StandardTestFailure != 0
+     if StandardTestFailure != 0
         lines append message TestCaseLines "Bus128 test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -428,24 +428,24 @@ testCaseBus128VerifySuccess:
 proc
     file pointer copy TestCaseStartFile TestCaseBus128VerifySuccessStartFile
     file pointer copy TestCaseFile TestCaseBus128VerifySuccessFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus128VerifySuccess
+    call logBusToTest
+    call testBus128VerifySuccess
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus128VerifySuccess test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -453,24 +453,24 @@ testCaseBus128VerifyFail:
 proc
     file pointer copy TestCaseStartFile TestCaseBus128VerifyFailStartFile
     file pointer copy TestCaseFile TestCaseBus128VerifyFailFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus128VerifyFail
+    call logBusToTest
+    call testBus128VerifyFail
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus128VerifyFail test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -478,24 +478,24 @@ testCaseBus128TimeOutRead:
 proc
     file pointer copy TestCaseStartFile TestCaseBus128TimeOutReadStartFile
     file pointer copy TestCaseFile TestCaseBus128TimeOutReadFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus128TimeOutRead
+    call logBusToTest
+    call testBus128TimeOutRead
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus128TimeOutRead test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -503,24 +503,24 @@ testCaseBus128TimeOutWrite:
 proc
     file pointer copy TestCaseStartFile TestCaseBus128TimeOutWriteStartFile
     file pointer copy TestCaseFile TestCaseBus128TimeOutWriteFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus128TimeOutWrite
+    call logBusToTest
+    call testBus128TimeOutWrite
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus128TimeOutWrite test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -528,24 +528,24 @@ testCaseBus256:
 proc
     file pointer copy TestCaseStartFile TestCaseBus256StartFile
     file pointer copy TestCaseFile TestCaseBus256File
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus256
+    call logBusToTest
+    call testBus256
 
-     if $StandardTestFailure != 0
+     if StandardTestFailure != 0
         lines append message TestCaseLines "Bus256 test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -553,24 +553,24 @@ testCaseBus256VerifySuccess:
 proc
     file pointer copy TestCaseStartFile TestCaseBus256VerifySuccessStartFile
     file pointer copy TestCaseFile TestCaseBus256VerifySuccessFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus256VerifySuccess
+    call logBusToTest
+    call testBus256VerifySuccess
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus256VerifySuccess test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -578,24 +578,24 @@ testCaseBus256VerifyFail:
 proc
     file pointer copy TestCaseStartFile TestCaseBus256VerifyFailStartFile
     file pointer copy TestCaseFile TestCaseBus256VerifyFailFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus256VerifyFail
+    call logBusToTest
+    call testBus256VerifyFail
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus256VerifyFail test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -603,24 +603,24 @@ testCaseBus256TimeOutRead:
 proc
     file pointer copy TestCaseStartFile TestCaseBus256TimeOutReadStartFile
     file pointer copy TestCaseFile TestCaseBus256TimeOutReadFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus256TimeOutRead
+    call logBusToTest
+    call testBus256TimeOutRead
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus256TimeOutRead test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -628,23 +628,23 @@ testCaseBus256TimeOutWrite:
 proc
     file pointer copy TestCaseStartFile TestCaseBus256TimeOutWriteStartFile
     file pointer copy TestCaseFile TestCaseBus256TimeOutWriteFile
-    call $beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $logBusToTest
-    call $testBus256TimeOutWrite
+    call logBusToTest
+    call testBus256TimeOutWrite
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "Bus256TimeOutWrite test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc

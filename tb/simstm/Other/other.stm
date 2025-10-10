@@ -6,31 +6,31 @@ var random_max 10
 
 testOtherRandom:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     loop 20
         random random_number 0 10
-        log message 0 "random_number: {:d}" $random_number
+        log message 0 "random_number: {:d}" random_number
     end loop
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testOtherSeed:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     seed 1
     loop 5
         random random_number 0 10
-        log message 0 "random_number: {:d}" $random_number
+        log message 0 "random_number: {:d}" random_number
     end loop
 
-    seed $seed_set
+    seed seed_set
     loop 5
-        random random_number $random_min $random_max
-        log message 0 "random_number: {:d}" $random_number
+        random random_number random_min random_max
+        log message 0 "random_number: {:d}" random_number
     end loop
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 const marker_1 1
@@ -44,71 +44,71 @@ const val_trace_on 1
 
 testOtherTrace:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     trace 1
     wait 100
     marker 0 1
-    marker $marker_1 $val_marker_high
+    marker marker_1 val_marker_high
     trace 0
     wait 1000
     marker 0 0
-    marker $marker_1 $val_marker_low
+    marker marker_1 val_marker_low
 
-    trace $val_trace_on
+    trace val_trace_on
     wait 100
     marker 14 1
-    marker $marker_15 $val_marker_high
+    marker marker_15 val_marker_high
     wait 100
     marker 14 0
-    marker $marker_15 $val_marker_low
-    trace $val_trace_off
+    marker marker_15 val_marker_low
+    trace val_trace_off
     wait 100
     marker 14 1
-    marker $marker_15 $val_marker_high
+    marker marker_15 val_marker_high
     wait 100
     marker 14 0
-    marker $marker_15 $val_marker_low
+    marker marker_15 val_marker_low
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testOtherMarker:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
     wait 100
     marker 0 1
-    marker $marker_1 $val_marker_high
+    marker marker_1 val_marker_high
     wait 1000
     marker 0 0
-    marker $marker_1 $val_marker_low
+    marker marker_1 val_marker_low
 
 
     wait 100
     marker 14 1
-    marker $marker_15 $val_marker_high
+    marker marker_15 val_marker_high
     wait 100
     marker 14 0
-    marker $marker_15 $val_marker_low
+    marker marker_15 val_marker_low
     wait 100
     marker 14 1
-    marker $marker_15 $val_marker_high
+    marker marker_15 val_marker_high
     wait 100
     marker 14 0
-    marker $marker_15 $val_marker_low
+    marker marker_15 val_marker_low
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testOtherWait:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
     trace 1
     wait 1000
     trace 0
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var test_variable_1 0xA1
@@ -119,24 +119,24 @@ var test_variable_5 0xF5
 
 testOtherLogSubstitutions:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    log message 0 "test_variable_1: {}" $test_variable_1
-    log message 0 "test_variable_1: {} test_variable_2: {}" $test_variable_1 $test_variable_2
-    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {}" $test_variable_1 $test_variable_2 $test_variable_2
-    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {} test_variable_4: {}" $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4
-    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {} test_variable_4: {} test_variable_5: {}" $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4 $test_variable_5
+    log message 0 "test_variable_1: {}" test_variable_1
+    log message 0 "test_variable_1: {} test_variable_2: {}" test_variable_1 test_variable_2
+    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {}" test_variable_1 test_variable_2 test_variable_2
+    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {} test_variable_4: {}" test_variable_1 test_variable_2 test_variable_3 test_variable_4
+    log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {} test_variable_4: {} test_variable_5: {}" test_variable_1 test_variable_2 test_variable_3 test_variable_4 test_variable_5
 
-    log message 0 "{}{}{}{}{}" $test_variable_1 $test_variable_2 $test_variable_3 $test_variable_4 $test_variable_5
+    log message 0 "{}{}{}{}{}" test_variable_1 test_variable_2 test_variable_3 test_variable_4 test_variable_5
 
-    log message 0 "test_variable_2: {}" $test_variable_2
-    log message 0 "test_variable_3: {}" $test_variable_3
-    log message 0 "test_variable_4: {}" $test_variable_4
-    log message 0 "test_variable_5: {}" $test_variable_5
+    log message 0 "test_variable_2: {}" test_variable_2
+    log message 0 "test_variable_3: {}" test_variable_3
+    log message 0 "test_variable_4: {}" test_variable_4
+    log message 0 "test_variable_5: {}" test_variable_5
 
-    log message $INFO "Main test call $endStandardTestShelled {}" $INFO
+    log message INFO "Main test call endStandardTestShelled {}" INFO
     wait 1000
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var test_variable_lf_1 0xA1
@@ -146,29 +146,29 @@ var test_variable_lf_4 0xE4
 
 testOtherLogFormats:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    call $testContent -- to have a reasonable call stack
+    call testContent -- to have a reasonable call stack
 
-    log message $INFO "Main test call $endStandardTestShelled {}" $INFO
+    log message INFO "Main test call endStandardTestShelled {}" INFO
     wait 1000
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testContent:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    log message 0 "test_variable_lf_1: {}" $test_variable_lf_1
-    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {}" $test_variable_lf_1 $test_variable_lf_2
-    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {} test_variable_lf_3: {}" $test_variable_lf_1 $test_variable_lf_2 $test_variable_lf_2
-    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {} test_variable_lf_3: {} test_variable_lf_4: {}" $test_variable_lf_1 $test_variable_lf_2 $test_variable_lf_3 $test_variable_lf_4
+    log message 0 "test_variable_lf_1: {}" test_variable_lf_1
+    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {}" test_variable_lf_1 test_variable_lf_2
+    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {} test_variable_lf_3: {}" test_variable_lf_1 test_variable_lf_2 test_variable_lf_2
+    log message 0 "test_variable_lf_1: {} test_variable_lf_2: {} test_variable_lf_3: {} test_variable_lf_4: {}" test_variable_lf_1 test_variable_lf_2 test_variable_lf_3 test_variable_lf_4
 
-    log message 0 "test_variable_lf_1: {}" $test_variable_lf_1
-    log message 0 "test_variable_lf_1: {:x} test_variable_lf_2: {:d} test_variable_lf_3: {:o} test_variable_lf_4: {:b}" $test_variable_lf_1 $test_variable_lf_2 $test_variable_lf_3 $test_variable_lf_4
+    log message 0 "test_variable_lf_1: {}" test_variable_lf_1
+    log message 0 "test_variable_lf_1: {:x} test_variable_lf_2: {:d} test_variable_lf_3: {:o} test_variable_lf_4: {:b}" test_variable_lf_1 test_variable_lf_2 test_variable_lf_3 test_variable_lf_4
 
-    log message 0 'test_variable_lf_1: {}' $test_variable_lf_1
-    log message 0 'test_variable_lf_1: {:x} test_variable_lf_2: {:d} test_variable_lf_3: {:o} test_variable_lf_4: {:b}' $test_variable_lf_1 $test_variable_lf_2 $test_variable_lf_3 $test_variable_lf_4
+    log message 0 'test_variable_lf_1: {}' test_variable_lf_1
+    log message 0 'test_variable_lf_1: {:x} test_variable_lf_2: {:d} test_variable_lf_3: {:o} test_variable_lf_4: {:b}' test_variable_lf_1 test_variable_lf_2 test_variable_lf_3 test_variable_lf_4
 
     log message 0 "label: {@c1}"
 
@@ -181,7 +181,7 @@ end proc
 
 testOtherLog:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     log message 0 "log 0"
     log message 1 "log 1"
     log message 2 "log 2"
@@ -211,7 +211,7 @@ proc
     log message 1 "log 1"
     log message 2 "log 2"
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 const year 0x2023
@@ -220,13 +220,13 @@ var day 0x22
 
 testOtherHelloWorld:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     loop 3
         -- currently values are only printed in hex format
-        log message 0 "Hello World {}-{}-{}" $year $month $day
+        log message 0 "Hello World {}-{}-{}" year month day
         wait 1000
     end loop
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var test_variable_call_1 1
@@ -237,18 +237,18 @@ var test_variable_call_5 5
 
 testOtherCall:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
 
-    call $callLabel1
-    call $callLabel2
+    call callLabel1
+    call callLabel2
 
-    log message 0 "test_variable_call_1: {}" $test_variable_call_1
-    log message 0 "test_variable_call_2: {}" $test_variable_call_2
-    log message 0 "test_variable_call_3: {}" $test_variable_call_3
-    log message 0 "test_variable_call_4: {}" $test_variable_call_4
-    log message 0 "test_variable_call_5: {}" $test_variable_call_5
+    log message 0 "test_variable_call_1: {}" test_variable_call_1
+    log message 0 "test_variable_call_2: {}" test_variable_call_2
+    log message 0 "test_variable_call_3: {}" test_variable_call_3
+    log message 0 "test_variable_call_4: {}" test_variable_call_4
+    log message 0 "test_variable_call_5: {}" test_variable_call_5
 
-    call $endStandardTestShell
+    call endStandardTestShell
 
 end proc
 
@@ -265,23 +265,23 @@ end proc
 callLabel2:
 proc
 
-    call $callLabel3
+    call callLabel3
     return
 end proc
 
 callLabel3:
 proc
 
-    call $callLabel4
-    log message 0 "test_variable_call_3: {}" $test_variable_call_3
-    log message 0 "test_variable_call_4: {}" $test_variable_call_4
-    log message 0 "test_variable_call_5: {}" $test_variable_call_5
+    call callLabel4
+    log message 0 "test_variable_call_3: {}" test_variable_call_3
+    log message 0 "test_variable_call_4: {}" test_variable_call_4
+    log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
 end proc
 
 callLabel4:
 proc
-    call $callLabel5
-    log message 0 "test_variable_call_5: {}" $test_variable_call_5
+    call callLabel5
+    log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
 end proc

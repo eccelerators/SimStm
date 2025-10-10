@@ -2,7 +2,7 @@
 --             Copyright 2023  Ken Campbell
 --               All rights reserved.
 -------------------------------------------------------------------------------
--- $Author: sckoarn $
+-- Author: sckoarn
 --
 -- Description :  The the testbench package header file.
 --
@@ -73,6 +73,7 @@ package tb_interpreter_pkg is
     procedure add_instruction(variable inst_list : inout stim_line_ptr;
                               variable var_list : inout var_field_ptr;
                               variable scope : in text_field;
+                              variable scope_left : in text_field;
                               variable inst : in text_field;
                               variable p1 : in text_field;
                               variable p2 : in text_field;
@@ -105,27 +106,30 @@ package tb_interpreter_pkg is
     --     inputs:
     --               text field containing variable
     --     outputs:
-    --               value  $var  returns value of var
+    --               value  var  returns value of var
     --               value  var   returns index of var
     --
     --               valid is 1, not valid is 0
     procedure access_variable(variable var_list : in var_field_ptr;
-                              variable scope : in text_field; 
-                              variable var : in text_field;
-                              variable value : out integer;
+                              variable var_scope : in text_field; 
+                              variable var_name : in text_field;
+                              variable var_index : out integer;
+                              variable var_value : out integer;
                               variable valid : out integer;
                               constant stm_value_width : in integer);
 
     procedure access_variable(variable var_list : in var_field_ptr;
-                              variable scope : in text_field; 
-                              variable var : in text_field;
-                              variable value : out unsigned;
+                              variable var_scope : in text_field;
+                              variable var_name : in text_field;
+                              variable var_index : out integer;
+                              variable var_value : out unsigned;
                               variable valid : out integer);
                               
     procedure access_variable_value_ptr(variable var_list : in var_field_ptr;
-                              variable scope : in text_field;
-                              variable var : in text_field;
-                              variable value_ptr : out t_stm_value_ptr;
+                              variable var_scope : in text_field;
+                              variable var_name : in text_field;
+                              variable var_index : out integer;
+                              variable var_value_ptr : out t_stm_value_ptr;
                               variable valid : out integer);
 
     -- access_inst_sequ
@@ -155,11 +159,16 @@ package tb_interpreter_pkg is
                                variable file_list : in file_def_ptr;
                                variable sequ_num : in integer;
                                variable inst : out text_field;
-                               variable scope : in text_field; 
+                               variable scope : out text_field;
+                               variable scope_left : out text_field;  
+                               variable p1_index : out integer;
+                               variable p2_index : out integer;
+                               variable p3_index : out integer;
+                               variable p4_index : out integer;
+                               variable p5_index : out integer;
+                               variable p6_index : out integer;
                                variable p1 : out unsigned;
-                               variable p1_text : out text_field;
                                variable p2 : out unsigned;
-                               variable p2_text : out text_field;
                                variable p3 : out unsigned;
                                variable p4 : out unsigned;
                                variable p5 : out unsigned;
@@ -198,21 +207,13 @@ package tb_interpreter_pkg is
     --               valid  is 1 if valid 0 if not
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
+                             variable var_scope : out text_field;
                              variable value : out unsigned;
                              variable valid : out integer);
-
-    procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in unsigned;
-                             variable value : out unsigned;
-                             variable valid : out integer);
-                             
-    procedure index_variable_value_ptr(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in unsigned;
-                             variable value_ptr : out t_stm_value_ptr;
-                             variable valid : out integer);
-                             
+                                                          
     procedure index_variable_value_ptr(variable var_list : in var_field_ptr;
                              variable index : in integer;
+                             variable var_scope : out text_field;
                              variable value_ptr : out t_stm_value_ptr;
                              variable valid : out integer);
 
@@ -224,12 +225,7 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
-                             variable var_stm_text : out stm_text_ptr;
-                             variable var_stm_text_enclosing_quote : out character;
-                             variable valid : out integer);
-
-    procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in unsigned;
+                             variable var_scope : out text_field;
                              variable var_stm_text : out stm_text_ptr;
                              variable var_stm_text_enclosing_quote : out character;
                              variable valid : out integer);
@@ -242,11 +238,7 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
-                             variable stm_array : out t_stm_array_ptr;
-                             variable valid : out integer);
-
-    procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in unsigned;
+                             variable var_scope : out text_field;
                              variable stm_array : out t_stm_array_ptr;
                              variable valid : out integer);
 
@@ -258,11 +250,7 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
-                             variable stm_lines : out t_stm_lines_ptr;
-                             variable valid : out integer);
-
-    procedure index_variable(variable var_list : in var_field_ptr;
-                             variable index_stm_value : in unsigned;
+                             variable var_scope : out text_field;
                              variable stm_lines : out t_stm_lines_ptr;
                              variable valid : out integer);
 
@@ -350,28 +338,13 @@ package tb_interpreter_pkg is
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable value : in unsigned;
-                              variable valid : out integer);
-
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
-                              variable value : in unsigned;
-                              variable valid : out integer);
-                              
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
-                              variable integer_value : in integer;
-                              variable valid : out integer);
+                              variable valid : out integer);                             
                                                  
     procedure update_variable_value_ptr(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable value_ptr : in t_stm_value_ptr;
                               variable valid : out integer);
                               
-    procedure update_variable_value_ptr(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
-                              variable value_ptr : in t_stm_value_ptr;
-                              variable valid : out integer);
-
     --  update_variable
     --     inputs:
     --               index:  the index of the variable being updated
@@ -379,11 +352,6 @@ package tb_interpreter_pkg is
     --               valid is 1, not valid is 0
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
-                              variable var_stm_text : in stm_text_ptr;
-                              variable valid : out integer);
-
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
                               variable var_stm_text : in stm_text_ptr;
                               variable valid : out integer);
 
@@ -398,11 +366,6 @@ package tb_interpreter_pkg is
                               variable stm_array : in t_stm_array_ptr;
                               variable valid : out integer);
 
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
-                              variable stm_array : in t_stm_array_ptr;
-                              variable valid : out integer);
-
     --  update_lines
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -411,11 +374,6 @@ package tb_interpreter_pkg is
     --               valid  is 1 if valid 0 if not
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
-                              variable stm_lines : in t_stm_lines_ptr;
-                              variable valid : out integer);
-
-    procedure update_variable(variable var_list : in var_field_ptr;
-                              variable index_stm_value : in unsigned;
                               variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);
 

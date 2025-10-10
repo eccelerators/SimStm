@@ -35,40 +35,40 @@ file TestCaseLinesSizeFile "../../SimulationResults/{@c3}_{@c2}.xml"
 
 testSuiteLines:
 proc
-    call $testCaseLinesAppendArray
-    call $testCaseLinesAppendText
-    call $testCaseLinesDeleteAllArray
-    call $testCaseLinesDeleteArray
-    call $testCaseLinesGetArray
-    call $testCaseLinesInsertArray
-    call $testCaseLinesInsertText
-    call $testCaseLinesPointerCopy
-    call $testCaseLinesSetArray
-    call $testCaseLinesSetText
-    call $testCaseLinesSize
+    call testCaseLinesAppendArray
+    call testCaseLinesAppendText
+    call testCaseLinesDeleteAllArray
+    call testCaseLinesDeleteArray
+    call testCaseLinesGetArray
+    call testCaseLinesInsertArray
+    call testCaseLinesInsertText
+    call testCaseLinesPointerCopy
+    call testCaseLinesSetArray
+    call testCaseLinesSetText
+    call testCaseLinesSize
 end proc
 
 testCaseLinesAppendArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesAppendArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesAppendArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesAppendArray
+    call testLinesAppendArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesAppendArray test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -76,23 +76,23 @@ testCaseLinesAppendText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesAppendTextStartFile
     file pointer copy TestCaseFile TestCaseLinesAppendTextFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesAppendText
+    call testLinesAppendText
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesAppendText test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -100,23 +100,23 @@ testCaseLinesDeleteAllArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesDeleteAllArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesDeleteAllArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesDeleteAllArray
+    call testLinesDeleteAllArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesDeleteAllArrayy test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -124,23 +124,23 @@ testCaseLinesDeleteArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesDeleteArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesDeleteArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesDeleteArray
+    call testLinesDeleteArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesDeleteArray test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -148,23 +148,23 @@ testCaseLinesGetArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesGetArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesGetArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesGetArray
+    call testLinesGetArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesGetArray test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -172,23 +172,23 @@ testCaseLinesInsertArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesInsertArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesInsertArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesInsertArray
+    call testLinesInsertArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesInsertArray test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -196,23 +196,23 @@ testCaseLinesInsertText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesInsertTextStartFile
     file pointer copy TestCaseFile TestCaseLinesInsertTextFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesInsertText
+    call testLinesInsertText
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesInsertText test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -220,23 +220,23 @@ testCaseLinesPointerCopy:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesPointerCopyStartFile
     file pointer copy TestCaseFile TestCaseLinesPointerCopyFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesPointerCopy
+    call testLinesPointerCopy
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesPointerCopy test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -244,23 +244,23 @@ testCaseLinesSetArray:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSetArrayStartFile
     file pointer copy TestCaseFile TestCaseLinesSetArrayFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesSetArray
+    call testLinesSetArray
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesSetArray test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -268,23 +268,23 @@ testCaseLinesSetText:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSetTextStartFile
     file pointer copy TestCaseFile TestCaseLinesSetTextFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesSetText
+    call testLinesSetText
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesSetText test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc
 
@@ -293,22 +293,22 @@ testCaseLinesSize:
 proc
     file pointer copy TestCaseStartFile TestCaseLinesSizeStartFile
     file pointer copy TestCaseFile TestCaseLinesSizeFile
-    call $beginTestCase
+    call beginTestCase
 
-    if $SKIP = $NOT_SKIPPED
+    if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
-        call $skipTestCase
-        call $endTestCase
+        call skipTestCase
+        call endTestCase
         return
     end if
 
-    call $testLinesSize
+    call testLinesSize
 
-    if $StandardTestFailure != 0
+    if StandardTestFailure != 0
         lines append message TestCaseLines "LinesSize test failed"
-        call $failureTestCase
+        call failureTestCase
     end if
 
-    call $endTestCase
+    call endTestCase
 
 end proc

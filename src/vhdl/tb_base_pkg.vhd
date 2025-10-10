@@ -2,7 +2,7 @@
 --             Copyright 2023  Ken Campbell
 --               All rights reserved.
 -------------------------------------------------------------------------------
--- $Author: sckoarn $
+-- Author: sckoarn
 --
 -- Description :  The the testbench package header file.
 --
@@ -86,6 +86,7 @@ package tb_base_pkg is
     type stim_line is record
         instruction : text_field;
         inst_scope : text_field;
+        inst_scope_left : text_field;
         inst_field_1 : text_field;
         inst_field_2 : text_field;
         inst_field_3 : text_field;
@@ -285,6 +286,8 @@ package tb_base_pkg is
                            stm_value_width : in integer) return unsigned;
 
     function is_digit(constant c : in character) return boolean;
+    
+    function is_txt_var_first_character(constant c : in character) return boolean;
 
     function is_space(constant c : in character) return boolean;
 
@@ -398,8 +401,6 @@ package tb_base_pkg is
     procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
                                    variable txt_str : in stm_text);
                                    
-    function strip_leading_dollar(itxt : in text_field) return text_field;
-
     --  function short text_line (remove 'nul')
     function stm_text_crop(txt : in stm_text) return string;
 

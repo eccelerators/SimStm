@@ -2,7 +2,7 @@ var valBus64Wishbone 0
 
 testBus64:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
 
     bus write busToTest 64 0 0x5555555555555555
@@ -62,12 +62,12 @@ proc
     bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0x8000000000000000
     bus verify busToTest 64 0 valBus64Wishbone 0x0000000000000000 0xffffffffffffffff
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testBus64VerifySuccess:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write busToTest  64 0 0x5555555555555555
     bus write busToTest  64 8 0xaaaaaaaaaaaaaaaa
@@ -77,7 +77,7 @@ proc
     bus verify busToTest 64 8 valBus64Wishbone 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
     bus verify busToTest 64 16 valBus64Wishbone 0x0000000000000000 0x0000000000000000
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 var wb_value64 0
@@ -85,7 +85,7 @@ bus wb_bus64 0
 
 testBus64VerifyFail:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write wb_bus64 64 0 0x5555555555555555
     bus write wb_bus64 64 8 0xaaaaaaaaaaaaaaaa
@@ -93,45 +93,45 @@ proc
     bus verify busToTest 64 0 valBus64Wishbone 0x5555555555555555 0xffffffffffffffff
     bus verify busToTest 64 8 valBus64Wishbone 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
     bus verify busToTest 64 16 valBus64Wishbone 0x0000000000000000 0x0000000000000000
-    log message $ALWAYS "bus verify intended error on no match"
+    log message ALWAYS "bus verify intended error on no match"
     bus verify wb_bus64 64 0 wb_value64 0x00000000 0xffffffff
-    call $incExpectedStandardTestVerifyFailureCount
+    call incExpectedStandardTestVerifyFailureCount
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 
 testBus64TimeOutRead:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus write busToTest 64 0 0x5555555555555555
     bus timeout set wb_bus64 1
     bus timeout get wb_bus64 wb_value64
-    var verify wb_value64 1 $MAX
+    var verify wb_value64 1 MAX
     bus read busToTest 64 0 valBus64Wishbone
-    call $incExpectedStandardTestBusTimeoutFailureCount
+    call incExpectedStandardTestBusTimeoutFailureCount
 
     bus timeout set wb_bus64 1000000000
     bus timeout get wb_bus64 wb_value64
-    var verify wb_value64 1000000000 $MAX
+    var verify wb_value64 1000000000 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc
 
 testBus64TimeOutWrite:
 proc
-    call $startStandardTestShell
+    call startStandardTestShell
     wait 1000
     bus timeout set wb_bus64 1
     bus timeout get wb_bus64 wb_value64
-    var verify wb_value64 1 $MAX
+    var verify wb_value64 1 MAX
     bus write busToTest 64 0 0x5555555555555555
-    call $incExpectedStandardTestBusTimeoutFailureCount
+    call incExpectedStandardTestBusTimeoutFailureCount
 
     bus timeout set wb_bus64 1000000000
     bus timeout get wb_bus64 wb_value64
-    var verify wb_value64 1000000000 $MAX
+    var verify wb_value64 1000000000 MAX
 
-    call $endStandardTestShell
+    call endStandardTestShell
 end proc

@@ -2,7 +2,7 @@
 --             Copyright 2023  Ken Campbell
 --               All rights reserved.
 -------------------------------------------------------------------------------
--- $Author: sckoarn $
+-- Author: sckoarn
 --
 -- Description :  The the testbench package body file.
 --

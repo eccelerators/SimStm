@@ -6,39 +6,39 @@ proc testVariableScope ()
 	var test_variable_scope_add_1 1
 	var test_variable_scope_add_2 2
 
-    call $startStandardTestShell
+    call startStandardTestShell
     
-    call $checkVariableScopeGlobal
+    call checkVariableScopeGlobal
 
-    log message $INFO_2 "test_variable_scope_add_1 local: {:d}" $test_variable_scope_add_1
-    log message $INFO_2 "test_variable_scope_add_2 local: {:d}" $test_variable_scope_add_2
+    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
 
     add test_variable_scope_add_1 10
     add test_variable_scope_add_2 20
 
-    log message $INFO_2 "test_variable_scope_add_1 local: {:d}" $test_variable_scope_add_1
-    log message $INFO_2 "test_variable_scope_add_2 local: {:d}" $test_variable_scope_add_2
-    var verify test_variable_scope_add_1 11 $MAX
-    var verify test_variable_scope_add_2 22 $MAX
+    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 11 MAX
+    var verify test_variable_scope_add_2 22 MAX
 
     add test_variable_scope_add_1 12345
     add test_variable_scope_add_2 88
 
-    log message $INFO_2 "test_variable_scope_add_1 local: {:d}" $test_variable_scope_add_1
-    log message $INFO_2 "test_variable_scope_add_2 local: {:d}" $test_variable_scope_add_2
-    var verify test_variable_scope_add_1 12356 $MAX
-    var verify test_variable_scope_add_2 110 $MAX
+    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 12356 MAX
+    var verify test_variable_scope_add_2 110 MAX
     
-    call $checkVariableScopeGlobal
+    call checkVariableScopeGlobal
 
-    call $endStandardTestShell
+    call endStandardTestShell
 
 end proc
 
 checkVariableScopeGlobal:
 proc
-    log message $INFO_2 "test_variable_scope_add_1 global: {:d}" $test_variable_scope_add_1
-    log message $INFO_2 "test_variable_scope_add_2 global: {:d}" $test_variable_scope_add_2
-    var verify test_variable_scope_add_1 5 $MAX
-    var verify test_variable_scope_add_2 6 $MAX
+    log message INFO_2 "test_variable_scope_add_1 global: {:d}" test_variable_scope_add_1
+    log message INFO_2 "test_variable_scope_add_2 global: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 5 MAX
+    var verify test_variable_scope_add_2 6 MAX
 end proc
