@@ -6,12 +6,12 @@ proc testVariablePointer ()
 
     call startStandardTestShell
     
-    log message INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_pointer_1
-    log message INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_pointer_2
+    log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
+    log message INFO_2 "test_variable_pointer_2: {:d}" test_variable_pointer_2
 
     var pointer copy test_variable_pointer_1 test_variable_pointer_2
 
-    log message INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_pointer_2
+    log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
     var verify test_variable_pointer_1 2 MAX
 
     call endStandardTestShell

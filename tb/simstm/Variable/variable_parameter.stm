@@ -23,20 +23,24 @@ proc checkParameterInput (
 end proc
 
 
---proc testVariableParameterOut ()
---    var out_val 0
---    call startStandardTestShell
---    
---    call setParameterOutput ( 
---    	var pointer copy par_out out_val
---    )
---    var verify out_val 0xAB MAX
---    call endStandardTestShell
---end proc
---
---
---proc setParameterOutput ( 
---	var par_out 0
---)
---	equ par_out 0xAB
---end proc
+proc testVariableParameterOut ()
+    
+    var out_val 0
+    call startStandardTestShell
+    -- trace TRACE_INSTRUCTIONS
+    call setParameterOutput ( 
+    	var pointer copy par_out out_val
+    )
+    var verify out_val 0xAB MAX
+    -- trace TRACE_OFF
+    call endStandardTestShell
+end proc
+
+
+proc setParameterOutput ( 
+	var par_out 0
+)
+    var result 0
+    equ result 0xAB
+    var pointer copy par_out result
+end proc

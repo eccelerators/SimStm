@@ -59,6 +59,7 @@ package tb_instructions_pkg is
     constant INSTR_END_IF : string := "end_if";
     constant INSTR_END_LOOP : string := "end_loop";
     constant INSTR_FINISH : string := "finish";
+    constant INSTR_STOP : string := "stop";
     constant INSTR_IF : string := "if";
     constant INSTR_INCLUDE : string := "include";
     constant INSTR_LOOP : string := "loop";
@@ -107,7 +108,7 @@ package tb_instructions_pkg is
     -- file
     constant INSTR_FILE : string := "file";
     constant INSTR_FILE_READABLE : string := "file_readable";
-    constant INSTR_FILE_WRITEABLE : string := "file_writeable";
+    constant INSTR_FILE_WRITABLE : string := "file_writeable";
     constant INSTR_FILE_APPENDABLE : string := "file_appendable";
     constant INSTR_FILE_READ : string := "file_read";
     constant INSTR_FILE_READ_END : string := "file_read_end";
@@ -212,6 +213,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_ELSIF, 3);
         define_instruction(inst_list, INSTR_END_IF, 0);
         define_instruction(inst_list, INSTR_END_LOOP, 0);
+        define_instruction(inst_list, INSTR_STOP, 0);
         define_instruction(inst_list, INSTR_FINISH, 0);
         define_instruction(inst_list, INSTR_IF, 3);
         define_instruction(inst_list, INSTR_INCLUDE, 1);
@@ -256,7 +258,7 @@ package body tb_instructions_pkg is
         -- file
         define_instruction(inst_list, INSTR_FILE, 1);
         define_instruction(inst_list, INSTR_FILE_READABLE, 2);
-        define_instruction(inst_list, INSTR_FILE_WRITEABLE, 2);
+        define_instruction(inst_list, INSTR_FILE_WRITABLE, 2);
         define_instruction(inst_list, INSTR_FILE_APPENDABLE, 2);
         define_instruction(inst_list, INSTR_FILE_READ, 3);
         define_instruction(inst_list, INSTR_FILE_READ_END, 1);

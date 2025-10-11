@@ -281,6 +281,7 @@ begin
         variable called_label : text_field;
         variable tmp_called_label : text_field;
         variable nul_scope : text_field;    
+        variable in_call_advanced_paramters : boolean;
 
     begin
         nul_scope(1) := nul;
@@ -393,19 +394,49 @@ begin
                     dump_variables(defined_vars, machine_value_width);
                 end if;
                 if trc_on(1) = '1' then
-                    print_inst(inst_sequ, v_line, file_list);
-                    print(".... par1 index: " & to_str(par1_index));
-                    print(".... par2 index: " & to_str(par2_index));
-                    print(".... par3 index: " & to_str(par3_index));
-                    print(".... par4 index: " & to_str(par4_index));
-                    print(".... par5 index: " & to_str(par5_index));
-                    print(".... par6 index: " & to_str(par6_index));
-                    print(".... par1 value: 0x" & to_str_hex(par1));
-                    print(".... par2 value: 0x" & to_str_hex(par2));
-                    print(".... par3 value: 0x" & to_str_hex(par3));
-                    print(".... par4 value: 0x" & to_str_hex(par4));
-                    print(".... par5 value: 0x" & to_str_hex(par5));
-                    print(".... par6 value: 0x" & to_str_hex(par6));
+                    print_inst(inst_sequ, v_line, file_list);              
+                    if par1_index >= 0 then
+                        print(".... par1 index: " & to_str(par1_index));
+                        dump_variable(defined_vars, par1_index, machine_value_width);
+                    else
+                        print(".... par1 index: -");
+                        print(".... par1 value: " & to_str_hex(par1));
+                    end if;                                                                            
+                    if par2_index >= 0 then
+                        print(".... par2 index: " & to_str(par2_index));
+                        dump_variable(defined_vars, par2_index, machine_value_width);
+                    else
+                        print(".... par2 index: -");
+                        print(".... par2 value: " & to_str_hex(par2));
+                    end if;                                                                 
+                    if par3_index >= 0 then
+                        print(".... par3 index: " & to_str(par3_index));
+                        dump_variable(defined_vars, par3_index, machine_value_width);
+                    else
+                        print(".... par3 index: -");
+                        print(".... par3 value: " & to_str_hex(par3)); 
+                    end if;                                                     
+                    if par4_index >= 0 then
+                        print(".... par4 index: " & to_str(par4_index));
+                        dump_variable(defined_vars, par4_index, machine_value_width);
+                    else
+                        print(".... par4 index: -");
+                        print(".... par4 value: " & to_str_hex(par4)); 
+                    end if;                                                    
+                    if par5_index >= 0 then
+                        print(".... par5 index: " & to_str(par5_index));
+                        dump_variable(defined_vars, par5_index, machine_value_width);
+                    else
+                        print(".... par5 index: -");
+                        print(".... par5 value: " & to_str_hex(par5));
+                    end if;                                                                          
+                    if par6_index >= 0 then
+                        print(".... par6 index: " & to_str(par6_index)); 
+                        dump_variable(defined_vars, par6_index, machine_value_width);
+                    else
+                        print(".... par6 index: -");
+                        print(".... par6 value: " & to_str_hex(par6));
+                    end if;    
                 end if;
 
                 executing_line <= file_line;
@@ -727,7 +758,7 @@ begin
                     severity failure;
 
                 -- file writeable a_fileA target
-                elsif instruction(1 to len) = INSTR_FILE_WRITEABLE then
+                elsif instruction(1 to len) = INSTR_FILE_WRITABLE then
                     index_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1437,6 +1468,12 @@ begin
                     severity failure;
                     finish;
 
+                -- stop
+                elsif instruction(1 to len) = INSTR_STOP then
+                    assert false
+                    report "the test has been stopped for debugging by command !!"
+                    severity failure;
+                    
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4(30 downto 0)));
@@ -1564,17 +1601,25 @@ begin
                         report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
                         report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
                         report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
-                    end if;
-                    stack_ptr := stack_ptr + 1;
-                    v_line := tmp_v_line;
-                    if trc_on(5) = '1' then
-                        report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
-                        report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                    end if;                   
+                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
+                        in_call_advanced_paramters := true;
+                        v_line := v_line + 1;
+                    else
+                        stack_ptr := stack_ptr + 1;
+                        v_line := tmp_v_line;
+                        if trc_on(5) = '1' then
+                            report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                            report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                        end if;
                     end if;
                     
                 -- ) 
                 elsif instruction(1 to len) = INSTR_PAR_CLOSE then
-                    null;           
+                    if in_call_advanced_paramters then
+                        v_line := tmp_v_line;        
+                        in_call_advanced_paramters := false;   
+                    end if;
                                         
                 -- log message INFO "some message"
                 -- log message  INFO "misc_proc severity: {}" INFO

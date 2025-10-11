@@ -190,6 +190,10 @@ package tb_interpreter_pkg is
     -- dump all variables
     procedure dump_variables(variable var_list : in var_field_ptr;
                              constant stm_value_width : in integer);
+                             
+    procedure dump_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             constant stm_value_width : in integer);
 
     procedure dump_file_defs(file_list : inout file_def_ptr);
 

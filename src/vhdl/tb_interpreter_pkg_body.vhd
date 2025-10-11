@@ -746,6 +746,30 @@ package body tb_interpreter_pkg is
         -- the last one
         dump_var_field(ptr, stm_value_width);
     end procedure;
+    
+    procedure dump_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             constant stm_value_width : in integer) is
+        variable ptr : var_field_ptr;
+        variable found : boolean;
+    begin
+        ptr := var_list;
+        found := false;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                dump_var_field(ptr, stm_value_width);
+                found := true; 
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- the last one
+        if not found then
+            if ptr.var_index = index then
+                dump_var_field(ptr, stm_value_width);
+            end if;
+        end if;
+    end procedure;
 
     procedure dump_file_defs(file_list : inout file_def_ptr) is
         variable tmp_file_def_ptr : file_def_ptr;
@@ -777,6 +801,7 @@ package body tb_interpreter_pkg is
         variable tmp_std_line_print : line;
         variable stm_array : t_stm_array_ptr;
     begin
+        write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
         print("---- var_name: " & ptr.var_name);
         print("---- var_scope: " & ptr.var_scope);
@@ -812,9 +837,12 @@ package body tb_interpreter_pkg is
                 print("-------- stm_line_ptr.line_number: " & to_str(stm_line_ptr.line_number));
                 if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
                     print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");
+                    std_line := stm_line_ptr.line_content;
                     tmp_str_ptr := new stm_text;
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
-                    txt_print(tmp_str_ptr);
+                    stm_text_ptr_to_line(tmp_str_ptr, std_line);
+                    stm_line_ptr.line_content := std_line;
+                    txt_print(tmp_str_ptr);                    
                 elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
                     print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");
                     success := true;
@@ -1625,7 +1653,7 @@ package body tb_interpreter_pkg is
     begin
         inst_ptr := inst_sequ;
         -- go through all the instructions
-        dump_variables(var_list, stm_value_width); --TODO: remove
+        -- dump_variables(var_list, stm_value_width); --TODO: remove
         -- dump_inst_sequ(inst_sequ, tmp_file_list); --TODO: remove
         while inst_ptr.next_rec /= null loop
             line := inst_ptr.file_line;

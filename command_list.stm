@@ -21,6 +21,18 @@ lines a_lines
 var operand1_and_target 0
 var operand2 0
 
+namespace a
+	var nma 0
+end namespace
+
+namespace b
+	var nma 0
+end namespace
+
+proc NmsTest ()
+     equ a.nma b.nma
+end proc
+
 ArithProc:
 proc
     equ operand1_and_target operand2

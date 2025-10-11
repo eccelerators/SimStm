@@ -28,7 +28,7 @@ proc
 
     verbosity INFO_2
     -- trace TRACE_OFF
-    trace TRACE_INSTRUCTIONS
+    -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
     -- trace TRACE_EXECUTED_LINES
     resume RESUME_ON_ALL_ERRORS
@@ -49,13 +49,16 @@ proc
     -- call testVariableLocal ()
     -- call testVariableScope ()
     -- call testVariablePointer ()
-    call testVariableParameterIn ()
-    -- call testVariableParameterOut ()
+    -- call testVariableParameterIn ()
+    call testVariableParameterOut ()
     -- call testLinesSize
 
     log message INFO "Main test finished"
     wait 1000
     lines append message success_lines "SUCCESS"
+    -- stop
+    log lines INFO success_lines
     file write simulation_success success_lines
+    wait 1000
     finish
 end proc
