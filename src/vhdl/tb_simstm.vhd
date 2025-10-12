@@ -128,7 +128,7 @@ architecture behavioural of tb_simstm is
             end loop;
         end if;
     end procedure;
-
+    
 begin
     --------------------------------------------------------------------------------
     --! Read_file Process:
@@ -281,7 +281,24 @@ begin
         variable called_label : text_field;
         variable tmp_called_label : text_field;
         variable nul_scope : text_field;    
-        variable in_call_advanced_paramters : boolean;
+        variable in_call_advanced_parameters : boolean;
+        
+        procedure close_call is
+        begin
+            stack(stack_ptr) := v_line;                                                                                                            
+            if trc_on(5) = '1' then
+                report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
+                report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
+                report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
+            end if;
+            stack_ptr := stack_ptr + 1;
+            v_line := tmp_v_line;
+            if trc_on(5) = '1' then
+                report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+            end if;    
+        end procedure;
 
     begin
         nul_scope(1) := nul;
@@ -1588,37 +1605,24 @@ begin
                     end if;
                     assert stack_ptr < 31
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
-                    severity failure;
-                    stack(stack_ptr) := v_line;
+                    severity failure;  
                     tmp_v_line := to_integer(par1(30 downto 0)) - 1; 
-                    tmp_instruction := instruction;
+                    tmp_instruction := instruction; 
                     get_inst_field_1(inst_sequ, v_line, called_label);
                     stack_called_labels(stack_ptr) := called_label;                                     
                     stack_called_files(stack_ptr) := file_name;
-                    stack_called_file_line_numbers(stack_ptr) := file_line;                                                                                                              
-                    if trc_on(5) = '1' then
-                        report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
-                        report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
-                        report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
-                        report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
-                    end if;                   
+                    stack_called_file_line_numbers(stack_ptr) := file_line;          
                     if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
-                        in_call_advanced_paramters := true;
-                        v_line := v_line + 1;
-                    else
-                        stack_ptr := stack_ptr + 1;
-                        v_line := tmp_v_line;
-                        if trc_on(5) = '1' then
-                            report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
-                            report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
-                        end if;
+                        in_call_advanced_parameters := true;                      
+                    else     
+                        close_call;               
                     end if;
                     
                 -- ) 
                 elsif instruction(1 to len) = INSTR_PAR_CLOSE then
-                    if in_call_advanced_paramters then
-                        v_line := tmp_v_line;        
-                        in_call_advanced_paramters := false;   
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
                     end if;
                                         
                 -- log message INFO "some message"

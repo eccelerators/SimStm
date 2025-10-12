@@ -32,7 +32,7 @@ proc testVariableParameterOut ()
     	var pointer copy par_out out_val
     )
     var verify out_val 0xAB MAX
-    -- trace TRACE_OFF
+
     call endStandardTestShell
 end proc
 
@@ -41,6 +41,6 @@ proc setParameterOutput (
 	var par_out 0
 )
     var result 0
+    var pointer copy result par_out
     equ result 0xAB
-    var pointer copy par_out result
 end proc
