@@ -478,28 +478,106 @@ begin
                 -- var a_varB a_varA
                 -- var a_varC a_constA
                 elsif instruction(1 to len) = INSTR_VAR then
-                    null; -- This instruction was implemented while reading the file
-
+                    -- This instruction has been executed for global variables while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " add error: not a valid variable??"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        update_variable(defined_vars, par1_index, stm_value, valid);
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & " add error: cannot update variable, it may be a constant ?"
+                        severity failure;
+                    end if;
+                    
                 -- array an_array 16
                 elsif instruction(1 to len) = INSTR_ARRAY then
-                    null; -- This instruction was implemented while reading the file
+                    -- This instruction has been executed for global arrays while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, var_stm_array, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        for i in 0 to var_stm_array'length - 1 loop
+                            var_stm_array(i) := to_unsigned(0, machine_value_width);
+                        end loop;
+                    end if;
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif instruction(1 to len) = INSTR_FILE then
-                    null; -- This instruction was implemented while reading the file
+                    -- This instruction has been executed for global files while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        stm_text_substitude_wvar(defined_vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                        var_stm_text_substituded_ptr := new stm_text;
+                        stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
+                        if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
+                            file_close(user_file_0);
+                            user_file_in_use_0 := false;
+                        elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
+                            file_close(user_file_1);
+                            user_file_in_use_1 := false;
+                        elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
+                            file_close(user_file_2);
+                            user_file_in_use_2 := false;
+                        elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
+                            file_close(user_file_3);
+                            user_file_in_use_3 := false;
+                        else
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
+                            severity failure;
+                        end if;
+                    end if;
 
                 -- signal a_signal
                 elsif instruction(1 to len) = INSTR_SIGNAL then
-                    null; -- This instruction was implemented while reading the file
-                --
+                    -- This instruction has been executed for global signals while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        update_variable(defined_vars, par1_index, par2, valid);
+                        assert valid /= 0
+                        report "signal_pointer error: not a signal object name??"
+                        severity failure;
+                    end if;
+                    
                 -- bus a_bus
                 elsif instruction(1 to len) = INSTR_BUS then
-                    null; -- This instruction was implemented while reading the file
-                --
+                    -- This instruction has been executed for global busses while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        update_variable(defined_vars, par1_index, par2, valid);
+                        assert valid /= 0
+                        report "bus_pointer error: not a bus object name??"
+                        severity failure;
+                    end if;
+                    
                 -- lines a_lines
                 elsif instruction(1 to len) = INSTR_LINES then
-                    null; -- This instruction was implemented while reading the file
+                    -- This instruction has been executed for global lines while reading the file
+                    index_variable(defined_vars, par1_index, var_scope, var_stm_lines, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    if fld_len(var_scope) > 0 then
+                        while var_stm_lines.size > 0 loop
+                            temp_int := 0;
+                            stm_lines_delete(var_stm_lines, temp_int, valid);
+                            assert valid /= 0
+                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
+                            severity failure;
+                        end loop;
+                    end if;
 
                 -- equ operand1_and_target operand2
                 -- equ operand1_and_target 0xF0
@@ -518,7 +596,22 @@ begin
                     update_variable_value_ptr(defined_vars, par1_index, stm_value_ptr, valid);
                     assert valid /= 0
                     report "var_pointer error: not a var name??"
-                    severity failure;                
+                    severity failure;
+                    
+                -- d_var s_var )
+                elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
+                    index_variable_value_ptr(defined_vars, par2_index, var_scope, stm_value_ptr, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
+                    severity failure;
+                    update_variable_value_ptr(defined_vars, par1_index, stm_value_ptr, valid);
+                    assert valid /= 0
+                    report "var_pointer error: not a var name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if;                 
 
                 -- add operand1_and_target operand2
                 -- add operand1_and_target 0xF0
@@ -726,7 +819,22 @@ begin
                     assert valid /= 0
                     report "array_pointer error: not a array name??"
                     severity failure;
-
+                    
+                -- array pointer an_array another_array )
+                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_array, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, var_stm_array, valid);
+                    assert valid /= 0
+                    report "array_pointer error: not a array name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if;   
+                    
                 -- array verify a_var array_position var_expected_value var_mask_value
                 -- array verify a_var array_position 0x0002 0x00FF
                 -- array verify a_var 5 var_expected_value var_mask_value
@@ -1036,7 +1144,22 @@ begin
                     assert valid /= 0
                     report "files_pointer error: not a lines object name??"
                     severity failure;
-
+                    
+                --  file pointer copy a_file_target a_file_source )
+                elsif instruction(1 to len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, var_stm_text, valid);
+                    assert valid /= 0
+                    report "files_pointer error: not a lines object name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if;   
+                    
                 -- lines get a_lines position an_array number_found
                 -- lines get a_lines 8 an_array number_found
                 elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
@@ -1209,7 +1332,22 @@ begin
                     assert valid /= 0
                     report "lines_pointer error: not a lines object name??"
                     severity failure;
-
+                    
+                --  lines pointer copy a_lines_target a_lines_source )
+                elsif instruction(1 to len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_lines, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, var_stm_lines, valid);
+                    assert valid /= 0
+                    report "lines_pointer error: not a lines object name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if;   
+                    
                 -- if a_var_ref = another_var
                 -- if 0x09 = another_var
                 -- if a_varA = 0x09
@@ -1789,7 +1927,7 @@ begin
                         end if;
                     end if;
                     wait for 0 ns;
-
+                    
                 --  signal pointer copy a_signal_target a_signal_source
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_COPY then
                     index_variable(defined_vars, par2_index, var_scope, stm_value, valid);
@@ -1800,7 +1938,22 @@ begin
                     assert valid /= 0
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
-
+                    
+                --  signal pointer copy a_signal_target a_signal_source )
+                elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: signal object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, stm_value, valid);
+                    assert valid /= 0
+                    report "signal_pointer error: not a signal object name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if;   
+                    
                 --  signal pointer set a_signal_target a_var
                 --  signal pointer set a_signal_target 0x01
                 elsif instruction(1 to len) = INSTR_SIGNAL_POINTER_SET then
@@ -1924,7 +2077,7 @@ begin
                     assert valid /= 0
                     report "variable error: not a var object name??"
                     severity failure;
-
+                    
                 --  bus pointer copy a_file_target a_file_source
                 elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY then
                     index_variable(defined_vars, par2_index, var_scope, stm_value, valid);
@@ -1935,6 +2088,21 @@ begin
                     assert valid /= 0
                     report "bus_pointer error: not a bus object name??"
                     severity failure;
+                    
+                --  bus pointer copy a_file_target a_file_source
+                elsif instruction(1 to len) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, stm_value, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: bus object not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, stm_value, valid);
+                    assert valid /= 0
+                    report "bus_pointer error: not a bus object name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        close_call;     
+                        in_call_advanced_parameters := false;   
+                    end if; 
 
                 --  bus pointer set a_bus_target a_var
                 --  bus pointer set a_bus_target 0x01

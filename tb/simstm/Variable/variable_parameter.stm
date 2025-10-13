@@ -40,7 +40,7 @@ end proc
 proc setParameterOutput ( 
 	var par_out 0
 )
-    var result 0
-    var pointer copy result par_out
-    equ result 0xAB
+    -- var result 0
+    -- var pointer copy result par_out
+    equ par_out 0xAB
 end proc
