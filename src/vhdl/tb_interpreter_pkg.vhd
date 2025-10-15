@@ -70,7 +70,8 @@ package tb_interpreter_pkg is
     --               line_num             line number in the text file
     --     outputs:
     --               none.  error will terminate sim
-    procedure add_instruction(variable inst_list : inout stim_line_ptr;
+    procedure add_instruction(variable pass : in integer;
+                              variable inst_list : inout stim_line_ptr;
                               variable var_list : inout var_field_ptr;
                               variable scope : in text_field;
                               variable scope_left : in text_field;
@@ -266,7 +267,8 @@ package tb_interpreter_pkg is
     -- procedure to get parameter 1 instruction text which is the called label in case of a call instrucution
     procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field);
 
-    procedure read_include_file(constant path_name : string;
+    procedure read_include_file(variable pass : in integer;
+                                constant path_name : string;
                                 variable name : text_line;
                                 variable sequ_numb : inout integer;
                                 variable file_list : inout file_def_ptr;
@@ -282,7 +284,8 @@ package tb_interpreter_pkg is
     --  with variable name and value (converted to integer).  the instructions are
     --  parsesed into the inst_sequ list.  instructions are validated against the
     --  inst_set which must have been set up prior to loading the instruction file.
-    procedure read_instruction_file(constant path_name : string;
+    procedure read_instruction_file(variable pass : in integer;
+                                    constant path_name : string;
                                     constant file_name : string;
                                     variable inst_set : inout inst_def_ptr;
                                     variable var_list : inout var_field_ptr;

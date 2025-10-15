@@ -16,8 +16,8 @@ proc checkParameterInput (
 	var par_in_1 0
 	var par_in_2 0
 )
-    log message INFO_2 "test_variable_local_add_1 local: {:d}" par_in_1
-    log message INFO_2 "test_variable_local_add_2 local: {:d}" par_in_2
+    log message INFO_2 "par_in_1 local: {:d}" par_in_1
+    log message INFO_2 "par_in_2 local: {:d}" par_in_2
 	var verify par_in_1 0xAA MAX
 	var verify par_in_2 0xBB MAX	
 end proc

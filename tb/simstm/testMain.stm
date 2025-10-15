@@ -30,7 +30,7 @@ proc
     trace TRACE_OFF
     -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
-    -- trace TRACE_EXECUTED_LINES
+    trace TRACE_EXECUTED_LINES
     resume RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000

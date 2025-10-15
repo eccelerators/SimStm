@@ -173,7 +173,7 @@ begin
         variable file_name : text_line; -- the file name the line came from
         variable tmp_file_name : text_line; -- the file name the line came from
         variable v_line : integer := 0; -- sequence number
-        variable tmp_v_line : integer := 0; -- remembered sequence number
+        variable target_proc_v_line : integer := 0; -- remembered sequence number
         variable stack : stack_register; -- call stack
         variable stack_called_labels : stack_text_field_array; -- called labels
         variable stack_called_files : stack_text_line_array; -- called files
@@ -282,6 +282,7 @@ begin
         variable tmp_called_label : text_field;
         variable nul_scope : text_field;    
         variable in_call_advanced_parameters : boolean;
+        variable pass :integer;
         
         procedure close_call is
         begin
@@ -293,7 +294,7 @@ begin
                 report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
             end if;
             stack_ptr := stack_ptr + 1;
-            v_line := tmp_v_line;
+            v_line := target_proc_v_line;
             if trc_on(5) = '1' then
                 report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
                 report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
@@ -322,7 +323,10 @@ begin
         file_close(stimulus);
 
         -- read, test, and load the stimulus file
-        read_instruction_file(stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        pass := 0;
+        read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        pass := 1;
+        read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
 
         -- initialize last info
         last_sequ_num := 0;
@@ -1744,7 +1748,7 @@ begin
                     assert stack_ptr < 31
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;  
-                    tmp_v_line := to_integer(par1(30 downto 0)) - 1; 
+                    target_proc_v_line := to_integer(par1(30 downto 0)) - 1; 
                     tmp_instruction := instruction; 
                     get_inst_field_1(inst_sequ, v_line, called_label);
                     stack_called_labels(stack_ptr) := called_label;                                     
