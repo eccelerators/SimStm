@@ -8,7 +8,7 @@ SimStm
  - variables can be local in procedures now
  - new procedures can have parameters now 
  
-** The compagnion simstm eclipse plugin
+** The compagnion simstm eclipse plugin Release 2.0.0 validation is still minimal **
 
 SimStm is a VHDL testbench designed to facilitate testing driven by
 external stimulus files with a “.stm” extension. This testbench is
