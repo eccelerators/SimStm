@@ -174,6 +174,8 @@ begin
         variable tmp_file_name : text_line; -- the file name the line came from
         variable v_line : integer := 0; -- sequence number
         variable target_proc_v_line : integer := 0; -- remembered sequence number
+        variable target_proc_after_par_bracket_v_line : integer := 0; -- remembered sequence number
+        variable target_call_v_line : integer := 0; -- remembered sequence number
         variable stack : stack_register; -- call stack
         variable stack_called_labels : stack_text_field_array; -- called labels
         variable stack_called_files : stack_text_line_array; -- called files
@@ -281,26 +283,10 @@ begin
         variable called_label : text_field;
         variable tmp_called_label : text_field;
         variable nul_scope : text_field;    
-        variable in_call_advanced_parameters : boolean;
+        variable in_call_advanced_parameters : boolean := false;
+        variable in_proc_advanced_parameters : boolean := false;
         variable pass :integer;
         
-        procedure close_call is
-        begin
-            stack(stack_ptr) := v_line;                                                                                                            
-            if trc_on(5) = '1' then
-                report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
-                report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
-                report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
-                report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
-            end if;
-            stack_ptr := stack_ptr + 1;
-            v_line := target_proc_v_line;
-            if trc_on(5) = '1' then
-                report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
-                report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
-            end if;    
-        end procedure;
-
     begin
         nul_scope(1) := nul;
         marker <= (others => '0');
@@ -343,8 +329,10 @@ begin
 
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
-                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
-            end if;
+                if not in_proc_advanced_parameters and not in_call_advanced_parameters then
+                    resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
+                end if;
+            end if;            
 
             if main_entered = 0 then          
                 access_variable(defined_vars, nul_scope, main_label_text_field, var_index, main_line, valid, machine_value_width);
@@ -613,7 +601,7 @@ begin
                     report "var_pointer error: not a var name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;                 
 
@@ -835,7 +823,7 @@ begin
                     report "array_pointer error: not a array name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;   
                     
@@ -1160,7 +1148,7 @@ begin
                     report "files_pointer error: not a lines object name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;   
                     
@@ -1348,7 +1336,7 @@ begin
                     report "lines_pointer error: not a lines object name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;   
                     
@@ -1749,21 +1737,38 @@ begin
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;  
                     target_proc_v_line := to_integer(par1(30 downto 0)) - 1; 
+                    target_call_v_line := v_line;
                     tmp_instruction := instruction; 
                     get_inst_field_1(inst_sequ, v_line, called_label);
                     stack_called_labels(stack_ptr) := called_label;                                     
                     stack_called_files(stack_ptr) := file_name;
-                    stack_called_file_line_numbers(stack_ptr) := file_line;          
-                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then
-                        in_call_advanced_parameters := true;                      
-                    else     
-                        close_call;               
+                    stack_called_file_line_numbers(stack_ptr) := file_line;     
+                    stack(stack_ptr) := v_line;                                                                                                            
+                    if trc_on(5) = '1' then
+                        report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
+                        report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
+                        report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
+                    end if;
+                    stack_ptr := stack_ptr + 1;
+                    v_line := target_proc_v_line;
+                    if trc_on(5) = '1' then
+                        report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                        report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                    end if;                    
+                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then                    
+                        in_proc_advanced_parameters := true;                                                     
                     end if;
                     
                 -- ) 
                 elsif instruction(1 to len) = INSTR_PAR_CLOSE then
-                    if in_call_advanced_parameters then
-                        close_call;     
+                    if in_proc_advanced_parameters then
+                        target_proc_after_par_bracket_v_line := v_line;
+                        v_line := target_call_v_line;  
+                        in_proc_advanced_parameters := false;  
+                        in_call_advanced_parameters := true;   
+                    elsif in_call_advanced_parameters then  
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;
                                         
@@ -1954,7 +1959,7 @@ begin
                     report "signal_pointer error: not a signal object name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if;   
                     
@@ -2104,7 +2109,7 @@ begin
                     report "bus_pointer error: not a bus object name??"
                     severity failure;
                     if in_call_advanced_parameters then
-                        close_call;     
+                        v_line := target_proc_after_par_bracket_v_line;
                         in_call_advanced_parameters := false;   
                     end if; 
 

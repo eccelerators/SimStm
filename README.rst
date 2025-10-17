@@ -2,6 +2,14 @@
 SimStm
 ======
 
+**Description of new Release 2.0.0 features is to do as there are:**
+ - no $ prefixes any more
+ - variables can be initialized with constants now regardless of their definition sequence
+ - variables can be local in procedures now
+ - new procedures can have parameters now 
+ 
+** The compagnion simstm eclipse plugin
+
 SimStm is a VHDL testbench designed to facilitate testing driven by
 external stimulus files with a “.stm” extension. This testbench is
 provided by Eccelerators GmbH and aims to simplify test script creation
