@@ -203,7 +203,7 @@ package body tb_interpreter_pkg is
 
         procedure init_stm_lines_var is
         begin
-            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
+            temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
@@ -223,7 +223,7 @@ package body tb_interpreter_pkg is
             assert stim_to_integer(p2, name, line_num) > 0
             report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;
-            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
+            temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
@@ -244,7 +244,7 @@ package body tb_interpreter_pkg is
             assert str_ptr /= null
             report lf & "error: missing file name in file declaration " & (integer'image(line_num)) & " of file " & text_line_crop(name)
             severity failure;
-            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
+            temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
@@ -259,7 +259,7 @@ package body tb_interpreter_pkg is
 
         procedure init_non_inline_var is
         begin
-            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
+            temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
@@ -274,7 +274,7 @@ package body tb_interpreter_pkg is
 
         procedure init_inline_var is
         begin
-            temp_var := new var_field(var_value(stm_value_width - 1 downto 0));
+            temp_var := new var_field;
             temp_var.var_name(1 to (length - 1)) := p1(1 to (length - 1));
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
