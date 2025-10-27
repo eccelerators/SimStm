@@ -2,11 +2,11 @@
 SimStm
 ======
 
-**Description of new Release 2.0.0 features is to do as there are:**
- - no $ prefixes any more
- - variables can be initialized with constants now regardless of their definition sequence
- - variables can be local in procedures now
- - new procedures can have parameters now 
+**Description of new Release 2.0.0 features:**
+ - removal of "$"-prefixes
+ - variables can now be initialized with constants regardless of their definition sequence
+ - local variables in procedures now possible
+ - new procedures can now have parameters 
  
 ** The compagnion simstm eclipse plugin Release 2.0.0 validation is still minimal **
 
@@ -34,7 +34,7 @@ been retained within all source files related to the original.
 The IDE plugins are available for free on the Eccelerators GmbH web
 page. They may also be available for free on the respective IDE
 marketplaces once deployed. The source code of the SimStm language IDE
-plugins is the property of Eccelerators GmbH and is closed source.
+plugins is property of Eccelerators GmbH and is closed source.
 
 Focus
 -----
@@ -88,19 +88,19 @@ generic when instanciating the **tb_simstm** top entity, individually
 for each instance.
 
 The SimStm testbench presents a bus and a signal package source file to
-the user. These packages can be customized by the user to add busses,
+the user. These packages can be customized by the user to add buses,
 signals, or interrupts to the testbench. All other files shall be used
-unchanged. Eccelerator samples for Wishbone, Avalon, and AXI4lite busses
+unchanged. Eccelerator samples for Wishbone, Avalon, and AXI4lite buses
 for single read/write accesses are already included.
 
 The primary focus of SimStm is to have a **functional** verification of
-all connected IPs via multiple busses with high coverage in a short
+all connected IPs via multiple buses with high coverage in a short
 time. It is **not** prepared to be used to verify the different
-conditions and sequences of accesses to the busses like other
+conditions and sequences of accesses to the buses like other
 testbenches. However, it could control these testbenches via respective
 bus adapters. Eccelerators uses its own HxS tool to design and generate
 HW/SW interfaces. The patterns used by the generators are verified to
-work with all circumstances happening on the supported busses all the
+work with all circumstances happening on the supported buses all the
 way to having counterparts in other asynchronous clock domains. The
 generated instances do not have to be verified again at this depth.
 
@@ -124,11 +124,11 @@ Features and Advantages
 -  Test case code change and test without re-compilation
 -  SimStm language transpiles to Python or C, thus simulation code can
    be reused for the test of real target HW
--  Easily customizable to support user-defined busses, signals, and
+-  Easily customizable to support user-defined buses, signals, and
    interrupts
--  Standard busses Axi4Lite, Avalon, Wishbone and direct synchronous RAM are included
+-  Standard buses Axi4Lite, Avalon, Wishbone and direct synchronous RAM are included
 -  High coverage of functional verification of all connected IPs via
-   multiple busses
+   multiple buses
 -  Supports JUnit test reports
 
 
@@ -199,7 +199,7 @@ All Eccelerators IP repositories are aimed to be presented as Python Packages in
 SimStm though not a syntheziable IP, is presented in the same manner. 
 SimStm tests itself by its own means.
 
-- ``helper``: The helper folder containing helper scripts only needed the SimStm selftest.
+- ``helper``: The helper folder containing helper scripts only needed for the SimStm selftest.
 - ``helper/proposal_for_setup_py.py``: Generating ``setup.py`` based on Eccelerators conventions.
 - ``helper/generate-ghdl-ant-build-xml.py``: Generating ``simulation/ghdl/build-ghdl.xml`` based on ``setup.py``.
 - ``helper/generate-modelsim-ant-build-xml.py``: Generating ``simulation/modelsim/build-modelsim.xml`` based on ``setup.py``.
@@ -236,14 +236,12 @@ comment only lines. Subroutine labels are considered as instruction in
 this manner too.
 
 The colon postfix of a subroutine label must end with a colon. No space
-is allowed between the label ID and the colon. A dollar sign as prefix
-is used to reference to object content e.g. variables. No space is
-allowed between the dollar sign and referenced object ID. Otherwise the
+is allowed between the label ID and the colon. Otherwise the
 SimStm language is not white space sensitive.
 
 The SimStm language is case sensitive.
 
-All constant, variable or label ID are global within a SimStm project.
+All constants, variables and label IDs are global within a SimStm project.
 The IDs must be unique.
 
 There are no subroutine parameters or local variables. Values must be
@@ -263,7 +261,7 @@ Comments
  const aconst 0x03 -- This is an appended line comment
 
 | Comments in a line start with two hyphens.
-| There are only line comments but no block comments.
+| There are only line comments, no block comments.
 
 Includes, Language Objects, and Declarations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,16 +282,29 @@ respective include instruction. Nested includes of files from the same
 folder or in child folders are predictable; nested includes to files in
 parent folders would be bad practice.
 
+Namespace
+^^^^^^^^^
+
+.. code-block:: none
+	
+	namespace a
+	var l_var 0
+	end namespace
+	
+The ``namespace`` instruction declares a container-like space, that can hold variables, subroutines etc.
+These are defined only inside the namespace and therefore help organizing code and avoiding naming conflicts.
+In the given example, the variable ``l_var`` is only defined inside the namespace ``a``.
+
 Const
 ^^^^^
 
 .. code-block:: none
 
- const aconst 0x03
- const bconst 0b011
- const cconst 3
+ const a_const 0x03
+ const b_const 0b011
+ const c_const 3
 
-The ``const`` instruction declares and defines a constant with ID and hex, binary,
+The ``const`` instruction declares and defines a constant with an ID and a hex, binary,
 decimal unsigned value.
 
 It **isn't possible** to initialize a constant by referencing another
@@ -304,11 +315,11 @@ Var
 
 .. code-block:: none
 
- var avar 0x03
- var bvar 0b011
- var cvar 3
+ var a_var 0x03
+ var b_var 0b011
+ var c_var 3
 
-The ``var`` instruction declares and defines a variable with ID and initial hex, binary, or
+The ``var`` instruction declares and defines a variable with an ID and an initial hex, binary, or
 decimal unsigned value.
 
 It **isn't possible** to initialize a variable by referencing another
@@ -320,50 +331,50 @@ Array
 
 .. code-block:: none
 
- barray 16
+ a_array 16
 
-The ``array`` instruction declares an array with ID and an unsigned 32-bit integer length.
+The ``array`` instruction declares an array with an ID and an unsigned 32-bit integer length.
 
-Only arrays with one dimension are possible; the length must be fixed.
+Only arrays with one dimension are possible; the length is fixed.
 
 File
 ^^^^
 
 .. code-block:: none
 
- file afile "filename.stm"
- file afile "filename{:d}{:d}.stm" $index1 $index2
+ file a_file "filename.stm"
+ file a_file "filename{:d}{:d}.stm" index1 index2
 
-The ``file`` instruction declares a file with ID and file name.
+The ``file`` instruction declares a file with an ID and a file name.
 
 The latter must be a relative path to the location of the main.stm file.
 Text substitution by variables is allowed in file names. Thus, files can
-be accessed in an indexed manner. The variables are evaluated each time
-when a reference to a file is used in another instruction accessing a
-file, e.g., ``file read all afile alines``.
+be accessed in an indexed manner. The variables are evaluated every time
+a reference to a file is used in another instruction accessing a
+file, e.g., ``file read all a_file a_lines``.
 
 Lines
 ^^^^^
 
 .. code-block:: none
 
- lines alines
+ lines a_lines
 
-The ``lines`` instruction declares a lines object with ID.
+The ``lines`` instruction declares a lines object with an ID.
 
 The lines object contains an arbitrary number of line objects. It is
 defined to have no content when it is declared by default. It can grow
 or shrink dynamically by lines instructions accessing it, e.g.,
-``lines insert array alines 9 barray``.
+``lines insert array a_lines 9 b_array``.
 
 Signal
 ^^^^^^
 
 .. code-block:: none
 
- signal asignal
+ signal a_signal
 
-The ``signal`` instruction declares a signal object with ID.
+The ``signal`` instruction declares a signal object with an ID.
 
 The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
@@ -374,7 +385,7 @@ Bus
 
 .. code-block:: none
 
- bus abus
+ bus a_bus
 
 The ``bus`` instruction declares a bus object with ID.
 
@@ -390,127 +401,119 @@ equ
 
 .. code-block:: none
 
- equ operand1 $operand2
+ equ operand1 operand2
  equ operand1 0xF0
 
-The ``equ`` instruction copies the value of operand2 variable, constant, or numeric value into
-variable operand1 value or copy the value 0xF0 into variable operand1
-value.
+The ``equ`` instruction copies the value of operand2 (variable or constant) into
+operand1 (variable) or copies the value 0xF0 into operand1.
 
 add
 ^^^
 
 .. code-block:: none
 
- add operand1 $operand2
+ add operand1 operand2
  add operand1 0xF0
 
-The ``add`` instruction adds variable or constant operand2 value to variable operand1 value or
-add value 0xF0 to variable operand1 value. The resulting value of the
-addition is in variable operand1 value after the operation.
+The ``add`` instruction adds the value of operand2 (variable or constant) to the value of operand1 (variable) or
+adds the value 0xF0 to the value of operand1. The resulting value of the
+addition is stored in operand1 after the operation.
 
 sub
 ^^^
 
 .. code-block:: none
 
- sub operand1 $operand2
+ sub operand1 operand2
  sub operand1 0xF0`
 
-The ``sub`` instruction subtracts variable or constant operand2 value from variable operand1
-value or subtract value 0xF0 from variable operand1 value. The resulting
-value of the subtraction is in variable operand1 value after the
-operation.
+The ``sub`` instruction subtracts the value of operand2 (variable or constant) from the value of operand1
+(variable) or subtracts the value 0xF0 from the value operand1. The resulting
+value of the subtraction is stored in operand1 after the operation.
 
 mul
 ^^^
 
 .. code-block:: none
 
- mul operand1 $operand2
+ mul operand1 operand2
  mul operand1 0xF0
 
-The ``mul`` instruction multiplies variable or constant operand2 value with variable operand1
-value or multiply value 0xF0 with variable operand1 value. The resulting
-value of the multiplication is in variable operand1 value after the
-operation.
+The ``mul`` instruction multiplies the value of operand2 (variable or constant) with the value of operand1
+(variable) or multiplies the value 0xF0 with the value operand1. The resulting
+value of the multiplication is stored in operand1 after the operation.
 
 div
 ^^^
 
 .. code-block:: none
 
- div operand1 $operand2
+ div operand1 operand2
  div operand1 0xF0
 
-The ``div`` instruction divides variable operand1 value by variable or constant operand2 value or
-divide variable operand1 value by value 0xF0. The resulting value of the
-division is in variable operand1 value after the operation.
+The ``div`` instruction divides the value of operand1 (variable) by the value of operand2 (variable or constant) or
+divides the value of operand1 by the value 0xF0. The resulting value of the
+division is stored in operand1  after the operation.
 
 and
 ^^^
 
 .. code-block:: none
 
- and operand1 $operand2
+ and operand1 operand2
  and operand1 0xF0
 
-The ``and`` instruction does a bitwise and of variable or constant operand2 value with variable operand1
-value or bitwise and value 0xF0 with variable operand1 value. The
-resulting value of the bitwise and is in variable operand1 value after
-the operation.
+The ``and`` instruction does a bitwise ``and`` of the value of operand2 (variable or constant) with 
+the value of operand1 (variable) or a bitwise ``and`` of value 0xF0 with the value of operand1. The
+resulting value of the bitwise ``and`` is stored in operand1 after the operation.
 
 or
 ^^
 
 .. code-block:: none
 
- or operand1 $operand2
+ or operand1 operand2
  or operand1 0xF0
 
-The ``or`` instruction does a bitwise or of variable or constant operand2 value with variable operand1
-value or bitwise or value 0xF0 with variable operand1 value. The
-resulting value of the bitwise or is in variable operand1 value after
-the operation.
+The ``or`` instruction does a bitwise ``or`` of the value of operand2 (variable or constant) with 
+the value of operand1 (variable) or a bitwise ``or`` of value 0xF0 with the value of operand1. The
+resulting value of the bitwise ``or`` is stored in operand1 after the operation.
 
 xor
 ^^^
 
 .. code-block:: none
 
- xor operand1 $operand2
+ xor operand1 operand2
  xor operand1 0xF0
 
-The ``xor`` instruction does a bitwise xor of variable or constant operand2 value with variable operand1
-value or bitwise xor value 0xF0 with variable operand1 value. The
-resulting value of the bitwise xor is in variable operand1 value after
-the operation.
+The ``xor`` instruction does a bitwise ``xor`` of the value of operand2 (variable or constant) with
+the value of operand1 (variable) or a bitwise ``xor`` of value 0xF0 with the value of operand1. The
+resulting value of the bitwise ``xor`` is stored in operand1 after the operation.
 
 shl
 ^^^
 
 .. code-block:: none
 
- shl operand1 $operand2
+ shl operand1 operand2
  shl operand1 0xF0
 
-The ``shl`` instruction does a bitwise shift left of variable or constant operand2 value with variable
-operand1 value or bitwise shift left value 0xF0 with variable operand1
-value. The resulting value of the bitwise shift left is in variable
-operand1 value after the operation.
+The ``shl`` instruction does a bitwise left shift of the value of operand2 (variable or constant) with
+the value of operand1 (variable) or a bitwise left shift of value 0xF0 with the value of operand1. 
+The resulting value of the bitwise left shift is stored in operand1 after the operation.
 
 shr
 ^^^
 
 .. code-block:: none
 
- shr operand1 $operand2
+ shr operand1 operand2
  shr operand1 0xF0
 
-The ``shr`` instruction does a bitwise shift right of variable or constant operand2 value with variable
-operand1 value or bitwise shift right value 0xF0 with variable operand1
-value. The resulting value of the bitwise shift right is in variable
-operand1 value after the operation.
+The ``shr`` instruction does a bitwise right shift of the value of operand2 (variable or constant) with 
+the value ofoperand1 (variable) or a bitwise variable shift of value 0xF0 with the value of operand1.
+The resulting value of the bitwise right shift is stored in operand1 after the operation.
 
 inv
 ^^^
@@ -519,8 +522,8 @@ inv
 
  inv operand1
 
-The ``or`` instruction does a bitwise invert of variable operand1 value. The resulting value of the
-bitwise invert is in variable operand1 value after the operation.
+The ``or`` instruction does a bitwise inversion of the value of operand1 (variable). The resulting value 
+of the bitwise inversion is stored in operand1 after the operation.
 
 ld
 ^^
@@ -529,22 +532,21 @@ ld
 
  ld operand1
 
-The ``ld`` instruction does calculates logarithmus dualis of variable operand1 value. The resulting
-value is in variable operand1 value after the operation. The function
-returns the number of the utmost set bit, e.g., 4 for the input 16. It
-returns 0 for the input 0 too since this is the best approximation in a
+The ``ld`` instruction calculates the logarithmus dualis of the value operand1 (variable). The resulting
+value is stored in operand1 after the operation. The function returns the index of the highest set bit, 
+e.g., 4 for the input 16. It returns 0 for the input 0 too since this is the best approximation in a
 natural number range. The user should handle this discontinuity if
 another result or an error is expected.
 
 Subroutines, Branches, and Loops
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-proc and end proc
+proc, end proc
 ^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- aproc:
+ a_proc:
  proc
      --...
      -- subroutine code
@@ -552,8 +554,8 @@ proc and end proc
  end proc
 
 Code of a subroutine is placed between  ``proc`` and ``end proc`` instructions.
-The subroutine name is a label placed on the line before the ``proc``
-instruction, e.g., ``aproc``. The label ends with a colon as a label
+The name of the subroutine is a label placed a line ahead of the ``proc``
+instruction, e.g., ``a_proc``. The label ends with a colon as a label
 indicator.
 
 call
@@ -561,11 +563,10 @@ call
 
 .. code-block:: none
 
- call $aproc
+ call a_proc
 
-The ``call`` instruction branches execution to the subroutine with the label ``aproc`` and continues
-execution with the next line when it returns from the subroutine after
-it has reached an ``end proc`` or ``return`` instruction there.
+The ``call`` instruction branches execution to the subroutine with the given label. Code execution proceeds
+in the next line after an ``end proc`` or a ``return`` in the subroutine.
 
 return
 ^^^^^^
@@ -576,12 +577,12 @@ return
 
 The ``return`` instruction returns to calling code from a subroutine.
 
-interrupt and end interrupt
+interrupt, end interrupt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- aninterrupt:
+ an_interrupt:
  interrupt
      --...
      -- interrupt subroutine code
@@ -590,22 +591,22 @@ interrupt and end interrupt
 
 Code of an interrupt subroutine is placed between ``interrupt``
 and ``end interrupt`` instructions. The interrupt subroutine name is a label placed
-on the line before the ``interrupt`` instruction, e.g., aninterrupt. The label
+a line ahead of the ``interrupt`` instruction, e.g., ``an_interrupt``. The label
 ends with a colon as a label indicator. The label must be given in the
 tbsignal package by customization and attached to a signal triggering
 the interrupt. If necessary, the handling of nested interrupts must be
 resolved there too.
 
-if, elsif, else, and end if
+if, elsif, else, end if
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- if $avar = $bvar
+ if a_var = b_var
      -- ... some code
- elsif $avar 0xABC
+ elsif a_var 0xABC
      -- ... some code
- elsif 0x123} $bvar
+ elsif 0x123} b_var
      -- ... some code
  else
      -- ... some code
@@ -616,8 +617,8 @@ if, elsif, else, and end if
 Possible comparison operators are:
 ``>= <= > < != =``.
 
-The ``if`` or ``elsif`` instructions compares 2 variables, constants, or numeric values and branches
-execution to the next line if resolving to true. Otherwise, it branches
+The ``if`` or ``elsif`` instructions compares two variables, constants, or numeric values and branches
+execution to the next line after the ``end if`` if it resolves to true. Otherwise, it branches
 to the next ``elsif`` or ``else`` or ``end if`` instruction.
 
 The ``if`` ``elsif`` or ``else`` instructions can be nested.
@@ -627,7 +628,7 @@ loop
 
 .. code-block:: none
 
- loop $lvar
+ loop l_var
      -- ... some code
  end loop
 
@@ -635,7 +636,7 @@ loop
      -- ... some code
  end loop
 
-The ``loop`` instruction executes a loop of the code between the ``loop`` and end ``loop`` instruction.
+The ``loop`` instruction executes a loop of the code between the ``loop`` and ``end loop`` instruction.
 
 The number of times the loop should be executed is given after the ``loop``
 keyword. It can be a numeric value, a variable, or a constant.
@@ -654,7 +655,7 @@ abort
 
  abort
 
-The ``abort`` instruction aborts the simulation with severity failure.
+The ``abort`` instruction aborts the simulation with severity Failure.
 
 finish
 ^^^^^^
@@ -663,9 +664,16 @@ finish
 
  finish
 
-The ``finish`` instruction exits the simulation with severity note or error. The latter occurs only
-if resume has been set to other values than 0, and there were verify
-errors in verify instructions.
+The ``finish`` instruction exits the simulation.
+
+stop
+^^^^
+
+.. code-block:: none
+	
+	stop
+	
+The ``stop`` instruction stops the simulation with the severity Failure. The simulation can be resumed.
 
 Var Access
 ~~~~~~~~~~~~
@@ -675,7 +683,7 @@ Var Verify
 
 .. code-block:: none
 
- var verify a_var $evar $mvar
+ var verify a_var e_var m_var
  var verify a_var 0x01 0x0F
 
 The ``var verify`` instruction reads the value of a signal and compares it to an expected
@@ -683,7 +691,19 @@ value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity failure if the global resume is set to 0.
+severity Failure if the global resume is set to 0.
+
+
+Var Pointer Copy
+^^^^^^^^^^^^^^^^
+
+.. code-block:: none
+	
+ var pointer copy a_varA a_varB
+ 
+The ``var pointer copy`` instruction copies an variable pointer; for example, the pointer ``a_varA``  
+is a copy of the pointer ``a_varB`` after the execution of the instruction.
+
 
 Array Access
 ~~~~~~~~~~~~
@@ -693,15 +713,15 @@ Array Set
 
 .. code-block:: none
 
- array set barray $pvar $avar
- array set barray 3 $avar
- array set barray $pvar 5
- array set barray 3 4
+ array set b_array p_var a_var
+ array set b_array 3 a_var
+ array set b_array p_var 5
+ array set b_array 3 4
 
-The ``array set`` instruction sets the value of ``barray`` at position ``pvar``to the value of ``avar`` or
-``5``.
+The ``array set`` instruction sets the value of ``b_array`` at position ``p_var``to 
+the value of ``a_var`` or ``5``.
 
-The ``array set`` instruction the value of ``barray`` at position ``3``to the value of ``avar`` or
+The ``array set`` instruction sets the value of ``b_array`` at position ``3``to the value of ``avar`` or
 ``4``.
 
 Array Get
@@ -709,32 +729,32 @@ Array Get
 
 .. code-block:: none
 
- array get barray $pvar tvar
- array get barray 5  tvar
+ array get b_array p_var t_var
+ array get b_array 5  t_var
 
-The ``array get`` instruction gets the value of ``barray`` at position ``pvar`` or ``5`` into ``tvar``.
+The ``array get`` instruction gets the value of ``b_array`` at position ``p_var`` or ``5`` into ``t_var``.
 
 Array Verify
 ^^^^^^^^^^^^^
 
 .. code-block:: none
 
- array verify barray $pvar $evar $mvar
- array verify barray $pvar 0x01 0x0F
+ array verify b_array p_var e_var m_var
+ array verify b_array p_var 0x01 0x0F
 
 The ``array verify`` instruction reads the value of an array at a position and compares it to an expected
 value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity failure if the global resume is set to 0.
+severity Failure if the global resume is set to 0.
 
 Array Size
 ^^^^^^^^^^
 
 .. code-block:: none
 
- array size barray tvar
+ array size b_array t_var
 
 The ``array size`` instruction gets the size of an array.
 
@@ -743,24 +763,24 @@ Array Pointer Copy
 
 .. code-block:: none
 
- array pointer copy tarray sarray
+ array pointer copy t_array s_array
 
-The ``array pointer copy`` instruction copies an array pointer; for example, ``tarray`` pointer is a copy of
-``sarray`` pointer after the execution of the instruction. Used, for
+The ``array pointer copy`` instruction copies an array pointer; for example, the pointer ``t_array``  
+is a copy of the pointer ``s_array`` after the execution of the instruction. Used, for
 instance, to hand over an array to a subroutine. Changes to the source
-array happen in the target array too.
+array also apply to the target array.
 
 File Access
 ~~~~~~~~~~~
 
-File Writeable
+File Writable
 ^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- file writeable afile rvar
+ file writable a_file r_var
 
-The ``file writeable`` instruction tests if a file is writable. If the file is not present, it is created
+The ``file writable`` instruction tests if a file is writable. If the file is not present, it is created
 without having content. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
 on the operating system.
@@ -770,7 +790,7 @@ File Readable
 
 .. code-block:: none
 
- file readable afile rvar
+ file readable a_file r_var
 
 The ``file readable`` instruction tests if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
 STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
@@ -781,10 +801,10 @@ File Appendable
 
 .. code-block:: none
 
- file appendable afile rvar
+ file appendable a_file r_var
 
-The ``file appendable`` instruction tests if a file is appendable. The result is for STATUSOK 0, STATUSERROR
-1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
+The ``file appendable`` instruction tests if a file is appendable. The result is for STATUSOK 0, 
+STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
 depend on the operating system.
 
 File Write
@@ -792,9 +812,9 @@ File Write
 
 .. code-block:: none
 
- file write afile alines
+ file write a_file a_lines
 
-The ``file write`` instruction writes all lines of an ``alines`` object to a file. The file is
+The ``file write`` instruction writes all lines of a lines object to a file. The file is
 overwritten if it exists.
 
 File Append
@@ -802,9 +822,9 @@ File Append
 
 .. code-block:: none
 
- file append afile alines
+ file append a_file a_lines
 
-The ``file append`` instruction appends all lines of an ``alines`` object to a file. The method will fail
+The ``file append`` instruction appends all lines of a lines object to a file. The method will fail
 if the file doesn't exist.
 
 File Read All
@@ -812,19 +832,19 @@ File Read All
 
 .. code-block:: none
 
- file read all afile alines
+ file read all a_file a_lines
 
-The ``file read all`` instruction reads all lines of a file into an ``alines`` object.
+The ``file read all`` instruction reads all lines of a file into a lines object.
 
 File Read
 ^^^^^^^^^
 
 .. code-block:: none
 
-   file read afile alines $nvar
-   file read afile alines 10
+   file read a_file a_lines n_var
+   file read a_file a_lines 10
 
-The ``file read`` instruction reads a number of lines from a file into an ``alines`` object.
+The ``file read`` instruction reads a number of lines from a file into an lines object.
 
 The first read opens the file for read, following reads start at the line after
 the last line which has been read by the previous read. Thus a file can
@@ -838,7 +858,7 @@ File Read End
 
 .. code-block:: none
 
-   file read end afile
+   file read end a_file
 
 The ``file read end `` instruction ends the piecewise read process of a file.
 
@@ -847,12 +867,12 @@ File Pointer Copy
 
 .. code-block:: none
 
-   file pointer copy tfile sfile
+   file pointer copy t_file s_file
 
-The ``file pointer copy`` instruction copies a file pointer; for example, ``tfile`` pointer is a copy of
-``sfile`` pointer after the execution of the instruction. Used, for
+The ``file pointer copy`` instruction copies a file pointer; for example, the pointer``t_file`` is a copy of
+the pointer ``sfile`` after the execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
-file happen in the target file too.
+file are applied in the target file as well.
 
 Lines Access
 ~~~~~~~~~~~~
@@ -862,8 +882,8 @@ Lines Get
 
 .. code-block:: none
 
- lines get array alines $pvar tarray rvar
- lines get array alines 9 tarray rvar
+ lines get array a_lines p_var t_array r_var
+ lines get array a_lines 9 t_array r_var
 
 The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
 into an array.
@@ -881,12 +901,12 @@ Lines Set
 ^^^^^^^^^
 .. code-block:: none
 
- lines set array alines $pvar sarray
- lines set array alines 9 sarray
- lines set message alines $pvar "Some message to be written to a file later"
- lines set message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines set array a_lines p_var s_array
+ lines set array a_lines 9 s_array
+ lines set message a_lines p_var "Some message to be written to a file later"
+ lines set message a_lines p_var "Value1: {} Value2: {} to be written to a file later" m_var1 m_var2
 
-The ``lines get array`` instruction sets a line at a given position of a lines object.
+The ``lines set`` instruction sets a line at a given position of a lines object.
 
 The line currently at this position is overwritten. The line can be derived from an array or a
 message. The message string can contain {} placeholders which are filled
@@ -897,12 +917,12 @@ Lines Insert
 
 .. code-block:: none
 
- lines insert array alines $pvar sarray
- lines insert array alines 9 sarray
- lines insert message alines $pvar "Some message to be written to a file later"
- lines insert message alines $pvar "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines insert array a_lines p_var s_array
+ lines insert array a_lines 9 s_array
+ lines insert message a_lines p_var "Some message to be written to a file later"
+ lines insert message a_lines p_var "Value1: {} Value2: {} to be written to a file later" mvar1 mvar2
 
-The ``lines insert array`` instruction inserts a line at a given position of a lines object. The line currently
+The ``lines insert`` instruction inserts a line at a given position of a lines object. The line currently
 at this position is moved to the next position. The line can be derived
 from an array or a message. The message string can contain {}
 placeholders which are filled by values of variables given after the
@@ -913,11 +933,11 @@ Lines Append
 
 .. code-block:: none
 
- lines append array alines sarray
- lines append message alines "Some message to be written to a file later"
- lines append message alines "Value1: {} Value2: {} to be written to a file later" $mvar1 $mvar2
+ lines append array a_lines s_array
+ lines append message a_lines "Some message to be written to a file later"
+ lines append message a_lines "Value1: {} Value2: {} to be written to a file later" m_var1 m_var2
 
-The ``lines append array`` instruction appends a line at the end of a lines object. The line can be derived from
+The ``lines append`` instruction appends a line at the end of a lines object. The line can be derived from
 an array or a message. The message string can contain {} placeholders
 which are filled by values of variables given after the message string.
 
@@ -926,8 +946,8 @@ Lines Delete
 
 .. code-block:: none
 
- lines delete alines $pvar
- lines delete alines 3
+ lines delete a_lines p_var
+ lines delete a_lines 3
 
 The ``lines delete`` instruction deletes a line at a given position of a lines object. The next line is
 moved to the given position if it exists.
@@ -937,20 +957,20 @@ Lines Size
 
 .. code-block:: none
 
- lines size alines rvar
+ lines size a_lines r_var
 
 The ``lines size`` instruction gets the size of a lines object, which is the number of lines it contains
-currently.
+at that point.
 
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- lines pointer copy tlines slines
+ lines pointer copy t_lines s_lines
 
-The ``lines pointer copy`` instruction copies a lines pointer; for example, ``tlines`` pointer is a copy of
-``slines``
+The ``lines pointer copy`` instruction copies a lines pointer; for example, the pointer ``t_lines``
+is a copy of ``s_lines``.
 
 Log
 ~~~
@@ -960,8 +980,8 @@ Log Message
 
 .. code-block:: none
 
- log message $vvar "A message to the console"
- log message $vvar "A message to the console{}{}" $mvar1 $mvar2
+ log message v_var "A message to the console"
+ log message v_var "A message to the console{}{}" m_var1 m_var2
 
 The ``log message`` instruction prints a message at a given verbosity level to the console.
 
@@ -973,7 +993,7 @@ Log Lines
 
 .. code-block:: none
 
- log lines} $vvar slines
+ log lines v_var s_lines
 
 The ``log lines`` instruction dumps a lines object at a given verbosity level to the console.
 
@@ -982,7 +1002,7 @@ Verbosity
 
 .. code-block:: none
 
- verbosity $vvar
+ verbosity v_var
  verbosity 20
 
 Usual practice is to use the following constants to set verbosity:
@@ -1003,7 +1023,7 @@ Wait
 
 .. code-block:: none
 
- wait $wvar
+ wait w_var
  wait 10000
 
 The ``wait`` instruction waits for the given number of nanoseconds.
@@ -1016,8 +1036,8 @@ Random
 
 .. code-block:: none
 
- random tvar $minvar $maxvar
- random tvar 0 10
+ random t_var min_var max_var
+ random t_var 0 10
 
 The ``random`` instruction generates a random number greater or equal to the min value given and
 less than the maximum number given.
@@ -1027,7 +1047,7 @@ Seed
 
 .. code-block:: none
 
- seed $svar
+ seed s_var
  seed 10
 
 The ``seed`` instruction sets the internal start value for the random number generator.
@@ -1040,7 +1060,7 @@ Trace
 
 .. code-block:: none
 
- trace $tvar
+ trace t_var
  trace 0b111
 
 The ``trace`` instruction enables or disables the output of trace
@@ -1058,7 +1078,7 @@ Marker
 
 .. code-block:: none
 
- marker $nvar $mvar
+ marker n_var m_var
  marker 0xF 0b1
 
 The ``marker`` instruction sets a marker at a given number used to mark
@@ -1080,17 +1100,17 @@ Signal Write
 
 .. code-block:: none
 
- signal write asignal $svar
- signal write asignal 0b11
+ signal write a_signal s_var
+ signal write a_signal 0b11
 
-The ``signal write`` instruction writes variable, constant, or numeric value to a signal.
+The ``signal write`` instruction writes a variable, constant, or numeric value to a signal.
 
 Signal Read
 ^^^^^^^^^^^
 
 .. code-block:: none
 
- signal read asignal tvar
+ signal read a_signal t_var
 
 The ``signal read`` instruction reads the value of a signal into a variable.
 
@@ -1099,8 +1119,8 @@ Signal Verify
 
 .. code-block:: none
 
- signal verify asignal tvar $evar $mvar
- signal verify asignal tvar 0x01 0x0F
+ signal verify a_signal t_var e_var m_var
+ signal verify a_signal t_var 0x01 0x0F
 
 The ``signal verify`` instruction reads the value of a signal into a variable and compares it to an expected
 value with a given mask.
@@ -1114,37 +1134,39 @@ Signal Pointer Copy
 
 .. code-block:: none
 
- signal pointer copy tsignal ssignal
+ signal pointer copy t_signal s_signal
 
-The ``signal pointer copy`` instruction copies a signal pointer; for example, ``tsignal`` pointer is a copy of
-``ssignal``
+The ``signal pointer copy`` instruction copies a signal pointer; for example, the pointer ``t_signal``
+is a copy of the pointer ``s_signal``.
 
 Signal Pointer Set
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- signal pointer set tsignal 5
- signal pointer set tsignal $ptvar
+ signal pointer set t_signal 5
+ signal pointer set t_signal ptr_var
 
-The ``signal pointer set`` instruction sets a signal pointer; for example, ``tsignal`` pointer absolutely.
+The ``signal pointer set`` instruction sets a signal pointer (for example, the pointer ``t_signal``)
+to an absolute address.
 
 Signal Pointer Get
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- signal pointer get ssignal ptvar
+ signal pointer get s_signal ptr_var
 
-The ``signal pointer get`` instruction gets a signal pointer; for example, ``tsignal`` pointer absolutely into e.g. ptvar.
+The ``signal pointer get`` instruction gets the value of a signal pointer and stores it in a variable.
+For example, the pointer ``s_signal`` is stored in ``ptr_var``.
 
 Bus Write
 ^^^^^^^^^
 
 .. code-block:: none
 
- bus write abus $width $address $wvar
- bus write abus 32 0x0004 0x12345678
+ bus write a_bus a_width an_address a_var
+ bus write a_bus 32 0x0004 0x12345678
 
 The ``bus write`` instruction writes a variable, constant, or numeric value to a bus with a given width and address.
 
@@ -1153,7 +1175,7 @@ Bus Read
 
 .. code-block:: none
 
- bus read abus $width $address tvar
+ bus read a_bus a_width an_address a_var
 
 The ``bus read`` instruction reads the value of a bus with a given width and address into a variable.
 
@@ -1162,70 +1184,71 @@ Bus Verify
 
 .. code-block:: none
 
- bus verify abus $width $address tvar $evar $mvar
- bus verify abus $width $address tvar 0x01 0x0F
+ bus verify a_bus a_width an_address a_var e_var m_var
+ bus verify a_bus a_width an_address a_var 0x01 0x0F
 
-The ``bus verify`` instruction reads the value of a bus with a given width and address into a variable and compare it to an expected
-value with a given mask. The expected value and mask can be variables,
+The ``bus verify`` instruction reads the value of a bus with a given width and address into a variable 
+and compares it to an expected value with a given mask. The expected values and masks can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity failure if the global resume is set to 0; otherwise, it
-continues and reports an error.
+severity Failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
 Bus Pointer Copy
 ^^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus pointer copy tsignal ssignal
+ bus pointer copy t_signal s_signal
 
-The ``bus pointer copy`` instruction copies a bus pointer; for example, ``tbus`` pointer is a copy of
-``sbus``
+The ``bus pointer copy`` instruction copies a bus pointer; for example, the pointer ``t_bus`` is a copy of
+the pointer ``s_bus``.
 
 Bus Pointer Set
 ^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus pointer set tbus 5
- bus pointer set tbus $ptvar
+ bus pointer set t_bus 5
+ bus pointer set t_bus ptr_var
 
-The ``bus pointer set`` instruction sets a bus pointer; for example, ``tbus`` pointer absolutely.
+The ``bus pointer set`` instruction sets a bus pointer (for example, the pointer ``t_bus``)
+to an absolute address.
 
 Bus Pointer Get
 ^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus pointer get sbus ptvar
+ bus pointer get s_bus ptr_var
 
-The ``bus pointer get`` instruction gets a bus pointer; for example, ``tbus`` pointer absolutely into e.g. ptvar.
+The ``bus pointer get`` instruction gets the value of a bus pointer and stores it in a variable.
+For example, the pointer ``s_bus`` is stored in ``ptr_var``.
 
 Bus Timeout Set
 ^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus timeout set abus $svar
- bus timeout set abus 1000
+ bus timeout set a_bus s_var
+ bus timeout set a_bus 1000
 
 The ``bus timeout`` instruction sets the timeout in nanoseconds to wait for a bus access to end. On
-violation, the simulation stops with severity failure always.
+violation, the simulation stops with severity Failure always.
 
 Bus Timeout Get
 ^^^^^^^^^^^^^^^
 
 .. code-block:: none
 
- bus timeout get sbus tovar
+ bus timeout get s_bus to_var
 
-The ``bus timeout get`` instruction gets a bus timeout; for example, ``tbus`` pointer absolutely into e.g. tovar.
+The ``bus timeout get`` instruction gets a bus timeout and stores it in a variable; for example, the timeout ``s_bus`` ist stored in ``to_var``.
 
 Resume
 ^^^^^^
 
 .. code-block:: none
 
- resume $EXIT_ON_VERIFY_ERROR
+ resume EXIT_ON_VERIFY_ERROR
  resume 0
 
 | Usual practice is to use the following constants to set verbosity:
@@ -1233,7 +1256,7 @@ Resume
 | ``const`` ``EXIT_ON_VERIFY_ERROR 0``
 
 The ``resume`` instruction sets the global resume behavior for verify instructions. On a verify
-mismatch, the simulation stops with severity failure if the global
+mismatch, the simulation stops with severity Failure if the global
 resume is set to 0; otherwise, it continues and reports an error.
 
 Examples
@@ -1249,9 +1272,9 @@ Hello World
  var day 22
 
  testMain:
- proc`
+ proc
      loop 3
-       log message 0 "Hello World {:d}-{:d}-{:d}" $YEAR $month $day
+       log message 0 "Hello World {:d}-{:d}-{:d}" YEAR month day
      end loop`
      finish
  end proc
@@ -1267,7 +1290,7 @@ folder..
 Unit Tests
 ~~~~~~~~~~
 
-The test folder contains unittest for all commands. Thus all commands
+The test folder contains unittests for all commands. Thus all commands
 are verified for each release by regression tests.
 
 .. code-block:: none
