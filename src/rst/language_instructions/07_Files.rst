@@ -36,8 +36,8 @@ File Readable
 
  file readable a_file r_var
 
-The ``file readable`` instruction tests if a file is readable. The result is for STATUSOK 0, STATUSERROR 1,
-STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
+The ``file readable`` instruction tests if a file is readable. The result for ``STATUSOK`` is 0, ``STATUSERROR`` is 1,
+``STATUSNAMEERROR`` is  2, ``STATUSMODEERROR`` is 3 and may, in case of error, depend
 on the operating system.
 
 File Appendable
@@ -47,8 +47,8 @@ File Appendable
 
  file appendable a_file r_var
 
-The ``file appendable`` instruction tests if a file is appendable. The result is for STATUSOK 0, 
-STATUSERROR 1, STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error,
+The ``file appendable`` instruction tests if a file is appendable. The result for ``STATUSOK`` is 0, 
+``STATUSERROR`` is 1, ``STATUSNAMEERROR`` is 2, ``STATUSMODEERROR`` is 3 and may, in case of error,
 depend on the operating system.
 
 File Write
@@ -104,7 +104,7 @@ File Read End
 
    file read end a_file
 
-The ``file read end `` instruction ends the piecewise read process of a file.
+The ``file read end`` instruction ends the piecewise read process of a file.
 
 File Pointer Copy
 ^^^^^^^^^^^^^^^^^
@@ -113,7 +113,7 @@ File Pointer Copy
 
    file pointer copy t_file s_file
 
-The ``file pointer copy`` instruction copies a file pointer; for example, the pointer``t_file`` is a copy of
-the pointer ``sfile`` after the execution of the instruction. Used, for
+The ``file pointer copy`` instruction copies a file pointer; for example, the pointer ``t_file`` is a copy of
+the pointer ``s_file`` after the execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
 file are applied in the target file as well.

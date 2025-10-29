@@ -22,10 +22,10 @@ Array Set
  array set b_array p_var 5
  array set b_array 3 4
 
-The ``array set`` instruction sets the value of ``b_array`` at position ``p_var``to 
+The ``array set`` instruction sets the value of ``b_array`` at position ``p_var`` to 
 the value of ``a_var`` or ``5``.
 
-The ``array set`` instruction sets the value of ``b_array`` at position ``3``to the value of ``avar`` or
+The ``array set`` instruction sets the value of ``b_array`` at position ``3`` to the value of ``avar`` or
 ``4``.
 
 Array Get

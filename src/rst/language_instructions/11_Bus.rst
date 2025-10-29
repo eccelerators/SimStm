@@ -95,4 +95,4 @@ Bus Timeout Get
 
  bus timeout get s_bus to_var
 
-The ``bus timeout get`` instruction gets a bus timeout and stores it in a variable; for example, the timeout ``s_bus`` ist stored in ``to_var``.
+The ``bus timeout get`` instruction gets a bus timeout and stores it in a variable; for example, the timeout ``s_bus`` is stored in ``to_var``.
