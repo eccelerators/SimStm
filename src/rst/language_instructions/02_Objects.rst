@@ -17,6 +17,7 @@ decimal unsigned value.
 It **isn't possible** to initialize a constant by referencing another
 constant.
 
+
 Var
 ^^^
 
@@ -33,6 +34,7 @@ It **isn't possible** to initialize a variable by referencing another
 variable or constant yet. The ``equ``
 instruction must be used within a procedure for this purpose.
 
+
 Array
 ^^^^^
 
@@ -43,6 +45,7 @@ Array
 The ``array`` instruction declares an array with an ID and an unsigned 32-bit integer length.
 
 Only arrays with one dimension are possible; the length is fixed.
+
 
 File
 ^^^^
@@ -60,6 +63,7 @@ be accessed in an indexed manner. The variables are evaluated every time
 a reference to a file is used in another instruction accessing a
 file, e.g., ``file read all a_file a_lines``.
 
+
 Lines
 ^^^^^
 
@@ -74,6 +78,7 @@ defined to have no content when it is declared by default. It can grow
 or shrink dynamically by lines instructions accessing it, e.g.,
 ``lines insert array a_lines 9 b_array``.
 
+
 Signal
 ^^^^^^
 
@@ -87,6 +92,7 @@ The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
 customization and attached to a signal.
 
+
 Bus
 ^^^
 
@@ -99,6 +105,7 @@ The ``bus`` instruction declares a bus object with ID.
 The signal object associates a SimStm bus name with a bus number. This
 bus number must be given in the tb_bus package by customization and
 attached to a bus.
+
 
 Namespace
 ^^^^^^^^^
