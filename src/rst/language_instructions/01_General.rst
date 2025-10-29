@@ -1,5 +1,4 @@
-
-SimStm language instructions
+SimStm Language Instructions
 ----------------------------
 
 General
@@ -10,14 +9,12 @@ comment only lines. Subroutine labels are considered as instruction in
 this manner too.
 
 The colon postfix of a subroutine label must end with a colon. No space
-is allowed between the label ID and the colon. A dollar sign as prefix
-is used to reference to object content e.g. variables. No space is
-allowed between the dollar sign and referenced object ID. Otherwise the
+is allowed between the label ID and the colon. Otherwise the
 SimStm language is not white space sensitive.
 
 The SimStm language is case sensitive.
 
-All constant, variable or label ID are global within a SimStm project.
+All constants, variables and label IDs are global within a SimStm project.
 The IDs must be unique.
 
 There are no subroutine parameters or local variables. Values must be
@@ -37,10 +34,13 @@ Comments
  const aconst 0x03 -- This is an appended line comment
 
 | Comments in a line start with two hyphens.
-| There are only line comments but no block comments.
+| There are only line comments, no block comments.
 
-Includes
-~~~~~~~~
+Includes, Language Objects, and Declarations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Include
+^^^^^^^
 
 .. code-block:: none
 

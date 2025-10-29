@@ -13,6 +13,7 @@ include "Other/other.stm"
 include "Variable/variable.stm"
 include "Variable/variable_scope.stm"
 include "Variable/variable_local.stm"
+include "Variable/variable_local_override.stm"
 include "Variable/variable_pointer.stm"
 
 
@@ -46,11 +47,12 @@ proc
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
     -- call testBus256
+    call testVariableLocalOverride ()
     -- call testVariableLocal ()
     -- call testVariableScope ()
     -- call testVariablePointer ()
     -- call testVariableParameterIn ()
-    call testVariableParameterOut ()
+    -- call testVariableParameterOut ()
     -- call testLinesSize
 
     log message INFO "Main test finished"

@@ -1,5 +1,8 @@
-Hello World Example
-~~~~~~~~~~~~~~~~~~~
+Examples
+--------
+
+Hello World
+~~~~~~~~~~~
 
 .. code-block:: none
 
@@ -8,9 +11,9 @@ Hello World Example
  var day 22
 
  testMain:
- proc`
+ proc
      loop 3
-       log message 0 "Hello World {:d}-{:d}-{:d}" $YEAR $month $day
+       log message 0 "Hello World {:d}-{:d}-{:d}" YEAR month day
      end loop`
      finish
  end proc
@@ -23,3 +26,8 @@ An demonstration of all commands is in the file
 `command_list.stm <./command_list.stm>`__ in the repository root
 folder..
 
+Real-World Examples
+~~~~~~~~~~~~~~~~~~~
+
+Complex real-world example are found in the eccelerators group of
+repositories on `GitHub <https://github.com/eccelerators>`__.

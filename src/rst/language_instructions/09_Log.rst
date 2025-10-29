@@ -1,13 +1,13 @@
-Log Methods
-~~~~~~~~~~~
+Log
+---
 
 Log Message
 ^^^^^^^^^^^
 
 .. code-block:: none
 
- log message $vvar "A message to the console"
- log message $vvar "A message to the console{}{}" $mvar1 $mvar2
+ log message v_var "A message to the console"
+ log message v_var "A message to the console{}{}" m_var1 m_var2
 
 The ``log message`` instruction prints a message at a given verbosity level to the console.
 
@@ -19,7 +19,7 @@ Log Lines
 
 .. code-block:: none
 
- log lines} $vvar slines
+ log lines v_var s_lines
 
 The ``log lines`` instruction dumps a lines object at a given verbosity level to the console.
 
@@ -28,7 +28,7 @@ Verbosity
 
 .. code-block:: none
 
- verbosity $vvar
+ verbosity v_var
  verbosity 20
 
 Usual practice is to use the following constants to set verbosity:

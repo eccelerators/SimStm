@@ -1,4 +1,5 @@
 
+
 Features and Advantages
 -----------------------
 
@@ -11,9 +12,9 @@ Features and Advantages
 -  Test case code change and test without re-compilation
 -  SimStm language transpiles to Python or C, thus simulation code can
    be reused for the test of real target HW
--  Easily customizable to support user-defined busses, signals, and
+-  Easily customizable to support user-defined buses, signals, and
    interrupts
--  Standard busses Axi4Lite, Avalon, Wishbone and direct synchronous RAM are included
+-  Standard buses Axi4Lite, Avalon, Wishbone and direct synchronous RAM are included
 -  High coverage of functional verification of all connected IPs via
-   multiple busses
+   multiple buses
 -  Supports JUnit test reports

@@ -1,7 +1,7 @@
 Unit Tests
-~~~~~~~~~~
+----------
 
-The test folder contains unittest for all commands. Thus all commands
+The test folder contains unittests for all commands. Thus all commands
 are verified for each release by regression tests.
 
 .. code-block:: none
@@ -13,4 +13,3 @@ are verified for each release by regression tests.
     pip3 install click jinja2
     ant _helper-generate-modelsim-ant-build-xml
     ant modelsim-all
-    

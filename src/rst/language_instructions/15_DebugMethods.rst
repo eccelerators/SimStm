@@ -6,7 +6,7 @@ Trace
 
 .. code-block:: none
 
- trace $tvar
+ trace t_var
  trace 0b111
 
 The ``trace`` instruction enables or disables the output of trace
@@ -24,7 +24,7 @@ Marker
 
 .. code-block:: none
 
- marker $nvar $mvar
+ marker n_var m_var
  marker 0xF 0b1
 
 The ``marker`` instruction sets a marker at a given number used to mark

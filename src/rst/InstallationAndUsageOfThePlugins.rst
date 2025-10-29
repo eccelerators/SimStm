@@ -1,4 +1,5 @@
 
+
 Installation and Usage of the Plugins
 -------------------------------------
 
@@ -25,4 +26,3 @@ Eclipse
 -  Press the “Install” button.
 -  Create or open a “.stm” test script file within a project.
 -  Leverage the plugin's IDE features to enhance your testing workflow.
-
