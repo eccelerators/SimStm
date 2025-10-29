@@ -25,8 +25,8 @@ File Writable
  file writable a_file r_var
 
 The ``file writable`` instruction tests if a file is writable. If the file is not present, it is created
-without having content. The result is for STATUSOK 0, STATUSERROR 1,
-STATUSNAMEERROR 2, STATUSMODEERROR 3 and may, in case of error, depend
+without having content. The result for ``STATUSOK`` is 0, ``STATUSERROR`` is 1,
+``STATUSNAMEERROR`` is 2, ``STATUSMODEERROR`` is 3 and may, in case of error, depend
 on the operating system.
 
 File Readable
