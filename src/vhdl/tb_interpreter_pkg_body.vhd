@@ -1732,7 +1732,7 @@ package body tb_interpreter_pkg is
     begin
         inst_ptr := inst_sequ;
         -- go through all the instructions
-        dump_variables(var_list, stm_value_width); --TODO: remove
+        -- dump_variables(var_list, stm_value_width); --TODO: remove
         -- dump_inst_sequ(inst_sequ, tmp_file_list); --TODO: remove
         while inst_ptr.next_rec /= null loop
             line := inst_ptr.file_line;
