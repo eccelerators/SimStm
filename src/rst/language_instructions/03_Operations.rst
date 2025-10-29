@@ -2,17 +2,6 @@
 Equations and Arithmetic Operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-equ
-^^^
-
-.. code-block:: none
-
- equ operand1 operand2
- equ operand1 0xF0
-
-The ``equ`` instruction copies the value of operand2 (variable or constant) into
-operand1 (variable) or copies the value 0xF0 into operand1.
-
 add
 ^^^
 
@@ -128,7 +117,7 @@ inv
 
  inv operand1
 
-The ``or`` instruction does a bitwise inversion of the value of operand1 (variable). The resulting value 
+The ``inv`` instruction does a bitwise inversion of the value of operand1 (variable). The resulting value 
 of the bitwise inversion is stored in operand1 after the operation.
 
 ld
