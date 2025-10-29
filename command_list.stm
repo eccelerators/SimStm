@@ -356,6 +356,15 @@ proc
     bus timeout get a_bus bus_timeout_value
 end proc
 
+var bus_num 0
+
+proc bus_new_proc ( 
+	bus target_bus bus_num
+	
+	
+)
+end proc
+
 bus target_bus 0
 bus source_bus 0
 var bus_pointer_absolut 0
