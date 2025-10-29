@@ -73,13 +73,20 @@ package body tb_interpreter_pkg is
         variable temp_stim_line : stim_line_ptr;
         variable temp_current : stim_line_ptr;
         variable valid : integer;
+        variable n_valid : integer;
+        variable c_valid : integer;
         variable l : integer;
         variable stm_var_type : t_stm_var_type := NO_VAR_TYPE;
         variable is_new_proc_label : boolean := false;
         variable nul_scope : text_field;
         variable temp_text_field : text_field; 
+        variable n_temp_text_field : text_field; 
         variable var_index : integer;
         variable var_value : unsigned(stm_value_width -1 downto 0);
+        variable c_var_index : integer;
+        variable c_var_value : unsigned(stm_value_width -1 downto 0);
+        variable n_var_index : integer;
+        variable n_var_value : unsigned(stm_value_width -1 downto 0);
     begin
         valid := 1;
         l := fld_len(inst);
@@ -136,11 +143,20 @@ package body tb_interpreter_pkg is
                         if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
                             add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
                         else
-                            access_variable(var_list, scope, p2, var_index, var_value, valid);
-                            assert valid = 1
+                            access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
+                            assert c_valid = 1
                             report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
-                            severity failure;                          
-                            update_variable(var_list, var_index, var_value, valid);                            
+                            severity failure;
+                            n_temp_text_field(1) := '0';
+                            add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                          
+                            access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
+                            assert n_valid = 1
+                            report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                            severity failure;
+                            update_variable(var_list, n_var_index, c_var_value, n_valid);    
+                            assert n_valid = 1
+                            report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                            severity failure;                        
                         end if;
                     end if;
                     if fld_len(scope) = 0 then
@@ -1222,6 +1238,20 @@ package body tb_interpreter_pkg is
                 t1_len := fld_len(t1);
                 if pass = 0 then
                     check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
+                    -- proc_(
+                    -- proc_() 
+                    -- proc_(_) 
+                    if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
+                        scope := t2;
+                        scope_left := scope;
+                    end if;
+                    -- end proc
+                    -- end interrupt
+                    -- return
+                    if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
+                        scope := nul_scope;
+                        scope_left := scope;
+                    end if;
                     if t1(1 to t1_len) = INSTR_CONST then
                         add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
                                         sequ_line, l_num, name, v_new_fn, stm_value_width); 
