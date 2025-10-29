@@ -34,6 +34,6 @@ The ``tb_simstm`` entity has an output signal marker which is a
 ``std_logic_vector(15 downto 0)``. Thus there are 16 markers which can
 be set ``0b1`` or ``0b0``. This should be used to mark occurrences
 during the execution of the SimStm code so they can be found easily in
-the waveform display. Beneath this, the ``Executing_Line`` and
-``Executing_File`` ``tb_simstm`` intern variables are always present and
+the waveform display. Beneath this, the intern variables ``Executing_Line`` and
+``Executing_File`` in the ``tb_simstm.vhd`` module are always present and
 show the currently executed line of code.
