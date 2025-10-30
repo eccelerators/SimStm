@@ -72,7 +72,7 @@ package body tb_interpreter_pkg is
                               constant stm_value_width : in integer) is
         variable temp_stim_line : stim_line_ptr;
         variable temp_current : stim_line_ptr;
-        variable valid : integer;
+        variable valid_instruction : integer;
         variable n_valid : integer;
         variable c_valid : integer;
         variable l : integer;
@@ -81,14 +81,12 @@ package body tb_interpreter_pkg is
         variable nul_scope : text_field;
         variable temp_text_field : text_field; 
         variable n_temp_text_field : text_field; 
-        variable var_index : integer;
-        variable var_value : unsigned(stm_value_width -1 downto 0);
         variable c_var_index : integer;
         variable c_var_value : unsigned(stm_value_width -1 downto 0);
         variable n_var_index : integer;
         variable n_var_value : unsigned(stm_value_width -1 downto 0);
     begin
-        valid := 1;
+        valid_instruction := 1;
         l := fld_len(inst);
         temp_current := inst_list;
         -- take care of special cases
@@ -124,7 +122,7 @@ package body tb_interpreter_pkg is
                      l := fld_len(p1);
                      add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                       
                 end if;
-                valid := 0; --removes this from the instruction list            
+                valid_instruction := 0; -- removes this from adding to the instruction list in this pass          
             elsif pass = 1 then
                 if stm_var_type /= STM_CONST_VALUE_TYPE then         
                     --  add the variable to the variable pool, not considered an instruction
@@ -138,36 +136,72 @@ package body tb_interpreter_pkg is
                         else
                             add_variable(var_list, nul_scope, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);               
                         end if;
+                        valid_instruction := 0; -- removes this from adding to the instruction list in this pass
                     else
-                        l := fld_len(p1);                      
-                        if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
-                            add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                        if fld_len(scope) = 0 then -- global variable
+                            l := fld_len(p1);                      
+                            if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
+                                add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                            else
+                                access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
+                                assert c_valid = 1
+                                report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                n_temp_text_field(1) := '0';
+                                add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                          
+                                access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                update_variable(var_list, n_var_index, c_var_value, n_valid);    
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;                        
+                            end if;
+                            valid_instruction := 0; -- removes this from adding to the instruction list in this pass
                         else
-                            access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
-                            assert c_valid = 1
-                            report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
-                            severity failure;
-                            n_temp_text_field(1) := '0';
-                            add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                          
-                            access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
-                            assert n_valid = 1
-                            report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
-                            severity failure;
-                            update_variable(var_list, n_var_index, c_var_value, n_valid);    
-                            assert n_valid = 1
-                            report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
-                            severity failure;                        
+                            valid_instruction := 0; -- removes this from adding to the instruction list in this pass
                         end if;
                     end if;
-                    if fld_len(scope) = 0 then
-                        valid := 0; --removes this from the instruction list
+                else
+                    valid_instruction := 0; -- removes this from adding to the instruction list in this pass 
+                end if;          
+            elsif pass = 2 then
+                if stm_var_type /= STM_CONST_VALUE_TYPE then -- local or parameter variable        
+                    --  add the variable to the variable pool, not considered an instruction
+                    if stm_var_type /= STM_LABEL_TYPE then
+                        if fld_len(scope) /= 0 then
+                            l := fld_len(p1);                      
+                            if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
+                                add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                            else
+                                access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
+                                assert c_valid = 1
+                                report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                n_temp_text_field(1) := '0';
+                                add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                          
+                                access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                update_variable(var_list, n_var_index, c_var_value, n_valid);    
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;                        
+                            end if;         
+                        else
+                            valid_instruction := 0; -- removes this from adding to the instruction list in this pass 
+                        end if;                 
+                    else
+                        valid_instruction := 0; -- removes this from adding to the instruction list in this pass 
                     end if;
                 else
-                    valid := 0; --removes this from the instruction list 
+                    valid_instruction := 0; -- removes this from adding to the instruction list in this pass 
                 end if;          
             end if;
         end if;
-        if valid = 1 then
+        if valid_instruction = 1 then
             -- prepare the new record
             temp_stim_line := new stim_line;
             temp_stim_line.instruction := inst;
@@ -1256,7 +1290,7 @@ package body tb_interpreter_pkg is
                         add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
                                         sequ_line, l_num, name, v_new_fn, stm_value_width); 
                     end if;                
-                elsif pass = 1 then
+                elsif pass > 0 then
                     if t1(1 to t1_len) /= INSTR_CONST then        
                         check_valid_inst(t1, v_inst_ptr, valid, l_num, name);                
                         -- proc_(
@@ -1416,7 +1450,7 @@ package body tb_interpreter_pkg is
                         add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
                                         sequ_line, l_num, v_name, v_fn_idx, stm_value_width);
                     end if;                
-                elsif pass = 1 then                
+                elsif pass > 0 then                
                     if t1(1 to t1_len) /= INSTR_CONST then
                         check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);                
                         -- proc_(
@@ -1461,7 +1495,7 @@ package body tb_interpreter_pkg is
         inst_sequ := v_sequ_ptr;
         file_list := v_tmp_fn;
         --  now that all the stimulus is loaded, test for invalid variables
-        if pass = 1 then
+        if pass = 2 then
             test_inst_sequ(inst_sequ, v_tmp_fn, var_list, stm_value_width);
         end if;
     end procedure;

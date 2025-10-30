@@ -313,6 +313,8 @@ begin
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
         pass := 1;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        pass := 2;
+        read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
 
         -- initialize last info
         last_sequ_num := 0;
@@ -345,7 +347,7 @@ begin
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                                  
-                report "exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
+                print("exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name));
                 main_entered := 1;
                 stack(stack_ptr) := v_line;
                 stack_called_labels(stack_ptr) := main_label_text_field;
@@ -1625,51 +1627,51 @@ begin
                 elsif instruction(1 to len) = INSTR_FINISH then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4(30 downto 0)));
                     expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6(30 downto 0)));
-                    report "Verify passes " & (integer'image(verify_passes_count));
-                    report "Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count));
+                    print("Verify passes " & (integer'image(verify_passes_count)));
+                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then
-                        report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
-                        report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
+                        print("Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
+                        print("Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
                         if expected_verify_failure_count /= verify_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
                         if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     elsif expected_verify_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
                         if expected_verify_failure_count /= verify_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     elsif expected_bus_timeout_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
                         if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     end if;
-                    report "SUCCESS";
-                    report "Test finished";
+                    print("SUCCESS");
+                    print("Test finished");
                     wait for 1000 ns;
                     finish;
                     
