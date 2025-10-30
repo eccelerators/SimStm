@@ -17,6 +17,18 @@ instruction must be used within a procedure for this purpose.
 Var Access
 ~~~~~~~~~~
 
+Equ
+^^^
+
+.. code-block:: none
+
+ equ operand1 operand2
+ equ operand1 0xF0
+
+The ``equ`` instruction copies the value of operand2 (variable or constant) into
+operand1 (variable) or copies the value 0xF0 into operand1.
+
+
 Var Verify
 ^^^^^^^^^^^^^
 
