@@ -60,7 +60,7 @@ Array Size
 
  array size b_array t_var
 
-The ``array size`` instruction gets the size of an array.
+The ``array size`` instruction gets the size of an array and stores it in a variable.
 
 Array Pointer Copy
 ^^^^^^^^^^^^^^^^^^
