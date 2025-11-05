@@ -455,7 +455,7 @@ begin
                 wait for 100 ps;
 
                 if trc_on(0) = '1' then
-                    report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
+                    print("exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " (" & text_line_crop(file_name) & ")");
                 end if;
 
                 -- include "an_include.stm"

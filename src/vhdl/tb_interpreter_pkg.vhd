@@ -101,7 +101,8 @@ package tb_interpreter_pkg is
                            constant var_stm_type : in t_stm_var_type;
                            variable str_ptr : in stm_text_ptr;
                            variable txt_enclosing_quote : in character;
-                           constant stm_value_width : in integer);
+                           constant stm_value_width : in integer;
+                           variable assigned_index : out integer);
 
     --  access_variable
     --     inputs:
