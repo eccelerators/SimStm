@@ -473,16 +473,10 @@ begin
                 -- var a_varC a_constA
                 elsif instruction(1 to len) = INSTR_VAR then
                     -- This instruction has been executed for global variables while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    update_variable(defined_vars, par1_index, par2, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " add error: not a valid variable??"
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, stm_value, valid);
-                        assert valid /= 0
-                        report " line " & (integer'image(file_line)) & " add error: cannot update variable, it may be a constant ?"
-                        severity failure;
-                    end if;
                     
                 -- array an_array 16
                 elsif instruction(1 to len) = INSTR_ARRAY then
