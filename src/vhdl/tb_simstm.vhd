@@ -473,7 +473,7 @@ begin
                 -- var a_varC a_constA
                 elsif instruction(1 to len) = INSTR_VAR then
                     -- This instruction has been executed for global variables while reading the file
-                    update_variable(defined_vars, par1_index, par2, valid);
+                    reinit_and_update_variable(defined_vars, par1_index, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                     severity failure;
@@ -481,7 +481,7 @@ begin
                 -- array an_array 16
                 elsif instruction(1 to len) = INSTR_ARRAY then
                     -- This instruction has been executed for global arrays while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_array, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
@@ -495,7 +495,7 @@ begin
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif instruction(1 to len) = INSTR_FILE then
                     -- This instruction has been executed for global files while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
@@ -525,7 +525,7 @@ begin
                 -- signal a_signal
                 elsif instruction(1 to len) = INSTR_SIGNAL then
                     -- This instruction has been executed for global signals while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
@@ -539,7 +539,7 @@ begin
                 -- bus a_bus
                 elsif instruction(1 to len) = INSTR_BUS then
                     -- This instruction has been executed for global busses while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
@@ -553,7 +553,7 @@ begin
                 -- lines a_lines
                 elsif instruction(1 to len) = INSTR_LINES then
                     -- This instruction has been executed for global lines while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_lines, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;

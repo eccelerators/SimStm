@@ -278,14 +278,22 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);                       
+            temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);                      
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := new t_stm_lines;
             temp_var.var_stm_lines.stm_line_list := null;
             temp_var.var_stm_lines.size := 0;
+            temp_var.var_org_stm_lines := new t_stm_lines;
+            temp_var.var_org_stm_lines.stm_line_list := null;
+            temp_var.var_org_stm_lines.size := 0;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -300,13 +308,22 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);  
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
             for i in 0 to stim_to_integer(p2, name, line_num)-1 loop
                 temp_var.var_stm_array(i) := to_unsigned(0, stm_value_width);
             end loop;
+            temp_var.var_org_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
+            for i in 0 to stim_to_integer(p2, name, line_num)-1 loop
+                temp_var.var_org_stm_array(i) := to_unsigned(0, stm_value_width);
+            end loop;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -321,10 +338,16 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);  
             temp_var.var_stm_text := str_ptr;
             temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
+            temp_var.var_org_stm_text := str_ptr;
+            temp_var.var_org_stm_text_enclosing_quote := txt_enclosing_quote;
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -335,11 +358,17 @@ package body tb_interpreter_pkg is
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned       
+            temp_var.var_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned         
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -351,10 +380,16 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(sequ_num, stm_value_width);
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(sequ_num, stm_value_width);
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
     begin
@@ -996,14 +1031,35 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                value := ptr.var_value(0);
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
             var_scope := ptr.var_scope;
+            value := ptr.var_value(0);
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable value : out unsigned;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_value := ptr.var_org_value;
             value := ptr.var_value(0);
             valid := 1;
         end if;
@@ -1020,8 +1076,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                value_ptr := ptr.var_value;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -1045,8 +1099,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                var_stm_text := ptr.var_stm_text;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -1055,6 +1107,30 @@ package body tb_interpreter_pkg is
             var_scope := ptr.var_scope;
             var_stm_text := ptr.var_stm_text;
             var_stm_text_enclosing_quote := ptr.var_stm_text_enclosing_quote;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable var_stm_text : out stm_text_ptr;
+                             variable var_stm_text_enclosing_quote : out character;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            var_stm_text := ptr.var_org_stm_text;
+            var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
             valid := 1;
         end if;
     end procedure;
@@ -1082,6 +1158,29 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_array : out t_stm_array_ptr;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_stm_array := ptr.var_org_stm_array;
+            stm_array := ptr.var_stm_array;
+            valid := 1;
+        end if;
+    end procedure;
 
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
@@ -1102,6 +1201,29 @@ package body tb_interpreter_pkg is
         end loop;
         if ptr.var_index = index then
             var_scope := ptr.var_scope;
+            stm_lines := ptr.var_stm_lines;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_lines : out t_stm_lines_ptr;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_stm_lines := ptr.var_org_stm_lines;
             stm_lines := ptr.var_stm_lines;
             valid := 1;
         end if;
@@ -2115,14 +2237,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                ptr.var_value(0) := value;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
         if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_value(0) := value;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable value : in unsigned;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_value := ptr.var_org_value;
             ptr.var_value(0) := value;
             valid := 1;
         end if;
@@ -2138,8 +2280,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                ptr.var_value := value_ptr;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -2150,7 +2290,7 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
-
+    
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable var_stm_text : in stm_text_ptr;
@@ -2161,14 +2301,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                ptr.var_stm_text := var_stm_text;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
             ptr.var_stm_text := var_stm_text;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable var_stm_text : in stm_text_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+                ptr.var_stm_text := ptr.var_org_stm_text;
+                ptr.var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
+                ptr.var_stm_text := var_stm_text;
             valid := 1;
         end if;
     end procedure;
@@ -2183,14 +2343,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-                ptr.var_stm_array := stm_array;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
         if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_stm_array := stm_array;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_array : in t_stm_array_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_stm_array := ptr.var_org_stm_array;
             ptr.var_stm_array := stm_array;
             valid := 1;
         end if;
@@ -2206,13 +2386,32 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index) then
-                ptr.var_stm_lines := stm_lines;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
+            ptr.var_stm_lines := stm_lines;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_lines : in t_stm_lines_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if (ptr.var_index = index) then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            ptr.var_stm_lines := ptr.var_org_stm_lines;
             ptr.var_stm_lines := stm_lines;
             valid := 1;
         end if;
