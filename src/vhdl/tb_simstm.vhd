@@ -309,12 +309,19 @@ begin
         file_close(stimulus);
 
         -- read, test, and load the stimulus file
+        print("Parsing instructions pass 0");
         pass := 0;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
+        print("Parsing instructions pass 1");
         pass := 1;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
+        print("Parsing instructions pass 2");
         pass := 2;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        print("Parsing instructions done");
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
 
         -- initialize last info
         last_sequ_num := 0;
@@ -485,11 +492,9 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        for i in 0 to var_stm_array'length - 1 loop
-                            var_stm_array(i) := to_unsigned(0, machine_value_width);
-                        end loop;
-                    end if;
+                    for i in 0 to var_stm_array'length - 1 loop
+                        var_stm_array(i) := to_unsigned(0, machine_value_width);
+                    end loop;
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
@@ -499,27 +504,25 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        stm_text_substitude_wvar(defined_vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
-                        var_stm_text_substituded_ptr := new stm_text;
-                        stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                        if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
-                            file_close(user_file_0);
-                            user_file_in_use_0 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
-                            file_close(user_file_1);
-                            user_file_in_use_1 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
-                            file_close(user_file_2);
-                            user_file_in_use_2 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
-                            file_close(user_file_3);
-                            user_file_in_use_3 := false;
-                        else
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
-                            severity failure;
-                        end if;
+                    stm_text_substitude_wvar(defined_vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    var_stm_text_substituded_ptr := new stm_text;
+                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
+                    if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
+                        file_close(user_file_0);
+                        user_file_in_use_0 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
+                        file_close(user_file_1);
+                        user_file_in_use_1 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
+                        file_close(user_file_2);
+                        user_file_in_use_2 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
+                        file_close(user_file_3);
+                        user_file_in_use_3 := false;
+                    else
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
+                        severity failure;
                     end if;
 
                 -- signal a_signal
@@ -529,12 +532,10 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, par2, valid);
-                        assert valid /= 0
-                        report "signal_pointer error: not a signal object name??"
-                        severity failure;
-                    end if;
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report "signal_pointer error: not a signal object name??"
+                    severity failure;
                     
                 -- bus a_bus
                 elsif instruction(1 to len) = INSTR_BUS then
@@ -543,12 +544,10 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, par2, valid);
-                        assert valid /= 0
-                        report "bus_pointer error: not a bus object name??"
-                        severity failure;
-                    end if;
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report "bus_pointer error: not a bus object name??"
+                    severity failure;
                     
                 -- lines a_lines
                 elsif instruction(1 to len) = INSTR_LINES then
@@ -557,15 +556,13 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        while var_stm_lines.size > 0 loop
-                            temp_int := 0;
-                            stm_lines_delete(var_stm_lines, temp_int, valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
-                            severity failure;
-                        end loop;
-                    end if;
+                    while var_stm_lines.size > 0 loop
+                        temp_int := 0;
+                        stm_lines_delete(var_stm_lines, temp_int, valid);
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
+                        severity failure;
+                    end loop;
 
                 -- equ operand1_and_target operand2
                 -- equ operand1_and_target 0xF0
