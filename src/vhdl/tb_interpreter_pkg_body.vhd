@@ -72,7 +72,7 @@ package body tb_interpreter_pkg is
                               constant stm_value_width : in integer) is
         variable temp_stim_line : stim_line_ptr;
         variable temp_current : stim_line_ptr;
-        variable valid : integer;
+        variable valid_instruction : integer;
         variable n_valid : integer;
         variable c_valid : integer;
         variable l : integer;
@@ -81,14 +81,14 @@ package body tb_interpreter_pkg is
         variable nul_scope : text_field;
         variable temp_text_field : text_field; 
         variable n_temp_text_field : text_field; 
-        variable var_index : integer;
-        variable var_value : unsigned(stm_value_width -1 downto 0);
         variable c_var_index : integer;
         variable c_var_value : unsigned(stm_value_width -1 downto 0);
         variable n_var_index : integer;
         variable n_var_value : unsigned(stm_value_width -1 downto 0);
+        variable debug : boolean := false;
+        variable assigned_index : integer;
     begin
-        valid := 1;
+        valid_instruction := 0;
         l := fld_len(inst);
         temp_current := inst_list;
         -- take care of special cases
@@ -118,37 +118,33 @@ package body tb_interpreter_pkg is
             stm_var_type := STM_LABEL_TYPE;
             is_new_proc_label := true;
         end if;
-        if stm_var_type /= NO_VAR_TYPE then
-            if pass = 0 then
-                if stm_var_type = STM_CONST_VALUE_TYPE then
-                     l := fld_len(p1);
-                     add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                       
-                end if;
-                valid := 0; --removes this from the instruction list            
-            elsif pass = 1 then
-                if stm_var_type /= STM_CONST_VALUE_TYPE then         
-                    --  add the variable to the variable pool, not considered an instruction
-                    if stm_var_type = STM_LABEL_TYPE then
-                        if is_new_proc_label then
-                            l := fld_len(p1) + 1;
-                            temp_text_field := p1;
-                            temp_text_field(l) := ':';
-                            temp_text_field(l + 1) := nul;
-                            add_variable(var_list, nul_scope, temp_text_field, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                
-                        else
-                            add_variable(var_list, nul_scope, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);               
-                        end if;
-                    else
+
+        if pass = 0 then           
+            if stm_var_type /= NO_VAR_TYPE and stm_var_type = STM_CONST_VALUE_TYPE then
+                 l := fld_len(p1);
+                 add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                 if debug then
+                    print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " constant '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
+                 end if;            
+            end if;       
+        elsif pass = 1 then
+            if stm_var_type /= NO_VAR_TYPE and stm_var_type /= STM_CONST_VALUE_TYPE then         
+                --  add the variable to the variable pool, not considered an instruction
+                if stm_var_type /= STM_LABEL_TYPE then      
+                    if fld_len(scope) = 0 then -- global variable
                         l := fld_len(p1);                      
                         if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
-                            add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                            add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                            if debug then
+                                print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " global var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
+                            end if;
                         else
                             access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
                             assert c_valid = 1
                             report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
                             severity failure;
                             n_temp_text_field(1) := '0';
-                            add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width);                          
+                            add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);                          
                             access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
                             assert n_valid = 1
                             report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
@@ -156,18 +152,73 @@ package body tb_interpreter_pkg is
                             update_variable(var_list, n_var_index, c_var_value, n_valid);    
                             assert n_valid = 1
                             report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
-                            severity failure;                        
+                            severity failure;     
+                            if debug then
+                                print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " global var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
+                            end if;              
                         end if;
                     end if;
-                    if fld_len(scope) = 0 then
-                        valid := 0; --removes this from the instruction list
+                end if;
+            end if;         
+        elsif pass = 2 then
+            if stm_var_type = NO_VAR_TYPE then
+                valid_instruction := 1; -- add this to the instruction list
+            else
+                if stm_var_type /= STM_CONST_VALUE_TYPE then -- local or parameter variable        
+                    --  add the variable to the variable pool, not considered an instruction
+                    if stm_var_type = STM_LABEL_TYPE then
+                        if is_new_proc_label then
+                            l := fld_len(p1) + 1;
+                            temp_text_field := p1;
+                            temp_text_field(l) := ':';
+                            temp_text_field(l + 1) := nul;
+                            add_variable(var_list, nul_scope, temp_text_field, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);                
+                            if debug then
+                                print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " label () '" & p1 & " seq " & integer'image(sequ_num) & "' scope '" & scope  & "'");
+                            end if; 
+                            valid_instruction := 1; -- add this to the instruction list
+                        else
+                            add_variable(var_list, nul_scope, inst, p1, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                            if debug then
+                                print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " label : '" & inst & " seq " & integer'image(sequ_num) & " scope '" & scope  & "'");
+                            end if;                                     
+                        end if;      
+                    else
+                        if fld_len(scope) /= 0 then
+                            l := fld_len(p1);                      
+                            if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
+                                add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                                if debug then
+                                    print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " local var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
+                                end if; 
+                                valid_instruction := 1; -- add this to the instruction list
+                            else
+                                access_variable(var_list, scope, p2, c_var_index, c_var_value, c_valid);
+                                assert c_valid = 1
+                                report lf & "error: Constant '" & p2(1 to fld_len(p2)) & "' to initialize variable not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                n_temp_text_field(1) := '0';
+                                add_variable(var_list, scope, p1, n_temp_text_field, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);                        
+                                access_variable(var_list, scope, p1, n_var_index, n_var_value, n_valid);
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' to initialize with constant not found:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;
+                                update_variable(var_list, n_var_index, c_var_value, n_valid);    
+                                assert n_valid = 1
+                                report lf & "error: New variable '" & p2(1 to fld_len(p2)) & "' update with constant not successful:'" & p1(1 to fld_len(p1)) & "' scope:'" & scope(1 to fld_len(scope)) & "' not found !"
+                                severity failure;    
+                                if debug then
+                                    print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " local var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
+                                end if; 
+                                valid_instruction := 1; -- add this to the instruction list                     
+                            end if;         
+                        end if;                 
                     end if;
-                else
-                    valid := 0; --removes this from the instruction list 
-                end if;          
-            end if;
+                end if;
+            end if;          
         end if;
-        if valid = 1 then
+
+        if valid_instruction = 1 then
             -- prepare the new record
             temp_stim_line := new stim_line;
             temp_stim_line.instruction := inst;
@@ -183,7 +234,10 @@ package body tb_interpreter_pkg is
             temp_stim_line.txt_enclosing_quote := txt_enclosing_quote;
             temp_stim_line.line_number := sequ_num;
             temp_stim_line.file_idx := file_idx;
-            temp_stim_line.file_line := line_num;
+            temp_stim_line.file_line := line_num; 
+            if debug then
+                print("pass " & integer'image(pass) & " add instruction " & inst & " seq " & integer'image(sequ_num) & " scope '" & scope  & "' scope_left '" & scope_left  & "'");
+            end if;                     
             -- if is not the first instruction
             if inst_list /= null then
                 while temp_current.next_rec /= null loop
@@ -212,7 +266,8 @@ package body tb_interpreter_pkg is
                            constant var_stm_type : in t_stm_var_type;
                            variable str_ptr : in stm_text_ptr;
                            variable txt_enclosing_quote : in character;
-                           constant stm_value_width : in integer) is
+                           constant stm_value_width : in integer;
+                           variable assigned_index : out integer) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;
@@ -223,14 +278,22 @@ package body tb_interpreter_pkg is
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);                       
+            temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);                      
             temp_var.var_index := index;
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := new t_stm_lines;
             temp_var.var_stm_lines.stm_line_list := null;
             temp_var.var_stm_lines.size := 0;
+            temp_var.var_org_stm_lines := new t_stm_lines;
+            temp_var.var_org_stm_lines.stm_line_list := null;
+            temp_var.var_org_stm_lines.size := 0;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -245,13 +308,22 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);  
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
             for i in 0 to stim_to_integer(p2, name, line_num)-1 loop
                 temp_var.var_stm_array(i) := to_unsigned(0, stm_value_width);
             end loop;
+            temp_var.var_org_stm_array := new t_stm_array(0 to stim_to_integer(p2, name, line_num)-1)(stm_value_width - 1 downto 0);
+            for i in 0 to stim_to_integer(p2, name, line_num)-1 loop
+                temp_var.var_org_stm_array(i) := to_unsigned(0, stm_value_width);
+            end loop;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -266,10 +338,16 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(0, stm_value_width); 
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);  
             temp_var.var_stm_text := str_ptr;
             temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
+            temp_var.var_org_stm_text := str_ptr;
+            temp_var.var_org_stm_text_enclosing_quote := txt_enclosing_quote;
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -280,11 +358,17 @@ package body tb_interpreter_pkg is
             temp_var.var_scope := scope; -- direct write of text_field
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned       
+            temp_var.var_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := stim_to_stm_value(p2, name, line_num, stm_value_width); -- convert text_field to unsigned         
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
@@ -296,10 +380,16 @@ package body tb_interpreter_pkg is
             temp_var.var_index := index;
             temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
             temp_var.var_value(0) := to_unsigned(sequ_num, stm_value_width);
+            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            temp_var.var_org_value(0) := to_unsigned(sequ_num, stm_value_width);
             temp_var.var_stm_text := null;
             temp_var.var_stm_text_enclosing_quote := character'val(126);
+            temp_var.var_org_stm_text := null;
+            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
             temp_var.var_stm_array := null;
+            temp_var.var_org_stm_array := null;
             temp_var.var_stm_lines := null;
+            temp_var.var_org_stm_lines := null;
             temp_var.var_stm_type := var_stm_type;
         end procedure;
     begin
@@ -350,6 +440,7 @@ package body tb_interpreter_pkg is
             end if;
             var_list := temp_var;
         end if;
+        assigned_index := index;
     end procedure;
     
     procedure access_variable(variable var_list : in var_field_ptr;
@@ -748,7 +839,7 @@ package body tb_interpreter_pkg is
             txt_to_string(v_sequ.txt, tmp_txt);           
             print("++++ text: " & tmp_txt);
             print("++++ scope: " & v_sequ.inst_scope);
-            print("++++ scope: " & v_sequ.inst_scope_left);
+            print("++++ scope left: " & v_sequ.inst_scope_left);
             print("++++ par1 index: " & to_str(v_sequ.line_number));
             print("++++ par1: " & v_sequ.inst_field_1);
             print("++++ par2: " & v_sequ.inst_field_2);
@@ -764,7 +855,7 @@ package body tb_interpreter_pkg is
         end procedure;
     begin
         v_sequ := inst_sequ;
-        print("++++ -----------------------------------------------------------------");
+        print("++++ --dump_inst_sequ-----------------------------------------------------");
         while v_sequ.next_rec /= null loop
             dump;
             v_sequ := v_sequ.next_rec;
@@ -940,14 +1031,35 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                value := ptr.var_value(0);
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
             var_scope := ptr.var_scope;
+            value := ptr.var_value(0);
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable value : out unsigned;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_value := ptr.var_org_value;
             value := ptr.var_value(0);
             valid := 1;
         end if;
@@ -964,8 +1076,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                value_ptr := ptr.var_value;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -989,8 +1099,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                var_stm_text := ptr.var_stm_text;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -999,6 +1107,30 @@ package body tb_interpreter_pkg is
             var_scope := ptr.var_scope;
             var_stm_text := ptr.var_stm_text;
             var_stm_text_enclosing_quote := ptr.var_stm_text_enclosing_quote;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable var_stm_text : out stm_text_ptr;
+                             variable var_stm_text_enclosing_quote : out character;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            var_stm_text := ptr.var_org_stm_text;
+            var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
             valid := 1;
         end if;
     end procedure;
@@ -1026,6 +1158,29 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_array : out t_stm_array_ptr;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_stm_array := ptr.var_org_stm_array;
+            stm_array := ptr.var_stm_array;
+            valid := 1;
+        end if;
+    end procedure;
 
     procedure index_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
@@ -1046,6 +1201,29 @@ package body tb_interpreter_pkg is
         end loop;
         if ptr.var_index = index then
             var_scope := ptr.var_scope;
+            stm_lines := ptr.var_stm_lines;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_lines : out t_stm_lines_ptr;
+                             variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            var_scope := ptr.var_scope;
+            ptr.var_stm_lines := ptr.var_org_stm_lines;
             stm_lines := ptr.var_stm_lines;
             valid := 1;
         end if;
@@ -1235,60 +1413,37 @@ package body tb_interpreter_pkg is
                 end if;
             -- if there was valid tokens
             elsif valid /= 0 then
-                t1_len := fld_len(t1);
-                if pass = 0 then
-                    check_valid_inst(t1, v_inst_ptr, valid, l_num, name);
-                    -- proc_(
-                    -- proc_() 
-                    -- proc_(_) 
-                    if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
-                        scope := t2;
-                        scope_left := scope;
-                    end if;
-                    -- end proc
-                    -- end interrupt
-                    -- return
-                    if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
-                        scope := nul_scope;
-                        scope_left := scope;
-                    end if;
-                    if t1(1 to t1_len) = INSTR_CONST then
-                        add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
-                                        sequ_line, l_num, name, v_new_fn, stm_value_width); 
-                    end if;                
-                elsif pass = 1 then
-                    if t1(1 to t1_len) /= INSTR_CONST then        
-                        check_valid_inst(t1, v_inst_ptr, valid, l_num, name);                
-                        -- proc_(
-                        -- proc_() 
-                        -- proc_(_) 
-                        if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
-                            scope := t2;
-                            scope_left := scope;
-                        end if;
-                        -- end proc
-                        -- end interrupt
-                        -- return
-                        if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
-                            scope := nul_scope;
-                            scope_left := scope;
-                        end if;
-                        -- call_(
-                        -- call_() 
-                        -- call_(_) 
-                        if t1(1 to t1_len) = INSTR_CALL_PAR_OPEN or t1(1 to t1_len) = INSTR_CALL_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_CALL_PAR_NOPAR_1 then
-                            scope_left := t2;
-                            in_call_par := true;
-                        end if;
-                        -- ) 
-                        if t1(1 to t1_len) = INSTR_PAR_CLOSE and in_call_par then
-                            scope_left := scope;
-                            in_call_par := false;
-                        end if;      
-                        add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
-                                        sequ_line, l_num, name, v_new_fn, stm_value_width);                                                                                                                      
-                    end if;
+                t1_len := fld_len(t1);             
+                check_valid_inst(t1, v_inst_ptr, valid, l_num, v_iname);                
+                -- proc_(
+                -- proc_() 
+                -- proc_(_) 
+                if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
+                    scope := t2;
+                    scope_left := scope;
                 end if;
+                -- end proc
+                -- end interrupt
+                -- return
+                if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
+                    scope := nul_scope;
+                    scope_left := scope;
+                end if;
+                -- call_(
+                -- call_() 
+                -- call_(_) 
+                if t1(1 to t1_len) = INSTR_CALL_PAR_OPEN then
+                    scope_left := t2;
+                    in_call_par := true;
+                end if;
+                -- ) 
+                if t1(1 to t1_len) = INSTR_PAR_CLOSE and in_call_par then
+                    scope_left := scope;
+                    in_call_par := false;
+                end if;      
+                add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
+                                sequ_line, l_num, v_iname, v_new_fn, stm_value_width);
+
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file
@@ -1409,46 +1564,36 @@ package body tb_interpreter_pkg is
                 end if;
             -- if there were valid tokens
             elsif valid /= 0 then
-                t1_len := fld_len(t1);
-                if pass = 0 then
-                    check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);
-                    if t1(1 to t1_len) = INSTR_CONST then
-                        add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
-                                        sequ_line, l_num, v_name, v_fn_idx, stm_value_width);
-                    end if;                
-                elsif pass = 1 then                
-                    if t1(1 to t1_len) /= INSTR_CONST then
-                        check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);                
-                        -- proc_(
-                        -- proc_() 
-                        -- proc_(_) 
-                        if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
-                            scope := t2;
-                            scope_left := scope;
-                        end if;
-                        -- end proc
-                        -- end interrupt
-                        -- return
-                        if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
-                            scope := nul_scope;
-                            scope_left := scope;
-                        end if;
-                        -- call_(
-                        -- call_() 
-                        -- call_(_) 
-                        if t1(1 to t1_len) = INSTR_CALL_PAR_OPEN or t1(1 to t1_len) = INSTR_CALL_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_CALL_PAR_NOPAR_1 then
-                            scope_left := t2;
-                            in_call_par := true;
-                        end if;
-                        -- ) 
-                        if t1(1 to t1_len) = INSTR_PAR_CLOSE and in_call_par then
-                            scope_left := scope;
-                            in_call_par := false;
-                        end if;      
-                        add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
-                                        sequ_line, l_num, v_name, v_fn_idx, stm_value_width);
-                    end if;
+                t1_len := fld_len(t1);             
+                check_valid_inst(t1, v_inst_ptr, valid, l_num, v_name);                
+                -- proc_(
+                -- proc_() 
+                -- proc_(_) 
+                if t1(1 to t1_len) = INSTR_PROC_PAR_OPEN or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_0 or t1(1 to t1_len) = INSTR_PROC_PAR_NOPAR_1 then
+                    scope := t2;
+                    scope_left := scope;
                 end if;
+                -- end proc
+                -- end interrupt
+                -- return
+                if t1(1 to t1_len) = INSTR_END_PROC or t1(1 to t1_len) = INSTR_END_INTERRUPT then
+                    scope := nul_scope;
+                    scope_left := scope;
+                end if;
+                -- call_(
+                -- call_() 
+                -- call_(_) 
+                if t1(1 to t1_len) = INSTR_CALL_PAR_OPEN then
+                    scope_left := t2;
+                    in_call_par := true;
+                end if;
+                -- ) 
+                if t1(1 to t1_len) = INSTR_PAR_CLOSE and in_call_par then
+                    scope_left := scope;
+                    in_call_par := false;
+                end if;      
+                add_instruction(pass, v_sequ_ptr, v_var_prt, scope, scope_left, t1, t2, t3, t4, t5, t6, t7, t_txt, txt_enclosing_quote,
+                                sequ_line, l_num, v_name, v_fn_idx, stm_value_width);
             end if;
             l_num := l_num + 1;
         end loop; -- end loop read file
@@ -1461,7 +1606,7 @@ package body tb_interpreter_pkg is
         inst_sequ := v_sequ_ptr;
         file_list := v_tmp_fn;
         --  now that all the stimulus is loaded, test for invalid variables
-        if pass = 1 then
+        if pass = 2 then
             test_inst_sequ(inst_sequ, v_tmp_fn, var_list, stm_value_width);
         end if;
     end procedure;
@@ -2059,14 +2204,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                ptr.var_value(0) := value;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
         if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_value(0) := value;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable value : in unsigned;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_value := ptr.var_org_value;
             ptr.var_value(0) := value;
             valid := 1;
         end if;
@@ -2082,8 +2247,6 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                ptr.var_value := value_ptr;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -2094,7 +2257,7 @@ package body tb_interpreter_pkg is
             valid := 1;
         end if;
     end procedure;
-
+    
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable var_stm_text : in stm_text_ptr;
@@ -2105,14 +2268,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                ptr.var_stm_text := var_stm_text;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
             ptr.var_stm_text := var_stm_text;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable var_stm_text : in stm_text_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+                ptr.var_stm_text := ptr.var_org_stm_text;
+                ptr.var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
+                ptr.var_stm_text := var_stm_text;
             valid := 1;
         end if;
     end procedure;
@@ -2127,14 +2310,34 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-                ptr.var_stm_array := stm_array;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         -- check the current one
         if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_stm_array := stm_array;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_array : in t_stm_array_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
+            ptr.var_stm_array := ptr.var_org_stm_array;
             ptr.var_stm_array := stm_array;
             valid := 1;
         end if;
@@ -2150,13 +2353,32 @@ package body tb_interpreter_pkg is
         valid := 0;
         while ptr.next_rec /= null loop
             if (ptr.var_index = index) then
-                ptr.var_stm_lines := stm_lines;
-                valid := 1;
                 exit;
             end if;
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
+            ptr.var_stm_lines := stm_lines;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_lines : in t_stm_lines_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if (ptr.var_index = index) then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        if ptr.var_index = index then
+            ptr.var_stm_lines := ptr.var_org_stm_lines;
             ptr.var_stm_lines := stm_lines;
             valid := 1;
         end if;

@@ -165,11 +165,16 @@ package tb_base_pkg is
         var_scope : text_field;
         var_index : integer;
         var_value : t_stm_value_ptr;
+        var_org_value : t_stm_value_ptr;
         var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_text_enclosing_quote : character;
+        var_org_stm_text : stm_text_ptr;
+        var_org_stm_text_enclosing_quote : character;
         var_stm_array : t_stm_array_ptr;
+        var_org_stm_array : t_stm_array_ptr;
         var_stm_lines : t_stm_lines_ptr;
+        var_org_stm_lines : t_stm_lines_ptr;
         next_rec : var_field_ptr;
     end record;
 

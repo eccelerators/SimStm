@@ -101,7 +101,8 @@ package tb_interpreter_pkg is
                            constant var_stm_type : in t_stm_var_type;
                            variable str_ptr : in stm_text_ptr;
                            variable txt_enclosing_quote : in character;
-                           constant stm_value_width : in integer);
+                           constant stm_value_width : in integer;
+                           variable assigned_index : out integer);
 
     --  access_variable
     --     inputs:
@@ -215,6 +216,12 @@ package tb_interpreter_pkg is
                              variable var_scope : out text_field;
                              variable value : out unsigned;
                              variable valid : out integer);
+                             
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable value : out unsigned;
+                             variable valid : out integer);
                                                           
     procedure index_variable_value_ptr(variable var_list : in var_field_ptr;
                              variable index : in integer;
@@ -234,6 +241,13 @@ package tb_interpreter_pkg is
                              variable var_stm_text : out stm_text_ptr;
                              variable var_stm_text_enclosing_quote : out character;
                              variable valid : out integer);
+                             
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable var_stm_text : out stm_text_ptr;
+                             variable var_stm_text_enclosing_quote : out character;
+                             variable valid : out integer);
 
     --  index_stm_array
     --     inputs:
@@ -242,6 +256,12 @@ package tb_interpreter_pkg is
     --               stm_array
     --               valid is 1, not valid is 0
     procedure index_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_array : out t_stm_array_ptr;
+                             variable valid : out integer);
+                             
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable var_scope : out text_field;
                              variable stm_array : out t_stm_array_ptr;
@@ -258,6 +278,13 @@ package tb_interpreter_pkg is
                              variable var_scope : out text_field;
                              variable stm_lines : out t_stm_lines_ptr;
                              variable valid : out integer);
+                             
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             variable var_scope : out text_field;
+                             variable stm_lines : out t_stm_lines_ptr;
+                             variable valid : out integer);
+
 
     procedure print_file_def(file_list : inout file_def_ptr; index : in integer);
 
@@ -345,6 +372,11 @@ package tb_interpreter_pkg is
     procedure update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable value : in unsigned;
+                              variable valid : out integer); 
+                              
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable value : in unsigned;
                               variable valid : out integer);                             
                                                  
     procedure update_variable_value_ptr(variable var_list : in var_field_ptr;
@@ -361,6 +393,11 @@ package tb_interpreter_pkg is
                               variable index : in integer;
                               variable var_stm_text : in stm_text_ptr;
                               variable valid : out integer);
+                              
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable var_stm_text : in stm_text_ptr;
+                              variable valid : out integer);
 
     --  update_array
     --     inputs:
@@ -372,6 +409,11 @@ package tb_interpreter_pkg is
                               variable index : in integer;
                               variable stm_array : in t_stm_array_ptr;
                               variable valid : out integer);
+                              
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_array : in t_stm_array_ptr;
+                              variable valid : out integer);
 
     --  update_lines
     --     inputs:
@@ -380,6 +422,11 @@ package tb_interpreter_pkg is
     --               new lines
     --               valid  is 1 if valid 0 if not
     procedure update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_lines : in t_stm_lines_ptr;
+                              variable valid : out integer);
+                              
+    procedure reinit_and_update_variable(variable var_list : in var_field_ptr;
                               variable index : in integer;
                               variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);

@@ -309,10 +309,19 @@ begin
         file_close(stimulus);
 
         -- read, test, and load the stimulus file
+        print("Parsing instructions pass 0");
         pass := 0;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
+        print("Parsing instructions pass 1");
         pass := 1;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
+        print("Parsing instructions pass 2");
+        pass := 2;
+        read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        print("Parsing instructions done");
+        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
 
         -- initialize last info
         last_sequ_num := 0;
@@ -345,7 +354,7 @@ begin
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
                                  last_sequ_num, last_sequ_ptr);
                                  
-                report "exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
+                print("exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name));
                 main_entered := 1;
                 stack(stack_ptr) := v_line;
                 stack_called_labels(stack_ptr) := main_label_text_field;
@@ -453,7 +462,7 @@ begin
                 wait for 100 ps;
 
                 if trc_on(0) = '1' then
-                    report "exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
+                    print("exec line " & (integer'image(file_line)) & " " & instruction(1 to len) & " (" & text_line_crop(file_name) & ")");
                 end if;
 
                 -- include "an_include.stm"
@@ -471,105 +480,89 @@ begin
                 -- var a_varC a_constA
                 elsif instruction(1 to len) = INSTR_VAR then
                     -- This instruction has been executed for global variables while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    reinit_and_update_variable(defined_vars, par1_index, par2, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & " add error: not a valid variable??"
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, stm_value, valid);
-                        assert valid /= 0
-                        report " line " & (integer'image(file_line)) & " add error: cannot update variable, it may be a constant ?"
-                        severity failure;
-                    end if;
                     
                 -- array an_array 16
                 elsif instruction(1 to len) = INSTR_ARRAY then
                     -- This instruction has been executed for global arrays while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_array, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        for i in 0 to var_stm_array'length - 1 loop
-                            var_stm_array(i) := to_unsigned(0, machine_value_width);
-                        end loop;
-                    end if;
+                    for i in 0 to var_stm_array'length - 1 loop
+                        var_stm_array(i) := to_unsigned(0, machine_value_width);
+                    end loop;
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif instruction(1 to len) = INSTR_FILE then
                     -- This instruction has been executed for global files while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        stm_text_substitude_wvar(defined_vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
-                        var_stm_text_substituded_ptr := new stm_text;
-                        stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                        if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
-                            file_close(user_file_0);
-                            user_file_in_use_0 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
-                            file_close(user_file_1);
-                            user_file_in_use_1 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
-                            file_close(user_file_2);
-                            user_file_in_use_2 := false;
-                        elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
-                            file_close(user_file_3);
-                            user_file_in_use_3 := false;
-                        else
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
-                            severity failure;
-                        end if;
+                    stm_text_substitude_wvar(defined_vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_labels, var_stm_text_substituded, machine_value_width);
+                    var_stm_text_substituded_ptr := new stm_text;
+                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
+                    if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
+                        file_close(user_file_0);
+                        user_file_in_use_0 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
+                        file_close(user_file_1);
+                        user_file_in_use_1 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
+                        file_close(user_file_2);
+                        user_file_in_use_2 := false;
+                    elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
+                        file_close(user_file_3);
+                        user_file_in_use_3 := false;
+                    else
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: trying to end file not started or already ended for read"
+                        severity failure;
                     end if;
 
                 -- signal a_signal
                 elsif instruction(1 to len) = INSTR_SIGNAL then
                     -- This instruction has been executed for global signals while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, par2, valid);
-                        assert valid /= 0
-                        report "signal_pointer error: not a signal object name??"
-                        severity failure;
-                    end if;
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report "signal_pointer error: not a signal object name??"
+                    severity failure;
                     
                 -- bus a_bus
                 elsif instruction(1 to len) = INSTR_BUS then
                     -- This instruction has been executed for global busses while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, stm_value, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        update_variable(defined_vars, par1_index, par2, valid);
-                        assert valid /= 0
-                        report "bus_pointer error: not a bus object name??"
-                        severity failure;
-                    end if;
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report "bus_pointer error: not a bus object name??"
+                    severity failure;
                     
                 -- lines a_lines
                 elsif instruction(1 to len) = INSTR_LINES then
                     -- This instruction has been executed for global lines while reading the file
-                    index_variable(defined_vars, par1_index, var_scope, var_stm_lines, valid);
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
                     severity failure;
-                    if fld_len(var_scope) > 0 then
-                        while var_stm_lines.size > 0 loop
-                            temp_int := 0;
-                            stm_lines_delete(var_stm_lines, temp_int, valid);
-                            assert valid /= 0
-                            report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
-                            severity failure;
-                        end loop;
-                    end if;
+                    while var_stm_lines.size > 0 loop
+                        temp_int := 0;
+                        stm_lines_delete(var_stm_lines, temp_int, valid);
+                        assert valid /= 0
+                        report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines delete all not successful"
+                        severity failure;
+                    end loop;
 
                 -- equ operand1_and_target operand2
                 -- equ operand1_and_target 0xF0
@@ -1625,51 +1618,51 @@ begin
                 elsif instruction(1 to len) = INSTR_FINISH then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4(30 downto 0)));
                     expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6(30 downto 0)));
-                    report "Verify passes " & (integer'image(verify_passes_count));
-                    report "Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count));
+                    print("Verify passes " & (integer'image(verify_passes_count)));
+                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then
-                        report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
-                        report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
+                        print("Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
+                        print("Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
                         if expected_verify_failure_count /= verify_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
                         if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     elsif expected_verify_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
                         if expected_verify_failure_count /= verify_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     elsif expected_bus_timeout_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
                         if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
-                            report "FAILURES";
-                            report "Test finished";
+                            print("FAILURES");
+                            print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        report "SUCCESS";
+                        print("SUCCESS");
                         wait for 1000 ns;
                         finish;
                     end if;
-                    report "SUCCESS";
-                    report "Test finished";
+                    print("SUCCESS");
+                    print("Test finished");
                     wait for 1000 ns;
                     finish;
                     
