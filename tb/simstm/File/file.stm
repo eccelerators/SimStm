@@ -24,7 +24,7 @@ var FileTmpResult 0
 
 testFileWriteArray:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_array 0 0
     array set a_array 1 1
@@ -50,12 +50,12 @@ proc
     lines size b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testFileAppendArray:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_array 0 0
     array set a_array 1 1
@@ -83,13 +83,13 @@ proc
     lines size b_lines FileTmpResult
     var verify FileTmpResult 6 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 
 testFileReadAllArray:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_array 0 0
     array set a_array 1 1
@@ -115,14 +115,14 @@ proc
     lines size b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var read_elements_got 0
 
 testFileReadArray:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_read_array 0 0
     array set a_read_array 1 0
@@ -196,23 +196,26 @@ proc
     lines get array c_read_lines 0 c_read_array read_elements_got
     var verify read_elements_got 8 MAX
 
-    array pointer copy ArrayToDump a_read_array
-    call arrayDump
-    array pointer copy ArrayToDump b_read_array
-    call arrayDump
-    array pointer copy ArrayToDump c_read_array
-    call arrayDump
+    call arrayDump (
+    	array pointer copy Array b_read_array
+    )
+    call arrayDump (
+    	array pointer copy Array b_read_array
+    )
+    call arrayDump (
+    	array pointer copy Array c_read_array
+    )
 
     array verify a_read_array 0 0 MAX
     array verify b_read_array 0 1 MAX
     array verify c_read_array 0 2 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testFileStatus:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_array 0 0
     array set a_array 1 1
@@ -230,10 +233,12 @@ proc
 
     array set a_array 0 2
     lines append array a_lines a_array
-
+	var FileStatus 0
     log message 0 "Check if file is readable, which doesn't exist"
     file readable user_data_out_not_present FileStatus
-    call printFileStatus
+    call printFileStatus (
+    	equ FileStatus FileStatus
+    )
     var verify FileStatus FILE_STATUS_NAME_ERROR MAX
 
     -- No means to delete a file with VHDL, thus not testable since file is constructed if it doesn't exist by writable test
@@ -249,26 +254,29 @@ proc
     -- call printFileStatus
 
     log message 0 "Check if file is readable, which exist"
-    file writeable user_data_out_present FileStatus -- constructs file
-    call printFileStatus
+  
+    file writable user_data_out_present FileStatus -- constructs file
+    call printFileStatus (
+    	equ FileStatus FileStatus
+    )
     var verify FileStatus FILE_STATUS_OK MAX
 
     log message 0 "Check if file is readable, which exist"
     file appendable user_data_out_present FileStatus
-    call printFileStatus
+    call printFileStatus ()
     var verify FileStatus FILE_STATUS_OK MAX
 
     log message 0 "Check if file is readable, which exist"
     file readable user_data_out_present FileStatus
-    call printFileStatus
+    call printFileStatus ()
     var verify FileStatus FILE_STATUS_OK MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testFilePointerCopy:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     array set a_array 0 0
     array set a_array 1 1
@@ -297,7 +305,7 @@ proc
     lines size b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 WriteFile:

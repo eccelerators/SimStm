@@ -1,43 +1,43 @@
-array src_array 10
-array des_array 1
+array test_array_pointer_src_array 10
+array test_array_pointer_des_array 1
 
-var var_name_p 0
+var test_array_pointer_var 0
 
 testArrayPointerCopy:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
-    array size src_array var_name_p
-    var verify var_name_p 10 MAX
+    array size test_array_pointer_src_array test_array_pointer_var
+    var verify test_array_pointer_var 10 MAX
 
-    array size des_array var_name_p
-    var verify var_name_p 1 MAX
+    array size test_array_pointer_des_array test_array_pointer_var
+    var verify test_array_pointer_var 1 MAX
 
-    array set src_array 0 10
-    array set src_array 1 11
-    array set src_array 2 12
+    array set test_array_pointer_src_array 0 10
+    array set test_array_pointer_src_array 1 11
+    array set test_array_pointer_src_array 2 12
 
-    array pointer copy des_array src_array
+    array pointer copy test_array_pointer_des_array test_array_pointer_src_array
 
-    array size src_array var_name_p
-    var verify var_name_p 10 MAX
+    array size test_array_pointer_src_array test_array_pointer_var
+    var verify test_array_pointer_var 10 MAX
 
-    array size des_array var_name_p
-    var verify var_name_p 10 MAX
+    array size test_array_pointer_des_array test_array_pointer_var
+    var verify test_array_pointer_var 10 MAX
 
-    array get des_array 0 var_name_p
-    var verify var_name_p 10 MAX
+    array get test_array_pointer_des_array 0 test_array_pointer_var
+    var verify test_array_pointer_var 10 MAX
 
-    array get des_array 1 var_name_p
-    var verify var_name_p 11 MAX
+    array get test_array_pointer_des_array 1 test_array_pointer_var
+    var verify test_array_pointer_var 11 MAX
 
-    array get des_array 2 var_name_p
-    var verify var_name_p 12 MAX
+    array get test_array_pointer_des_array 2 test_array_pointer_var
+    var verify test_array_pointer_var 12 MAX
 
-    array set des_array 5 55
+    array set test_array_pointer_des_array 5 55
 
-    array get src_array 5 var_name_p
-    var verify var_name_p 55 MAX
+    array get test_array_pointer_src_array 5 test_array_pointer_var
+    var verify test_array_pointer_var 55 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
