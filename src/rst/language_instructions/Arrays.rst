@@ -3,7 +3,7 @@ Arrays
 
 .. code-block:: none
 
- a_array 16
+ array a_array 16
 
 The ``array`` instruction declares an array with an ID and an unsigned 32-bit integer length.
 
