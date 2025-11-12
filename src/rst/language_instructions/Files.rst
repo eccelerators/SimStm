@@ -113,7 +113,7 @@ File Pointer Copy
 
    file pointer copy t_file s_file
 
-The ``file pointer copy`` instruction copies a file pointer; for example, the pointer ``t_file`` is a copy of
-the pointer ``s_file`` after the execution of the instruction. Used, for
+The ``file pointer copy`` instruction creates a file pointer; for example, ``t_file`` points to ``s_file`` after the
+execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
 file are applied in the target file as well.

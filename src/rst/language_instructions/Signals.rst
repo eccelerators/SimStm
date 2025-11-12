@@ -55,8 +55,10 @@ Signal Pointer Copy
 
  signal pointer copy t_signal s_signal
 
-The ``signal pointer copy`` instruction copies a signal pointer; for example, the pointer ``t_signal``
-is a copy of the pointer ``s_signal``.
+The ``signal pointer copy`` instruction copies a signal pointer; for example, ``t_signal``
+points to ``s_signal`` after the instruction of the execution. Used, for
+instance, to hand over a signal to a subroutine. Changes to the source
+object are applied to the target object as well.
 
 Signal Pointer Set
 ^^^^^^^^^^^^^^^^^^

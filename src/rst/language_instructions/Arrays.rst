@@ -69,7 +69,7 @@ Array Pointer Copy
 
  array pointer copy t_array s_array
 
-The ``array pointer copy`` instruction copies an array pointer; for example, the pointer ``t_array``  
-is a copy of the pointer ``s_array`` after the execution of the instruction. Used, for
+The ``array pointer copy`` instruction creates an array pointer; for example, ``t_array``  
+points to ``s_array`` after the execution of the instruction. Used, for
 instance, to hand over an array to a subroutine. Changes to the source
 array also apply to the target array.

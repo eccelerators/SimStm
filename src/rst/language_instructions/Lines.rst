@@ -107,5 +107,7 @@ Lines Pointer Copy
 
  lines pointer copy t_lines s_lines
 
-The ``lines pointer copy`` instruction copies a lines pointer; for example, the pointer ``t_lines``
-is a copy of ``s_lines``.
+The ``lines pointer copy`` instruction copies a lines pointer; for example, ``t_lines``
+points to ``s_lines`` after the execution of the instruction. Used, for
+instance, to hand over a file to a subroutine. Changes to the source
+object are applied to the target object as well.

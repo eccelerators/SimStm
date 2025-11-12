@@ -51,10 +51,11 @@ Bus Pointer Copy
 
 .. code-block:: none
 
- bus pointer copy t_signal s_signal
+ bus pointer copy t_bus s_bus
 
-The ``bus pointer copy`` instruction copies a bus pointer; for example, the pointer ``t_bus`` is a copy of
-the pointer ``s_bus``.
+The ``bus pointer copy`` instruction creates a bus pointer; for example, ``t_bus`` points to ``s_bus`` after the execution of the instruction.
+Used, for instance, to hand over a bus to a subroutine. Changes to the source
+bus are applied to the target bus as well.
 
 Bus Pointer Set
 ^^^^^^^^^^^^^^^
