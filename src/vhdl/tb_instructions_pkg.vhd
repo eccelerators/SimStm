@@ -110,7 +110,7 @@ package tb_instructions_pkg is
     -- file
     constant INSTR_FILE : string := "file";
     constant INSTR_FILE_READABLE : string := "file_readable";
-    constant INSTR_FILE_WRITABLE : string := "file_writeable";
+    constant INSTR_FILE_WRITABLE : string := "file_writable";
     constant INSTR_FILE_APPENDABLE : string := "file_appendable";
     constant INSTR_FILE_READ : string := "file_read";
     constant INSTR_FILE_READ_END : string := "file_read_end";
@@ -271,9 +271,9 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_READ_END, 1);
         define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
-        define_instruction(inst_list, INSTR_FILE_APPEND, 2);
+        define_instruction(inst_list, INSTR_FILE_APPEND, 2); 
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
-        define_instruction(inst_list, INSTR_FILE_POINTER_COPY_PAR_CLOSE, 2);
+        define_instruction(inst_list, INSTR_FILE_POINTER_COPY_PAR_CLOSE, 2); 
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
         define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
@@ -414,8 +414,8 @@ package body tb_instructions_pkg is
                 if token2(1 to 8) = "readable" then
                     token2_len := 8;
                     token_merge := 12;
-                elsif token2(1 to 9) = "writeable" then
-                    token2_len := 9;
+                elsif token2(1 to 8) = "writable" then
+                    token2_len := 8;
                     token_merge := 12;
                 elsif token2(1 to 10) = "appendable" then
                     token2_len := 10;
