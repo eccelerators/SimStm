@@ -4,7 +4,7 @@ proc testVariablePointer ()
 	var test_variable_pointer_1 1
 	var test_variable_pointer_2 2
 
-    call startStandardTestShell
+    call startStandardTestShell ()
     
     log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
     log message INFO_2 "test_variable_pointer_2: {:d}" test_variable_pointer_2
@@ -14,6 +14,6 @@ proc testVariablePointer ()
     log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
     var verify test_variable_pointer_1 2 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc

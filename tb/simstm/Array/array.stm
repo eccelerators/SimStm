@@ -2,8 +2,8 @@ array test_array_name 3
 
 var test_array_var 10
 
-testArray:
-proc
+proc testArray ()
+
     call startStandardTestShell ()
 
     array set test_array_name 0 3
@@ -24,8 +24,7 @@ proc
     call endStandardTestShell ()
 end proc
 
-testArrayGet:
-proc
+proc testArrayGet ()
     call startStandardTestShell ()
 
     array set test_array_name 0 3
@@ -43,8 +42,8 @@ proc
     call endStandardTestShell ()
 end proc
 
-testArraySet:
-proc
+proc testArraySet ()
+
     call startStandardTestShell ()
 
     array set test_array_name 0 3

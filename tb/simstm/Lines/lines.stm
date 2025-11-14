@@ -1,4 +1,4 @@
-array a_array 8
+array file_array 8
 array another_array 8
 
 var number_of_elements_got 0
@@ -9,39 +9,39 @@ var lines_size 0
 
 lines a_lines_aa
 
-testLinesAppendArray:
-proc
-    call startStandardTestShell
+proc testLinesAppendArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines append array a_lines_aa a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines_aa a_array
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+    lines append array a_lines_aa file_array
 
-    array set a_array 0 2
-    lines append array a_lines_aa a_array
+    array set file_array 0 1
+    lines append array a_lines_aa file_array
+
+    array set file_array 0 2
+    lines append array a_lines_aa file_array
 
     log lines 0 a_lines_aa
 
     lines size a_lines_aa number_of_lines
     var verify number_of_lines 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_at
 
-testLinesAppendText:
-proc
-     call startStandardTestShell
+proc testLinesAppendText ()
+
+     call startStandardTestShell ()
 
     lines append message a_lines_at "line 1"
     lines append message a_lines_at "line 2"
@@ -52,30 +52,30 @@ proc
     lines size a_lines_at number_of_lines
     var verify number_of_lines 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_daa
 
-testLinesDeleteAllArray:
-proc
-    call startStandardTestShell
+proc testLinesDeleteAllArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines append array a_lines_daa a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines_daa a_array
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+    lines append array a_lines_daa file_array
 
-    array set a_array 0 2
-    lines append array a_lines_daa a_array
+    array set file_array 0 1
+    lines append array a_lines_daa file_array
+
+    array set file_array 0 2
+    lines append array a_lines_daa file_array
 
     log lines 0 a_lines_daa
 
@@ -88,30 +88,30 @@ proc
     lines size a_lines_daa number_of_lines
     var verify number_of_lines 0 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_da
 
-testLinesDeleteArray:
-proc
-    call startStandardTestShell
+proc testLinesDeleteArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines append array a_lines_da a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines_da a_array
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+    lines append array a_lines_da file_array
 
-    array set a_array 0 2
-    lines append array a_lines_da a_array
+    array set file_array 0 1
+    lines append array a_lines_da file_array
+
+    array set file_array 0 2
+    lines append array a_lines_da file_array
 
     log lines 0 a_lines_da
 
@@ -136,33 +136,33 @@ proc
     lines size a_lines_da number_of_lines
     var verify number_of_lines 0 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_ga
 
-testLinesGetArray:
-proc
-    call startStandardTestShell
+proc testLinesGetArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
+    call startStandardTestShell ()
 
-    lines append array a_lines_ga a_array
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+
+    lines append array a_lines_ga file_array
     log lines 0 a_lines_ga
 
-    array set a_array 0 1
-    lines append array a_lines_ga a_array
+    array set file_array 0 1
+    lines append array a_lines_ga file_array
     log lines 0 a_lines_ga
 
-    array set a_array 0 2
-    lines append array a_lines_ga a_array
+    array set file_array 0 2
+    lines append array a_lines_ga file_array
     log lines 0 a_lines_ga
 
     lines size a_lines_ga number_of_lines
@@ -172,8 +172,10 @@ proc
     loop number_of_lines
         lines get array a_lines_ga index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         array verify another_array 0 index_of_line MAX
         array verify another_array 1 1 MAX
         array verify another_array 2 0xA MAX
@@ -185,34 +187,34 @@ proc
         add index_of_line 1
     end loop
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_ia
 
-testLinesInsertArray:
-proc
-    call startStandardTestShell
+proc testLinesInsertArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
+    call startStandardTestShell ()
 
-    array set a_array 7 0xFFFFFFFF
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
 
-    lines append array a_lines_ia a_array
+    array set file_array 7 0xFFFFFFFF
+
+    lines append array a_lines_ia file_array
     log lines 0 a_lines_ia
 
-    array set a_array 0 1
-    lines append array a_lines_ia a_array
+    array set file_array 0 1
+    lines append array a_lines_ia file_array
     log lines 0 a_lines_ia
 
-    array set a_array 0 2
-    lines append array a_lines_ia a_array
+    array set file_array 0 2
+    lines append array a_lines_ia file_array
 
     log lines 0 a_lines_ia
 
@@ -223,8 +225,9 @@ proc
     loop number_of_lines
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         array verify another_array 0 index_of_line MAX
         array verify another_array 1 1 MAX
         array verify another_array 2 0xA MAX
@@ -236,22 +239,22 @@ proc
         add index_of_line 1
     end loop
 
-    array set a_array 0 3
-    array set a_array 1 0x22
-    array set a_array 2 0x33
-    array set a_array 3 0
-    array set a_array 4 0x12345678
-    array set a_array 5 0x777
-    array set a_array 6 0x800
-    array set a_array 7 0xFFF
-    lines insert array a_lines_ia 1 a_array
+    array set file_array 0 3
+    array set file_array 1 0x22
+    array set file_array 2 0x33
+    array set file_array 3 0
+    array set file_array 4 0x12345678
+    array set file_array 5 0x777
+    array set file_array 6 0x800
+    array set file_array 7 0xFFF
+    lines insert array a_lines_ia 1 file_array
     log lines 0 a_lines_ia
 
-    array set a_array 0 4
-    lines insert array a_lines_ia 0 a_array
+    array set file_array 0 4
+    lines insert array a_lines_ia 0 file_array
 
-    array set a_array 0 5
-    lines insert array a_lines_ia 4 a_array
+    array set file_array 0 5
+    lines insert array a_lines_ia 4 file_array
 
     log message 0 "6"
     log lines 0 a_lines_ia
@@ -264,8 +267,9 @@ proc
     loop 3
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         array verify another_array 0 index_of_line_offset MAX
         array verify another_array 1 1 MAX
         array verify another_array 2 0xA MAX
@@ -283,8 +287,9 @@ proc
     loop 3
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         array verify another_array 0 index_of_line_offset MAX
         array verify another_array 1 0x22 MAX
         array verify another_array 2 0x33 MAX
@@ -301,14 +306,14 @@ proc
         end if
     end loop
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_it
 
-testLinesInsertText:
-proc
-    call startStandardTestShell
+proc testLinesInsertText ()
+
+    call startStandardTestShell ()
 
     lines append message a_lines_it "line 0"
     lines append message a_lines_it "line 1"
@@ -334,31 +339,31 @@ proc
     lines size a_lines_it number_of_lines
     var verify number_of_lines 6 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_pc
 lines b_lines_pc
 
-testLinesPointerCopy:
-proc
-    call startStandardTestShell
+proc testLinesPointerCopy ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines append array a_lines_pc a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines_pc a_array
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+    lines append array a_lines_pc file_array
 
-    array set a_array 0 2
-    lines append array a_lines_pc a_array
+    array set file_array 0 1
+    lines append array a_lines_pc file_array
+
+    array set file_array 0 2
+    lines append array a_lines_pc file_array
 
     log lines 0 a_lines_pc
     log lines 0 b_lines_pc
@@ -377,8 +382,8 @@ proc
     lines size b_lines_pc number_of_lines
     var verify number_of_lines 3 MAX
 
-    array set a_array 0 0xAFAFAFEE
-    lines append array b_lines_pc a_array
+    array set file_array 0 0xAFAFAFEE
+    lines append array b_lines_pc file_array
     log lines 0 a_lines_pc
     log lines 0 b_lines_pc
 
@@ -388,34 +393,34 @@ proc
     lines size b_lines_pc number_of_lines
     var verify number_of_lines 4 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_sa
 
-testLinesSetArray:
-proc
-    call startStandardTestShell
+proc testLinesSetArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
+    call startStandardTestShell ()
+
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
     -- trace  0x7
-    array set a_array 7 0xFFFFFFFF
+    array set file_array 7 0xFFFFFFFF
 
-    lines append array a_lines_sa a_array
+    lines append array a_lines_sa file_array
     log lines 0 a_lines_sa
 
-    array set a_array 0 1
-    lines append array a_lines_sa a_array
+    array set file_array 0 1
+    lines append array a_lines_sa file_array
     log lines 0 a_lines_sa
 
-    array set a_array 0 2
-    lines append array a_lines_sa a_array
+    array set file_array 0 2
+    lines append array a_lines_sa file_array
 
     log lines 0 a_lines_sa
 
@@ -426,8 +431,9 @@ proc
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         array verify another_array 0 index_of_line MAX
         array verify another_array 1 1 MAX
         array verify another_array 2 0xA MAX
@@ -439,23 +445,24 @@ proc
         add index_of_line 1
     end loop
 
-    array set a_array 0 3
-    array set a_array 1 0x22
-    array set a_array 2 0x33
-    array set a_array 3 0
-    array set a_array 4 0x12345678
-    array set a_array 5 0x777
-    array set a_array 6 0x800
-    array set a_array 7 0xFFF
-    lines set array a_lines_sa 1 a_array
+    array set file_array 0 3
+    array set file_array 1 0x22
+    array set file_array 2 0x33
+    array set file_array 3 0
+    array set file_array 4 0x12345678
+    array set file_array 5 0x777
+    array set file_array 6 0x800
+    array set file_array 7 0xFFF
+    lines set array a_lines_sa 1 file_array
     log lines 0 a_lines_sa
 
     equ index_of_line 0
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         add index_of_line 1
     end loop
 
@@ -466,8 +473,9 @@ proc
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        array pointer copy ArrayToDump another_array
-        call arrayDump
+        call arrayDump (
+        	array pointer copy Array another_array
+        )
         if index_of_line = 1
             array verify another_array 0 3 MAX
             array verify another_array 1 0x22 MAX
@@ -490,14 +498,14 @@ proc
         add index_of_line 1
     end loop
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_st
 
-testLinesSetText:
-proc
-    call startStandardTestShell
+proc testLinesSetText ()
+
+    call startStandardTestShell ()
 
     lines append message a_lines_st "line 1"
     lines append message a_lines_st "line 2"
@@ -517,34 +525,34 @@ proc
     lines size a_lines_st number_of_lines
     var verify number_of_lines 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 lines a_lines_ls
 
-testLinesSize:
-proc
-    call startStandardTestShell
+proc testLinesSize ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines append array a_lines_ls a_array
+    call startStandardTestShell ()
+
+    array set file_array 0 0
+    array set file_array 1 1
+    array set file_array 2 0xA
+    array set file_array 3 2
+    array set file_array 4 0xB
+    array set file_array 5 0x7FFFFFFF
+    array set file_array 6 0x80000000
+    array set file_array 7 0xFFFFFFFF
+    lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
     var verify number_of_lines 1 MAX
 
-    array set a_array 0 1
-    lines append array a_lines_ls a_array
+    array set file_array 0 1
+    lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
     var verify number_of_lines 2 MAX
 
-    array set a_array 0 2
-    lines append array a_lines_ls a_array
+    array set file_array 0 2
+    lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
     var verify number_of_lines 3 MAX
 
@@ -554,5 +562,5 @@ proc
 
     log message 0 "lines size is {}" lines_size
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
