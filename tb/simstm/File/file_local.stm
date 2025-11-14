@@ -1,0 +1,34 @@
+
+proc testFileLocal ()
+
+	file a_file "a_file.dat"
+	var is_writable 0
+	var is_readable 0
+	lines a_lines
+	lines b_lines
+	lines c_lines
+	lines final_lines
+	array b_array 2
+	call startStandardTestShell ()
+	
+	lines delete all a_lines
+	lines append message a_lines "some message to be overwritten"
+	
+	file writable a_file is_writable
+	file write a_file a_lines
+	
+	lines delete all b_lines
+	array set b_array 0 1
+	array set b_array 1 2
+	lines append array b_lines b_array
+	file write a_file b_lines
+	
+	lines delete all c_lines
+	lines append message c_lines "appended message"
+	file append a_file c_lines
+	
+	file read all a_file final_lines
+	log lines INFO_2 final_lines
+	
+		
+end proc
