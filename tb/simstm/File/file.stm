@@ -7,8 +7,8 @@ file user_data_out_not_present "user_data_out_not_present.dat"
 file user_data_out_present "user_data_out_present.dat"
 file user_data_out_writable "user_data_out_writable.dat"
 file user_data_out_appendable "user_data_out_appendable.dat"
-file tmp_file "unused"
-lines file_a_lines
+file test_file_tmp_file "unused"
+lines test_file_a_lines
 lines test_file_b_lines
 lines test_file_a_read_lines
 lines test_file_b_read_lines
@@ -34,16 +34,16 @@ proc testFileWriteArray ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array file_a_lines test_file_a_array
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_write_array file_a_lines
+    file write user_data_out_write_array test_file_a_lines
 
     lines delete all test_file_b_lines
     file read all user_data_out_write_array test_file_b_lines
@@ -65,18 +65,18 @@ proc testFileAppendArray ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all file_a_lines
-    lines append array file_a_lines test_file_a_array
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_append_array file_a_lines
+    file write user_data_out_append_array test_file_a_lines
 
-    file append user_data_out_append_array file_a_lines
+    file append user_data_out_append_array test_file_a_lines
 
     lines delete all test_file_b_lines
     file read all user_data_out_append_array test_file_b_lines
@@ -99,16 +99,16 @@ proc testFileReadAllArray ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all file_a_lines
-    lines append array file_a_lines test_file_a_array
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_read_all_array file_a_lines
+    file write user_data_out_read_all_array test_file_a_lines
 
     lines delete all test_file_b_lines
     file read all user_data_out_read_all_array test_file_b_lines
@@ -161,17 +161,17 @@ proc testFileReadArray ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all file_a_lines
+    lines delete all test_file_a_lines
 
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_read_array file_a_lines
+    file write user_data_out_read_array test_file_a_lines
 
     wait 1000
 
@@ -225,14 +225,14 @@ proc testFileStatus ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all file_a_lines
-    lines append array file_a_lines test_file_a_array
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 	var FileStatus 0
     log message 0 "Check if file is readable, which doesn't exist"
     file readable user_data_out_not_present FileStatus
@@ -286,18 +286,18 @@ proc testFilePointerCopy ()
     array set test_file_a_array 5 0x7FFFFFFF
     array set test_file_a_array 6 0x80000000
     array set test_file_a_array 7 0xFFFFFFFF
-    lines delete all file_a_lines
-    lines append array file_a_lines test_file_a_array
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 1
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
     array set test_file_a_array 0 2
-    lines append array file_a_lines test_file_a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    -- log lines 0 a_lines
+    -- log lines 0 test_file_a_lines
 
-    file pointer copy tmp_file user_data_out_pointer_copy
+    file pointer copy test_file_tmp_file user_data_out_pointer_copy
     call WriteFile ()
 
     lines delete all test_file_b_lines
@@ -310,5 +310,5 @@ end proc
 
 proc WriteFile ()
 
-    file write tmp_file file_a_lines
+    file write test_file_tmp_file test_file_a_lines
 end proc
