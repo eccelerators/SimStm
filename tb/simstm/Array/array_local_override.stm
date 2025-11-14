@@ -14,15 +14,12 @@ proc setTestArray ()
 	array set test_array_local_override_array 0 1
 	array set test_array_local_override_array 1 2
 	array set test_array_local_override_array 2 3
-	array size test_array_local_override_array test_array_local_size
-	log message INFO_2 "size global array: {:d}" test_array_local_size
+	array size test_array_local_override_array test_array_local_override_size
+	log message INFO_2 "size global array: {:d}" test_array_local_override_size
 
 	array get test_array_local_override_array 0 test_array_local_override_pos_0
 	array get test_array_local_override_array 1 test_array_local_override_pos_1
 	array get test_array_local_override_array 2 test_array_local_override_pos_2
-
-	
-
 end proc
 
 
@@ -30,7 +27,7 @@ proc testArrayLocalOverride ()
 
 	call setTestArray ()
 	array test_array_local_override 5
-	array size test_array_local_override test_array_local_size
+	array size test_array_local_override test_array_local_override_size
 	
 	call startStandardTestShell ()
 	
@@ -51,7 +48,7 @@ proc testArrayLocalOverride ()
 	log message INFO_2 "position 2 of test_array_local_override: {:d}" test_array_local_override_pos_2
 	log message INFO_2 "position 3 of test_array_local_override: {:d}" test_array_local_override_pos_3
 	log message INFO_2 "position 4 of test_array_local_override: {:d}" test_array_local_override_pos_4
-	log message INFO_2 "size of test_array_local_override: {:d}" test_array_local_size
+	log message INFO_2 "size of test_array_local_override: {:d}" test_array_local_override_size
 	
 	array verify test_array_local_override 0 100 MAX
 	array verify test_array_local_override 1 101 MAX 
@@ -74,15 +71,15 @@ proc checkArrayGlobal ()
 	log message INFO_2 "position 0 of test_array_local_override global: {:d}" test_array_local_override_pos_0
 	log message INFO_2 "position 1 of test_array_local_override global: {:d}" test_array_local_override_pos_1
 	log message INFO_2 "position 2 of test_array_local_override global: {:d}" test_array_local_override_pos_2
-	log message INFO_2 "size of test_array_local_override global: {:d}" test_array_local_size
+	log message INFO_2 "size of test_array_local_override global: {:d}" test_array_local_override_size
 	log message INFO_2 "position 4 of test_array_local_override global: {:d}" test_array_local_override_pos_4
 	
-	log message INFO_2 "size global array: {:d}" test_array_local_size
-	array size test_array_local_override_array test_array_local_size
-	log message INFO_2 "size global array: {:d}" test_array_local_size
+	log message INFO_2 "size global array: {:d}" test_array_local_override_size
+	array size test_array_local_override_array test_array_local_override_size
+	log message INFO_2 "size global array: {:d}" test_array_local_override_size
 	array verify test_array_local_override_array 0 1 MAX
 	array verify test_array_local_override_array 1 2 MAX
 	array verify test_array_local_override_array 2 3 MAX
-	var verify test_array_local_size 3 MAX
+	var verify test_array_local_override_size 3 MAX
 end proc
 
