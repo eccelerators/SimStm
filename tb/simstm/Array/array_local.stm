@@ -1,29 +1,29 @@
 
 
-var test_array_local_p_0 5
-var test_array_local_p_1 6
-var test_array_local_p_2 7
-var test_array_local_size 100
-
 proc testArrayLocal ()
 
 	array test_array_local 3
+	
+	var pos_0 5
+	var pos_1 6
+	var pos_2 7
+	var array_size 100
 	
 	call startStandardTestShell ()
 	
 	array set test_array_local 0 1
 	array set test_array_local 1 2
 	array set test_array_local 2 3
+
+	array get test_array_local 0 pos_0
+	array get test_array_local 1 pos_1
+	array get test_array_local 2 pos_2
+	array size test_array_local array_size
 	
-	array get test_array_local 0 test_array_local_p_0
-	array get test_array_local 1 test_array_local_p_1
-	array get test_array_local 2 test_array_local_p_2
-	array size test_array_local test_array_local_size
-	
-	log message INFO_2 "position 0 of test_array_local: {:d}" test_array_local_p_0
-	log message INFO_2 "position 1 of test_array_local: {:d}" test_array_local_p_1
-	log message INFO_2 "position 2 of test_array_local: {:d}" test_array_local_p_2
-	log message INFO_2 "size of test_array_local: {:d}" test_array_local_size
+	log message INFO_2 "position 0 of test_array_local: {:d}" pos_0
+	log message INFO_2 "position 1 of test_array_local: {:d}" pos_1
+	log message INFO_2 "position 2 of test_array_local: {:d}" pos_2
+	log message INFO_2 "size of test_array_local: {:d}" array_size
 	
 	array verify test_array_local 0 1 MAX
 	array verify test_array_local 1 2 MAX
