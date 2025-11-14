@@ -36,4 +36,6 @@ proc testFilePointer ()
 	log lines INFO_2 a_lines_result
 	log lines INFO_2 b_lines_result
 	
+	call endStandardTestShell ()
+	
 end proc

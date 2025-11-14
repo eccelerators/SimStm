@@ -1,0 +1,26 @@
+
+proc testFileParameterIn ()
+
+	file a_file "a_file.dat"
+	lines a_lines
+	call startStandardTestShell ()
+	lines delete all a_lines
+	lines append message a_lines "hello world"
+	file write a_file a_lines
+	
+	call checkFileParameterInput (
+		file pointer copy this_file a_file
+	)
+	
+	call endStandardTestShell ()
+end proc
+
+proc checkFileParameterInput (
+	file this_file "a_file.dat"
+	)
+
+lines result_lines
+file read all this_file result_lines
+log lines INFO_2 result_lines
+
+end proc

@@ -1,0 +1,31 @@
+
+file file_local_override "local_override.dat"
+
+proc testFileLocalOverride ()
+
+	lines a_lines
+	lines lines_result
+	call startStandardTestShell ()
+	call setFileToOverwrite ()
+	lines append message a_lines "second message"
+	file append file_local_override a_lines
+	file read all file_local_override lines_result
+	log lines INFO_2 lines_result
+	call checkGlobalFile ()
+	call endStandardTestShell ()	
+end proc
+
+
+proc setFileToOverwrite ()
+
+lines b_lines
+lines append message b_lines "first message"
+file write file_local_override b_lines
+end proc
+
+proc checkGlobalFile ()
+
+	lines final_lines
+	file read all file_local_override final_lines
+	log lines INFO_2 final_lines
+end proc

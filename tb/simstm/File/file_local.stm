@@ -30,5 +30,7 @@ proc testFileLocal ()
 	file read all a_file final_lines
 	log lines INFO_2 final_lines
 	
+	call endStandardTestShell ()
+	
 		
 end proc

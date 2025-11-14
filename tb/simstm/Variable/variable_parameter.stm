@@ -3,7 +3,7 @@ proc testVariableParameterIn ()
     var in_val 0xBB
     call startStandardTestShell ()
     
-    call checkParameterInput ( 
+    call checkVariableParameterInput ( 
     	equ par_in_1 0xAA
     	equ par_in_2 in_val
     )
@@ -12,7 +12,7 @@ proc testVariableParameterIn ()
 end proc
 
 
-proc checkParameterInput ( 
+proc checkVariableParameterInput ( 
 	var par_in_1 0
 	var par_in_2 0
 )
