@@ -1,0 +1,39 @@
+
+proc testFilePointer ()
+
+	file file_a "file_a.dat"
+	file file_b "file_b.dat"
+	lines a_lines
+	lines b_lines
+	lines a_lines_result
+	lines b_lines_result
+	array an_array 2
+	var is_readable_a 0
+	var is_readable_b 0
+	call startStandardTestShell ()
+	
+	array set an_array 0 7
+	array set an_array 1 8
+	
+	lines delete all a_lines
+	lines append array a_lines an_array
+	file write file_a a_lines
+	
+	--lines delete all b_lines
+	lines append message b_lines "this is the expected output"
+	file write file_b b_lines
+	
+	file pointer copy file_a file_b
+	
+	file readable file_a is_readable_a
+	file readable file_a is_readable_b
+	
+	lines delete all a_lines_result
+	lines delete all b_lines_result
+	file read all file_a a_lines_result
+	file read all file_b b_lines_result
+	
+	log lines INFO_2 a_lines_result
+	log lines INFO_2 b_lines_result
+	
+end proc
