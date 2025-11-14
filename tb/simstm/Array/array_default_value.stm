@@ -1,0 +1,21 @@
+
+proc testArrayDefaultValue ()
+
+	array default_array 3
+	call startStandardTestShell ()
+	
+	array set default_array 0 1
+	array set default_array 1 2
+	array set default_array 2 3
+	
+	call checkArrayParameter ()
+	
+	call endStandardTestShell ()
+	
+end proc
+
+proc checkArrayParameter (
+	array pointer copy this_array default_array
+)
+
+end proc
