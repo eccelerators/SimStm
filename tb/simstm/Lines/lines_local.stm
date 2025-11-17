@@ -1,0 +1,11 @@
+
+proc testLinesLocal ()
+
+	lines a_lines
+	call startStandardTestShell ()
+	
+	lines append message a_lines "this is a local msg"
+	log lines INFO_2 a_lines
+	
+	call endStandardTestShell ()
+end proc
