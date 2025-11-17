@@ -9,7 +9,7 @@ The ``signal`` instruction declares a signal object with an ID.
 
 The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
-customization and attached to a signal.
+customization and be attached to a signal.
 
 Signal Access
 ~~~~~~~~~~~~~
