@@ -1,0 +1,19 @@
+
+proc testLinesPointer ()
+
+	lines a_lines
+	lines b_lines
+	call startStandardTestShell ()
+	
+	lines delete all a_lines
+	lines delete all b_lines
+	lines append message a_lines "message to be overwritten"
+	lines append message b_lines "new message"
+	
+	lines pointer copy a_lines b_lines
+	
+	log lines INFO_2 a_lines
+	log lines INFO_2 b_lines
+	
+	call endStandardTestShell ()
+end proc
