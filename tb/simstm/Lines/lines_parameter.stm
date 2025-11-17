@@ -1,0 +1,44 @@
+
+proc testLinesParameterIn ()
+
+lines a_lines
+call startStandardTestShell ()
+lines delete all a_lines
+lines append message a_lines "some message"
+
+call checkLinesParameterInput (
+	lines pointer copy any_lines a_lines
+)
+
+call endStandardTestShell ()
+end proc
+
+proc checkLinesParameterInput (
+	lines any_lines
+)
+
+	log lines INFO_2 any_lines
+end proc
+
+
+proc testLinesParameterOut ()
+
+	lines b_lines
+	call startStandardTestShell ()
+	lines delete all b_lines
+	lines append message b_lines "different message"
+	
+	call checkLinesParameterOutput (
+		lines pointer copy any_lines b_lines
+	)
+	log lines INFO_2 b_lines
+	call endStandardTestShell ()
+	
+end proc
+
+proc checkLinesParameterOutput (
+	lines any_lines
+)
+	lines delete all any_lines
+	lines append message any_lines "new message"
+end proc
