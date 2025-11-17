@@ -24,3 +24,32 @@ file read all this_file result_lines
 log lines INFO_2 result_lines
 
 end proc
+
+proc testFileParameterOut ()
+
+	file b_file "b_file.dat"
+	lines b_lines
+	lines result_lines
+	call startStandardTestShell ()
+	lines delete all b_lines
+	lines append message b_lines "how are you world?"
+	file write b_file b_lines
+	
+	call checkFileParameterOutput (
+		file pointer copy this_file b_file
+	)
+	
+	file read all b_file result_lines
+	log lines INFO_2 result_lines
+	call endStandardTestShell ()
+end proc
+
+proc checkFileParameterOutput (
+	file this_file "b_file.dat"
+	)
+	
+	lines more_lines
+	lines append message more_lines "goodbye world"
+	file append this_file more_lines
+end proc
+
