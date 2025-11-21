@@ -25,11 +25,14 @@ end proc
 
 proc testArrayLocalOverride ()
 
+	call startStandardTestShell ()
 	call setTestArray ()
+	log message INFO_2 "position 0 of test_array_local_override: {:d}" test_array_local_override_pos_0
+	log message INFO_2 "position 1 of test_array_local_override: {:d}" test_array_local_override_pos_1
+	log message INFO_2 "position 2 of test_array_local_override: {:d}" test_array_local_override_pos_2
+	
 	array test_array_local_override 5
 	array size test_array_local_override test_array_local_override_size
-	
-	call startStandardTestShell ()
 	
 	array set test_array_local_override 0 100
 	array set test_array_local_override 1 101
