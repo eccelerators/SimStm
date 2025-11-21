@@ -1,16 +1,16 @@
 
 proc testLinesParameterIn ()
 
-lines a_lines
-call startStandardTestShell ()
-lines delete all a_lines
-lines append message a_lines "some message"
+	lines a_lines
+	call startStandardTestShell ()
+	lines delete all a_lines
+	lines append message a_lines "some message"
 
-call checkLinesParameterInput (
-	lines pointer copy any_lines a_lines
-)
+	call checkLinesParameterInput (
+		lines pointer copy any_lines a_lines
+	)
 
-call endStandardTestShell ()
+	call endStandardTestShell ()
 end proc
 
 proc checkLinesParameterInput (

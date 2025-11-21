@@ -1,8 +1,8 @@
 array array_name_sz 5544
 
 var var_name_sz 10
-testArraySize:
-proc
+proc testArraySize ()
+
     call startStandardTestShell ()
 
     array size array_name_sz var_name_sz

@@ -19,9 +19,9 @@ proc checkFileParameterInput (
 	file this_file "a_file.dat"
 	)
 
-lines result_lines
-file read all this_file result_lines
-log lines INFO_2 result_lines
+	lines result_lines
+	file read all this_file result_lines
+	log lines INFO_2 result_lines
 
 end proc
 

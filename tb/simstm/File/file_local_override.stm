@@ -18,9 +18,9 @@ end proc
 
 proc setFileToOverwrite ()
 
-lines b_lines
-lines append message b_lines "first message"
-file write file_local_override b_lines
+	lines b_lines
+	lines append message b_lines "first message"
+	file write file_local_override b_lines
 end proc
 
 proc checkGlobalFile ()
