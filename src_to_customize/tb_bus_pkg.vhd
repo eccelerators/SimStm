@@ -114,6 +114,10 @@ package body tb_bus_pkg is
         valid := 1;
         case bus_number is
             when 0 =>
+                assert false
+                report  "write to unassigned bus e.g., local bus in procedure"
+                severity failure;                
+            when 1 =>
                 write_wishbone_32(
                     bus_down.wishbone32,
                     bus_up.wishbone32,
@@ -123,7 +127,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 1 =>
+            when 2 =>
                 write_wishbone_64(
                     bus_down.wishbone64,
                     bus_up.wishbone64,
@@ -133,7 +137,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 2 =>
+            when 3 =>
                 write_wishbone_128(
                     bus_down.wishbone128,
                     bus_up.wishbone128,
@@ -143,7 +147,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 3 =>
+            when 4 =>
                 write_wishbone_256(
                     bus_down.wishbone256,
                     bus_up.wishbone256,
@@ -153,7 +157,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 4 =>
+            when 5 =>
                 write_avalonmm_32(
                     bus_down.avalonmm32,
                     bus_up.avalonmm32,
@@ -163,7 +167,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 5 =>
+            when 6 =>
                 write_avalonmm_64(
                     bus_down.avalonmm64,
                     bus_up.avalonmm64,
@@ -173,7 +177,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 6 =>
+            when 7 =>
                 write_axi4lite_32(
                     bus_down.axi4lite32,
                     bus_up.axi4lite32,
@@ -183,7 +187,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 7 =>
+            when 8 =>
                 write_ram_32(
                     bus_down.ram32,
                     bus_up.ram32,
@@ -213,6 +217,10 @@ package body tb_bus_pkg is
         valid := 1;
         case bus_number is
             when 0 =>
+                assert false
+                report  "read of unassigned bus e.g., local bus in procedure"
+                severity failure;
+            when 1 =>
                 read_wishbone_32(
                     bus_down.wishbone32,
                     bus_up.wishbone32,
@@ -221,7 +229,7 @@ package body tb_bus_pkg is
                     access_width,
                     successfull,
                     timeout);
-            when 1 =>
+            when 2 =>
                 read_wishbone_64(
                     bus_down.wishbone64,
                     bus_up.wishbone64,
@@ -231,7 +239,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 2 =>
+            when 3 =>
                 read_wishbone_128(
                     bus_down.wishbone128,
                     bus_up.wishbone128,
@@ -240,7 +248,7 @@ package body tb_bus_pkg is
                     access_width,
                     successfull,
                     timeout);
-            when 3 =>
+            when 4 =>
                 read_wishbone_256(
                     bus_down.wishbone256,
                     bus_up.wishbone256,
@@ -250,7 +258,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 4 =>
+            when 5 =>
                 read_avalonmm_32(
                     bus_down.avalonmm32,
                     bus_up.avalonmm32,
@@ -260,7 +268,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 5 =>
+            when 6 =>
                 read_avalonmm_64(
                     bus_down.avalonmm64,
                     bus_up.avalonmm64,
@@ -270,7 +278,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 6 =>
+            when 7 =>
                 read_axi4lite_32(
                     bus_down.axi4lite32,
                     bus_up.axi4lite32,
@@ -280,7 +288,7 @@ package body tb_bus_pkg is
                     successfull,
                     timeout);
 
-            when 7 =>
+            when 8 =>
                 read_ram_32(
                     bus_down.ram32,
                     bus_up.ram32,

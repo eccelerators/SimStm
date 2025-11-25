@@ -65,16 +65,16 @@ const FILE_STATUS_MODE_ERROR 3
 
 const TIME_OUT_100MS 100000000
 
-signal sigInSimulatedTimeNow 0
+signal sigInSimulatedTimeNow 1
 var SimulatedTimeNow 0
 
-signal sigInTestSuiteIndex 1
+signal sigInTestSuiteIndex 2
 var TestSuiteIndex 255
 
-signal sigInZero 2
+signal sigInZero 3
 var BasicZero 0
 
-signal sigMachineValueWidth 7
+signal sigMachineValueWidth 8
 var MachineValueWidth 0
 
 var MAX 0
@@ -100,13 +100,13 @@ proc printFileStatus (
     end if
 end proc
 
-signal sigInStandardTestVerifyPassCount 3
-signal sigInStandardTestVerifyFailureCount 4
-signal sigOutExpectedStandardTestVerifyFailureCount 4
+signal sigInStandardTestVerifyPassCount 4
+signal sigInStandardTestVerifyFailureCount 5
+signal sigOutExpectedStandardTestVerifyFailureCount 5
 
-signal sigInStandardTestBusTimeoutPassCount 5
-signal sigInStandardTestBusTimeoutFailureCount 6
-signal sigOutExpectedStandardTestBusTimeoutFailureCount 6
+signal sigInStandardTestBusTimeoutPassCount 6
+signal sigInStandardTestBusTimeoutFailureCount 7
+signal sigOutExpectedStandardTestBusTimeoutFailureCount 7
 
 var StandardTestVerifyFailureCountStartSnapShot 0
 var StandardTestVerifyFailureCountResult 0

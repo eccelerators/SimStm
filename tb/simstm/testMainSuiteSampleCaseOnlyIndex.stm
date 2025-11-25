@@ -6,7 +6,7 @@ include "TestSuites/TestSuiteSampleCaseOnlyIndex.stm"
 
 testMainSuiteSampleCaseOnlyIndex:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

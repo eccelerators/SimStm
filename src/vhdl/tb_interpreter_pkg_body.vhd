@@ -1813,7 +1813,7 @@ package body tb_interpreter_pkg is
                 src_tail_i := src_tail_i + 1;
                 tmp_i := tmp_i + 1;
                 -- parse to the next space
-                while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul loop
+                while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul and ptr(src_tail_i) /=  ht loop
                     tmp_field(tmp_i) := ptr(src_tail_i);
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;

@@ -8,7 +8,7 @@ include "TestSuites/TestSuiteArray.stm"
 
 testMainSuiteArray:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

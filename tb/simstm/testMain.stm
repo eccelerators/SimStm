@@ -18,6 +18,7 @@ include "Variable/variable_pointer.stm"
 
 
 include "Array/array.stm"
+include "Array/array_local_override.stm"
 include "Lines/lines.stm"
 
 file simulation_success "simulation.success"
@@ -25,7 +26,7 @@ lines success_lines
 
 testMain:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF
@@ -46,14 +47,18 @@ proc
 
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
-    -- call testBus256
-    call testVariableLocalOverride ()
+    call testBus32 (
+    	bus pointer copy busToTest wishbone32
+    )
+    -- call testVariableLocalOverride ()
     -- call testVariableLocal ()
     -- call testVariableScope ()
     -- call testVariablePointer ()
     -- call testVariableParameterIn ()
     -- call testVariableParameterOut ()
     -- call testLinesSize
+    
+    call testArrayLocalOverride ()
 
     log message INFO "Main test finished"
     wait 1000
