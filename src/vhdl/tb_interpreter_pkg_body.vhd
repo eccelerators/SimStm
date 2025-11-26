@@ -299,9 +299,6 @@ package body tb_interpreter_pkg is
 
         procedure init_stm_array_var is
         begin
-            assert stim_to_integer(p2, name, line_num) > 0
-            report lf & "error: array size < 1 is not allowed on line " & (integer'image(line_num)) & " of file " & text_line_crop(name)
-            severity failure;
             temp_var := new var_field;
             temp_var.var_name := p1; -- direct write of text_field
             temp_var.var_scope := scope; -- direct write of text_field
@@ -1813,7 +1810,7 @@ package body tb_interpreter_pkg is
                 src_tail_i := src_tail_i + 1;
                 tmp_i := tmp_i + 1;
                 -- parse to the next space
-                while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul loop
+                while ptr(src_tail_i) /= ' ' and ptr(src_tail_i) /= nul and ptr(src_tail_i) /=  ht loop
                     tmp_field(tmp_i) := ptr(src_tail_i);
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;

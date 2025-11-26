@@ -8,7 +8,7 @@ lines success_lines
 
 testMainLabBasicDoubleConst:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace 0

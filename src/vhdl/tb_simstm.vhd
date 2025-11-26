@@ -1616,8 +1616,8 @@ begin
                     
                 -- finish
                 elsif instruction(1 to len) = INSTR_FINISH then
-                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_4(30 downto 0)));
-                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_6(30 downto 0)));
+                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
+                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_7(30 downto 0)));
                     print("Verify passes " & (integer'image(verify_passes_count)));
                     print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then

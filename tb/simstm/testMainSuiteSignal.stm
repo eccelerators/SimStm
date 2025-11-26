@@ -7,7 +7,7 @@ include "TestSuites/TestSuiteSignal.stm"
 
 testMainSuiteSignal:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

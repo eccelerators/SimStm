@@ -28,8 +28,138 @@ proc
     call testCaseArraySet
     call testCaseArraySize
     call testCaseArrayPointerCopy
+    call testCaseArrayParameterIn ()
+    call testArrayParameterOut ()
+    call testCaseArrayLocal ()
+    call testCaseArrayLocalOverride ()
+    call testCaseArrayDefaultValue ()
 end proc
 
+proc testCaseArrayDefaultValue ()
+    file tcfs "../../SimulationResults/{@c3}_{@c2}.start"
+    file tcf "../../SimulationResults/{@c3}_{@c2}.xml"
+    file pointer copy TestCaseStartFile tcfs
+    file pointer copy TestCaseFile tcf
+    call beginTestCase
+
+    if SKIP = NOT_SKIPPED
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call skipTestCase
+        call endTestCase
+        return
+    end if
+
+    call testArrayDefaultValue ()
+
+    if StandardTestFailure != 0
+        lines append message TestCaseLines "Array test failed"
+        call failureTestCase
+    end if
+
+    call endTestCase
+
+end proc
+
+
+proc testCaseArrayLocalOverride ()
+    file tcfs "../../SimulationResults/{@c3}_{@c2}.start"
+    file tcf "../../SimulationResults/{@c3}_{@c2}.xml"
+    file pointer copy TestCaseStartFile tcfs
+    file pointer copy TestCaseFile tcf
+    call beginTestCase
+
+    if SKIP = NOT_SKIPPED
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call skipTestCase
+        call endTestCase
+        return
+    end if
+
+    call testArrayLocalOverride ()
+
+    if StandardTestFailure != 0
+        lines append message TestCaseLines "Array test failed"
+        call failureTestCase
+    end if
+
+    call endTestCase
+
+end proc
+
+proc testCaseArrayLocal ()
+    file tcfs "../../SimulationResults/{@c3}_{@c2}.start"
+    file tcf "../../SimulationResults/{@c3}_{@c2}.xml"
+    file pointer copy TestCaseStartFile tcfs
+    file pointer copy TestCaseFile tcf
+    call beginTestCase
+
+    if SKIP = NOT_SKIPPED
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call skipTestCase
+        call endTestCase
+        return
+    end if
+
+    call testArrayParameterIn ()
+
+    if StandardTestFailure != 0
+        lines append message TestCaseLines "Array test failed"
+        call failureTestCase
+    end if
+
+    call endTestCase
+
+end proc
+
+proc testCaseArrayParameterIn ()
+    file tcfs "../../SimulationResults/{@c3}_{@c2}.start"
+    file tcf "../../SimulationResults/{@c3}_{@c2}.xml"
+    file pointer copy TestCaseStartFile tcfs
+    file pointer copy TestCaseFile tcf
+    call beginTestCase
+
+    if SKIP = NOT_SKIPPED
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call skipTestCase
+        call endTestCase
+        return
+    end if
+
+    call testArrayParameterIn ()
+
+    if StandardTestFailure != 0
+        lines append message TestCaseLines "Array test failed"
+        call failureTestCase
+    end if
+
+    call endTestCase
+
+end proc
+
+proc testArrayParameterOut ()
+    file tcfs "../../SimulationResults/{@c3}_{@c2}.start"
+    file tcf "../../SimulationResults/{@c3}_{@c2}.xml"
+    file pointer copy TestCaseStartFile tcfs
+    file pointer copy TestCaseFile tcf
+    call beginTestCase
+
+    if SKIP = NOT_SKIPPED
+        lines append message TestCaseLines "TestCase not implemented yet"
+        call skipTestCase
+        call endTestCase
+        return
+    end if
+
+    call testArrayParameterOut ()
+
+    if StandardTestFailure != 0
+        lines append message TestCaseLines "Array test failed"
+        call failureTestCase
+    end if
+
+    call endTestCase
+
+end proc
 
 testCaseArray:
 proc

@@ -6,7 +6,7 @@ include "TestSuites/TestSuiteSample.stm"
 
 testMainSuiteSample:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

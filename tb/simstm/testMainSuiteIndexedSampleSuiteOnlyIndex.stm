@@ -8,7 +8,7 @@ const testMainSuiteIndexedSampleSuiteOnlyIndexMaximumIndex 4
 
 testMainSuiteIndexedSampleSuiteOnlyIndex:
 proc
-    call initBase
+    call initBase ()
             
     verbosity INFO_2
     trace TRACE_OFF

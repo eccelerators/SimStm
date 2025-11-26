@@ -9,7 +9,7 @@ lines success_lines
 
 testMainLabArraySetOutPos:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace 0

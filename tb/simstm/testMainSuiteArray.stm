@@ -4,11 +4,16 @@ include "Array/array.stm"
 include "Array/array_size.stm"
 include "Array/array_pointer.stm"
 
+include "Array/array_default_value.stm"
+include "Array/array_local_override.stm"
+include "Array/array_local.stm"
+include "Array/array_parameter.stm"
+
 include "TestSuites/TestSuiteArray.stm"
 
 testMainSuiteArray:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

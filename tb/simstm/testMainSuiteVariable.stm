@@ -10,7 +10,7 @@ include "TestSuites/TestSuiteVariable.stm"
 
 testMainSuiteVariable:
 proc
-    call initBase
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF

@@ -16,7 +16,7 @@ proc testFileParameterIn ()
 end proc
 
 proc checkFileParameterInput (
-	file this_file "a_file.dat"
+	file this_file ""
 	)
 
 	lines result_lines
