@@ -3,9 +3,11 @@ Bus
 
 .. code-block:: none
 
- bus a_bus
+ bus a_bus 10
+ bus a_bus a_const
+ bus a_bus a_global_var
 
-The ``bus`` instruction declares a bus object with ID.
+The ``bus`` instruction declares a bus object with ID initialized with a global variable, constant or literal. 
 
 The signal object associates a SimStm bus name with a bus number. This
 bus number must be given in the tb_bus package by customization and

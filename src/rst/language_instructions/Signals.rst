@@ -2,8 +2,10 @@ Signals
 -------
 
 .. code-block:: none
-
- signal a_signal
+	
+ signal a_signal 10
+ signal a_signal a_const
+ signal a_signal a_global_var
 
 The ``signal`` instruction declares a signal object with an ID.
 
