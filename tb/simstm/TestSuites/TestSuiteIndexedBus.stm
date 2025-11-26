@@ -1,55 +1,8 @@
-   var TestCaseBus32Index 0
-   var TestCaseBus64Index 0
-   var TestCaseBus128Index 0
-   var TestCaseBus256Index 0
-
--- intern
-file TestCaseBus32StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus32Index
-file TestCaseBus32TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus32Index
-
-file TestCaseBus64StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus64Index
-file TestCaseBus64TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus64Index
-
-file TestCaseBus128StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus128Index
-file TestCaseBus128TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus128Index
-
-file TestCaseBus256StartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256File "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256VerifySuccessStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256VerifySuccessFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256VerifyFailStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256VerifyFailFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256TimeOutReadStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256TimeOutReadFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256TimeOutWriteStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseBus256Index
-file TestCaseBus256TimeOutWriteFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseBus256Index
-
+var TestCaseBus32Index 0
+var TestCaseBus64Index 0
+var TestCaseBus128Index 0
+var TestCaseBus256Index 0
 var RepeatedTestSuiteIndex 0
-
 
 proc testSuiteIndexedBus ()
     bus busToTest NO_BUS
@@ -234,14 +187,12 @@ end proc
 proc testCaseBus32 (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus32StartFile
-    file pointer copy TestCaseFile TestCaseBus32File
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -257,21 +208,19 @@ proc testCaseBus32 (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
 proc testCaseBus32VerifySuccess (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus32VerifySuccessStartFile
-    file pointer copy TestCaseFile TestCaseBus32VerifySuccessFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -287,7 +236,7 @@ proc testCaseBus32VerifySuccess (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -295,14 +244,12 @@ end proc
 proc testCaseBus32VerifyFail (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus32VerifyFailStartFile
-    file pointer copy TestCaseFile TestCaseBus32VerifyFailFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -318,7 +265,7 @@ proc testCaseBus32VerifyFail (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -326,14 +273,12 @@ end proc
 proc testCaseBus32TimeOutRead (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus32TimeOutReadStartFile
-    file pointer copy TestCaseFile TestCaseBus32TimeOutReadFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -349,7 +294,7 @@ proc testCaseBus32TimeOutRead (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -357,14 +302,12 @@ end proc
 proc testCaseBus32TimeOutWrite (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus32TimeOutWriteStartFile
-    file pointer copy TestCaseFile TestCaseBus32TimeOutWriteFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -380,7 +323,7 @@ proc testCaseBus32TimeOutWrite (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -388,14 +331,12 @@ end proc
 proc testCaseBus64 (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus64StartFile
-    file pointer copy TestCaseFile TestCaseBus64File
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -411,7 +352,7 @@ proc testCaseBus64 (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -419,14 +360,12 @@ end proc
 proc testCaseBus64VerifySuccess (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus64VerifySuccessStartFile
-    file pointer copy TestCaseFile TestCaseBus64VerifySuccessFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -442,7 +381,7 @@ proc testCaseBus64VerifySuccess (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -450,14 +389,12 @@ end proc
 proc testCaseBus64VerifyFail (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus64VerifyFailStartFile
-    file pointer copy TestCaseFile TestCaseBus64VerifyFailFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -473,7 +410,7 @@ proc testCaseBus64VerifyFail (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -481,14 +418,12 @@ end proc
 proc testCaseBus64TimeOutRead (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus64TimeOutReadStartFile
-    file pointer copy TestCaseFile TestCaseBus64TimeOutReadFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -504,7 +439,7 @@ proc testCaseBus64TimeOutRead (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -512,14 +447,12 @@ end proc
 proc testCaseBus64TimeOutWrite (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus64TimeOutWriteStartFile
-    file pointer copy TestCaseFile TestCaseBus64TimeOutWriteFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -535,7 +468,7 @@ proc testCaseBus64TimeOutWrite (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -543,14 +476,12 @@ end proc
 proc testCaseBus128 (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus128StartFile
-    file pointer copy TestCaseFile TestCaseBus128File
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -566,7 +497,7 @@ proc testCaseBus128 (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -574,14 +505,12 @@ end proc
 proc testCaseBus128VerifySuccess (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus128VerifySuccessStartFile
-    file pointer copy TestCaseFile TestCaseBus128VerifySuccessFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -597,7 +526,7 @@ proc testCaseBus128VerifySuccess (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -605,14 +534,12 @@ end proc
 proc testCaseBus128VerifyFail (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus128VerifyFailStartFile
-    file pointer copy TestCaseFile TestCaseBus128VerifyFailFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -628,7 +555,7 @@ proc testCaseBus128VerifyFail (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -636,14 +563,12 @@ end proc
 proc testCaseBus128TimeOutRead (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus128TimeOutReadStartFile
-    file pointer copy TestCaseFile TestCaseBus128TimeOutReadFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -659,7 +584,7 @@ proc testCaseBus128TimeOutRead (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -667,14 +592,12 @@ end proc
 proc testCaseBus128TimeOutWrite (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus128TimeOutWriteStartFile
-    file pointer copy TestCaseFile TestCaseBus128TimeOutWriteFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -690,7 +613,7 @@ proc testCaseBus128TimeOutWrite (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -698,14 +621,12 @@ end proc
 proc testCaseBus256 (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus256StartFile
-    file pointer copy TestCaseFile TestCaseBus256File
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -721,7 +642,7 @@ proc testCaseBus256 (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -729,14 +650,12 @@ end proc
 proc testCaseBus256VerifySuccess (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus256VerifySuccessStartFile
-    file pointer copy TestCaseFile TestCaseBus256VerifySuccessFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -752,7 +671,7 @@ proc testCaseBus256VerifySuccess (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -760,14 +679,12 @@ end proc
 proc testCaseBus256VerifyFail (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus256VerifyFailStartFile
-    file pointer copy TestCaseFile TestCaseBus256VerifyFailFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -783,7 +700,7 @@ proc testCaseBus256VerifyFail (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -791,14 +708,12 @@ end proc
 proc testCaseBus256TimeOutRead (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus256TimeOutReadStartFile
-    file pointer copy TestCaseFile TestCaseBus256TimeOutReadFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -814,7 +729,7 @@ proc testCaseBus256TimeOutRead (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
@@ -822,14 +737,12 @@ end proc
 proc testCaseBus256TimeOutWrite (
 	bus busToTest 0
 )
-    file pointer copy TestCaseStartFile TestCaseBus256TimeOutWriteStartFile
-    file pointer copy TestCaseFile TestCaseBus256TimeOutWriteFile
-    call beginTestCaseIndexedSuiteIndexed
+    call beginTestCaseIndexedSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -845,6 +758,6 @@ proc testCaseBus256TimeOutWrite (
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc

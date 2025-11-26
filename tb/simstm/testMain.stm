@@ -24,6 +24,8 @@ include "Lines/lines.stm"
 include "File/file.stm"
 include "File/file_parameter.stm"
 
+include "TestSuites/TestSuiteIndexedBus.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -33,9 +35,9 @@ proc
 
     verbosity INFO_2
     trace TRACE_OFF
+    -- trace TRACE_EXECUTED_LINES
     -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
-    -- trace TRACE_EXECUTED_LINES
     resume RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
@@ -54,7 +56,7 @@ proc
     -- 	bus pointer copy busToTest wishbone32
     -- )
     -- call testArrayParameterIn ()
-    call testFileParameterIn ()
+    -- call testFileParameterIn ()
     -- call testVariableLocalOverride ()
     -- call testVariableLocal ()
     -- call testVariableScope ()
@@ -63,7 +65,9 @@ proc
     -- call testVariableParameterOut ()
     -- call testLinesSize
     
-    call testArrayLocalOverride ()
+    -- call testArrayLocalOverride ()
+    
+    call testSuiteIndexedBus ()
 
     log message INFO "Main test finished"
     wait 1000
@@ -74,3 +78,6 @@ proc
     wait 1000
     finish
 end proc
+
+
+

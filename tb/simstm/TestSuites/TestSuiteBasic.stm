@@ -1,43 +1,21 @@
-
--- intern
-file TestCaseBasicConstStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicConstFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseBasicIfElseElsifStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicIfElseElsifFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseBasicNestedIfElseElsifStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicNestedIfElseElsifFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseBasicLoopStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicLoopFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseBasicVarStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicVarFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseBasicVar3StartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseBasicVar3File "../../SimulationResults/{@c3}_{@c2}.xml"
-
 testSuiteBasic:
 proc
-    call testCaseBasicConst
-    call testCaseBasicIfElseElsif
-    call testCaseBasicNestedIfElseElsif
-    call testCaseBasicLoop
-    call testCaseBasicVar
-    call testCaseBasicVar3
+    call testCaseBasicConst ()
+    call testCaseBasicIfElseElsif ()
+    call testCaseBasicNestedIfElseElsif ()
+    call testCaseBasicLoop ()
+    call testCaseBasicVar ()
+    call testCaseBasicVar3 ()
 end proc
 
-testCaseBasicLoop:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicLoopStartFile
-    file pointer copy TestCaseFile TestCaseBasicLoopFile
-    call beginTestCase
+proc testCaseBasicLoop ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -48,20 +26,18 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-testCaseBasicVar:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicVarStartFile
-    file pointer copy TestCaseFile TestCaseBasicVarFile
-    call beginTestCase
+proc testCaseBasicVar ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -72,20 +48,18 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-testCaseBasicVar3:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicVar3StartFile
-    file pointer copy TestCaseFile TestCaseBasicVar3File
-    call beginTestCase
+proc testCaseBasicVar3 ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -96,20 +70,18 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-testCaseBasicIfElseElsif:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicIfElseElsifStartFile
-    file pointer copy TestCaseFile TestCaseBasicIfElseElsifFile
-    call beginTestCase
+proc testCaseBasicIfElseElsif ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -120,20 +92,18 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-testCaseBasicNestedIfElseElsif:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicNestedIfElseElsifStartFile
-    file pointer copy TestCaseFile TestCaseBasicNestedIfElseElsifFile
-    call beginTestCase
+proc testCaseBasicNestedIfElseElsif ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -144,20 +114,18 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-testCaseBasicConst:
-proc
-    file pointer copy TestCaseStartFile TestCaseBasicConstStartFile
-    file pointer copy TestCaseFile TestCaseBasicConstFile
-    call beginTestCase
+proc testCaseBasicConst ()
+
+    call beginTestCase ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+	    call endTestCase ()
         return
     end if
 
@@ -168,6 +136,6 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc

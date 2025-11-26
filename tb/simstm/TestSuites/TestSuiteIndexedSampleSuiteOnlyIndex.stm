@@ -1,28 +1,19 @@
--- intern
-file TestCaseSampleSuiteOnlyIndexAStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
-file TestCaseSampleSuiteOnlyIndexAFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
-
-file TestCaseSampleSuiteOnlyIndexBStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
-file TestCaseSampleSuiteOnlyIndexBFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
-
 testSuiteIndexedSampleSuiteOnlyIndex:
 proc
-    call testCaseSampleSuiteOnlyIndexA
-    call testCaseSampleSuiteOnlyIndexB
+    call testCaseSampleSuiteOnlyIndexA ()
+    call testCaseSampleSuiteOnlyIndexB ()
 end proc
 
-var tmpSampleSuiteOnlyIndexA 0
 
-testCaseSampleSuiteOnlyIndexA:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteOnlyIndexAStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteOnlyIndexAFile
-    call beginTestCaseSuiteIndexed
+proc testCaseSampleSuiteOnlyIndexA ()
+    var tmpSampleSuiteOnlyIndexA 0
+
+    call beginTestCaseSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+        call endTestCase ()
         return
     end if
 
@@ -36,22 +27,20 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
 
-var tmpSampleSuiteOnlyIndexB 0
 
-testCaseSampleSuiteOnlyIndexB:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteOnlyIndexBStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteOnlyIndexBFile
-    call beginTestCaseSuiteIndexed
+proc testCaseSampleSuiteOnlyIndexB ()
+    var tmpSampleSuiteOnlyIndexB 0
+
+    call beginTestCaseSuiteIndexed ()
 
     if SKIP = NOT_SKIPPED
         lines append message TestCaseLines "TestCase not implemented yet"
         call skipTestCase
-        call endTestCase
+        call endTestCase ()
         return
     end if
     equ tmpSampleSuiteOnlyIndexB TestSuiteIndex
@@ -65,6 +54,6 @@ proc
         call failureTestCase
     end if
 
-    call endTestCase
+    call endTestCase ()
 
 end proc
