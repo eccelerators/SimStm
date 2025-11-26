@@ -15,7 +15,7 @@ proc testArrayParameterIn ()
 end proc
 
 proc checkArrayParameterInput (
-	array this_array 1
+	array this_array 0
 	)
 	var pos_0 12
 	var pos_1 13
