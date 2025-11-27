@@ -5,7 +5,7 @@ Objects
 Const
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  const a_const 0x03
  const b_const 0b011
@@ -21,7 +21,7 @@ constant.
 Var
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  var a_var 0x03
  var b_var 0b011
@@ -38,7 +38,7 @@ instruction must be used within a procedure for this purpose.
 Array
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  a_array 16
 
@@ -50,7 +50,7 @@ Only arrays with one dimension are possible; the length is fixed.
 File
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file a_file "filename.stm"
  file a_file "filename{:d}{:d}.stm" index1 index2
@@ -67,7 +67,7 @@ file, e.g., ``file read all a_file a_lines``.
 Lines
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines a_lines
 
@@ -82,7 +82,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 Signal
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal a_signal
 
@@ -96,7 +96,7 @@ customization and attached to a signal.
 Bus
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus a_bus
 
@@ -110,7 +110,7 @@ attached to a bus.
 Namespace
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
 	namespace a
 	var l_var 0

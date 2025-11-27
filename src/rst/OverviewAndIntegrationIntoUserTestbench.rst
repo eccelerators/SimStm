@@ -11,7 +11,7 @@ defined in ``tb_bus_pkg``, and eventually, a new bus type package if the
 predefined buses aren't sufficient. All other packages shall not be
 changed.
 
-.. figure:: https://github.com/eccelerators/simstm/assets/124497409/1f15e6b8-1587-4bd7-96a7-8ad51ebe7d05
+.. figure:: resources/simstm-ForSimStm_ReadMe.png
    :alt: simstm-overview
 
    simstm-overview

@@ -255,7 +255,7 @@ SimStm code for the simulator.
 Comments
 ~~~~~~~~
 
-.. code-block:: none
+.. code-block:: simstm
 
  -- This is a full line comment
  const aconst 0x03 -- This is an appended line comment
@@ -269,7 +269,7 @@ Includes, Language Objects, and Declarations
 Include
 ^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  include "aninclude.stm"
 
@@ -285,7 +285,7 @@ parent folders would be bad practice.
 Namespace
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
 	namespace a
 	var l_var 0
@@ -298,7 +298,7 @@ In the given example, the variable ``l_var`` is only defined inside the namespac
 Const
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  const a_const 0x03
  const b_const 0b011
@@ -313,7 +313,7 @@ constant.
 Var
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  var a_var 0x03
  var b_var 0b011
@@ -329,7 +329,7 @@ instruction must be used within a procedure for this purpose.
 Array
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  a_array 16
 
@@ -340,7 +340,7 @@ Only arrays with one dimension are possible; the length is fixed.
 File
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file a_file "filename.stm"
  file a_file "filename{:d}{:d}.stm" index1 index2
@@ -356,7 +356,7 @@ file, e.g., ``file read all a_file a_lines``.
 Lines
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines a_lines
 
@@ -370,7 +370,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 Signal
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal a_signal
 
@@ -383,7 +383,7 @@ customization and attached to a signal.
 Bus
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus a_bus
 
@@ -399,7 +399,7 @@ Equations and Arithmetic Operations
 equ
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  equ operand1 operand2
  equ operand1 0xF0
@@ -410,7 +410,7 @@ operand1 (variable) or copies the value 0xF0 into operand1.
 add
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  add operand1 operand2
  add operand1 0xF0
@@ -422,7 +422,7 @@ addition is stored in operand1 after the operation.
 sub
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  sub operand1 operand2
  sub operand1 0xF0`
@@ -434,7 +434,7 @@ value of the subtraction is stored in operand1 after the operation.
 mul
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  mul operand1 operand2
  mul operand1 0xF0
@@ -446,7 +446,7 @@ value of the multiplication is stored in operand1 after the operation.
 div
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  div operand1 operand2
  div operand1 0xF0
@@ -458,7 +458,7 @@ division is stored in operand1  after the operation.
 and
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  and operand1 operand2
  and operand1 0xF0
@@ -470,7 +470,7 @@ resulting value of the bitwise ``and`` is stored in operand1 after the operation
 or
 ^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  or operand1 operand2
  or operand1 0xF0
@@ -482,7 +482,7 @@ resulting value of the bitwise ``or`` is stored in operand1 after the operation.
 xor
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  xor operand1 operand2
  xor operand1 0xF0
@@ -494,7 +494,7 @@ resulting value of the bitwise ``xor`` is stored in operand1 after the operation
 shl
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  shl operand1 operand2
  shl operand1 0xF0
@@ -506,7 +506,7 @@ The resulting value of the bitwise left shift is stored in operand1 after the op
 shr
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  shr operand1 operand2
  shr operand1 0xF0
@@ -518,7 +518,7 @@ The resulting value of the bitwise right shift is stored in operand1 after the o
 inv
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  inv operand1
 
@@ -528,7 +528,7 @@ of the bitwise inversion is stored in operand1 after the operation.
 ld
 ^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  ld operand1
 
@@ -544,7 +544,7 @@ Subroutines, Branches, and Loops
 proc, end proc
 ^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  a_proc:
  proc
@@ -561,7 +561,7 @@ indicator.
 call
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  call a_proc
 
@@ -571,7 +571,7 @@ in the next line after an ``end proc`` or a ``return`` in the subroutine.
 return
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  return
 
@@ -580,7 +580,7 @@ The ``return`` instruction returns to calling code from a subroutine.
 interrupt, end interrupt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  an_interrupt:
  interrupt
@@ -600,7 +600,7 @@ resolved there too.
 if, elsif, else, end if
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  if a_var = b_var
      -- ... some code
@@ -626,7 +626,7 @@ The ``if`` ``elsif`` or ``else`` instructions can be nested.
 loop
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  loop l_var
      -- ... some code
@@ -651,7 +651,7 @@ which is a good practice.
 abort
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  abort
 
@@ -660,7 +660,7 @@ The ``abort`` instruction aborts the simulation with severity Failure.
 finish
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  finish
 
@@ -669,7 +669,7 @@ The ``finish`` instruction exits the simulation.
 stop
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
 	stop
 	
@@ -681,7 +681,7 @@ Var Access
 Var Verify
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  var verify a_var e_var m_var
  var verify a_var 0x01 0x0F
@@ -697,7 +697,7 @@ severity Failure if the global resume is set to 0.
 Var Pointer Copy
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
  var pointer copy a_varA a_varB
  
@@ -711,7 +711,7 @@ Array Access
 Array Set
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array set b_array p_var a_var
  array set b_array 3 a_var
@@ -727,7 +727,7 @@ The ``array set`` instruction sets the value of ``b_array`` at position ``3``to 
 Array Get
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array get b_array p_var t_var
  array get b_array 5  t_var
@@ -737,7 +737,7 @@ The ``array get`` instruction gets the value of ``b_array`` at position ``p_var`
 Array Verify
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array verify b_array p_var e_var m_var
  array verify b_array p_var 0x01 0x0F
@@ -752,7 +752,7 @@ severity Failure if the global resume is set to 0.
 Array Size
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array size b_array t_var
 
@@ -761,7 +761,7 @@ The ``array size`` instruction gets the size of an array.
 Array Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array pointer copy t_array s_array
 
@@ -776,7 +776,7 @@ File Access
 File Writable
 ^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file writable a_file r_var
 
@@ -788,7 +788,7 @@ on the operating system.
 File Readable
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file readable a_file r_var
 
@@ -799,7 +799,7 @@ on the operating system.
 File Appendable
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file appendable a_file r_var
 
@@ -810,7 +810,7 @@ depend on the operating system.
 File Write
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file write a_file a_lines
 
@@ -820,7 +820,7 @@ overwritten if it exists.
 File Append
 ^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file append a_file a_lines
 
@@ -830,7 +830,7 @@ if the file doesn't exist.
 File Read All
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file read all a_file a_lines
 
@@ -839,7 +839,7 @@ The ``file read all`` instruction reads all lines of a file into a lines object.
 File Read
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file read a_file a_lines n_var
    file read a_file a_lines 10
@@ -856,7 +856,7 @@ limited to 4.
 File Read End
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file read end a_file
 
@@ -865,7 +865,7 @@ The ``file read end `` instruction ends the piecewise read process of a file.
 File Pointer Copy
 ^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file pointer copy t_file s_file
 
@@ -880,7 +880,7 @@ Lines Access
 Lines Get
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines get array a_lines p_var t_array r_var
  lines get array a_lines 9 t_array r_var
@@ -899,7 +899,7 @@ mismatch.
 
 Lines Set
 ^^^^^^^^^
-.. code-block:: none
+.. code-block:: simstm
 
  lines set array a_lines p_var s_array
  lines set array a_lines 9 s_array
@@ -915,7 +915,7 @@ by values of variables given after the message string.
 Lines Insert
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines insert array a_lines p_var s_array
  lines insert array a_lines 9 s_array
@@ -931,7 +931,7 @@ message string.
 Lines Append
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines append array a_lines s_array
  lines append message a_lines "Some message to be written to a file later"
@@ -944,7 +944,7 @@ which are filled by values of variables given after the message string.
 Lines Delete
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines delete a_lines p_var
  lines delete a_lines 3
@@ -955,7 +955,7 @@ moved to the given position if it exists.
 Lines Size
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines size a_lines r_var
 
@@ -965,7 +965,7 @@ at that point.
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines pointer copy t_lines s_lines
 
@@ -978,7 +978,7 @@ Log
 Log Message
 ^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  log message v_var "A message to the console"
  log message v_var "A message to the console{}{}" m_var1 m_var2
@@ -991,7 +991,7 @@ variables given after the message string.
 Log Lines
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  log lines v_var s_lines
 
@@ -1000,14 +1000,14 @@ The ``log lines`` instruction dumps a lines object at a given verbosity level to
 Verbosity
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  verbosity v_var
  verbosity 20
 
 Usual practice is to use the following constants to set verbosity:
 
-.. code-block:: none
+.. code-block:: simstm
 
  const FAILURE 0
  const WARNING 10
@@ -1021,7 +1021,7 @@ point in the execution flow.
 Wait
 ~~~~
 
-.. code-block:: none
+.. code-block:: simstm
 
  wait w_var
  wait 10000
@@ -1034,7 +1034,7 @@ Random Numbers
 Random
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  random t_var min_var max_var
  random t_var 0 10
@@ -1045,7 +1045,7 @@ less than the maximum number given.
 Seed
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  seed s_var
  seed 10
@@ -1058,7 +1058,7 @@ Debug
 Trace
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  trace t_var
  trace 0b111
@@ -1076,7 +1076,7 @@ shown.
 Marker
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  marker n_var m_var
  marker 0xF 0b1
@@ -1098,7 +1098,7 @@ Signal and Bus Access
 Signal Write
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal write a_signal s_var
  signal write a_signal 0b11
@@ -1108,7 +1108,7 @@ The ``signal write`` instruction writes a variable, constant, or numeric value t
 Signal Read
 ^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal read a_signal t_var
 
@@ -1117,7 +1117,7 @@ The ``signal read`` instruction reads the value of a signal into a variable.
 Signal Verify
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal verify a_signal t_var e_var m_var
  signal verify a_signal t_var 0x01 0x0F
@@ -1132,7 +1132,7 @@ severity failure if the global resume is set to 0.
 Signal Pointer Copy
 ^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal pointer copy t_signal s_signal
 
@@ -1142,7 +1142,7 @@ is a copy of the pointer ``s_signal``.
 Signal Pointer Set
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal pointer set t_signal 5
  signal pointer set t_signal ptr_var
@@ -1153,7 +1153,7 @@ to an absolute address.
 Signal Pointer Get
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  signal pointer get s_signal ptr_var
 
@@ -1163,7 +1163,7 @@ For example, the pointer ``s_signal`` is stored in ``ptr_var``.
 Bus Write
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus write a_bus a_width an_address a_var
  bus write a_bus 32 0x0004 0x12345678
@@ -1173,7 +1173,7 @@ The ``bus write`` instruction writes a variable, constant, or numeric value to a
 Bus Read
 ^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus read a_bus a_width an_address a_var
 
@@ -1182,7 +1182,7 @@ The ``bus read`` instruction reads the value of a bus with a given width and add
 Bus Verify
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus verify a_bus a_width an_address a_var e_var m_var
  bus verify a_bus a_width an_address a_var 0x01 0x0F
@@ -1195,7 +1195,7 @@ severity Failure if the global resume is set to 0; otherwise, it continues and r
 Bus Pointer Copy
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer copy t_signal s_signal
 
@@ -1205,7 +1205,7 @@ the pointer ``s_bus``.
 Bus Pointer Set
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer set t_bus 5
  bus pointer set t_bus ptr_var
@@ -1216,7 +1216,7 @@ to an absolute address.
 Bus Pointer Get
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer get s_bus ptr_var
 
@@ -1226,7 +1226,7 @@ For example, the pointer ``s_bus`` is stored in ``ptr_var``.
 Bus Timeout Set
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus timeout set a_bus s_var
  bus timeout set a_bus 1000
@@ -1237,7 +1237,7 @@ violation, the simulation stops with severity Failure always.
 Bus Timeout Get
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus timeout get s_bus to_var
 
@@ -1246,7 +1246,7 @@ The ``bus timeout get`` instruction gets a bus timeout and stores it in a variab
 Resume
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  resume EXIT_ON_VERIFY_ERROR
  resume 0
@@ -1265,7 +1265,7 @@ Examples
 Hello World
 ~~~~~~~~~~~
 
-.. code-block:: none
+.. code-block:: simstm
 
  const YEAR 2023
  var month 11
@@ -1293,12 +1293,12 @@ Unit Tests
 The test folder contains unittests for all commands. Thus all commands
 are verified for each release by regression tests.
 
-.. code-block:: none
+.. code-block:: simstm
     pip3 install click jinja2
     ant _helper-generate-ghdl-ant-build-xml
     ant ghdl-all
 
-.. code-block:: none
+.. code-block:: simstm
     pip3 install click jinja2
     ant _helper-generate-modelsim-ant-build-xml
     ant modelsim-all

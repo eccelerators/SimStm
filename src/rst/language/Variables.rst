@@ -1,7 +1,7 @@
 Variables
 ---------
 
-.. code-block:: none
+.. code-block:: simstm
 
  var a_var 0x03
  var b_var 0b011
@@ -20,7 +20,7 @@ Var Access
 Equ
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  equ operand1 operand2
  equ operand1 0xF0
@@ -32,7 +32,7 @@ operand1 (variable) or copies the value 0xF0 into operand1.
 Var Verify
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  var verify a_var e_var m_var
  var verify a_var 0x01 0x0F
@@ -48,7 +48,7 @@ severity Failure if the global resume is set to 0.
 Var Pointer Copy
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
  var pointer copy a_varA a_varB
  

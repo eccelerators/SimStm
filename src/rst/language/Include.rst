@@ -1,7 +1,7 @@
 Include
 -------
 
-.. code-block:: none
+.. code-block:: simstm
 
  include "aninclude.stm"
 

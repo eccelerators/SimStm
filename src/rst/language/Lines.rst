@@ -1,7 +1,7 @@
 Lines
 -----
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines a_lines
 
@@ -18,7 +18,7 @@ Lines Access
 Lines Get
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines get array a_lines p_var t_array r_var
  lines get array a_lines 9 t_array r_var
@@ -37,7 +37,7 @@ mismatch.
 
 Lines Set
 ^^^^^^^^^
-.. code-block:: none
+.. code-block:: simstm
 
  lines set array a_lines p_var s_array
  lines set array a_lines 9 s_array
@@ -53,7 +53,7 @@ by values of variables given after the message string.
 Lines Insert
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines insert array a_lines p_var s_array
  lines insert array a_lines 9 s_array
@@ -69,7 +69,7 @@ message string.
 Lines Append
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines append array a_lines s_array
  lines append message a_lines "Some message to be written to a file later"
@@ -82,7 +82,7 @@ which are filled by values of variables given after the message string.
 Lines Delete
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines delete a_lines p_var
  lines delete a_lines 3
@@ -93,7 +93,7 @@ moved to the given position if it exists.
 Lines Size
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines size a_lines r_var
 
@@ -103,7 +103,7 @@ at that point.
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines pointer copy t_lines s_lines
 

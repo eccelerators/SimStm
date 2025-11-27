@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="SimStmSubtargetsAndMacros">    
+<project name="SimStmHtml">    
 
-	<target name="rst2html-sphinx" depends="-collect-sources-for-sphinx-html-transformation">	
+	<target name="sphinx-rst2html" depends="-collect-sources-for-sphinx-html-transformation" 
+		description="Generates HTML documentation from reStructuredText sources using Sphinx.">	
 		<exec executable="${python-executable}">
 			<arg value="-m" />
 			<arg value="sphinx" />
@@ -10,7 +11,7 @@
 			<arg value="tmp-gen/source" />
 			<arg value="tmp-gen/build" />
 		</exec>  
-		<copy todir="src-gen/html-sphinx">
+		<copy todir="build/html">
 			<fileset dir="tmp-gen/build">
 				<include name="**/*" />
 			</fileset>
@@ -36,15 +37,13 @@
             </fileset>
         </delete>
         <copy todir="tmp-gen/source">
-            <fileset dir="submodules/sphinx_template/source">
+            <fileset dir="src/sphinx">
                 <include name="**/*" />
             </fileset>
         </copy>
         <copy todir="tmp-gen/source">
             <fileset dir="src/rst">
                 <include name="**/*.rst" />
-                <exclude name="**/index_pdf.rst" />
-                <exclude name="**/index_html.rst" />
             </fileset>
         </copy>  
         <if> 
@@ -56,18 +55,7 @@
                     </fileset>
                 </copy>
             </then>
-        </if>
-        <copy todir="tmp-gen/source">
-            <fileset dir="src-gen/rst">
-                <include name="**/*.rst" />
-            </fileset>
-        </copy>          	    	
-        <copy todir="tmp-gen/source/resources">
-            <fileset dir="src-gen/rst">
-                <include name="**/*.png" />
-            </fileset>
-        </copy>        
-        <copy file="src/rst/index_html.rst" tofile="tmp-gen/source/index.rst" />
+        </if>       	    	     
     </target>
 	
 </project>
