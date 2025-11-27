@@ -16,58 +16,39 @@ proc
 end proc
 
 
-proc testCaseSampleSuiteAndCaseIndexA ()
-    var tmpSampleSuiteAndCaseIndexA 0
-	equ TestCaseIndex sampleCaseIndexA
+proc testCaseSampleSuiteAndCaseIndexA (
+	var skipped 0
+)
+    var t 0
+    equ TestCaseIndex sampleCaseIndexA
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    equ tmpSampleSuiteAndCaseIndexA TestSuiteIndex
-    add tmpSampleSuiteAndCaseIndexA 1
-    add tmpSampleSuiteAndCaseIndexA TestSuiteIndex
-    seed tmpSampleSuiteAndCaseIndexA
+    equ t TestSuiteIndex
+    add t 1
+    add t TestSuiteIndex
+    seed t
     call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteAndCaseIndexA test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-
-proc testCaseSampleSuiteAndCaseIndexB ()
-    var tmpSampleSuiteAndCaseIndexB 0
-	equ TestCaseIndex sampleCaseIndexB
+proc testCaseSampleSuiteAndCaseIndexB (
+	var skipped 0
+)
+    var t 0
+    equ TestCaseIndex sampleCaseIndexB
     call beginTestCaseIndexedSuiteIndexed ()
+    equ t TestSuiteIndex
+    add t 100000
+    add t TestSuiteIndex
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-    equ tmpSampleSuiteAndCaseIndexB TestSuiteIndex
-    add tmpSampleSuiteAndCaseIndexB 100000
-    add tmpSampleSuiteAndCaseIndexB TestSuiteIndex
-
-    seed tmpSampleSuiteAndCaseIndexB
+    seed t
     call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteAndCaseIndexB test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 
 end proc

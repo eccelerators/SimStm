@@ -13,256 +13,123 @@ proc
     call testCaseLinesSize ()
 end proc
 
-
-proc testCaseLinesAppendArray ()
-
+proc testCaseLinesAppendArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesAppendArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesAppendArray test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesAppendText ()
-
+proc testCaseLinesAppendText (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesAppendText ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesAppendText test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesDeleteAllArray ()
-
+proc testCaseLinesDeleteAllArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesDeleteAllArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesDeleteAllArrayy test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesDeleteArray ()
-
+proc testCaseLinesDeleteArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesDeleteArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesDeleteArray test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesGetArray ()
-
+proc testCaseLinesGetArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesGetArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesGetArray test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesInsertArray ()
-
+proc testCaseLinesInsertArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesInsertArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesInsertArray test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesInsertText ()
-
+proc testCaseLinesInsertText (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesInsertText ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesInsertText test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesPointerCopy ()
-
+proc testCaseLinesPointerCopy (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesPointerCopy ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesPointerCopy test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesSetArray ()
-
+proc testCaseLinesSetArray (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesSetArray ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesSetArray test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-proc testCaseLinesSetText ()
-
+proc testCaseLinesSetText (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesSetText ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesSetText test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-
-
-proc testCaseLinesSize ()
-
+proc testCaseLinesSize (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase ()
-        return
-    end if
-
     call testLinesSize ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "LinesSize test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

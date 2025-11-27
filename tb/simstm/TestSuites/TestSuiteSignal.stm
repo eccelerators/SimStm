@@ -7,93 +7,49 @@ proc
 end proc
 
 
-proc testCaseSignalWriteReadVerify ()
-
+proc testCaseSignalWriteReadVerify (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call testSignalWriteReadVerify ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SignalWriteReadVerify test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseSignalVerifyFail ()
-
+proc testCaseSignalVerifyFail (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call testSignalVerifyFail ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SignalVerifyFail test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseSignalPointerCopy ()
-
+proc testCaseSignalPointerCopy (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call testSignalPointerCopy
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SignalPointerCopy test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseSignalPointerGetSet ()
-
+proc testCaseSignalPointerGetSet (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call testSignalPointerGetSet
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SignalPointerGetSet test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

@@ -3,7 +3,7 @@ var test_variable_add_2 2
 
 testVariableAdd:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_add_1
     log message 0 "test_variable_2: {:d}" test_variable_add_2
@@ -24,7 +24,7 @@ proc
     var verify test_variable_add_1 12356 MAX
     var verify test_variable_add_2 110 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -33,7 +33,7 @@ var test_variable_and_2 0x77777777
 
 testVariableAnd:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:x}" test_variable_and_1
     log message 0 "test_variable_2: {:x}" test_variable_and_2
@@ -54,7 +54,7 @@ proc
     var verify test_variable_and_1 0xAA02 MAX
     var verify test_variable_and_2 0x70745607 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -63,7 +63,7 @@ var test_variable_div_2 5000
 
 testVariableDiv:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_div_1
     log message 0 "test_variable_2: {:d}" test_variable_div_2
@@ -84,7 +84,7 @@ proc
     var verify test_variable_div_1 10 MAX
     var verify test_variable_div_2 2 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -96,7 +96,7 @@ var test_variable_equ_5 5
 
 testVariableEqu:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_equ_1
     log message 0 "test_variable_2: {:d}" test_variable_equ_2
@@ -138,7 +138,7 @@ proc
     var verify test_variable_equ_4 11 MAX
     var verify test_variable_equ_5 0 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var test_variable_mul_1 1
@@ -146,7 +146,7 @@ var test_variable_mul_2 2
 
 testVariableMul:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_mul_1
     log message 0 "test_variable_2: {:d}" test_variable_mul_2
@@ -167,7 +167,7 @@ proc
     var verify test_variable_mul_1 123450 MAX
     var verify test_variable_mul_2 3520 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -177,7 +177,7 @@ var test_variable_or_2 0x80000000
 
 testVariableOr:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_or_1
     log message 0 "test_variable_2: {}" test_variable_or_2
@@ -198,7 +198,7 @@ proc
     var verify test_variable_or_1 0x3675 MAX
     var verify test_variable_or_2 0x80000001 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -207,7 +207,7 @@ var test_variable_sub_2 88
 
 testVariableSub:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_sub_1
     log message 0 "test_variable_2: {:d}" test_variable_sub_2
@@ -228,7 +228,7 @@ proc
     var verify test_variable_sub_1 12333 MAX
     var verify test_variable_sub_2 67 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -237,7 +237,7 @@ var test_variable_xor_2 0x00000000
 
 testVariableXor:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_xor_1
     log message 0 "test_variable_2: {}" test_variable_xor_2
@@ -258,7 +258,7 @@ proc
     var verify test_variable_xor_1 0 0xFFFFFFFF
     var verify test_variable_xor_2 0xFFFFFFFF 0xFFFFFFFF
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -267,7 +267,7 @@ var test_variable_inv_2 0x0FEDCBA9
 
 testVariableInv:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_inv_1
     log message 0 "test_variable_2: {}" test_variable_inv_2
@@ -288,7 +288,7 @@ proc
     var verify test_variable_inv_1 0x12345678 0xFFFFFFFF
     var verify test_variable_inv_2 0x0FEDCBA9 0xFFFFFFFF
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
@@ -298,7 +298,7 @@ var test_variable_ld_2 0x80000000
 
 testVariableLd:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_ld_1
     log message 0 "test_variable_2: {}" test_variable_ld_2
@@ -311,6 +311,6 @@ proc
     var verify test_variable_ld_1 12 MAX
     var verify test_variable_ld_2 31 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc

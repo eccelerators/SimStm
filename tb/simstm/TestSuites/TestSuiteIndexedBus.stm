@@ -14,20 +14,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus32Index 1
         end if
         if MachineValueWidth >= 64
@@ -35,20 +35,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus64Index
             call testCaseBus64 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus64Index 1
         end if
         if MachineValueWidth >= 128
@@ -56,20 +56,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus128Index
             call testCaseBus128 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus128VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus128VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus128TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus128TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus128Index 1
         end if
         if MachineValueWidth >= 256
@@ -77,20 +77,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus256Index
             call testCaseBus256 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus256VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus256VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus256TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus256TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus256Index 1
         end if
     elsif RepeatedTestSuiteIndex <= 5
@@ -99,20 +99,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus32Index 1
         end if
         if MachineValueWidth >= 64
@@ -120,20 +120,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus64Index
             call testCaseBus64 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus64TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus64Index 1
         end if
     elsif RepeatedTestSuiteIndex = 6
@@ -142,20 +142,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus32Index 1
         end if
     elsif RepeatedTestSuiteIndex = 7
@@ -164,20 +164,20 @@ proc testSuiteIndexedBus ()
             bus timeout set busToTest 1000
             equ TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifySuccess (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32VerifyFail (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutRead (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             call testCaseBus32TimeOutWrite (
-		    	bus pointer copy busToTest busToTest
-		    )
+			bus pointer copy busToTest busToTest
+		)
             add TestCaseBus32Index 1
         end if
     end if
@@ -186,578 +186,358 @@ end proc
 
 proc testCaseBus32 (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32 (
     	bus pointer copy busToTest busToTest
     )
-
-     if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus32 test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 proc testCaseBus32VerifySuccess (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32VerifySuccess (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus32VerifySuccess test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus32VerifyFail (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32VerifyFail (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus32VerifyFail test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus32TimeOutRead (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32TimeOutRead (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus32TimeOutRead test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus32TimeOutWrite (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32TimeOutWrite (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus32TimeOutWrite test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus64 (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus64 (
     	bus pointer copy busToTest busToTest
     )
-
-     if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus64 test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus64VerifySuccess (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus64VerifySuccess (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus64VerifySuccess test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus64VerifyFail (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus64VerifyFail (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus64VerifyFail test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus64TimeOutRead (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus64TimeOutRead (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus64TimeOutRead test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus64TimeOutWrite (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus64TimeOutWrite (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus64TimeOutWrite test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus128 (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus128 (
     	bus pointer copy busToTest busToTest
     )
-
-     if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus128 test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus128VerifySuccess (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus128VerifySuccess (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus128VerifySuccess test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus128VerifyFail (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus128VerifyFail (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus128VerifyFail test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus128TimeOutRead (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus128TimeOutRead (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus128TimeOutRead test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus128TimeOutWrite (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus128TimeOutWrite (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus128TimeOutWrite test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus256 (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus256 (
     	bus pointer copy busToTest busToTest
     )
-
-     if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus256 test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus256VerifySuccess (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus256VerifySuccess (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus256VerifySuccess test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus256VerifyFail (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus256VerifyFail (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus256VerifyFail test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus256TimeOutRead (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus256TimeOutRead (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus256TimeOutRead test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
 proc testCaseBus256TimeOutWrite (
 	bus busToTest 0
+	var skipped 0
 )
     call beginTestCaseIndexedSuiteIndexed ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus256TimeOutWrite (
     	bus pointer copy busToTest busToTest
     )
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "Bus256TimeOutWrite test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

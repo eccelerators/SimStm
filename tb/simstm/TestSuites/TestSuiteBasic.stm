@@ -8,134 +8,68 @@ proc
     call testCaseBasicVar3 ()
 end proc
 
-proc testCaseBasicLoop ()
-
+proc testCaseBasicLoop (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicLoop
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicLoop test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicLoop ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-proc testCaseBasicVar ()
-
+proc testCaseBasicVar (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicVar
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicVar test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicVar ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-proc testCaseBasicVar3 ()
-
+proc testCaseBasicVar3 (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicVar3
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicVar3 test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicVar3 ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-proc testCaseBasicIfElseElsif ()
-
+proc testCaseBasicIfElseElsif (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicIfElseElsif
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicIfElseElsif test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicIfElseElsif ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-proc testCaseBasicNestedIfElseElsif ()
-
+proc testCaseBasicNestedIfElseElsif (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicNestedIfElseElsif
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicNestedIfElseElsif test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicNestedIfElseElsif ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-proc testCaseBasicConst ()
-
+proc testCaseBasicConst (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
-    call testBasicConst
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "BasicConst test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call testBasicConst ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

@@ -114,7 +114,18 @@ proc beginTestCase ()
 end proc
 
 
-proc endTestCase ()
+proc endTestCase (
+	var skipped 0
+	var error 0
+	var failure 0
+)
+    if skipped != 0
+        call skipTestCase ()
+    elsif error != 0
+        call errorTestCase ()
+    elsif failure != 0
+        call failureTestCase ()
+    end if
     signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
     log message ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
@@ -128,6 +139,7 @@ proc endTestCase ()
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedStartTime" value="{:d}"/>' TestCaseSimulatedStartTime
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<properties>'
     -- file last modified time is test case end real time
+
     if TestSuiteHasIndex = 1
         if TestCaseHasIndex = 1
             file TestCaseIndexedSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseIndex
@@ -151,24 +163,22 @@ proc endTestCase ()
      end if
 end proc
 
-skipTestCase:
-proc
+proc skipTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<skipped message=\""
      lines append message TestCaseLines "\"/>"
 end proc
 
-errorTestCase:
-proc
+
+proc errorTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<error message=\""
      lines append message TestCaseLines "\"/>"
 end proc
 
-failureTestCase:
-proc
+proc failureTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<failure message=\""

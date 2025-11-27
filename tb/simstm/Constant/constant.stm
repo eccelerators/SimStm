@@ -4,9 +4,9 @@ var test_constant_add_2 2
 var test_variable_add_1 1
 var test_variable_add_2 2
 
-testConstantAdd:
-proc
-    call startStandardTestShell
+
+proc testConstantAdd ()
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_add_1
     log message 0 "test_variable_2: {}" test_variable_add_2
@@ -27,6 +27,6 @@ proc
     log message 0 "test_variable_1: {}" test_variable_add_1
     log message 0 "test_variable_2: {}" test_variable_add_2
 
-call endStandardTestShell
+call endStandardTestShell ()
 
 end proc

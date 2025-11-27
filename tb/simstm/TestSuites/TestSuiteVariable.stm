@@ -18,346 +18,181 @@ proc
 end proc
 
 
-proc testCaseVariableLocal ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableLocal (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableLocal ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableLocal test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableScope ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableScope (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableScope ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableScope test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariablePointer ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariablePointer (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariablePointer ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariablePointer test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableParameterIn ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableParameterIn (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableParameterIn ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableParameterIn test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableParameterOut ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableParameterOut (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableParameterOut ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableParameterOut test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableLd ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableLd (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableLd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableLd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableInv ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableInv (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableInv
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableInv test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableXor ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableXor (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableXor
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableXor test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableSub ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableSub (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableSub
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableSub test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableOr ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableOr (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableOr
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableOr test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableMul ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableMul (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableMul
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableMul test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableEqu ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableEqu (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableEqu
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableEqu test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableDiv ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableDiv (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableDiv
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableDiv test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableAnd ()
-
-    call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
+proc testCaseVariableAnd (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableAnd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableAnd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 
-proc testCaseVariableAdd ()
-
+proc testCaseVariableAdd (
+	var skipped 0
+)
     call beginTestCase ()
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-	    call endTestCase ()
-        return
-    end if
-
     call testVariableAdd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableAdd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase ()
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
