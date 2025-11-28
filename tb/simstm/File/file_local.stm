@@ -6,7 +6,6 @@ proc testFileLocal ()
 	var is_readable 0
 	lines a_lines
 	lines b_lines
-	lines c_lines
 	lines final_lines
 	array b_array 2
 	call startStandardTestShell ()
@@ -23,14 +22,19 @@ proc testFileLocal ()
 	lines append array b_lines b_array
 	file write a_file b_lines
 	
-	lines delete all c_lines
-	lines append message c_lines "appended message"
-	file append a_file c_lines
+
 	
 	file read all a_file final_lines
 	log lines INFO_2 final_lines
+	array first_array 2
+	var a_var 99
+	lines get array final_lines 0 first_array a_var
+	log message INFO_2 "a_var: {:d}" a_var
+	array verify first_array 0 1 MAX
+	array verify first_array 1 2 MAX
+	
 	
 	call endStandardTestShell ()
-	
+	--NOT WORKINHVCVWCCVWVCVWCVCEVWCUV
 		
 end proc
