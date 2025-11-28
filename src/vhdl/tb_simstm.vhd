@@ -1159,7 +1159,7 @@ begin
                     temp_int := to_integer(par2(30 downto 0));
                     stm_lines_get(var_stm_lines, temp_int, var_stm_array, number_found, valid, machine_value_width);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object not get successfully"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array object does not get successfully"
                     severity failure;
                     update_variable(defined_vars, par3_index, var_stm_array, valid);
                     assert valid /= 0
