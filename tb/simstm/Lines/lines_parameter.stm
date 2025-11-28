@@ -2,43 +2,59 @@
 proc testLinesParameterIn ()
 
 	lines a_lines
+	array a_array 1
 	call startStandardTestShell ()
+	array set a_array 0 1
 	lines delete all a_lines
-	lines append message a_lines "some message"
+	lines append array a_lines a_array
 
 	call checkLinesParameterInput (
-		lines pointer copy any_lines a_lines
+		lines pointer copy this_lines a_lines
 	)
 
 	call endStandardTestShell ()
 end proc
 
 proc checkLinesParameterInput (
-	lines any_lines
+	lines this_lines
 )
-
-	log lines INFO_2 any_lines
+	
+	array this_array 1
+	var a_var 99
+	lines get array this_lines 0 this_array a_var
+	array verify this_array 0 1 MAX
 end proc
 
 
 proc testLinesParameterOut ()
 
 	lines b_lines
+	array a_array 1
 	call startStandardTestShell ()
+	array set a_array 0 1
 	lines delete all b_lines
-	lines append message b_lines "different message"
+	lines append array b_lines a_array
 	
 	call checkLinesParameterOutput (
-		lines pointer copy any_lines b_lines
+		lines pointer copy this_lines b_lines
 	)
+	array final_array_a 1
+	array final_array_b 1
+	var a_var 99
+	var b_var 99
 	log lines INFO_2 b_lines
+	lines get array b_lines 0 final_array_a a_var
+	lines get array b_lines 1 final_array_b b_var
+	array verify final_array_a 0 1 MAX
+	array verify final_array_b 0 2 MAX
 	call endStandardTestShell ()
 	
 end proc
 
 proc checkLinesParameterOutput (
-	lines any_lines
+	lines this_lines
 )
-	lines delete all any_lines
-	lines append message any_lines "new message"
+	array more 1
+	array set more 0 2
+	lines append array this_lines more
 end proc

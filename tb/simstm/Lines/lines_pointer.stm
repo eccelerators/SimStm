@@ -3,15 +3,25 @@ proc testLinesPointer ()
 
 	lines a_lines
 	lines b_lines
+	array b_array 1
 	call startStandardTestShell ()
 	
+	array set b_array 0 1
 	lines delete all a_lines
 	lines delete all b_lines
 	lines append message a_lines "message to be overwritten"
-	lines append message b_lines "new message"
+	lines append array b_lines b_array
 	
 	lines pointer copy a_lines b_lines
 	
+	array final_array 1
+	var a_var 99
+	--verifies a_lines
+	lines get array a_lines 0 final_array a_var
+	array verify final_array 0 1 MAX
+	-- verifies b_lines
+	lines get array b_lines 0 final_array a_var
+	array verify final_array 0 1 MAX
 	log lines INFO_2 a_lines
 	log lines INFO_2 b_lines
 	
