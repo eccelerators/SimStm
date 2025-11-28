@@ -24,7 +24,7 @@ Lines Get
  lines get array a_lines 9 t_array r_var
 
 The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
-into an array.
+into an array. The number of extracted values is stored in ``r_var``.
 
 The line is expected to hold hex numbers (without 0x
 prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
