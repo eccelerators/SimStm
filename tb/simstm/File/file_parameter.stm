@@ -3,9 +3,12 @@ proc testFileParameterIn ()
 
 	file a_file "a_file.dat"
 	lines a_lines
+	array a_array 2
+	array set a_array 0 1
+	array set a_array 1 2
 	call startStandardTestShell ()
 	lines delete all a_lines
-	lines append message a_lines "hello world"
+	lines append array a_lines a_array
 	file write a_file a_lines
 	
 	call checkFileParameterInput (
@@ -20,7 +23,13 @@ proc checkFileParameterInput (
 	)
 
 	lines result_lines
+	array this_array 2
+	var a_var 99
+	var b_var 99
 	file read all this_file result_lines
+	lines get array result_lines 0 this_array a_var
+	array verify this_array 0 1 MAX
+	array verify this_array 1 2 MAX
 	log lines INFO_2 result_lines
 
 end proc
@@ -28,11 +37,14 @@ end proc
 proc testFileParameterOut ()
 
 	file b_file "b_file.dat"
+	array a_array 2
+	array set a_array 0 1
+	array set a_array 1 2
 	lines b_lines
 	lines result_lines
 	call startStandardTestShell ()
 	lines delete all b_lines
-	lines append message b_lines "how are you world?"
+	lines append array b_lines a_array
 	file write b_file b_lines
 	
 	call checkFileParameterOutput (
@@ -40,6 +52,15 @@ proc testFileParameterOut ()
 	)
 	
 	file read all b_file result_lines
+	array final_array_a 2
+	array final_array_b 1
+	var a_var 99
+	var b_var 99
+	lines get array result_lines 0 final_array_a a_var 
+	lines get array result_lines 1 final_array_b b_var 
+	array verify final_array_a 0 1 MAX
+	array verify final_array_a 1 2 MAX
+	array verify final_array_b 0 3 MAX
 	log lines INFO_2 result_lines
 	call endStandardTestShell ()
 end proc
@@ -48,8 +69,10 @@ proc checkFileParameterOutput (
 	file this_file "b_file.dat"
 	)
 	
-	lines more_lines
-	lines append message more_lines "goodbye world"
-	file append this_file more_lines
+	array b_array 1
+	array set b_array 0 3
+	lines more_numbers
+	lines append array more_numbers b_array
+	file append this_file more_numbers
 end proc
 
