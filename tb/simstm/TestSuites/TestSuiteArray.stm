@@ -1,5 +1,5 @@
-testSuiteArray:
-proc
+proc testSuiteArray ()
+
     call testCaseArray ()
     call testCaseArrayGet ()
     call testCaseArraySet ()

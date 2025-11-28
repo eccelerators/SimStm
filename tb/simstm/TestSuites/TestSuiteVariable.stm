@@ -1,5 +1,5 @@
-testSuiteVariable:
-proc
+proc testSuiteVariable ()
+
     call testCaseVariableAdd ()
     call testCaseVariableAnd ()
     call testCaseVariableDiv ()

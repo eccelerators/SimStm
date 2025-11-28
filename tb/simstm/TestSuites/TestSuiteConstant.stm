@@ -1,5 +1,5 @@
-testSuiteConstant:
-proc
+proc testSuiteConstant ()
+
     call testCaseConstantAdd ()
 end proc
 
