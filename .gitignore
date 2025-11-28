@@ -24,3 +24,5 @@ test/**/tb_top
 *.pyc
 
 simulation/SimulationResults/*
+/build
+/tmp-gen

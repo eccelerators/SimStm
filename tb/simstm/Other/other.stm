@@ -6,18 +6,18 @@ var random_max 10
 
 testOtherRandom:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
     loop 20
         random random_number 0 10
         log message 0 "random_number: {:d}" random_number
     end loop
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testOtherSeed:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
     seed 1
     loop 5
         random random_number 0 10
@@ -30,7 +30,7 @@ proc
         log message 0 "random_number: {:d}" random_number
     end loop
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 const marker_1 1
@@ -44,7 +44,7 @@ const val_trace_on 1
 
 testOtherTrace:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
     trace 1
     wait 100
     marker 0 1
@@ -69,12 +69,12 @@ proc
     marker 14 0
     marker marker_15 val_marker_low
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testOtherMarker:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     wait 100
     marker 0 1
@@ -97,18 +97,18 @@ proc
     marker 14 0
     marker marker_15 val_marker_low
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testOtherWait:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     trace 1
     wait 1000
     trace 0
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var test_variable_1 0xA1
@@ -119,7 +119,7 @@ var test_variable_5 0xF5
 
 testOtherLogSubstitutions:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_1
     log message 0 "test_variable_1: {} test_variable_2: {}" test_variable_1 test_variable_2
@@ -134,9 +134,9 @@ proc
     log message 0 "test_variable_4: {}" test_variable_4
     log message 0 "test_variable_5: {}" test_variable_5
 
-    log message INFO "Main test call endStandardTestShelled {}" INFO
+    log message INFO "Main test call endStandardTestShell ()ed {}" INFO
     wait 1000
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var test_variable_lf_1 0xA1
@@ -146,18 +146,18 @@ var test_variable_lf_4 0xE4
 
 testOtherLogFormats:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     call testContent -- to have a reasonable call stack
 
-    log message INFO "Main test call endStandardTestShelled {}" INFO
+    log message INFO "Main test call endStandardTestShell ()ed {}" INFO
     wait 1000
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 testContent:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     log message 0 "test_variable_lf_1: {}" test_variable_lf_1
     log message 0 "test_variable_lf_1: {} test_variable_lf_2: {}" test_variable_lf_1 test_variable_lf_2
@@ -181,7 +181,7 @@ end proc
 
 testOtherLog:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
     log message 0 "log 0"
     log message 1 "log 1"
     log message 2 "log 2"
@@ -211,7 +211,7 @@ proc
     log message 1 "log 1"
     log message 2 "log 2"
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 const year 0x2023
@@ -220,13 +220,13 @@ var day 0x22
 
 testOtherHelloWorld:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
     loop 3
         -- currently values are only printed in hex format
         log message 0 "Hello World {}-{}-{}" year month day
         wait 1000
     end loop
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var test_variable_call_1 1
@@ -237,7 +237,7 @@ var test_variable_call_5 5
 
 testOtherCall:
 proc
-    call startStandardTestShell
+    call startStandardTestShell ()
 
     call callLabel1
     call callLabel2
@@ -248,7 +248,7 @@ proc
     log message 0 "test_variable_call_4: {}" test_variable_call_4
     log message 0 "test_variable_call_5: {}" test_variable_call_5
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 

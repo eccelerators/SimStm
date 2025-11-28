@@ -1,5 +1,7 @@
 
-proc testBus32ParameterIn ()
+proc testBus32ParameterIn (
+	bus busToTest 0
+)
 
 	call startStandardTestShell ()
 	bus write busToTest 32 0 0x55555555
@@ -17,7 +19,9 @@ proc checkBus32ParameterInput (
 
 end proc
 
-proc testBus32ParameterOut ()
+proc testBus32ParameterOut (
+	bus busToTest 0
+)
 	var a_var 12
 	call startStandardTestShell ()
 	bus write busToTest 32 0 0xaaaaaaaa

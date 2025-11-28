@@ -1,426 +1,198 @@
-
--- intern
-file TestCaseVariableAddStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableAddFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableAndStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableAndFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableDivStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableDivFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableEquStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableEquFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableMulStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableMulFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableOrStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableOrFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableSubStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableSubFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableXorStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableXorFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableInvStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableInvFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableLdStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableLdFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableLocalStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableLocalFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableScopeStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableScopeFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariablePointerStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariablePointerFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableParameterInStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableParameterInFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseVariableParameterOutStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseVariableParameterOutFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
 testSuiteVariable:
 proc
-    call testCaseVariableAdd
-    call testCaseVariableAnd
-    call testCaseVariableDiv
-    call testCaseVariableEqu
-    call testCaseVariableMul
-    call testCaseVariableOr
-    call testCaseVariableSub
-    call testCaseVariableXor
-    call testCaseVariableInv
-    call testCaseVariableLd
-    call testCaseVariableLocal
-    call testCaseVariableScope
-    call testCaseVariablePointer
-    call testCaseVariableParameterIn
-    call testCaseVariableParameterOut        
+    call testCaseVariableAdd ()
+    call testCaseVariableAnd ()
+    call testCaseVariableDiv ()
+    call testCaseVariableEqu ()
+    call testCaseVariableMul ()
+    call testCaseVariableOr ()
+    call testCaseVariableSub ()
+    call testCaseVariableXor ()
+    call testCaseVariableInv ()
+    call testCaseVariableLd ()
+    call testCaseVariableLocal ()
+    call testCaseVariableScope ()
+    call testCaseVariablePointer ()
+    call testCaseVariableParameterIn ()
+    call testCaseVariableParameterOut ()        
 end proc
 
 
-testCaseVariableLocal:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableLocalStartFile
-    file pointer copy TestCaseFile TestCaseVariableLocalFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableLocal (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableLocal ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableLocal test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableScope:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableScopeStartFile
-    file pointer copy TestCaseFile TestCaseVariableScopeFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableScope (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableScope ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableScope test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariablePointer:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariablePointerStartFile
-    file pointer copy TestCaseFile TestCaseVariablePointerFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariablePointer (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariablePointer ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariablePointer test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableParameterIn:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableParameterInStartFile
-    file pointer copy TestCaseFile TestCaseVariableParameterInFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableParameterIn (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableParameterIn ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableParameterIn test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableParameterOut:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableParameterOutStartFile
-    file pointer copy TestCaseFile TestCaseVariableParameterOutFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableParameterOut (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableParameterOut ()
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableParameterOut test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableLd:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableLdStartFile
-    file pointer copy TestCaseFile TestCaseVariableLdFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableLd (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableLd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableLd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableInv:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableInvStartFile
-    file pointer copy TestCaseFile TestCaseVariableInvFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableInv (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableInv
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableInv test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableXor:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableXorStartFile
-    file pointer copy TestCaseFile TestCaseVariableXorFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableXor (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableXor
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableXor test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableSub:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableSubStartFile
-    file pointer copy TestCaseFile TestCaseVariableSubFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableSub (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableSub
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableSub test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableOr:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableOrStartFile
-    file pointer copy TestCaseFile TestCaseVariableOrFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableOr (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableOr
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableOr test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableMul:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableMulStartFile
-    file pointer copy TestCaseFile TestCaseVariableMulFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableMul (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableMul
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableMul test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableEqu:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableEquStartFile
-    file pointer copy TestCaseFile TestCaseVariableEquFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableEqu (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableEqu
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableEqu test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableDiv:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableDivStartFile
-    file pointer copy TestCaseFile TestCaseVariableDivFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableDiv (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableDiv
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableDiv test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableAnd:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableAndStartFile
-    file pointer copy TestCaseFile TestCaseVariableAndFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableAnd (
+	var skipped 0
+)
+    call beginTestCase ()    
     call testVariableAnd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableAnd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseVariableAdd:
-proc
-    file pointer copy TestCaseStartFile TestCaseVariableAddStartFile
-    file pointer copy TestCaseFile TestCaseVariableAddFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseVariableAdd (
+	var skipped 0
+)
+    call beginTestCase ()
     call testVariableAdd
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "VariableAdd test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

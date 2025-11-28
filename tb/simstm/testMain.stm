@@ -42,6 +42,8 @@ include "File/file_parameter.stm"
 include "File/file_local.stm"
 include "File/file_local_override.stm"
 
+include "TestSuites/TestSuiteIndexedBus.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -51,9 +53,9 @@ proc
 
     verbosity INFO_2
     trace TRACE_OFF
+    -- trace TRACE_EXECUTED_LINES
     -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
-    -- trace TRACE_EXECUTED_LINES
     resume RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
@@ -79,11 +81,19 @@ proc
 
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
+<<<<<<< HEAD
     -- call testBus256 () 
     -- call testBus32ParameterIn ()
     -- call testBus32ParameterOut ()
     call testBus32Pointer ()
     
+=======
+    -- call testBus32 (
+    -- 	bus pointer copy busToTest wishbone32
+    -- )
+    -- call testArrayParameterIn ()
+    -- call testFileParameterIn ()
+>>>>>>> 01a604a011ae31890653761c6119ad071526d208
     -- call testVariableLocalOverride ()
     -- call testVariableLocal ()
     -- call testVariableScope ()
@@ -92,6 +102,7 @@ proc
     --call testVariableParameterOut ()
     -- call testVariableDefaultValue ()
     
+<<<<<<< HEAD
     -- call testLinesSize  ()
     --call testLinesLocalOverride ()
 	--call testLinesLocal ()
@@ -105,6 +116,12 @@ proc
     -- call testArrayDefaultValue ()
 	
 	
+=======
+    -- call testArrayLocalOverride ()
+    
+    call testSuiteIndexedBus ()
+
+>>>>>>> 01a604a011ae31890653761c6119ad071526d208
     log message INFO "Main test finished"
     wait 1000
     lines append message success_lines "SUCCESS"
@@ -114,3 +131,6 @@ proc
     wait 1000
     finish
 end proc
+
+
+

@@ -1,32 +1,27 @@
--- intern
-file TestCaseSampleAStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseSampleAFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
 testSuiteSample:
 proc
-    call testCaseSampleA
+    call testCaseSampleA ()
 end proc
 
-testCaseSampleA:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleAStartFile
-    file pointer copy TestCaseFile TestCaseSampleAFile
-    call beginTestCase
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
+proc testCaseSampleA (
+	var skipped 0
+)
+    call beginTestCase ()
     call testOtherRandom
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
 
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleA test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseSampleB (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherRandom
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

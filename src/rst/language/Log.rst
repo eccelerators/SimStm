@@ -4,7 +4,7 @@ Log
 Log Message
 ^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  log message v_var "A message to the console"
  log message v_var "A message to the console{}{}" m_var1 m_var2
@@ -17,7 +17,7 @@ variables given after the message string.
 Log Lines
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  log lines v_var s_lines
 
@@ -26,14 +26,14 @@ The ``log lines`` instruction dumps a lines object at a given verbosity level to
 Verbosity
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  verbosity v_var
  verbosity 20
 
 Usual practice is to use the following constants to set verbosity:
 
-.. code-block:: none
+.. code-block:: simstm
 
  const FAILURE 0
  const WARNING 10

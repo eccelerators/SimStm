@@ -4,7 +4,7 @@ Debug Methods
 Trace
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  trace t_var
  trace 0b111
@@ -22,7 +22,7 @@ shown.
 Marker
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  marker n_var m_var
  marker 0xF 0b1

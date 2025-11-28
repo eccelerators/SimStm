@@ -1,7 +1,7 @@
 Arrays
 ------
 
-.. code-block:: none
+.. code-block:: simstm
 
  array a_array 16
 
@@ -15,7 +15,7 @@ Array Access
 Array Set
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array set a_array p_var a_var
  array set a_array p_var 5
@@ -31,7 +31,7 @@ The ``array set`` instruction sets the value of ``b_array`` at position ``3`` to
 Array Get
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array get b_array p_var t_var
  array get b_array 5  t_var
@@ -41,7 +41,7 @@ The ``array get`` instruction gets the value of ``b_array`` at position ``p_var`
 Array Verify
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array verify b_array p_var e_var m_var
  array verify b_array p_var 0x01 0x0F
@@ -56,7 +56,7 @@ severity Failure if the global resume is set to 0.
 Array Size
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array size b_array t_var
 
@@ -65,7 +65,7 @@ The ``array size`` instruction gets the size of an array and stores it in a vari
 Array Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  array pointer copy t_array s_array
 

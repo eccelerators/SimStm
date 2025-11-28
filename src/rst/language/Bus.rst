@@ -1,7 +1,7 @@
 Bus
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus a_bus 10
  bus a_bus a_const
@@ -19,7 +19,7 @@ Bus Access
 Bus Write
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus write a_bus a_width an_address a_var
  bus write a_bus 32 0x0004 0x12345678
@@ -29,7 +29,7 @@ The ``bus write`` instruction writes a variable, constant, or numeric value to a
 Bus Read
 ^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus read a_bus a_width an_address a_var
 
@@ -38,7 +38,7 @@ The ``bus read`` instruction reads the value of a bus with a given width and add
 Bus Verify
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus verify a_bus a_width an_address a_var e_var m_var
  bus verify a_bus a_width an_address a_var 0x01 0x0F
@@ -51,7 +51,7 @@ severity Failure if the global resume is set to 0; otherwise, it continues and r
 Bus Pointer Copy
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer copy t_bus s_bus
 
@@ -62,7 +62,7 @@ bus are applied to the target bus as well.
 Bus Pointer Set
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer set t_bus 5
  bus pointer set t_bus ptr_var
@@ -73,7 +73,7 @@ to an absolute address.
 Bus Pointer Get
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus pointer get s_bus ptr_var
 
@@ -83,7 +83,7 @@ For example, the pointer ``s_bus`` is stored in ``ptr_var``.
 Bus Timeout Set
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus timeout set a_bus s_var
  bus timeout set a_bus 1000
@@ -94,7 +94,7 @@ violation, the simulation stops with severity Failure always.
 Bus Timeout Get
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  bus timeout get s_bus to_var
 

@@ -26,7 +26,7 @@ SimStm code for the simulator.
 Comments
 ~~~~~~~~
 
-.. code-block:: none
+.. code-block:: simstm
 
  -- This is a full line comment
  const aconst 0x03 -- This is an appended line comment

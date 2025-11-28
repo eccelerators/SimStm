@@ -4,7 +4,7 @@ Examples
 Hello World
 ~~~~~~~~~~~
 
-.. code-block:: none
+.. code-block:: simstm
 
  const YEAR 2023
  var month 11

@@ -5,7 +5,7 @@ Equations and Arithmetic Operations
 add
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  add operand1 operand2
  add operand1 0xF0
@@ -17,7 +17,7 @@ addition is stored in operand1 after the operation.
 sub
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  sub operand1 operand2
  sub operand1 0xF0`
@@ -29,7 +29,7 @@ value of the subtraction is stored in operand1 after the operation.
 mul
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  mul operand1 operand2
  mul operand1 0xF0
@@ -41,7 +41,7 @@ value of the multiplication is stored in operand1 after the operation.
 div
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  div operand1 operand2
  div operand1 0xF0
@@ -53,7 +53,7 @@ division is stored in operand1  after the operation.
 and
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  and operand1 operand2
  and operand1 0xF0
@@ -65,7 +65,7 @@ resulting value of the bitwise ``and`` is stored in operand1 after the operation
 or
 ^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  or operand1 operand2
  or operand1 0xF0
@@ -77,7 +77,7 @@ resulting value of the bitwise ``or`` is stored in operand1 after the operation.
 xor
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  xor operand1 operand2
  xor operand1 0xF0
@@ -89,7 +89,7 @@ resulting value of the bitwise ``xor`` is stored in operand1 after the operation
 shl
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  shl operand1 operand2
  shl operand1 0xF0
@@ -101,7 +101,7 @@ The resulting value of the bitwise left shift is stored in operand1 after the op
 shr
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  shr operand1 operand2
  shr operand1 0xF0
@@ -113,7 +113,7 @@ The resulting value of the bitwise right shift is stored in operand1 after the o
 inv
 ^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  inv operand1
 
@@ -123,7 +123,7 @@ of the bitwise inversion is stored in operand1 after the operation.
 ld
 ^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  ld operand1
 

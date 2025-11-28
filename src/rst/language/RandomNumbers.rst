@@ -5,7 +5,7 @@ Random Numbers
 Random
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  random t_var min_var max_var
  random t_var 0 10
@@ -16,7 +16,7 @@ less than the maximum number given.
 Seed
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  seed s_var
  seed 10

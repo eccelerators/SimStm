@@ -2,7 +2,7 @@
 Wait
 ----
 
-.. code-block:: none
+.. code-block:: simstm
 
  wait w_var
  wait 10000

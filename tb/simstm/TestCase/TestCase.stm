@@ -1,5 +1,3 @@
-file TestCaseStartFile "TestCaseStartFilePointer"
-file TestCaseFile "TestCaseFilePointer"
 
 lines TestCaseStartLines
 lines TestCaseLines
@@ -15,14 +13,15 @@ var TestCaseSimulatedStartTime 0
 var TestCaseSimulatedEndTime 0
 var TestCaseSimulatedDurationTime 0
 
-beginTestCaseIndexedSuiteIndexed:
-proc
+proc beginTestCaseIndexedSuiteIndexed ()
     log message ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" TestSuiteIndex TestCaseIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
-    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime 
     lines append message TestCaseStartLines "test case started"
+    
+    file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseIndex   
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
@@ -39,14 +38,14 @@ proc
     equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
-beginTestCaseSuiteIndexed:
-proc
+proc beginTestCaseSuiteIndexed ()
     log message ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" TestSuiteIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 0
     lines delete all TestCaseLines
     signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
+	file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
@@ -63,14 +62,15 @@ proc
     equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
-beginTestCaseIndexed:
-proc
+
+proc beginTestCaseIndexed ()
     log message ALWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
     signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
+    file TestCaseStartFile "../../SimulationResults/{@c3}_{@c2}_{:d}.start" TestCaseIndex
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
@@ -87,8 +87,8 @@ proc
     equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
-beginTestCase:
-proc
+
+proc beginTestCase ()
     log message ALWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 0
@@ -96,6 +96,7 @@ proc
     signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
     log message ALWAYS "Started at simulation time of {:d}ns" TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
+    file TestCaseStartFile "../../SimulationResults/{@c3}_{@c2}.start"
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
@@ -112,55 +113,72 @@ proc
     equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
-endTestCase:
-proc
+
+proc endTestCase (
+	var skipped 0
+	var error 0
+	var failure 0
+)
+    if skipped != 0
+        call skipTestCase ()
+    elsif error != 0
+        call errorTestCase ()
+    elsif failure != 0
+        call failureTestCase ()
+    end if
     signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
     log message ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
     lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' StandardTestVerifyPassCountResult
     add TestCasePropertiesInsertionPoint 1
-     lines append message TestCaseLines '</testcase>'
-     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'
+    lines append message TestCaseLines '</testcase>'
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedDuration" value="{:d}"/>' TestCaseSimulatedDurationTime
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedEndTime" value="{:d}"/>' TestCaseSimulatedEndTime
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedStartTime" value="{:d}"/>' TestCaseSimulatedStartTime
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<properties>'
-     -- file last modified time is test case end real time
-     file append TestCaseFile TestCaseLines
-     if TestSuiteHasIndex = 1
-         if TestCaseHasIndex = 1
-             log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" TestSuiteIndex TestCaseIndex
-         else
-             log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" TestSuiteIndex
-         end if
+    -- file last modified time is test case end real time
+
+    if TestSuiteHasIndex = 1
+        if TestCaseHasIndex = 1
+            file TestCaseIndexedSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseIndex
+            file append TestCaseIndexedSuiteIndexedFile TestCaseLines
+            log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" TestSuiteIndex TestCaseIndex
+        else
+            file TestSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
+            file append TestSuiteIndexedFile TestCaseLines
+            log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" TestSuiteIndex
+        end if
      else
-         if TestCaseHasIndex = 1
-             log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
-         else
-             log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
-         end if
+        if TestCaseHasIndex = 1
+            file TestCaseIndexedFile "../../SimulationResults/{@c3}_{@c2}_{:d}.xml" TestCaseIndex
+            file append TestCaseIndexedFile TestCaseLines
+            log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
+        else
+            file TestCaseFile "../../SimulationResults/{@c3}_{@c2}.xml"
+            file append TestCaseFile TestCaseLines
+            log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
+        end if
      end if
 end proc
 
-skipTestCase:
-proc
+proc skipTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<skipped message=\""
      lines append message TestCaseLines "\"/>"
 end proc
 
-errorTestCase:
-proc
+
+proc errorTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<error message=\""
      lines append message TestCaseLines "\"/>"
 end proc
 
-failureTestCase:
-proc
+proc failureTestCase ()
     lines size TestCaseLines TestCaseLinesPosition
     sub TestCaseLinesPosition 1
     lines insert message TestCaseLines TestCaseLinesPosition "<failure message=\""
