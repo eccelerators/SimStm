@@ -1,7 +1,7 @@
 var test_variable_scope_add_1 5
 var test_variable_scope_add_2 6
 
-proc testVariableScope ()
+proc testVariableLocalOverride ()
 
 	var test_variable_scope_add_1 1
 	var test_variable_scope_add_2 2
