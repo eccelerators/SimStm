@@ -5,8 +5,8 @@ signal b_in_signal_pointer 0
 signal a_out_signal_pointer 0
 signal b_out_signal_pointer 0
 
-testSignalPointerCopy:
-proc
+proc testSignalPointerCopy ()
+
     call startStandardTestShell ()
 
     signal pointer copy a_in_signal_pointer in_signal_2000
