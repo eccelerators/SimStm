@@ -23,7 +23,7 @@ proc testFilePointer ()
 	lines append message b_lines "this is the expected output"
 	file write file_b b_lines
 	
-	file pointer copy file_a file_b
+	file pointer copy file_b file_a
 	
 	file readable file_a is_readable_a
 	file readable file_a is_readable_b
@@ -32,9 +32,17 @@ proc testFilePointer ()
 	lines delete all b_lines_result
 	file read all file_a a_lines_result
 	file read all file_b b_lines_result
-	
-	log lines INFO_2 a_lines_result
-	log lines INFO_2 b_lines_result
+	array final_array 2
+	var a_var 99
+	-- verifies file_a content
+	lines get array a_lines_result 0 final_array a_var
+	array verify final_array 0 7 MAX
+	array verify final_array 1 8 MAX
+
+	-- verifies file_b content
+	lines get array b_lines_result 0 final_array a_var
+	array verify final_array 0 7 MAX
+	array verify final_array 1 8 MAX
 	
 	call endStandardTestShell ()
 	
