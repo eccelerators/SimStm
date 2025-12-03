@@ -4,8 +4,8 @@ include "File/file.stm"
 include "Base/Array.stm"
 include "TestSuites/TestSuiteFile.stm"
 
-testMainSuiteFile:
-proc
+proc testMainSuiteFile ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite File started"
 
-    call testSuiteFile
+    call testSuiteFile ()
 
     log message INFO "Main test suite File ended"
     wait 1000

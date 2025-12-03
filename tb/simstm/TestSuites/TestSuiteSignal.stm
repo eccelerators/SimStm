@@ -1,5 +1,5 @@
-testSuiteSignal:
-proc
+proc testSuiteSignal ()
+
     call testCaseSignalWriteReadVerify ()
     call testCaseSignalVerifyFail ()
     call testCaseSignalPointerCopy ()
@@ -35,7 +35,7 @@ proc testCaseSignalPointerCopy (
 	var skipped 0
 )
     call beginTestCase ()
-    call testSignalPointerCopy
+    call testSignalPointerCopy ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -47,7 +47,7 @@ proc testCaseSignalPointerGetSet (
 	var skipped 0
 )
     call beginTestCase ()
-    call testSignalPointerGetSet
+    call testSignalPointerGetSet ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure

@@ -5,8 +5,8 @@ include "Signal/signal_pointer.stm"
 
 include "TestSuites/TestSuiteSignal.stm"
 
-testMainSuiteSignal:
-proc
+proc testMainSuiteSignal ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -17,7 +17,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Signal started"
 
-    call testSuiteSignal
+    call testSuiteSignal ()
 
     log message INFO "Main test suite Signal ended"
     wait 1000

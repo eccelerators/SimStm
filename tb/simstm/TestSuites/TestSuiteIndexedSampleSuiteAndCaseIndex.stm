@@ -1,8 +1,8 @@
 var sampleCaseIndexA 0
 var sampleCaseIndexB 0
 
-testSuiteIndexedSampleSuiteAndCaseIndex:
-proc
+proc testSuiteIndexedSampleSuiteAndCaseIndex ()
+
     equ sampleCaseIndexA 0
     equ sampleCaseIndexB 0
     loop 3

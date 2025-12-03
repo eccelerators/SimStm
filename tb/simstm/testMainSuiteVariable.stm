@@ -8,8 +8,8 @@ include "Variable/variable_parameter.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
 
-testMainSuiteVariable:
-proc
+proc testMainSuiteVariable ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -20,7 +20,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Variable started"
 
-    call testSuiteVariable
+    call testSuiteVariable ()
 
     log message INFO "Main test suite Variable ended"
     wait 1000

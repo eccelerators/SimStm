@@ -11,8 +11,8 @@ include "Array/array_parameter.stm"
 
 include "TestSuites/TestSuiteArray.stm"
 
-testMainSuiteArray:
-proc
+proc testMainSuiteArray ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -23,7 +23,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Array started"
 
-    call testSuiteArray
+    call testSuiteArray ()
 
     log message INFO "Main test suite Array ended"
     wait 1000

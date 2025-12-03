@@ -1,5 +1,4 @@
 
-testLabArraySetOutPos:
-proc
+proc testLabArraySetOutPos ()
     call testArraySetOutPos
 end proc

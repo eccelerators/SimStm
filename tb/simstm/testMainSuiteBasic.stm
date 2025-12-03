@@ -4,8 +4,8 @@ include "Basic/basic.stm"
 
 include "TestSuites/TestSuiteBasic.stm"
 
-testMainSuiteBasic:
-proc
+proc testMainSuiteBasic ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Basic started"
 
-    call testSuiteBasic
+    call testSuiteBasic ()
 
     log message INFO "Main test suite Basic ended"
     wait 1000

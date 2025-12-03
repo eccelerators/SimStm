@@ -4,8 +4,8 @@ include "Base/Array.stm"
 include "Lines/lines.stm"
 include "TestSuites/TestSuiteLines.stm"
 
-testMainSuiteLines:
-proc
+proc testMainSuiteLines ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Lines started"
 
-    call testSuiteLines
+    call testSuiteLines ()
 
     log message INFO "Main test suite Lines ended"
     wait 1000

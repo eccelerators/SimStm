@@ -4,8 +4,8 @@ var seed_set 5
 var random_min 0
 var random_max 10
 
-testOtherRandom:
-proc
+proc testOtherRandom ()
+
     call startStandardTestShell ()
     loop 20
         random random_number 0 10
@@ -15,8 +15,8 @@ proc
     call endStandardTestShell ()
 end proc
 
-testOtherSeed:
-proc
+proc testOtherSeed ()
+
     call startStandardTestShell ()
     seed 1
     loop 5
@@ -42,8 +42,8 @@ const val_marker_high 1
 const val_trace_off 0
 const val_trace_on 1
 
-testOtherTrace:
-proc
+proc testOtherTrace ()
+
     call startStandardTestShell ()
     trace 1
     wait 100
@@ -72,8 +72,8 @@ proc
     call endStandardTestShell ()
 end proc
 
-testOtherMarker:
-proc
+proc testOtherMarker ()
+
     call startStandardTestShell ()
 
     wait 100
@@ -100,8 +100,8 @@ proc
     call endStandardTestShell ()
 end proc
 
-testOtherWait:
-proc
+proc testOtherWait ()
+
     call startStandardTestShell ()
 
     trace 1
@@ -117,8 +117,8 @@ var test_variable_3 0xC3
 var test_variable_4 0xE4
 var test_variable_5 0xF5
 
-testOtherLogSubstitutions:
-proc
+proc testOtherLogSubstitutions ()
+
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_1
@@ -144,19 +144,19 @@ var test_variable_lf_2 0xB2
 var test_variable_lf_3 0xC3
 var test_variable_lf_4 0xE4
 
-testOtherLogFormats:
-proc
+proc testOtherLogFormats ()
+
     call startStandardTestShell ()
 
-    call testContent -- to have a reasonable call stack
+    call testContent () -- to have a reasonable call stack
 
     log message INFO "Main test call endStandardTestShell ()ed {}" INFO
     wait 1000
     call endStandardTestShell ()
 end proc
 
-testContent:
-proc
+proc testContent ()
+
     call startStandardTestShell ()
 
     log message 0 "test_variable_lf_1: {}" test_variable_lf_1
@@ -179,8 +179,8 @@ proc
 
 end proc
 
-testOtherLog:
-proc
+proc testOtherLog ()
+
     call startStandardTestShell ()
     log message 0 "log 0"
     log message 1 "log 1"
@@ -218,8 +218,8 @@ const year 0x2023
 var month 0x11
 var day 0x22
 
-testOtherHelloWorld:
-proc
+proc testOtherHelloWorld ()
+
     call startStandardTestShell ()
     loop 3
         -- currently values are only printed in hex format
@@ -235,12 +235,12 @@ var test_variable_call_3 3
 var test_variable_call_4 4
 var test_variable_call_5 5
 
-testOtherCall:
-proc
+proc testOtherCall ()
+
     call startStandardTestShell ()
 
-    call callLabel1
-    call callLabel2
+    call callLabel1 ()
+    call callLabel2 ()
 
     log message 0 "test_variable_call_1: {}" test_variable_call_1
     log message 0 "test_variable_call_2: {}" test_variable_call_2
@@ -252,36 +252,36 @@ proc
 
 end proc
 
-callLabel5:
-proc
+proc callLabel5 ()
+
     return
 end proc
 
-callLabel1:
-proc
+proc callLabel1 ()
+
     return
 end proc
 
-callLabel2:
-proc
+proc callLabel2 ()
 
-    call callLabel3
+
+    call callLabel3 ()
     return
 end proc
 
-callLabel3:
-proc
+proc callLabel3 ()
 
-    call callLabel4
+
+    call callLabel4 ()
     log message 0 "test_variable_call_3: {}" test_variable_call_3
     log message 0 "test_variable_call_4: {}" test_variable_call_4
     log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
 end proc
 
-callLabel4:
-proc
-    call callLabel5
+proc callLabel4 ()
+
+    call callLabel5 ()
     log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
 end proc

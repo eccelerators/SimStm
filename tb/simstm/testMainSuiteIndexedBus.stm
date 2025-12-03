@@ -9,8 +9,8 @@ include "TestSuites/TestSuiteIndexedBus.stm"
 
 const testMainSuiteIndexedBusMaximumIndex 32
 
-testMainSuiteIndexedBus:
-proc
+proc testMainSuiteIndexedBus ()
+
     call initBase ()
 
     verbosity INFO_2

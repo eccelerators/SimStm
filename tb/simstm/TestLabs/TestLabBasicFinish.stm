@@ -1,5 +1,5 @@
 
-testLabBasicFinish:
-proc
-    call testBasicFinish
+proc testLabBasicFinish ()
+
+    call testBasicFinish ()
 end proc
