@@ -1,0 +1,22 @@
+
+proc testSignalParameterIn ()
+
+	call startStandardTestShell ()
+	--trace TRACE_INSTRUCTIONS
+	signal write out_signal_3000 0
+	call checkSignalParameterInput (
+		signal pointer copy this_signal out_signal_3000
+	)
+	
+	call endStandardTestShell ()
+
+end proc
+
+proc checkSignalParameterInput (
+	signal this_signal 1
+)
+	var res 0
+	signal read this_signal res
+	log message INFO_2 "signal: {:d}" res
+	signal verify this_signal res 1 MAX
+end proc
