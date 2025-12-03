@@ -1,31 +1,65 @@
 
-file file_local_override "local_override.dat"
+file file_local_override_global "file_override_global.dat"
 
 proc testFileLocalOverride ()
 
-	lines a_lines
-	lines lines_result
 	call startStandardTestShell ()
-	call setFileToOverwrite ()
-	lines append message a_lines "second message"
-	file append file_local_override a_lines
-	file read all file_local_override lines_result
+	array a_array 1
+	array set a_array 0 1 --initialize a_array with value 1
+	
+	lines a_lines
+	lines delete all a_lines
+	lines append array a_lines a_array
+	file write file_local_override_global a_lines -- write a_array to file
+
+	call setLocalOverrideFile () -- initialize b_array with value 2 and append to local file with same ID
+	
+	lines lines_result
+	file read all file_local_override_global lines_result 
+	log message INFO_2 "global:"
 	log lines INFO_2 lines_result
+	log message INFO_2 "end global"
+	var a_var 99
+	var b_var 99
+	array b_array 1
+	lines get array lines_result 0 a_array a_var
+	--lines get array lines_result 1 b_array b_var -- read lines from file back into array
+	array verify a_array 0 1 MAX
+	--array verify b_array 0 2 MAX
 	call checkGlobalFile ()
+	
 	call endStandardTestShell ()	
 end proc
 
 
-proc setFileToOverwrite ()
-
+proc setLocalOverrideFile ()
+	
+	file file_local_override_global "file_override_local.dat"
 	lines b_lines
-	lines append message b_lines "first message"
-	file write file_local_override b_lines
+	array b_array 1
+	array set b_array 0 2
+
+	lines delete all b_lines
+	lines append array b_lines b_array
+	log message INFO_2 "local:"
+	log lines INFO_2 b_lines
+	log message INFO_2 "end local"
+	file append file_local_override_global b_lines
 end proc
 
 proc checkGlobalFile ()
 
 	lines final_lines
-	file read all file_local_override final_lines
+	array a_array 1
+	array b_array 1
+	var a_var 99
+	var b_var 99
+	file read all file_local_override_global final_lines
+	lines get array final_lines 0 a_array a_var
+	--lines get array final_lines 1 b_array b_var
+	array verify a_array 0 1 MAX
+	--array verify b_array 0 2 MAX --supposed to fail ?
+	array get b_array 0 b_var
+	log message INFO_2 "check global:"
 	log lines INFO_2 final_lines
 end proc
