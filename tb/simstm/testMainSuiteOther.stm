@@ -4,8 +4,8 @@ include "Other/other.stm"
 
 include "TestSuites/TestSuiteOther.stm"
 
-testMainSuiteOther:
-proc
+proc testMainSuiteOther ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Other started"
 
-    call testSuiteOther
+    call testSuiteOther ()
 
     log message INFO "Main test suite Other ended"
     wait 1000
