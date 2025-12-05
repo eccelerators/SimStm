@@ -1,17 +1,11 @@
 Signals
 -------
 
-<<<<<<< HEAD:src/rst/language_instructions/Signals.rst
-.. code-block:: none
+.. code-block:: simstm
 	
  signal a_signal 10
  signal a_signal a_const
  signal a_signal a_global_var
-=======
-.. code-block:: simstm
-
- signal a_signal
->>>>>>> 01a604a011ae31890653761c6119ad071526d208:src/rst/language/Signals.rst
 
 The ``signal`` instruction declares a signal object with an ID.
 
