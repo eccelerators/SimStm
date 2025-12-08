@@ -8,7 +8,7 @@ proc testCaseSampleA (
 	var skipped 0
 )
     call beginTestCase ()
-    call testOtherRandom
+    call testOtherRandom ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -19,7 +19,7 @@ proc testCaseSampleB (
 	var skipped 0
 )
     call beginTestCase ()
-    call testOtherRandom
+    call testOtherRandom ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure

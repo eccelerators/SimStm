@@ -4,8 +4,8 @@ include "Constant/constant.stm"
 
 include "TestSuites/TestSuiteConstant.stm"
 
-testMainSuiteConstant:
-proc
+proc testMainSuiteConstant ()
+
     call initBase ()
 
     verbosity INFO_2

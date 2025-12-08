@@ -4,8 +4,8 @@ include "Other/other.stm"
 
 include "TestSuites/TestSuiteSampleCaseOnlyIndex.stm"
 
-testMainSuiteSampleCaseOnlyIndex:
-proc
+proc testMainSuiteSampleCaseOnlyIndex ()
+
     call initBase ()
 
     verbosity INFO_2

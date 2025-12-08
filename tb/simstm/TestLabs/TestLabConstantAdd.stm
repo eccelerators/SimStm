@@ -1,5 +1,5 @@
 
-testLabConstantAdd:
-proc
-    call testConstantAdd
+proc testLabConstantAdd ()
+
+    call testConstantAdd ()
 end proc

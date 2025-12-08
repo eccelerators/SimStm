@@ -1,5 +1,5 @@
 
-Lib2:
-proc
+proc Lib2 ()
+
     log message 0 "load file lib2.stm"
 end proc

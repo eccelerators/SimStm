@@ -1,5 +1,5 @@
 
-testLabBasicIncludeNested:
-proc
+proc testLabBasicIncludeNested ()
+
     call testBasicIncludeNested
 end proc

@@ -7,8 +7,8 @@ include "Variable/variable_parameter.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
 
-testMainSuiteVariable:
-proc
+proc testMainSuiteVariable ()
+
     call initBase ()
 
     verbosity INFO_2

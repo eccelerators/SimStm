@@ -1,7 +1,6 @@
 var sampleCaseIndexA 0
 var sampleCaseIndexB 0
 
-
 proc testSuiteIndexedSampleSuiteAndCaseIndex ()
     equ sampleCaseIndexA 0
     equ sampleCaseIndexB 0
@@ -26,7 +25,7 @@ proc testCaseSampleSuiteAndCaseIndexA (
     add t 1
     add t TestSuiteIndex
     seed t
-    call testOtherRandom
+    call testOtherRandom ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -45,7 +44,7 @@ proc testCaseSampleSuiteAndCaseIndexB (
     add t TestSuiteIndex
 
     seed t
-    call testOtherRandom
+    call testOtherRandom ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure

@@ -1,5 +1,5 @@
 
-testLabBasicIncludeFlat:
-proc
-    call testBasicIncludeFlat
+proc testLabBasicIncludeFlat ()
+
+    call testBasicIncludeFlat ()
 end proc

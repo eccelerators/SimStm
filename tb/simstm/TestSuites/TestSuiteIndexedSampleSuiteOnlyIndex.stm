@@ -33,7 +33,7 @@ proc testCaseSampleSuiteOnlyIndexB (
     equ t TestSuiteIndex
     add t 1
     seed t
-    call testOtherRandom
+    call testOtherRandom ()
 
     call endTestCase ( 
     	equ  skipped skipped

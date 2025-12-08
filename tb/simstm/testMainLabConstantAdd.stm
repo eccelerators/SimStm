@@ -6,8 +6,8 @@ include "Constant/constant_labs.stm"
 file simulation_success "simulation.success"
 lines success_lines
 
-testMainLabConstantAdd:
-proc
+proc testMainLabConstantAdd ()
+
     call initBase ()
 
     verbosity INFO_2
@@ -18,7 +18,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test started"
 
-    call testLabConstantAdd
+    call testLabConstantAdd ()
 
     log message INFO "Main test finished"
     wait 1000

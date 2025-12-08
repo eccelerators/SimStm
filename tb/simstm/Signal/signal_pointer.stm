@@ -106,8 +106,8 @@ var b_in_signal_pointer_value_absolut 0
 var a_out_signal_pointer_value_absolut 0
 var b_out_signal_pointer_value_absolut 0
 
-testSignalPointerGetSet:
-proc
+proc testSignalPointerGetSet ()
+
     call startStandardTestShell ()
 
     signal pointer get in_signal_2000 a_in_signal_pointer_value_absolut

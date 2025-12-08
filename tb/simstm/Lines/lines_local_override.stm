@@ -1,0 +1,52 @@
+
+lines test_lines_local_override_a
+
+proc testLinesLocalOverride ()
+
+	call startStandardTestShell ()
+	call setLinesToOverwrite ()
+	array b_array 1
+	array set b_array 0 2
+	lines append array test_lines_local_override_a b_array
+	
+	array final_array_a 1
+	array final_array_b 1
+	var a_var 99
+	var b_var 99
+	log lines INFO_2 test_lines_local_override_a
+	-- lines get array test_lines_local_override_a 1 final_array_a a_var
+	lines get array test_lines_local_override_a 0 final_array_b b_var
+	--array verify final_array_b 0 2 MAX
+	array verify final_array_b 0 2 MAX
+
+	
+	call checkLinesGlobal ()
+	call endStandardTestShell ()
+end proc
+
+proc setLinesToOverwrite ()
+	
+	lines test_lines_local_override_a
+	array a_array 1
+	array set a_array 0 1
+	lines delete all test_lines_local_override_a
+	lines append array test_lines_local_override_a a_array
+	array override_array 1
+	var a_var 99
+	lines get array test_lines_local_override_a 0 override_array a_var
+	array verify override_array 0 1 MAX
+end proc
+
+
+proc checkLinesGlobal ()
+
+	array global_array_a 1
+	array global_array_b 1
+	var a_var 99
+	var b_var 99
+	lines get array test_lines_local_override_a 0 global_array_a a_var
+	--lines get array test_lines_local_override_a 1 global_array_b b_var
+	
+	array verify global_array_a 0 2 MAX
+	--array verify global_array_b 0 2 MAX
+end proc

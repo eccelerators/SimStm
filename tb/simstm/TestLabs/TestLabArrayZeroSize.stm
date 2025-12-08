@@ -1,5 +1,5 @@
 
-testLabArrayZeroSize:
-proc
+proc testLabArrayZeroSize ()
+
     call testArrayZeroSize
 end proc

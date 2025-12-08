@@ -1,5 +1,5 @@
 
-Lib6:
-proc
+
+proc Lib6 ()
     log message 0 "load file lib6.stm"
 end proc

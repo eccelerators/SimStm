@@ -47,7 +47,7 @@ proc testCaseSignalPointerGetSet (
 	var skipped 0
 )
     call beginTestCase ()
-    call testSignalPointerGetSet
+    call testSignalPointerGetSet ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure

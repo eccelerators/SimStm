@@ -4,8 +4,8 @@ include "Interrupt/interrupt.stm"
 
 include "TestSuites/TestSuiteInterrupt.stm"
 
-testMainSuiteInterrupt:
-proc
+proc testMainSuiteInterrupt ()
+
     call initBase ()
 
     verbosity INFO_2

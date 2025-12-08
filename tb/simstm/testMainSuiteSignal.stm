@@ -5,8 +5,8 @@ include "Signal/signal_pointer.stm"
 
 include "TestSuites/TestSuiteSignal.stm"
 
-testMainSuiteSignal:
-proc
+proc testMainSuiteSignal ()
+
     call initBase ()
 
     verbosity INFO_2

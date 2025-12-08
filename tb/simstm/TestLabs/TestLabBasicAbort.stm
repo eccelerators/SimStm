@@ -1,5 +1,5 @@
 
-testLabBasicAbort:
-proc
+proc testLabBasicAbort ()
+
     call testBasicAbort
 end proc

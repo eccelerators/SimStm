@@ -6,8 +6,8 @@ include "TestSuites/TestSuiteIndexedSampleSuiteOnlyIndex.stm"
 
 const testMainSuiteIndexedSampleSuiteOnlyIndexMaximumIndex 4
 
-testMainSuiteIndexedSampleSuiteOnlyIndex:
-proc
+proc testMainSuiteIndexedSampleSuiteOnlyIndex ()
+
     call initBase ()
             
     verbosity INFO_2

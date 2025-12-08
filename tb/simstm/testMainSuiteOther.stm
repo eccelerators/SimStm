@@ -4,8 +4,8 @@ include "Other/other.stm"
 
 include "TestSuites/TestSuiteOther.stm"
 
-testMainSuiteOther:
-proc
+proc testMainSuiteOther ()
+
     call initBase ()
 
     verbosity INFO_2
