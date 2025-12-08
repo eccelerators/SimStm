@@ -17,7 +17,7 @@ proc
     signal read sigInTestSuiteIndex TestSuiteIndex
     log message INFO "Main test main suite indexed SampleCaseOnlyIndex started"
 
-    call testSuiteSampleCaseOnlyIndex
+    call testSuiteSampleCaseOnlyIndex ()
 
     log message INFO "Main test main suite indexed SampleCaseOnlyIndex ended"
     wait 1000

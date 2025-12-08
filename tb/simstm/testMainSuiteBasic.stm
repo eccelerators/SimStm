@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Basic started"
 
-    call testSuiteBasic
+    call testSuiteBasic ()
 
     log message INFO "Main test suite Basic ended"
     wait 1000

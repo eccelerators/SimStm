@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Constant started"
 
-    call testSuiteConstant
+    call testSuiteConstant ()
 
     log message INFO "Main test suite Constant ended"
     wait 1000

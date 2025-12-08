@@ -1,5 +1,5 @@
-testSuiteIndexedSampleSuiteOnlyIndex:
-proc
+
+proc testSuiteIndexedSampleSuiteOnlyIndex ()
     call testCaseSampleSuiteOnlyIndexA ()
     call testCaseSampleSuiteOnlyIndexB ()
 end proc

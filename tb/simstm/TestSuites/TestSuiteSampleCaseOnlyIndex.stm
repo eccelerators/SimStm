@@ -1,7 +1,7 @@
 var sampleCaseOnlyIndexA 1
 
-testSuiteSampleCaseOnlyIndex:
-proc
+
+proc testSuiteSampleCaseOnlyIndex ()
     loop 5
         call testCaseSampleCaseOnlyIndexA ()
         add sampleCaseOnlyIndexA 1

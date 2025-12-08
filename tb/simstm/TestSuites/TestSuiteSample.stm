@@ -1,5 +1,5 @@
-testSuiteSample:
-proc
+
+proc testSuiteSample ()
     call testCaseSampleA ()
 end proc
 

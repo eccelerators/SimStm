@@ -131,7 +131,7 @@ class GenerateProposalForSetupPy:
             for f in os.listdir(project_folder_path + '/tb/simstm/TestSuites'):
                 if os.path.isfile(project_folder_path + '/tb/simstm/TestSuites' + '/' + f):
                     if Path(project_folder_path + '/tb/simstm/TestSuites' + '/' + f).suffix in ['.stm']:
-                        if "TestSuite" in f:
+                        if "TestSuite" in f:                           
                             TestSuiteObjectName = Path(project_folder_path + '/tb/simstm/TestSuites' + '/' + f).stem[9:]
                             if TestSuiteObjectName.startswith("Indexed"):
                                 isIndexedTestSuite = True
@@ -140,38 +140,41 @@ class GenerateProposalForSetupPy:
                             tsf = open(project_folder_path + '/tb/simstm/TestSuites' + '/' + f, 'r')
                             tsf_lines = tsf.readlines()
                             for l in tsf_lines:
-                                if l.startswith("testSuite"):
-                                    testsuite_name = l.split(':')[0]
-                                    break
+                                if l.startswith("proc"):                                    
+                                    proc_split = l.split()
+                                    if len(proc_split) > 1:
+                                        if proc_split[1].startswith("testSuite"):
+                                            testsuite_name = proc_split[1]
+                                            break
                             entry_file = "testMainSuite" + TestSuiteObjectName + ".stm"
                             entry_label = "testMainSuite" + TestSuiteObjectName
-                        if isIndexedTestSuite:
-                            tsmf = open(project_folder_path + '/tb/simstm/' + entry_file, 'r')
-                            tsmf_lines = tsmf.readlines()
-                            testsuite_indexes = ""
-                            for l in tsmf_lines:
-                                if "const" in l and "testMainSuite" + TestSuiteObjectName + "MaximumIndex" in l:
-                                    testsuite_indexes = l.split()[2]
-                                    break
-                            if testsuite_indexes == "":
-                                print(
-                                    "line: 'const testMainSuite" +
-                                    TestSuiteObjectName +
-                                    "MaximumIndex = ?' is missing in file: " +
-                                    project_folder_path +
-                                    '/tb/simstm/' +
-                                    entry_file)
-                                exit()
-                            TestSuiteFileDictList.append({"testsuite-name": testsuite_name,
-                                                          "file": "TestSuites/" + f,
-                                                          "testsuite-indexes": testsuite_indexes,
-                                                          "entry-file": entry_file,
-                                                          "entry-label": entry_label})
-                        else:
-                            TestSuiteFileDictList.append({"testsuite-name": testsuite_name,
-                                                          "file": "TestSuites/" + f,
-                                                          "entry-file": entry_file,
-                                                          "entry-label": entry_label})
+                            if isIndexedTestSuite:
+                                tsmf = open(project_folder_path + '/tb/simstm/' + entry_file, 'r')
+                                tsmf_lines = tsmf.readlines()
+                                testsuite_indexes = ""
+                                for l in tsmf_lines:
+                                    if "const" in l and "testMainSuite" + TestSuiteObjectName + "MaximumIndex" in l:
+                                        testsuite_indexes = l.split()[2]
+                                        break
+                                if testsuite_indexes == "":
+                                    print(
+                                        "line: 'const testMainSuite" +
+                                        TestSuiteObjectName +
+                                        "MaximumIndex = ?' is missing in file: " +
+                                        project_folder_path +
+                                        '/tb/simstm/' +
+                                        entry_file)
+                                    exit()
+                                TestSuiteFileDictList.append({"testsuite-name": testsuite_name,
+                                                              "file": "TestSuites/" + f,
+                                                              "testsuite-indexes": testsuite_indexes,
+                                                              "entry-file": entry_file,
+                                                              "entry-label": entry_label})
+                            else:
+                                TestSuiteFileDictList.append({"testsuite-name": testsuite_name,
+                                                              "file": "TestSuites/" + f,
+                                                              "entry-file": entry_file,
+                                                              "entry-label": entry_label})
 
         TestLabFileDictList = []
         if os.path.exists(project_folder_path + '/tb/simstm/TestLabs'):

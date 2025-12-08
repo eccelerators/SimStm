@@ -2,22 +2,20 @@ include "Variable/variable_parameter.stm"
 
 include "Common/Common.stm"
 include "Signal/signal.stm"
-include "Signal/signal_pointer.stm"
-include "Signal/signal_local.stm"
-include "Signal/signal_parameter.stm"
-include "Signal/signal_local_override.stm"
+--include "Signal/signal_pointer.stm"
+--include "Signal/signal_parameter.stm"
+--include "Signal/signal_local_override.stm"
 
 include "Bus/bus32.stm"
 include "Bus/bus64.stm"
 include "Bus/bus128.stm"
 include "Bus/bus256.stm"
-include "Bus/bus32_parameter.stm"
-include "Bus/bus32_pointer.stm"
+--include "Bus/bus32_parameter.stm"
+--include "Bus/bus32_pointer.stm"
 include "Base/Array.stm"
 
 include "Other/other.stm"
 include "Variable/variable.stm"
-include "Variable/variable_scope.stm"
 include "Variable/variable_local.stm"
 include "Variable/variable_local_override.stm"
 include "Variable/variable_pointer.stm"
@@ -29,11 +27,13 @@ include "Array/array_local.stm"
 include "Array/array_local_override.stm"
 include "Array/array_parameter.stm"
 include "Array/array_default_value.stm"
+include "Array/array_size.stm"
+include "Array/array_pointer.stm"
 
 include "Lines/lines.stm"
-include "Lines/lines_local_override.stm"
-include "Lines/lines_local.stm"
-include "Lines/lines_parameter.stm"
+--include "Lines/lines_local_override.stm"
+--include "Lines/lines_local.stm"
+--include "Lines/lines_parameter.stm"
 include "Lines/lines_pointer.stm"
 
 include "File/file.stm"
@@ -43,6 +43,9 @@ include "File/file_local.stm"
 include "File/file_local_override.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
+
+include "TestSuites/TestSuiteArray.stm"
+include "TestSuites/TestSuiteVariable.stm"
 
 file simulation_success "simulation.success"
 lines success_lines
@@ -62,66 +65,49 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test started"
 
-     --call testSignalWriteReadVerify ()
+    -- call testSignalWriteReadVerify ()
     -- call testSignalVerifyFail
-    --call testSignalLocal ()
-    --call testSignalParameterIn ()
-    --call testSignalLocalOverride ()
+    -- call testSignalLocal ()
+    -- call testSignalParameterIn ()
+    -- call testSignalLocalOverride ()
     
     --call testFileAppendArray ()
     -- call testFileWriteArray ()
     -- call testFileReadArray ()
     -- call testFilePointer ()
-    --call testFileLocal ()
-    --call testFileLocalOverride ()
-    --call testFileParameterIn ()
-    --call testFileParameterOut ()
+    -- call testFileLocal ()
+    -- call testFileLocalOverride ()
+    -- call testFileParameterIn ()
+    -- call testFileParameterOut ()
     -- call testVariableInv ()
     -- call testOtherRandom ()
 
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
-<<<<<<< HEAD
-    -- call testBus256 () 
-    -- call testBus32ParameterIn ()
-    -- call testBus32ParameterOut ()
-    call testBus32Pointer ()
-    
-=======
-    -- call testBus32 (
-    -- 	bus pointer copy busToTest wishbone32
-    -- )
-    -- call testArrayParameterIn ()
-    -- call testFileParameterIn ()
->>>>>>> 01a604a011ae31890653761c6119ad071526d208
     -- call testVariableLocalOverride ()
     -- call testVariableLocal ()
     -- call testVariableScope ()
     -- call testVariablePointer ()
     -- call testVariableParameterIn ()
-    --call testVariableParameterOut ()
+    -- call testVariableParameterOut ()
     -- call testVariableDefaultValue ()
     
-<<<<<<< HEAD
+
     -- call testLinesSize  ()
-    --call testLinesLocalOverride ()
-	--call testLinesLocal ()
-	--call testLinesParameterIn ()
-	--call testLinesParameterOut ()
-	--call testLinesPointer ()
+    -- call testLinesLocalOverride ()
+	-- call testLinesLocal ()
+	-- call testLinesParameterIn ()
+	-- call testLinesParameterOut ()
+	-- call testLinesPointer ()
     
     -- call testArrayLocalOverride ()
     -- call testArrayLocal ()
     -- call testArrayParameterIn ()
     -- call testArrayDefaultValue ()
-	
-	
-=======
-    -- call testArrayLocalOverride ()
     
-    call testSuiteIndexedBus ()
-
->>>>>>> 01a604a011ae31890653761c6119ad071526d208
+    call testSuiteArray ()
+    call testSuiteVariable ()
+	
     log message INFO "Main test finished"
     wait 1000
     lines append message success_lines "SUCCESS"

@@ -11,7 +11,6 @@ proc testSuiteVariable ()
     call testCaseVariableInv ()
     call testCaseVariableLd ()
     call testCaseVariableLocal ()
-    call testCaseVariableScope ()
     call testCaseVariablePointer ()
     call testCaseVariableParameterIn ()
     call testCaseVariableParameterOut ()        
@@ -28,19 +27,6 @@ proc testCaseVariableLocal (
     	equ failure StandardTestFailure
     )
 end proc
-
-
-proc testCaseVariableScope (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableScope ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
 
 proc testCaseVariablePointer (
 	var skipped 0

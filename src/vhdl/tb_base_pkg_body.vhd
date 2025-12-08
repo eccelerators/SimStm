@@ -192,6 +192,30 @@ package body tb_base_pkg is
         return sc;
     end function;
     
+    procedure ew_str_cat_ptr(variable s1 : in stm_text;
+                         variable s2_ptr : in text_field_ptr;
+                         variable so : out stm_text
+                         ) is
+        variable i : integer;
+        variable j : integer;
+        variable sc : stm_text;
+    begin
+        sc := s1;
+        i := 1;
+        while sc(i) /= nul loop
+            i := i + 1;
+        end loop;
+        j := 1;
+        if s2_ptr /= null then
+            while s2_ptr(j) /= nul loop
+                sc(i) := s2_ptr(j);
+                i := i + 1;
+                j := j + 1;
+            end loop;
+        end if;
+        so := sc;
+    end procedure;
+    
     function str_cat(s1 : text_field;
                      s2 : text_field) return text_field is
         variable i : integer;
@@ -215,7 +239,7 @@ package body tb_base_pkg is
         end if;
         return sc;
     end function;
-
+    
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field;
                         s3 : integer) return stm_text is
@@ -259,7 +283,7 @@ package body tb_base_pkg is
         sc(i) := s4;
         return sc;
     end function;
-
+    
     function ew_to_char(int : integer) return character is
         variable c : character;
     begin
@@ -1360,6 +1384,19 @@ package body tb_base_pkg is
             end loop;
         end if;
     end procedure;
+    
+    procedure text_field_copy_to_ptr(variable ptr : inout text_field_ptr;
+                                   variable txt_field : in text_field) is
+    begin
+        if ptr /= null then
+            for i in 1 to txt_field'length loop
+                if txt_field(i) = nul then
+                    exit;
+                end if;
+                ptr(i) := txt_field(i);
+            end loop;
+        end if;
+    end procedure;
         
     function stm_text_crop(txt : in stm_text) return string is
         variable l : integer;
@@ -1518,6 +1555,22 @@ package body tb_base_pkg is
                 txt_str(i) := ptr(i);
             end loop;
             str := txt_str;
+        end if;
+    end procedure;
+    
+    procedure txt_field_ptr_to_text_field(variable ptr : in text_field_ptr;
+                            variable txt_field : out text_field) is
+        variable result_txt_field : text_field;
+    begin
+        result_txt_field := (others => nul);
+        if ptr /= null then
+            for i in 1 to txt_field'length loop
+                if (ptr(i) = nul) then
+                    exit;
+                end if;
+                result_txt_field(i) := ptr(i);
+            end loop;
+            txt_field := result_txt_field;
         end if;
     end procedure;
 

@@ -19,7 +19,7 @@ proc
     signal read sigInTestSuiteIndex TestSuiteIndex
     log message INFO "Main test main suite indexed SampleSuiteSuiteAndCase {:d} started" TestSuiteIndex
 
-    call testSuiteIndexedSampleSuiteAndCaseIndex
+    call testSuiteIndexedSampleSuiteAndCaseIndex ()
 
     log message INFO "Main test main suite indexed SampleSuiteSuiteAndCase {:d} ended" TestSuiteIndex
     wait 1000

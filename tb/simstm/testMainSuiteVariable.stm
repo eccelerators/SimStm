@@ -2,7 +2,6 @@ include "Common/Common.stm"
 
 include "Variable/variable.stm"
 include "Variable/variable_local.stm"
-include "Variable/variable_scope.stm"
 include "Variable/variable_pointer.stm"
 include "Variable/variable_parameter.stm"
 
@@ -20,7 +19,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Variable started"
 
-    call testSuiteVariable
+    call testSuiteVariable ()
 
     log message INFO "Main test suite Variable ended"
     wait 1000

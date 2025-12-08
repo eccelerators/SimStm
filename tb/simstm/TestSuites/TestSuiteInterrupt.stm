@@ -1,5 +1,5 @@
-testSuiteInterrupt:
-proc
+
+proc testSuiteInterrupt ()
     call testCaseInterrupt ()
 end proc
 

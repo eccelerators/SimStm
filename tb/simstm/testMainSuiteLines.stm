@@ -2,6 +2,9 @@ include "Common/Common.stm"
 include "Base/Array.stm"
 
 include "Lines/lines.stm"
+include "Lines/lines_local.stm"
+include "Lines/lines_parameter.stm"
+include "Lines/lines_pointer.stm"
 include "TestSuites/TestSuiteLines.stm"
 
 testMainSuiteLines:
@@ -16,7 +19,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Lines started"
 
-    call testSuiteLines
+    call testSuiteLines ()
 
     log message INFO "Main test suite Lines ended"
     wait 1000

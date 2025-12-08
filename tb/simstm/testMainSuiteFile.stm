@@ -4,6 +4,11 @@ include "File/file.stm"
 include "Base/Array.stm"
 include "TestSuites/TestSuiteFile.stm"
 
+include "File/file_local_override.stm"
+include "File/file_local.stm"
+include "File/file_parameter.stm"
+include "File/file_pointer.stm"
+
 testMainSuiteFile:
 proc
     call initBase ()
@@ -16,7 +21,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite File started"
 
-    call testSuiteFile
+    call testSuiteFile ()
 
     log message INFO "Main test suite File ended"
     wait 1000
