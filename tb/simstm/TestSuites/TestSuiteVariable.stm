@@ -14,9 +14,21 @@ proc testSuiteVariable ()
     call testCaseVariableLocalOverride ()
     call testCaseVariablePointer ()
     call testCaseVariableParameterIn ()
-    call testCaseVariableParameterOut ()        
+    call testCaseVariableParameterOut ()
+    call testCaseVariableDefaultValue ()
 end proc
 
+
+proc testCaseVariableDefaultValue (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableLocalOverride ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
 
 proc testCaseVariableLocalOverride (
 	var skipped 0

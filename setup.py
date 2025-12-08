@@ -119,7 +119,10 @@ static_setup_data = {
         ]),(
         "SimStm/tb/simstm/Signal", [
             {"file":"tb/simstm/Signal/signal_pointer.stm"},
-            {"file":"tb/simstm/Signal/signal.stm"}
+            {"file":"tb/simstm/Signal/signal_local_override.stm"},
+            {"file":"tb/simstm/Signal/signal_parameter.stm"},
+            {"file":"tb/simstm/Signal/signal.stm"},
+            {"file":"tb/simstm/Signal/signal_local.stm"}
         ]),(
         "SimStm/tb/simstm/Common", [
             {"file":"tb/simstm/Common/CommonLabs.stm"},
@@ -128,6 +131,7 @@ static_setup_data = {
         "SimStm/tb/simstm/Lines", [
             {"file":"tb/simstm/Lines/lines_local.stm"},
             {"file":"tb/simstm/Lines/lines_pointer.stm"},
+            {"file":"tb/simstm/Lines/lines_local_override.stm"},
             {"file":"tb/simstm/Lines/lines_parameter.stm"},
             {"file":"tb/simstm/Lines/lines.stm"}
         ]),(

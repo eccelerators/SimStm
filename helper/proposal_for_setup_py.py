@@ -186,12 +186,15 @@ class GenerateProposalForSetupPy:
                             tsf = open(project_folder_path + '/tb/simstm/TestLabs' + '/' + f, 'r')
                             tsf_lines = tsf.readlines()
                             for l in tsf_lines:
-                                if l.startswith("testLab"):
-                                    testlab_name = l.split(':')[0]
-                                    break
+                                if l.startswith("proc"):                                    
+                                    proc_split = l.split()
+                                    if len(proc_split) > 1:
+                                        if proc_split[1].startswith("testLab"):
+                                            testlab_name = proc_split[1]
+                                            break                                
                             entry_file = "testMainLab" + TestLabObjectName + ".stm"
                             entry_label = "testMainLab" + TestLabObjectName
-                        TestLabFileDictList.append({"testlab-name": testlab_name,
+                            TestLabFileDictList.append({"testlab-name": testlab_name,
                                                     "file": "TestLabs/" + f,
                                                     "entry-file": entry_file,
                                                     "entry-label": entry_label})
