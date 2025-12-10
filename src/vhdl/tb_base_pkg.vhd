@@ -414,11 +414,7 @@ package tb_base_pkg is
     --  procedure copy stm_text into an existing pointer
     procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
                                    variable txt_str : in stm_text);
-
-    --  procedure copy stm_text_field into an existing pointer
-    procedure text_field_copy_to_ptr(variable ptr : inout text_field_ptr;
-                                   variable txt_field : in text_field);
-                                   
+                                 
     --  function short text_line (remove 'nul')
     function stm_text_crop(txt : in stm_text) return string;
 
@@ -467,8 +463,11 @@ package tb_base_pkg is
     procedure txt_to_string(variable ptr : in stm_text_ptr;
                             variable str : out stm_text);
                             
-    procedure txt_field_ptr_to_text_field(variable ptr : in text_field_ptr;
-                            variable txt_field : out text_field);
+    procedure text_field_ptr_to_text_field(variable ptr : in text_field_ptr;
+                            variable field : out text_field);
+                            
+    procedure text_field_to_text_field_ptr (variable field : in text_field;
+                                           variable ptr : inout text_field_ptr);
                             
     -- function to get string of the txt field                     
     function txt_field_to_string(s : in text_field) return string;

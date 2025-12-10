@@ -1,0 +1,38 @@
+label lLabel iLabel 
+
+proc iLabel (
+	var p 0
+	var r 0
+)
+end proc 
+
+proc testCallLabelIndirect ()
+	var v 0
+	
+	call label lLabel (
+		equ p 5
+		var pointer copy r v
+	)
+	var verify v 6 MAX	
+end proc
+
+proc pLabel (
+	var p 0
+	var r 0
+)
+	log message 0 "pLabel has been called with p={}" p
+    equ r p
+    add r 1
+    log message 0 "pLabel returns r={}" r
+end proc
+
+
+proc testCallProcDirect ()
+	var v 0
+	
+	call pLabel (
+		equ p 5
+		var pointer copy r v
+	)
+	var verify v 6 MAX
+end proc

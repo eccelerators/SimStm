@@ -1384,20 +1384,7 @@ package body tb_base_pkg is
             end loop;
         end if;
     end procedure;
-    
-    procedure text_field_copy_to_ptr(variable ptr : inout text_field_ptr;
-                                   variable txt_field : in text_field) is
-    begin
-        if ptr /= null then
-            for i in 1 to txt_field'length loop
-                if txt_field(i) = nul then
-                    exit;
-                end if;
-                ptr(i) := txt_field(i);
-            end loop;
-        end if;
-    end procedure;
-        
+           
     function stm_text_crop(txt : in stm_text) return string is
         variable l : integer;
     begin
@@ -1557,22 +1544,31 @@ package body tb_base_pkg is
             str := txt_str;
         end if;
     end procedure;
-    
-    procedure txt_field_ptr_to_text_field(variable ptr : in text_field_ptr;
-                            variable txt_field : out text_field) is
-        variable result_txt_field : text_field;
+            
+    procedure text_field_ptr_to_text_field(variable ptr : in text_field_ptr;
+                            variable field : out text_field) is
+        variable tmp_field : text_field;
     begin
-        result_txt_field := (others => nul);
+        tmp_field := (others => nul);
         if ptr /= null then
-            for i in 1 to txt_field'length loop
+            for i in 1 to field'length loop
                 if (ptr(i) = nul) then
                     exit;
                 end if;
-                result_txt_field(i) := ptr(i);
+                tmp_field(i) := ptr(i);
             end loop;
-            txt_field := result_txt_field;
+            field := tmp_field;
         end if;
-    end procedure;
+    end procedure;  
+    
+    procedure text_field_to_text_field_ptr (variable field : in text_field;
+                                           variable ptr : inout text_field_ptr) is
+    begin
+        for i in 1 to field'length loop
+            ptr(i) := field(i);
+        end loop;
+    end procedure;  
+    
 
     function to_str_hex(int : integer) return string is
     begin

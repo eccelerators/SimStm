@@ -154,6 +154,12 @@ begin
         variable tmp_instruction : text_field; -- remembered instruction field
         variable scope : text_field;
         variable scope_left : text_field;  
+        variable p1_text_field : text_field;
+        variable p2_text_field : text_field;
+        variable p3_text_field : text_field;
+        variable p4_text_field : text_field;
+        variable p5_text_field : text_field;
+        variable p6_text_field : text_field;  
         variable par1_index : integer; -- parameter index 1
         variable par2_index : integer; -- parameter index 2        
         variable par3_index : integer; -- parameter index 3
@@ -291,6 +297,13 @@ begin
         variable in_proc_advanced_parameters : boolean := false;
         variable pass :integer;
         
+        variable tmp_text_field_ptr : text_field_ptr;
+        variable in_call_label_parameters : boolean := false;
+        variable in_call_label_parameters_scope_left : text_field;
+        variable tmp_label_ptr : text_field_ptr;
+        variable tmp_label : text_field;
+        variable label_line : integer := 0;
+        
     begin
         nul_scope(1) := nul;
         marker <= (others => '0');
@@ -313,24 +326,60 @@ begin
         file_close(stimulus);
 
         -- read, test, and load the stimulus file
-        print("Parsing instructions pass 0");
+        print("Parsing constants pass 0");
         pass := 0;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
-        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
-        print("Parsing instructions pass 1");
+        -- dump_variables(defined_vars, machine_value_width);
+        
+        print("Parsing variables except labels pass 1");
         pass := 1;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
-        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
+        -- dump_variables(defined_vars, machine_value_width);
+        
         print("Parsing instructions pass 2");
         pass := 2;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
-        print("Parsing instructions done");
-        -- dump_variables(defined_vars, machine_value_width); --TODO: remove
-
+        print("Initilize global labels pass 3");
+        pass := 3;
+        read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, defined_vars, inst_sequ, file_list, machine_value_width);
+        dump_variables(defined_vars, machine_value_width);
+        
+        print("Initilize local labels pass 4");
+        pass := 4;        
         -- initialize last info
         last_sequ_num := 0;
         last_sequ_ptr := inst_sequ;
-
+        in_call_label_parameters := false;
+        v_line := 0;
+        -- using the instruction record list, get the instruction and if label then initialize it
+        while v_line < inst_sequ.num_of_lines loop
+            v_line := v_line + 1;
+            access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                             p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
+                             par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
+                             par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
+                             last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
+            -- label a_label a_proc_label
+            if instruction(1 to len) = INSTR_LABEL then
+                -- a local label definition and declaration ( since it is an instruction), initialize it
+                text_field_to_text_field_ptr(p2_text_field, tmp_text_field_ptr);    
+                init_and_update_variable(defined_vars, par1_index, tmp_text_field_ptr, valid);
+                assert valid /= 0
+                report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
+                severity failure;
+                temp_int := fld_len(p1_text_field);
+                temp_int_b := fld_len(p2_text_field);
+                print("pass " & integer'image(pass) & " init local label var " & p1_text_field(1 to temp_int) & " idx "& integer'image(par1_index) & " with proc label var " & p2_text_field(1 to temp_int_b) & " idx '" & integer'image(par2_index));
+            end if;
+        end loop;
+        -- dump_variables(defined_vars, machine_value_width);
+        print("Parsing .stm files done");
+        
+        -- initialize last info
+        last_sequ_num := 0;
+        last_sequ_ptr := inst_sequ;
+        in_call_label_parameters := false;
+        v_line := 0;
         -- using the instruction record list, get the instruction and implement
         -- it as per the statements in the elsif tree.
         while v_line < inst_sequ.num_of_lines loop
@@ -349,14 +398,15 @@ begin
 
             if main_entered = 0 then          
                 access_variable(defined_vars, nul_scope, main_label_text_field, var_index, main_line, valid, machine_value_width);
-                assert valid = 1
+                assert valid /= 0
                 report lf & "error: Entry point proc Main:'" & main_label_text_field(1 to fld_len(main_label_text_field)) & "' scope:'' not found !"
                 severity failure;
                 v_line := main_line;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                 p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                  par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                 last_sequ_num, last_sequ_ptr);
+                                 last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                                  
                 print("exec main entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name));
                 main_entered := 1;
@@ -385,15 +435,16 @@ begin
                 stack_ptr := stack_ptr + 1;
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
                 access_variable(defined_vars, nul_scope, branch_to_interrupt_label, var_index, branch_to_interrupt_v_line, valid, machine_value_width);
-                assert valid = 1
+                assert valid /= 0
                 report lf & "error: Interrupt entry point branch_to_interrupt_label not found !"
                 severity failure;
 
                 v_line := branch_to_interrupt_v_line;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                 p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                  par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                 last_sequ_num, last_sequ_ptr);
+                                 last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                 report "exec interrupt entry line " & (integer'image(file_line)) & " " & instruction(1 to len) & " file " & text_line_crop(file_name);
                 stack_called_labels(stack_ptr) := branch_to_interrupt_label;
                 stack_called_files(stack_ptr) := file_name;
@@ -405,9 +456,10 @@ begin
 
                 v_line := v_line + 1;
                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                 p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                  par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                 last_sequ_num, last_sequ_ptr);
+                                 last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
 
                 if trc_on(3) = '1' then
                     dump_file_defs(file_list);
@@ -505,9 +557,9 @@ begin
                     -- This instruction has been executed for global labels while reading the file
                     index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_label, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
                     severity failure;
-                            
+                                                               
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif instruction(1 to len) = INSTR_FILE then
@@ -864,7 +916,7 @@ begin
                     end if;
                     
                 -- label pointer copy a_label another_label
-                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY then
+                elsif instruction(1 to len) = INSTR_LABEL_POINTER_COPY then
                     index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
@@ -875,7 +927,7 @@ begin
                     severity failure;
                     
                 -- label pointer copy a_label another_label )
-                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                elsif instruction(1 to len) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE then
                     index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
@@ -1434,9 +1486,10 @@ begin
                     if if_state(if_level) = false then
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                         p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                          par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                          par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                         last_sequ_num, last_sequ_ptr);
+                                         last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
                             if instruction(1 to len) = INSTR_IF then
@@ -1450,9 +1503,10 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                             p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                              par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                              par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                             last_sequ_num, last_sequ_ptr);
+                                             last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         end loop;
                         if trc_on(4) = '1' then
                             report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
@@ -1477,18 +1531,20 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                         p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                          par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                          par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                         last_sequ_num, last_sequ_ptr);
+                                         last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         while (instruction(1 to len) /= INSTR_IF) and instruction(1 to len) /= INSTR_END_IF loop
                             assert v_line < inst_sequ.num_of_lines
                             report " line " & (integer'image(file_line)) & " error:  if instruction unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                             p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                              par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                              par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                             last_sequ_num, last_sequ_ptr);
+                                             last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         end loop;
                         v_line := v_line - 1; -- re-align so it will be operated on.
                     else
@@ -1526,9 +1582,10 @@ begin
                         if if_state(if_level) = false then
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                             p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                              par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                              par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                             last_sequ_num, last_sequ_ptr);
+                                             last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (instruction(1 to len) /= INSTR_ELSE and instruction(1 to len) /= INSTR_ELSIF and instruction(1 to len) /= INSTR_END_IF) loop
                                 if instruction(1 to len) = INSTR_IF then
@@ -1542,9 +1599,10 @@ begin
                                 severity failure;
                                 v_line := v_line + 1;
                                 access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                                 p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                                  par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                                  par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                                 last_sequ_num, last_sequ_ptr);
+                                                 last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                             end loop;
                             if trc_on(4) = '1' then
                                 report instruction(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
@@ -1567,9 +1625,10 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip the else
                         v_line := v_line + 1;
                         access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                         p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                          par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                          par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                         last_sequ_num, last_sequ_ptr);
+                                         last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or instruction(1 to len) /= INSTR_END_IF loop
                             if instruction(1 to len) = INSTR_IF then
@@ -1583,9 +1642,10 @@ begin
                             severity failure;
                             v_line := v_line + 1;
                             access_inst_sequ(inst_sequ, defined_vars, file_list, v_line, instruction, scope, scope_left,
+                                             p1_text_field, p2_text_field, p3_text_field, p4_text_field, p5_text_field, p6_text_field,
                                              par1_index, par2_index, par3_index, par4_index, par5_index, par6_index,
                                              par1, par2, par3, par4, par5, par6, txt, txt_enclosing_quote, len, file_name, file_line,
-                                             last_sequ_num, last_sequ_ptr);
+                                             last_sequ_num, last_sequ_ptr, in_call_label_parameters, in_call_label_parameters_scope_left);
                         end loop;
 
                         v_line := v_line - 1; -- re-align so it will be operated on.
@@ -1788,7 +1848,7 @@ begin
                     target_proc_v_line := to_integer(par1(30 downto 0)) - 1; 
                     target_call_v_line := v_line;
                     tmp_instruction := instruction; 
-                    get_inst_field_1(inst_sequ, v_line, called_label);
+                    called_label := p1_text_field;
                     stack_called_labels(stack_ptr) := called_label;                                     
                     stack_called_files(stack_ptr) := file_name;
                     stack_called_file_line_numbers(stack_ptr) := file_line;     
@@ -1820,15 +1880,21 @@ begin
                     assert stack_ptr < 31
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;  
-                    index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
+                    
+                    access_variable_label_ptr (defined_vars, scope, p1_text_field, var_index, tmp_label_ptr, valid);
                     assert valid /= 0
-                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
+                    report lf & "error: called label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                    severity failure;       
+                    text_field_ptr_to_text_field(tmp_label_ptr, tmp_label);
+                    access_variable(defined_vars, nul_scope, tmp_label, var_index, label_line, valid, machine_value_width);
+                    assert valid /= 0
+                    report lf & "error: Called proc label:'" & tmp_label(1 to fld_len(tmp_label)) & "' scope:'' not found !"
                     severity failure;
-                    target_proc_v_line := par2_index; 
+                    target_proc_v_line := label_line; 
                     target_call_v_line := v_line;
                     tmp_instruction := instruction; 
-                    get_inst_field_1(inst_sequ, v_line, called_label);
-                    stack_called_labels(stack_ptr) := called_label;                                     
+                    called_label := tmp_label;
+                    stack_called_labels(stack_ptr) := tmp_label;                                     
                     stack_called_files(stack_ptr) := file_name;
                     stack_called_file_line_numbers(stack_ptr) := file_line;     
                     stack(stack_ptr) := v_line;                                                                                                            

@@ -286,7 +286,7 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY_PAR_CLOSE, 2);
         -- label
-        define_instruction(inst_list, INSTR_LABEL, 1);
+        define_instruction(inst_list, INSTR_LABEL, 2);
         define_instruction(inst_list, INSTR_LABEL_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_LABEL_POINTER_COPY_PAR_CLOSE, 2);  
         define_instruction(inst_list, INSTR_LABEL_EQU, 2);
@@ -403,6 +403,7 @@ package body tb_instructions_pkg is
             elsif token1(1 to 4) = "call" then
                 token1_len := 4;
                 if token2(1 to 5) = "label" then
+                    token2_len := 5;
                     if token4(1 to 1) = "(" then    
                         if token4(2 to 2) = ")" then                         
                             token4_len := 2;
@@ -413,7 +414,7 @@ package body tb_instructions_pkg is
                             token_merge := 1245;
                         else
                             token4_len := 1;
-                            token_merge := 14;
+                            token_merge := 124;
                         end if;
                     end if;
                 else 

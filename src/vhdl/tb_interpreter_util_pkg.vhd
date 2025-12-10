@@ -213,9 +213,6 @@ package tb_interpreter_util_pkg is
     -- procedure to print instruction records to stdout  *for debug*
     procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
 
-    -- procedure to get parameter 1 instruction text which is the called label in case of a call instrucution
-    procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field);
-
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable scope : in text_field; 
                                        variable ptr : in stm_text_ptr;
@@ -322,6 +319,11 @@ package tb_interpreter_util_pkg is
                               variable stm_label : in text_field_ptr;
                               variable valid : out integer);
 
+    procedure init_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_label : in text_field_ptr;
+                              variable valid : out integer);
+
     --  update_lines
     --     inputs:
     --               index:  the index of the variable being accessed
@@ -337,5 +339,5 @@ package tb_interpreter_util_pkg is
                               variable index : in integer;
                               variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);
-
+                              
 end package;

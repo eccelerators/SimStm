@@ -462,6 +462,7 @@ package body tb_interpreter_util_pkg is
     procedure dump_var_field(variable ptr : var_field_ptr;
                              constant stm_value_width : in integer) is
         variable std_line : line;
+        variable tmp_label : text_field;
         variable tmp_str : stm_text;
         variable tmp_str_ptr : stm_text_ptr;
         variable stm_line_ptr : t_stm_line_ptr;
@@ -478,6 +479,7 @@ package body tb_interpreter_util_pkg is
         print("---- var_scope: " & ptr.var_scope);
         print("---- var_index: " & to_str(ptr.var_index));
         print("---- var_value: 0x" & to_str_hex(ptr.var_value(0)));
+        print("---- var_org_value: 0x" & to_str_hex(ptr.var_org_value(0)));
         if ptr.var_stm_type = STM_VALUE_TYPE then
             print("---- var_stm_type: STM_VALUE_TYPE");
         elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
@@ -496,6 +498,12 @@ package body tb_interpreter_util_pkg is
                 array_index := i;
                 array_value := ptr.var_stm_array(array_index);
                 print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+            end loop;
+            stm_array := ptr.var_org_stm_array;
+            for i in 0 to stm_array'high loop
+                array_index := i;
+                array_value := ptr.var_stm_array(array_index);
+                print("-------- org index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
             end loop;
         elsif ptr.var_stm_type = STM_LINES_TYPE then
             print("---- var_stm_type: STM_LINES_TYPE");
@@ -532,11 +540,52 @@ package body tb_interpreter_util_pkg is
                 end if;
                 stm_line_ptr := stm_line_ptr.next_stm_line;
             end loop;
+            stm_line_ptr := ptr.var_org_stm_lines.stm_line_list;
+            while stm_line_ptr /= null loop
+                print("-------- stm_org_lines.line_number: " & to_str(stm_line_ptr.line_number));
+                if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
+                    print("-------- stm_org_lines.line_type: STM_LINE_TEXT_TYPE");
+                    std_line := stm_line_ptr.line_content;
+                    tmp_str_ptr := new stm_text;
+                    get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
+                    stm_text_ptr_to_line(tmp_str_ptr, std_line);
+                    stm_line_ptr.line_content := std_line;
+                    txt_print(tmp_str_ptr);                    
+                elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
+                    print("-------- stm_org_lines.line_type: STM_LINE_ARRAY_TYPE");
+                    success := true;
+                    print("-------- stm_org_lines.line_content'length before reading: " & to_str(stm_line_ptr.line_content'length));
+                    array_index := 0;
+                    tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
+                    while success loop
+                        hread(tmp_std_line_print, value_std_logic_vector, success);
+                        if success then
+                            array_value := unsigned(value_std_logic_vector);
+                            print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+                        end if;
+                        array_index := array_index + 1;
+                    end loop;
+                    print("-------- stm_org_lines.line_content'length after reading: " & to_str(stm_line_ptr.line_content'length));
+                end if;
+                stm_line_ptr := stm_line_ptr.next_stm_line;
+            end loop;
         elsif ptr.var_stm_type = STM_BUS_TYPE then
             print("---- var_stm_type: STM_BUS_TYPE");
         elsif ptr.var_stm_type = STM_SIGNAL_TYPE then
             print("---- var_stm_type: STM_SIGNAL_TYPE");
         elsif ptr.var_stm_type = STM_LABEL_TYPE then
+            if ptr.var_label /= null then
+                text_field_ptr_to_text_field(ptr.var_label, tmp_label); 
+                print("---- var_label: " & tmp_label);
+            else
+                print("---- var_label: missing");
+            end if;
+            if ptr.var_org_label /= null then
+                text_field_ptr_to_text_field(ptr.var_org_label, tmp_label);
+                print("---- var_org_label: " & tmp_label);
+            else
+                print("---- var_org_label: missing");
+            end if;
             print("---- var_stm_type: STM_LABEL_TYPE");
         elsif ptr.var_stm_type = NO_VAR_TYPE then
             print("---- var_stm_type: NO_VAR_TYPE");
@@ -863,21 +912,7 @@ package body tb_interpreter_util_pkg is
         get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
     end procedure;
-
-    procedure get_inst_field_1(variable inst_sequ : in stim_line_ptr; v_line : in integer; inst_field_1 : out text_field) is
-        variable inst_ptr : stim_line_ptr;
-    begin
-        inst_ptr := inst_sequ;
-        while inst_ptr.next_rec /= null loop
-            if inst_ptr.line_number = v_line then
-                exit;
-            else
-                inst_ptr := inst_ptr.next_rec;
-            end if;
-        end loop;
-        inst_field_1 := inst_ptr.inst_field_1;
-    end procedure;
-
+   
     procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
                                        variable scope : in text_field; 
                                        variable ptr : in stm_text_ptr;
@@ -1086,10 +1121,10 @@ package body tb_interpreter_util_pkg is
                     tmp_i := tmp_i + 1;
                 end loop;
                 access_variable(var_list, scope, tmp_field, v1_index, v1, valid);
-                assert (valid = 1)
+                assert valid /= 0
                 report lf & "invalid variable found in stm_text_ptr: ignoring."
                 severity warning;
-                if valid = 1 then
+                if valid /= 0 then
                     dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(v1, format));
                     k := 1;
                     while dest_txt_str(k) /= nul loop
@@ -1599,6 +1634,28 @@ package body tb_interpreter_util_pkg is
         -- check the current one
         if ptr.var_index = index then
             ptr.var_label := ptr.var_org_label;
+            ptr.var_label := stm_label;
+            valid := 1;
+        end if;
+    end procedure;
+    
+    procedure init_and_update_variable(variable var_list : in var_field_ptr;
+                              variable index : in integer;
+                              variable stm_label : in text_field_ptr;
+                              variable valid : out integer) is
+        variable ptr : var_field_ptr;
+    begin
+        ptr := var_list;
+        valid := 0;
+        while ptr.next_rec /= null loop
+            if ptr.var_index = index then
+                exit;
+            end if;
+            ptr := ptr.next_rec;
+        end loop;
+        -- check the current one
+        if ptr.var_index = index then
+            ptr.var_org_label := stm_label;
             ptr.var_label := stm_label;
             valid := 1;
         end if;

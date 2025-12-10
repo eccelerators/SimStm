@@ -56,17 +56,17 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal verify_passes : std_logic_vector(31 downto 0);
-    signal verify_failures : std_logic_vector(31 downto 0);
-    signal bus_timeout_passes : std_logic_vector(31 downto 0);
-    signal bus_timeout_failures : std_logic_vector(31 downto 0);
+    signal verify_passes : std_logic_vector(31 downto 0) := (others => '0');
+    signal verify_failures : std_logic_vector(31 downto 0) := (others => '0');
+    signal bus_timeout_passes : std_logic_vector(31 downto 0) := (others => '0');
+    signal bus_timeout_failures : std_logic_vector(31 downto 0) := (others => '0');
 
-    signal signals_in : t_signals_in;
-    signal signals_out : t_signals_out;
-    signal bus_down : t_bus_down;
-    signal bus_up : t_bus_up;
+    signal signals_in : t_signals_in := signals_in_init;
+    signal signals_out : t_signals_out := signals_out_init;
+    signal bus_down : t_bus_down := bus_down_init;
+    signal bus_up : t_bus_up := bus_up_init;
 
-    signal InitDut : std_logic;
+    signal InitDut : std_logic := '1';
 
 begin
 
