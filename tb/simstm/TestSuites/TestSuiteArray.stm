@@ -1,6 +1,10 @@
 proc testSuiteArray ()
 
     call testCaseArray ()
+    
+--    call testCase (
+--    	label equ Test testArray
+--    )
     call testCaseArrayGet ()
     call testCaseArraySet ()
     call testCaseArraySize ()
@@ -11,6 +15,21 @@ proc testSuiteArray ()
     call testCaseArrayLocalOverride ()
     call testCaseArrayDefaultValue ()
 end proc
+
+--proc NULL ()
+--end proc
+--
+--proc testCase (
+--	label Test NULL
+--	var skipped 0
+--)
+--    call beginTestCase ()
+--    call label Test ()
+--    call endTestCase ( 
+--    	equ  skipped skipped
+--    	equ failure StandardTestFailure
+--    )
+--end proc
 
 proc testCaseArrayDefaultValue (
 	var skipped 0

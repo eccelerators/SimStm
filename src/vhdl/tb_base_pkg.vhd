@@ -69,6 +69,7 @@ package tb_base_pkg is
     type interrupt_array is array (0 to 127) of integer;
 
     subtype text_field is string(1 to max_field_len);
+    type text_field_ptr is access text_field;
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
@@ -153,6 +154,7 @@ package tb_base_pkg is
                             STM_LINES_TYPE,
                             STM_BUS_TYPE,
                             STM_SIGNAL_TYPE,
+                            STM_PROC_LABEL_TYPE,
                             STM_LABEL_TYPE,
                             NO_VAR_TYPE
                            );
@@ -166,6 +168,8 @@ package tb_base_pkg is
         var_index : integer;
         var_value : t_stm_value_ptr;
         var_org_value : t_stm_value_ptr;
+        var_label : text_field_ptr;
+        var_org_label : text_field_ptr;
         var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_text_enclosing_quote : character;
@@ -206,6 +210,11 @@ package tb_base_pkg is
 
     function ew_str_cat(s1 : stm_text;
                         s2 : text_field) return stm_text;
+                        
+    procedure ew_str_cat_ptr(variable s1 : in stm_text;
+                         variable s2_ptr : in text_field_ptr;
+                         variable so : out stm_text
+                         );
                         
     function str_cat(s1 : text_field;
                      s2 : text_field) return text_field;
@@ -405,6 +414,10 @@ package tb_base_pkg is
     --  procedure copy stm_text into an existing pointer
     procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
                                    variable txt_str : in stm_text);
+
+    --  procedure copy stm_text_field into an existing pointer
+    procedure text_field_copy_to_ptr(variable ptr : inout text_field_ptr;
+                                   variable txt_field : in text_field);
                                    
     --  function short text_line (remove 'nul')
     function stm_text_crop(txt : in stm_text) return string;
@@ -453,6 +466,9 @@ package tb_base_pkg is
     --  procedure to get string of the txt pointer
     procedure txt_to_string(variable ptr : in stm_text_ptr;
                             variable str : out stm_text);
+                            
+    procedure txt_field_ptr_to_text_field(variable ptr : in text_field_ptr;
+                            variable txt_field : out text_field);
                             
     -- function to get string of the txt field                     
     function txt_field_to_string(s : in text_field) return string;

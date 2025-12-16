@@ -1,5 +1,5 @@
-proc testSuiteBasic ()
 
+proc testSuiteBasic ()
     call testCaseBasicConst ()
     call testCaseBasicIfElseElsif ()
     call testCaseBasicNestedIfElseElsif ()

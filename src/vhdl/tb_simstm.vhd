@@ -56,6 +56,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.tb_base_pkg.all;
+use work.tb_interpreter_util_pkg.all;
 use work.tb_instructions_pkg.all;
 use work.tb_interpreter_pkg.all;
 use work.tb_bus_pkg.all;
@@ -236,6 +237,9 @@ begin
 
         -- Array
         variable var_stm_array : t_stm_array_ptr;
+        
+        -- Label
+        variable var_stm_label : text_field_ptr;
 
         -- Text
         variable var_stm_text : stm_text_ptr;
@@ -495,7 +499,15 @@ begin
                     for i in 0 to var_stm_array'length - 1 loop
                         var_stm_array(i) := to_unsigned(0, machine_value_width);
                     end loop;
-
+                    
+                -- label a_label a_proc_label
+                elsif instruction(1 to len) = INSTR_LABEL then
+                    -- This instruction has been executed for global labels while reading the file
+                    index_and_reinit_variable(defined_vars, par1_index, var_scope, var_stm_label, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
+                    severity failure;
+                            
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif instruction(1 to len) = INSTR_FILE then
@@ -564,8 +576,8 @@ begin
                         severity failure;
                     end loop;
 
-                -- equ operand1_and_target operand2
-                -- equ operand1_and_target 0xF0
+                -- equ operand1_equ_target operand2
+                -- equ operand1_equ_target 0xF0
                 elsif instruction(1 to len) = INSTR_EQU then                  
                     update_variable(defined_vars, par1_index, par2, valid);
                     assert valid /= 0
@@ -850,6 +862,50 @@ begin
                             verify_failure_count := verify_failure_count + 1;
                         end if;
                     end if;
+                    
+                -- label pointer copy a_label another_label
+                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY then
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, var_stm_label, valid);
+                    assert valid /= 0
+                    report "label_pointer error: not a label name??"
+                    severity failure;
+                    
+                -- label pointer copy a_label another_label )
+                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
+                    severity failure;
+                    update_variable(defined_vars, par1_index, var_stm_label, valid);
+                    assert valid /= 0
+                    report "label_pointer error: not a label name??"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        v_line := target_proc_after_par_bracket_v_line;
+                        in_call_advanced_parameters := false;   
+                    end if;   
+ 
+                -- equ label1_equ_target label2 ) 
+                elsif instruction(1 to len) = INSTR_LABEL_EQU_PAR_CLOSE then                  
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
+                    severity failure; 
+                    
+                -- equ label1_equ_target label2 INSTR_LABEL_EQU_PAR_CLOSE
+                elsif instruction(1 to len) = INSTR_LABEL_EQU then                  
+                    update_variable(defined_vars, par1_index, par2, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
+                    severity failure;
+                    if in_call_advanced_parameters then
+                        v_line := target_proc_after_par_bracket_v_line;
+                        in_call_advanced_parameters := false;   
+                    end if;   
 
                 -- file readable a_fileA target
                 elsif instruction(1 to len) = INSTR_FILE_READABLE then
@@ -1720,7 +1776,7 @@ begin
                 -- call some_proc
                 -- call some_proc (
                 -- call some_proc ()
-                -- call some_proc ()
+                -- call some_proc ( )
                 elsif instruction(1 to len) = INSTR_CALL or instruction(1 to len) = INSTR_CALL_PAR_OPEN or instruction(1 to len) = INSTR_CALL_PAR_NOPAR_0 or instruction(1 to len) = INSTR_CALL_PAR_NOPAR_1 then          
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
@@ -1730,6 +1786,45 @@ begin
                     report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
                     severity failure;  
                     target_proc_v_line := to_integer(par1(30 downto 0)) - 1; 
+                    target_call_v_line := v_line;
+                    tmp_instruction := instruction; 
+                    get_inst_field_1(inst_sequ, v_line, called_label);
+                    stack_called_labels(stack_ptr) := called_label;                                     
+                    stack_called_files(stack_ptr) := file_name;
+                    stack_called_file_line_numbers(stack_ptr) := file_line;     
+                    stack(stack_ptr) := v_line;                                                                                                            
+                    if trc_on(5) = '1' then
+                        report tmp_instruction(1 to len) & ":  push v_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(v_line);
+                        report tmp_instruction(1 to len) & ":  push called_label: stack(" & integer'image(stack_ptr) & ") = " & called_label;
+                        report tmp_instruction(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
+                        report tmp_instruction(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
+                    end if;
+                    stack_ptr := stack_ptr + 1;
+                    v_line := target_proc_v_line;
+                    if trc_on(5) = '1' then
+                        report tmp_instruction(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
+                        report tmp_instruction(1 to len) & ":  goto v_line:" & integer'image(v_line);
+                    end if;                    
+                    if instruction(1 to len) = INSTR_CALL_PAR_OPEN then                    
+                        in_proc_advanced_parameters := true;                                                     
+                    end if;
+                    
+                -- call label some_label (
+                -- call label some_label ()
+                -- call label some_label ( )
+                elsif instruction(1 to len) = INSTR_CALL_LABEL_PAR_OPEN or instruction(1 to len) = INSTR_CALL_LABEL_PAR_NOPAR_0 or instruction(1 to len) = INSTR_CALL_LABEL_PAR_NOPAR_1 then          
+                    if trc_on(5) = '1' then
+                        report instruction(1 to len) & ": v_line: " & integer'image(v_line) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
+                    end if;
+                    assert stack_ptr < 31
+                    report " line " & (integer'image(file_line)) & " call error: stack over run, calls to deeply nested!!"
+                    severity failure;  
+                    index_variable(defined_vars, par2_index, var_scope, var_stm_label, valid);
+                    assert valid /= 0
+                    report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
+                    severity failure;
+                    target_proc_v_line := par2_index; 
                     target_call_v_line := v_line;
                     tmp_instruction := instruction; 
                     get_inst_field_1(inst_sequ, v_line, called_label);

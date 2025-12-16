@@ -2,9 +2,10 @@ include "Common/Common.stm"
 
 include "Variable/variable.stm"
 include "Variable/variable_local.stm"
-include "Variable/variable_scope.stm"
 include "Variable/variable_pointer.stm"
 include "Variable/variable_parameter.stm"
+include "Variable/variable_local_override.stm"
+include "Variable/variable_default_value.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
 

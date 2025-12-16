@@ -11,10 +11,21 @@ proc testSuiteLines ()
     call testCaseLinesSetArray ()
     call testCaseLinesSetText ()
     call testCaseLinesSize ()
-    call testCaseLinesLocalOverride ()
     call testCaseLinesLocal ()
     call testCaseLinesParameterIn ()
     call testCaseLinesParameterOut ()
+    call testLinesLocalOverride ()
+end proc
+
+proc testCaseLinesLocalOverride (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testLinesLocalOverride ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
 proc testCaseLinesAppendArray (
@@ -133,17 +144,6 @@ proc testCaseLinesSize (
     call beginTestCase ()
     call testLinesSize ()
     call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesLocalOverride (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testLinesLocalOverride ()
-	call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
     )

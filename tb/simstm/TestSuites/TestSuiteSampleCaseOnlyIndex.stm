@@ -1,7 +1,6 @@
 var sampleCaseOnlyIndexA 1
 
 proc testSuiteSampleCaseOnlyIndex ()
-
     loop 5
         call testCaseSampleCaseOnlyIndexA ()
         add sampleCaseOnlyIndexA 1
@@ -17,7 +16,7 @@ proc testCaseSampleCaseOnlyIndexA (
     call beginTestCaseIndexed ()
 
     seed sampleCaseOnlyIndexA
-    call testOtherRandom
+    call testOtherRandom ()
 
     call endTestCase ( 
     	equ  skipped skipped

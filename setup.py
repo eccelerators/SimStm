@@ -72,15 +72,17 @@ static_setup_data = {
         "SimStm/src/vhdl", [
             {"file":"src/vhdl/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070"},
             {"file":"src/vhdl/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
-            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
+            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00190"},
             {"file":"src/vhdl/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050"},
-            {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00171"},
+            {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00181"},
             {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
             {"file":"src/vhdl/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"},
             {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"},
-            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
+            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
             {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
             {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
+            {"file":"src/vhdl/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
+            {"file":"src/vhdl/tb_interpreter_util_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00171"},
             {"file":"src/vhdl/tb_bus_axi4lite_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00120"},
             {"file":"src/vhdl/tb_bus_ram_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110"},
             {"file":"src/vhdl/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00051"}
@@ -91,7 +93,7 @@ static_setup_data = {
             {"file":"tb/hdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAvalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/Ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00190", "ghdl_options":["-frelaxed"]},
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00200", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamWishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00010", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAxi4Lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00020", "ghdl_options":["-frelaxed"]}
         ])
@@ -100,23 +102,37 @@ static_setup_data = {
         "SimStm/tb/simstm/Array", [
             {"file":"tb/simstm/Array/array_size.stm"},
             {"file":"tb/simstm/Array/array_local_override.stm"},
+            {"file":"tb/simstm/Array/array_parameter.stm"},
+            {"file":"tb/simstm/Array/array_local.stm"},
             {"file":"tb/simstm/Array/array_labs.stm"},
+            {"file":"tb/simstm/Array/array_default_value.stm"},
             {"file":"tb/simstm/Array/array_pointer.stm"},
             {"file":"tb/simstm/Array/array_labs_zero_size.stm"},
             {"file":"tb/simstm/Array/array.stm"}
         ]),(
         "SimStm/tb/simstm/File", [
-            {"file":"tb/simstm/File/file.stm"}
+            {"file":"tb/simstm/File/file_local.stm"},
+            {"file":"tb/simstm/File/file_pointer.stm"},
+            {"file":"tb/simstm/File/file_parameter.stm"},
+            {"file":"tb/simstm/File/file.stm"},
+            {"file":"tb/simstm/File/file_local_override.stm"}
         ]),(
         "SimStm/tb/simstm/Signal", [
             {"file":"tb/simstm/Signal/signal_pointer.stm"},
-            {"file":"tb/simstm/Signal/signal.stm"}
+            {"file":"tb/simstm/Signal/signal_local_override.stm"},
+            {"file":"tb/simstm/Signal/signal_parameter.stm"},
+            {"file":"tb/simstm/Signal/signal.stm"},
+            {"file":"tb/simstm/Signal/signal_local.stm"}
         ]),(
         "SimStm/tb/simstm/Common", [
             {"file":"tb/simstm/Common/CommonLabs.stm"},
             {"file":"tb/simstm/Common/Common.stm"}
         ]),(
         "SimStm/tb/simstm/Lines", [
+            {"file":"tb/simstm/Lines/lines_local.stm"},
+            {"file":"tb/simstm/Lines/lines_pointer.stm"},
+            {"file":"tb/simstm/Lines/lines_local_override.stm"},
+            {"file":"tb/simstm/Lines/lines_parameter.stm"},
             {"file":"tb/simstm/Lines/lines.stm"}
         ]),(
         "SimStm/tb/simstm/Interrupt", [
@@ -157,10 +173,11 @@ static_setup_data = {
         ]),(
         "SimStm/tb/simstm/Variable", [
             {"file":"tb/simstm/Variable/variable_local.stm"},
+            {"file":"tb/simstm/Variable/variable_local_override.stm"},
             {"file":"tb/simstm/Variable/variable_pointer.stm"},
             {"file":"tb/simstm/Variable/variable.stm"},
-            {"file":"tb/simstm/Variable/variable_parameter.stm"},
-            {"file":"tb/simstm/Variable/variable_scope.stm"}
+            {"file":"tb/simstm/Variable/variable_default_value.stm"},
+            {"file":"tb/simstm/Variable/variable_parameter.stm"}
         ]),(
         "SimStm/tb/simstm/Constant", [
             {"file":"tb/simstm/Constant/constant.stm"},
@@ -189,7 +206,8 @@ static_setup_data = {
             {"file":"tb/simstm/Bus/bus32.stm"},
             {"file":"tb/simstm/Bus/bus128.stm"},
             {"file":"tb/simstm/Bus/bus256.stm"},
-            {"file":"tb/simstm/Bus/bus64.stm"}
+            {"file":"tb/simstm/Bus/bus64.stm"},
+            {"file":"tb/simstm/Bus/bus32_parameter.stm"}
         ]),(
         "SimStm/tb/simstm", [
             {"file":"tb/simstm/testMainSuiteIndexedSampleSuiteOnlyIndex.stm"},

@@ -2,20 +2,16 @@ include "Variable/variable_parameter.stm"
 
 include "Common/Common.stm"
 include "Signal/signal.stm"
-include "Signal/signal_pointer.stm"
-include "Signal/signal_parameter.stm"
-include "Signal/signal_local_override.stm"
-include "Signal/signal_default_value.stm"
+--include "Signal/signal_pointer.stm"
+--include "Signal/signal_parameter.stm"
+--include "Signal/signal_local_override.stm"
 
 include "Bus/bus32.stm"
 include "Bus/bus64.stm"
 include "Bus/bus128.stm"
 include "Bus/bus256.stm"
-include "Bus/bus32_parameter.stm"
-include "Bus/bus32_pointer.stm"
-include "Bus/bus32_local_override.stm"
-include "Bus/bus32_default_value.stm"
-
+--include "Bus/bus32_parameter.stm"
+--include "Bus/bus32_pointer.stm"
 include "Base/Array.stm"
 
 include "Other/other.stm"
@@ -31,11 +27,13 @@ include "Array/array_local.stm"
 include "Array/array_local_override.stm"
 include "Array/array_parameter.stm"
 include "Array/array_default_value.stm"
+include "Array/array_size.stm"
+include "Array/array_pointer.stm"
 
 include "Lines/lines.stm"
-include "Lines/lines_local_override.stm"
-include "Lines/lines_local.stm"
-include "Lines/lines_parameter.stm"
+--include "Lines/lines_local_override.stm"
+--include "Lines/lines_local.stm"
+--include "Lines/lines_parameter.stm"
 include "Lines/lines_pointer.stm"
 
 include "File/file.stm"
@@ -46,11 +44,14 @@ include "File/file_local_override.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
 
+include "TestSuites/TestSuiteArray.stm"
+include "TestSuites/TestSuiteVariable.stm"
+
 file simulation_success "simulation.success"
 lines success_lines
 
-proc testMain ()
-
+testMain:
+proc
     call initBase ()
 
     verbosity INFO_2
@@ -64,70 +65,49 @@ proc testMain ()
     signal write out_signal_init_dut 0
     log message INFO "Main test started"
 
-     --call testSignalWriteReadVerify ()
+    -- call testSignalWriteReadVerify ()
     -- call testSignalVerifyFail
-    --call testSignalLocal ()
-    --call testSignalParameterIn ()
-    --call testSignalLocalOverride ()
-    --call testSignalDefaultValue ()
-    
+    -- call testSignalLocal ()
+    -- call testSignalParameterIn ()
+    -- call testSignalLocalOverride ()
     
     --call testFileAppendArray ()
     -- call testFileWriteArray ()
     -- call testFileReadArray ()
     -- call testFilePointer ()
     -- call testFileLocal ()
-    -- call testFileLocalOverride () --not working yet
-    --call testFileParameterIn ()
+    -- call testFileLocalOverride ()
+    -- call testFileParameterIn ()
     -- call testFileParameterOut ()
-
+    -- call testVariableInv ()
     -- call testOtherRandom ()
 
     -- bus pointer copy busToTest wishbone256
     -- bus timeout set busToTest 1000
-
-    -- call testBus256 () 
-    --call testBus32ParameterIn (
-    	--bus pointer copy busToTest wishbone32
-    --)
-    --call testBus32ParameterOut (
-    	--bus pointer copy busToTest wishbone32
-    --)
-    --call testBus32Pointer (
-    --	bus pointer copy busToTest wishbone32
-    --)
-    --call testBusLocalOverride ()
-     --call testBus32 (
-     	--bus pointer copy busToTest wishbone32
-     --)
-    --call testBus32DefaultValue (
-    	--bus pointer copy busToTest avalon32		--not working yet
-    --) 
-
-    
+    -- call testVariableLocalOverride ()
     -- call testVariableLocal ()
-    --call testVariableLocalOverride ()
+    -- call testVariableScope ()
     -- call testVariablePointer ()
     -- call testVariableParameterIn ()
-    --call testVariableParameterOut ()
-    --call testVariableDefaultValue ()
-    -- call testVariableInv ()
+    -- call testVariableParameterOut ()
+    -- call testVariableDefaultValue ()
     
+
     -- call testLinesSize  ()
-    call testLinesLocalOverride () 	--not working yet
-	--call testLinesLocal ()
-	--call testLinesParameterIn ()
-	--call testLinesParameterOut ()
-	--call testLinesPointer ()
+    -- call testLinesLocalOverride ()
+	-- call testLinesLocal ()
+	-- call testLinesParameterIn ()
+	-- call testLinesParameterOut ()
+	-- call testLinesPointer ()
     
     -- call testArrayLocalOverride ()
     -- call testArrayLocal ()
     -- call testArrayParameterIn ()
     -- call testArrayDefaultValue ()
     
-    
-    -- call testSuiteIndexedBus ()
-    
+    call testSuiteArray ()
+    call testSuiteVariable ()
+	
     log message INFO "Main test finished"
     wait 1000
     lines append message success_lines "SUCCESS"
@@ -137,6 +117,3 @@ proc testMain ()
     wait 1000
     finish
 end proc
-
-
-

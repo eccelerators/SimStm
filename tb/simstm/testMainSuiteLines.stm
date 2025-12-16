@@ -2,6 +2,11 @@ include "Common/Common.stm"
 include "Base/Array.stm"
 
 include "Lines/lines.stm"
+include "Lines/lines_local.stm"
+include "Lines/lines_parameter.stm"
+include "Lines/lines_pointer.stm"
+include "Lines/lines_local_override.stm"
+
 include "TestSuites/TestSuiteLines.stm"
 
 proc testMainSuiteLines ()

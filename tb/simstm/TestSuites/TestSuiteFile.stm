@@ -105,7 +105,6 @@ proc testCaseFileParameterIn (
 )
 	call beginTestCase ()
 	call testFileParameterIn ()
-	call endTestCase ()
 	call endTestCase (
 		equ skipped skipped
 		equ failure StandardTestFailure

@@ -4,8 +4,13 @@ include "File/file.stm"
 include "Base/Array.stm"
 include "TestSuites/TestSuiteFile.stm"
 
-proc testMainSuiteFile ()
+include "File/file_local_override.stm"
+include "File/file_local.stm"
+include "File/file_parameter.stm"
+include "File/file_pointer.stm"
 
+testMainSuiteFile:
+proc
     call initBase ()
 
     verbosity INFO_2

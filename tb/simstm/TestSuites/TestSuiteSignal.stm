@@ -1,5 +1,5 @@
-proc testSuiteSignal ()
 
+proc testSuiteSignal ()
     call testCaseSignalWriteReadVerify ()
     call testCaseSignalVerifyFail ()
     call testCaseSignalPointerCopy ()

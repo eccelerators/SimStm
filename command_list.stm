@@ -133,8 +133,39 @@ end proc
 -- end advanced
 -------------------------------------------
 
-proc VarVerify ()
+-------------------------------------------
+-- more advanced
 
+label ExistingLabel ToBeCalledByLabel
+
+callLabel:
+proc
+	call UseLabelForCall (
+		label pointer copy  LabelToCall ExistingLabel
+	)
+end proc
+
+callLabelEqu:
+proc
+	call UseLabelForCall ( 
+		label equ LabelToCall ToBeCalledByLabel
+	)
+end proc
+
+proc UseLabelForCall (
+	label LabelToCall ExistingLabel
+)
+	call label LabelToCall ()
+end proc
+
+proc ToBeCalledByLabel ()
+	log message 0 "Having been called by label"
+end proc
+
+-- end more advanced
+-------------------------------------------
+
+proc VarVerify ()
     var verify position expected_value mask_value
     var verify position 8 0xFF
 end proc
