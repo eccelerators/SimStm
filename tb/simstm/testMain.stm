@@ -5,13 +5,17 @@ include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
 include "Signal/signal_parameter.stm"
 include "Signal/signal_local_override.stm"
+include "Signal/signal_default_value.stm"
 
 include "Bus/bus32.stm"
 include "Bus/bus64.stm"
 include "Bus/bus128.stm"
 include "Bus/bus256.stm"
---include "Bus/bus32_parameter.stm"
---include "Bus/bus32_pointer.stm"
+include "Bus/bus32_parameter.stm"
+include "Bus/bus32_pointer.stm"
+include "Bus/bus32_local_override.stm"
+include "Bus/bus32_default_value.stm"
+
 include "Base/Array.stm"
 
 include "Other/other.stm"
@@ -65,6 +69,8 @@ proc testMain ()
     --call testSignalLocal ()
     --call testSignalParameterIn ()
     --call testSignalLocalOverride ()
+    --call testSignalDefaultValue ()
+    
     
     --call testFileAppendArray ()
     -- call testFileWriteArray ()
@@ -81,12 +87,22 @@ proc testMain ()
     -- bus timeout set busToTest 1000
 
     -- call testBus256 () 
-    -- call testBus32ParameterIn ()
-    -- call testBus32ParameterOut ()
-    -- call testBus32Pointer ()
-    -- call testBus32 (
-    -- 	bus pointer copy busToTest wishbone32
-    -- )
+    --call testBus32ParameterIn (
+    	--bus pointer copy busToTest wishbone32
+    --)
+    --call testBus32ParameterOut (
+    	--bus pointer copy busToTest wishbone32
+    --)
+    --call testBus32Pointer (
+    --	bus pointer copy busToTest wishbone32
+    --)
+    --call testBusLocalOverride ()
+     --call testBus32 (
+     	--bus pointer copy busToTest wishbone32
+     --)
+    --call testBus32DefaultValue (
+    	--bus pointer copy busToTest avalon32		--not working yet
+    --) 
 
     
     -- call testVariableLocal ()
@@ -94,11 +110,11 @@ proc testMain ()
     -- call testVariablePointer ()
     -- call testVariableParameterIn ()
     --call testVariableParameterOut ()
-    -- call testVariableDefaultValue ()
+    --call testVariableDefaultValue ()
     -- call testVariableInv ()
     
     -- call testLinesSize  ()
-    call testLinesLocalOverride () --not working yet
+    call testLinesLocalOverride () 	--not working yet
 	--call testLinesLocal ()
 	--call testLinesParameterIn ()
 	--call testLinesParameterOut ()
