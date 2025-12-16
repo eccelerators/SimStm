@@ -14,9 +14,7 @@ proc testLinesLocalOverride ()
 	var a_var 99
 	var b_var 99
 	log lines INFO_2 test_lines_local_override_a
-	-- lines get array test_lines_local_override_a 1 final_array_a a_var
 	lines get array test_lines_local_override_a 0 final_array_b b_var
-	--array verify final_array_b 0 2 MAX
 	array verify final_array_b 0 2 MAX
 
 	
@@ -41,12 +39,8 @@ end proc
 proc checkLinesGlobal ()
 
 	array global_array_a 1
-	array global_array_b 1
 	var a_var 99
-	var b_var 99
-	lines get array test_lines_local_override_a 0 global_array_a a_var
-	--lines get array test_lines_local_override_a 1 global_array_b b_var
-	
+	lines get array test_lines_local_override_a 0 global_array_a a_var	
 	array verify global_array_a 0 2 MAX
-	--array verify global_array_b 0 2 MAX
+
 end proc
