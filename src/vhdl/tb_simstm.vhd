@@ -468,19 +468,29 @@ begin
             access_instruction_line(
                 instruction_line_ptr, file_list, instruction_text_field, instruction_len, p1_text_field, p2_text_field,
                 p3_text_field, p4_text_field, p5_text_field, p6_text_field, txt, txt_enclosing_quote, file_name, file_line);
-  
-
-
-
             if is_instruction(INSTR_CALL_LABEL_PAR_OPEN) then 
-                access_variable(var_list, nul_scope, p1_text_field, p1_index, p1, valid);
+                access_variable_label_ptr(var_list, instr_scope, p1_text_field, p1_index, tmp_label_ptr, valid);
                 assert valid /= 0
-                report lf & "error: call proc: variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                severity failure;
-                scope_p1 := p1_text_field;  
-                scope := p1_text_field;   
+                report lf & "error: call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;       
+                text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);          
+                in_proc_advanced_label_parameters := true;
+                called_proc := tmp_proc; 
             elsif is_instruction(INSTR_CALL_LABEL_PAR_NOPAR_0, INSTR_CALL_LABEL_PAR_NOPAR_1) then
-            elsif is_instruction(INSTR_CALL_PAR_OPEN) then         
+                access_variable_label_ptr(var_list, instr_scope, p1_text_field, p1_index, tmp_label_ptr, valid);
+                assert valid /= 0
+                report lf & "error: call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;       
+                text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);          
+                in_proc_advanced_label_parameters := true;
+                called_proc := tmp_proc; 
+            elsif is_instruction(INSTR_CALL_PAR_OPEN) then
+                in_proc_advanced_parameters := true;
+                target_call_code_line_to_execute := code_line_to_execute;
+                access_variable(var_list, instr_scope_left, p1_text_field, p1_index, p1, valid);
+                assert valid /= 0
+                report lf & "error: call proc() variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
             elsif is_instruction(INSTR_CALL, INSTR_CALL_PAR_NOPAR_0, INSTR_CALL_PAR_NOPAR_1) then
                 access_variable(var_list, nul_scope, p1_text_field, p1_index, p1, valid);
                 assert valid /= 0
@@ -670,19 +680,19 @@ begin
                 end if;
 
                 -- include "an_include.stm"
-                if instruction(1 to len) = INSTR_INCLUDE then
+                if is_instruction(INSTR_INCLUDE) then
                     null; -- This instruction was implemented while reading the file
                 --
                 -- const a_const_num 0x03
                 -- const a_constB a_constA
                 -- const a_constC a_varA
-                elsif instruction(1 to len) = INSTR_CONST then
+                elsif is_instruction(INSTR_CONST) then
                     null; -- This instruction was implemented while reading the file
 
                 -- var a_varA 0x05
                 -- var a_varB a_varA
                 -- var a_varC a_constA
-                elsif instruction(1 to len) = INSTR_VAR then
+                elsif is_instruction(INSTR_VAR) then
                     -- This instruction has been executed for global variables while reading the file
                     reinit_and_update_variable(var_list, par1_index, par2, valid);
                     assert valid /= 0
@@ -690,7 +700,7 @@ begin
                     severity failure;
                     
                 -- array an_array 16
-                elsif instruction(1 to len) = INSTR_ARRAY then
+                elsif is_instruction(INSTR_ARRAY) then
                     -- This instruction has been executed for global arrays while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
@@ -701,7 +711,7 @@ begin
                     end loop;
                     
                 -- label a_label a_proc_label
-                elsif instruction(1 to len) = INSTR_LABEL then
+                elsif is_instruction(INSTR_LABEL) then
                     -- This instruction has been executed for global labels while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, var_stm_label, valid);
                     assert valid /= 0
@@ -710,7 +720,7 @@ begin
                                                                
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
-                elsif instruction(1 to len) = INSTR_FILE then
+                elsif is_instruction(INSTR_FILE) then
                     -- This instruction has been executed for global files while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
@@ -738,7 +748,7 @@ begin
                     end if;
 
                 -- signal a_signal
-                elsif instruction(1 to len) = INSTR_SIGNAL then
+                elsif is_instruction(INSTR_SIGNAL) then
                     -- This instruction has been executed for global signals while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
@@ -750,7 +760,7 @@ begin
                     severity failure;
                     
                 -- bus a_bus
-                elsif instruction(1 to len) = INSTR_BUS then
+                elsif is_instruction(INSTR_BUS) then
                     -- This instruction has been executed for global busses while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
@@ -762,7 +772,7 @@ begin
                     severity failure;
                     
                 -- lines a_lines
-                elsif instruction(1 to len) = INSTR_LINES then
+                elsif is_instruction(INSTR_LINES) then
                     -- This instruction has been executed for global lines while reading the file
                     index_and_reinit_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
@@ -778,18 +788,18 @@ begin
 
                 -- equ operand1_equ_target operand2
                 -- equ operand1_equ_target 0xF0
-                elsif instruction(1 to len) = INSTR_EQU or instruction(1 to len) = INSTR_EQU_PAR_CLOSE then                  
+                elsif is_instruction(INSTR_EQU, INSTR_EQU_PAR_CLOSE) then                  
                     update_variable(var_list, par1_index, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
                     severity failure;
-                    if instruction(1 to len) = INSTR_EQU_PAR_CLOSE then
+                    if is_instruction(INSTR_EQU_PAR_CLOSE) then
                         instruction_line_to_execute := access_next_instruction_line_to_execute;
                     end if;
                     
                 -- d_var s_var
                 -- d_var s_var )
-                elsif instruction(1 to len) = INSTR_VAR_POINTER_COPY or instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
+                elsif is_instruction(INSTR_VAR_POINTER_COPY, INSTR_VAR_POINTER_COPY_PAR_CLOSE) then
                     index_variable_value_ptr(var_list, par2_index, var_scope, stm_value_ptr, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: var not found"
@@ -798,13 +808,13 @@ begin
                     assert valid /= 0
                     report "var_pointer error: not a var name??"
                     severity failure;
-                    if instruction(1 to len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
+                    if is_instruction(INSTR_VAR_POINTER_COPY_PAR_CLOSE) then
                         instruction_line_to_execute := access_next_instruction_line_to_execute;
                     end if;
                              
                 -- add operand1_and_target operand2
                 -- add operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_ADD then
+                elsif is_instruction(INSTR_ADD) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " add error: not a valid variable??"
@@ -817,7 +827,7 @@ begin
 
                 -- sub operand1_and_target operand2
                 -- sub operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_SUB then
+                elsif is_instruction(INSTR_SUB) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " sub error: not a valid variable??"
@@ -830,7 +840,7 @@ begin
 
                 -- mul operand1_and_target operand2
                 -- mul operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_MUL then
+                elsif is_instruction(INSTR_MUL) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -843,7 +853,7 @@ begin
 
                 -- div operand1_and_target operand2
                 -- div operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_DIV then
+                elsif is_instruction(INSTR_DIV) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -856,7 +866,7 @@ begin
 
                 -- rem operand1_and_target operand2
                 -- rem operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_REM then
+                elsif is_instruction(INSTR_REM) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -869,7 +879,7 @@ begin
 
                 -- and operand1_and_target operand2
                 -- and operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_AND then
+                elsif is_instruction(INSTR_AND) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -882,7 +892,7 @@ begin
 
                 -- or operand1_and_target operand2
                 -- or operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_OR then
+                elsif is_instruction(INSTR_OR) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -895,7 +905,7 @@ begin
 
                 -- xor operand1_and_target operand2
                 -- xor operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_XOR then
+                elsif is_instruction(INSTR_XOR) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -908,7 +918,7 @@ begin
 
                 -- shl operand1_and_target operand2
                 -- shl operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_SHL then
+                elsif is_instruction(INSTR_SHL) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -921,7 +931,7 @@ begin
 
                 -- shr operand1_and_target operand2
                 -- shr operand1_and_target 0xF0
-                elsif instruction(1 to len) = INSTR_SHR then
+                elsif is_instruction(INSTR_SHR) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -933,7 +943,7 @@ begin
                     severity failure;
 
                 -- inv operand1_and_target
-                elsif instruction(1 to len) = INSTR_INV then
+                elsif is_instruction(INSTR_INV) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -945,7 +955,7 @@ begin
                     severity failure;
 
                 -- ld operand1_and_target
-                elsif instruction(1 to len) = INSTR_LD then
+                elsif is_instruction(INSTR_LD) then
                     index_variable(var_list, par1_index, var_scope, stm_value, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & ": not a valid variable??"
@@ -960,7 +970,7 @@ begin
                 -- array set an_array array_position a_varA
                 -- array set an_array 5 0x07
                 -- array set an_array 3 a_varA
-                elsif instruction(1 to len) = INSTR_ARRAY_SET then
+                elsif is_instruction(INSTR_ARRAY_SET) then
                     index_variable(var_list, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
@@ -971,7 +981,7 @@ begin
                     var_stm_array(to_integer(par2(30 downto 0))) := par3;
 
                 -- array get an_array array_position a_varB
-                elsif instruction(1 to len) = INSTR_ARRAY_GET then
+                elsif is_instruction(INSTR_ARRAY_GET) then
                     index_variable(var_list, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
@@ -986,7 +996,7 @@ begin
                     severity failure;
 
                 --  array size an_array array_size
-                elsif instruction(1 to len) = INSTR_ARRAY_SIZE then
+                elsif is_instruction(INSTR_ARRAY_SIZE) then
                     temp_int := 0;
                     index_variable(var_list, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
@@ -1000,7 +1010,7 @@ begin
 
                 -- array pointer an_array another_array
                 -- array pointer an_array another_array )
-                elsif instruction(1 to len) = INSTR_ARRAY_POINTER_COPY or instruction(1 to len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                elsif is_instruction(INSTR_ARRAY_POINTER_COPY, INSTR_ARRAY_POINTER_COPY_PAR_CLOSE) then
                     index_variable(var_list, par2_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
@@ -1009,7 +1019,7 @@ begin
                     assert valid /= 0
                     report "array_pointer error: not a array name??"
                     severity failure;
-                    if instruction(1 to len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                    if is_instruction(INSTR_ARRAY_POINTER_COPY_PAR_CLOSE) then
                         instruction_line_to_execute := access_next_instruction_line_to_execute;
                     end if;
                                      
@@ -1017,7 +1027,7 @@ begin
                 -- array verify a_var array_position 0x0002 0x00FF
                 -- array verify a_var 5 var_expected_value var_mask_value
                 -- array verify a_var 5 0x0002 0x00FF
-                elsif instruction(1 to len) = INSTR_ARRAY_VERIFY then
+                elsif is_instruction(INSTR_ARRAY_VERIFY) then
                     index_variable(var_list, par1_index, var_scope, var_stm_array, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: array not found"
@@ -1046,7 +1056,7 @@ begin
                     
                 -- label pointer copy a_label another_label
                 -- label pointer copy a_label another_label )
-                elsif instruction(1 to len) = INSTR_LABEL_POINTER_COPY or instruction(1 to len) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE then
+                elsif is_instruction(INSTR_LABEL_POINTER_COPY, INSTR_LABEL_POINTER_COPY_PAR_CLOSE) then
                     index_variable(var_list, par2_index, var_scope, var_stm_label, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: label not found"
@@ -1061,7 +1071,7 @@ begin
 
                 -- equ label1_equ_target label2
                 -- equ label1_equ_target label2 )
-                elsif instruction(1 to len) = INSTR_LABEL_EQU or instruction(1 to len) = INSTR_LABEL_EQU_PAR_CLOSE then                  
+                elsif is_instruction(INSTR_LABEL_EQU, INSTR_LABEL_EQU_PAR_CLOSE) then                  
                     update_variable(var_list, par1_index, par2, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ error: cannot update variable, it may be a constant ?"
@@ -1071,7 +1081,7 @@ begin
                     end if;
                     
                 -- file readable a_fileA target
-                elsif instruction(1 to len) = INSTR_FILE_READABLE then
+                elsif is_instruction(INSTR_FILE_READABLE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1087,7 +1097,7 @@ begin
                     severity failure;
 
                 -- file writeable a_fileA target
-                elsif instruction(1 to len) = INSTR_FILE_WRITABLE then
+                elsif is_instruction(INSTR_FILE_WRITABLE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1103,7 +1113,7 @@ begin
                     severity failure;
 
                 -- file appendable a_fileA target
-                elsif instruction(1 to len) = INSTR_FILE_APPENDABLE then
+                elsif is_instruction(INSTR_FILE_APPENDABLE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1119,7 +1129,7 @@ begin
                     severity failure;
 
                 -- file write a_fileA a_lines
-                elsif instruction(1 to len) = INSTR_FILE_WRITE then
+                elsif is_instruction(INSTR_FILE_WRITE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1137,7 +1147,7 @@ begin
                     severity failure;
 
                 -- file append a_fileB  a_lines
-                elsif instruction(1 to len) = INSTR_FILE_APPEND then
+                elsif is_instruction(INSTR_FILE_APPEND) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1156,7 +1166,7 @@ begin
 
                 -- file read a_fileA a_lines number_of_lines
                 -- file read a_fileA a_lines 256
-                elsif instruction(1 to len) = INSTR_FILE_READ then
+                elsif is_instruction(INSTR_FILE_READ) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1294,7 +1304,7 @@ begin
                     end if;
 
                 -- file read end a_fileA a_lines
-                elsif instruction(1 to len) = INSTR_FILE_READ_END then
+                elsif is_instruction(INSTR_FILE_READ_END) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1321,7 +1331,7 @@ begin
                     end if;
 
                 -- file read all a_fileA a_lines
-                elsif instruction(1 to len) = INSTR_FILE_READ_ALL then
+                elsif is_instruction(INSTR_FILE_READ_ALL) then
                     index_variable(var_list, par1_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: file object not found"
@@ -1340,7 +1350,7 @@ begin
 
                 --  file pointer copy a_file_target a_file_source
                 --  file pointer copy a_file_target a_file_source )
-                elsif instruction(1 to len) = INSTR_FILE_POINTER_COPY or instruction(1 to len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
+                elsif is_instruction(INSTR_FILE_POINTER_COPY, INSTR_FILE_POINTER_COPY_PAR_CLOSE) then
                     index_variable(var_list, par2_index, var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1355,7 +1365,7 @@ begin
                                       
                 -- lines get a_lines position an_array number_found
                 -- lines get a_lines 8 an_array number_found
-                elsif instruction(1 to len) = INSTR_LINES_GET_ARRAY then
+                elsif is_instruction(INSTR_LINES_GET_ARRAY) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1381,7 +1391,7 @@ begin
 
                 -- lines set a_lines position an_array
                 -- lines set a_lines 9 an_array
-                elsif instruction(1 to len) = INSTR_LINES_SET_ARRAY then
+                elsif is_instruction(INSTR_LINES_SET_ARRAY) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1400,7 +1410,7 @@ begin
                 -- lines set a_lines 7 "abc"
                 -- lines set a_lines position "abc{}" a_varB
                 -- lines set a_lines 7 "abc{}" a_varB
-                elsif instruction(1 to len) = INSTR_LINES_SET_MESSAGE then
+                elsif is_instruction(INSTR_LINES_SET_MESSAGE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1416,7 +1426,7 @@ begin
 
                 -- lines insert a_lines position an_array
                 -- lines insert a_lines 9 an_array
-                elsif (instruction(1 to len) = INSTR_LINES_INSERT_ARRAY) then
+                elsif is_instruction(INSTR_LINES_INSERT_ARRAY) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1435,7 +1445,7 @@ begin
                 -- lines insert a_lines 7 "abc"
                 -- lines insert a_lines position "abc{}" a_varB
                 -- lines insert a_lines 7 "abc{}" a_varB
-                elsif (instruction(1 to len) = INSTR_LINES_INSERT_MESSAGE) then
+                elsif is_instruction(INSTR_LINES_INSERT_MESSAGE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1450,7 +1460,7 @@ begin
                     severity failure;
 
                 -- lines append a_lines an_array
-                elsif instruction(1 to len) = INSTR_LINES_APPEND_ARRAY then
+                elsif is_instruction(INSTR_LINES_APPEND_ARRAY) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1466,7 +1476,7 @@ begin
 
                 -- lines append a_lines "abc"
                 -- lines append a_lines "abc{}" a_varB
-                elsif instruction(1 to len) = INSTR_LINES_APPEND_MESSAGE then
+                elsif is_instruction(INSTR_LINES_APPEND_MESSAGE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1481,7 +1491,7 @@ begin
 
                 -- lines delete a_lines position
                 -- lines delete a_lines 13
-                elsif instruction(1 to len) = INSTR_LINES_DELETE then
+                elsif is_instruction(INSTR_LINES_DELETE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1493,7 +1503,7 @@ begin
                     severity failure;
 
                 -- lines delete all a_lines
-                elsif instruction(1 to len) = INSTR_LINES_DELETE_ALL then
+                elsif is_instruction(INSTR_LINES_DELETE_ALL) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1507,7 +1517,7 @@ begin
                     end loop;
 
                 -- lines size a_lines read_size
-                elsif instruction(1 to len) = INSTR_LINES_SIZE then
+                elsif is_instruction(INSTR_LINES_SIZE) then
                     index_variable(var_list, par1_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report "line_size error: not a valid variable??"
@@ -1517,7 +1527,7 @@ begin
 
                 --  lines pointer copy a_lines_target a_lines_source
                 --  lines pointer copy a_lines_target a_lines_source 
-                elsif instruction(1 to len) = INSTR_LINES_POINTER_COPY or instruction(1 to len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE then
+                elsif is_instruction(INSTR_LINES_POINTER_COPY, INSTR_LINES_POINTER_COPY_PAR_CLOSE) then
                     index_variable(var_list, par2_index, var_scope, var_stm_lines, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & instruction(1 to len) & " error: lines object not found"
@@ -1534,7 +1544,7 @@ begin
                 -- if 0x09 = another_var
                 -- if a_varA = 0x09
                 -- if 0x09 = 0x09
-                elsif instruction(1 to len) = INSTR_IF then
+                elsif is_instruction(INSTR_IF) then
                     if_level := if_level + 1;
                     if_state(if_level) := false;
                     if trc_on(4) = '1' then
@@ -1613,7 +1623,7 @@ begin
                 -- 0x09 > another_var
                 -- a_varA > 0x09
                 -- elsif 0x0A > 0x09
-                elsif instruction(1 to len) = INSTR_ELSIF then
+                elsif is_instruction(INSTR_ELSIF) then
                     if trc_on(4) = '1' then
                         report instruction(1 to len) & ": instruction_line_to_execute: " & integer'image(instruction_line_to_execute) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
@@ -1719,7 +1729,7 @@ begin
                     end if;
 
                 -- else
-                elsif instruction(1 to len) = INSTR_ELSE then
+                elsif is_instruction(INSTR_ELSE) then
                     if trc_on(4) = '1' then
                         report instruction(1 to len) & ": instruction_line_to_execute: " & integer'image(instruction_line_to_execute) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  if_level is " & integer'image(if_level);
@@ -1764,7 +1774,7 @@ begin
                     end if;
 
                 -- end if
-                elsif instruction(1 to len) = INSTR_END_IF then
+                elsif is_instruction(INSTR_END_IF) then
                     if_level := if_level - 1;
                     if trc_on(4) = '1' then
                         report instruction(1 to len) & ": instruction_line_to_execute: " & integer'image(instruction_line_to_execute) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
@@ -1795,7 +1805,7 @@ begin
                     end if;
 
                 -- end loop
-                elsif instruction(1 to len) = INSTR_END_LOOP then
+                elsif is_instruction(INSTR_END_LOOP) then
                     act_loop_num := stack_loop_num(stack_ptr);
                     act_curr_loop_count := stack_curr_loop_count(stack_ptr)(act_loop_num);
                     act_curr_loop_count := act_curr_loop_count + 1;
@@ -1830,20 +1840,20 @@ begin
                     end if;
 
                 -- abort
-                elsif instruction(1 to len) = INSTR_ABORT then
+                elsif is_instruction(INSTR_ABORT) then
                     assert false
                     report "the test has aborted due to an error!!"
                     severity failure;
                     finish;
 
                 -- stop
-                elsif instruction(1 to len) = INSTR_STOP then
+                elsif is_instruction(INSTR_STOP) then
                     assert false
                     report "the test has been stopped for debugging by command !!"
                     severity failure;
                     
                 -- finish
-                elsif instruction(1 to len) = INSTR_FINISH then
+                elsif is_instruction(INSTR_FINISH) then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
                     expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_7(30 downto 0)));
                     print("Verify passes " & (integer'image(verify_passes_count)));
@@ -1895,7 +1905,7 @@ begin
                     finish;
                     
                 -- proc
-                elsif instruction(1 to len) = INSTR_PROC 
+                elsif is_instruction(INSTR_PROC)
                       or instruction(1 to len) = INSTR_PROC_PAR_OPEN
                       or instruction(1 to len) = INSTR_PROC_PAR_NOPAR_0
                       or instruction(1 to len) = INSTR_PROC_PAR_NOPAR_1 then
@@ -1904,7 +1914,7 @@ begin
                 -- end proc
                 -- end interrupt
                 -- return
-                elsif instruction(1 to len) = INSTR_RETURN or instruction(1 to len) = INSTR_END_PROC or instruction(1 to len) = INSTR_END_INTERRUPT then
+                elsif is_instruction(INSTR_RETURN, INSTR_END_PROC, INSTR_END_INTERRUPT) then
                     if trc_on(5) = '1' then
                         report instruction(1 to len) & ": instruction_line_to_execute: " & integer'image(instruction_line_to_execute) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report instruction(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
