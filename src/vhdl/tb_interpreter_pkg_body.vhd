@@ -55,6 +55,7 @@ package body tb_interpreter_pkg is
 
     procedure add_instruction(variable pass : in integer;
                               variable inst_list : inout stim_line_ptr;
+                              variable inst_pointers list : inout stim_line_ptr;
                               variable var_list : inout var_field_ptr;
                               variable scope : in text_field;
                               variable scope_left : in text_field;
@@ -818,11 +819,10 @@ package body tb_interpreter_pkg is
     
     procedure access_instruction_line_parameters( 
             variable var_list : in var_field_ptr;
-            variable file_list : in file_def_ptr;
-            variable fname : in text_line;
+            variable file_name : in text_line;
             variable file_line : in integer;
-            variable scope_p_others : in text_field;
-            variable scope_p1 : in text_field;              
+            variable scope_p1 : in text_field;     
+            variable scope_p_others : in text_field;         
             variable p1_text_field : in text_field;
             variable p2_text_field : in text_field;
             variable p3_text_field : in text_field;
@@ -850,7 +850,6 @@ package body tb_interpreter_pkg is
         variable instr_len : integer;
         variable instr_ptr : stim_line_ptr;
         variable valid : integer;
-        variable file_name : text_line;
         variable tmp_file_index : integer;
         variable tmp_file_def_ptr : file_def_ptr;
         variable tmp_label_ptr : text_field_ptr;

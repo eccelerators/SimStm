@@ -102,7 +102,7 @@ package tb_base_pkg is
         file_idx : integer;      
         next_rec : stim_line_ptr;
     end record;
-
+    
     -- define the instruction structure
     type inst_def;
     type inst_def_ptr is access inst_def;
