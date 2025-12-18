@@ -94,13 +94,20 @@ package tb_interpreter_pkg is
     --   based on the line number you pass to it, it returns the instruction with
     --   any variables substituted as integers.
 
-    procedure access_inst_sequ(variable inst_sequ : in stim_line_ptr;
+    procedure access_inst_sequ(variable mode_is_check : in boolean;
+                               variable inst_sequ : in stim_line_ptr;
                                variable var_list : in var_field_ptr;
                                variable file_list : in file_def_ptr;
-                               variable sequ_num : in integer;
-                               variable inst : out text_field;
-                               variable scope : out text_field;
-                               variable scope_left : out text_field;
+                               variable code_line_to_execute : in integer;
+                               variable next_alternate_code_line_to_execute : inout integer;
+                               variable instruction : out text_field;
+                               variable instruction_len : out integer;
+                               variable instruction_scope : out text_field;
+                               variable instruction_scope_left : out text_field;
+                               variable scope : in text_field;
+                               variable scope_left : in text_field;
+                               variable next_alternate_scope : inout text_field;
+                               variable next_alternate_scope_left : inout text_field;
                                variable p1_text_field : out text_field;
                                variable p2_text_field : out text_field;
                                variable p3_text_field : out text_field;
@@ -121,13 +128,18 @@ package tb_interpreter_pkg is
                                variable p6 : out unsigned;
                                variable txt : out stm_text_ptr;
                                variable txt_enclosing_quote : out character;
-                               variable inst_len : out integer;
                                variable fname : out text_line;
                                variable file_line : out integer;
                                variable last_num : inout integer;
                                variable last_ptr : inout stim_line_ptr;
-                               variable in_call_label_parameters : inout boolean;
-                               variable in_call_label_parameters_scope_left : inout text_field);
+                               variable in_proc_advanced_parameters : inout boolean;                               
+                               variable in_call_advanced_parameters : inout boolean;
+                               variable in_proc_advanced_label_parameters : inout boolean;
+                               variable in_call_advanced_label_parameters : inout boolean;
+                               variable in_call_advanced_label : inout boolean;
+                               variable called_proc : inout text_field;
+                               variable target_proc_after_par_bracket_code_line_to_execute : inout integer;
+                               variable target_call_code_line_to_execute : inout integer);
                                
     procedure read_include_file(variable pass : in integer;
                                 constant path_name : string;
@@ -153,11 +165,6 @@ package tb_interpreter_pkg is
                                     variable var_list : inout var_field_ptr;
                                     variable inst_sequ : inout stim_line_ptr;
                                     variable file_list : inout file_def_ptr;
-                                    constant stm_value_width : in integer);
-                                    
-    procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
-                             variable file_list : in file_def_ptr;
-                             variable var_list : in var_field_ptr;
-                             constant stm_value_width : in integer);
+                                    constant stm_value_width : in integer);                                
 
 end package;

@@ -183,7 +183,7 @@ package tb_interpreter_util_pkg is
                              variable stm_label : out text_field_ptr;
                              variable valid : out integer);
                              
-     procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
+    procedure index_and_reinit_variable(variable var_list : in var_field_ptr;
                              variable index : in integer;
                              variable var_scope : out text_field;
                              variable stm_label : out text_field_ptr;
@@ -206,50 +206,6 @@ package tb_interpreter_util_pkg is
                              variable var_scope : out text_field;
                              variable stm_lines : out t_stm_lines_ptr;
                              variable valid : out integer);
-
-
-    procedure print_file_def(file_list : inout file_def_ptr; index : in integer);
-
-    -- procedure to print instruction records to stdout  *for debug*
-    procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
-
-    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
-                                       variable scope : in text_field; 
-                                       variable ptr : in stm_text_ptr;
-                                       variable txt_enclosing_quote : in character;
-                                       variable stack_ptr : integer;
-                                       variable stack_called_files : stack_text_line_array;
-                                       variable stack_called_file_line_numbers : stack_numbers_array;
-                                       variable stack_called_labels : stack_text_field_array;
-                                       variable stm_text_substituded : out stm_text;
-                                       constant stm_value_width : in integer);
-
-    --  tokenize_line
-    --    this procedure takes a type text_line in and returns up to 6
-    --    tokens and the count in integer valid, as well if text string
-    --    is found the pointer to that is returned.
-    procedure tokenize_line(variable text_line : in text_line;
-                            variable otoken1 : out text_field;
-                            variable otoken2 : out text_field;
-                            variable otoken3 : out text_field;
-                            variable otoken4 : out text_field;
-                            variable otoken5 : out text_field;
-                            variable otoken6 : out text_field;
-                            variable otoken7 : out text_field;
-                            variable txt_ptr : out stm_text_ptr;
-                            variable txt_enclosing_quote : out character;
-                            variable ovalid : out integer);
-
-    --procedure print stim txt sub variables found
-    procedure txt_print_wvar(variable var_list : in var_field_ptr;
-                             variable scope : in text_field;
-                             variable ptr : in stm_text_ptr;
-                             variable txt_enclosing_quote : in character;
-                             variable stack_ptr : integer;
-                             variable stack_called_files : stack_text_line_array;
-                             variable stack_called_file_line_numbers : stack_numbers_array;
-                             variable stack_called_labels : stack_text_field_array;
-                             constant stm_value_width : in integer);
 
     --  update_variable
     --     inputs:
@@ -339,5 +295,48 @@ package tb_interpreter_util_pkg is
                               variable index : in integer;
                               variable stm_lines : in t_stm_lines_ptr;
                               variable valid : out integer);
+                              
+    procedure print_file_def(file_list : inout file_def_ptr; index : in integer);
+
+    -- procedure to print instruction records to stdout  *for debug*
+    procedure print_inst(variable inst_sequ : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
+
+    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+                                       variable scope : in text_field; 
+                                       variable ptr : in stm_text_ptr;
+                                       variable txt_enclosing_quote : in character;
+                                       variable stack_ptr : integer;
+                                       variable stack_called_files : stack_text_line_array;
+                                       variable stack_called_file_line_numbers : stack_numbers_array;
+                                       variable stack_called_procs : stack_text_field_array;
+                                       variable stm_text_substituded : out stm_text;
+                                       constant stm_value_width : in integer);
+
+    --  tokenize_line
+    --    this procedure takes a type text_line in and returns up to 6
+    --    tokens and the count in integer valid, as well if text string
+    --    is found the pointer to that is returned.
+    procedure tokenize_line(variable text_line : in text_line;
+                            variable otoken1 : out text_field;
+                            variable otoken2 : out text_field;
+                            variable otoken3 : out text_field;
+                            variable otoken4 : out text_field;
+                            variable otoken5 : out text_field;
+                            variable otoken6 : out text_field;
+                            variable otoken7 : out text_field;
+                            variable txt_ptr : out stm_text_ptr;
+                            variable txt_enclosing_quote : out character;
+                            variable ovalid : out integer);
+
+    --procedure print stim txt sub variables found
+    procedure txt_print_wvar(variable var_list : in var_field_ptr;
+                             variable scope : in text_field;
+                             variable ptr : in stm_text_ptr;
+                             variable txt_enclosing_quote : in character;
+                             variable stack_ptr : integer;
+                             variable stack_called_files : stack_text_line_array;
+                             variable stack_called_file_line_numbers : stack_numbers_array;
+                             variable stack_called_procs : stack_text_field_array;
+                             constant stm_value_width : in integer);
                               
 end package;

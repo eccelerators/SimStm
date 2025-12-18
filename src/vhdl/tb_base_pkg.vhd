@@ -154,7 +154,7 @@ package tb_base_pkg is
                             STM_LINES_TYPE,
                             STM_BUS_TYPE,
                             STM_SIGNAL_TYPE,
-                            STM_PROC_LABEL_TYPE,
+                            STM_PROC_TYPE,
                             STM_LABEL_TYPE,
                             NO_VAR_TYPE
                            );

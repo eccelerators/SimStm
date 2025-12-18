@@ -112,15 +112,15 @@ package body tb_interpreter_pkg is
         elsif inst(1 to l) = INSTR_SIGNAL then
             stm_var_type := STM_SIGNAL_TYPE;
         elsif inst(l) = ':' then
-            stm_var_type := STM_PROC_LABEL_TYPE;
+            stm_var_type := STM_PROC_TYPE;
         elsif inst(1 to l) = INSTR_PROC_PAR_OPEN then
-            stm_var_type := STM_PROC_LABEL_TYPE;
+            stm_var_type := STM_PROC_TYPE;
             is_new_proc_label := true;
         elsif inst(1 to l) = INSTR_PROC_PAR_NOPAR_0 then
-            stm_var_type := STM_PROC_LABEL_TYPE;
+            stm_var_type := STM_PROC_TYPE;
             is_new_proc_label := true;
         elsif inst(1 to l) = INSTR_PROC_PAR_NOPAR_1 then
-            stm_var_type := STM_PROC_LABEL_TYPE;
+            stm_var_type := STM_PROC_TYPE;
             is_new_proc_label := true;
         elsif inst(1 to l) = INSTR_LABEL then
             stm_var_type := STM_LABEL_TYPE;          
@@ -137,11 +137,11 @@ package body tb_interpreter_pkg is
             end if;       
         elsif pass = 1 then
             if stm_var_type /= NO_VAR_TYPE and stm_var_type /= STM_CONST_VALUE_TYPE then         
-                if stm_var_type /= STM_LABEL_TYPE and stm_var_type /= STM_PROC_LABEL_TYPE then      
+                if stm_var_type /= STM_PROC_TYPE then      
                     if fld_len(scope) = 0 then -- global variable
                         --  global variable, definition and declaration, no instruction, may use an already declared constant of pass 1
                         l := fld_len(p1);                      
-                        if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
+                        if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE or stm_var_type = STM_LABEL_TYPE then
                             add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
                             if debug then
                                 print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " global var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
@@ -173,7 +173,7 @@ package body tb_interpreter_pkg is
                 valid_instruction := 1; -- anything but a declartion, thus always an instruction
             else
                 if stm_var_type /= STM_CONST_VALUE_TYPE then -- constant constant definition and declaration already done in pass 1       
-                    if stm_var_type = STM_PROC_LABEL_TYPE then
+                    if stm_var_type = STM_PROC_TYPE then
                         -- a proc label
                         if is_new_proc_label then
                             -- a new proc label e.g., PROC A_PROCNAME, to be added as instruction
@@ -192,25 +192,13 @@ package body tb_interpreter_pkg is
                             if debug then
                                 print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " proc label label var : '" & inst & " seq " & integer'image(sequ_num) & " scope '" & scope  & "'");
                             end if;                                     
-                        end if;      
-                    elsif stm_var_type = STM_LABEL_TYPE then
-                        -- a label definition and declaration
-                        if fld_len(scope) /= 0 then 
-                            -- a local label definition and declaration to be added as instruction
-                            add_variable(var_list, nul_scope, p1, nul_source_label, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                            if debug then
-                                print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " label var : '" & p1 & " seq " & integer'image(sequ_num) & " scope '" & scope  & "'");
-                            end if;      
-                            valid_instruction := 1;
-                        else
-                            null; -- a global label definition and declaration no instruction, to be processed in pass 3
-                        end if;                                  
+                        end if;                                        
                     else
                         -- any other var definition and declartion
                         if fld_len(scope) /= 0 then
                             -- any other local var definition and declaration, to be added as instruction
                             l := fld_len(p1);                      
-                            if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE then
+                            if is_digit(p2(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE or stm_var_type = STM_LABEL_TYPE then
                                 add_variable(var_list, scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
                                 if debug then
                                     print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " local var '" & p1 & "' value '" & p2 & "' scope '" & scope  & "'");
@@ -239,18 +227,7 @@ package body tb_interpreter_pkg is
                         end if;                 
                     end if;
                 end if;
-            end if;  
-        elsif pass = 3 then
-            if stm_var_type = STM_LABEL_TYPE then
-                -- a label definition and declaration               
-                if fld_len(scope) = 0 then
-                    --  a global label definition and declaration, add the variable to the variable pool and initialize it, no instruction
-                    add_variable(var_list, nul_scope, p1, p2, sequ_num, line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                    if debug then
-                        print("pass " & integer'image(pass) & " add idx "& integer'image(assigned_index) & " global label var : '" & p1 & " seq " & integer'image(sequ_num) & " scope '" & scope  & "'");
-                    end if;                                                                    
-                end if;
-            end if;    
+            end if;     
         end if;
 
         if valid_instruction = 1 then
@@ -437,7 +414,7 @@ package body tb_interpreter_pkg is
             temp_var.var_stm_type := var_stm_type;
         end procedure;
 
-        procedure init_proc_label_var is
+        procedure init_proc_var is
         begin
             temp_var := new var_field;
             temp_var.var_name(1 to (length - 1)) := p1(1 to (length - 1));
@@ -485,8 +462,8 @@ package body tb_interpreter_pkg is
             elsif var_stm_type = STM_TEXT_TYPE then
                 init_stm_text_var;
                 current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_PROC_LABEL_TYPE then
-                init_proc_label_var;
+            elsif var_stm_type = STM_PROC_TYPE then
+                init_proc_var;
                 current_ptr.next_rec := temp_var;
             elsif var_stm_type = STM_LABEL_TYPE then
                 init_label_var;
@@ -503,8 +480,8 @@ package body tb_interpreter_pkg is
                 init_stm_array_var;
             elsif var_stm_type = STM_TEXT_TYPE then
                 init_stm_text_var;
-            elsif var_stm_type = STM_PROC_LABEL_TYPE then
-                init_proc_label_var;
+            elsif var_stm_type = STM_PROC_TYPE then
+                init_proc_var;
             elsif var_stm_type = STM_LABEL_TYPE then
                 init_label_var;
             else
@@ -515,46 +492,121 @@ package body tb_interpreter_pkg is
         assigned_index := index;
     end procedure;
     
+    procedure search_instruction_line_ptr( 
+            variable sequential_instruction_list : in stim_line_ptr;
+            variable search_for_instruction_line_number : in integer;
+            variable last_searched_instruction_line_number : inout integer;
+            variable last_searched_instruction_line_ptr : inout stim_line_ptr;
+            variable instruction_line_ptr : out stim_line_ptr
+        ) is                               
+        variable instr_ptr : stim_line_ptr;
+    begin                                   
+        -- get to the instruction indicated by the search_for_instruction_line_number
+        -- check to see if this number is before the last_searched_instruction_line_number
+        -- so search from start
+        if last_searched_instruction_line_number > search_for_instruction_line_number then
+            instr_ptr := sequential_instruction_list;
+            while instr_ptr.next_rec /= null loop
+                if instr_ptr.line_number = search_for_instruction_line_number then
+                    exit;
+                else
+                    instr_ptr := instr_ptr.next_rec;
+                end if;
+            end loop;
+        -- else is equal or greater, so search forward
+        else
+            instr_ptr := last_searched_instruction_line_ptr;
+            while instr_ptr.next_rec /= null loop
+                if instr_ptr.line_number = search_for_instruction_line_number then
+                    instruction_line_ptr := instr_ptr;
+                    exit;
+                else
+                    instr_ptr := instr_ptr.next_rec;
+                end if;
+            end loop;
+        end if;
+        -- update the last sequence number and record pointer
+        last_searched_instruction_line_number := search_for_instruction_line_number;
+        last_searched_instruction_line_ptr := instr_ptr;
+    end procedure;
 
-    procedure access_inst_sequ(variable inst_sequ : in stim_line_ptr;
+    procedure access_instruction_line(        
+            variable instruction_line_ptr : in stim_line_ptr;                                                                          
+            variable file_list : in file_def_ptr;                             
+            variable instruction : out text_field;
+            variable instruction_len : out integer;
+            variable p1_text_field : out text_field;
+            variable p2_text_field : out text_field;
+            variable p3_text_field : out text_field;
+            variable p4_text_field : out text_field;
+            variable p5_text_field : out text_field;
+            variable p6_text_field : out text_field;   
+            variable txt : out stm_text_ptr;
+            variable txt_enclosing_quote : out character;
+            variable file_name : out text_line;
+            variable file_line : out integer
+        ) is
+        variable tmp_file_index : integer;
+        variable tmp_file_def_ptr : file_def_ptr;
+    begin 
+        instruction := instruction_line_ptr.instruction;  
+        instruction_len := fld_len(instruction_line_ptr.instruction); 
+        p1_text_field := instruction_line_ptr.inst_field_1; 
+        p2_text_field := instruction_line_ptr.inst_field_2; 
+        p3_text_field := instruction_line_ptr.inst_field_3; 
+        p4_text_field := instruction_line_ptr.inst_field_4; 
+        p5_text_field := instruction_line_ptr.inst_field_5; 
+        p6_text_field := instruction_line_ptr.inst_field_6; 
+        file_line := instruction_line_ptr.file_line;
+        -- recover the file name this line came from
+        tmp_file_def_ptr := file_list;
+        tmp_file_index := instruction_line_ptr.file_idx;
+        while tmp_file_def_ptr.next_rec /= null loop
+            if tmp_file_def_ptr.rec_idx = tmp_file_index then
+                exit;
+            end if;
+            tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
+        end loop;
+        for i in 1 to file_name'high loop
+            file_name(i) := tmp_file_def_ptr.file_name(i);
+        end loop;                   
+    end procedure;
+    
+    
+    procedure access_inst_sequ(
+                               variable mode_is_check : in boolean;
+                               variable inst_sequ : in stim_line_ptr;
                                variable var_list : in var_field_ptr;
                                variable file_list : in file_def_ptr;
-                               variable sequ_num : in integer;
-                               variable inst : out text_field;
-                               variable scope : out text_field;
-                               variable scope_left : out text_field;
+                               variable program_line_number_counter : in integer;
+                               variable instruction : out text_field;
+                               variable instruction_len : out integer;
+                               variable instruction_scope : out text_field;
+                               variable instruction_scope_left : out text_field;
                                variable p1_text_field : out text_field;
                                variable p2_text_field : out text_field;
                                variable p3_text_field : out text_field;
                                variable p4_text_field : out text_field;
                                variable p5_text_field : out text_field;
                                variable p6_text_field : out text_field;   
-                               variable p1_index : out integer;
-                               variable p2_index : out integer;
-                               variable p3_index : out integer;
-                               variable p4_index : out integer;
-                               variable p5_index : out integer;
-                               variable p6_index : out integer;
-                               variable p1 : out unsigned;
-                               variable p2 : out unsigned;
-                               variable p3 : out unsigned;
-                               variable p4 : out unsigned;
-                               variable p5 : out unsigned;
-                               variable p6 : out unsigned;
                                variable txt : out stm_text_ptr;
                                variable txt_enclosing_quote : out character;
-                               variable inst_len : out integer;
                                variable fname : out text_line;
                                variable file_line : out integer;
-                               variable last_num : inout integer;
-                               variable last_ptr : inout stim_line_ptr;
-                               variable in_call_label_parameters : inout boolean;
-                               variable in_call_label_parameters_scope_left : inout text_field) is
+                               variable in_proc_advanced_parameters : inout boolean;                               
+                               variable in_call_advanced_parameters : inout boolean;
+                               variable in_proc_advanced_label_parameters : inout boolean;
+                               variable in_call_advanced_label_parameters : inout boolean;
+                               variable in_call_advanced_label : inout boolean;
+                               variable called_proc : inout text_field;
+                               variable target_proc_after_par_bracket_code_line_to_execute : inout integer;
+                               variable target_call_code_line_to_execute : inout integer                       
+                               ) is
 
-        variable temp_text_field : text_field;
-        variable instr_text_field : text_field;
+        variable instr : text_field;
         variable instr_scope : text_field;
         variable instr_scope_left : text_field;
+        variable instr_text_field : text_field;
         variable instr_len : integer;
         variable instr_ptr : stim_line_ptr;
         variable valid : integer;
@@ -562,7 +614,7 @@ package body tb_interpreter_pkg is
         variable tmp_file_index : integer;
         variable tmp_file_def_ptr : file_def_ptr;
         variable tmp_label_ptr : text_field_ptr;
-        variable tmp_label : text_field;
+        variable tmp_proc: text_field;
 
     begin 
 
@@ -577,14 +629,15 @@ package body tb_interpreter_pkg is
         p3 := to_unsigned(0, p1'length) - 1;
         p4 := to_unsigned(0, p1'length) - 1;
         p5 := to_unsigned(0, p1'length) - 1;
-        p6 := to_unsigned(0, p1'length) - 1;       
-        -- get to the instruction indicated by sequ_num
+        p6 := to_unsigned(0, p1'length) - 1;   
+                
+        -- get to the instruction indicated by code_line_to_execute
         -- check to see if this sequence is before the last
-        --    so search from start
-        if last_num > sequ_num then
+        -- so search from start
+        if last_searched_instruction_line_number > program_line_number_pointer then
             instr_ptr := inst_sequ;
             while instr_ptr.next_rec /= null loop
-                if instr_ptr.line_number = sequ_num then
+                if instr_ptr.line_number = program_line_number_pointer then
                     exit;
                 else
                     instr_ptr := instr_ptr.next_rec;
@@ -592,9 +645,9 @@ package body tb_interpreter_pkg is
             end loop;
         -- else is equal or greater, so search forward
         else
-            instr_ptr := last_ptr;
+            instr_ptr := last_searched_instruction_line_ptr;
             while instr_ptr.next_rec /= null loop
-                if instr_ptr.line_number = sequ_num then
+                if instr_ptr.line_number = program_line_number_pointer then
                     exit;
                 else
                     instr_ptr := instr_ptr.next_rec;
@@ -602,28 +655,23 @@ package body tb_interpreter_pkg is
             end loop;
         end if;
         -- update the last sequence number and record pointer
-        last_num := sequ_num;
-        last_ptr := instr_ptr;
+        last_searched_instruction_line_number := program_line_number_pointer;
+        last_searched_instruction_line_ptr := instr_ptr;
         
-        instr_text_field := instr_ptr.instruction;
+        instr := instr_ptr.instruction;
+        instruction := instr;    
         instr_scope := instr_ptr.inst_scope;
-        if in_call_label_parameters then
-            instr_scope_left := in_call_label_parameters_scope_left;
-        else
-            instr_scope_left := instr_ptr.inst_scope_left;
-        end if;
-        instr_len := fld_len(instr_text_field);
-        
+        instruction_scope := instr_scope;
+        instr_scope_left := instr_ptr.inst_scope_left;
+        instruction_scope_left := instr_scope_left;
+        instr_len := fld_len(instr);
+        instruction_len := instr_len;  
         p1_text_field := instr_ptr.inst_field_1; 
         p2_text_field := instr_ptr.inst_field_2; 
         p3_text_field := instr_ptr.inst_field_3; 
         p4_text_field := instr_ptr.inst_field_4; 
         p5_text_field := instr_ptr.inst_field_5; 
         p6_text_field := instr_ptr.inst_field_6; 
-        scope := instr_scope;
-        scope_left := instr_scope_left;
-        inst := instr_text_field;
-        inst_len := instr_len;
         file_line := instr_ptr.file_line;
         -- recover the file name this line came from
         tmp_file_def_ptr := file_list;
@@ -638,81 +686,127 @@ package body tb_interpreter_pkg is
             file_name(i) := tmp_file_def_ptr.file_name(i);
             fname(i) := tmp_file_def_ptr.file_name(i);
         end loop;
-
-        if instr_text_field(1 to instr_len) = INSTR_CALL_LABEL_PAR_OPEN then 
-            access_variable_label_ptr (var_list, instr_scope, p1_text_field, p1_index, tmp_label_ptr, valid);
+        
+        if instr(1 to instr_len) = INSTR_CALL_LABEL_PAR_OPEN 
+           or instr(1 to instr_len) = INSTR_CALL_LABEL_PAR_NOPAR_0 
+           or instr(1 to instr_len) = INSTR_CALL_LABEL_PAR_NOPAR_1 then 
+            access_variable_label_ptr(var_list, instr_scope, p1_text_field, p1_index, tmp_label_ptr, valid);
             assert valid /= 0
-            report lf & "error: called label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+            report lf & "error: call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
             severity failure;       
-            text_field_ptr_to_text_field(tmp_label_ptr, tmp_label);
-            in_call_label_parameters := true;
-            in_call_label_parameters_scope_left := tmp_label;
-        elsif instr_text_field(1 to instr_len) = INSTR_PAR_CLOSE then
-            in_call_label_parameters := false;
+            text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);          
+            in_proc_advanced_label_parameters := true;
+            called_proc := tmp_proc; 
+            access_variable(var_list, instr_scope, tmp_proc, p1_index, p1, valid);
+            assert valid /= 0
+            report lf & "error: call label proc variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+            severity failure;
+        elsif instruction(1 to instr_len) = INSTR_CALL_PAR_OPEN then                    
+            in_proc_advanced_parameters := true;
+            target_call_code_line_to_execute := code_line_to_execute;
+            access_variable(var_list, instr_scope_left, p1_text_field, p1_index, p1, valid);
+            assert valid /= 0
+            report lf & "error: call proc() variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+            severity failure;
+            next_alternate_code_line_to_execute := to_integer(p1(30 downto 0)) - 1;
+            variable next_alternate_scope := scope inout text_field;
+            variable next_alternate_scope_left : inout text_field;
+            called_proc := instr_ptr.inst_field_1; 
+        elsif instruction(1 to instr_len) = INSTR_CALL 
+              or instr(1 to instr_len) = INSTR_CALL_PAR_NOPAR_0 
+              or instr(1 to instr_len) = INSTR_CALL_PAR_NOPAR_1 then 
+              access_variable(var_list, instr_scope_left, p1_text_field, p1_index, p1, valid);
+              assert valid /= 0
+              report lf & "error: call proc: variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+              severity failure;
+              next_alternate_code_line_to_execute := to_integer(p1(30 downto 0)) - 1;                     
+              called_proc := instr_ptr.inst_field_1;                                    
+        elsif instr_text_field(1 to instr_len) = INSTR_PAR_CLOSE 
+              or instr(1 to instr_len) = INSTR_VAR_POINTER_COPY_PAR_CLOSE 
+              or instr(1 to instr_len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_LABEL_EQU_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
+              or instr(1 to instr_len) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
+            if in_proc_advanced_parameters then
+                target_proc_after_par_bracket_code_line_to_execute := code_line_to_execute;
+                next_alternate_code_line_to_execute := target_call_code_line_to_execute;  
+                in_proc_advanced_parameters := false;  
+                in_call_advanced_parameters := true;
+            elsif in_proc_advanced_label_parameters then
+                target_proc_after_par_bracket_code_line_to_execute := code_line_to_execute;
+                next_alternate_code_line_to_execute := target_call_code_line_to_execute;  
+                in_proc_advanced_label_parameters := false;  
+                in_call_advanced_label_parameters := true; 
+            elsif in_call_advanced_parameters then  
+                next_alternate_code_line_to_execute := target_proc_after_par_bracket_code_line_to_execute;
+                in_call_advanced_parameters := false;
+                in_call_advanced_label := true;
+            elsif in_call_advanced_label_parameters then  
+                next_alternate_code_line_to_execute := target_proc_after_par_bracket_code_line_to_execute;
+                in_call_advanced_label_parameters := false;
+                in_call_advanced_label := true;
+            end if;
         else       
             txt := instr_ptr.txt;
-            txt_enclosing_quote := instr_ptr.txt_enclosing_quote;
-            temp_text_field := instr_ptr.inst_field_1;        
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p1 := stim_to_stm_value(temp_text_field, file_name, file_line, p1'length);
+            txt_enclosing_quote := instr_ptr.txt_enclosing_quote;        
+            if p1_text_field(1) /= nul then
+                if is_digit(p1_text_field(1)) then
+                    p1 := stim_to_stm_value(p1_text_field, file_name, file_line, p1'length);
                 else
-                    access_variable(var_list, instr_scope_left, temp_text_field, p1_index, p1, valid);
+                    access_variable(var_list, scope_left, p1_text_field, p1_index, p1, valid);
                     assert valid /= 0
                     report lf & "error: first variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            temp_text_field := instr_ptr.inst_field_2;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p2 := stim_to_stm_value(temp_text_field, file_name, file_line, p2'length);
+            if p2_text_field(1) /= nul then
+                if is_digit(p2_text_field(1)) then
+                    p2 := stim_to_stm_value(p2_text_field, file_name, file_line, p2'length);
                 else
-                    access_variable(var_list, instr_scope, temp_text_field, p2_index, p2, valid);
+                    access_variable(var_list, scope, p2_text_field, p2_index, p2, valid);
                     assert valid /= 0
                     report lf & "error: second variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            temp_text_field := instr_ptr.inst_field_3;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p3 := stim_to_stm_value(temp_text_field, file_name, file_line, p3'length);
+            if p3_text_field(1) /= nul then
+                if is_digit(p3_text_field(1)) then
+                    p3 := stim_to_stm_value(p3_text_field, file_name, file_line, p3'length);
                 else
-                    access_variable(var_list, instr_scope, temp_text_field, p3_index, p3, valid);
+                    access_variable(var_list, scope, p3_text_field, p3_index, p3, valid);
                     assert valid /= 0
                     report lf & "error: third variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            temp_text_field := instr_ptr.inst_field_4;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p4 := stim_to_stm_value(temp_text_field, file_name, file_line, p4'length);
+            if p4_text_field(1) /= nul then
+                if is_digit(p4_text_field(1)) then
+                    p4 := stim_to_stm_value(p4_text_field, file_name, file_line, p4'length);
                 else
-                    access_variable(var_list, instr_scope, temp_text_field, p4_index, p4, valid);
+                    access_variable(var_list, scope, p4_text_field, p4_index, p4, valid);
                     assert valid /= 0
                     report lf & "error: forth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            temp_text_field := instr_ptr.inst_field_5;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p5 := stim_to_stm_value(temp_text_field, file_name, file_line, p5'length);
+            if p5_text_field(1) /= nul then
+                if is_digit(p5_text_field(1)) then
+                    p5 := stim_to_stm_value(p5_text_field, file_name, file_line, p5'length);
                 else
-                    access_variable(var_list, instr_scope, temp_text_field, p5_index, p5, valid);
+                    access_variable(var_list, scope, p5_text_field, p5_index, p5, valid);
                     assert valid /= 0
                     report lf & "error: fifth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
             end if;
-            temp_text_field := instr_ptr.inst_field_6;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    p6 := stim_to_stm_value(temp_text_field, file_name, file_line, p6'length);
+            if p6_text_field(1) /= nul then
+                if is_digit(p6_text_field(1)) then
+                    p6 := stim_to_stm_value(p6_text_field, file_name, file_line, p6'length);
                 else
-                    access_variable(var_list, instr_scope, temp_text_field, p6_index, p6, valid);
+                    access_variable(var_list, scope, p6_text_field, p6_index, p6, valid);
                     assert valid /= 0
                     report lf & "error: sixth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
@@ -721,6 +815,112 @@ package body tb_interpreter_pkg is
         end if;
                
     end procedure;
+    
+    procedure access_instruction_line_parameters( 
+            variable var_list : in var_field_ptr;
+            variable file_list : in file_def_ptr;
+            variable fname : in text_line;
+            variable file_line : in integer;
+            variable scope_p_others : in text_field;
+            variable scope_p1 : in text_field;              
+            variable p1_text_field : in text_field;
+            variable p2_text_field : in text_field;
+            variable p3_text_field : in text_field;
+            variable p4_text_field : in text_field;
+            variable p5_text_field : in text_field;
+            variable p6_text_field : in text_field;
+            variable p1_index : out integer;
+            variable p2_index : out integer;
+            variable p3_index : out integer;
+            variable p4_index : out integer;
+            variable p5_index : out integer;
+            variable p6_index : out integer;
+            variable p1_value : out unsigned;
+            variable p2_value : out unsigned;
+            variable p3_value : out unsigned;
+            variable p4_value : out unsigned;
+            variable p5_value : out unsigned;
+            variable p6_value : out unsigned
+        ) is
+
+        variable instr : text_field;
+        variable instr_scope : text_field;
+        variable instr_scope_left : text_field;
+        variable instr_text_field : text_field;
+        variable instr_len : integer;
+        variable instr_ptr : stim_line_ptr;
+        variable valid : integer;
+        variable file_name : text_line;
+        variable tmp_file_index : integer;
+        variable tmp_file_def_ptr : file_def_ptr;
+        variable tmp_label_ptr : text_field_ptr;
+        variable tmp_proc: text_field;
+
+    begin 
+             
+        if p1_text_field(1) /= nul then
+            if is_digit(p1_text_field(1)) then
+                p1 := stim_to_stm_value(p1_text_field, file_name, file_line, p1'length);
+            else
+                access_variable(var_list, scope_p1, p1_text_field, p1_index, p1, valid);
+                assert valid /= 0
+                report lf & "error: first variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+        if p2_text_field(1) /= nul then
+            if is_digit(p2_text_field(1)) then
+                p2 := stim_to_stm_value(p2_text_field, file_name, file_line, p2'length);
+            else
+                access_variable(var_list, scope_p_others, p2_text_field, p2_index, p2, valid);
+                assert valid /= 0
+                report lf & "error: second variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+        if p3_text_field(1) /= nul then
+            if is_digit(p3_text_field(1)) then
+                p3 := stim_to_stm_value(p3_text_field, file_name, file_line, p3'length);
+            else
+                access_variable(var_list, scope_p_others, p3_text_field, p3_index, p3, valid);
+                assert valid /= 0
+                report lf & "error: third variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+        if p4_text_field(1) /= nul then
+            if is_digit(p4_text_field(1)) then
+                p4 := stim_to_stm_value(p4_text_field, file_name, file_line, p4'length);
+            else
+                access_variable(var_list, scope_p_others, p4_text_field, p4_index, p4, valid);
+                assert valid /= 0
+                report lf & "error: forth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+        if p5_text_field(1) /= nul then
+            if is_digit(p5_text_field(1)) then
+                p5 := stim_to_stm_value(p5_text_field, file_name, file_line, p5'length);
+            else
+                access_variable(var_list, scope_p_others, p5_text_field, p5_index, p5, valid);
+                assert valid /= 0
+                report lf & "error: fifth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+        if p6_text_field(1) /= nul then
+            if is_digit(p6_text_field(1)) then
+                p6 := stim_to_stm_value(p6_text_field, file_name, file_line, p6'length);
+            else
+                access_variable(var_list, scope_p_others, p6_text_field, p6_index, p6, valid);
+                assert valid /= 0
+                report lf & "error: sixth variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
+                severity failure;
+            end if;
+        end if;
+               
+    end procedure;
+    
     
     procedure read_include_file(variable pass : in integer;
                                 constant path_name : string;
@@ -1035,101 +1235,6 @@ package body tb_interpreter_pkg is
         var_list := v_var_prt;
         inst_sequ := v_sequ_ptr;
         file_list := v_tmp_fn;
-        --  now that all the stimulus is loaded, test for invalid variables
-        if pass = 5 then
-            test_inst_sequ(inst_sequ, v_tmp_fn, var_list, stm_value_width);
-        end if;
     end procedure;
     
-    procedure test_inst_sequ(variable inst_sequ : in stim_line_ptr;
-                             variable file_list : in file_def_ptr;
-                             variable var_list : in var_field_ptr;
-                             constant stm_value_width : in integer) is
-        variable temp_text_field : text_field;
-        variable instr_ptr : stim_line_ptr;
-        variable v_p : unsigned(stm_value_width - 1 downto 0);
-        variable v_p_index : integer;
-        variable valid : integer;
-        variable file_line : integer; -- value of the file_line
-        variable file_name : text_line;
-        variable tmp_file_list : file_def_ptr := file_list;
-        
-    begin
-        instr_ptr := inst_sequ;
-        -- go through all the instructions
-        -- dump_variables(var_list, stm_value_width); --TODO: remove
-        -- dump_inst_sequ(inst_sequ, tmp_file_list); --TODO: remove
-        while instr_ptr.next_rec /= null loop
-            file_line := instr_ptr.file_line;
-            get_instruction_file_name(tmp_file_list, instr_ptr.file_idx, file_name);
-            temp_text_field := instr_ptr.inst_field_1;                    
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope_left, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: first variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            temp_text_field := instr_ptr.inst_field_2;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: second variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            temp_text_field := instr_ptr.inst_field_3;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: third variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            temp_text_field := instr_ptr.inst_field_4;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: forth variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            temp_text_field := instr_ptr.inst_field_5;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: fifth variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            temp_text_field := instr_ptr.inst_field_6;
-            if temp_text_field(1) /= nul then
-                if is_digit(temp_text_field(1)) then
-                    null;
-                else
-                    access_variable(var_list, instr_ptr.inst_scope, temp_text_field, v_p_index, v_p, valid);
-                    assert valid /= 0
-                    report lf & "error: sixth variable " & txt_field_to_string(temp_text_field) & " in scope " & txt_field_to_string(instr_ptr.inst_scope) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
-                    severity failure;
-                end if;
-            end if;
-            instr_ptr := instr_ptr.next_rec;
-        end loop;
-    end procedure;
-
 end package body;
