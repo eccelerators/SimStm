@@ -48,7 +48,7 @@ use std.textio.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 
-package tb_interpreter_basic_pkg is
+package tb_interpreter_pkg is
 
     procedure access_inst_sequ(variable mode_is_check : in boolean;
                                variable inst_sequ : in stim_line_ptr;

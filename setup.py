@@ -72,13 +72,15 @@ static_setup_data = {
         "SimStm/src/vhdl", [
             {"file":"src/vhdl/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070"},
             {"file":"src/vhdl/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
-            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00190"},
+            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00200"},
             {"file":"src/vhdl/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050"},
             {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00181"},
-            {"file":"src/vhdl/tb_interpreter_basic_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
+            {"file":"src/vhdl/tb_interpreter_basic_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00191"},
+            {"file":"src/vhdl/tb_interpreter_basic_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00190"},
             {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
             {"file":"src/vhdl/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"},
             {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"},
+            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
             {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
             {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
             {"file":"src/vhdl/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
@@ -93,7 +95,7 @@ static_setup_data = {
             {"file":"tb/hdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAvalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/Ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00200", "ghdl_options":["-frelaxed"]},
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00210", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamWishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00010", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAxi4Lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00020", "ghdl_options":["-frelaxed"]}
         ])

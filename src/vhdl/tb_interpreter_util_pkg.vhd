@@ -50,6 +50,41 @@ use work.tb_instructions_pkg.all;
 
 package tb_interpreter_util_pkg is
 
+    procedure file_read_line(file file_name : text;
+                             variable file_line : out text_line);
+                             
+    --  tokenize_line
+    --    this procedure takes a type text_line in and returns up to 6
+    --    tokens and the count in integer valid, as well if text string
+    --    is found the pointer to that is returned.
+    procedure tokenize_line(variable itext_line : in text_line;
+                            variable otokens : out token_text_field_array;
+                            variable txt_ptr : out stm_text_ptr;
+                            variable txt_enclosing_quote : out character;
+                            variable ovalid : out integer);
+                            
+    --procedure print stim txt sub variables found
+    procedure txt_print_wvar(variable var_list : in var_field_ptr;
+                             variable scope : in text_field;
+                             variable ptr : in stm_text_ptr;
+                             variable txt_enclosing_quote : in character;
+                             variable stack_ptr : integer;
+                             variable stack_called_files : stack_text_line_array;
+                             variable stack_called_file_line_numbers : stack_numbers_array;
+                             variable stack_called_procs : stack_text_field_array;
+                             constant stm_value_width : in integer);
+                             
+    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
+                                       variable scope : in text_field; 
+                                       variable ptr : in stm_text_ptr;
+                                       variable txt_enclosing_quote : in character;
+                                       variable stack_ptr : integer;
+                                       variable stack_called_files : stack_text_line_array;
+                                       variable stack_called_file_line_numbers : stack_numbers_array;
+                                       variable stack_called_procs : stack_text_field_array;
+                                       variable stm_text_substituded : out stm_text;
+                                       constant stm_value_width : in integer);
+
     --  access_variable
     --     inputs:
     --               text field containing variable
@@ -86,28 +121,6 @@ package tb_interpreter_util_pkg is
                               variable var_index : out integer;
                               variable var_label_ptr : out text_field_ptr;
                               variable valid : out integer);
-
-    -- dump_inst_list
-    --  this procedure dumps to the simulation window the current instruction
-    --  list.  the whole thing will be dumped, which could be big.
-    --   ** intended for testbench development debug**
-    procedure dump_inst_list(variable inst_ptr : in stim_line_ptr; file_list : inout file_def_ptr);
-
-    -- dump all variables
-    procedure dump_variables(variable var_list : in var_field_ptr;
-                             constant stm_value_width : in integer);
-                             
-    procedure dump_variable(variable var_list : in var_field_ptr;
-                             variable index : in integer;
-                             constant stm_value_width : in integer);
-
-    procedure dump_file_defs(file_list : inout file_def_ptr);
-
-    procedure dump_var_field(variable ptr : var_field_ptr;
-                             constant stm_value_width : in integer);
-
-    procedure file_read_line(file file_name : text;
-                             variable file_line : out text_line);
 
     --  index_variable
     --     inputs:
@@ -298,45 +311,36 @@ package tb_interpreter_util_pkg is
                               
     procedure print_file_def(file_list : inout file_def_ptr; index : in integer);
 
-    -- procedure to print instruction records to stdout  *for debug*
-    procedure print_inst(variable inst_list_element : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr);
+    -- procedure to print instruction element number to stdout  *for debug*
+    procedure print_inst_element_number(
+        variable inst_list : in stim_line_ptr; 
+        element_number : in integer; 
+        file_list : inout file_def_ptr);
 
-    procedure stm_text_substitude_wvar(variable var_list : in var_field_ptr;
-                                       variable scope : in text_field; 
-                                       variable ptr : in stm_text_ptr;
-                                       variable txt_enclosing_quote : in character;
-                                       variable stack_ptr : integer;
-                                       variable stack_called_files : stack_text_line_array;
-                                       variable stack_called_file_line_numbers : stack_numbers_array;
-                                       variable stack_called_procs : stack_text_field_array;
-                                       variable stm_text_substituded : out stm_text;
-                                       constant stm_value_width : in integer);
+    -- procedure to print instruction pointer to stdout  *for debug*        
+    procedure print_inst_ptr(
+        variable inst_ptr : in stim_line_ptr; 
+        file_list : inout file_def_ptr);
 
-    --  tokenize_line
-    --    this procedure takes a type text_line in and returns up to 6
-    --    tokens and the count in integer valid, as well if text string
-    --    is found the pointer to that is returned.
-    procedure tokenize_line(variable text_line : in text_line;
-                            variable otoken1 : out text_field;
-                            variable otoken2 : out text_field;
-                            variable otoken3 : out text_field;
-                            variable otoken4 : out text_field;
-                            variable otoken5 : out text_field;
-                            variable otoken6 : out text_field;
-                            variable otoken7 : out text_field;
-                            variable txt_ptr : out stm_text_ptr;
-                            variable txt_enclosing_quote : out character;
-                            variable ovalid : out integer);
+    -- dump_inst_list
+    --  this procedure dumps to the simulation window the current instruction
+    --  list.  the whole thing will be dumped, which could be big.
+    --   ** intended for testbench development debug**
+    procedure dump_inst_list(
+        variable inst_list : in stim_line_ptr; 
+        file_list : inout file_def_ptr);
 
-    --procedure print stim txt sub variables found
-    procedure txt_print_wvar(variable var_list : in var_field_ptr;
-                             variable scope : in text_field;
-                             variable ptr : in stm_text_ptr;
-                             variable txt_enclosing_quote : in character;
-                             variable stack_ptr : integer;
-                             variable stack_called_files : stack_text_line_array;
-                             variable stack_called_file_line_numbers : stack_numbers_array;
-                             variable stack_called_procs : stack_text_field_array;
+    -- dump all variables
+    procedure dump_variables(variable var_list : in var_field_ptr;
+                             constant stm_value_width : in integer);
+                             
+    procedure dump_variable(variable var_list : in var_field_ptr;
+                             variable index : in integer;
+                             constant stm_value_width : in integer);
+
+    procedure dump_file_defs(file_list : inout file_def_ptr);
+
+    procedure dump_var_field(variable ptr : var_field_ptr;
                              constant stm_value_width : in integer);
                               
 end package;

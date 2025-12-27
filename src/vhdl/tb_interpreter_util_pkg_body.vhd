@@ -1313,12 +1313,16 @@ package body tb_interpreter_util_pkg is
         print(".... name: " & tmp_file_def_ptr.file_name);
     end procedure;
     
-    procedure print_inst_element_number(variable inst_list : in stim_line_ptr; v_line : in integer; file_list : inout file_def_ptr) is
+    procedure print_inst_element_number(
+        variable inst_list : in stim_line_ptr; 
+        element_number : in integer; 
+        file_list : inout file_def_ptr
+    ) is
         variable inst_ptr : stim_line_ptr;
     begin
         inst_ptr := inst_list;
         while inst_ptr.next_rec /= null loop
-            if inst_ptr.line_number = v_line then
+            if inst_ptr.element_number = element_number then
                 print_inst_ptr(inst_ptr, file_list);
                 exit;
             else
@@ -1327,32 +1331,63 @@ package body tb_interpreter_util_pkg is
         end loop;
     end procedure;
     
-    procedure print_inst_ptr(variable inst_ptr : in stim_line_ptr; file_list : inout file_def_ptr) is
+    procedure print_inst_ptr(
+        variable inst_ptr : in stim_line_ptr; 
+        file_list : inout file_def_ptr
+    ) is
         variable tmp_txt : stm_text;
         variable fn : text_line;
+        variable pl : integer;
     begin
         print(".... -----------------------------------------------------------------");
         print(".... instruction is " & inst_ptr.inst);
-        print(".... internal list element number: " & to_str(inst_ptr.line_number));
+        print(".... internal list element number: " & to_str(inst_ptr.element_number));
         print(".... instruction file linenumber: " & to_str(inst_ptr.file_line));
         print(".... instruction file idx: " & to_str(inst_ptr.file_idx));
         get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
         for i in 1 to 6 loop
-            print(".... par" & to_str(var_index(i)) & " text: " & inst_ptr.inst_parameters(i));
-            if var_index(i) >= 0 then
-                print(".... index a proc var with var list element number: " & to_str(var_index(1)));
-                dump_variable(var_list, var_index, machine_value_width);
-            else
-                print(".... par" & to_str(var_index(i)) & " value 0x: " & to_str_hex(par_values(1)));
-                print(".... par" & to_str(var_index(i)) & " value : " & to_str(par_values(1)));
+            pl := fld_len(inst_ptr.parameters(i));
+            if pl > 0 then
+                print(".... par " & to_str(i) & " text" & inst_ptr.parameters(i)(1 to pl));
             end if; 
         end loop;
         txt_to_string(inst_ptr.txt, tmp_txt);
         print(".... text: " & tmp_txt);
     end procedure;
     
-    procedure dump_inst_list(variable inst_list : in stim_line_ptr; file_list : inout file_def_ptr) is
+--    procedure print_access_inst(
+--        variable inst_ptr : in stim_line_ptr; 
+--        file_list : inout file_def_ptr
+--    ) is
+--        variable tmp_txt : stm_text;
+--        variable fn : text_line;
+--    begin
+--        print(".... -----------------------------------------------------------------");
+--        print(".... instruction is " & inst_ptr.inst);
+--        print(".... internal list element number: " & to_str(inst_ptr.element_number));
+--        print(".... instruction file linenumber: " & to_str(inst_ptr.file_line));
+--        print(".... instruction file idx: " & to_str(inst_ptr.file_idx));
+--        get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
+--        print(".... instruction file name: " & fn);
+--        for i in 1 to 6 loop
+--            print(".... par" & to_str(inst_ptr.parameters(i).var_index) & " text: " & inst_ptr.inst_parameters(i));
+--            if inst_ptr.parameters(i).var_index >= 0 then
+--                print(".... index a proc var with var list element number: " & to_str(var_index(1)));
+--                dump_variable(var_list, inst_ptr.parameters(i).var_index, machine_value_width);
+--            else
+--                print(".... par" & to_str(var_index(i)) & " value 0x: " & to_str_hex(par_values(1)));
+--                print(".... par" & to_str(var_index(i)) & " value : " & to_str(par_values(1)));
+--            end if; 
+--        end loop;
+--        txt_to_string(inst_ptr.txt, tmp_txt);
+--        print(".... text: " & tmp_txt);
+--    end procedure;
+    
+    procedure dump_inst_list(
+        variable inst_list : in stim_line_ptr; 
+        file_list : inout file_def_ptr
+    ) is
         variable inst_ptr : stim_line_ptr;
     begin
         inst_ptr := inst_list;
