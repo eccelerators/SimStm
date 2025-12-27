@@ -151,7 +151,6 @@ begin
         variable last_searched_instruction_line_number : integer;
         variable last_searched_instruction_line_ptr : stim_line_ptr;
         
-        variable mode_is_check : boolean;
         variable instruction : text_field; -- instruction field
         variable scope : text_field;
         variable scope_left : text_field;
@@ -407,44 +406,31 @@ begin
         severity failure;
         file_close(stimulus);
 
-        -- read, test, and load the stimulus file
-        print("Parsing constants pass 0");
+        -- read and test the stimulus files
+        print("Pass 0, parsing constants");
         pass := 0;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, var_list, inst_list, file_list, machine_value_width);
-        -- dump_variables(var_list, machine_value_width);
-        
-        print("Parsing variables pass 1");
+        print("Pass 1, parsing variables");
         pass := 1;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, var_list, inst_list, file_list, machine_value_width);
-        -- dump_variables(var_list, machine_value_width);
-        
-        print("Parsing instructions pass 2");
+        print("Pass 2, parsing instructions");
         pass := 2;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, var_list, inst_list, file_list, machine_value_width);
-        
-        -- dump_variables(var_list, machine_value_width);
         print("Parsing .stm files done");
-
-        -- initialize        
-        scope := nul_scope;
-        scope_left := nul_scope;
-        in_proc_advanced_parameters := false;
-        in_proc_advanced_label_parameters := false;
-        in_call_advanced_parameters := false;
-        in_call_advanced_label_parameters := false;
-        instruction_line_to_execute := 0;
-        last_searched_instruction_line_number := 0;
-        last_searched_instruction_line_ptr := inst_list;    
-        mode_is_check := true;    
-        
+     
+        init_scope(scope);
+        inst_element_number := 0;
+        last_searched_inst_element_number := 0;
+        last_searched_inst_element_ptr := inst_list;    
         print("Checking if all variables are defined for all instructions");        
-        while instruction_line_to_check < inst_list.num_of_lines loop
-            instruction_line_to_execute := instruction_line_to_execute + 1;
-            search_instruction_line_ptr(
-                inst_list, instruction_line_to_execute, 
-                last_searched_instruction_line_number, last_searched_instruction_line_ptr, instruction_line_ptr);
-            access_instruction_line(
-                instruction_line_ptr, file_list, instruction_text_field, instruction_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
+        while inst_element_number < inst_list.element_count loop
+            inst_element_number := inst_element_number + 1;
+            search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
+            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
+                
+                
+                        track_scope(inst, par_text_fields, scope);
+        var_scope := textfield_dot_cat(scope.namespace, scope.proc);  
             if is_instruction(INSTR_CALL_LABEL_PAR_OPEN) then 
                 access_variable_label_ptr(var_list, instr_scope, par_text_fields(1), par_indexes(1), tmp_label_ptr, valid);
                 assert valid /= 0

@@ -50,52 +50,36 @@ use work.tb_instructions_pkg.all;
 
 package tb_interpreter_pkg is
 
-    procedure access_inst_sequ(variable mode_is_check : in boolean;
-                               variable inst_sequ : in stim_line_ptr;
-                               variable var_list : in var_field_ptr;
-                               variable file_list : in file_def_ptr;
-                               variable code_line_to_execute : in integer;
-                               variable next_alternate_code_line_to_execute : inout integer;
-                               variable instruction : out text_field;
-                               variable instruction_len : out integer;
-                               variable instruction_scope : out text_field;
-                               variable instruction_scope_left : out text_field;
-                               variable scope : in text_field;
-                               variable scope_left : in text_field;
-                               variable next_alternate_scope : inout text_field;
-                               variable next_alternate_scope_left : inout text_field;
-                               variable p1_text_field : out text_field;
-                               variable p2_text_field : out text_field;
-                               variable p3_text_field : out text_field;
-                               variable p4_text_field : out text_field;
-                               variable p5_text_field : out text_field;
-                               variable p6_text_field : out text_field;   
-                               variable p1_index : out integer;
-                               variable p2_index : out integer;
-                               variable p3_index : out integer;
-                               variable p4_index : out integer;
-                               variable p5_index : out integer;
-                               variable p6_index : out integer;
-                               variable p1 : out unsigned;
-                               variable p2 : out unsigned;
-                               variable p3 : out unsigned;
-                               variable p4 : out unsigned;
-                               variable p5 : out unsigned;
-                               variable p6 : out unsigned;
-                               variable txt : out stm_text_ptr;
-                               variable txt_enclosing_quote : out character;
-                               variable fname : out text_line;
-                               variable file_line : out integer;
-                               variable last_num : inout integer;
-                               variable last_ptr : inout stim_line_ptr;
-                               variable in_proc_advanced_parameters : inout boolean;                               
-                               variable in_call_advanced_parameters : inout boolean;
-                               variable in_proc_advanced_label_parameters : inout boolean;
-                               variable in_call_advanced_label_parameters : inout boolean;
-                               variable in_call_advanced_label : inout boolean;
-                               variable called_proc : inout text_field;
-                               variable target_proc_after_par_bracket_code_line_to_execute : inout integer;
-                               variable target_call_code_line_to_execute : inout integer);
+    procedure search_inst_element_ptr( 
+        variable inst_list : in stim_line_ptr;
+        variable search_for_inst_element_number : in integer;
+        variable last_searched_inst_element_number : inout integer;
+        variable last_searched_inst_element_ptr : inout stim_line_ptr;
+        variable inst_element_ptr : out stim_line_ptr
+    );
+
+    procedure access_inst_element_ptr(        
+        variable inst_element_ptr : in stim_line_ptr;                                                                          
+        variable file_list : in file_def_ptr;                             
+        variable inst : out text_field;
+        variable inst_len : out integer;
+        variable par_text_fields : out parameter_text_field_array;  
+        variable txt : out stm_text_ptr;
+        variable txt_enclosing_quote : out character;
+        variable file_name : out text_line;
+        variable file_line : out integer
+    );
+    
+    procedure access_inst_element_parameters( 
+        variable var_list : in var_field_ptr;
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable var_scope_par1 : in text_field;     
+        variable var_scope_par_others : in text_field;         
+        variable par_text_fields : in parameter_text_field_array;
+        variable par_indexes : out parameter_index_array;
+        variable par_values : out parameter_value_array
+    );
                                
     procedure read_include_file(variable pass : in integer;
                                 constant path_name : string;

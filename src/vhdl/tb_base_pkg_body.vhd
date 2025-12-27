@@ -51,7 +51,6 @@ use ieee.math_real.all;
 package body tb_base_pkg is
 
     procedure init_scope(variable s : inout t_stm_scope) is
-        variable nul_text_field : text_field;
     begin
        s.in_namespace := false;
        s.in_proc_conventional := false;
@@ -60,8 +59,8 @@ package body tb_base_pkg is
        s.in_proc_advanced_body := false;
        s.in_call_advanced_parameters := false;
        s.in_call_label_advanced_parameters := false;
-       s.namespace := nul_text_field;
-       s.proc := nul_text_field;
+       s.namespace := (others => nul);
+       s.proc := (others => nul);
     end procedure;
 
     function bin2integer(bin_number : in text_field;
