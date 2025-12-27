@@ -50,6 +50,20 @@ use ieee.math_real.all;
 
 package body tb_base_pkg is
 
+    procedure init_scope(variable s : inout t_stm_scope) is
+        variable nul_text_field : text_field;
+    begin
+       s.in_namespace := false;
+       s.in_proc_conventional := false;
+       s.in_proc_advanced := false;
+       s.in_proc_advanced_parameters := false;
+       s.in_proc_advanced_body := false;
+       s.in_call_advanced_parameters := false;
+       s.in_call_label_advanced_parameters := false;
+       s.namespace := nul_text_field;
+       s.proc := nul_text_field;
+    end procedure;
+
     function bin2integer(bin_number : in text_field;
                          file_name : in text_line;
                          line : in integer) return integer is
@@ -69,7 +83,7 @@ package body tb_base_pkg is
                     int_number := 1;
                 when others =>
                     assert false
-                    report lf & "error: bin2integer found non binary digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "bin2integer found non binary digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (2 ** power));
@@ -96,7 +110,7 @@ package body tb_base_pkg is
                     vec_number := '1';
                 when others =>
                     assert false
-                    report lf & "error: bin2stm_value found non binary digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "bin2stm_value found non binary digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(stm_value_width - 2 downto 0) & vec_number;
@@ -121,7 +135,7 @@ package body tb_base_pkg is
             when '9' => i := 9;
             when others =>
                 assert (false)
-                report lf & "error: c2int was given a non number digit."
+                report lf & "c2int was given a non number digit."
                 severity failure;
         end case;
         return i;
@@ -148,7 +162,7 @@ package body tb_base_pkg is
             when 'f' | 'F' => return "1111";
             when others =>
                 assert (false)
-                report lf & "error: c2std_vec found non hex digit on file line "
+                report lf & "c2std_vec found non hex digit on file line "
                 severity failure;
                 return "XXXX";
         end case;
@@ -216,7 +230,7 @@ package body tb_base_pkg is
         so := sc;
     end procedure;
     
-    function str_cat(s1 : text_field;
+    function textfield_dot_cat(s1 : text_field;
                      s2 : text_field) return text_field is
         variable i : integer;
         variable j : integer;
@@ -307,7 +321,7 @@ package body tb_base_pkg is
             when 15 => c := 'F';
             when others =>
                 assert false
-                report lf & "error: ew_to_char was given a non number digit."
+                report lf & "ew_to_char was given a non number digit."
                 severity failure;
         end case;
         return c;
@@ -626,7 +640,7 @@ package body tb_base_pkg is
                     int_number := 15;
                 when others =>
                     assert false
-                    report lf & "error: hex2integer found non hex digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "hex2integer found non hex digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (16 ** power));
@@ -681,7 +695,7 @@ package body tb_base_pkg is
                     vec_number := x"F";
                 when others =>
                     assert false
-                    report lf & "error: hex2stm_value found non hex digit on line " & (integer'image(line)) & " of file " & file_name
+                    report lf & "hex2stm_value found non hex digit on line " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(stm_value_width - 5 downto 0) & vec_number;
@@ -792,7 +806,7 @@ package body tb_base_pkg is
             when "1111" => return 'F';
             when others =>
                 assert (false)
-                report lf & "error: std_vec2c found non-binary digit in vec "
+                report lf & "std_vec2c found non-binary digit in vec "
                 severity failure;
                 return 'X';
         end case;
@@ -825,7 +839,7 @@ package body tb_base_pkg is
                     value := bin2integer(temp_str, file_name, line);
                 when others =>
                     assert false
-                    report lf & "error: strange # found ! " & (integer'image(line)) & " of file " & file_name
+                    report lf & "strange # found ! " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
         else
@@ -863,7 +877,7 @@ package body tb_base_pkg is
                     stmvalue := bin2stm_value(temp_str, file_name, line, stm_value_width);
                 when others =>
                     assert false
-                    report lf & "error: strange # found ! " & (integer'image(line)) & " of file " & file_name
+                    report lf & "strange # found ! " & (integer'image(line)) & " of file " & file_name
                     severity failure;
             end case;
         else

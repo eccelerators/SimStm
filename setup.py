@@ -75,10 +75,10 @@ static_setup_data = {
             {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00190"},
             {"file":"src/vhdl/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050"},
             {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00181"},
+            {"file":"src/vhdl/tb_interpreter_basic_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
             {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
             {"file":"src/vhdl/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"},
             {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"},
-            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
             {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
             {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
             {"file":"src/vhdl/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
@@ -138,6 +138,9 @@ static_setup_data = {
         "SimStm/tb/simstm/Interrupt", [
             {"file":"tb/simstm/Interrupt/interrupt.stm"}
         ]),(
+        "SimStm/tb/simstm/namespace", [
+            {"file":"tb/simstm/namespace/namespace.stm"}
+        ]),(
         "SimStm/tb/simstm/Basic", [
             {"file":"tb/simstm/Basic/lib2.stm"},
             {"file":"tb/simstm/Basic/lib4.stm"},
@@ -165,6 +168,9 @@ static_setup_data = {
         ]),(
         "SimStm/tb/simstm/TestCase", [
             {"file":"tb/simstm/TestCase/TestCase.stm"}
+        ]),(
+        "SimStm/tb/simstm/Label", [
+            {"file":"tb/simstm/Label/label.stm"}
         ]),(
         "SimStm/tb/simstm/Base", [
             {"file":"tb/simstm/Base/ReadModifyWrite.stm"},

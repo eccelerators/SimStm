@@ -48,51 +48,7 @@ use std.textio.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 
-package tb_interpreter_pkg is
-
-    --  add_instruction
-    --    this is the procedure that adds the instruction to the linked list of
-    --    instructions.  also variable addition are called and or handled.
-    --    the instruction sequence link list.
-
-    procedure add_instruction(variable pass : in integer;
-                              variable inst_list : inout stim_line_ptr;
-                              variable var_list : inout var_field_ptr;
-                              variable scope : in text_field;
-                              variable scope_left : in text_field;
-                              variable inst : in text_field;
-                              variable p1 : in text_field;
-                              variable p2 : in text_field;
-                              variable p3 : in text_field;
-                              variable p4 : in text_field;
-                              variable p5 : in text_field;
-                              variable p6 : in text_field;
-                              variable str_ptr : in stm_text_ptr;
-                              variable txt_enclosing_quote : in character;
-                              variable sequ_num : inout integer;
-                              variable line_num : in integer;
-                              variable file_name : in text_line;
-                              variable file_idx : in integer;
-                              constant stm_value_width : in integer);
-
-    procedure add_variable(variable var_list : inout var_field_ptr;
-                           variable scope : in text_field;
-                           variable p1 : in text_field; -- should be var name
-                           variable p2 : in text_field; -- should be value
-                           variable sequ_num : in integer;
-                           variable line_num : in integer;
-                           variable name : in text_line;
-                           variable length : in integer;
-                           constant var_stm_type : in t_stm_var_type;
-                           variable str_ptr : in stm_text_ptr;
-                           variable txt_enclosing_quote : in character;
-                           constant stm_value_width : in integer;
-                           variable assigned_index : out integer);
-
-    -- access_inst_sequ
-    --   this procedure retrieves an instruction from the sequence of instructions.
-    --   based on the line number you pass to it, it returns the instruction with
-    --   any variables substituted as integers.
+package tb_interpreter_basic_pkg is
 
     procedure access_inst_sequ(variable mode_is_check : in boolean;
                                variable inst_sequ : in stim_line_ptr;

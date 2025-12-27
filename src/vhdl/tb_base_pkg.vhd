@@ -73,6 +73,12 @@ package tb_base_pkg is
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
+    
+    type unmerged_token_text_field_array is array (1 to 9) of text_field;
+    type token_text_field_array is array (1 to 7) of text_field;
+    type parameter_text_field_array is array (1 to 6) of text_field;
+    type parameter_index_array is array (1 to 6) of integer;
+    type parameter_value_array is array (1 to 6) of unsigned;
 
     type stack_text_field_array is array (31 downto 0) of text_field;
     type stack_text_line_array is array (31 downto 0) of text_line;
@@ -85,19 +91,12 @@ package tb_base_pkg is
     type stim_line;
     type stim_line_ptr is access stim_line; -- pointer to stim_line record
     type stim_line is record
-        instruction : text_field;
-        inst_scope : text_field;
-        inst_scope_left : text_field;
-        inst_field_1 : text_field;
-        inst_field_2 : text_field;
-        inst_field_3 : text_field;
-        inst_field_4 : text_field;
-        inst_field_5 : text_field;
-        inst_field_6 : text_field;
+        inst : text_field;
+        parameters : parameter_text_field_array;
         txt : stm_text_ptr;
         txt_enclosing_quote : character;
-        line_number : integer; -- sequence line
-        num_of_lines : integer; -- total number of lines
+        element_number : integer; -- sequential element number
+        element_count : integer; -- total number of elements in list
         file_line : integer; -- file line number
         file_idx : integer;      
         next_rec : stim_line_ptr;
@@ -158,6 +157,18 @@ package tb_base_pkg is
                             STM_LABEL_TYPE,
                             NO_VAR_TYPE
                            );
+                           
+    type t_stm_scope is record
+        in_namespace : boolean;
+        in_proc_conventional : boolean;  
+        in_proc_advanced : boolean;
+        in_proc_advanced_parameters : boolean;
+        in_proc_advanced_body : boolean;
+        in_call_advanced_parameters : boolean;
+        in_call_label_advanced_parameters : boolean;
+        namespace : text_field;
+        proc : text_field;
+    end record;
 
     -- define the variables field and pointer
     type var_field;
@@ -181,6 +192,8 @@ package tb_base_pkg is
         var_org_stm_lines : t_stm_lines_ptr;
         next_rec : var_field_ptr;
     end record;
+    
+    procedure init_scope(variable s : inout t_stm_scope);
 
     -- bin2integer    convert bin stimulus field to integer
     --          inputs :  string of type text_field containing only binary numbers
@@ -216,7 +229,7 @@ package tb_base_pkg is
                          variable so : out stm_text
                          );
                         
-    function str_cat(s1 : text_field;
+    function textfield_dot_cat(s1 : text_field;
                      s2 : text_field) return text_field;
 
     function ew_str_cat(s1 : stm_text;
