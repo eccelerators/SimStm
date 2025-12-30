@@ -47,6 +47,7 @@ use std.textio.all;
 
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
+use work.tb_interpreter_util_pkg.all;
 
 package tb_interpreter_basic_pkg is
 

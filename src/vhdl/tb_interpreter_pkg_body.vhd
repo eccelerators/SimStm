@@ -48,9 +48,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.tb_base_pkg.all;
+use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
 use work.tb_interpreter_basic_pkg.all;
-use work.tb_instructions_pkg.all;
 
 package body tb_interpreter_pkg is
     
@@ -142,7 +142,7 @@ package body tb_interpreter_pkg is
                 if is_digit(par_text_fields(i)(1)) then
                     par_values(i) := stim_to_stm_value(par_text_fields(i), file_name, file_line, par_text_fields(i)'length);
                 else
-                    access_variable(var_list, par_scopes(i), par_text_fields(i), par_indexes(i), par_values(i), valid);
+                    access_var(var_list, par_scopes(i), par_text_fields(i), par_indexes(i), par_values(i), valid);
                     assert valid /= 0
                     report lf & "variable number " & (integer'image(i)) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;

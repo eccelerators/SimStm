@@ -93,7 +93,7 @@ package tb_interpreter_util_pkg is
         constant stm_value_width : in integer
     );
 
-    --  access_variable
+    --  access_var
     --     inputs:
     --               text field containing variable
     --     outputs:

@@ -56,8 +56,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.tb_base_pkg.all;
-use work.tb_interpreter_util_pkg.all;
 use work.tb_instructions_pkg.all;
+use work.tb_interpreter_util_pkg.all;
 use work.tb_interpreter_basic_pkg.all;
 use work.tb_interpreter_pkg.all;
 use work.tb_bus_pkg.all;
@@ -443,7 +443,7 @@ begin
             end if;            
 
             if main_entered = 0 then          
-                access_variable(var_list, nul_scope, main_proc_name, var_index, main_element, valid, machine_value_width);
+                access_var(var_list, nul_scope, main_proc_name, var_index, main_element, valid, machine_value_width);
                 assert valid /= 0
                 report lf & "Entry point proc Main:'" & main_proc_name(1 to fld_len(main_proc_name)) & "' scope:'' not found !"
                 severity failure;
@@ -483,7 +483,7 @@ begin
                 stack(stack_ptr) := inst_element_number;
                 stack_ptr := stack_ptr + 1;
                 line_to_text_field(branch_to_interrupt_label_std_txt_io_line, branch_to_interrupt_label);
-                access_variable(var_list, nul_scope, branch_to_interrupt_label, var_index, branch_to_interrupt_instruction_line_to_execute, valid, machine_value_width);
+                access_var(var_list, nul_scope, branch_to_interrupt_label, var_index, branch_to_interrupt_instruction_line_to_execute, valid, machine_value_width);
                 assert valid /= 0
                 report lf & "Interrupt entry point branch_to_interrupt_label not found !"
                 severity failure;

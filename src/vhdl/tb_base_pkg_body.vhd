@@ -51,7 +51,7 @@ use ieee.math_real.all;
 package body tb_base_pkg is
 
     procedure init_inst_context(
-        variable inst_context : inout t_stm_scope
+        variable inst_context : inout t_stm_inst_context
     ) is
     begin
        inst_context.in_namespace := false;
@@ -1702,6 +1702,20 @@ package body tb_base_pkg is
         return os;
     end function;
     
+    procedure stm_text_copy_to_ptr(
+        variable ptr : inout stm_text_ptr;
+        variable txt_str : in stm_text
+    ) is
+    begin
+        if ptr /= null then
+            for i in 1 to c_stm_text_len loop
+                if txt_str(i) = nul then
+                    exit;
+                end if;
+                ptr(i) := txt_str(i);
+            end loop;
+        end if;
+    end procedure;
 
     function to_str_hex(
         int : integer

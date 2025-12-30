@@ -196,7 +196,7 @@ package tb_base_pkg is
     end record;
     
     procedure init_inst_context(
-        variable inst_context : inout t_stm_scope
+        variable inst_context : inout t_stm_inst_context
     );
 
     -- bin2integer    convert bin stimulus field to integer
@@ -610,6 +610,11 @@ package tb_base_pkg is
     function txt_field_to_string(
         s : in text_field
     ) return string;
+
+    procedure stm_text_copy_to_ptr(
+        variable ptr : inout stm_text_ptr;
+        variable txt_str : in stm_text
+    );
 
     function to_str_hex(
         int : integer

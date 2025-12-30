@@ -48,8 +48,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.tb_base_pkg.all;
-use work.tb_interpreter_util_pkg.all;
 use work.tb_instructions_pkg.all;
+use work.tb_interpreter_util_pkg.all;
 
 package body tb_interpreter_basic_pkg is
     
@@ -119,7 +119,7 @@ package body tb_interpreter_basic_pkg is
         if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
             inst_context.in_call_label_advanced_parameters := true;
             inst_context.called_label := par_text_fields(1); 
-            access_variable_label_ptr(var_list, instr_scope, inst_context.called_label, var_index, label_ptr, valid);
+            access_var_label_ptr(var_list, instr_scope, inst_context.called_label, var_index, label_ptr, valid);
             assert valid /= 0
             report lf & "initial context call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line_num))
             severity failure;       
@@ -205,13 +205,13 @@ package body tb_interpreter_basic_pkg is
                         print("add idx "& integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
                     end if;
                 else
-                    access_variable(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
+                    access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
                     assert c_valid /= 0
                     report lf & "Constant '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize variable '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
                     severity failure;
                     n_temp_text_field(1) := '0';
                     add_variable(var_list, var_scope, par_text_fields(1), n_temp_text_field, sequ_num, file_line_num, file_name, l, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);                          
-                    access_variable(var_list, var_scope, par_text_fields(1), n_var_index, n_var_value, n_valid);
+                    access_var(var_list, var_scope, par_text_fields(1), n_var_index, n_var_value, n_valid);
                     assert n_valid /= 0
                     report lf & "variable '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize with constant '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
                     severity failure;
@@ -329,13 +329,13 @@ package body tb_interpreter_basic_pkg is
                             end if; 
                             valid_instruction := 1; 
                         else
-                            access_variable(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
+                            access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
                             assert c_valid /= 0
                             report lf & "constant '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize variable '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
                             severity failure;
                             n_temp_text_field(1) := '0';
                             add_variable(var_list, var_scope, par_text_fields(1), n_temp_text_field, inst_list_elment_num, file_line_num, file_name, pl, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);                        
-                            access_variable(var_list, var_scope, par_text_fields(1), n_var_index, n_var_value, n_valid);
+                            access_var(var_list, var_scope, par_text_fields(1), n_var_index, n_var_value, n_valid);
                             assert n_valid /= 0
                             report lf & "variable '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize with constant '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
                             severity failure;

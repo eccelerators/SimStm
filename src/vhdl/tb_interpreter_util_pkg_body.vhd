@@ -432,7 +432,7 @@ package body tb_interpreter_util_pkg is
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;
                 end loop;
-                access_variable(var_list, scope, tmp_field, v1_index, v1, valid);
+                access_var(var_list, scope, tmp_field, v1_index, v1, valid);
                 assert valid /= 0
                 report lf & "invalid variable found in stm_text_ptr: ignoring."
                 severity warning;
@@ -486,7 +486,7 @@ package body tb_interpreter_util_pkg is
     ) is
         variable stmvalue : unsigned(stm_value_width - 1 downto 0) := to_unsigned(0, stm_value_width);
     begin
-        access_variable(var_list, var_scope, var_name, var_index, stmvalue, valid);
+        access_var(var_list, var_scope, var_name, var_index, stmvalue, valid);
         var_value := to_integer(stmvalue(30 downto 0));
     end procedure;
 
@@ -1405,7 +1405,7 @@ package body tb_interpreter_util_pkg is
         print(".... internal list element number: " & to_str(inst_ptr.element_number));
         print(".... instruction file linenumber: " & to_str(inst_ptr.file_line));
         print(".... instruction file idx: " & to_str(inst_ptr.file_idx));
-        get_instruction_file_name(file_list, inst_ptr.file_idx, fn);
+        get_inst_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
         for i in 1 to 6 loop
             pl := fld_len(inst_ptr.parameters(i));
