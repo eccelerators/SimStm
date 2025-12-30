@@ -205,7 +205,7 @@ package body tb_bus_axi4lite_32_pkg is
         variable access_width : in integer;
         variable successfull : out boolean;
         variable timeout : in time
-    ) is    
+    ) is
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin

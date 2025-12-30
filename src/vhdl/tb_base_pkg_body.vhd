@@ -54,16 +54,16 @@ package body tb_base_pkg is
         variable inst_context : inout t_stm_inst_context
     ) is
     begin
-       inst_context.in_namespace := false;
-       inst_context.in_proc_conventional := false;
-       inst_context.in_proc_advanced := false;
-       inst_context.in_proc_advanced_parameters := false;
-       inst_context.in_proc_advanced_body := false;
-       inst_context.in_call_advanced_parameters := false;
-       inst_context.in_call_label_advanced_parameters := false;
-       inst_context.in_namespace_name := (others => nul);
-       inst_context.in_proc_name := (others => nul);
-       inst_context.in_called_proc_name := (others => nul);
+        inst_context.in_namespace := false;
+        inst_context.in_proc_conventional := false;
+        inst_context.in_proc_advanced := false;
+        inst_context.in_proc_advanced_parameters := false;
+        inst_context.in_proc_advanced_body := false;
+        inst_context.in_call_advanced_parameters := false;
+        inst_context.in_call_label_advanced_parameters := false;
+        inst_context.in_namespace_name := (others => nul);
+        inst_context.in_proc_name := (others => nul);
+        inst_context.in_called_proc_name := (others => nul);
     end procedure;
 
     function bin2integer(
@@ -178,9 +178,9 @@ package body tb_base_pkg is
         end case;
     end function;
 
-    procedure check_presence_instruction_file_name(
+    procedure check_presence_inst_file_name(
         variable file_list : inout file_def_ptr;
-        variable file_name : in string;
+        variable file_name : in text_line;
         variable present : out boolean
     ) is
         variable temp_fn_prt : file_def_ptr;
@@ -219,7 +219,7 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
-    
+
     procedure ew_str_cat_ptr(
         variable s1 : in stm_text;
         variable s2_ptr : in text_field_ptr;
@@ -244,7 +244,7 @@ package body tb_base_pkg is
         end if;
         so := sc;
     end procedure;
-    
+
     function textfield_dot_cat(
         s1 : text_field;
         s2 : text_field
@@ -270,7 +270,7 @@ package body tb_base_pkg is
         end if;
         return sc;
     end function;
-    
+
     function ew_str_cat(
         s1 : stm_text;
         s2 : text_field;
@@ -318,7 +318,7 @@ package body tb_base_pkg is
         sc(i) := s4;
         return sc;
     end function;
-    
+
     function ew_to_char(
         int : integer
     ) return character is
@@ -350,7 +350,7 @@ package body tb_base_pkg is
         return c;
     end function;
 
-    function ew_to_str(
+    function ew_to_text_field(
         int : integer;
         b : base
     ) return text_field is
@@ -417,7 +417,7 @@ package body tb_base_pkg is
         return temp;
     end function;
 
-    function ew_to_str(
+    function ew_to_text_field(
         stmvalue : unsigned;
         b : base
     ) return text_field is
@@ -474,7 +474,7 @@ package body tb_base_pkg is
     end function;
 
     function fld_equal(
-        s1 : in text_field;                     
+        s1 : in text_field;
         s2 : in text_field
     ) return boolean is
         variable i : integer := 0;
@@ -765,7 +765,7 @@ package body tb_base_pkg is
         end if;
         return rtn;
     end function;
-    
+
     function is_txt_var_first_character(
         constant c : in character
     ) return boolean is
@@ -836,7 +836,7 @@ package body tb_base_pkg is
         end loop;
         writeline(output, l);
     end procedure;
-    
+
     function std_vec2c(
         vec : in std_logic_vector(3 downto 0)
     ) return character is
@@ -1479,7 +1479,7 @@ package body tb_base_pkg is
             stm_line_ptr := stm_line_ptr.next_stm_line;
         end loop;
     end procedure;
-          
+
     function stm_text_crop(
         txt : in stm_text
     ) return string is
@@ -1488,7 +1488,7 @@ package body tb_base_pkg is
         l := stm_text_len(txt);
         return txt(1 to l);
     end function;
-         
+
     function stm_text_len(
         s : in stm_text
     ) return integer is
@@ -1576,7 +1576,7 @@ package body tb_base_pkg is
     end function;
 
     function str2stm_value(
-        str : in string; 
+        str : in string;
         stm_value_width : in integer
     ) return unsigned is
         variable l : integer;
@@ -1662,7 +1662,7 @@ package body tb_base_pkg is
             str := txt_str;
         end if;
     end procedure;
-            
+
     procedure text_field_ptr_to_text_field(
         variable ptr : in text_field_ptr;
         variable field : out text_field
@@ -1679,8 +1679,8 @@ package body tb_base_pkg is
             end loop;
             field := tmp_field;
         end if;
-    end procedure;  
-    
+    end procedure;
+
     procedure text_field_to_text_field_ptr(
         variable field : in text_field;
         variable ptr : inout text_field_ptr
@@ -1689,8 +1689,8 @@ package body tb_base_pkg is
         for i in 1 to field'length loop
             ptr(i) := field(i);
         end loop;
-    end procedure;  
-    
+    end procedure;
+
     function txt_field_to_string(
         s : in text_field
     ) return string is
@@ -1701,7 +1701,7 @@ package body tb_base_pkg is
         end loop;
         return os;
     end function;
-    
+
     procedure stm_text_copy_to_ptr(
         variable ptr : inout stm_text_ptr;
         variable txt_str : in stm_text
@@ -1717,32 +1717,32 @@ package body tb_base_pkg is
         end if;
     end procedure;
 
-    function to_str_hex(
+    function to_text_field_hex(
         int : integer
-    ) return string is
+    ) return text_field is
     begin
-        return ew_to_str(int, hex);
+        return ew_to_text_field(int, hex);
     end function;
 
-    function to_str(
+    function to_text_field(
         int : integer
-    ) return string is
+    ) return text_field is
     begin
-        return ew_to_str(int, dec);
+        return ew_to_text_field(int, dec);
     end function;
 
-    function to_str_hex(
+    function to_text_field_hex(
         stmvalue : unsigned
-    ) return string is
+    ) return text_field is
     begin
-        return ew_to_str(stmvalue, hex);
+        return ew_to_text_field(stmvalue, hex);
     end function;
 
-    function to_str(
+    function to_text_field(
         stmvalue : unsigned
-    ) return string is
+    ) return text_field is
     begin
-        return ew_to_str(stmvalue, dec);
+        return ew_to_text_field(stmvalue, dec);
     end function;
 
 end package body;

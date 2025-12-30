@@ -53,23 +53,23 @@ use work.tb_interpreter_util_pkg.all;
 use work.tb_interpreter_basic_pkg.all;
 
 package body tb_interpreter_pkg is
-    
-    procedure search_inst_element_ptr( 
+
+    procedure search_inst_element_ptr(
         variable inst_list : in stim_line_ptr;
         variable search_for_inst_element_number : in integer;
         variable last_searched_inst_element_number : inout integer;
         variable last_searched_inst_element_ptr : inout stim_line_ptr;
         variable inst_element_ptr : out stim_line_ptr
-    ) is                               
+    ) is
         variable instr_ptr : stim_line_ptr;
-    begin                                   
+    begin
         -- get to the instruction indicated by the search_for_inst_element_number
         -- check to see if this number is before the last_searched_inst_element_number
         -- so search from start
         if last_searched_inst_element_number > search_for_inst_element_number then
             instr_ptr := inst_list;
             while instr_ptr.next_rec /= null loop
-                if instr_ptr.line_number = search_for_inst_element_number then
+                if instr_ptr.element_number = search_for_inst_element_number then
                     exit;
                 else
                     instr_ptr := instr_ptr.next_rec;
@@ -79,7 +79,7 @@ package body tb_interpreter_pkg is
         else
             instr_ptr := last_searched_inst_element_ptr;
             while instr_ptr.next_rec /= null loop
-                if instr_ptr.line_number = search_for_inst_element_number then
+                if instr_ptr.element_number = search_for_inst_element_number then
                     inst_element_ptr := instr_ptr;
                     exit;
                 else
@@ -92,12 +92,12 @@ package body tb_interpreter_pkg is
         last_searched_inst_element_ptr := instr_ptr;
     end procedure;
 
-    procedure access_inst_element_ptr(        
-        variable inst_element_ptr : in stim_line_ptr;                                                                          
-        variable file_list : in file_def_ptr;                             
+    procedure access_inst_element_ptr(
+        variable inst_element_ptr : in stim_line_ptr;
+        variable file_list : in file_def_ptr;
         variable inst : out text_field;
         variable inst_len : out integer;
-        variable par_text_fields : out parameter_text_field_array;  
+        variable par_text_fields : out parameter_text_field_array;
         variable txt : out stm_text_ptr;
         variable txt_enclosing_quote : out character;
         variable file_name : out text_line;
@@ -105,12 +105,12 @@ package body tb_interpreter_pkg is
     ) is
         variable tmp_file_index : integer;
         variable tmp_file_def_ptr : file_def_ptr;
-    begin 
-        inst := inst_element_ptr.inst;  
-        inst_len := fld_len(inst_element_ptr.inst); 
-        par_text_fields := inst_element_ptr.inst_parameters;
-        txt := instr_ptr.txt;
-        txt_enclosing_quote := instr_ptr.txt_enclosing_quote; 
+    begin
+        inst := inst_element_ptr.inst;
+        inst_len := fld_len(inst_element_ptr.inst);
+        par_text_fields := inst_element_ptr.parameters;
+        txt := inst_element_ptr.txt;
+        txt_enclosing_quote := inst_element_ptr.txt_enclosing_quote;
         file_line := inst_element_ptr.file_line;
         -- recover the file name this line came from
         tmp_file_def_ptr := file_list;
@@ -123,22 +123,22 @@ package body tb_interpreter_pkg is
         end loop;
         for i in 1 to file_name'high loop
             file_name(i) := tmp_file_def_ptr.file_name(i);
-        end loop;                   
+        end loop;
     end procedure;
-    
-    procedure access_inst_element_parameters( 
+
+    procedure access_inst_element_parameters(
         variable var_list : in var_field_ptr;
         variable file_name : in text_line;
         variable file_line : in integer;
-        variable par_scopes : in scope_text_field_array;          
+        variable par_scopes : in scope_text_field_array;
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
     ) is
-        variable valid : integer;      
-    begin 
+        variable valid : integer;
+    begin
         for i in 1 to 6 loop
-            if par_text_fields(i) /= nul then
+            if par_text_fields(i)(1) /= nul then
                 if is_digit(par_text_fields(i)(1)) then
                     par_values(i) := stim_to_stm_value(par_text_fields(i), file_name, file_line, par_text_fields(i)'length);
                 else
@@ -147,10 +147,10 @@ package body tb_interpreter_pkg is
                     report lf & "variable number " & (integer'image(i)) & " on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name
                     severity failure;
                 end if;
-            end if;        
-        end loop;             
+            end if;
+        end loop;
     end procedure;
-    
+
     procedure read_instruction_file(
         variable pass : in integer;
         constant path_name : string;
@@ -161,9 +161,12 @@ package body tb_interpreter_pkg is
         variable file_list : inout file_def_ptr;
         constant stm_value_width : in integer
     ) is
+        variable inst_context : t_stm_inst_context;
+        variable inst : text_field;
+        variable ps : parameter_text_field_array;        
         variable l : text_line; -- the line
-        variable file_line_num : integer; -- line number file
-        variable inst_line_num : integer; -- line number program
+        variable file_line : integer; -- line number file
+        variable inst_element_num : integer; -- line number program
         variable ts : token_text_field_array;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
@@ -178,7 +181,6 @@ package body tb_interpreter_pkg is
         variable v_iname : text_line;
         variable v_tmp_fn : file_def_ptr;
         variable v_fn_idx : integer;
-        variable scope : t_stm_scope;
 
     begin
         -- open the stimulus_file and check
@@ -207,26 +209,26 @@ package body tb_interpreter_pkg is
             v_tmp_fn.file_name(i + path_name'high) := file_name(i);
         end loop;
         v_tmp_fn.next_rec := null;
-        file_line_num := 1;
-        inst_line_num := 1;
+        file_line := 1;
+        inst_element_num := 1;
         v_ostat := 0;
         v_instr_ptr := inst_set_list;
         v_var_ptr := var_list;
         v_sequ_ptr := inst_list;
-        init_scope_flags(scope_flags);
+        init_inst_context(inst_context);
         -- while not the end of file read it
         while not endfile(stimulus) loop
             file_read_line(stimulus, l);
             --  tokenize the line
-            tokenize_line(l, ts, t_txt, txt_enclosing_quote, valid);
-            v_len := fld_len(t(1));
+            tokenize_inst_line(l, ts, t_txt, txt_enclosing_quote, valid);
+            v_len := fld_len(ts(1));
             -- if there is an include instruction
-            if t(1)(1 to v_len) = "include" then
+            if ts(1)(1 to v_len) = "include" then
                 -- if file name is in par2
                 if valid = 2 then
                     v_iname := (others => nul);
                     for i in 1 to max_field_len loop
-                        v_iname(i) := t2(i);
+                        v_iname(i) := ts(2)(i);
                     end loop;
                 -- elsif the text string is not null
                 elsif t_txt /= null then
@@ -240,46 +242,47 @@ package body tb_interpreter_pkg is
                     end loop;
                 else
                     assert false
-                    report lf & " include instruction has not file name included.  found on" & lf & "line " & (integer'image(file_line_num)) & " in file " & path_name & file_name & lf
+                    report lf & " include instruction has not file name included.  found on" & lf & "line " & (integer'image(file_line)) & " in file " & path_name & file_name & lf
                     severity failure;
                 end if;
                 print("include found: loading file " & path_name & v_iname);
-                read_include_file(pass, path_name, v_iname, inst_line_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
+                read_include_file(pass, path_name, v_iname, inst_element_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
                 -- if include file not found
                 if v_ostat = 1 then
                     exit;
                 end if;
             -- if there were valid tokens
-            elsif valid /= 0 then             
-                check_valid_inst(t(1), v_instr_ptr, valid, file_line_num, v_name);  
-                if pass = 0 then  
-                    add_on_constant_declaration(v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_name, scope, stm_value_width);
-                elsif pass = 1 then                  
-                    add_on_variable_declaration(v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_name, scope, stm_value_width);
+            elsif valid /= 0 then
+                inst := ts(1);
+                for i in 1 to 6 loop 
+                    ps(i) := ts(i + 1);
+                end loop;
+                check_valid_inst(inst, v_instr_ptr, valid, file_line, v_name);
+                if pass = 0 then
+                    add_var_on_constant_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
+                elsif pass = 1 then
+                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
                 else
-                    add_instruction(v_sequ_ptr, v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_name, v_fn_idx, scope, stm_value_width);                
+                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, v_fn_idx, inst_context, stm_value_width);
                 end if;
             end if;
-            file_line_num := file_line_num + 1;
+            file_line := file_line + 1;
         end loop; -- end loop read file
         file_close(stimulus); -- close the file when done
         assert v_ostat = 0
-        report lf & "include file specified on line " & (integer'image(file_line_num)) & " in file " & path_name & file_name & " was not found! test terminated" & lf
+        report lf & "include file specified on line " & (integer'image(file_line)) & " in file " & path_name & file_name & " was not found! test terminated" & lf
         severity failure;
         inst_set_list := v_instr_ptr;
         var_list := v_var_ptr;
         inst_list := v_sequ_ptr;
         file_list := v_tmp_fn;
     end procedure;
-    
+
     procedure read_include_file(
         variable pass : in integer;
         constant path_name : string;
         variable name : text_line;
-        variable inst_line_num : inout integer;
+        variable inst_element_num : inout integer;
         variable file_list : inout file_def_ptr;
         variable inst_set_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
@@ -287,9 +290,11 @@ package body tb_interpreter_pkg is
         variable status : inout integer;
         constant stm_value_width : in integer
     ) is
+        variable inst_context : t_stm_inst_context;
         variable l : text_line; -- the line
-        variable file_line_num : integer; -- line number file
-        variable inst_line_num : integer; -- line number program
+        variable file_line : integer; -- line number file
+        variable inst : text_field;
+        variable ps : parameter_text_field_array; 
         variable ts : token_text_field_array;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
@@ -306,11 +311,10 @@ package body tb_interpreter_pkg is
         variable v_iname : text_line;
         variable include_file_path_name : text_line;
         variable v_ostat : integer;
-        file include_file : text; -- file declaration for includes     
-        
+        file include_file : text; -- file declaration for includes
+
     begin
-        inst_line_num := inst_line_num;
-        nul_scope(1) := nul;
+        inst_element_num := inst_element_num;
         v_tmp_fn_ptr := file_list;
         for i in 1 to path_name'high loop
             include_file_path_name(i) := path_name(i);
@@ -325,7 +329,7 @@ package body tb_interpreter_pkg is
             status := 1;
             return;
         end if;
-        file_line_num := 1; -- initialize line number
+        file_line := 1; -- initialize line number
         --  the file is opened, put it on the file name ll
         while v_tmp_fn_ptr.next_rec /= null loop
             v_tmp_fn_ptr := v_tmp_fn_ptr.next_rec;
@@ -343,20 +347,18 @@ package body tb_interpreter_pkg is
         v_instr_ptr := inst_set_list;
         v_var_ptr := var_list;
         v_sequ_ptr := inst_list;
-        scope := nul_scope;
-        scope_left := nul_scope;
         -- while not the end of file read it
         while not endfile(include_file) loop
             file_read_line(include_file, l);
             --  tokenize the line
-            tokenize_line(l, ts, t_txt, txt_enclosing_quote, valid);
-            v_len := fld_len(t(1));
-            if t(1)(1 to v_len) = "include" then
+            tokenize_inst_line(l, ts, t_txt, txt_enclosing_quote, valid);
+            v_len := fld_len(ts(1));
+            if ts(1)(1 to v_len) = "include" then
                 -- if file name is in par2
                 if valid = 2 then
                     v_iname := (others => nul);
                     for i in 1 to max_field_len loop
-                        v_iname(i) := t2(i);
+                        v_iname(i) := ts(2)(i);
                     end loop;
                 -- elsif the text string is not null
                 elsif t_txt /= null then
@@ -370,42 +372,43 @@ package body tb_interpreter_pkg is
                     end loop;
                 else
                     assert false
-                    report lf & " include instruction is missing included file name paramater , found at:" & lf & "line " & (integer'image(file_line_num)) & " in file " & include_file_path_name & lf
+                    report lf & " include instruction is missing included file name paramater , found at:" & lf & "line " & (integer'image(file_line)) & " in file " & include_file_path_name & lf
                     severity failure;
                 end if;
                 print("nested include found in : " & include_file_path_name);
-                check_presence_instruction_file_name(file_list, text_line_crop(v_iname), present);
+                check_presence_inst_file_name(file_list, v_iname, present);
                 if present then
                     print("nested include found: not loading file since already present " & text_line_crop(v_iname));
                 else
                     print("nested include found: loading file " & path_name & v_iname);
-                    read_include_file(pass, path_name, v_iname, inst_line_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
+                    read_include_file(pass, path_name, v_iname, inst_element_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
                     -- if include file not found
                     if v_ostat = 1 then
                         exit;
                     end if;
                 end if;
             -- if there was valid tokens
-            elsif valid /= 0 then            
-                check_valid_inst(t(1), v_instr_ptr, valid, file_line_num, v_iname);                      
-                if pass = 0 then  
-                    add_on_constant_declaration(v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_name, scope, stm_value_width);
-                elsif pass = 1 then                  
-                    add_on_variable_declaration(v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_name, scope, stm_value_width);
+            elsif valid /= 0 then
+                inst := ts(1);
+                for i in 1 to 6 loop 
+                    ps(i) := ts(i + 1);
+                end loop;
+                check_valid_inst(inst, v_instr_ptr, valid, file_line, v_iname);
+                if pass = 0 then
+                    add_var_on_constant_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, inst_context, stm_value_width);
+                elsif pass = 1 then
+                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, inst_context, stm_value_width);
                 else
-                    add_instruction(v_sequ_ptr, v_var_ptr, ts(1), ts(2 to 6), inst_line_num, t_txt, txt_enclosing_quote,
-                                    file_line_num, v_iname, v_new_fn, scope, stm_value_width);                
+                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, v_new_fn, inst_context, stm_value_width);
                 end if;
             end if;
-            file_line_num := file_line_num + 1;
+            file_line := file_line + 1;
         end loop; -- end loop read file
         file_close(include_file);
-        inst_line_num := inst_line_num;
+        inst_element_num := inst_element_num;
         inst_set_list := v_instr_ptr;
         var_list := v_var_ptr;
         inst_list := v_sequ_ptr;
     end procedure;
-       
+
 end package body;

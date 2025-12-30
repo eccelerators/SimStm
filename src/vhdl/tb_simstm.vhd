@@ -130,7 +130,7 @@ architecture behavioural of tb_simstm is
             end loop;
         end if;
     end procedure;
-    
+
 begin
     --------------------------------------------------------------------------------
     --! Read_file Process:
@@ -151,11 +151,11 @@ begin
         variable file_list : file_def_ptr; -- the list of defined file names
         variable last_searched_inst_element_number : integer;
         variable last_searched_inst_element_ptr : stim_line_ptr;
-        
+
         variable inst : text_field; -- inst name
         variable inst_context : t_stm_inst_context;
-        variable par_text_fields : parameter_text_field_array;   
-        variable par_indexes : parameter_index_array;  
+        variable par_text_fields : parameter_text_field_array;
+        variable par_indexes : parameter_index_array;
         variable par_values : parameter_value_array;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
@@ -165,14 +165,14 @@ begin
         variable file_name : text_line; -- the file name the line came from
         variable tmp_file_name : text_line; -- the file name the line came from
         variable inst_element_number : integer := 0; -- sequence number
-        
+
         variable stack_ptr : integer := 0; -- call stack pointer
         variable stack : stack_register; -- call stack
         variable stack_scopes : stack_text_field_array; -- scopes
         variable stack_scope_lefts : stack_text_field_array; -- scope_lefts
         variable stack_called_procs : stack_text_field_array; -- called labels
         variable stack_called_files : stack_text_line_array; -- called files
-        variable stack_called_file_line_numbers : stack_numbers_array; -- called line numbers
+        variable stack_called_file_linebers : stack_numbers_array; -- called line numbers
 
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
@@ -228,7 +228,7 @@ begin
 
         -- Array
         variable var_stm_array : t_stm_array_ptr;
-        
+
         -- Label
         variable var_stm_label : text_field_ptr;
 
@@ -276,101 +276,101 @@ begin
         variable branch_to_interrupt_instruction_line_to_execute : integer := 0;
 
         variable tmp_called_proc : text_field;
-        variable nul_scope : text_field;    
-        variable pass :integer;
-        
+        variable nul_scope : text_field;
+        variable pass : integer;
+
         function is_inst(i0 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 then 
-               return true; 
+            if inst(1 to inst_len) = i0 then
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 then 
-               return true; 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 then
+                return true;
             end if;
             return false;
         end function;
-            
+
         function is_inst(i0 : string; i1 : string; i2 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 then 
-               return true; 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 then
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string; i5 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 or inst(1 to inst_len) = i5 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string; i5 : string; i6 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 or inst(1 to inst_len) = i5 
                or inst(1 to inst_len) = i6 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string; i5 : string; i6 : string; i7 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 or inst(1 to inst_len) = i5 
                or inst(1 to inst_len) = i6 or inst(1 to inst_len) = i7 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string; i5 : string; i6 : string; i7 : string; i8 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 or inst(1 to inst_len) = i5 
                or inst(1 to inst_len) = i6 or inst(1 to inst_len) = i7 or inst(1 to inst_len) = i8 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-        
+
         function is_inst(i0 : string; i1 : string; i2 : string; i3 : string; i4 : string; i5 : string; i6 : string; i7 : string; i8 : string; i9 : string) return boolean is
         begin
-            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2 
+            if inst(1 to inst_len) = i0 or inst(1 to inst_len) = i1 or inst(1 to inst_len) = i2
                or inst(1 to inst_len) = i3 or inst(1 to inst_len) = i4 or inst(1 to inst_len) = i5 
                or inst(1 to inst_len) = i6 or inst(1 to inst_len) = i7 or inst(1 to inst_len) = i8
                or inst(1 to inst_len) = i9 then 
-               return true; 
+                return true;
             end if;
             return false;
         end function;
-                            
+
     begin
         nul_scope(1) := nul;
         marker <= (others => '0');
@@ -380,7 +380,7 @@ begin
         bus_timeout_failures <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
-        
+
         wait for 0 ns;
 
         init_const_text_field(stimulus_main_entry_label, main_proc_name);
@@ -403,29 +403,29 @@ begin
         pass := 2;
         read_instruction_file(pass, stimulus_path, stimulus_file, inst_list, var_list, inst_list, file_list, machine_value_width);
         print("Parsing .stm files done");
-     
+
         init_inst_context(inst_context);
         inst_element_number := 0;
         last_searched_inst_element_number := 0;
-        last_searched_inst_element_ptr := inst_list;    
-        print("Checking if all variables are initially defined for all instructions");        
+        last_searched_inst_element_ptr := inst_list;
+        print("Checking if all variables are initially defined for all instructions");
         while inst_element_number < inst_list.element_count loop
             inst_element_number := inst_element_number + 1;
             search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
             track_initial_context_var_scope(inst, par_text_fields, inst_context);
-            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));  
-            if inst_context.in_call_advanced_parameters 
+            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+            if inst_context.in_call_advanced_parameters
                 or in_call_label_advanced_parameters then
-                var_scopes(2) := in_called_proc_name;       
+                var_scopes(2) := in_called_proc_name;
             end if;
-            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);        
+            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
         end loop;
 
         init_inst_context(inst_context);
         inst_element_number := 0;
         last_searched_inst_element_number := 0;
-        last_searched_inst_element_ptr := inst_list;   
+        last_searched_inst_element_ptr := inst_list;
 
         -- using the inst list, get the inst element and execute it as per the statements in the elsif tree.
         while inst_element_number < inst_list.num_of_lines loop
@@ -440,19 +440,19 @@ begin
                 if not in_proc_advanced_parameters and not in_call_advanced_parameters then
                     resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_label_std_txt_io_line);
                 end if;
-            end if;            
+            end if;
 
-            if main_entered = 0 then          
+            if main_entered = 0 then
                 access_var(var_list, nul_scope, main_proc_name, var_index, main_element, valid, machine_value_width);
                 assert valid /= 0
                 report lf & "Entry point proc Main:'" & main_proc_name(1 to fld_len(main_proc_name)) & "' scope:'' not found !"
                 severity failure;
                 inst_element_number := main_element;
                 search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                 track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);                               
+                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                 print("exec main entry line " & (integer'image(file_line)) & " " & inst(1 to len) & " in file " & text_line_crop(file_name));
                 main_entered := 1;
                 stack(stack_ptr) := -1;
@@ -460,9 +460,9 @@ begin
                 stack_scope_lefts(stack_ptr) := scope_left;
                 stack_called_procs(stack_ptr) := main_proc_name;
                 stack_called_files(stack_ptr) := file_name;
-                stack_called_file_line_numbers(stack_ptr) := file_line;
+                stack_called_file_linebers(stack_ptr) := file_line;
                 scope := nul_scope;
-                scope_left := nul_scope;           
+                scope_left := nul_scope;
 
             elsif branch_to_interrupt then
                 if (stack_ptr >= 31) then
@@ -490,15 +490,15 @@ begin
 
                 inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                 search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                 track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                 stack_scopes(stack_ptr) := scope;
                 stack_scope_lefts(stack_ptr) := scope_left;
                 stack_called_procs(stack_ptr) := branch_to_interrupt_label;
                 stack_called_files(stack_ptr) := file_name;
-                stack_called_file_line_numbers(stack_ptr) := file_line;
+                stack_called_file_linebers(stack_ptr) := file_line;
                 scope := instruction_scope;
                 scope_left := nul_scope;
 
@@ -508,10 +508,10 @@ begin
 
                 inst_element_number := inst_element_number + 1;
                 search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                 track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);                                    
+                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                 if trc_on(3) = '1' then
                     dump_file_defs(file_list);
                 end if;
@@ -519,7 +519,7 @@ begin
                     dump_variables(var_list, machine_value_width);
                 end if;
                 if trc_on(1) = '1' then
-                    print_inst_element_number(inst_list, inst_element_number, file_list);              
+                    print_inst_element_number(inst_list, inst_element_number, file_list);
                 end if;
 
                 executing_line <= file_line;
@@ -557,7 +557,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ cannot update variable, it may be a constant ?"
                     severity failure;
-                    
+
                 -- array an_array 16
                 elsif is_inst(INSTR_ARRAY) then
                     -- This inst has been executed for global arrays while reading the file
@@ -568,7 +568,7 @@ begin
                     for i in 0 to var_stm_array'length - 1 loop
                         var_stm_array(i) := to_unsigned(0, machine_value_width);
                     end loop;
-                    
+
                 -- label a_label a_proc_label
                 elsif is_inst(INSTR_LABEL) then
                     -- This inst has been executed for global labels while reading the file
@@ -576,7 +576,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " label not found"
                     severity failure;
-                                                               
+
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif is_inst(INSTR_FILE) then
@@ -585,7 +585,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -617,7 +617,7 @@ begin
                     assert valid /= 0
                     report "signal_pointer not a signal object name??"
                     severity failure;
-                    
+
                 -- bus a_bus
                 elsif is_inst(INSTR_BUS) then
                     -- This inst has been executed for global busses while reading the file
@@ -629,7 +629,7 @@ begin
                     assert valid /= 0
                     report "bus_pointer not a bus object name??"
                     severity failure;
-                    
+
                 -- lines a_lines
                 elsif is_inst(INSTR_LINES) then
                     -- This inst has been executed for global lines while reading the file
@@ -647,7 +647,7 @@ begin
 
                 -- equ operand1_equ_target operand2
                 -- equ operand1_equ_target 0xF0
-                elsif is_inst(INSTR_EQU, INSTR_EQU_PAR_CLOSE) then                  
+                elsif is_inst(INSTR_EQU, INSTR_EQU_PAR_CLOSE) then
                     update_variable(var_list, par_indexes(1), par_values(2), valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ cannot update variable, it may be a constant ?"
@@ -655,7 +655,7 @@ begin
                     if is_inst(INSTR_EQU_PAR_CLOSE) then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                    
+
                 -- d_var s_var
                 -- d_var s_var )
                 elsif is_inst(INSTR_VAR_POINTER_COPY, INSTR_VAR_POINTER_COPY_PAR_CLOSE) then
@@ -670,7 +670,7 @@ begin
                     if is_inst(INSTR_VAR_POINTER_COPY_PAR_CLOSE) then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                             
+
                 -- add operand1_and_target operand2
                 -- add operand1_and_target 0xF0
                 elsif is_inst(INSTR_ADD) then
@@ -881,7 +881,7 @@ begin
                     if is_inst(INSTR_ARRAY_POINTER_COPY_PAR_CLOSE) then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                                     
+
                 -- array verify a_var array_position var_expected_value var_mask_value
                 -- array verify a_var array_position 0x0002 0x00FF
                 -- array verify a_var 5 var_expected_value var_mask_value
@@ -912,7 +912,7 @@ begin
                             verify_failure_count := verify_failure_count + 1;
                         end if;
                     end if;
-                    
+
                 -- label pointer copy a_label another_label
                 -- label pointer copy a_label another_label )
                 elsif is_inst(INSTR_LABEL_POINTER_COPY, INSTR_LABEL_POINTER_COPY_PAR_CLOSE) then
@@ -930,7 +930,7 @@ begin
 
                 -- equ label1_equ_target label2
                 -- equ label1_equ_target label2 )
-                elsif is_inst(INSTR_LABEL_EQU, INSTR_LABEL_EQU_PAR_CLOSE) then                  
+                elsif is_inst(INSTR_LABEL_EQU, INSTR_LABEL_EQU_PAR_CLOSE) then
                     update_variable(var_list, par_indexes(1), par_values(2), valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & " equ cannot update variable, it may be a constant ?"
@@ -938,14 +938,14 @@ begin
                     if inst(1 to len) = INSTR_LABEL_EQU_PAR_CLOSE then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                    
+
                 -- file readable a_fileA target
                 elsif is_inst(INSTR_FILE_READABLE) then
                     index_variable(var_list, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_readable(var_stm_text_substituded_ptr, temp_int);
@@ -961,7 +961,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_writeable(var_stm_text_substituded_ptr, temp_int);
@@ -977,7 +977,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_appendable(var_stm_text_substituded_ptr, temp_int);
@@ -997,7 +997,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_write(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -1015,7 +1015,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_append(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -1090,7 +1090,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                        stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -1168,7 +1168,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " file object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -1199,7 +1199,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " position object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, var_stm_text, var_stm_text_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr, valid);
@@ -1221,7 +1221,7 @@ begin
                     if inst(1 to len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                                      
+
                 -- lines get a_lines position an_array number_found
                 -- lines get a_lines 8 an_array number_found
                 elsif is_inst(INSTR_LINES_GET_ARRAY) then
@@ -1274,7 +1274,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par_values(2)(30 downto 0));
@@ -1309,7 +1309,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par_values(2)(30 downto 0));
@@ -1340,7 +1340,7 @@ begin
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " lines object not found"
                     severity failure;
-                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(var_list, var_scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out, valid);
@@ -1398,7 +1398,7 @@ begin
                     if inst(1 to len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                                        
+
                 -- if a_var_ref = another_var
                 -- if 0x09 = another_var
                 -- if a_varA = 0x09
@@ -1407,7 +1407,7 @@ begin
                     if_level := if_level + 1;
                     if_state(if_level) := false;
                     if trc_on(4) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  incremented if_level " & integer'image(if_level);
                     end if;
                     case to_integer(par_values(2)(30 downto 0)) is
@@ -1431,7 +1431,7 @@ begin
                             end if;
                         when others =>
                             assert false
-                            report " line " & (integer'image(file_line)) & "  if inst got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
+                            report " line " & (integer'image(file_line)) & "  if inst got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_text_field(file_line, dec)) & " in file " & text_line_crop(file_name)
                             severity failure;
                     end case;
                     if trc_on(4) = '1' then
@@ -1445,10 +1445,10 @@ begin
                         inst_element_number := inst_element_number + 1;
                         inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                         search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                         track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (inst(1 to len) /= INSTR_ELSE and inst(1 to len) /= INSTR_ELSIF and inst(1 to len) /= INSTR_END_IF) loop
                             if inst(1 to len) = INSTR_IF then
@@ -1461,12 +1461,12 @@ begin
                             report " line " & (integer'image(file_line)) & "  if inst unable to find terminating" & lf & "    else, elsif or end_if statement."
                             severity failure;
                             inst_element_number := inst_element_number + 1;
-                        inst_element_number := branch_to_interrupt_instruction_line_to_execute;
-                        search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
-                        track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                            inst_element_number := branch_to_interrupt_instruction_line_to_execute;
+                            search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
+                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
+                            track_initial_context_var_scope(inst, par_text_fields, inst_context);
+                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         end loop;
                         if trc_on(4) = '1' then
                             report inst(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
@@ -1480,7 +1480,7 @@ begin
                 -- elsif 0x0A > 0x09
                 elsif is_inst(INSTR_ELSIF) then
                     if trc_on(4) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  if_level is " & integer'image(if_level);
                         if if_state(if_level) = true then
                             report inst(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
@@ -1492,10 +1492,10 @@ begin
                         inst_element_number := inst_element_number + 1;
                         inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                         search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                         track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         while (inst(1 to len) /= INSTR_IF) and inst(1 to len) /= INSTR_END_IF loop
                             assert inst_element_number < inst_list.num_of_lines
                             report " line " & (integer'image(file_line)) & "  if inst unable to find terminating" & lf & "    else, elsif or end_if statement."
@@ -1503,10 +1503,10 @@ begin
                             inst_element_number := inst_element_number + 1;
                             inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                             search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                             track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         end loop;
                         inst_element_number := inst_element_number - 1; -- re-align so it will be operated on.
                     else
@@ -1531,7 +1531,7 @@ begin
                                 end if;
                             when others =>
                                 assert false
-                                report " line " & (integer'image(file_line)) & "  elsif inst got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_str(file_line, dec)) & " in file " & text_line_crop(file_name)
+                                report " line " & (integer'image(file_line)) & "  elsif inst got an unexpected value" & lf & "  in parameter 2!" & lf & "found on line " & (ew_to_text_field(file_line, dec)) & " in file " & text_line_crop(file_name)
                                 severity failure;
                         end case;
                         if trc_on(4) = '1' then
@@ -1545,10 +1545,10 @@ begin
                             inst_element_number := inst_element_number + 1;
                             inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                             search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                             track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (inst(1 to len) /= INSTR_ELSE and inst(1 to len) /= INSTR_ELSIF and inst(1 to len) /= INSTR_END_IF) loop
                                 if inst(1 to len) = INSTR_IF then
@@ -1563,10 +1563,10 @@ begin
                                 inst_element_number := inst_element_number + 1;
                                 inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                                 search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                                access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                                 track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                                var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                                access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                             end loop;
                             if trc_on(4) = '1' then
                                 report inst(1 to len) & ":  num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level));
@@ -1578,7 +1578,7 @@ begin
                 -- else
                 elsif is_inst(INSTR_ELSE) then
                     if trc_on(4) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  if_level is " & integer'image(if_level);
                         if if_state(if_level) = true then
                             report inst(1 to len) & ":  resolved if_state " & integer'image(if_level) & " is true";
@@ -1590,10 +1590,10 @@ begin
                         inst_element_number := inst_element_number + 1;
                         inst_element_number := branch_to_interrupt_instruction_line_to_execute;
                         search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
+                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
                         track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or inst(1 to len) /= INSTR_END_IF loop
                             if inst(1 to len) = INSTR_IF then
@@ -1606,12 +1606,12 @@ begin
                             report " line " & (integer'image(file_line)) & "  else inst unable to find terminating" & lf & "    end_if statement."
                             severity failure;
                             inst_element_number := inst_element_number + 1;
-                        inst_element_number := branch_to_interrupt_instruction_line_to_execute;
-                        search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
-                        access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);     
-                        track_initial_context_var_scope(inst, par_text_fields, inst_context);
-                        var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name)); 
-                        access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);         
+                            inst_element_number := branch_to_interrupt_instruction_line_to_execute;
+                            search_inst_element_ptr(inst_list, inst_element_number, last_searched_inst_element_number, last_searched_inst_element_ptr, inst_element_ptr);
+                            access_inst_element_ptr(inst_element_ptr, file_list, inst, inst_len, par_text_fields, txt, txt_enclosing_quote, file_name, file_line);
+                            track_initial_context_var_scope(inst, par_text_fields, inst_context);
+                            var_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
+                            access_inst_element_parameters(var_list, file_name, file_line, var_scopes, par_text_fields, par_indexes, par_values);
                         end loop;
                         inst_element_number := inst_element_number - 1; -- re-align so it will be operated on.
                     end if;
@@ -1620,7 +1620,7 @@ begin
                 elsif is_inst(INSTR_END_IF) then
                     if_level := if_level - 1;
                     if trc_on(4) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  decremented if_level " & integer'image(if_level);
                     end if;
 
@@ -1630,7 +1630,7 @@ begin
                     stack_loop_if_enter_level(stack_ptr) := if_level;
                     act_loop_num := stack_loop_num(stack_ptr);
                     if trc_on(5) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                         report inst(1 to len) & ":  stack_loop_if_enter_level(" & integer'image(stack_ptr) & ")=" & integer'image(if_level);
                         report inst(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
@@ -1654,7 +1654,7 @@ begin
                     act_curr_loop_count := act_curr_loop_count + 1;
                     stack_curr_loop_count(stack_ptr)(act_loop_num) := act_curr_loop_count;
                     act_term_loop_count := stack_term_loop_count(stack_ptr)(act_loop_num);
-                    if trc_on(5) = '1' then                    
+                    if trc_on(5) = '1' then
                         index_variable_value_ptr(var_list, par_indexes(2), var_scope, stm_value_ptr, valid);
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & inst(1 to len) & " var not found"
@@ -1663,7 +1663,7 @@ begin
                         assert valid /= 0
                         report "var_pointer not a var name??"
                         severity failure; 
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                         report inst(1 to len) & ":  act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ")=" & integer'image(act_loop_num);
                         report inst(1 to len) & ":  set incremented stack_curr_loop_count(" & integer'image(stack_ptr) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_curr_loop_count);
@@ -1694,7 +1694,7 @@ begin
                     assert false
                     report "the test has been stopped for debugging by command !!"
                     severity failure;
-                    
+
                 -- finish
                 elsif is_inst(INSTR_FINISH) then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
@@ -1746,20 +1746,20 @@ begin
                     print("Test finished");
                     wait for 1000 ns;
                     finish;
-                    
+
                 -- proc
                 elsif is_inst(INSTR_PROC)
                       or inst(1 to len) = INSTR_PROC_PAR_OPEN
                       or inst(1 to len) = INSTR_PROC_PAR_NOPAR_0
                       or inst(1 to len) = INSTR_PROC_PAR_NOPAR_1 then
                     null; -- no action necessary
-                                
+
                 -- end proc
                 -- end interrupt
                 -- return
                 elsif is_inst(INSTR_RETURN, INSTR_END_PROC, INSTR_END_INTERRUPT) then
                     if trc_on(5) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                     end if;
                     act_loop_num := stack_loop_num(stack_ptr);
@@ -1788,17 +1788,17 @@ begin
                     scope_left := stack_scope_lefts(stack_ptr);
                     if trc_on(5) = '1' then
                         report inst(1 to len) & ":  decremented stack_ptr is:" & integer'image(stack_ptr);
-                        report inst(1 to len) & ":  restored inst_element_number to goto: stack(" & integer'image(stack_ptr) & ") = " & integer'image(inst_element_number);                        
+                        report inst(1 to len) & ":  restored inst_element_number to goto: stack(" & integer'image(stack_ptr) & ") = " & integer'image(inst_element_number);
                         report inst(1 to len) & ":  restored scope: stack(" & integer'image(stack_ptr) & ") = " & scope;
                         report inst(1 to len) & ":  restored scope_left: stack(" & integer'image(stack_ptr) & ") = " & scope_left;
                         report inst(1 to len) & ":  restored if_level: stack_loop_if_enter_level(" & integer'image(stack_ptr) & ") = " & integer'image(if_level);
                         report inst(1 to len) & ":  restored act_loop_num: stack_loop_num(" & integer'image(stack_ptr) & ") = " & integer'image(act_loop_num);
                         tmp_called_proc := stack_called_procs(stack_ptr);
-                        report inst(1 to len) & ":  restored called_proc: stack(" & integer'image(stack_ptr) & ") = " & tmp_called_proc; 
+                        report inst(1 to len) & ":  restored called_proc: stack(" & integer'image(stack_ptr) & ") = " & tmp_called_proc;
                         tmp_file_name := stack_called_files(stack_ptr) ;
-                        tmp_file_line := stack_called_file_line_numbers(stack_ptr);   
+                        tmp_file_line := stack_called_file_linebers(stack_ptr);
                         report inst(1 to len) & ":  restored file_name: stack(" & integer'image(stack_ptr) & ") = " & tmp_file_name;
-                        report inst(1 to len) & ":  restored file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(tmp_file_line);                                                                     
+                        report inst(1 to len) & ":  restored file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(tmp_file_line);
                     end if;
                     wait for 0 ns;
 
@@ -1809,14 +1809,14 @@ begin
                 -- call label some_label (
                 -- call label some_label ()
                 -- call label some_label ( )
-                elsif inst(1 to len) = INSTR_CALL or inst(1 to len) = INSTR_CALL_PAR_OPEN 
+                elsif inst(1 to len) = INSTR_CALL or inst(1 to len) = INSTR_CALL_PAR_OPEN
                       or inst(1 to len) = INSTR_CALL_PAR_NOPAR_0 
                       or inst(1 to len) = INSTR_CALL_PAR_NOPAR_1 
                       or inst(1 to len) = INSTR_CALL_LABEL_PAR_OPEN 
                       or inst(1 to len) = INSTR_CALL_LABEL_PAR_NOPAR_0 
                       or inst(1 to len) = INSTR_CALL_LABEL_PAR_NOPAR_1 then          
                     if trc_on(5) = '1' then
-                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_str(file_line, dec)) & ";  file: " & text_line_crop(file_name);
+                        report inst(1 to len) & ": inst_element_number: " & integer'image(inst_element_number) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to len) & ":  stack_ptr:" & integer'image(stack_ptr);
                     end if;
                     assert stack_ptr < 31
@@ -1826,34 +1826,34 @@ begin
                     stack_scope_lefts(stack_ptr) := scope_left;
                     scope := access_next_scope;
                     scope_left := access_next_scope_left;
-                    stack_called_procs(stack_ptr) := called_proc;                                     
+                    stack_called_procs(stack_ptr) := called_proc;
                     stack_called_files(stack_ptr) := file_name;
-                    stack_called_file_line_numbers(stack_ptr) := file_line;     
-                    stack(stack_ptr) := inst_element_number;                                                                                                            
+                    stack_called_file_linebers(stack_ptr) := file_line;
+                    stack(stack_ptr) := inst_element_number;
                     if trc_on(5) = '1' then
                         report inst(1 to len) & ":  push inst_element_number: stack(" & integer'image(stack_ptr) & ") = " & integer'image(inst_element_number);
                         report inst(1 to len) & ":  push scope: stack(" & integer'image(stack_ptr) & ") = " & scope;
                         report inst(1 to len) & ":  push scope_left: stack(" & integer'image(stack_ptr) & ") = " & scope_left;
                         report inst(1 to len) & ":  push called_proc: stack(" & integer'image(stack_ptr) & ") = " & called_proc;
                         report inst(1 to len) & ":  push file_name: stack(" & integer'image(stack_ptr) & ") = " & file_name;
-                        report inst(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line); 
+                        report inst(1 to len) & ":  push file_line: stack(" & integer'image(stack_ptr) & ") = " & integer'image(file_line);
                     end if;
                     stack_ptr := stack_ptr + 1;
-                    inst_element_number := access_next_instruction_line_to_execute; -- go into proc to init default parameters 
+                    inst_element_number := access_next_instruction_line_to_execute; -- go into proc to init default parameters
                     if trc_on(5) = '1' then
                         report inst(1 to len) & ":  incremented stack_ptr:" & integer'image(stack_ptr);
                         report inst(1 to len) & ":  goto inst_element_number:" & integer'image(inst_element_number);
-                    end if;                    
-                             
+                    end if;
+
                 -- ) 
                 elsif inst(1 to len) = INSTR_PAR_CLOSE then
-                    inst_element_number := access_next_instruction_line_to_execute;       
-                                                   
+                    inst_element_number := access_next_instruction_line_to_execute;
+
                 -- log message INFO "some message"
                 -- log message  INFO "misc_proc severity: {}" INFO
                 elsif inst(1 to len) = INSTR_LOG_MESSAGE then
-                    if par_values(1) <= loglevel then                        
-                        txt_print_wvar(var_list, scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, machine_value_width);
+                    if par_values(1) <= loglevel then
+                        txt_print_wvar(var_list, scope, txt, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, machine_value_width);
                     end if;
 
                 -- log lines INFO a_lines
@@ -2013,7 +2013,7 @@ begin
                         end if;
                     end if;
                     wait for 0 ns;
-                    
+
                 --  signal pointer copy a_signal_target a_signal_source
                 --  signal pointer copy a_signal_target a_signal_source )
                 elsif inst(1 to len) = INSTR_SIGNAL_POINTER_COPY or inst(1 to len) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE then
@@ -2028,7 +2028,7 @@ begin
                     if inst(1 to len) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                                      
+
                 --  signal pointer set a_signal_target a_var
                 --  signal pointer set a_signal_target 0x01
                 elsif inst(1 to len) = INSTR_SIGNAL_POINTER_SET then
@@ -2152,7 +2152,7 @@ begin
                     assert valid /= 0
                     report "variable not a var object name??"
                     severity failure;
-                    
+
                 --  bus pointer copy a_file_target a_file_source
                 --  bus pointer copy a_file_target a_file_source (
                 elsif inst(1 to len) = INSTR_BUS_POINTER_COPY or inst(1 to len) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
@@ -2167,7 +2167,7 @@ begin
                     if inst(1 to len) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
                         inst_element_number := access_next_instruction_line_to_execute;
                     end if;
-                    
+
                 --  bus pointer set a_bus_target a_var
                 --  bus pointer set a_bus_target 0x01
                 elsif inst(1 to len) = INSTR_BUS_POINTER_SET then

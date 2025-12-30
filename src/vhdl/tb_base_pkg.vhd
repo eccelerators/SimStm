@@ -73,7 +73,7 @@ package tb_base_pkg is
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
-    
+
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
     type scope_text_field_array is array (1 to 6) of text_field;
@@ -99,10 +99,10 @@ package tb_base_pkg is
         element_number : integer; -- sequential element number
         element_count : integer; -- total number of elements in list
         file_line : integer; -- file line number
-        file_idx : integer;      
+        file_idx : integer;
         next_rec : stim_line_ptr;
     end record;
-    
+
     -- define the instruction structure
     type inst_def;
     type inst_def_ptr is access inst_def;
@@ -126,8 +126,8 @@ package tb_base_pkg is
     type t_stm_array_ptr is access t_stm_array;
 
     type t_stm_line_type is (STM_LINE_TEXT_TYPE,
-                             STM_LINE_ARRAY_TYPE
-                            );
+        STM_LINE_ARRAY_TYPE
+    );
 
     type t_stm_line;
     type t_stm_line_ptr is access t_stm_line;
@@ -148,20 +148,20 @@ package tb_base_pkg is
     end record;
 
     type t_stm_var_type is (STM_VALUE_TYPE,
-                            STM_CONST_VALUE_TYPE,
-                            STM_TEXT_TYPE,
-                            STM_ARRAY_TYPE,
-                            STM_LINES_TYPE,
-                            STM_BUS_TYPE,
-                            STM_SIGNAL_TYPE,
-                            STM_PROC_TYPE,
-                            STM_LABEL_TYPE,
-                            NO_VAR_TYPE
-                           );
-                           
+        STM_CONST_VALUE_TYPE,
+        STM_TEXT_TYPE,
+        STM_ARRAY_TYPE,
+        STM_LINES_TYPE,
+        STM_BUS_TYPE,
+        STM_SIGNAL_TYPE,
+        STM_PROC_TYPE,
+        STM_LABEL_TYPE,
+        NO_VAR_TYPE
+    );
+
     type t_stm_inst_context is record
         in_namespace : boolean;
-        in_proc_conventional : boolean;  
+        in_proc_conventional : boolean;
         in_proc_advanced : boolean;
         in_proc_advanced_parameters : boolean;
         in_proc_advanced_body : boolean;
@@ -169,7 +169,7 @@ package tb_base_pkg is
         in_call_label_advanced_parameters : boolean;
         in_namespace_name : text_field;
         in_proc_name : text_field;
-        in_called_proc_name : text_field; 
+        in_called_proc_name : text_field;
     end record;
 
     -- define the variables field and pointer
@@ -194,7 +194,7 @@ package tb_base_pkg is
         var_org_stm_lines : t_stm_lines_ptr;
         next_rec : var_field_ptr;
     end record;
-    
+
     procedure init_inst_context(
         variable inst_context : inout t_stm_inst_context
     );
@@ -229,9 +229,9 @@ package tb_base_pkg is
         c : in character
     ) return std_logic_vector;
 
-    procedure check_presence_instruction_file_name(
+    procedure check_presence_inst_file_name(
         variable file_list : inout file_def_ptr;
-        variable file_name : in string;
+        variable file_name : in text_line;
         variable present : out boolean
     );
 
@@ -239,13 +239,13 @@ package tb_base_pkg is
         s1 : stm_text;
         s2 : text_field
     ) return stm_text;
-                        
+
     procedure ew_str_cat_ptr(
         variable s1 : in stm_text;
         variable s2_ptr : in text_field_ptr;
         variable so : out stm_text
     );
-                        
+
     function textfield_dot_cat(
         s1 : text_field;
         s2 : text_field
@@ -270,14 +270,14 @@ package tb_base_pkg is
 
     --  to_str function  with base parameter
     --     convert integer to number base
-    function ew_to_str(
+    function ew_to_text_field(
         int : integer;
         b : base
     ) return text_field;
 
     --  to_str function  with base parameter
     --     convert t_stm_value to number base
-    function ew_to_str(
+    function ew_to_text_field(
         stmvalue : unsigned;
         b : base
     ) return text_field;
@@ -286,7 +286,7 @@ package tb_base_pkg is
     --          inputs :  text field s1 and s2
     --          return :  true if text fields are equal; false otherwise.
     function fld_equal(
-        s1 : in text_field;                     
+        s1 : in text_field;
         s2 : in text_field
     ) return boolean;
 
@@ -366,7 +366,7 @@ package tb_base_pkg is
     function is_digit(
         constant c : in character
     ) return boolean;
-    
+
     function is_txt_var_first_character(
         constant c : in character
     ) return boolean;
@@ -515,16 +515,16 @@ package tb_base_pkg is
     );
 
     procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
-                            variable position : in integer;
-                            variable var_stm_text : in stm_text_ptr;
-                            variable valid : out integer);
+        variable position : in integer;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer);
 
     procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
-                            variable position : integer;
-                            variable stm_array : in t_stm_array_ptr;
-                            variable valid : out integer;
-                            constant stm_value_width : in integer);
-                                 
+        variable position : integer;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer;
+        constant stm_value_width : in integer);
+
     --  function short text_line (remove 'nul')
     function stm_text_crop(
         txt : in stm_text
@@ -562,7 +562,7 @@ package tb_base_pkg is
     --   inputs  :  string
     --   output  :  stm_value
     function str2stm_value(
-        str : in string; 
+        str : in string;
         stm_value_width : in integer
     ) return unsigned;
 
@@ -595,18 +595,18 @@ package tb_base_pkg is
         variable ptr : in stm_text_ptr;
         variable str : out stm_text
     );
-                            
+
     procedure text_field_ptr_to_text_field(
         variable ptr : in text_field_ptr;
         variable field : out text_field
     );
-                            
+
     procedure text_field_to_text_field_ptr(
         variable field : in text_field;
         variable ptr : inout text_field_ptr
     );
-                            
-    -- function to get string of the txt field                     
+
+    -- function to get string of the txt field
     function txt_field_to_string(
         s : in text_field
     ) return string;
@@ -616,20 +616,20 @@ package tb_base_pkg is
         variable txt_str : in stm_text
     );
 
-    function to_str_hex(
+    function to_text_field_hex(
         int : integer
-    ) return string;
+    ) return text_field;
 
-    function to_str(
+    function to_text_field(
         int : integer
-    ) return string;
+    ) return text_field;
 
-    function to_str_hex(
+    function to_text_field_hex(
         stmvalue : unsigned
-    ) return string;
+    ) return text_field;
 
-    function to_str(
+    function to_text_field(
         stmvalue : unsigned
-    ) return string;
+    ) return text_field;
 
 end package;

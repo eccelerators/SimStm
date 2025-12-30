@@ -52,49 +52,49 @@ use work.tb_interpreter_util_pkg.all;
 package tb_interpreter_basic_pkg is
 
     procedure track_inst_context(
-          variable inst : in text_field;
-          variable par_text_fields : in parameter_text_field_array;
-          variable file_name : in text_line;
-          variable file_line_num : in integer;
-          variable var_list : inout var_field_ptr;
-          variable inst_context : inout t_stm_inst_context          
+        variable inst : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        variable file_line : in integer;
+        variable file_name : in text_line;
+        variable var_list : inout var_field_ptr;
+        variable inst_context : inout t_stm_inst_context
     );
 
     procedure add_var_on_constant_declaration(
-          variable var_list : inout var_field_ptr;    
-          variable inst : in text_field;
-          variable par_text_fields : in parameter_text_field_array;
-          variable inst_list_elment_num : inout integer;
-          variable str_ptr : in stm_text_ptr;
-          variable txt_enclosing_quote : in character;
-          variable file_line_num : in integer;
-          variable file_name : in text_line;
-          variable inst_context : inout t_stm_inst_context;
-          constant stm_value_width : in integer
-    );
-
-    procedure add_var_on_non_local_variable_declaration(
-          variable var_list : inout var_field_ptr;
-          variable inst : in text_field;
-          variable par_text_fields : in parameter_text_field_array;
-          variable inst_list_elment_num : inout integer;
-          variable str_ptr : in stm_text_ptr;
-          variable txt_enclosing_quote : in character;
-          variable file_line_num : in integer;
-          variable file_name : in text_line;
-          variable inst_context : inout t_stm_inst_context;
-          constant stm_value_width : in integer
-    );
-
-    procedure add_inst(
-        variable inst_list : inout stim_line_ptr;                    
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable inst_list_elment_num : inout integer;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable file_line_num : in integer;
+        variable file_line : in integer;
+        variable file_name : in text_line;
+        variable inst_context : inout t_stm_inst_context;
+        constant stm_value_width : in integer
+    );
+
+    procedure add_var_on_non_local_variable_declaration(
+        variable var_list : inout var_field_ptr;
+        variable inst : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        variable inst_list_elment_num : inout integer;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        variable file_line : in integer;
+        variable file_name : in text_line;
+        variable inst_context : inout t_stm_inst_context;
+        constant stm_value_width : in integer
+    );
+
+    procedure add_inst(
+        variable inst_list : inout stim_line_ptr;
+        variable var_list : inout var_field_ptr;
+        variable inst : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        variable inst_list_elment_num : inout integer;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        variable file_line : in integer;
         variable file_name : in text_line;
         variable file_idx : in integer;
         variable inst_context : inout t_stm_inst_context;
@@ -104,16 +104,15 @@ package tb_interpreter_basic_pkg is
     procedure add_var(
         variable var_list : inout var_field_ptr;
         variable var_scope : in text_field;
-        variable par_text_fields : in parameter_text_field_array; 
+        variable par_text_fields : in parameter_text_field_array;
         variable inst_list_elment_num : in integer;
-        variable file_line_num : in integer;
-        variable name : in text_line;
-        variable length : in integer;
+        variable file_line : in integer;
+        variable file_name : in text_line;
         constant var_stm_type : in t_stm_var_type;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         constant stm_value_width : in integer;
         variable assigned_index : out integer
     );
-                          
+
 end package;

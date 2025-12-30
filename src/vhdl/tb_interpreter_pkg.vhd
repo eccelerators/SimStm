@@ -52,7 +52,7 @@ use work.tb_interpreter_basic_pkg.all;
 
 package tb_interpreter_pkg is
 
-    procedure search_inst_element_ptr( 
+    procedure search_inst_element_ptr(
         variable inst_list : in stim_line_ptr;
         variable search_for_inst_element_number : in integer;
         variable last_searched_inst_element_number : inout integer;
@@ -60,28 +60,28 @@ package tb_interpreter_pkg is
         variable inst_element_ptr : out stim_line_ptr
     );
 
-    procedure access_inst_element_ptr(        
-        variable inst_element_ptr : in stim_line_ptr;                                                                          
-        variable file_list : in file_def_ptr;                             
+    procedure access_inst_element_ptr(
+        variable inst_element_ptr : in stim_line_ptr;
+        variable file_list : in file_def_ptr;
         variable inst : out text_field;
         variable inst_len : out integer;
-        variable par_text_fields : out parameter_text_field_array;  
+        variable par_text_fields : out parameter_text_field_array;
         variable txt : out stm_text_ptr;
         variable txt_enclosing_quote : out character;
         variable file_name : out text_line;
         variable file_line : out integer
     );
-    
-    procedure access_inst_element_parameters( 
+
+    procedure access_inst_element_parameters(
         variable var_list : in var_field_ptr;
         variable file_name : in text_line;
         variable file_line : in integer;
-        variable par_scopes : in scope_text_field_array;          
+        variable par_scopes : in scope_text_field_array;
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
     );
- 
+
     procedure read_instruction_file(
         variable pass : in integer;
         constant path_name : string;
@@ -91,13 +91,13 @@ package tb_interpreter_pkg is
         variable inst_list : inout stim_line_ptr;
         variable file_list : inout file_def_ptr;
         constant stm_value_width : in integer
-    );  
-                               
+    );
+
     procedure read_include_file(
         variable pass : in integer;
         constant path_name : string;
         variable name : text_line;
-        variable inst_line_num : inout integer;
+        variable inst_element_num : inout integer;
         variable file_list : inout file_def_ptr;
         variable inst_set_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
@@ -105,5 +105,5 @@ package tb_interpreter_pkg is
         variable status : inout integer;
         constant stm_value_width : in integer
     );
-                              
+
 end package;

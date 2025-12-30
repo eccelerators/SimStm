@@ -79,7 +79,7 @@ package body tb_bus_avalon_32_pkg is
         variable access_width : in integer;
         variable successfull : out boolean;
         variable timeout : in time
-    ) is    
+    ) is
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -151,7 +151,7 @@ package body tb_bus_avalon_32_pkg is
         variable access_width : in integer;
         variable successfull : out boolean;
         variable timeout : in time
-    ) is    
+    ) is
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;

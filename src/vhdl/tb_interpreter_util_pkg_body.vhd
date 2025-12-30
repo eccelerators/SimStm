@@ -87,7 +87,7 @@ package body tb_interpreter_util_pkg is
         variable j : integer;
         variable txt_ptr_tmp : stm_text_ptr;
         variable txt_str : stm_text;
-        variable itokens: unmerged_token_text_field_array;
+        variable itokens : unmerged_token_text_field_array;
         variable valid : integer := 0;
         constant SINGLE_QUOTE : character := character'val(39);
         constant DOUBLE_QUOTE : character := character'val(34);
@@ -95,7 +95,7 @@ package body tb_interpreter_util_pkg is
     begin
         tmp_text_line := (others => nul);
         j := 1;
-        for i in 1 to itext_line'high - 1 loop         
+        for i in 1 to itext_line'high - 1 loop
             c(1) := itext_line(i);
             c(2) := itext_line(i + 1);
             if c(2) = '(' and not is_space(c(1)) then
@@ -111,9 +111,9 @@ package body tb_interpreter_util_pkg is
             else
                 tmp_text_line(j) := c(1);
                 j := j + 1;
-            end if;         
-        end loop;    
-    
+            end if;
+        end loop;
+
         -- null outputs
         itokens := (others => (others => nul));
         txt_ptr := null;
@@ -158,7 +158,7 @@ package body tb_interpreter_util_pkg is
                 token_index := token_index + 1;
                 current_token(token_index) := tmp_text_line(i);
             -- else is a space, deal with pointers
-            elsif is_space(tmp_text_line(i + 1)) = false and tmp_text_line(i + 1) /= nul then         
+            elsif is_space(tmp_text_line(i + 1)) = false and tmp_text_line(i + 1) /= nul then
                 for i in 0 to 9 loop
                     if i = 0 then
                         if token_index /= 0 then
@@ -168,11 +168,11 @@ package body tb_interpreter_util_pkg is
                             valid := 1;
                             token_index := 0;
                         end if;
-                    else                       
+                    else
                         if i = token_number then
                             itokens(i) := current_token;
                             valid := 1;
-                            exit;                    
+                            exit;
                         end if;
                     end if;
                 end loop;
@@ -184,7 +184,7 @@ package body tb_interpreter_util_pkg is
                         if i = token_number then
                             itokens(i) := current_token;
                             valid := 1;
-                            exit;                    
+                            exit;
                         end if;
                     end loop;
                 end if;
@@ -197,8 +197,8 @@ package body tb_interpreter_util_pkg is
                 for i in 0 to 9 loop
                     if i = token_number then
                         itokens(i) := current_token;
-                        valid := 1; 
-                        exit;                   
+                        valid := 1;
+                        exit;
                     end if;
                 end loop;
             end if;
@@ -213,24 +213,24 @@ package body tb_interpreter_util_pkg is
         variable txt_enclosing_quote : in character;
         variable stack_ptr : integer;
         variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_line_numbers : stack_numbers_array;
+        variable stack_called_file_linebers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
         constant stm_value_width : in integer
     ) is
         variable stm_text_substituded : stm_text;
     begin
-        stm_text_substitude_wvar(var_list, scope, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_line_numbers, stack_called_procs, stm_text_substituded, stm_value_width);
+        stm_text_substitude_wvar(var_list, scope, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, stm_text_substituded, stm_value_width);
         print(stm_text_substituded);
     end procedure;
-    
+
     procedure stm_text_substitude_wvar(
         variable var_list : in var_field_ptr;
-        variable scope : in text_field; 
+        variable scope : in text_field;
         variable ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         variable stack_ptr : integer;
         variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_line_numbers : stack_numbers_array;
+        variable stack_called_file_linebers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
         variable stm_text_substituded : out stm_text;
         constant stm_value_width : in integer
@@ -258,7 +258,7 @@ package body tb_interpreter_util_pkg is
         variable insert_call_stack_file : boolean;
         variable insert_call_stack_line_number : boolean;
         variable stack_called_file : text_field;
-        variable stack_called_file_line_number : integer;
+        variable stack_called_file_lineber : integer;
         variable stack_called_label : text_field;
 
     begin
@@ -437,7 +437,7 @@ package body tb_interpreter_util_pkg is
                 report lf & "invalid variable found in stm_text_ptr: ignoring."
                 severity warning;
                 if valid /= 0 then
-                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(v1, format));
+                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
                     k := 1;
                     while dest_txt_str(k) /= nul loop
                         k := k + 1;
@@ -453,8 +453,8 @@ package body tb_interpreter_util_pkg is
                 end loop;
                 dest_i := k;
             elsif insert_call_stack_line_number then
-                stack_called_file_line_number := stack_called_file_line_numbers(stack_ptr - previous_level);
-                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_str(stack_called_file_line_number, dec));
+                stack_called_file_lineber := stack_called_file_linebers(stack_ptr - previous_level);
+                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(stack_called_file_lineber, dec));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
@@ -477,7 +477,7 @@ package body tb_interpreter_util_pkg is
 
     procedure access_var(
         variable var_list : in var_field_ptr;
-        variable var_scope : in text_field; 
+        variable var_scope : in text_field;
         variable var_name : in text_field;
         variable var_index : out integer;
         variable var_value : out integer;
@@ -498,7 +498,7 @@ package body tb_interpreter_util_pkg is
         variable var_value : out unsigned;
         variable valid : out integer
     ) is
-                              
+
         variable var_ptr : var_field_ptr;
         variable is_defined : boolean := false;
     begin
@@ -552,7 +552,7 @@ package body tb_interpreter_util_pkg is
                         end if;
                         var_ptr := var_ptr.next_rec;
                     end loop;
-                end if;  
+                end if;
             else
                 var_ptr := var_list;
                 while var_ptr.next_rec /= null loop
@@ -565,9 +565,9 @@ package body tb_interpreter_util_pkg is
                         exit;
                     end if;
                     var_ptr := var_ptr.next_rec;
-                end loop;                          
+                end loop;
             end if;
-            
+
             if fld_len(var_scope) > 0 then
                 if var_ptr.next_rec = null then
                     -- check for a local match in the last record
@@ -584,7 +584,7 @@ package body tb_interpreter_util_pkg is
                             var_value := var_ptr.var_value(0);
                             valid := 1;
                             is_defined := true;
-                        end if;  
+                        end if;
                     end if;
                 end if;
             else
@@ -597,14 +597,14 @@ package body tb_interpreter_util_pkg is
                         is_defined := true;
                     end if;
                     var_ptr := var_ptr.next_rec;
-                end if;                          
-            end if;                                         
+                end if;
+            end if;
             assert is_defined
             report lf & "variable is not defined " & var_name & lf
             severity error;
         end if;
     end procedure;
-    
+
     procedure access_var_value_ptr(
         variable var_list : in var_field_ptr;
         variable var_scope : in text_field;
@@ -612,7 +612,7 @@ package body tb_interpreter_util_pkg is
         variable var_index : out integer;
         variable var_value_ptr : out t_stm_value_ptr;
         variable valid : out integer
-    ) is                 
+    ) is
         variable var_ptr : var_field_ptr;
         variable temp_field : text_field;
         variable is_defined : boolean := false;
@@ -648,7 +648,7 @@ package body tb_interpreter_util_pkg is
                     end if;
                     var_ptr := var_ptr.next_rec;
                 end loop;
-            end if;  
+            end if;
         else
             var_ptr := var_list;
             while var_ptr.next_rec /= null loop
@@ -661,9 +661,9 @@ package body tb_interpreter_util_pkg is
                     exit;
                 end if;
                 var_ptr := var_ptr.next_rec;
-            end loop;                          
+            end loop;
         end if;
-        
+
         if fld_len(var_scope) > 0 then
             if var_ptr.next_rec = null then
                 -- check for a local match in the last record
@@ -680,7 +680,7 @@ package body tb_interpreter_util_pkg is
                         var_value_ptr := var_ptr.var_value;
                         valid := 2;
                         is_defined := true;
-                    end if;  
+                    end if;
                 end if;
             end if;
         else
@@ -693,14 +693,14 @@ package body tb_interpreter_util_pkg is
                     is_defined := true;
                 end if;
                 var_ptr := var_ptr.next_rec;
-            end if;                          
-        end if;                                         
+            end if;
+        end if;
         assert is_defined
         report lf & "variable is not defined " & temp_field & lf
         severity error;
 
     end procedure;
-    
+
     procedure access_var_label_ptr(
         variable var_list : in var_field_ptr;
         variable var_scope : in text_field;
@@ -708,7 +708,7 @@ package body tb_interpreter_util_pkg is
         variable var_index : out integer;
         variable var_label_ptr : out text_field_ptr;
         variable valid : out integer
-    ) is                    
+    ) is
         variable var_ptr : var_field_ptr;
         variable temp_field : text_field;
         variable is_defined : boolean := false;
@@ -744,7 +744,7 @@ package body tb_interpreter_util_pkg is
                     end if;
                     var_ptr := var_ptr.next_rec;
                 end loop;
-            end if;  
+            end if;
         else
             var_ptr := var_list;
             while var_ptr.next_rec /= null loop
@@ -757,9 +757,9 @@ package body tb_interpreter_util_pkg is
                     exit;
                 end if;
                 var_ptr := var_ptr.next_rec;
-            end loop;                          
+            end loop;
         end if;
-        
+
         if fld_len(var_scope) > 0 then
             if var_ptr.next_rec = null then
                 -- check for a local match in the last record
@@ -776,7 +776,7 @@ package body tb_interpreter_util_pkg is
                         var_label_ptr := var_ptr.var_label;
                         valid := 2;
                         is_defined := true;
-                    end if;  
+                    end if;
                 end if;
             end if;
         else
@@ -789,8 +789,8 @@ package body tb_interpreter_util_pkg is
                     is_defined := true;
                 end if;
                 var_ptr := var_ptr.next_rec;
-            end if;                          
-        end if;                                         
+            end if;
+        end if;
         assert is_defined
         report lf & "variable is not defined " & temp_field & lf
         severity error;
@@ -820,7 +820,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_and_reinit_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -845,7 +845,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-          
+
     procedure index_var_value_ptr(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -895,7 +895,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_and_reinit_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -947,7 +947,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_and_reinit_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -972,8 +972,8 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
-     procedure index_var(
+
+    procedure index_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
@@ -998,7 +998,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_and_reinit_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1049,7 +1049,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure index_and_reinit_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1097,7 +1097,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1121,7 +1121,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-   
+
     procedure update_var_value_ptr(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1144,7 +1144,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1166,7 +1166,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1184,9 +1184,9 @@ package body tb_interpreter_util_pkg is
             ptr := ptr.next_rec;
         end loop;
         if ptr.var_index = index then
-                ptr.var_stm_text := ptr.var_org_stm_text;
-                ptr.var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
-                ptr.var_stm_text := var_stm_text;
+            ptr.var_stm_text := ptr.var_org_stm_text;
+            ptr.var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
+            ptr.var_stm_text := var_stm_text;
             valid := 1;
         end if;
     end procedure;
@@ -1213,7 +1213,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1260,7 +1260,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1284,7 +1284,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure init_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1308,7 +1308,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1330,7 +1330,7 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1353,9 +1353,9 @@ package body tb_interpreter_util_pkg is
             valid := 1;
         end if;
     end procedure;
-    
+
     procedure print_file_def(
-        variable file_list : inout file_def_ptr; 
+        variable file_list : inout file_def_ptr;
         variable index : in integer
     ) is
         variable tmp_file_def_ptr : file_def_ptr;
@@ -1370,13 +1370,13 @@ package body tb_interpreter_util_pkg is
         end loop;
         print(".... -----------------------------------------------------------------");
         print(".... file_def is ");
-        print(".... index: " & to_str(tmp_file_def_ptr.rec_idx));
+        print(".... index: " & to_text_field(tmp_file_def_ptr.rec_idx));
         print(".... name: " & tmp_file_def_ptr.file_name);
     end procedure;
-    
+
     procedure print_inst_element_number(
-        variable inst_list : in stim_line_ptr; 
-        variable element_number : in integer; 
+        variable inst_list : in stim_line_ptr;
+        variable element_number : in integer;
         variable file_list : inout file_def_ptr
     ) is
         variable inst_ptr : stim_line_ptr;
@@ -1391,9 +1391,9 @@ package body tb_interpreter_util_pkg is
             end if;
         end loop;
     end procedure;
-    
+
     procedure print_inst_ptr(
-        variable inst_ptr : in stim_line_ptr; 
+        variable inst_ptr : in stim_line_ptr;
         file_list : inout file_def_ptr
     ) is
         variable tmp_txt : stm_text;
@@ -1402,23 +1402,23 @@ package body tb_interpreter_util_pkg is
     begin
         print(".... -----------------------------------------------------------------");
         print(".... instruction is " & inst_ptr.inst);
-        print(".... internal list element number: " & to_str(inst_ptr.element_number));
-        print(".... instruction file linenumber: " & to_str(inst_ptr.file_line));
-        print(".... instruction file idx: " & to_str(inst_ptr.file_idx));
+        print(".... internal list element number: " & to_text_field(inst_ptr.element_number));
+        print(".... instruction file linenumber: " & to_text_field(inst_ptr.file_line));
+        print(".... instruction file idx: " & to_text_field(inst_ptr.file_idx));
         get_inst_file_name(file_list, inst_ptr.file_idx, fn);
         print(".... instruction file name: " & fn);
         for i in 1 to 6 loop
             pl := fld_len(inst_ptr.parameters(i));
             if pl > 0 then
-                print(".... par " & to_str(i) & " text" & inst_ptr.parameters(i)(1 to pl));
-            end if; 
+                print(".... par " & to_text_field(i) & " text" & inst_ptr.parameters(i)(1 to pl));
+            end if;
         end loop;
         txt_to_string(inst_ptr.txt, tmp_txt);
         print(".... text: " & tmp_txt);
     end procedure;
-       
+
     procedure dump_inst_list(
-        variable inst_list : in stim_line_ptr; 
+        variable inst_list : in stim_line_ptr;
         variable file_list : inout file_def_ptr
     ) is
         variable inst_ptr : stim_line_ptr;
@@ -1449,7 +1449,7 @@ package body tb_interpreter_util_pkg is
         -- the last one
         dump_var_field(ptr, stm_value_width);
     end procedure;
-    
+
     procedure dump_variable(
         variable var_list : in var_field_ptr;
         variable index : in integer;
@@ -1463,7 +1463,7 @@ package body tb_interpreter_util_pkg is
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
                 dump_var_field(ptr, stm_value_width);
-                found := true; 
+                found := true;
                 exit;
             end if;
             ptr := ptr.next_rec;
@@ -1513,9 +1513,9 @@ package body tb_interpreter_util_pkg is
         print("-----------------------------------------------------------------");
         print("---- var_name: " & ptr.var_name);
         print("---- var_scope: " & ptr.var_scope);
-        print("---- var_index: " & to_str(ptr.var_index));
-        print("---- var_value: 0x" & to_str_hex(ptr.var_value(0)));
-        print("---- var_org_value: 0x" & to_str_hex(ptr.var_org_value(0)));
+        print("---- var_index: " & to_text_field(ptr.var_index));
+        print("---- var_value: 0x" & to_text_field_hex(ptr.var_value(0)));
+        print("---- var_org_value: 0x" & to_text_field_hex(ptr.var_org_value(0)));
         if ptr.var_stm_type = STM_VALUE_TYPE then
             print("---- var_stm_type: STM_VALUE_TYPE");
         elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
@@ -1533,23 +1533,23 @@ package body tb_interpreter_util_pkg is
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := ptr.var_stm_array(array_index);
-                print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+                print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
             end loop;
             stm_array := ptr.var_org_stm_array;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := ptr.var_stm_array(array_index);
-                print("-------- org index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+                print("-------- org index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
             end loop;
         elsif ptr.var_stm_type = STM_LINES_TYPE then
             print("---- var_stm_type: STM_LINES_TYPE");
             assert ptr.var_stm_lines /= null
             report " stm_lines_ptr pointer is null "
             severity failure;
-            print("-------- stm_lines.size: " & to_str(ptr.var_stm_lines.size));
+            print("-------- stm_lines.size: " & to_text_field(ptr.var_stm_lines.size));
             stm_line_ptr := ptr.var_stm_lines.stm_line_list;
             while stm_line_ptr /= null loop
-                print("-------- stm_line_ptr.line_number: " & to_str(stm_line_ptr.line_number));
+                print("-------- stm_line_ptr.line_number: " & to_text_field(stm_line_ptr.line_number));
                 if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
                     print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");
                     std_line := stm_line_ptr.line_content;
@@ -1557,28 +1557,28 @@ package body tb_interpreter_util_pkg is
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
                     stm_text_ptr_to_line(tmp_str_ptr, std_line);
                     stm_line_ptr.line_content := std_line;
-                    txt_print(tmp_str_ptr);                    
+                    txt_print(tmp_str_ptr);
                 elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
                     print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");
                     success := true;
-                    print("-------- stm_line_ptr.line_content'length before reading: " & to_str(stm_line_ptr.line_content'length));
+                    print("-------- stm_line_ptr.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
                     array_index := 0;
                     tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                     while success loop
                         hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
                             array_value := unsigned(value_std_logic_vector);
-                            print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+                            print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    print("-------- stm_line_ptr.line_content'length after reading: " & to_str(stm_line_ptr.line_content'length));
+                    print("-------- stm_line_ptr.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
                 end if;
                 stm_line_ptr := stm_line_ptr.next_stm_line;
             end loop;
             stm_line_ptr := ptr.var_org_stm_lines.stm_line_list;
             while stm_line_ptr /= null loop
-                print("-------- stm_org_lines.line_number: " & to_str(stm_line_ptr.line_number));
+                print("-------- stm_org_lines.line_number: " & to_text_field(stm_line_ptr.line_number));
                 if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
                     print("-------- stm_org_lines.line_type: STM_LINE_TEXT_TYPE");
                     std_line := stm_line_ptr.line_content;
@@ -1586,22 +1586,22 @@ package body tb_interpreter_util_pkg is
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
                     stm_text_ptr_to_line(tmp_str_ptr, std_line);
                     stm_line_ptr.line_content := std_line;
-                    txt_print(tmp_str_ptr);                    
+                    txt_print(tmp_str_ptr);
                 elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
                     print("-------- stm_org_lines.line_type: STM_LINE_ARRAY_TYPE");
                     success := true;
-                    print("-------- stm_org_lines.line_content'length before reading: " & to_str(stm_line_ptr.line_content'length));
+                    print("-------- stm_org_lines.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
                     array_index := 0;
                     tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                     while success loop
                         hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
                             array_value := unsigned(value_std_logic_vector);
-                            print("-------- index: " & to_str(array_index) & ", value: " & to_str_hex(array_value));
+                            print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    print("-------- stm_org_lines.line_content'length after reading: " & to_str(stm_line_ptr.line_content'length));
+                    print("-------- stm_org_lines.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
                 end if;
                 stm_line_ptr := stm_line_ptr.next_stm_line;
             end loop;
@@ -1611,7 +1611,7 @@ package body tb_interpreter_util_pkg is
             print("---- var_stm_type: STM_SIGNAL_TYPE");
         elsif ptr.var_stm_type = STM_LABEL_TYPE then
             if ptr.var_label /= null then
-                text_field_ptr_to_text_field(ptr.var_label, tmp_label); 
+                text_field_ptr_to_text_field(ptr.var_label, tmp_label);
                 print("---- var_label: " & tmp_label);
             else
                 print("---- var_label: missing");
