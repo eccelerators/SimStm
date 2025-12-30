@@ -68,15 +68,15 @@ package tb_interpreter_pkg is
         variable par_text_fields : out parameter_text_field_array;
         variable txt : out stm_text_ptr;
         variable txt_enclosing_quote : out character;
-        variable file_name : out text_line;
-        variable file_line : out integer
+        variable file_line : out integer;
+        variable file_name : out text_line
     );
 
     procedure access_inst_element_parameters(
         variable var_list : in var_field_ptr;
-        variable file_name : in text_line;
         variable file_line : in integer;
-        variable par_scopes : in scope_text_field_array;
+        variable file_name : in text_line;
+        variable par_scopes : in parameter_scope_text_field_array;
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
@@ -86,7 +86,7 @@ package tb_interpreter_pkg is
         variable pass : in integer;
         constant path_name : string;
         constant file_name : string;
-        variable inst_set_list : inout inst_def_ptr;
+        variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
         variable inst_list : inout stim_line_ptr;
         variable file_list : inout file_def_ptr;
@@ -99,7 +99,7 @@ package tb_interpreter_pkg is
         variable name : text_line;
         variable inst_element_num : inout integer;
         variable file_list : inout file_def_ptr;
-        variable inst_set_list : inout inst_def_ptr;
+        variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
         variable inst_list : inout stim_line_ptr;
         variable status : inout integer;

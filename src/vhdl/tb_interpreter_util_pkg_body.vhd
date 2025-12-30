@@ -1433,7 +1433,7 @@ package body tb_interpreter_util_pkg is
         print_inst_ptr(inst_ptr, file_list);
     end procedure;
 
-    procedure dump_variables(
+    procedure dump_vars(
         variable var_list : in var_field_ptr;
         constant stm_value_width : in integer
     ) is
@@ -1450,7 +1450,7 @@ package body tb_interpreter_util_pkg is
         dump_var_field(ptr, stm_value_width);
     end procedure;
 
-    procedure dump_variable(
+    procedure dump_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
         constant stm_value_width : in integer
@@ -1474,23 +1474,6 @@ package body tb_interpreter_util_pkg is
                 dump_var_field(ptr, stm_value_width);
             end if;
         end if;
-    end procedure;
-
-    procedure dump_file_defs(file_list : inout file_def_ptr) is
-        variable tmp_file_def_ptr : file_def_ptr;
-        variable index : integer;
-    begin
-        print("---- -----------------------------------------------------------------");
-        print("---- -- dump file defs start -----------------------------------------");
-        index := 0;
-        tmp_file_def_ptr := file_list;
-        while tmp_file_def_ptr.next_rec /= null loop
-            print_file_def(file_list, index);
-            tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
-            index := index + 1;
-        end loop;
-        -- the last one
-        print_file_def(file_list, index);
     end procedure;
 
     procedure dump_var_field(
@@ -1626,6 +1609,25 @@ package body tb_interpreter_util_pkg is
         elsif ptr.var_stm_type = NO_VAR_TYPE then
             print("---- var_stm_type: NO_VAR_TYPE");
         end if;
+    end procedure;
+    
+    procedure dump_file_defs(
+        variable file_list : inout file_def_ptr
+    ) is
+        variable tmp_file_def_ptr : file_def_ptr;
+        variable index : integer;
+    begin
+        print("---- -----------------------------------------------------------------");
+        print("---- -- dump file defs start -----------------------------------------");
+        index := 0;
+        tmp_file_def_ptr := file_list;
+        while tmp_file_def_ptr.next_rec /= null loop
+            print_file_def(file_list, index);
+            tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
+            index := index + 1;
+        end loop;
+        -- the last one
+        print_file_def(file_list, index);
     end procedure;
 
 end package body;

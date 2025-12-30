@@ -76,10 +76,10 @@ package tb_base_pkg is
 
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
-    type scope_text_field_array is array (1 to 6) of text_field;
+    type parameter_scope_text_field_array is array (1 to 6) of text_field;
     type parameter_text_field_array is array (1 to 6) of text_field;
     type parameter_index_array is array (1 to 6) of integer;
-    type parameter_value_array is array (1 to 6) of unsigned;
+    type parameter_value_array is array (natural range <>) of unsigned;
 
     type stack_text_field_array is array (31 downto 0) of text_field;
     type stack_text_line_array is array (31 downto 0) of text_line;

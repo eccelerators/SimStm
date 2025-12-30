@@ -100,8 +100,8 @@ package body tb_interpreter_pkg is
         variable par_text_fields : out parameter_text_field_array;
         variable txt : out stm_text_ptr;
         variable txt_enclosing_quote : out character;
-        variable file_name : out text_line;
-        variable file_line : out integer
+        variable file_line : out integer;
+        variable file_name : out text_line
     ) is
         variable tmp_file_index : integer;
         variable tmp_file_def_ptr : file_def_ptr;
@@ -128,9 +128,9 @@ package body tb_interpreter_pkg is
 
     procedure access_inst_element_parameters(
         variable var_list : in var_field_ptr;
-        variable file_name : in text_line;
         variable file_line : in integer;
-        variable par_scopes : in scope_text_field_array;
+        variable file_name : in text_line;
+        variable par_scopes : in parameter_scope_text_field_array;
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
@@ -155,7 +155,7 @@ package body tb_interpreter_pkg is
         variable pass : in integer;
         constant path_name : string;
         constant file_name : string;
-        variable inst_set_list : inout inst_def_ptr;
+        variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
         variable inst_list : inout stim_line_ptr;
         variable file_list : inout file_def_ptr;
@@ -212,7 +212,7 @@ package body tb_interpreter_pkg is
         file_line := 1;
         inst_element_num := 1;
         v_ostat := 0;
-        v_instr_ptr := inst_set_list;
+        v_instr_ptr := inst_def_list;
         v_var_ptr := var_list;
         v_sequ_ptr := inst_list;
         init_inst_context(inst_context);
@@ -272,7 +272,7 @@ package body tb_interpreter_pkg is
         assert v_ostat = 0
         report lf & "include file specified on line " & (integer'image(file_line)) & " in file " & path_name & file_name & " was not found! test terminated" & lf
         severity failure;
-        inst_set_list := v_instr_ptr;
+        inst_def_list := v_instr_ptr;
         var_list := v_var_ptr;
         inst_list := v_sequ_ptr;
         file_list := v_tmp_fn;
@@ -284,7 +284,7 @@ package body tb_interpreter_pkg is
         variable name : text_line;
         variable inst_element_num : inout integer;
         variable file_list : inout file_def_ptr;
-        variable inst_set_list : inout inst_def_ptr;
+        variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
         variable inst_list : inout stim_line_ptr;
         variable status : inout integer;
@@ -344,7 +344,7 @@ package body tb_interpreter_pkg is
             v_tmp_fn.file_name(i) := name(i);
         end loop;
         v_tmp_fn.next_rec := null;
-        v_instr_ptr := inst_set_list;
+        v_instr_ptr := inst_def_list;
         v_var_ptr := var_list;
         v_sequ_ptr := inst_list;
         -- while not the end of file read it
@@ -406,7 +406,7 @@ package body tb_interpreter_pkg is
         end loop; -- end loop read file
         file_close(include_file);
         inst_element_num := inst_element_num;
-        inst_set_list := v_instr_ptr;
+        inst_def_list := v_instr_ptr;
         var_list := v_var_ptr;
         inst_list := v_sequ_ptr;
     end procedure;
