@@ -76,6 +76,7 @@ package tb_base_pkg is
     
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
+    type scope_text_field_array is array (1 to 6) of text_field;
     type parameter_text_field_array is array (1 to 6) of text_field;
     type parameter_index_array is array (1 to 6) of integer;
     type parameter_value_array is array (1 to 6) of unsigned;
@@ -158,7 +159,7 @@ package tb_base_pkg is
                             NO_VAR_TYPE
                            );
                            
-    type t_stm_scope is record
+    type t_stm_inst_context is record
         in_namespace : boolean;
         in_proc_conventional : boolean;  
         in_proc_advanced : boolean;
@@ -166,8 +167,9 @@ package tb_base_pkg is
         in_proc_advanced_body : boolean;
         in_call_advanced_parameters : boolean;
         in_call_label_advanced_parameters : boolean;
-        namespace : text_field;
-        proc : text_field;
+        in_namespace_name : text_field;
+        in_proc_name : text_field;
+        in_called_proc_name : text_field; 
     end record;
 
     -- define the variables field and pointer
@@ -193,225 +195,324 @@ package tb_base_pkg is
         next_rec : var_field_ptr;
     end record;
     
-    procedure init_scope(variable s : inout t_stm_scope);
+    procedure init_inst_context(
+        variable inst_context : inout t_stm_scope
+    );
 
     -- bin2integer    convert bin stimulus field to integer
     --          inputs :  string of type text_field containing only binary numbers
     --          return :  integer value
-    function bin2integer(bin_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer;
+    function bin2integer(
+        bin_number : in text_field;
+        file_name : in text_line;
+        file_line : in integer
+    ) return integer;
 
     -- bin2t_stm_value    convert bin stimulus field to t_stm_value
     --          inputs :  string of type text_field containing only binary numbers
     --          return :  unsigned value
-    function bin2stm_value(bin_number : in text_field;
-                           file_name : in text_line;
-                           line : in integer;
-                           stm_value_width : in integer) return unsigned;
+    function bin2stm_value(
+        bin_number : in text_field;
+        file_name : in text_line;
+        file_line : in integer;
+        stm_value_width : in integer
+    ) return unsigned;
 
-    function c2int(c : in character) return integer;
+    function c2int(
+        c : in character
+    ) return integer;
 
     -- convert character to 4 bit vector
     --   input    character
     --   output   std_logic_vector  4 bits
-    function c2std_vec(c : in character) return std_logic_vector;
+    function c2std_vec(
+        c : in character
+    ) return std_logic_vector;
 
-    procedure check_presence_instruction_file_name(file_list : inout file_def_ptr;
-                                                   file_name : in string;
-                                                   present : out boolean);
+    procedure check_presence_instruction_file_name(
+        variable file_list : inout file_def_ptr;
+        variable file_name : in string;
+        variable present : out boolean
+    );
 
-    function ew_str_cat(s1 : stm_text;
-                        s2 : text_field) return stm_text;
+    function ew_str_cat(
+        s1 : stm_text;
+        s2 : text_field
+    ) return stm_text;
                         
-    procedure ew_str_cat_ptr(variable s1 : in stm_text;
-                         variable s2_ptr : in text_field_ptr;
-                         variable so : out stm_text
-                         );
+    procedure ew_str_cat_ptr(
+        variable s1 : in stm_text;
+        variable s2_ptr : in text_field_ptr;
+        variable so : out stm_text
+    );
                         
-    function textfield_dot_cat(s1 : text_field;
-                     s2 : text_field) return text_field;
+    function textfield_dot_cat(
+        s1 : text_field;
+        s2 : text_field
+    ) return text_field;
 
-    function ew_str_cat(s1 : stm_text;
-                        s2 : text_field;
-                        s3 : integer) return stm_text;
+    function ew_str_cat(
+        s1 : stm_text;
+        s2 : text_field;
+        s3 : integer
+    ) return stm_text;
 
-    function ew_str_cat(s1 : stm_text;
-                        s2 : text_field;
-                        s3 : integer;
-                        s4 : character) return stm_text;
+    function ew_str_cat(
+        s1 : stm_text;
+        s2 : text_field;
+        s3 : integer;
+        s4 : character
+    ) return stm_text;
 
-    function ew_to_char(int : integer) return character;
+    function ew_to_char(
+        int : integer
+    ) return character;
 
     --  to_str function  with base parameter
     --     convert integer to number base
-    function ew_to_str(int : integer;
-                       b : base) return text_field;
+    function ew_to_str(
+        int : integer;
+        b : base
+    ) return text_field;
 
     --  to_str function  with base parameter
     --     convert t_stm_value to number base
-    function ew_to_str(stmvalue : unsigned;
-                       b : base) return text_field;
+    function ew_to_str(
+        stmvalue : unsigned;
+        b : base
+    ) return text_field;
 
     -- fld_equal  check text field for equality
     --          inputs :  text field s1 and s2
     --          return :  true if text fields are equal; false otherwise.
-    function fld_equal(s1 : in text_field;
-                       s2 : in text_field) return boolean;
+    function fld_equal(
+        s1 : in text_field;                     
+        s2 : in text_field
+    ) return boolean;
 
     -- fld_len    field length
     --          inputs :  string of type text_field
     --          return :  integer number of non 'nul' chars
-    function fld_len(s : in text_field) return integer;
+    function fld_len(
+        s : in text_field
+    ) return integer;
 
-    procedure get_instruction_file_name(file_list : inout file_def_ptr;
-                                        file_idx : integer;
-                                        file_name : inout text_line);
+    procedure get_inst_file_name(
+        variable file_list : inout file_def_ptr;
+        variable file_idx : integer;
+        variable file_name : inout text_line
+    );
 
     -- procedure to get a line from a string
-    procedure get_line_from_str(s : in string;
-                                std_line : inout line);
+    procedure get_line_from_str(
+        variable s : in string;
+        variable std_line : inout line
+    );
 
     -- procedure to get stm_text pointer from a line
-    procedure get_stm_text_ptr_from_line(std_line : inout line;
-                                         var_stm_text_ptr : inout stm_text_ptr);
+    procedure get_stm_text_ptr_from_line(
+        variable std_line : inout line;
+        variable var_stm_text_ptr : inout stm_text_ptr
+    );
 
     --  get a random intetger number
-    procedure random(variable seed1 : inout positive;
-                     variable seed2 : inout positive;
-                     variable rand : out real);
+    procedure random(
+        variable seed1 : inout positive;
+        variable seed2 : inout positive;
+        variable rand : out real
+    );
 
-    procedure random(variable seed1 : inout positive;
-                     variable seed2 : inout positive;
-                     variable lowestvalue : in integer;
-                     variable utmostvalue : in integer;
-                     variable rand : out integer);
+    procedure random(
+        variable seed1 : inout positive;
+        variable seed2 : inout positive;
+        variable lowestvalue : in integer;
+        variable utmostvalue : in integer;
+        variable rand : out integer
+    );
 
-    procedure random(variable seed1 : inout positive;
-                     variable seed2 : inout positive;
-                     variable rand : out unsigned);
+    procedure random(
+        variable seed1 : inout positive;
+        variable seed2 : inout positive;
+        variable rand : out unsigned
+    );
 
-    procedure random(variable seed1 : inout positive;
-                     variable seed2 : inout positive;
-                     variable lowestvalue : in unsigned;
-                     variable utmostvalue : in unsigned;
-                     variable rand : out unsigned);
+    procedure random(
+        variable seed1 : inout positive;
+        variable seed2 : inout positive;
+        variable lowestvalue : in unsigned;
+        variable utmostvalue : in unsigned;
+        variable rand : out unsigned
+    );
 
     -- hex2integer    convert hex stimulus field to integer
     --          inputs :  string of type text_field containing only hex numbers
     --          return :  integer value
-    function hex2integer(hex_number : in text_field;
-                         file_name : in text_line;
-                         line : in integer) return integer;
+    function hex2integer(
+        hex_number : in text_field;
+        file_name : in text_line;
+        file_line : in integer
+    ) return integer;
 
     -- hex2integer    convert hex stimulus field to t_stm_value
     --          inputs :  string of type text_field containing only hex numbers
     --          return :  t_stm_value value
-    function hex2stm_value(hex_number : in text_field;
-                           file_name : in text_line;
-                           line : in integer;
-                           stm_value_width : in integer) return unsigned;
+    function hex2stm_value(
+        hex_number : in text_field;
+        file_name : in text_line;
+        file_line : in integer;
+        stm_value_width : in integer
+    ) return unsigned;
 
-    function is_digit(constant c : in character) return boolean;
+    function is_digit(
+        constant c : in character
+    ) return boolean;
     
-    function is_txt_var_first_character(constant c : in character) return boolean;
+    function is_txt_var_first_character(
+        constant c : in character
+    ) return boolean;
 
-    function is_space(constant c : in character) return boolean;
+    function is_space(
+        constant c : in character
+    ) return boolean;
 
-    procedure init_text_field(variable sourcestr : in string;
-                              variable destfield : out text_field);
+    procedure init_text_field(
+        variable sourcestr : in string;
+        variable destfield : out text_field
+    );
 
-    procedure init_const_text_field(constant sourcestr : in string;
-                                    variable destfield : out text_field);
+    procedure init_const_text_field(
+        constant sourcestr : in string;
+        variable destfield : out text_field
+    );
 
     -- procedure to print loggings to stdout
-    procedure print(s : in string);
+    procedure print(
+        s : in string
+    );
 
     --  std_vec2c  convert 4 bit std_vector to a character
     --     input  std_logic_vector 4 bits
     --     output  character
-    function std_vec2c(vec : in std_logic_vector(3 downto 0)) return character;
+    function std_vec2c(
+        vec : in std_logic_vector(3 downto 0)
+    ) return character;
 
     -- stim_to_integer    convert stimulus field to integer
     --          inputs :  string of type text_field "stimulus format of number"
     --          return :  integer value
-    function stim_to_integer(field : in text_field;
-                             file_name : in text_line;
-                             line : in integer) return integer;
+    function stim_to_integer(
+        field : in text_field;
+        file_name : in text_line;
+        file_line : in integer
+    ) return integer;
 
     -- stim_to_integer    convert stimulus field to t_stm_value
     --          inputs :  string of type text_field "stimulus format of number"
     --          return :  t_stm_value value
-    function stim_to_stm_value(field : in text_field;
-                               file_name : in text_line;
-                               line : in integer;
-                               stm_value_width : in integer) return unsigned;
+    function stim_to_stm_value(
+        field : in text_field;
+        file_name : in text_line;
+        file_line : in integer;
+        stm_value_width : in integer
+    ) return unsigned;
 
-    procedure stm_file_append(variable stm_lines : in t_stm_lines_ptr;
-                              variable file_path : in stm_text_ptr;
-                              variable valid : out integer);
+    procedure stm_file_append(
+        variable stm_lines : in t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer
+    );
 
-    procedure stm_file_appendable(variable file_path : in stm_text_ptr;
-                                  variable status : out integer);
+    procedure stm_file_appendable(
+        variable file_path : in stm_text_ptr;
+        variable status : out integer
+    );
 
-    procedure stm_file_read_all(variable stm_lines : inout t_stm_lines_ptr;
-                                variable file_path : in stm_text_ptr;
-                                variable valid : out integer);
+    procedure stm_file_read_all(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer
+    );
 
-    procedure stm_file_readable(variable file_path : in stm_text_ptr;
-                                variable status : out integer);
+    procedure stm_file_readable(
+        variable file_path : in stm_text_ptr;
+        variable status : out integer
+    );
 
-    function stm_file_status(v_stat : file_open_status) return integer;
+    function stm_file_status(
+        v_stat : file_open_status
+    ) return integer;
 
-    procedure stm_file_write(variable stm_lines : in t_stm_lines_ptr;
-                             variable file_path : in stm_text_ptr;
-                             variable valid : out integer);
+    procedure stm_file_write(
+        variable stm_lines : in t_stm_lines_ptr;
+        variable file_path : in stm_text_ptr;
+        variable valid : out integer
+    );
 
-    procedure stm_file_writeable(variable file_path : in stm_text_ptr;
-                                 variable status : out integer);
+    procedure stm_file_writeable(
+        variable file_path : in stm_text_ptr;
+        variable status : out integer
+    );
 
-    procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
-                               variable std_line : in line;
-                               variable valid : out integer);
+    procedure stm_lines_append(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable std_line : in line;
+        variable valid : out integer
+    );
 
-    procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
-                               variable stm_array : in t_stm_array_ptr;
-                               variable valid : out integer;
-                               constant stm_value_width : in integer);
+    procedure stm_lines_append(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer;
+        constant stm_value_width : in integer
+    );
 
-    procedure stm_lines_append(variable stm_lines : inout t_stm_lines_ptr;
-                               variable var_stm_text : in stm_text_ptr;
-                               variable valid : out integer);
+    procedure stm_lines_append(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer
+    );
 
-    procedure stm_lines_delete(variable stm_lines : inout t_stm_lines_ptr;
-                               variable position : in integer;
-                               variable valid : out integer);
+    procedure stm_lines_delete(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable position : in integer;
+        variable valid : out integer
+    );
 
-    procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
-                            variable position : in integer;
-                            variable std_line : out line;
-                            variable valid : out integer);
+    procedure stm_lines_get(
+        variable stm_lines : in t_stm_lines_ptr;
+        variable position : in integer;
+        variable std_line : out line;
+        variable valid : out integer
+    );
 
-    procedure stm_lines_get(variable stm_lines : in t_stm_lines_ptr;
-                            variable position : in integer;
-                            variable stm_array : inout t_stm_array_ptr;
-                            variable number_found : out integer;
-                            variable valid : out integer;
-                            constant stm_value_width : in integer);
+    procedure stm_lines_get(
+        variable stm_lines : in t_stm_lines_ptr;
+        variable position : in integer;
+        variable stm_array : inout t_stm_array_ptr;
+        variable number_found : out integer;
+        variable valid : out integer;
+        constant stm_value_width : in integer
+    );
 
-    procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
-                               variable position : in integer;
-                               variable var_stm_text : in stm_text_ptr;
-                               variable valid : out integer);
+    procedure stm_lines_insert(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable position : in integer;
+        variable var_stm_text : in stm_text_ptr;
+        variable valid : out integer
+    );
 
-    procedure stm_lines_insert(variable stm_lines : inout t_stm_lines_ptr;
-                               variable position : integer;
-                               variable stm_array : in t_stm_array_ptr;
-                               variable valid : out integer;
-                               constant stm_value_width : in integer);
+    procedure stm_lines_insert(
+        variable stm_lines : inout t_stm_lines_ptr;
+        variable position : integer;
+        variable stm_array : in t_stm_array_ptr;
+        variable valid : out integer;
+        constant stm_value_width : in integer
+    );
 
-    procedure stm_lines_print(variable stm_lines : in t_stm_lines_ptr;
-                              variable valid : out integer);
+    procedure stm_lines_print(
+        variable stm_lines : in t_stm_lines_ptr;
+        variable valid : out integer
+    );
 
     procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
                             variable position : in integer;
@@ -423,74 +524,107 @@ package tb_base_pkg is
                             variable stm_array : in t_stm_array_ptr;
                             variable valid : out integer;
                             constant stm_value_width : in integer);
-
-    --  procedure copy stm_text into an existing pointer
-    procedure stm_text_copy_to_ptr(variable ptr : inout stm_text_ptr;
-                                   variable txt_str : in stm_text);
                                  
     --  function short text_line (remove 'nul')
-    function stm_text_crop(txt : in stm_text) return string;
+    function stm_text_crop(
+        txt : in stm_text
+    ) return string;
 
     -- stm_text_len    stm_text length
     --          inputs :  string of type stm_text
     --          out :  integer number of non 'nul' chars
-    function stm_text_len(s : in stm_text) return integer;
+    function stm_text_len(
+        s : in stm_text
+    ) return integer;
 
     --  procedure to get line of the txt pointer
-    procedure stm_text_ptr_to_line(variable var_stm_text : in stm_text_ptr;
-                                   variable line_out : out line);
+    procedure stm_text_ptr_to_line(
+        variable var_stm_text : in stm_text_ptr;
+        variable line_out : out line
+    );
 
     -- stm_text_ptr_truncate_trailing_quote
     --          inputs :  stm_text pointer
     --          inout :  adjusted stm_text
-    procedure stm_text_ptr_truncate_trailing_quote(variable si : stm_text_ptr;
-                                                   variable so : inout stm_text_ptr);
+    procedure stm_text_ptr_truncate_trailing_quote(
+        variable si : stm_text_ptr;
+        variable so : inout stm_text_ptr
+    );
 
     -- str2integer   convert a string to integer number.
     --   inputs  :  string
     --   output  :  int value
-    function str2integer(str : in string) return integer;
+    function str2integer(
+        str : in string
+    ) return integer;
 
     -- str2integer   convert a string to integer number.
     --   inputs  :  string
     --   output  :  stm_value
-    function str2stm_value(str : in string; stm_value_width : in integer) return unsigned;
+    function str2stm_value(
+        str : in string; 
+        stm_value_width : in integer
+    ) return unsigned;
 
     --  function short text_line (remove 'nul')
-    function text_line_crop(txt : in text_line) return string;
+    function text_line_crop(
+        txt : in text_line
+    ) return string;
 
     -- text_line_len    text_line length
     --          inputs :  string of type text_line
     --          return :  integer number of non 'nul' chars
-    function text_line_len(s : in text_line) return integer;
+    function text_line_len(
+        s : in text_line
+    ) return integer;
 
     --  procedure to print to the stdout the txt pointer
-    procedure txt_print(variable ptr : in stm_text_ptr);
+    procedure txt_print(
+        variable ptr : in stm_text_ptr
+    );
 
     --  procedure copy text into an existing pointer
-    procedure txt_ptr_copy(variable ptr : in stm_text_ptr;
-                           variable ptr_o : out stm_text_ptr;
-                           variable txt_str : in stm_text);
+    procedure txt_ptr_copy(
+        variable ptr : in stm_text_ptr;
+        variable ptr_o : out stm_text_ptr;
+        variable txt_str : in stm_text
+    );
 
     --  procedure to get string of the txt pointer
-    procedure txt_to_string(variable ptr : in stm_text_ptr;
-                            variable str : out stm_text);
+    procedure txt_to_string(
+        variable ptr : in stm_text_ptr;
+        variable str : out stm_text
+    );
                             
-    procedure text_field_ptr_to_text_field(variable ptr : in text_field_ptr;
-                            variable field : out text_field);
+    procedure text_field_ptr_to_text_field(
+        variable ptr : in text_field_ptr;
+        variable field : out text_field
+    );
                             
-    procedure text_field_to_text_field_ptr (variable field : in text_field;
-                                           variable ptr : inout text_field_ptr);
+    procedure text_field_to_text_field_ptr(
+        variable field : in text_field;
+        variable ptr : inout text_field_ptr
+    );
                             
     -- function to get string of the txt field                     
-    function txt_field_to_string(s : in text_field) return string;
+    function txt_field_to_string(
+        s : in text_field
+    ) return string;
 
-    function to_str_hex(int : integer) return string;
+    function to_str_hex(
+        int : integer
+    ) return string;
 
-    function to_str(int : integer) return string;
+    function to_str(
+        int : integer
+    ) return string;
 
-    function to_str_hex(stmvalue : unsigned) return string;
+    function to_str_hex(
+        stmvalue : unsigned
+    ) return string;
 
-    function to_str(stmvalue : unsigned) return string;
+    function to_str(
+        stmvalue : unsigned
+    ) return string;
 
 end package;

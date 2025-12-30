@@ -50,21 +50,25 @@ package tb_bus_axi4lite_32_pkg is
     function axi4lite_down_32_init return t_axi4lite_down_32;
     function axi4lite_up_32_init return t_axi4lite_up_32;
 
-    procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                                signal axi4lite_up : in t_axi4lite_up_32;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time);
+    procedure write_axi4lite_32(
+        signal axi4lite_down : out t_axi4lite_down_32;
+        signal axi4lite_up : in t_axi4lite_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                               signal axi4lite_up : in t_axi4lite_up_32;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time);
+    procedure read_axi4lite_32(
+        signal axi4lite_down : out t_axi4lite_down_32;
+        signal axi4lite_up : in t_axi4lite_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_axi4lite_32_pkg is
@@ -101,14 +105,15 @@ package body tb_bus_axi4lite_32_pkg is
         return init;
     end;
 
-    procedure write_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                                signal axi4lite_up : in t_axi4lite_up_32;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time) is
-
+    procedure write_axi4lite_32(
+        signal axi4lite_down : out t_axi4lite_down_32;
+        signal axi4lite_up : in t_axi4lite_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         variable awready_present : boolean := false;
@@ -192,14 +197,15 @@ package body tb_bus_axi4lite_32_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_axi4lite_32(signal axi4lite_down : out t_axi4lite_down_32;
-                               signal axi4lite_up : in t_axi4lite_up_32;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time) is
-
+    procedure read_axi4lite_32(
+        signal axi4lite_down : out t_axi4lite_down_32;
+        signal axi4lite_up : in t_axi4lite_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is    
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin

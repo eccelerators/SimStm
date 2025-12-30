@@ -30,21 +30,25 @@ package tb_bus_wishbone_64_pkg is
     function wishbone_down_64_init return t_wishbone_down_64;
     function wishbone_up_64_init return t_wishbone_up_64;
 
-    procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                                signal wishbone_up : in t_wishbone_up_64;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time);
+    procedure write_wishbone_64(
+        signal wishbone_down : out t_wishbone_down_64;
+        signal wishbone_up : in t_wishbone_up_64;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                               signal wishbone_up : in t_wishbone_up_64;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time);
+    procedure read_wishbone_64(
+        signal wishbone_down : out t_wishbone_down_64;
+        signal wishbone_up : in t_wishbone_up_64;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_wishbone_64_pkg is
@@ -70,14 +74,15 @@ package body tb_bus_wishbone_64_pkg is
         return init;
     end;
 
-    procedure write_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                                signal wishbone_up : in t_wishbone_up_64;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time) is
-
+    procedure write_wishbone_64(
+        signal wishbone_down : out t_wishbone_down_64;
+        signal wishbone_up : in t_wishbone_up_64;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable sel : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
         constant start_time : time := now;
@@ -156,14 +161,15 @@ package body tb_bus_wishbone_64_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_wishbone_64(signal wishbone_down : out t_wishbone_down_64;
-                               signal wishbone_up : in t_wishbone_up_64;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time) is
-
+    procedure read_wishbone_64(
+        signal wishbone_down : out t_wishbone_down_64;
+        signal wishbone_up : in t_wishbone_up_64;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable sel : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
         constant start_time : time := now;

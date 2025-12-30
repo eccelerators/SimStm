@@ -53,53 +53,44 @@ use work.tb_instructions_pkg.all;
 
 package body tb_interpreter_basic_pkg is
     
-    procedure track_scope(
+    procedure track_inst_context(
           variable inst : in text_field;
           variable par_text_fields : in parameter_text_field_array;
           variable file_name : in text_line;
           variable file_line_num : in integer;
           variable var_list : inout var_field_ptr;
-          variable scope : inout t_stm_scope          
+          variable inst_context : inout t_stm_inst_context          
     ) is
         variable il : integer;
-        variable var_scope : text_field;
-        variable nul_scope : text_field; 
-        variable nul_namespace : text_field; 
         variable var_index : integer;
         variable label_ptr : t_stm_text_field_ptr;
     begin 
-        nul_scope(1) := nul;
-        nul_namespace(1) := nul;
         il := fld_len(inst);
         if inst(1 to il) = INSTR_NAMESPACE then
-            scope.in_namespace := true;
-            scope.namespace := par_text_fields(1);
+            inst_context.in_namespace := true;
+            inst_context.in_namespace_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_NAMESPACE then
-            scope.in_namespace := false;
-            scope.namespace := nul_namespace;
+            inst_context.in_namespace := false;
+            inst_context.in_namespace_name := (others => nul); 
         end if;
         if inst(1 to il) = INSTR_PROC then
-            scope.in_proc_conventional := true;
-            scope.proc := nul_scope;
+            inst_context.in_proc_conventional := true;
+            inst_context.in_proc_name := (others => nul); 
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            scope.in_proc_advanced := true;
-            scope.in_proc_advanced_parameters := true;
-            scope.proc := par_text_fields(1);
+            inst_context.in_proc_advanced := true;
+            inst_context.in_proc_advanced_parameters := true;
+            inst_context.in_proc_name := par_text_fields(1);
         end if;
-        if inst(1 to il) = INSTR_PROC_PAR_NOPAR_0 then
-            scope.in_proc_advanced := true;
-            scope.proc := par_text_fields(1);
-        end if;
-        if inst(1 to il) = INSTR_PROC_PAR_NOPAR_1 then
-            scope.in_proc_advanced := true;
-            scope.proc := par_text_fields(1);   
+        if inst(1 to il) = INSTR_PROC_PAR_NOPAR then
+            inst_context.in_proc_advanced := true;
+            inst_context.in_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_PROC then
-            scope.in_proc_conventional := false;
-            scope.in_proc_advanced := false;
-            scope.proc := nul_scope; 
+            inst_context.in_proc_conventional := false;
+            inst_context.in_proc_advanced := false;
+            inst_context.in_proc_name := (others => nul); 
         end if;
         if inst(1 to il) = INSTR_PAR_CLOSE 
             or inst(1 to il) = INSTR_EQU_PAR_CLOSE
@@ -111,34 +102,34 @@ package body tb_interpreter_basic_pkg is
             or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-            if scope.in_proc_advanced_parameters then
-                scope.in_proc_advanced_parameters := false;      
+            if inst_context.in_proc_advanced_parameters then
+                inst_context.in_proc_advanced_parameters := false;      
             end if;
-            if scope.in_call_advanced_parameters then
-                scope.in_call_advanced_parameters := false;      
+            if inst_context.in_call_advanced_parameters then
+                inst_context.in_call_advanced_parameters := false;      
             end if;
-            if scope.in_call_label_advanced_parameters then
-                scope.in_call_label_advanced_parameters := false;      
+            if inst_context.in_call_label_advanced_parameters then
+                inst_context.in_call_label_advanced_parameters := false;      
             end if;
         end if;
         if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-            scope.in_call_advanced_parameters := true;
-            scope.called_proc := par_text_fields(1); 
+            inst_context.in_call_advanced_parameters := true;
+            inst_context.in_called_proc_name := par_text_fields(1); 
         end if;
         if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-            scope.in_call_label_advanced_parameters := true;
-            scope.called_label := par_text_fields(1); 
-            access_variable_label_ptr(var_list, instr_scope, scope.called_label, var_index, label_ptr, valid);
+            inst_context.in_call_label_advanced_parameters := true;
+            inst_context.called_label := par_text_fields(1); 
+            access_variable_label_ptr(var_list, instr_scope, inst_context.called_label, var_index, label_ptr, valid);
             assert valid /= 0
-            report lf & "call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line_num))
+            report lf & "initial context call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line_num))
             severity failure;       
             text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);          
             in_proc_advanced_label_parameters := true;
-            called_proc := tmp_proc;
+            in_called_proc_name := tmp_proc;
         end if;      
     end procedure;
 
-    procedure add_on_constant_declaration(
+    procedure add_var_on_constant_declaration(
           variable var_list : inout var_field_ptr;    
           variable inst : in text_field;
           variable par_text_fields : in parameter_text_field_array;
@@ -147,14 +138,14 @@ package body tb_interpreter_basic_pkg is
           variable txt_enclosing_quote : in character;
           variable file_line_num : in integer;
           variable file_name : in text_line;
-          variable scope : inout t_stm_scope;
+          variable inst_context : inout t_stm_inst_context;
           constant stm_value_width : in integer
     ) is
         variable pl : integer;
         variable var_scope : text_field;
     begin 
-        track_scope(inst, par_text_fields, scope);
-        var_scope := textfield_dot_cat(scope.namespace, scope.proc);                   
+        track_inst_context(inst, par_text_fields, inst_context);
+        var_scope := textfield_dot_cat(inst_context.namespace, inst_context.in_proc_name);                   
         stm_var_type := STM_CONST_VALUE_TYPE; 
         if inst(1 to il) = INSTR_CONST then
              --  global or local constant, definition and declaration
@@ -166,7 +157,7 @@ package body tb_interpreter_basic_pkg is
         end if;       
     end procedure;
     
-    procedure add_on_variable_declaration(
+    procedure add_var_on_non_local_variable_declaration(
           variable var_list : inout var_field_ptr;
           variable inst : in text_field;
           variable par_text_fields : in parameter_text_field_array;
@@ -175,14 +166,14 @@ package body tb_interpreter_basic_pkg is
           variable txt_enclosing_quote : in character;
           variable file_line_num : in integer;
           variable file_name : in text_line;
-          variable scope : inout t_stm_scope;
+          variable inst_context : inout t_stm_inst_context;
           constant stm_value_width : in integer
     ) is
         variable pl : integer;
         variable var_scope : text_field;
     begin 
-        track_scope(inst, par_text_fields, scope);        
-        var_scope := textfield_dot_cat(scope.namespace, scope.proc);
+        track_inst_context(inst, par_text_fields, inst_context);        
+        var_scope := textfield_dot_cat(inst_context.namespace, inst_context.in_proc_name);
         stm_var_type := NO_VAR_TYPE;
         if inst(1 to l) = INSTR_VAR then
             stm_var_type := STM_VALUE_TYPE;
@@ -236,20 +227,20 @@ package body tb_interpreter_basic_pkg is
         end if;       
     end procedure; 
     
-    procedure add_instruction(
-          variable inst_list : inout stim_line_ptr;                    
-          variable var_list : inout var_field_ptr;
-          variable inst : in text_field;
-          variable par_text_fields : in parameter_text_field_array;
-          variable inst_list_elment_num : inout integer;
-          variable str_ptr : in stm_text_ptr;
-          variable txt_enclosing_quote : in character;
-          variable file_line_num : in integer;
-          variable file_name : in text_line;
-          variable file_idx : in integer;
-          variable scope : inout t_stm_scope;
-          constant stm_value_width : in integer) is
-                                                                                      
+    procedure add_inst(
+        variable inst_list : inout stim_line_ptr;                    
+        variable var_list : inout var_field_ptr;
+        variable inst : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        variable inst_list_elment_num : inout integer;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        variable file_line_num : in integer;
+        variable file_name : in text_line;
+        variable file_idx : in integer;
+        variable inst_context : inout t_stm_inst_context;
+        constant stm_value_width : in integer
+    ) is                                                                                     
         variable inst_list_element : stim_line_ptr;
         variable temp_current : stim_line_ptr;
         variable valid_instruction : integer;
@@ -268,8 +259,8 @@ package body tb_interpreter_basic_pkg is
         variable debug : boolean := true;
         variable assigned_index : integer;
     begin
-        track_scope(inst, par_text_fields, scope);
-        var_scope := textfield_dot_cat(scope.namespace, scope.proc);
+        track_inst_context(inst, par_text_fields, inst_context);
+        var_scope := textfield_dot_cat(inst_context.namespace, inst_context.in_proc_name);
         valid_instruction := 0;
         l := fld_len(inst);
         temp_current := inst_list;
@@ -392,18 +383,20 @@ package body tb_interpreter_basic_pkg is
         end if;
     end procedure;
 
-    procedure add_variable(variable var_list : inout var_field_ptr;
-                           variable var_scope : in text_field;
-                           variable par_text_fields : in parameter_text_field_array; 
-                           variable inst_list_elment_num : in integer;
-                           variable file_line_num : in integer;
-                           variable name : in text_line;
-                           variable length : in integer;
-                           constant var_stm_type : in t_stm_var_type;
-                           variable str_ptr : in stm_text_ptr;
-                           variable txt_enclosing_quote : in character;
-                           constant stm_value_width : in integer;
-                           variable assigned_index : out integer) is
+    procedure add_var(
+        variable var_list : inout var_field_ptr;
+        variable var_scope : in text_field;
+        variable par_text_fields : in parameter_text_field_array; 
+        variable inst_list_elment_num : in integer;
+        variable file_line_num : in integer;
+        variable name : in text_line;
+        variable length : in integer;
+        constant var_stm_type : in t_stm_var_type;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        constant stm_value_width : in integer;
+        variable assigned_index : out integer
+    ) is
         variable temp_var : var_field_ptr;
         variable current_ptr : var_field_ptr;
         variable index : integer := 1;

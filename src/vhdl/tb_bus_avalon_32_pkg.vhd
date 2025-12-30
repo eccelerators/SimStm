@@ -28,21 +28,25 @@ package tb_bus_avalon_32_pkg is
     function avalonmm_down_32_init return t_avalonmm_down_32;
     function avalonmm_up_32_init return t_avalonmm_up_32;
 
-    procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                                signal avalonmm_up : in t_avalonmm_up_32;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time);
+    procedure write_avalonmm_32(
+        signal avalonmm_down : out t_avalonmm_down_32;
+        signal avalonmm_up : in t_avalonmm_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                               signal avalonmm_up : in t_avalonmm_up_32;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time);
+    procedure read_avalonmm_32(
+        signal avalonmm_down : out t_avalonmm_down_32;
+        signal avalonmm_up : in t_avalonmm_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_avalon_32_pkg is
@@ -67,14 +71,15 @@ package body tb_bus_avalon_32_pkg is
         return init;
     end;
 
-    procedure write_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                                signal avalonmm_up : in t_avalonmm_up_32;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time) is
-
+    procedure write_avalonmm_32(
+        signal avalonmm_down : out t_avalonmm_down_32;
+        signal avalonmm_up : in t_avalonmm_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is    
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -138,14 +143,15 @@ package body tb_bus_avalon_32_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_avalonmm_32(signal avalonmm_down : out t_avalonmm_down_32;
-                               signal avalonmm_up : in t_avalonmm_up_32;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time) is
-
+    procedure read_avalonmm_32(
+        signal avalonmm_down : out t_avalonmm_down_32;
+        signal avalonmm_up : in t_avalonmm_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is    
         variable byteenable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;

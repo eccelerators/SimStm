@@ -30,21 +30,25 @@ package tb_bus_wishbone_128_pkg is
     function wishbone_down_128_init return t_wishbone_down_128;
     function wishbone_up_128_init return t_wishbone_up_128;
 
-    procedure write_wishbone_128(signal wishbone_down : out t_wishbone_down_128;
-                                 signal wishbone_up : in t_wishbone_up_128;
-                                 variable address : in unsigned;
-                                 variable data : in unsigned;
-                                 variable access_width : in integer;
-                                 variable successfull : out boolean;
-                                 variable timeout : in time);
+    procedure write_wishbone_128(
+        signal wishbone_down : out t_wishbone_down_128;
+        signal wishbone_up : in t_wishbone_up_128;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_wishbone_128(signal wishbone_down : out t_wishbone_down_128;
-                                signal wishbone_up : in t_wishbone_up_128;
-                                variable address : in unsigned;
-                                variable data : out unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time);
+    procedure read_wishbone_128(
+        signal wishbone_down : out t_wishbone_down_128;
+        signal wishbone_up : in t_wishbone_up_128;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_wishbone_128_pkg is
@@ -70,14 +74,15 @@ package body tb_bus_wishbone_128_pkg is
         return init;
     end;
 
-    procedure write_wishbone_128(signal wishbone_down : out t_wishbone_down_128;
-                                 signal wishbone_up : in t_wishbone_up_128;
-                                 variable address : in unsigned;
-                                 variable data : in unsigned;
-                                 variable access_width : in integer;
-                                 variable successfull : out boolean;
-                                 variable timeout : in time) is
-
+    procedure write_wishbone_128(
+        signal wishbone_down : out t_wishbone_down_128;
+        signal wishbone_up : in t_wishbone_up_128;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable sel : std_logic_vector(15 downto 0);
         variable data_temp : std_logic_vector(127 downto 0);
         constant start_time : time := now;
@@ -183,14 +188,15 @@ package body tb_bus_wishbone_128_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_wishbone_128(signal wishbone_down : out t_wishbone_down_128;
-                                signal wishbone_up : in t_wishbone_up_128;
-                                variable address : in unsigned;
-                                variable data : out unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time) is
-
+    procedure read_wishbone_128(
+        signal wishbone_down : out t_wishbone_down_128;
+        signal wishbone_up : in t_wishbone_up_128;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable sel : std_logic_vector(15 downto 0);
         variable data_temp : std_logic_vector(127 downto 0);
         constant start_time : time := now;

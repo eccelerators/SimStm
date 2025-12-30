@@ -74,37 +74,34 @@ package tb_interpreter_pkg is
         variable var_list : in var_field_ptr;
         variable file_name : in text_line;
         variable file_line : in integer;
-        variable var_scope_par1 : in text_field;     
-        variable var_scope_par_others : in text_field;         
+        variable par_scopes : in scope_text_field_array;          
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
     );
+ 
+    procedure read_instruction_file(
+        variable pass : in integer;
+        constant path_name : string;
+        constant file_name : string;
+        variable inst_set_list : inout inst_def_ptr;
+        variable var_list : inout var_field_ptr;
+        variable inst_list : inout stim_line_ptr;
+        variable file_list : inout file_def_ptr;
+        constant stm_value_width : in integer
+    );  
                                
-    procedure read_include_file(variable pass : in integer;
-                                constant path_name : string;
-                                variable name : text_line;
-                                variable sequ_numb : inout integer;
-                                variable file_list : inout file_def_ptr;
-                                variable inst_set : inout inst_def_ptr;
-                                variable var_list : inout var_field_ptr;
-                                variable inst_sequ : inout stim_line_ptr;
-                                variable status : inout integer;
-                                constant stm_value_width : in integer);
-
-    -- read_instruction_file
-    --  this procedure reads the instruction file, name passed throught file_name.
-    --  pointers to records are passed in and out.  a table of variables is created
-    --  with variable name and value (converted to integer).  the instructions are
-    --  parsesed into the inst_sequ list.  instructions are validated against the
-    --  inst_set which must have been set up prior to loading the instruction file.
-    procedure read_instruction_file(variable pass : in integer;
-                                    constant path_name : string;
-                                    constant file_name : string;
-                                    variable inst_set : inout inst_def_ptr;
-                                    variable var_list : inout var_field_ptr;
-                                    variable inst_sequ : inout stim_line_ptr;
-                                    variable file_list : inout file_def_ptr;
-                                    constant stm_value_width : in integer);                                
-
+    procedure read_include_file(
+        variable pass : in integer;
+        constant path_name : string;
+        variable name : text_line;
+        variable inst_line_num : inout integer;
+        variable file_list : inout file_def_ptr;
+        variable inst_set_list : inout inst_def_ptr;
+        variable var_list : inout var_field_ptr;
+        variable inst_list : inout stim_line_ptr;
+        variable status : inout integer;
+        constant stm_value_width : in integer
+    );
+                              
 end package;

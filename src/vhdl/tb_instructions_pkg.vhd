@@ -178,34 +178,44 @@ package tb_instructions_pkg is
     constant INSTR_TRACE : string := "trace";
     constant INSTR_WAIT : string := "wait";
 
-    procedure define_instructions(variable inst_list : inout inst_def_ptr);
+    procedure define_instructions(
+        variable inst_list : inout inst_def_ptr
+    );
 
-    procedure token_merge_words(variable itokens : in unmerged_token_text_field_array;
-                                variable valid : in integer;
-                                variable otokens : out token_text_field_array;
-                                variable ovalid : out integer);
+    procedure token_merge_words(
+        variable itokens : in unmerged_token_text_field_array;
+        variable valid : in integer;
+        variable otokens : out token_text_field_array;
+        variable ovalid : out integer
+    );
 
     -- add a new instruction to the instruction list
     --   inputs  :   the linked list of instructions
     --               the instruction
     --               the number of args
     --   outputs :   updated instruction set linked list
-    procedure define_instruction(variable inst_set : inout inst_def_ptr;
-                                 constant inst : in string;
-                                 constant args : in integer);
+    procedure define_instruction(
+        variable inst_set : inout inst_def_ptr;
+        constant inst : in string;
+        constant args : in integer
+    );
 
     --  check for valid instruction in the list of instructions
-    procedure check_valid_inst(variable inst : in text_field;
-                               variable inst_set : in inst_def_ptr;
-                               variable token_num : in integer;
-                               variable line_num : in integer;
-                               variable name : in text_line);
+    procedure check_valid_inst(
+        variable inst : in text_field;
+        variable inst_set : in inst_def_ptr;
+        variable token_num : in integer;
+        variable line_num : in integer;
+        variable name : in text_line
+    );
 
 end package;
 
 package body tb_instructions_pkg is
 
-    procedure define_instructions(variable inst_list : inout inst_def_ptr) is
+    procedure define_instructions(
+        variable inst_list : inout inst_def_ptr
+    ) is
     begin
         -- basic
         define_instruction(inst_list, INSTR_NAMESPACE, 1);
@@ -274,7 +284,10 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY_PAR_CLOSE, 2);
         -- label
         define_instruction(inst_list, INSTR_LABEL, 2);
-        define_instruction(inst_list, INSTR_LABEL_POINTER_COPY, 2);
+        define_instruction(       variable inst_set : in inst_def_ptr;
+       variable token_num : in integer;
+       variable line_num : in integer;
+       variable name : in text_line);inst_list, INSTR_LABEL_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_LABEL_POINTER_COPY_PAR_CLOSE, 2);  
         define_instruction(inst_list, INSTR_LABEL_EQU, 2);
         define_instruction(inst_list, INSTR_LABEL_EQU_PAR_CLOSE, 2);  
@@ -325,10 +338,12 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_WAIT, 1);
     end procedure;
 
-    procedure token_merge_words(variable itokens : in unmerged_token_text_field_array;
-                                variable valid : in integer;
-                                variable otokens : out token_text_field_array;
-                                variable ovalid : out integer) is
+    procedure token_merge_words(
+        variable itokens : in unmerged_token_text_field_array;
+        variable valid : in integer;
+        variable otokens : out token_text_field_array;
+        variable ovalid : out integer
+    ) is
         variable token_merge : integer;
         variable token1_len : integer;
         variable token2_len : integer;
@@ -782,9 +797,11 @@ package body tb_instructions_pkg is
         end if;
     end procedure;
 
-    procedure define_instruction(variable inst_set : inout inst_def_ptr;
-                                 constant inst : in string;
-                                 constant args : in integer) is
+    procedure define_instruction(
+        variable inst_set : inout inst_def_ptr;
+        constant inst : in string;
+        constant args : in integer
+    ) is
         variable v_inst_ptr : inst_def_ptr;
         variable v_prev_ptr : inst_def_ptr;
         variable v_new_ptr : inst_def_ptr;
@@ -837,11 +854,13 @@ package body tb_instructions_pkg is
         inst_set := v_temp_inst;
     end procedure;
 
-    procedure check_valid_inst(variable inst : in text_field;
-                               variable inst_set : in inst_def_ptr;
-                               variable token_num : in integer;
-                               variable line_num : in integer;
-                               variable name : in text_line) is
+    procedure check_valid_inst(
+        variable inst : in text_field;
+        variable inst_set : in inst_def_ptr;
+        variable token_num : in integer;
+        variable line_num : in integer;
+        variable name : in text_line
+    ) is
         variable l : integer := 0;
         variable seti : inst_def_ptr;
         variable match : integer := 0;

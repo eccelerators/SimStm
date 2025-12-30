@@ -26,21 +26,25 @@ package tb_bus_ram_32_pkg is
     function ram_down_32_init return t_ram_down_32;
     function ram_up_32_init return t_ram_up_32;
 
-    procedure write_ram_32(signal ram_down : out t_ram_down_32;
-                           signal ram_up : in t_ram_up_32;
-                           variable address : in unsigned;
-                           variable data : in unsigned;
-                           variable access_width : in integer;
-                           variable successfull : out boolean;
-                           variable timeout : in time);
+    procedure write_ram_32(
+        signal ram_down : out t_ram_down_32;
+        signal ram_up : in t_ram_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_ram_32(signal ram_down : out t_ram_down_32;
-                          signal ram_up : in t_ram_up_32;
-                          variable address : in unsigned;
-                          variable data : out unsigned;
-                          variable access_width : in integer;
-                          variable successfull : out boolean;
-                          variable timeout : in time);
+    procedure read_ram_32(
+        signal ram_down : out t_ram_down_32;
+        signal ram_up : in t_ram_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_ram_32_pkg is
@@ -62,14 +66,15 @@ package body tb_bus_ram_32_pkg is
         return init;
     end;
 
-    procedure write_ram_32(signal ram_down : out t_ram_down_32;
-                           signal ram_up : in t_ram_up_32;
-                           variable address : in unsigned;
-                           variable data : in unsigned;
-                           variable access_width : in integer;
-                           variable successfull : out boolean;
-                           variable timeout : in time) is
-
+    procedure write_ram_32(
+        signal ram_down : out t_ram_down_32;
+        signal ram_up : in t_ram_up_32;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable write_enable : std_logic_vector(3 downto 0);
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
@@ -120,14 +125,15 @@ package body tb_bus_ram_32_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_ram_32(signal ram_down : out t_ram_down_32;
-                          signal ram_up : in t_ram_up_32;
-                          variable address : in unsigned;
-                          variable data : out unsigned;
-                          variable access_width : in integer;
-                          variable successfull : out boolean;
-                          variable timeout : in time) is
-
+    procedure read_ram_32(
+        signal ram_down : out t_ram_down_32;
+        signal ram_up : in t_ram_up_32;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable data_temp : std_logic_vector(31 downto 0);
         constant start_time : time := now;
     begin

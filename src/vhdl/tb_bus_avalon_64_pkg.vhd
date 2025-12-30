@@ -28,21 +28,25 @@ package tb_bus_avalon_64_pkg is
     function avalonmm_down_64_init return t_avalonmm_down_64;
     function avalonmm_up_64_init return t_avalonmm_up_64;
 
-    procedure write_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                                signal avalonmm_up : in t_avalonmm_up_64;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time);
+    procedure write_avalonmm_64(
+        signal avalonmm_down : out t_avalonmm_down_64;
+        signal avalonmm_up : in t_avalonmm_up_64;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure read_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                               signal avalonmm_up : in t_avalonmm_up_64;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time);
+    procedure read_avalonmm_64(
+        signal avalonmm_down : out t_avalonmm_down_64;
+        signal avalonmm_up : in t_avalonmm_up_64;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_avalon_64_pkg is
@@ -67,14 +71,15 @@ package body tb_bus_avalon_64_pkg is
         return init;
     end;
 
-    procedure write_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                                signal avalonmm_up : in t_avalonmm_up_64;
-                                variable address : in unsigned;
-                                variable data : in unsigned;
-                                variable access_width : in integer;
-                                variable successfull : out boolean;
-                                variable timeout : in time) is
-
+    procedure write_avalonmm_64(
+        signal avalonmm_down : out t_avalonmm_down_64;
+        signal avalonmm_up : in t_avalonmm_up_64;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is    
         variable byteenable : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
         constant start_time : time := now;
@@ -152,14 +157,15 @@ package body tb_bus_avalon_64_pkg is
         successfull := true;
     end procedure;
 
-    procedure read_avalonmm_64(signal avalonmm_down : out t_avalonmm_down_64;
-                               signal avalonmm_up : in t_avalonmm_up_64;
-                               variable address : in unsigned;
-                               variable data : out unsigned;
-                               variable access_width : in integer;
-                               variable successfull : out boolean;
-                               variable timeout : in time) is
-
+    procedure read_avalonmm_64(
+        signal avalonmm_down : out t_avalonmm_down_64;
+        signal avalonmm_up : in t_avalonmm_up_64;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
         variable byteenable : std_logic_vector(7 downto 0);
         variable data_temp : std_logic_vector(63 downto 0);
         constant start_time : time := now;
