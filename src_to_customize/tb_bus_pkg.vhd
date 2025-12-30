@@ -50,25 +50,29 @@ package tb_bus_pkg is
     function bus_down_init return t_bus_down;
     function bus_up_init return t_bus_up;
 
-    procedure bus_write(signal bus_down : out t_bus_down;
-                        signal bus_up : in t_bus_up;
-                        variable address : in unsigned;
-                        variable data : in unsigned;
-                        variable access_width : in integer;
-                        variable bus_number : in integer;
-                        variable valid : out integer;
-                        variable successfull : out boolean;
-                        variable timeout : in time);
+    procedure bus_write(
+        signal bus_down : out t_bus_down;
+        signal bus_up : in t_bus_up;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable bus_number : in integer;
+        variable valid : out integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 
-    procedure bus_read(signal bus_down : out t_bus_down;
-                       signal bus_up : in t_bus_up;
-                       variable address : in unsigned;
-                       variable data : out unsigned;
-                       variable access_width : in integer;
-                       variable bus_number : in integer;
-                       variable valid : out integer;
-                       variable successfull : out boolean;
-                       variable timeout : in time);
+    procedure bus_read(
+        signal bus_down : out t_bus_down;
+        signal bus_up : in t_bus_up;
+        variable address : in unsigned;
+        variable data : out unsigned;
+        variable access_width : in integer;
+        variable bus_number : in integer;
+        variable valid : out integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    );
 end;
 
 package body tb_bus_pkg is
@@ -101,15 +105,17 @@ package body tb_bus_pkg is
         return init;
     end;
 
-    procedure bus_write(signal bus_down : out t_bus_down;
-                        signal bus_up : in t_bus_up;
-                        variable address : in unsigned;
-                        variable data : in unsigned;
-                        variable access_width : in integer;
-                        variable bus_number : in integer;
-                        variable valid : out integer;
-                        variable successfull : out boolean;
-                        variable timeout : in time) is
+    procedure bus_write(
+        signal bus_down : out t_bus_down;
+        signal bus_up : in t_bus_up;
+        variable address : in unsigned;
+        variable data : in unsigned;
+        variable access_width : in integer;
+        variable bus_number : in integer;
+        variable valid : out integer;
+        variable successfull : out boolean;
+        variable timeout : in time
+    ) is
     begin
         valid := 1;
         case bus_number is
@@ -212,7 +218,8 @@ package body tb_bus_pkg is
         variable bus_number : in integer;
         variable valid : out integer;
         variable successfull : out boolean;
-        variable timeout : in time) is
+        variable timeout : in time
+    ) is
     begin
         valid := 1;
         case bus_number is

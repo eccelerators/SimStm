@@ -50,29 +50,39 @@ package tb_signals_pkg is
     function signals_in_init return t_signals_in;
     function signals_out_init return t_signals_out;
 
-    procedure signal_read(signal signals : in t_signals_in;
-                          variable signal_number : in integer;
-                          variable value : out unsigned;
-                          variable valid : out integer);
+    procedure signal_read(
+        signal signals : in t_signals_in;
+        variable signal_number : in integer;
+        variable value : out unsigned;
+        variable valid : out integer
+    );
 
-    procedure signal_write(signal signals : out t_signals_out;
-                           variable signal_number : in integer;
-                           variable value : in unsigned;
-                           variable valid : out integer);
+    procedure signal_write(
+        signal signals : out t_signals_out;
+        variable signal_number : in integer;
+        variable value : in unsigned;
+        variable valid : out integer
+    );
 
-    procedure get_interrupt_requests(signal signals : in t_signals_in;
-                                     variable interrupt_requests : out unsigned);
+    procedure get_interrupt_requests(
+        signal signals : in t_signals_in;
+        variable interrupt_requests : out unsigned
+    );
 
-    procedure resolve_interrupt_requests(variable interrupt_requests : in unsigned;
-                                         variable interrupt_in_service : in unsigned;
-                                         variable interrupt_number : out integer;
-                                         variable branch_to_interrupt : out boolean;
-                                         variable branch_to_interrupt_label_std_txt_io_line : out line);
+    procedure resolve_interrupt_requests(
+        variable interrupt_requests : in unsigned;
+        variable interrupt_in_service : in unsigned;
+        variable interrupt_number : out integer;
+        variable branch_to_interrupt : out boolean;
+        variable branch_to_interrupt_label_std_txt_io_line : out line
+    );
 
-    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned;
-                                       variable interrupt_number : in integer;
-                                       variable value_to_be_set : in std_logic;
-                                       signal signals : out t_signals_out);
+    procedure set_interrupt_in_service(
+        variable interrupt_in_service : inout unsigned;
+        variable interrupt_number : in integer;
+        variable value_to_be_set : in std_logic;
+        signal signals : out t_signals_out
+    );
 
 end package;
 
@@ -118,10 +128,12 @@ package body tb_signals_pkg is
     end function;
 
     -- SimStm Mapping for input signals
-    procedure signal_read(signal signals : in t_signals_in;
-                          variable signal_number : in integer;
-                          variable value : out unsigned;
-                          variable valid : out integer) is
+    procedure signal_read(
+        signal signals : in t_signals_in;
+        variable signal_number : in integer;
+        variable value : out unsigned;
+        variable valid : out integer
+    ) is
     begin
         valid := 1;
         value := to_unsigned(0, value'length);
@@ -171,10 +183,12 @@ package body tb_signals_pkg is
     end procedure;
 
     -- SimStm Mapping for output signals
-    procedure signal_write(signal signals : out t_signals_out;
-                           variable signal_number : in integer;
-                           variable value : in unsigned;
-                           variable valid : out integer) is
+    procedure signal_write(
+        signal signals : out t_signals_out;
+        variable signal_number : in integer;
+        variable value : in unsigned;
+        variable valid : out integer
+    ) is
     begin
         valid := 1;
 
@@ -208,8 +222,10 @@ package body tb_signals_pkg is
     end procedure;
 
     -- Map interrupts to interrupt requests
-    procedure get_interrupt_requests(signal signals : in t_signals_in;
-                                     variable interrupt_requests : out unsigned) is
+    procedure get_interrupt_requests(
+        signal signals : in t_signals_in;
+        variable interrupt_requests : out unsigned
+    ) is
     begin
         -- TODO: Connect in_signals used as interrupt to interrupt requests
         interrupt_requests(0) := signals.in_signal_1000;
@@ -217,11 +233,13 @@ package body tb_signals_pkg is
         wait for 0 ps;
     end procedure;
 
-    procedure resolve_interrupt_requests(variable interrupt_requests : in unsigned;
-                                         variable interrupt_in_service : in unsigned;
-                                         variable interrupt_number : out integer;
-                                         variable branch_to_interrupt : out boolean;
-                                         variable branch_to_interrupt_label_std_txt_io_line : out line) is
+    procedure resolve_interrupt_requests(
+        variable interrupt_requests : in unsigned;
+        variable interrupt_in_service : in unsigned;
+        variable interrupt_number : out integer;
+        variable branch_to_interrupt : out boolean;
+        variable branch_to_interrupt_label_std_txt_io_line : out line
+    ) is
         variable empty_label : line := new string'("");
         variable interrupt_labels : t_interrupt_labels := (
             -- TODO: Add here all your simstm interrupt entry procedure labels
@@ -253,10 +271,12 @@ package body tb_signals_pkg is
     end procedure;
 
     -- Set or Reset the in service bit for a processed interrupt
-    procedure set_interrupt_in_service(variable interrupt_in_service : inout unsigned;
-                                       variable interrupt_number : in integer;
-                                       variable value_to_be_set : in std_logic;
-                                       signal signals : out t_signals_out) is
+    procedure set_interrupt_in_service(
+        variable interrupt_in_service : inout unsigned;
+        variable interrupt_number : in integer;
+        variable value_to_be_set : in std_logic;
+        signal signals : out t_signals_out
+    ) is
     begin
         interrupt_in_service(interrupt_number) := value_to_be_set;
         -- TODO: Connect to out_signals used to interrupt busy e.g., to a interrupt dispatcher for

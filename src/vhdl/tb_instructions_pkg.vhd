@@ -121,7 +121,7 @@ package tb_instructions_pkg is
     constant INSTR_FILE_APPEND : string := "file_append";
     constant INSTR_FILE_POINTER_COPY : string := "file_pointer_copy";
     constant INSTR_FILE_POINTER_COPY_PAR_CLOSE : string := "file_pointer_copy_)";
-    
+
     -- label
     constant INSTR_LABEL : string := "label";
     constant INSTR_LABEL_POINTER_COPY : string := "label_pointer_copy";
@@ -163,7 +163,7 @@ package tb_instructions_pkg is
     constant INSTR_CALL_LABEL : string := "call_label";
     constant INSTR_CALL_LABEL_PAR_OPEN : string := "call_label_(";
     constant INSTR_CALL_LABEL_PAR_NOPAR : string := "call_label_(_)";
-    constant INSTR_PAR_CLOSE : string := ")";     
+    constant INSTR_PAR_CLOSE : string := ")";
     constant INSTR_INTERRUPT : string := "interrupt";
     constant INSTR_END_PROC : string := "end_proc";
     constant INSTR_END_INTERRUPT : string := "end_interrupt";
@@ -279,18 +279,15 @@ package body tb_instructions_pkg is
         define_instruction(inst_list, INSTR_FILE_READ_END, 1);
         define_instruction(inst_list, INSTR_FILE_READ_ALL, 2);
         define_instruction(inst_list, INSTR_FILE_WRITE, 2);
-        define_instruction(inst_list, INSTR_FILE_APPEND, 2); 
+        define_instruction(inst_list, INSTR_FILE_APPEND, 2);
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY, 2);
         define_instruction(inst_list, INSTR_FILE_POINTER_COPY_PAR_CLOSE, 2);
         -- label
         define_instruction(inst_list, INSTR_LABEL, 2);
-        define_instruction(       variable inst_set : in inst_def_ptr;
-       variable token_num : in integer;
-       variable line_num : in integer;
-       variable name : in text_line);inst_list, INSTR_LABEL_POINTER_COPY, 2);
-        define_instruction(inst_list, INSTR_LABEL_POINTER_COPY_PAR_CLOSE, 2);  
+        define_instruction(inst_list, INSTR_LABEL_POINTER_COPY, 2);
+        define_instruction(inst_list, INSTR_LABEL_POINTER_COPY_PAR_CLOSE, 2);
         define_instruction(inst_list, INSTR_LABEL_EQU, 2);
-        define_instruction(inst_list, INSTR_LABEL_EQU_PAR_CLOSE, 2);  
+        define_instruction(inst_list, INSTR_LABEL_EQU_PAR_CLOSE, 2);
         -- lines
         define_instruction(inst_list, INSTR_LINES, 1);
         define_instruction(inst_list, INSTR_LINES_GET_ARRAY, 4);
@@ -387,7 +384,7 @@ package body tb_instructions_pkg is
                 token1_len := 4;
                 if itokens(2)(1 to 5) = "label" then
                     token2_len := 5;
-                    if itokens(4)(1 to 1) = "(" then    
+                    if itokens(4)(1 to 1) = "(" then
                         if itokens(5)(1 to 1) = ")" then
                             token4_len := 1;
                             token5_len := 1;
@@ -397,8 +394,8 @@ package body tb_instructions_pkg is
                             token_merge := 124;
                         end if;
                     end if;
-                else 
-                    if itokens(3)(1 to 1) = "(" then    
+                else
+                    if itokens(3)(1 to 1) = "(" then
                         if itokens(4)(1 to 1) = ")" then
                             token3_len := 1;
                             token4_len := 1;
@@ -408,7 +405,7 @@ package body tb_instructions_pkg is
                             token_merge := 13;
                         end if;
                     end if;
-                end if;    
+                end if;
             elsif itokens(1)(1 to 4) = "proc" then
                 token1_len := 4;
                 if itokens(3)(1 to 1) = "(" then
@@ -454,11 +451,11 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     end if;
                 end if;
             elsif itokens(1)(1 to 5) = "label" then
@@ -468,19 +465,19 @@ package body tb_instructions_pkg is
                     token_merge := 12;
                     if itokens(3)(1 to 1) = ")" then
                         token3_len := 1;
-                        token_merge := 123;  
-                    end if;                     
+                        token_merge := 123;
+                    end if;
                 elsif itokens(2)(1 to 7) = "pointer" then
                     token2_len := 7;
                     token_merge := 12;
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     end if;
                 end if;
             elsif itokens(1)(1 to 5) = "lines" then
@@ -538,11 +535,11 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     end if;
                 end if;
             elsif itokens(1)(1 to 5) = "array" then
@@ -565,11 +562,11 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     end if;
                 end if;
             elsif itokens(1)(1 to 4) = "else" then
@@ -588,13 +585,13 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;                    
+                        end if;
                     end if;
-                end if;           
+                end if;
             elsif itokens(1)(1 to 6) = "signal" then
                 token1_len := 6;
                 if itokens(2)(1 to 6) = "verify" then
@@ -612,11 +609,11 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     elsif itokens(3)(1 to 3) = "set" then
                         token3_len := 3;
                         token_merge := 123;
@@ -652,11 +649,11 @@ package body tb_instructions_pkg is
                     if itokens(3)(1 to 4) = "copy" then
                         if itokens(5)(1 to 1) = ")" then
                             token5_len := 1;
-                            token_merge := 1235;  
+                            token_merge := 1235;
                         else
                             token3_len := 4;
                             token_merge := 123;
-                        end if;     
+                        end if;
                     elsif itokens(3)(1 to 3) = "set" then
                         token3_len := 3;
                         token_merge := 123;
@@ -666,7 +663,7 @@ package body tb_instructions_pkg is
                     end if;
                 end if;
             end if;
-        end if; 
+        end if;
         if token_merge = 134 then
             token(token1_len + 2 to token1_len + token4_len + 1) := itokens(4)(1 to token4_len);
             token(token1_len + 1) := '_';
@@ -773,7 +770,7 @@ package body tb_instructions_pkg is
             otokens(6) := itokens(9);
             otokens(7) := (others => nul);
             ovalid := valid - 3;
-            
+
         elsif token_merge = 12 then
             token(token1_len + 2 to token1_len + token2_len + 1) := itokens(2)(1 to token2_len);
             token(token1_len + 1) := '_';
