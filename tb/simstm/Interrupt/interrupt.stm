@@ -22,15 +22,13 @@ var InterruptHappenedB 0
     call endStandardTestShell ()
 end proc
 
-InterruptA:
-interrupt
+interrupt InterruptA ()
     log message 0 "InterruptA happened"
     signal write out_signal_3002 0
     equ InterruptHappenedA 1
 end interrupt
 
-InterruptB:
-interrupt
+interrupt InterruptB ()
     log message 0 "InterruptB happened"
     signal write out_signal_3003 0
     equ InterruptHappenedB 1

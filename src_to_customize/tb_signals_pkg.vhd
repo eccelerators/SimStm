@@ -74,7 +74,7 @@ package tb_signals_pkg is
         variable interrupt_in_service : in unsigned;
         variable interrupt_number : out integer;
         variable branch_to_interrupt : out boolean;
-        variable branch_to_interrupt_label_std_txt_io_line : out line
+        variable branch_to_interrupt_proc_std_txt_io_line : out line
     );
 
     procedure set_interrupt_in_service(
@@ -238,7 +238,7 @@ package body tb_signals_pkg is
         variable interrupt_in_service : in unsigned;
         variable interrupt_number : out integer;
         variable branch_to_interrupt : out boolean;
-        variable branch_to_interrupt_label_std_txt_io_line : out line
+        variable branch_to_interrupt_proc_std_txt_io_line : out line
     ) is
         variable empty_label : line := new string'("");
         variable interrupt_labels : t_interrupt_labels := (
@@ -249,7 +249,7 @@ package body tb_signals_pkg is
     begin
         interrupt_number := -1;
         branch_to_interrupt := false;
-        branch_to_interrupt_label_std_txt_io_line := empty_label;
+        branch_to_interrupt_proc_std_txt_io_line := empty_label;
 
         -- TODO: Adapt your interrupt priority and nesting logic
 
@@ -262,7 +262,7 @@ package body tb_signals_pkg is
                     if interrupt_requests(i) = '1' then
                         interrupt_number := i;
                         branch_to_interrupt := true;
-                        branch_to_interrupt_label_std_txt_io_line := interrupt_labels(i);
+                        branch_to_interrupt_proc_std_txt_io_line := interrupt_labels(i);
                     end if;
                 end loop;
             end if;

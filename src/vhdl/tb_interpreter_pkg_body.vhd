@@ -91,6 +91,44 @@ package body tb_interpreter_pkg is
         last_searched_inst_element_number := search_for_inst_element_number;
         last_searched_inst_element_ptr := instr_ptr;
     end procedure;
+    
+    procedure get_inst_element_ptr(
+        variable inst_list : in stim_line_ptr;
+        variable search_for_inst_element_number : in integer;
+        variable last_searched_inst_element_number : inout integer;
+        variable last_searched_inst_element_ptr : inout stim_line_ptr;
+        variable inst_element_ptr : out stim_line_ptr
+    ) is
+        variable instr_ptr : stim_line_ptr;
+    begin
+        -- get to the instruction indicated by the search_for_inst_element_number
+        -- check to see if this number is before the last_searched_inst_element_number
+        -- so search from start
+        if last_searched_inst_element_number > search_for_inst_element_number then
+            instr_ptr := inst_list;
+            while instr_ptr.next_rec /= null loop
+                if instr_ptr.element_number = search_for_inst_element_number then
+                    exit;
+                else
+                    instr_ptr := instr_ptr.next_rec;
+                end if;
+            end loop;
+        -- else is equal or greater, so search forward
+        else
+            instr_ptr := last_searched_inst_element_ptr;
+            while instr_ptr.next_rec /= null loop
+                if instr_ptr.element_number = search_for_inst_element_number then
+                    inst_element_ptr := instr_ptr;
+                    exit;
+                else
+                    instr_ptr := instr_ptr.next_rec;
+                end if;
+            end loop;
+        end if;
+        -- update the last sequence number and record pointer
+        last_searched_inst_element_number := search_for_inst_element_number;
+        last_searched_inst_element_ptr := instr_ptr;
+    end procedure;
 
     procedure access_inst_element_ptr(
         variable inst_element_ptr : in stim_line_ptr;
@@ -156,17 +194,17 @@ package body tb_interpreter_pkg is
         constant path_name : string;
         constant file_name : string;
         variable inst_def_list : inout inst_def_ptr;
+        variable insts : inout inst_sequence;       
         variable var_list : inout var_field_ptr;
-        variable inst_list : inout stim_line_ptr;
         variable file_list : inout file_def_ptr;
         constant stm_value_width : in integer
     ) is
         variable inst_context : t_stm_inst_context;
         variable inst : text_field;
         variable ps : parameter_text_field_array;        
-        variable l : text_line; -- the line
-        variable file_line : integer; -- line number file
-        variable inst_element_num : integer; -- line number program
+        variable l : text_line; 
+        variable file_line : integer; 
+        
         variable ts : token_text_field_array;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
@@ -246,7 +284,7 @@ package body tb_interpreter_pkg is
                     severity failure;
                 end if;
                 print("include found: loading file " & path_name & v_iname);
-                read_include_file(pass, path_name, v_iname, inst_element_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
+                read_include_file(pass, path_name, v_iname, insts, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
                 -- if include file not found
                 if v_ostat = 1 then
                     exit;
@@ -259,11 +297,11 @@ package body tb_interpreter_pkg is
                 end loop;
                 check_valid_inst(inst, v_instr_ptr, valid, file_line, v_name);
                 if pass = 0 then
-                    add_var_on_constant_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
+                    add_var_on_constant_declaration(v_var_ptr, inst, ps, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
                 elsif pass = 1 then
-                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
+                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
                 else
-                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_name, v_fn_idx, inst_context, stm_value_width);
+                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, insts, t_txt, txt_enclosing_quote, file_line, v_name, v_fn_idx, inst_context, stm_value_width);
                 end if;
             end if;
             file_line := file_line + 1;

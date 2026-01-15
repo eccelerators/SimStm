@@ -53,7 +53,7 @@ use work.tb_interpreter_util_pkg.all;
 
 package body tb_interpreter_basic_pkg is
 
-    procedure track_inst_context(
+    procedure track_inst_parse_context(
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable file_line : in integer;
@@ -135,7 +135,6 @@ package body tb_interpreter_basic_pkg is
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         variable file_line : in integer;
@@ -155,7 +154,7 @@ package body tb_interpreter_basic_pkg is
         il := fld_len(inst);
         if inst(1 to il) = INSTR_CONST then
              --  global or local constant, definition and declaration
-            add_var(var_list, var_scope, par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+            add_var(var_list, var_scope, par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
             if debug then
                 print("add idx " & integer'image(assigned_index) & " constant '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
             end if;
@@ -166,7 +165,6 @@ package body tb_interpreter_basic_pkg is
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         variable file_line : in integer;
@@ -207,7 +205,7 @@ package body tb_interpreter_basic_pkg is
             if var_scope(var_scope'length) = '.' then
                 -- global variable definition and declaration in var_scope "." or top of a "a_namespace."
                 if is_digit(par_text_fields(2)(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE or stm_var_type = STM_LABEL_TYPE then
-                    add_var(var_list, var_scope, par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                    add_var(var_list, var_scope, par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
                     if debug then
                         print("add idx " & integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
                     end if;
@@ -218,7 +216,7 @@ package body tb_interpreter_basic_pkg is
                     severity failure;
                     n_par_text_fields := par_text_fields;
                     n_par_text_fields(2) := to_text_field(c_var_value);
-                    add_var(var_list, var_scope, n_par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                    add_var(var_list, var_scope, n_par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
                     if debug then
                         print("add idx " & integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
                     end if;
@@ -228,11 +226,10 @@ package body tb_interpreter_basic_pkg is
     end procedure;
 
     procedure add_inst(
-        variable inst_list : inout stim_line_ptr;
+        variable insts : inout inst_sequence; 
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
+        variable par_text_fields : in parameter_text_field_array;  
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         variable file_line : in integer;
@@ -370,9 +367,11 @@ package body tb_interpreter_basic_pkg is
             -- print_inst(inst_list_element);  -- for debug
         end if;
     end procedure;
+    
 
+    
     procedure add_var(
-        variable var_list : inout var_field_ptr;
+        variable vars : inout var_pool_ordered;
         variable var_scope : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable inst_list_elment_num : in integer;
@@ -543,6 +542,90 @@ package body tb_interpreter_basic_pkg is
             temp_var.var_stm_type := var_stm_type;
         end procedure;
     begin
+        -- if this is not the first one
+        if var_list /= null then
+            current_ptr := var_list;
+            index := index + 1;
+            while current_ptr.next_rec /= null loop
+                -- if we have defined the current before then die
+                assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
+                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
+                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
+                severity failure;
+                current_ptr := current_ptr.next_rec;
+                index := index + 1;
+            end loop;
+            -- if we have defined the current before then die. this checks the last one
+            assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
+                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
+                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
+            severity failure;
+            if var_stm_type = STM_LINES_TYPE then
+                init_stm_lines_var;
+                current_ptr.next_rec := temp_var;
+            elsif var_stm_type = STM_ARRAY_TYPE then
+                init_stm_array_var;
+                current_ptr.next_rec := temp_var;
+            elsif var_stm_type = STM_TEXT_TYPE then
+                init_stm_text_var;
+                current_ptr.next_rec := temp_var;
+            elsif var_stm_type = STM_PROC_TYPE then
+                init_proc_var;
+                current_ptr.next_rec := temp_var;
+            elsif var_stm_type = STM_LABEL_TYPE then
+                init_label_var;
+                current_ptr.next_rec := temp_var;
+            else
+                init_value_var;
+                current_ptr.next_rec := temp_var;
+            end if;
+        -- this is the first one
+        else
+            if var_stm_type = STM_LINES_TYPE then
+                init_stm_lines_var;
+            elsif var_stm_type = STM_ARRAY_TYPE then
+                init_stm_array_var;
+            elsif var_stm_type = STM_TEXT_TYPE then
+                init_stm_text_var;
+            elsif var_stm_type = STM_PROC_TYPE then
+                init_proc_var;
+            elsif var_stm_type = STM_LABEL_TYPE then
+                init_label_var;
+            else
+                init_value_var;
+            end if;
+            var_list := temp_var;
+        end if;
+        assigned_index := index;
+    end procedure;
+    
+    procedure add_proc(
+        variable procs : inout proc_pool_ordered;
+        variable var_scope : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        variable proc_inst_elment_num : in integer;
+        variable file_line : in integer;
+        variable file_name : in text_line
+    ) is
+        variable n_proc : proc_field_ptr;
+        variable current_ptr : proc_field_ptr;
+        variable index : integer := 1;
+
+    begin
+        np := new proc_field_ptr;
+        np.proc_name := par_text_fields(1);
+        if procs.size = 0 then
+            np.proc_element_num := 1;
+            np.proc_inst_element_num := proc_inst_elment_num;
+            np.next_ptr := null;
+            procs.num_to_ptr_map(1) := np;
+            procs.list := np;
+            procs.size := 1;
+        else
+        
+        end if;
+    
+    
         -- if this is not the first one
         if var_list /= null then
             current_ptr := var_list;

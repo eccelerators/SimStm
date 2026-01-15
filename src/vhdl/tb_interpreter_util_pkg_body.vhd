@@ -1629,5 +1629,28 @@ package body tb_interpreter_util_pkg is
         -- the last one
         print_file_def(file_list, index);
     end procedure;
+    
+    procedure print_runtime_context(
+        variable rc : in t_stm_runtime_context
+    ) is
+    begin
+        print("inst_element_number" & integer'image(rc.inst_element_number));
+        case rc.call_process_state is
+            when IN_PROC_CONVENTIONAL_BODY =>    
+                print("call_process_state IN_PROC_CONVENTIONAL_BODY");
+            when IN_PROC_ADVANCED_PARAMS =>    
+                print("call_process_state IN_PROC_ADVANCED_PARAMS");
+            when IN_PROC_ADVANCED_BODY =>    
+                print("call_process_state IN_PROC_ADVANCED_BODY");
+            when IN_CALL_ADVANCED_PARAMS =>    
+                print("call_process_state IN_CALL_ADVANCED_PARAMS");       
+        end case;            
+        print("called_proc_name " & rc.called_proc_name);
+        print("called_file_line " & integer'image(rc.called_file_line));
+        print("called_file_name " & rc.called_file_name);    
+        for i in 1 to 6 loop
+            print("par 0 scope " & rc.par_scope(i));
+        end loop;     
+    end procedure;    
 
 end package body;

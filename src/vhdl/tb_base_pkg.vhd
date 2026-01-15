@@ -53,14 +53,14 @@ package tb_base_pkg is
     constant max_str_len : integer := 512;
     constant max_field_len : integer := 128;
     constant c_stm_text_len : integer := 500;
+    constant max_num_of_inst_elements : integer := 1000000;
 
     -- file handles
     file stimulus : text; -- file main file
 
-    -- type def's
-    type base is (bin, oct, hex, dec);
-    type stack_boolean is array (31 downto 0) of boolean;
-    type stack_register is array (31 downto 0) of integer;
+
+
+    type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
     type stack_int_array is array (0 to 127) of integer;
@@ -81,7 +81,7 @@ package tb_base_pkg is
     type parameter_index_array is array (1 to 6) of integer;
     type parameter_value_array is array (natural range <>) of unsigned;
 
-    type stack_text_field_array is array (31 downto 0) of text_field;
+    type stack_array_of_parameter_scope_text_field_array is array (31 downto 0) of parameter_scope_text_field_array;
     type stack_text_line_array is array (31 downto 0) of text_line;
     type stack_numbers_array is array (31 downto 0) of integer;
 
@@ -103,6 +103,26 @@ package tb_base_pkg is
         next_rec : stim_line_ptr;
     end record;
 
+    type inst_element_ptrs is array ( 1 to max_num_of_inst_elements) of stim_line;
+    
+    type var_pool_ordered is record
+        list : var_field_ptr;
+        num_to_ptr_map : var_field_ptr;
+        size :integer;
+    end record;
+    
+    type proc_pool_ordered is record
+        list : proc_field_ptr;
+        num_to_ptr_map : proc_field_ptr;
+        size :integer;
+    end record;
+    
+    type inst_sequence is record
+        list : stim_line_ptr;
+        num_to_ptr_map : inst_element_ptrs;
+        size :integer;
+    end record;
+   
     -- define the instruction structure
     type inst_def;
     type inst_def_ptr is access inst_def;
@@ -159,7 +179,7 @@ package tb_base_pkg is
         NO_VAR_TYPE
     );
 
-    type t_stm_inst_context is record
+    type t_stm_inst_parse_context is record
         in_namespace : boolean;
         in_proc_conventional : boolean;
         in_proc_advanced : boolean;
@@ -171,6 +191,31 @@ package tb_base_pkg is
         in_proc_name : text_field;
         in_called_proc_name : text_field;
     end record;
+    
+    type t_stm_call_process_state_type is (
+        NONE,
+        IN_PROC_PARAMS,
+        IN_CALL_PARAMS
+    );
+
+    type t_stm_runtime_context is record
+        inst_element_number_to_return_to_after_call : integer;
+        inst_element_number_of_called_proc : integer;
+        inst_element_number_of_called_proc_params_end : integer;
+        inst_element_number_of_call_params : integer;
+        call_process_state : t_stm_call_process_state_type;    
+        called_proc_name : text_field;
+        called_in_file_line : integer;
+        called_in_file_name : text_line;    
+        par_scopes : parameter_scope_text_field_array;  
+        loop_num : integer;
+        curr_loop_count : stack_int_array;
+        term_loop_count : stack_int_array;
+        loop_line: stack_int_array;
+        loop_if_enter_level : integer;
+    end record;
+    
+    type t_stm_array_of_runtime_context is array (31 downto 0) of t_stm_runtime_context; 
 
     -- define the variables field and pointer
     type var_field;
@@ -181,8 +226,9 @@ package tb_base_pkg is
         var_index : integer;
         var_value : t_stm_value_ptr;
         var_org_value : t_stm_value_ptr;
-        var_label : text_field_ptr;
-        var_org_label : text_field_ptr;
+        var_proc_inst_element_num : integer;
+        var_label_proc_ref : text_field_ptr;
+        var_org_label_proc_ref : text_field_ptr;
         var_stm_type : t_stm_var_type;
         var_stm_text : stm_text_ptr;
         var_stm_text_enclosing_quote : character;
@@ -194,9 +240,28 @@ package tb_base_pkg is
         var_org_stm_lines : t_stm_lines_ptr;
         next_rec : var_field_ptr;
     end record;
+    
+    -- define the proc field and pointer
+    type proc_field;
+    type proc_field_ptr is access proc_field; -- pointer to var_field
+    type proc_field is record
+        proc_name : text_field;
+        proc_element_num : integer;
+        proc_inst_element_num : integer;
+        next_ptr : proc_field_ptr;
+    end record;    
+ 
+    procedure insert_proc_element(
+        variable procs : inout proc_pool_ordered;
+        variable pe : proc_field_ptr
+    );
+    
+    procedure init_inst_sequence(
+        variable insts : inout inst_sequence
+    );
 
-    procedure init_inst_context(
-        variable inst_context : inout t_stm_inst_context
+    procedure init_inst_parse_context(
+        variable ipc : inout t_stm_inst_parse_context
     );
 
     -- bin2integer    convert bin stimulus field to integer
@@ -286,6 +351,11 @@ package tb_base_pkg is
     --          inputs :  text field s1 and s2
     --          return :  true if text fields are equal; false otherwise.
     function fld_equal(
+        s1 : in text_field;
+        s2 : in text_field
+    ) return boolean;
+    
+    function fld_order_less_than(
         s1 : in text_field;
         s2 : in text_field
     ) return boolean;

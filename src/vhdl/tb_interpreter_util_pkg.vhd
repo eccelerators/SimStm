@@ -125,7 +125,7 @@ package tb_interpreter_util_pkg is
         variable var_scope : in text_field;
         variable var_name : in text_field;
         variable var_index : out integer;
-        variable var_label_ptr : out text_field_ptr;
+        variable var_label_proc_ref_ptr : out text_field_ptr;
         variable valid : out integer
     );
 
@@ -408,6 +408,10 @@ package tb_interpreter_util_pkg is
     
     procedure dump_file_defs(
         variable file_list : inout file_def_ptr
+    );
+    
+    procedure print_runtime_context(
+        variable rc : in t_stm_runtime_context
     );
     
 end package;

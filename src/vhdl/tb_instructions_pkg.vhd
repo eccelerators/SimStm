@@ -156,15 +156,14 @@ package tb_instructions_pkg is
     -- others
     constant INSTR_PROC : string := "proc";
     constant INSTR_PROC_PAR_OPEN : string := "proc_(";
-    constant INSTR_PROC_PAR_NOPAR : string := "proc_(_)";
-    constant INSTR_CALL : string := "call";
+    constant INSTR_PROC_NOPAR : string := "proc_(_)";
     constant INSTR_CALL_PAR_OPEN : string := "call_(";
-    constant INSTR_CALL_PAR_NOPAR : string := "call_(_)";
+    constant INSTR_CALL_NOPAR : string := "call_(_)";
     constant INSTR_CALL_LABEL : string := "call_label";
     constant INSTR_CALL_LABEL_PAR_OPEN : string := "call_label_(";
-    constant INSTR_CALL_LABEL_PAR_NOPAR : string := "call_label_(_)";
+    constant INSTR_CALL_LABEL_NOPAR : string := "call_label_(_)";
     constant INSTR_PAR_CLOSE : string := ")";
-    constant INSTR_INTERRUPT : string := "interrupt";
+    constant INSTR_INTERRUPT_NOPAR : string := "interrupt_(_)";
     constant INSTR_END_PROC : string := "end_proc";
     constant INSTR_END_INTERRUPT : string := "end_interrupt";
     constant INSTR_RANDOM : string := "random";
@@ -313,14 +312,13 @@ package body tb_instructions_pkg is
         -- others
         define_instruction(inst_list, INSTR_PROC, 0);
         define_instruction(inst_list, INSTR_PROC_PAR_OPEN, 1);
-        define_instruction(inst_list, INSTR_PROC_PAR_NOPAR, 1);
-        define_instruction(inst_list, INSTR_CALL, 1);
+        define_instruction(inst_list, INSTR_PROC_NOPAR, 1);
         define_instruction(inst_list, INSTR_CALL_PAR_OPEN, 1);
-        define_instruction(inst_list, INSTR_CALL_PAR_NOPAR, 1);
+        define_instruction(inst_list, INSTR_CALL_NOPAR, 1);
         define_instruction(inst_list, INSTR_CALL_LABEL_PAR_OPEN, 1);
-        define_instruction(inst_list, INSTR_CALL_LABEL_PAR_NOPAR, 1);
+        define_instruction(inst_list, INSTR_CALL_LABEL_NOPAR, 1);
         define_instruction(inst_list, INSTR_PAR_CLOSE, 0);
-        define_instruction(inst_list, INSTR_INTERRUPT, 0);
+        define_instruction(inst_list, INSTR_INTERRUPT_NOPAR, 1);
         define_instruction(inst_list, INSTR_END_PROC, 0);
         define_instruction(inst_list, INSTR_END_INTERRUPT, 0);
         define_instruction(inst_list, INSTR_RANDOM, 3);
@@ -408,6 +406,18 @@ package body tb_instructions_pkg is
                 end if;
             elsif itokens(1)(1 to 4) = "proc" then
                 token1_len := 4;
+                if itokens(3)(1 to 1) = "(" then
+                    if itokens(4)(1 to 1) = ")" then
+                        token3_len := 1;
+                        token4_len := 1;
+                        token_merge := 134;
+                    else
+                        token3_len := 1;
+                        token_merge := 13;
+                    end if;
+                end if;
+            elsif itokens(1)(1 to 9) = "interrupt" then
+                token1_len := 9;
                 if itokens(3)(1 to 1) = "(" then
                     if itokens(4)(1 to 1) = ")" then
                         token3_len := 1;

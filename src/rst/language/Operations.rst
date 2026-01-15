@@ -50,6 +50,18 @@ The ``div`` instruction divides the value of operand1 (variable) by the value of
 divides the value of operand1 by the value 0xF0. The resulting value of the
 division is stored in operand1  after the operation.
 
+rem
+^^^
+
+.. code-block:: simstm
+
+ rem operand1 operand2
+ rem operand1 0xF0
+
+The ``rem`` instruction divides the value of operand1 (variable) by the value of operand2 (variable or constant) or
+divides the value of operand1 by the value 0xF0. The resulting remainder of the
+division is stored in operand1  after the operation.
+
 and
 ^^^
 

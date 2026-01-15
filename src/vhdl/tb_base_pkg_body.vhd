@@ -50,20 +50,60 @@ use ieee.math_real.all;
 
 package body tb_base_pkg is
 
-    procedure init_inst_context(
-        variable inst_context : inout t_stm_inst_context
+    procedure insert_proc_element(
+        variable procs : inout proc_pool_ordered;
+        variable pe : proc_field_ptr
     ) is
     begin
-        inst_context.in_namespace := false;
-        inst_context.in_proc_conventional := false;
-        inst_context.in_proc_advanced := false;
-        inst_context.in_proc_advanced_parameters := false;
-        inst_context.in_proc_advanced_body := false;
-        inst_context.in_call_advanced_parameters := false;
-        inst_context.in_call_label_advanced_parameters := false;
-        inst_context.in_namespace_name := (others => nul);
-        inst_context.in_proc_name := (others => nul);
-        inst_context.in_called_proc_name := (others => nul);
+        insts.list := null;
+        insts.num_to_ptr_map := (others => null);
+        insts.size := 0;
+    end procedure;
+
+    procedure init_inst_sequence(
+        variable insts : inout inst_sequence
+    ) is
+    begin
+        insts.list := null;
+        insts.num_to_ptr_map := (others => null);
+        insts.size := 0;
+    end procedure;
+
+    procedure init_inst_parse_context(
+        variable ipc : inout t_stm_inst_parse_context
+    ) is
+    begin
+        ipc.in_namespace := false;
+        ipc.in_proc_conventional := false;
+        ipc.in_proc_advanced := false;
+        ipc.in_proc_advanced_parameters := false;
+        ipc.in_proc_advanced_body := false;
+        ipc.in_call_advanced_parameters := false;
+        ipc.in_call_label_advanced_parameters := false;
+        ipc.in_namespace_name := (others => nul);
+        ipc.in_proc_name := (others => nul);
+        ipc.in_called_proc_name := (others => nul);
+    end procedure;
+    
+    procedure init_runtime_context(
+        variable rc : inout t_stm_runtime_context
+    ) is
+    begin
+        init_const_text_field(".", no_scope);
+        rc.inst_element_number_to_return_to_after_call := -1;
+        rc.inst_element_number_of_called_proc := -1;
+        rc.inst_element_number_of_called_proc_params_end := -1;
+        rc.inst_element_number_of_call_params := -1;
+        rc.call_process_state := NONE;
+        rc.called_proc_name := (others => nul);
+        rc.called_in_file_line := -1;
+        rc.called_in_file_name := (others => nul);  
+        rc.par_scopes := (others => (others => no_scope));
+        rc.loop_num := 0;
+        rc.curr_loop_count := (others => 0);
+        rc.term_loop_count := (others => 0);
+        rc.loop_line := (others => 0);
+        rc.loop_if_enter_level:= 0;
     end procedure;
 
     function bin2integer(
@@ -494,6 +534,38 @@ package body tb_base_pkg is
             end if;
         end loop;
         return true;
+    end function;
+    
+    function fld_order_less_than(
+        s1 : in text_field;
+        s2 : in text_field
+    ) return boolean is
+        variable i : integer := 0;
+        variable s1_length : integer := 0;
+        variable s2_length : integer := 0;
+        variable cmp_length : integer := 0;
+    begin
+        s1_length := fld_len(s1);
+        s2_length := fld_len(s2);
+        if s1_length < s2_length then
+            cmp_length := s1_length;
+        else
+            cmp_length := s2_length;
+        end if;
+
+        while i /= cmp_length loop
+            i := i + 1;
+            if s1(i) < s2(i) then
+                return true;
+            elsif s1(i) > s2(i) then
+                return false;
+            end if;
+        end loop;
+        if s1_length < s2_length then        
+            return true;
+        else
+            return false;
+        end if; 
     end function;
 
     function fld_len(
