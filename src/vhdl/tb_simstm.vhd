@@ -143,21 +143,16 @@ begin
     --! records are drawn from the user inst list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_files : process
-        variable inst_def_list : inst_def_ptr; -- the inst definition list
-        variable inst_list : inst_element_ptr; -- the inst element sequence list
-        variable var_list : var_field_ptr; -- the defined variables list
-
-        variable file_list : file_def_ptr; -- the list of defined file names
-        variable last_searched_inst_element_number : integer;
-        variable last_searched_inst_element_ptr : inst_element_ptr;
- 
+    read_files : process       
+        variable inst_defs : inst_def_list;
+        variable code_files : file_def_list; 
         variable insts : inst_sequence;
         variable vars : var_pool_ordered;
         variable procs : proc_pool_ordered;
+        variable absolute_code_file_name : text_line;
         variable inst : text_field;
         variable il : integer;
-        variable inst_context : t_stm_inst_context;
+        variable inst_parse_context : t_stm_inst_parse_context;
         variable par_text_fields : parameter_text_field_array;
         variable par_indexes : parameter_index_array;
         variable par_values : parameter_value_array(1 to 6)(machine_value_width - 1 downto 0);
@@ -301,26 +296,18 @@ begin
         init_const_text_line("no_file", no_file);
         define_instructions(inst_def_list);
         init_inst_parse_context(inst_context);
-        
         init_inst_sequence(insts);
-
-        file_open(v_stat, stimulus, stimulus_path & stimulus_file, read_mode);
-        assert v_stat = open_ok
-        report lf & "unable to open stimulus_file " & stimulus_path & stimulus_file
-        severity failure;
-        file_close(stimulus);
-
-        -- read and test the stimulus files
-        print("Pass 0, parsing constants");
-        pass := 0;
-        read_instruction_file(pass, stimulus_path, stimulus_file, inst_def_list, var_list, inst_list, file_list, machine_value_width);
-        print("Pass 1, parsing variables");
-        pass := 1;
-        read_instruction_file(pass, stimulus_path, stimulus_file, inst_def_list, var_list, inst_list, file_list, machine_value_width);
-        print("Pass 2, parsing instructions");
-        pass := 2;
-        read_instruction_file(pass, stimulus_path, stimulus_file, inst_def_list, var_list, inst_list, file_list, machine_value_width);
-        print("Parsing .stm files done");
+        
+        make_absolut_code_file_name(stimulus_path, stimulus_file, absolute_code_file_name);
+        print("collect_code_files");
+        collect_code_files(absolute_code_file_name, code_files);
+        print("parsing constants");
+        parse_constants(code_files);
+        print("parsing variables");
+        parse_variables(code_files);
+        print("parsing instructions and procs");
+        parse_instructions_and_procs(code_files);
+        print("parsing done");
 
         init_inst_parse_context(inst_context);
         ien := 0;

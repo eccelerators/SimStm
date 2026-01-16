@@ -87,8 +87,12 @@ package tb_base_pkg is
 
     type t_stm_value is array (natural range <>) of unsigned;
     type t_stm_value_ptr is access t_stm_value;
+    
+    type slice is record
+         left :integer;
+         right :integer;
+    end record;
 
-    -- define the stimulus line record and access
     type inst_element;
     type inst_element_ptr is access inst_element; -- pointer to inst_element record
     type inst_element is record
@@ -99,39 +103,34 @@ package tb_base_pkg is
         txt : stm_text_ptr;
         txt_enclosing_quote : character;
     end record;
-
-    type inst_element_ptrs is array ( 1 to max_num_of_inst_elements) of inst_element;
-    
-    type slice is record
-         left :integer;
-         right :integer;
-    end record;
-    
+    type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element;
     type inst_sequence is record
         element_ptrs : inst_element_ptrs;
         last_element_num : integer;
     end record;
    
-      
-   
-    -- define the instruction structure
-    type inst_def;
-    type inst_def_ptr is access inst_def;
-    type inst_def is record
-        instruction : text_field;
-        instruction_l : integer;
-        params : integer;
-        next_rec : inst_def_ptr;
+    type inst_def_element;
+    type inst_def_element_ptr is access inst_def_element;
+    type inst_def_element is record
+        inst : text_field;
+        inst_len : integer;
+        num_of_params : integer;
     end record;
+    type inst_def_element_ptrs is array (0 to max_num_of_inst_def_elements - 1) of inst_def_element;    
+    type inst_def_list is record
+        element_ptrs : inst_def_element_ptrs;
+        last_element_num : integer;
+    end record;    
 
-    -- define the file handle record
-    type file_def;
-    type file_def_ptr is access file_def;
-    type file_def is record
-        rec_idx : integer;
-        file_name : text_line;
-        next_rec : file_def_ptr;
+    type file_def_element;
+    type file_def_element_ptr is access file_def_element;
+    type file_def_element is record
+        absolute_file_name : text_line;
     end record;
+    type file_def_list is record
+        element_ptrs : file_def_element_ptrs;
+        last_element_num : integer;
+    end record;  
 
     type t_stm_array is array (natural range <>) of unsigned;
     type t_stm_array_ptr is access t_stm_array;
@@ -171,26 +170,24 @@ package tb_base_pkg is
         STM_NO_VAR
     );
 
-    type t_stm_inst_parse_context is record
+    type stm_inst_parse_context is record
         in_namespace : boolean;
-        in_proc_conventional : boolean;
-        in_proc_advanced : boolean;
-        in_proc_advanced_parameters : boolean;
-        in_proc_advanced_body : boolean;
-        in_call_advanced_parameters : boolean;
-        in_call_label_advanced_parameters : boolean;
+        in_proc_parameters : boolean;
+        in_proc_body : boolean;
+        in_call_parameters : boolean;
+        in_call_label_parameters : boolean;
         in_namespace_name : text_field;
         in_proc_name : text_field;
         in_called_proc_name : text_field;
     end record;
     
-    type t_stm_call_process_state_type is (
+    type stm_call_process_state_type is (
         NONE,
         IN_PROC_PARAMS,
         IN_CALL_PARAMS
     );
 
-    type t_stm_runtime_context is record
+    type stm_runtime_context is record
         inst_element_number_to_return_to_after_call : integer;
         inst_element_number_of_called_proc : integer;
         inst_element_number_of_called_proc_params_end : integer;
@@ -207,7 +204,7 @@ package tb_base_pkg is
         loop_if_enter_level : integer;
     end record;
     
-    type t_stm_array_of_runtime_context is array (31 downto 0) of t_stm_runtime_context; 
+    type stm_array_of_runtime_context is array (31 downto 0) of t_stm_runtime_context; 
 
     -- define the variables element and pointer
     type var_element;

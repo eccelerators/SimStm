@@ -121,6 +121,49 @@ package body tb_base_pkg is
         insts.last_element_num := nen;
     end procedure;
     
+    procedure append_code_file(
+        variable absolute_code_file_name : in text_line; 
+        variable code_files : inout file_def_list
+        )
+    is
+        variable nen : integer;
+        variable ne_ptr : file_def_element_ptr;
+    begin
+        nen := code_files.last_element_num + 1;
+        ne_ptr := new file_def_element_ptr;          
+        ne_ptr.absolute_file_name := absolute_code_file_name;
+        code_files.element_ptrs(nen) := ne_ptr;
+        code_files.last_element_num := nen;
+    end procedure;
+    
+    procedure make_absolut_code_file_name(
+        variable path_name : in string; 
+        variable file_name : in string;
+        variable absolut_code_file_name : out text_line
+        )
+    is
+        variable absolut_file_name : text_line;
+    begin
+        absolute_code_file_name := (others => nul);
+        for i in 1 to path_name'high loop
+            absolut_code_file_name(i) := path_name(i);
+        end loop;
+        for i in 1 to file_name'high loop
+            absolut_code_file_name(i + path_name'high) := file_name(i);
+        end loop;          
+    end procedure;
+    
+    procedure extract_parameters(
+        variable ts : in token_text_field_array; 
+        variable ps : inout parameter_text_field_array
+        )
+    is
+    begin
+        for i in 1 to 6 loop 
+            ps(i) := ts(i + 1);
+        end loop;
+    end procedure;    
+    
     procedure set_var_type(
         variable inst : in text_field;
         variable inst_len : in integer;

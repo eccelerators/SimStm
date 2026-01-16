@@ -59,7 +59,7 @@ package body tb_interpreter_basic_pkg is
         variable file_line : in integer;
         variable file_name : in text_line;
         variable var_list : inout var_field_ptr;
-        variable inst_context : inout t_stm_inst_context
+        variable inst_parse_context : inout stm_inst_parse_context
     ) is
         variable il : integer;
         variable var_index : integer;
@@ -69,30 +69,25 @@ package body tb_interpreter_basic_pkg is
     begin
         il := fld_len(inst);
         if inst(1 to il) = INSTR_NAMESPACE then
-            inst_context.in_namespace := true;
-            inst_context.in_namespace_name := par_text_fields(1);
+            inst_parse_context.in_namespace := true;
+            inst_parse_context.in_namespace_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_NAMESPACE then
-            inst_context.in_namespace := false;
-            inst_context.in_namespace_name := (others => nul);
-        end if;
-        if inst(1 to il) = INSTR_PROC then
-            inst_context.in_proc_conventional := true;
-            inst_context.in_proc_name := (others => nul);
+            inst_parse_context.in_namespace := false;
+            inst_parse_context.in_namespace_name := (others => nul);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            inst_context.in_proc_advanced := true;
-            inst_context.in_proc_advanced_parameters := true;
-            inst_context.in_proc_name := par_text_fields(1);
+            inst_parse_context.in_proc_parameters := true;
+            inst_parse_context.in_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_NOPAR then
-            inst_context.in_proc_advanced := true;
-            inst_context.in_proc_name := par_text_fields(1);
+            inst_parse_context.in_proc_parameters := false;
+            inst_parse_context.in_proc_body := true;
+            inst_parse_context.in_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_PROC then
-            inst_context.in_proc_conventional := false;
-            inst_context.in_proc_advanced := false;
-            inst_context.in_proc_name := (others => nul);
+            inst_parse_context.in_proc_body := false;
+            inst_parse_context.in_proc_name := (others => nul);
         end if;
         if inst(1 to il) = INSTR_PAR_CLOSE
             or inst(1 to il) = INSTR_EQU_PAR_CLOSE
@@ -104,42 +99,41 @@ package body tb_interpreter_basic_pkg is
             or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-            if inst_context.in_proc_advanced_parameters then
-                inst_context.in_proc_advanced_parameters := false;
+            if inst_parse_context.in_proc_parameters then
+                inst_parse_context.in_proc_parameters := false;
+                inst_parse_context.in_proc_body := true;
             end if;
-            if inst_context.in_call_advanced_parameters then
-                inst_context.in_call_advanced_parameters := false;
+            if inst_parse_context.in_call_parameters then
+                inst_parse_context.in_call_parameters := false;
             end if;
-            if inst_context.in_call_label_advanced_parameters then
-                inst_context.in_call_label_advanced_parameters := false;
+            if inst_parse_context.in_call_label_advanced_parameters then
+                inst_parse_context.in_call_label_advanced_parameters := false;
             end if;
         end if;
         if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-            inst_context.in_call_advanced_parameters := true;
-            inst_context.in_called_proc_name := par_text_fields(1);
+            inst_parse_context.in_call_parameters := true;
+            inst_parse_context.in_called_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-            inst_context.in_call_label_advanced_parameters := true;
-            inst_context.in_called_proc_name := par_text_fields(1);
-            access_var_label_ptr(var_list, inst_context.in_namespace_name, inst_context.in_called_proc_name, var_index, tmp_label_ptr, valid);
+            inst_parse_context.in_call_label_parameters := true;
+            access_var_label_ptr(var_list, inst_parse_context.in_namespace_name, inst_parse_context.in_called_proc_name, var_index, tmp_label_ptr, valid);
             assert valid /= 0
             report lf & "initial context call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
             severity failure;       
             text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);
-            inst_context.in_proc_advanced_parameters := true;
-            inst_context.in_called_proc_name := tmp_proc;
+            inst_parse_context.in_called_proc_name := tmp_proc;
         end if;
     end procedure;
 
     procedure add_var_on_constant_declaration(
-        variable var_list : inout var_field_ptr;
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable vars : inout var_pool_ordered;
+        variable inst_parse_context : inout t_stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable inst_context : inout t_stm_inst_context;
         constant stm_value_width : in integer
     ) is
         variable var_type : t_stm_var_type;
@@ -148,7 +142,7 @@ package body tb_interpreter_basic_pkg is
         variable assigned_index : integer;
         constant debug : boolean := false;
     begin
-        track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
         var_type := STM_CONST_VALUE_TYPE;
         il := fld_len(inst);
@@ -162,14 +156,14 @@ package body tb_interpreter_basic_pkg is
     end procedure;
 
     procedure add_var_on_variable_declaration(
-        variable var_list : inout var_field_ptr;
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable vars : inout var_pool_ordered;
+        variable inst_parse_context : inout t_stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable inst_context : inout t_stm_inst_context;
         constant stm_value_width : in integer
     ) is
         variable var_type : t_stm_var_type;
@@ -182,7 +176,7 @@ package body tb_interpreter_basic_pkg is
         variable n_par_text_fields : parameter_text_field_array;
         constant debug : boolean := false;
     begin
-        track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
         var_type := STM_NO_VAR;
         il := fld_len(inst);
@@ -210,24 +204,22 @@ package body tb_interpreter_basic_pkg is
     end procedure;
 
     procedure add_inst_and_proc_on_proc(
+        variable file_name : in text_line;
+        variable file_line : in integer;
         variable insts : inout inst_sequence; 
         variable procs : inout var_field_ptr;
+        variable inst_parse_context : inout t_stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;  
         variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable file_idx : in integer;
-        variable inst_context : inout t_stm_inst_context;
-        constant stm_value_width : in integer
+        variable txt_enclosing_quote : in character
     ) is
         variable il : integer;
         variable var_type : t_stm_var_type;
         variable proc_type : boolean;
         constant debug : boolean := false;
     begin
-        track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         il := fld_len(inst);
         set_var_type(inst, il, var_type);
         set_proc_type(inst, il, proc_type);

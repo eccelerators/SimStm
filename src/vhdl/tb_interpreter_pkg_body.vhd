@@ -188,13 +188,189 @@ package body tb_interpreter_pkg is
             end if;
         end loop;
     end procedure;
+    
+    procedure collect_code_files(
+        constant absolute_code_file_name : in text_line;
+        variable code_files : inout file_def_list
+    ) is 
+        variable fos : file_open_status;
+        variable absolut_file_name : text_line;
+        variable tl : text_line;
+        variable ts : token_text_field_array;
+        variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
+        variable valid : integer;
+        variable len : integer;
+        variable absolut_include_file_name : text_line;
+        variable file_line : integer; 
+    begin
+        file_open(fos, stimulus, absolute_code_file_name, read_mode);
+        assert fos = open_ok
+        report "unable to open stimulus_file " & absolute_code_file_name
+        severity failure; 
+        append_code_file(path_name, file_name, code_files);
+        print("loading codefile " & absolut_include_file_name);
+        file_line := 0;  
+        while not endfile(stimulus) loop
+            file_line := file_line + 1;
+            file_read_line(stimulus, tl);
+            tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid);
+            len := fld_len(ts(1));
+            if ts(1)(1 to len) = "include" then
+                assert t_txt /= null
+                report "include instruction defines no file name: " & lf &
+                "file " & path_name & file_name & lf &
+                "line " & integer'image(file_line)
+                severity failure;            
+                absolut_include_file_name := (others => nul);
+                for i in 1 to c_stm_text_len loop
+                    absolut_include_file_name(i) := t_txt(i);
+                    if t_txt(i) = txt_enclosing_quote then
+                        absolut_include_file_name(i) := nul;
+                        exit;
+                    end if;
+                end loop;
+                collect_code_files(absolut_include_file_name, code_files);
+            end if;
+        end loop;   
+    end procedure;  
+    
+      
+    procedure parse_constants(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered; 
+        variable inst_parse_context : t_stm_inst_parse_context;
+        variable machine_value_width : integer       
+    ) is
+        variable fos : file_open_status;
+        variable afn : text_line;
+        variable file_line : integer;        
+        variable tl : text_line;
+        variable len : integer;
+        variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
+        variable valid_tokenize : integer;
+        variable valid_ckeck : integer;
+    begin
+        for i in 0 to code_files.last_element_num loop
+            afn := code_files.element_ptrs(i).absolute_file_name;
+            file_open(fos, stimulus, afn, read_mode);
+            assert fos = open_ok
+            report "unable to open code file  " & afn
+            severity failure;
+            file_line := 0;
+            while not endfile(stimulus) loop
+                file_line := file_line + 1;
+                file_read_line(stimulus, tl);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                len := fld_len(ts(1));
+                if valid_tokenize /= 0 then
+                    inst := ts(1);
+                    extract_parameters(ts, ps);
+                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    add_var_on_constant_declaration(afn, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, machine_value_width);
+                end if;            
+            end loop;
+            file_close(stimulus);
+        end loop;
+    end procedure;
+    
+    
+    procedure parse_variables(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered; 
+        variable inst_parse_context : t_stm_inst_parse_context;
+        variable machine_value_width : integer       
+    ) is
+        variable fos : file_open_status;
+        variable afn : text_line;
+        variable file_line : integer;        
+        variable tl : text_line;
+        variable len : integer;
+        variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
+        variable valid_tokenize : integer;
+        variable valid_ckeck : integer;
+    begin
+        for i in 0 to code_files.last_element_num loop
+            afn := code_files.element_ptrs(i).absolute_file_name;
+            file_open(fos, stimulus, afn, read_mode);
+            assert fos = open_ok
+            report "unable to open code file  " & afn
+            severity failure;
+            file_line := 0;
+            while not endfile(stimulus) loop
+                file_line := file_line + 1;
+                file_read_line(stimulus, tl);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                len := fld_len(ts(1));
+                if valid_tokenize /= 0 then
+                    inst := ts(1);
+                    extract_parameters(ts, ps);
+                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    add_var_on_variable_declaration(afn, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, machine_value_width);
+                end if;            
+            end loop;
+            file_close(stimulus);
+        end loop;
+    end procedure;
+    
+    procedure parse_instructions_and_procs(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered; 
+        variable inst_parse_context : t_stm_inst_parse_context;
+        variable machine_value_width : integer       
+    ) is
+        variable fos : file_open_status;
+        variable afn : text_line;
+        variable file_line : integer;        
+        variable tl : text_line;
+        variable len : integer;
+        variable t_txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
+        variable valid_tokenize : integer;
+        variable valid_ckeck : integer;
+    begin
+        for i in 0 to code_files.last_element_num loop
+            afn := code_files.element_ptrs(i).absolute_file_name;
+            file_open(fos, stimulus, afn, read_mode);
+            assert fos = open_ok
+            report "unable to open code file  " & afn
+            severity failure;
+            file_line := 0;
+            while not endfile(stimulus) loop
+                file_line := file_line + 1;
+                file_read_line(stimulus, tl);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                len := fld_len(ts(1));
+                if valid_tokenize /= 0 then
+                    inst := ts(1);
+                    extract_parameters(ts, ps);
+                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    add_inst_and_proc_on_proc(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
+                 end if;            
+            end loop;
+            file_close(stimulus);
+        end loop;
+    end procedure;
+        
+        
+        
+            
+    
 
     procedure read_instruction_file(
         variable pass : in integer;
         constant path_name : string;
         constant file_name : string;
-        variable inst_def_list : inout inst_def_ptr;
-        variable insts : inout inst_sequence;       
+        variable inst_defs : inout inst_def_ptr;
+        variable vars : inout var_pool_ordered;
+        variable procss : inout proc_pool_ordered;
+        variable insts : inout inst_sequence;
+        variable s : inout inst_sequence; 
         variable var_list : inout var_field_ptr;
         variable file_list : inout file_def_ptr;
         constant stm_value_width : in integer
@@ -280,7 +456,7 @@ package body tb_interpreter_pkg is
                     end loop;
                 else
                     assert false
-                    report lf & " include instruction has not file name included.  found on" & lf & "line " & (integer'image(file_line)) & " in file " & path_name & file_name & lf
+                    report lf & " include instruction has not file name included.  found on" & lf & "line " & integer'image(file_line) & " in file " & path_name & file_name & lf
                     severity failure;
                 end if;
                 print("include found: loading file " & path_name & v_iname);
@@ -296,12 +472,13 @@ package body tb_interpreter_pkg is
                     ps(i) := ts(i + 1);
                 end loop;
                 check_valid_inst(inst, v_instr_ptr, valid, file_line, v_name);
-                if pass = 0 then
-                    add_var_on_constant_declaration(v_var_ptr, inst, ps, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
-                elsif pass = 1 then
-                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, t_txt, txt_enclosing_quote, file_line, v_name, inst_context, stm_value_width);
-                else
-                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, insts, t_txt, txt_enclosing_quote, file_line, v_name, v_fn_idx, inst_context, stm_value_width);
+                case pass is
+                    when 0 =>
+                        add_var_on_constant_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
+                    when 1 =>
+                        add_var_on_variable_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
+                    when others =>
+                        add_inst_and_proc_on_proc(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
                 end if;
             end if;
             file_line := file_line + 1;
@@ -425,19 +602,20 @@ package body tb_interpreter_pkg is
                         exit;
                     end if;
                 end if;
-            -- if there was valid tokens
+            -- if there were valid tokens
             elsif valid /= 0 then
                 inst := ts(1);
                 for i in 1 to 6 loop 
                     ps(i) := ts(i + 1);
                 end loop;
                 check_valid_inst(inst, v_instr_ptr, valid, file_line, v_iname);
-                if pass = 0 then
-                    add_var_on_constant_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, inst_context, stm_value_width);
-                elsif pass = 1 then
-                    add_var_on_non_local_variable_declaration(v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, inst_context, stm_value_width);
-                else
-                    add_inst(v_sequ_ptr, v_var_ptr, inst, ps, inst_element_num, t_txt, txt_enclosing_quote, file_line, v_iname, v_new_fn, inst_context, stm_value_width);
+                case pass is
+                    when 0 =>
+                        add_var_on_constant_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
+                    when 1 =>
+                        add_var_on_non_local_variable_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
+                    when others =>
+                        add_var_on_variable_declaration(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, file_line, v_iname, v_new_fn, inst_context, stm_value_width);
                 end if;
             end if;
             file_line := file_line + 1;
