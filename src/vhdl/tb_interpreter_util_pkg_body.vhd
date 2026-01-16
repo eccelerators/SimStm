@@ -1375,11 +1375,11 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure print_inst_element_number(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable element_number : in integer;
         variable file_list : inout file_def_ptr
     ) is
-        variable inst_ptr : stim_line_ptr;
+        variable inst_ptr : inst_element_ptr;
     begin
         inst_ptr := inst_list;
         while inst_ptr.next_rec /= null loop
@@ -1393,7 +1393,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure print_inst_ptr(
-        variable inst_ptr : in stim_line_ptr;
+        variable inst_ptr : in inst_element_ptr;
         file_list : inout file_def_ptr
     ) is
         variable tmp_txt : stm_text;
@@ -1418,10 +1418,10 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure dump_inst_list(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable file_list : inout file_def_ptr
     ) is
-        variable inst_ptr : stim_line_ptr;
+        variable inst_ptr : inst_element_ptr;
     begin
         inst_ptr := inst_list;
         print("++++ --dump_inst_list-----------------------------------------------------");

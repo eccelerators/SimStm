@@ -145,12 +145,12 @@ begin
 
     read_files : process
         variable inst_def_list : inst_def_ptr; -- the inst definition list
-        variable inst_list : stim_line_ptr; -- the inst element sequence list
+        variable inst_list : inst_element_ptr; -- the inst element sequence list
         variable var_list : var_field_ptr; -- the defined variables list
 
         variable file_list : file_def_ptr; -- the list of defined file names
         variable last_searched_inst_element_number : integer;
-        variable last_searched_inst_element_ptr : stim_line_ptr;
+        variable last_searched_inst_element_ptr : inst_element_ptr;
  
         variable insts : inst_sequence;
         variable vars : var_pool_ordered;
@@ -168,7 +168,7 @@ begin
         variable file_name : text_line; -- the file name the line came from
         variable tmp_file_name : text_line; -- the file name the line came from
         variable ien : integer := 0; -- sequence number
-        variable ie_ptr : stim_line_ptr;
+        variable ie_ptr : inst_element_ptr;
 
         variable sp : integer := 0; -- call stack pointer
         variable rc_stack : t_stm_array_of_runtime_context; -- call stack

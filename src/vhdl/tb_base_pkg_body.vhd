@@ -50,16 +50,6 @@ use ieee.math_real.all;
 
 package body tb_base_pkg is
 
-    procedure insert_proc_element(
-        variable procs : inout proc_pool_ordered;
-        variable pe : proc_field_ptr
-    ) is
-    begin
-        insts.list := null;
-        insts.num_to_ptr_map := (others => null);
-        insts.size := 0;
-    end procedure;
-
     procedure init_inst_sequence(
         variable insts : inout inst_sequence
     ) is
@@ -105,7 +95,72 @@ package body tb_base_pkg is
         rc.loop_line := (others => 0);
         rc.loop_if_enter_level:= 0;
     end procedure;
-
+    
+    procedure append_inst(
+        variable file_name : in text_line; 
+        variable file_line : in integer;
+        variable insts : inout inst_sequence;
+        variable inst : text_field;
+        variable par_text_fields : in parameter_text_field_array;  
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character
+        )
+    is
+        variable nen : integer;
+        variable ne_ptr : inst_element_ptr;
+    begin
+        nen := insts.last_element_num + 1;
+        ne_ptr := new inst_element_ptr;
+        ne_ptr.file_name := file_name;
+        ne_ptr.file_line := file_line; 
+        ne_ptr.inst := inst;
+        ne_ptr.parameters := par_text_fields;
+        ne_ptr.txt := str_ptr;
+        ne_ptr.txt_enclosing_quote := txt_enclosing_quote;
+        insts.element_ptrs(nen) := ne_ptr;
+        insts.last_element_num := nen;
+    end procedure;
+    
+    procedure set_var_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable var_type : out t_stm_var_type
+    ) is
+    begin
+        var_type := STM_NO_VAR;
+        if inst(1 to inst_len) = INSTR_VAR then
+            var_type := STM_VALUE;
+        elsif inst(1 to inst_len) = INSTR_CONST then
+            var_type := STM_CONST_VALUE;
+        elsif inst(1 to inst_len) = INSTR_ARRAY then
+            var_type := STM_ARRAY;
+        elsif inst(1 to inst_len) = INSTR_LINES then
+            var_type := STM_LINES;
+        elsif inst(1 to inst_len) = INSTR_FILE then
+            var_type := STM_TEXT;
+        elsif inst(1 to inst_len) = INSTR_BUS then
+            var_type := STM_BUS;
+        elsif inst(1 to inst_len) = INSTR_SIGNAL then
+            var_type := STM_SIGNAL;
+        elsif inst(1 to inst_len) = INSTR_LABEL then
+            var_type := STM_LABEL;
+        end if; 
+    end procedure;
+    
+    procedure set_proc_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable proc_type : out boolean
+    ) is
+    begin
+        proc_type := false;
+        if inst(1 to inst_len) = INSTR_PROC_PAR_OPEN then
+            proc_type := true;
+        elsif inst(1 to inst_len) = INSTR_PROC_PAR_NOPAR then
+            proc_type := true;
+        end if;
+    end procedure;     
+    
     function bin2integer(
         bin_number : in text_field;
         file_name : in text_line;
@@ -536,37 +591,59 @@ package body tb_base_pkg is
         return true;
     end function;
     
-    function fld_order_less_than(
+    procedure fld_order(
         s1 : in text_field;
-        s2 : in text_field
-    ) return boolean is
-        variable i : integer := 0;
-        variable s1_length : integer := 0;
-        variable s2_length : integer := 0;
-        variable cmp_length : integer := 0;
+        s2 : in text_field;
+        is_equ : out boolean;
+        is_less : out boolean
+    ) is
     begin
-        s1_length := fld_len(s1);
-        s2_length := fld_len(s2);
-        if s1_length < s2_length then
-            cmp_length := s1_length;
-        else
-            cmp_length := s2_length;
-        end if;
-
-        while i /= cmp_length loop
-            i := i + 1;
-            if s1(i) < s2(i) then
-                return true;
-            elsif s1(i) > s2(i) then
-                return false;
+        is_equ := true;
+        is_less := false;
+        for i in 1 to text_field'length loop
+            if s1(i) /= nul and s2(i) /= nul then
+                if s1(i) < s2(i) then
+                    is_less := true;
+                    is_equ := false;
+                    exit;
+                elsif s1(i) > s2(i) then
+                    is_less := false;
+                    is_equ := false;
+                    exit;
+                end if;
+            elsif s1(i) = nul and s2(i) /= nul then
+                is_less := true;
+                is_equ := false;
+                exit; 
+            elsif s1(i) /= nul and s2(i) = nul then
+                is_less := false;
+                is_equ := false;
+                exit;      
+            else
+                exit;        
             end if;
-        end loop;
-        if s1_length < s2_length then        
-            return true;
-        else
-            return false;
-        end if; 
+        end loop;       
+    end procedure;
+    
+    function order_is_less_than_failure_on_equal(
+        s1 : in text_field;
+        s2 : in text_field;
+        file_name : in text_line;
+        file_line : in integer
+    ) return boolean is
+        variable is_equ : boolean;
+        variable is_less : boolean;
+    begin
+        fld_order(s1, s2, is_equ, is_less);
+        assert not is_equ
+        report "attemping to add a duplicate proc definition:" & lf &
+               " proc_name: " & proc_name & lf &
+               " file name: " & file_name & lf &
+               " file line: " & integer'image(file_line)
+        severity failure;
+        return is_less;   
     end function;
+
 
     function fld_len(
         s : in text_field
@@ -1669,7 +1746,7 @@ package body tb_base_pkg is
         l := text_line_len(txt);
         return txt(1 to l);
     end function;
-
+    
     function text_line_len(
         s : in text_line
     ) return integer is

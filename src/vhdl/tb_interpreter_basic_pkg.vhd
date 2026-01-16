@@ -87,7 +87,7 @@ package tb_interpreter_basic_pkg is
     );
 
     procedure add_inst(
-        variable inst_list : inout stim_line_ptr;
+        variable inst_list : inout inst_element_ptr;
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
@@ -113,6 +113,26 @@ package tb_interpreter_basic_pkg is
         variable txt_enclosing_quote : in character;
         constant stm_value_width : in integer;
         variable assigned_index : out integer
+    );
+    
+    procedure insert_proc_element(
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable procs : inout proc_pool_ordered;
+        variable proc_name : in text_field;
+        variable proc_inst_element_num : in integer
+    );
+    
+    procedure insert_var_element(
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable vars : inout var_pool_ordered;
+        variable var_scope : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        constant var_stm_type : in t_stm_var_type;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        constant stm_value_width : in integer
     );
 
 end package;

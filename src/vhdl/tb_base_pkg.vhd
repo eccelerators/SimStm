@@ -89,39 +89,30 @@ package tb_base_pkg is
     type t_stm_value_ptr is access t_stm_value;
 
     -- define the stimulus line record and access
-    type stim_line;
-    type stim_line_ptr is access stim_line; -- pointer to stim_line record
-    type stim_line is record
+    type inst_element;
+    type inst_element_ptr is access inst_element; -- pointer to inst_element record
+    type inst_element is record
+        file_name : text_line;
+        file_line : integer;
         inst : text_field;
         parameters : parameter_text_field_array;
         txt : stm_text_ptr;
         txt_enclosing_quote : character;
-        element_number : integer; -- sequential element number
-        element_count : integer; -- total number of elements in list
-        file_line : integer; -- file line number
-        file_idx : integer;
-        next_rec : stim_line_ptr;
     end record;
 
-    type inst_element_ptrs is array ( 1 to max_num_of_inst_elements) of stim_line;
+    type inst_element_ptrs is array ( 1 to max_num_of_inst_elements) of inst_element;
     
-    type var_pool_ordered is record
-        list : var_field_ptr;
-        num_to_ptr_map : var_field_ptr;
-        size :integer;
-    end record;
-    
-    type proc_pool_ordered is record
-        list : proc_field_ptr;
-        num_to_ptr_map : proc_field_ptr;
-        size :integer;
+    type slice is record
+         left :integer;
+         right :integer;
     end record;
     
     type inst_sequence is record
-        list : stim_line_ptr;
-        num_to_ptr_map : inst_element_ptrs;
-        size :integer;
+        element_ptrs : inst_element_ptrs;
+        last_element_num : integer;
     end record;
+   
+      
    
     -- define the instruction structure
     type inst_def;
@@ -167,16 +158,17 @@ package tb_base_pkg is
         next_stm_lines : t_stm_lines_ptr;
     end record;
 
-    type t_stm_var_type is (STM_VALUE_TYPE,
-        STM_CONST_VALUE_TYPE,
-        STM_TEXT_TYPE,
-        STM_ARRAY_TYPE,
-        STM_LINES_TYPE,
-        STM_BUS_TYPE,
-        STM_SIGNAL_TYPE,
-        STM_PROC_TYPE,
-        STM_LABEL_TYPE,
-        NO_VAR_TYPE
+    type t_stm_var_type is (
+        STM_VALUE,
+        STM_CONST,
+        STM_TEXT,
+        STM_ARRAY,
+        STM_LINES,
+        STM_BUS,
+        STM_SIGNAL,
+        STM_PROC,
+        STM_LABEL,
+        STM_NO_VAR
     );
 
     type t_stm_inst_parse_context is record
@@ -217,10 +209,10 @@ package tb_base_pkg is
     
     type t_stm_array_of_runtime_context is array (31 downto 0) of t_stm_runtime_context; 
 
-    -- define the variables field and pointer
-    type var_field;
-    type var_field_ptr is access var_field; -- pointer to var_field
-    type var_field is record
+    -- define the variables element and pointer
+    type var_element;
+    type var_element_ptr is access var_element;
+    type var_element is record
         var_name : text_field;
         var_scope : text_field;
         var_index : integer;
@@ -241,15 +233,33 @@ package tb_base_pkg is
         next_rec : var_field_ptr;
     end record;
     
-    -- define the proc field and pointer
-    type proc_field;
-    type proc_field_ptr is access proc_field; -- pointer to var_field
-    type proc_field is record
+    type var_pool_ordered is record
+        element_ptrs : proc_element_ptrs;
+        last_element_num : integer;
+    end record;
+    
+    -- define the proc element and pointer
+    type proc_element;
+    type proc_element_ptr is access proc_element;
+    type proc_element is record
         proc_name : text_field;
         proc_element_num : integer;
         proc_inst_element_num : integer;
-        next_ptr : proc_field_ptr;
-    end record;    
+        file_name : text_line;
+        file_line : integer;
+    end record;
+    
+    type proc_pool_ordered is record
+        element_ptrs : proc_element_ptrs;
+        last_element_num : integer;
+    end record;
+    
+    type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
+    
+    procedure set_var_type(
+        variable inst : in text_field;
+        variable var_type : out t_stm_var_type
+    );
  
     procedure insert_proc_element(
         variable procs : inout proc_pool_ordered;

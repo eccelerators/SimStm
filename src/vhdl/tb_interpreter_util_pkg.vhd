@@ -369,14 +369,14 @@ package tb_interpreter_util_pkg is
 
     -- procedure to print instruction element number to stdout  *for debug*
     procedure print_inst_element_number(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable element_number : in integer;
         variable file_list : inout file_def_ptr
     );
 
     -- procedure to print instruction pointer to stdout  *for debug*        
     procedure print_inst_ptr(
-        variable inst_ptr : in stim_line_ptr;
+        variable inst_ptr : in inst_element_ptr;
         file_list : inout file_def_ptr
     );
 
@@ -385,7 +385,7 @@ package tb_interpreter_util_pkg is
     --  list.  the whole thing will be dumped, which could be big.
     --   ** intended for testbench development debug**
     procedure dump_inst_list(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable file_list : inout file_def_ptr
     );
 

@@ -53,15 +53,15 @@ use work.tb_interpreter_basic_pkg.all;
 package tb_interpreter_pkg is
 
     procedure search_inst_element_ptr(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable search_for_inst_element_number : in integer;
         variable last_searched_inst_element_number : inout integer;
-        variable last_searched_inst_element_ptr : inout stim_line_ptr;
-        variable inst_element_ptr : out stim_line_ptr
+        variable last_searched_inst_element_ptr : inout inst_element_ptr;
+        variable inst_element_ptr : out inst_element_ptr
     );
 
     procedure access_inst_element_ptr(
-        variable inst_element_ptr : in stim_line_ptr;
+        variable inst_element_ptr : in inst_element_ptr;
         variable file_list : in file_def_ptr;
         variable inst : out text_field;
         variable inst_len : out integer;
@@ -88,7 +88,7 @@ package tb_interpreter_pkg is
         constant file_name : string;
         variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
-        variable inst_list : inout stim_line_ptr;
+        variable inst_list : inout inst_element_ptr;
         variable file_list : inout file_def_ptr;
         constant stm_value_width : in integer
     );
@@ -101,7 +101,7 @@ package tb_interpreter_pkg is
         variable file_list : inout file_def_ptr;
         variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
-        variable inst_list : inout stim_line_ptr;
+        variable inst_list : inout inst_element_ptr;
         variable status : inout integer;
         constant stm_value_width : in integer
     );

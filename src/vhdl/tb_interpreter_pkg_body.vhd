@@ -55,13 +55,13 @@ use work.tb_interpreter_basic_pkg.all;
 package body tb_interpreter_pkg is
 
     procedure search_inst_element_ptr(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable search_for_inst_element_number : in integer;
         variable last_searched_inst_element_number : inout integer;
-        variable last_searched_inst_element_ptr : inout stim_line_ptr;
-        variable inst_element_ptr : out stim_line_ptr
+        variable last_searched_inst_element_ptr : inout inst_element_ptr;
+        variable inst_element_ptr : out inst_element_ptr
     ) is
-        variable instr_ptr : stim_line_ptr;
+        variable instr_ptr : inst_element_ptr;
     begin
         -- get to the instruction indicated by the search_for_inst_element_number
         -- check to see if this number is before the last_searched_inst_element_number
@@ -93,13 +93,13 @@ package body tb_interpreter_pkg is
     end procedure;
     
     procedure get_inst_element_ptr(
-        variable inst_list : in stim_line_ptr;
+        variable inst_list : in inst_element_ptr;
         variable search_for_inst_element_number : in integer;
         variable last_searched_inst_element_number : inout integer;
-        variable last_searched_inst_element_ptr : inout stim_line_ptr;
-        variable inst_element_ptr : out stim_line_ptr
+        variable last_searched_inst_element_ptr : inout inst_element_ptr;
+        variable inst_element_ptr : out inst_element_ptr
     ) is
-        variable instr_ptr : stim_line_ptr;
+        variable instr_ptr : inst_element_ptr;
     begin
         -- get to the instruction indicated by the search_for_inst_element_number
         -- check to see if this number is before the last_searched_inst_element_number
@@ -131,7 +131,7 @@ package body tb_interpreter_pkg is
     end procedure;
 
     procedure access_inst_element_ptr(
-        variable inst_element_ptr : in stim_line_ptr;
+        variable inst_element_ptr : in inst_element_ptr;
         variable file_list : in file_def_ptr;
         variable inst : out text_field;
         variable inst_len : out integer;
@@ -212,7 +212,7 @@ package body tb_interpreter_pkg is
         variable v_ostat : integer;
         variable v_instr_ptr : inst_def_ptr;
         variable v_var_ptr : var_field_ptr;
-        variable v_sequ_ptr : stim_line_ptr;
+        variable v_sequ_ptr : inst_element_ptr;
         variable v_len : integer;
         variable v_stat : file_open_status;
         variable v_name : text_line;
@@ -324,7 +324,7 @@ package body tb_interpreter_pkg is
         variable file_list : inout file_def_ptr;
         variable inst_def_list : inout inst_def_ptr;
         variable var_list : inout var_field_ptr;
-        variable inst_list : inout stim_line_ptr;
+        variable inst_list : inout inst_element_ptr;
         variable status : inout integer;
         constant stm_value_width : in integer
     ) is
@@ -339,7 +339,7 @@ package body tb_interpreter_pkg is
         variable valid : integer;
         variable v_instr_ptr : inst_def_ptr;
         variable v_var_ptr : var_field_ptr;
-        variable v_sequ_ptr : stim_line_ptr;
+        variable v_sequ_ptr : inst_element_ptr;
         variable v_len : integer;
         variable v_stat : file_open_status;
         variable v_tmp_fn_ptr : file_def_ptr;

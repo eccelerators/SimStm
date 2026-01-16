@@ -142,7 +142,7 @@ package body tb_interpreter_basic_pkg is
         variable inst_context : inout t_stm_inst_context;
         constant stm_value_width : in integer
     ) is
-        variable stm_var_type : t_stm_var_type;
+        variable var_type : t_stm_var_type;
         variable il : integer;
         variable var_scope : text_field;
         variable assigned_index : integer;
@@ -150,18 +150,18 @@ package body tb_interpreter_basic_pkg is
     begin
         track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
-        stm_var_type := STM_CONST_VALUE_TYPE;
+        var_type := STM_CONST_VALUE_TYPE;
         il := fld_len(inst);
         if inst(1 to il) = INSTR_CONST then
-             --  global or local constant, definition and declaration
-            add_var(var_list, var_scope, par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+             -- constant definition and declaration
+            insert_var_element(file_name, file_line, vars, var_scope, par_text_fields, var_type, str_ptr, txt_enclosing_quote, stm_value_width);
             if debug then
-                print("add idx " & integer'image(assigned_index) & " constant '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
+                print("add constant " & par_text_fields(1) & ", value '" & par_text_fields(2) & ", var_scope " & var_scope);
             end if;
         end if;
     end procedure;
 
-    procedure add_var_on_non_local_variable_declaration(
+    procedure add_var_on_variable_declaration(
         variable var_list : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
@@ -172,7 +172,7 @@ package body tb_interpreter_basic_pkg is
         variable inst_context : inout t_stm_inst_context;
         constant stm_value_width : in integer
     ) is
-        variable stm_var_type : t_stm_var_type;
+        variable var_type : t_stm_var_type;
         variable il : integer;
         variable var_scope : text_field;
         variable assigned_index : integer;
@@ -184,50 +184,34 @@ package body tb_interpreter_basic_pkg is
     begin
         track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
-        stm_var_type := NO_VAR_TYPE;
+        var_type := STM_NO_VAR;
         il := fld_len(inst);
-        if inst(1 to il) = INSTR_VAR then
-            stm_var_type := STM_VALUE_TYPE;
-        elsif inst(1 to il) = INSTR_ARRAY then
-            stm_var_type := STM_ARRAY_TYPE;
-        elsif inst(1 to il) = INSTR_LINES then
-            stm_var_type := STM_LINES_TYPE;
-        elsif inst(1 to il) = INSTR_FILE then
-            stm_var_type := STM_TEXT_TYPE;
-        elsif inst(1 to il) = INSTR_BUS then
-            stm_var_type := STM_BUS_TYPE;
-        elsif inst(1 to il) = INSTR_SIGNAL then
-            stm_var_type := STM_SIGNAL_TYPE;
-        elsif inst(1 to il) = INSTR_LABEL then
-            stm_var_type := STM_LABEL_TYPE;
-        end if;
-        if stm_var_type /= NO_VAR_TYPE then
-            if var_scope(var_scope'length) = '.' then
-                -- global variable definition and declaration in var_scope "." or top of a "a_namespace."
-                if is_digit(par_text_fields(2)(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE or stm_var_type = STM_LABEL_TYPE then
-                    add_var(var_list, var_scope, par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                    if debug then
-                        print("add idx " & integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
-                    end if;
-                else
-                    access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
-                    assert c_valid /= 0
-                    report lf & "Constant '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize variable '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
-                    severity failure;
-                    n_par_text_fields := par_text_fields;
-                    n_par_text_fields(2) := to_text_field(c_var_value);
-                    add_var(var_list, var_scope, n_par_text_fields, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                    if debug then
-                        print("add idx " & integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
-                    end if;
+        set_var_type(inst, il, var_type);
+        if var_type /= STM_NO_VAR then
+            -- variable definition and declaration
+            if is_digit(par_text_fields(2)(1)) or var_type = STM_TEXT_TYPE or var_type = STM_LINES_TYPE or var_type = STM_LABEL_TYPE then                   
+                insert_var_element(file_name, file_line, vars, var_scope, par_text_fields, var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                if debug then
+                    print("add var " & par_text_fields(1) & ", value " & par_text_fields(2) & ", var_scope " & var_scope);
+                end if;
+            else
+                access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
+                assert c_valid /= 0
+                report "constant " & par_text_fields(2) & " to initialize variable " & par_text_fields(1) & ", var_scope:'" & var_scope & " not found"
+                severity failure;
+                n_par_text_fields := par_text_fields;
+                n_par_text_fields(2) := to_text_field(c_var_value);
+                insert_var_element(file_name, file_line, vars, var_scope, n_par_text_fields, var_type, str_ptr, txt_enclosing_quote, stm_value_width);
+                if debug then
+                    print("add var " & par_text_fields(1) & ", value " & par_text_fields(2) & ", var_scope " & var_scope);
                 end if;
             end if;
         end if;
     end procedure;
 
-    procedure add_inst(
+    procedure add_inst_and_proc_on_proc(
         variable insts : inout inst_sequence; 
-        variable var_list : inout var_field_ptr;
+        variable procs : inout var_field_ptr;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;  
         variable str_ptr : in stm_text_ptr;
@@ -238,133 +222,48 @@ package body tb_interpreter_basic_pkg is
         variable inst_context : inout t_stm_inst_context;
         constant stm_value_width : in integer
     ) is
-        variable inst_list_element : stim_line_ptr;
-        variable tmp_inst_list_element_ptr : stim_line_ptr;
         variable il : integer;
-        variable pl : integer;
-        variable var_scope : text_field;
-        variable assigned_index : integer;
-        variable stm_var_type : t_stm_var_type := NO_VAR_TYPE;
-        variable c_var_index : integer;
-        variable c_var_value : unsigned(stm_value_width -1 downto 0);
-        variable c_valid : integer;
-        variable n_par_text_fields : parameter_text_field_array;
-        variable valid_instruction : integer;
+        variable var_type : t_stm_var_type;
+        variable proc_type : boolean;
         constant debug : boolean := false;
     begin
         track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
-        var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
-        valid_instruction := 0;
         il := fld_len(inst);
-        if inst(1 to il) = INSTR_VAR then
-            stm_var_type := STM_VALUE_TYPE;
-        elsif inst(1 to il) = INSTR_CONST then
-            stm_var_type := STM_CONST_VALUE_TYPE;
-        elsif inst(1 to il) = INSTR_ARRAY then
-            stm_var_type := STM_ARRAY_TYPE;
-        elsif inst(1 to il) = INSTR_LINES then
-            stm_var_type := STM_LINES_TYPE;
-        elsif inst(1 to il) = INSTR_FILE then
-            stm_var_type := STM_TEXT_TYPE;
-        elsif inst(1 to il) = INSTR_BUS then
-            stm_var_type := STM_BUS_TYPE;
-        elsif inst(1 to il) = INSTR_SIGNAL then
-            stm_var_type := STM_SIGNAL_TYPE;
-        elsif inst(il) = ':' then
-            stm_var_type := STM_PROC_TYPE;
-        elsif inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            stm_var_type := STM_PROC_TYPE;
-        elsif inst(1 to il) = INSTR_PROC_PAR_NOPAR then
-            stm_var_type := STM_PROC_TYPE;
-        elsif inst(1 to il) = INSTR_LABEL then
-            stm_var_type := STM_LABEL_TYPE;
-        end if;
-
-        if stm_var_type = NO_VAR_TYPE then
-            valid_instruction := 1; -- anything but a declaration, thus always an instruction
+        set_var_type(inst, il, var_type);
+        set_proc_type(inst, il, proc_type);
+        if var_type = STM_NO_VAR and proc_type = false then
+            -- anything but a constant, variable or proc definition, thus always an instruction
+            append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+            if debug then
+                print("add instruction " & inst & ", element number " & integer'image(insts.last_element_num));
+            end if;
         else
-            if stm_var_type /= STM_CONST_VALUE_TYPE then 
-                -- constant definition and declaration already done
-                -- variable definition but proc vars and local vars already done
-                -- proc vars refer to an inst element thus can only be done when instructions are parsed and have an element number assigned.
-                -- local vars must be reinitialized upon entry of the respective call thus must end as an instruction too.
-                if stm_var_type = STM_PROC_TYPE then
-                    -- a proc 
+            if var_type /= STM_CONST_VALUE then 
+                -- constant definitions and declarations are already done in pass 0 and are never added as an instruction
+                -- variable definitions and declaration already done in pass 1 but need to be an instruction too in case of living in proc parameters or proc local area be reinitilized on each call.
+                -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
+                if proc_type then
                     if inst_context.in_proc_advanced then
                         -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
-                        n_par_text_fields := par_text_fields;
-                        pl := fld_len(par_text_fields(1)) + 1;
-                        n_par_text_fields(1) := par_text_fields(1);
-                        n_par_text_fields(1)(pl) := ':';
-                        add_var(var_list, var_scope, par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                        insert_proc_element(file_name, file_line, procs, par_text_fields(1), insts.last_element_num + 1);
                         if debug then
-                            print("add idx " & integer'image(assigned_index) & " proc label var () '" & par_text_fields(1) & " seq " & integer'image(inst_list_elment_num) & "' var_scope '" & var_scope  & "'");
+                            print("add proc " & par_text_fields(1) & ", inst_element_num " & integer'image(insts.last_element_num + 1));
                         end if;
-                        valid_instruction := 1;
-                    elsif inst_context.in_proc_conventional then
-                        -- a conventional proc e.g., PROCNAME: , not to be added as instruction
-                        add_var(var_list, var_scope, par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
+                        append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
                         if debug then
-                            print("add idx " & integer'image(assigned_index) & " proc label label var : '" & inst & " seq " & integer'image(inst_list_elment_num) & " var_scope '" & var_scope  & "'");
+                            print("add instruction " & inst & ", element number " & integer'image(insts.last_element_num));
                         end if;
                     end if;
                 else
-                    -- any other var definition and declaration
                     if var_scope(var_scope'length) /= '.' then
-                        -- any other local var definition and declaration, to be added as instruction
-                        pl := fld_len(par_text_fields(1));
-                        if is_digit(par_text_fields(2)(1)) or stm_var_type = STM_TEXT_TYPE or stm_var_type = STM_LINES_TYPE or stm_var_type = STM_LABEL_TYPE then
-                            add_var(var_list, var_scope, par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                            if debug then
-                                print("add idx " & integer'image(assigned_index) & " local var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
-                            end if;
-                            valid_instruction := 1;
-                        else
-                            access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
-                            assert c_valid /= 0
-                            report lf & "Constant '" & par_text_fields(2)(1 to fld_len(par_text_fields(2))) & "' to initialize variable '" & par_text_fields(1)(1 to fld_len(par_text_fields(1))) & "' var_scope:'" & var_scope(1 to fld_len(var_scope)) & "' not found !"
-                            severity failure;
-                            n_par_text_fields := par_text_fields;
-                            n_par_text_fields(2) := to_text_field(c_var_value);
-                            add_var(var_list, var_scope, n_par_text_fields, inst_list_elment_num, file_line, file_name, stm_var_type, str_ptr, txt_enclosing_quote, stm_value_width, assigned_index);
-                            if debug then
-                                print("add idx " & integer'image(assigned_index) & " global var '" & par_text_fields(1) & "' value '" & par_text_fields(2) & "' var_scope '" & var_scope  & "'");
-                            end if;
-                            valid_instruction := 1;
+                        -- any other local var definition and declaration living in proc parameters or proc local area to be added as instruction
+                        append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                        if debug then
+                            print("add instruction " & inst & ", element number " & integer'image(insts.last_element_num));
                         end if;
                     end if;
                 end if;
             end if;
-        end if;
-
-        if valid_instruction = 1 then
-            -- prepare the new inst_list_element record
-            inst_list_element := new stim_line;
-            inst_list_element.inst := inst;
-            inst_list_element.parameters := par_text_fields;
-            inst_list_element.txt := str_ptr;
-            inst_list_element.txt_enclosing_quote := txt_enclosing_quote;
-            inst_list_element.element_number := inst_list_elment_num;
-            inst_list_element.file_idx := file_idx;
-            inst_list_element.file_line := file_line;
-            if debug then
-                print("add instruction " & inst & " element number " & integer'image(inst_list_elment_num) & " var_scope '" & var_scope & "'");
-            end if;
-            tmp_inst_list_element_ptr := inst_list;
-            -- if it is not the first instruction
-            if inst_list /= null then
-                while tmp_inst_list_element_ptr.next_rec /= null loop
-                    tmp_inst_list_element_ptr := tmp_inst_list_element_ptr.next_rec;
-                end loop;
-                tmp_inst_list_element_ptr.next_rec := inst_list_element;
-                inst_list.element_count := inst_list.element_count + 1;
-            -- otherwise it is first instruction to be added
-            else
-                inst_list := inst_list_element;
-                inst_list.element_count := 1;
-            end if;
-            inst_list_elment_num := inst_list_elment_num + 1;
-            -- print_inst(inst_list_element);  -- for debug
         end if;
     end procedure;
     
@@ -601,86 +500,298 @@ package body tb_interpreter_basic_pkg is
     
     procedure add_proc(
         variable procs : inout proc_pool_ordered;
-        variable var_scope : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable proc_inst_elment_num : in integer;
         variable file_line : in integer;
         variable file_name : in text_line
     ) is
-        variable n_proc : proc_field_ptr;
-        variable current_ptr : proc_field_ptr;
-        variable index : integer := 1;
+    begin
+        insert_proc_element(procs, par_text_fields(1), proc_inst_elment_num);
+    end procedure;
+    
+    procedure insert_proc_element(
+        variable procs : inout proc_pool_ordered;
+        variable proc_name : in text_field;
+        variable proc_inst_element_num : in integer;
+        variable file_name : in text_line;
+        variable file_line : in integer
+    ) is
+        variable ne : proc_element_ptr;
+        variable su : slice;
+        variable sl : slice;
+        variable is_equ : boolean;
+        variable is_less : boolean;
+    begin
+        ne := new proc_element_ptr;    
+        ne.proc_name := proc_name;
+        ne.proc_inst_element_num := proc_inst_element_num;
+        ne.file_name := file_name;
+        ne.file_line := file_line;
+        if procs.last_element_num < 8 then
+            insert_before := -1;
+            for i in 0 to procs.last_element_num loop
+                if order_is_less_than_failure_on_equal(procs.element_ptrs(i), proc_name, file_name, file_line) then
+                    insert_before_proc_element_num := i;
+                    exit;
+                end if;              
+            end loop;
+        else
+            s.left := 0;
+            s.right := procs.last_element_num;           
+            while s.right - s.left > 8 loop
+                sl.left := s.left;
+                sl.right := s.right / 2 - 1;
+                su.left := sl.right + 1;
+                su.right := sl.right;
+                if order_is_less_than_failure_on_equal(procs.element_ptrs(i), proc_name, file_name, file_line) then
+                    s.left := sl.left;
+                    s.right := sl.right;
+                else
+                    s.left := su.left;
+                    s.right := su.right;
+                end if;    
+            end loop;
+            insert_before := -1;
+            for i in 0 to procs.last_element_num - 1 loop
+                if order_is_less_than_failure_on_equal(procs.element_ptrs(i), proc_name, file_name, file_line) then
+                    insert_before_proc_element_num := i;
+                    exit;
+                end if;              
+            end loop;
+            insert_before := -1;
+            for i in s.left to s.right loop
+                if order_is_less_than_failure_on_equal(procs.element_ptrs(i), proc_name, file_name, file_line) then
+                    insert_before_proc_element_num := i;
+                    exit;
+                end if;              
+            end loop;
+        end if;  
+        if insert_before_proc_element_num >= 0 then
+           procs.element_ptrs(i + 1 to procs.last_element_num + 1) := procs.element_ptrs(i to procs.last_element_num);
+           procs.element_ptrs(i) := ne;
+           procs.last_element_num := procs.last_element_num + 1;
+        else
+           procs.element_ptrs(procs.last_element_num + 1) := ne;
+           procs.last_element_num := procs.last_element_num + 1;
+        end if;                
+    end procedure;
+    
+    procedure insert_var_element(
+        variable vars : inout var_pool_ordered;
+        variable var_name : in text_field;
+        variable file_name : in text_line;
+        variable file_line : in integer;
+        variable var_scope : in text_field;
+        variable par_text_fields : in parameter_text_field_array;
+        constant var_stm_type : in t_stm_var_type;
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        constant stm_value_width : in integer
+    ) is
+        variable ne : var_element_ptr;
+        variable su : slice;
+        variable sl : slice;
+        
+        procedure init_stm_lines_var is
+        begin
+            ne := new var_element;
+            ne.var_name := par_text_fields(1); -- direct write of text_field
+            ne.var_scope := var_scope; -- direct write of text_field
+            ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_org_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_label := null;
+            ne.var_org_label := null;
+            ne.var_index := index;
+            ne.var_stm_text := null;
+            ne.var_stm_text_enclosing_quote := character'val(126);
+            ne.var_org_stm_text := null;
+            ne.var_org_stm_text_enclosing_quote := character'val(126);
+            ne.var_stm_array := null;
+            ne.var_org_stm_array := null;
+            ne.var_stm_lines := new t_stm_lines;
+            ne.var_stm_lines.stm_line_list := null;
+            ne.var_stm_lines.size := 0;
+            ne.var_org_stm_lines := new t_stm_lines;
+            ne.var_org_stm_lines.stm_line_list := null;
+            ne.var_org_stm_lines.size := 0;
+            ne.var_stm_type := var_stm_type;
+            ne.file_name := file_name;
+            ne.file_line := file_line;
+        end procedure;
+
+        procedure init_stm_array_var is
+        begin
+            ne := new var_element;
+            ne.var_name := par_text_fields(1); -- direct write of text_field
+            ne.var_scope := var_scope; -- direct write of text_field
+            ne.var_index := index;
+            ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_org_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_label := null;
+            ne.var_org_label := null;
+            ne.var_stm_text := null;
+            ne.var_stm_text_enclosing_quote := character'val(126);
+            ne.var_org_stm_text := null;
+            ne.var_org_stm_text_enclosing_quote := character'val(126);
+            ne.var_stm_array := new t_stm_array(0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1)(stm_value_width - 1 downto 0);
+            for i in 0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1 loop
+                ne.var_stm_array(i) := to_unsigned(0, stm_value_width);
+            end loop;
+            ne.var_org_stm_array := new t_stm_array(0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1)(stm_value_width - 1 downto 0);
+            for i in 0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1 loop
+                ne.var_org_stm_array(i) := to_unsigned(0, stm_value_width);
+            end loop;
+            ne.var_stm_lines := null;
+            ne.var_org_stm_lines := null;
+            ne.var_stm_type := var_stm_type;
+            ne.file_name := file_name;
+            ne.file_line := file_line;
+        end procedure;
+
+        procedure init_stm_text_var is
+        begin
+            assert str_ptr /= null
+            report lf & "missing file name in file declaration " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
+            severity failure;
+            ne := new var_element;
+            ne.var_name := par_text_fields(1); -- direct write of text_field
+            ne.var_scope := var_scope; -- direct write of text_field
+            ne.var_index := index;
+            ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_org_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_label := null;
+            ne.var_org_label := null;
+            ne.var_stm_text := str_ptr;
+            ne.var_stm_text_enclosing_quote := txt_enclosing_quote;
+            ne.var_org_stm_text := str_ptr;
+            ne.var_org_stm_text_enclosing_quote := txt_enclosing_quote;
+            ne.var_stm_array := null;
+            ne.var_org_stm_array := null;
+            ne.var_stm_lines := null;
+            ne.var_org_stm_lines := null;
+            ne.var_stm_type := var_stm_type;
+            ne.file_name := file_name;
+            ne.file_line := file_line;
+        end procedure;
+        
+        procedure init_label_var is
+        begin
+            ne := new var_element;
+            ne.var_name := par_text_fields(1); -- direct write of text_field
+            ne.var_scope := var_scope; -- direct write of text_field
+            ne.var_index := index;
+            ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_org_value(0) := to_unsigned(0, stm_value_width);
+            ne.var_label := new text_field;
+            text_field_to_text_field_ptr(par_text_fields(2), ne.var_label);
+            ne.var_org_label := new text_field;
+            text_field_to_text_field_ptr(par_text_fields(2), ne.var_org_label);
+            ne.var_stm_text := null;
+            ne.var_stm_text_enclosing_quote := character'val(126);
+            ne.var_org_stm_text := null;
+            ne.var_org_stm_text_enclosing_quote := character'val(126);
+            ne.var_stm_array := null;
+            ne.var_org_stm_array := null;
+            ne.var_stm_lines := null;
+            ne.var_org_stm_lines := null;
+            ne.var_stm_type := var_stm_type;
+            ne.file_name := file_name;
+            ne.file_line := file_line;
+        end procedure;
+
+        procedure init_value_var is
+        begin
+            ne := new var_element;
+            ne.var_name := par_text_fields(1); -- direct write of text_field
+            ne.var_scope := var_scope; -- direct write of text_field
+            ne.var_index := index;
+            ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_value(0) := stim_to_stm_value(par_text_fields(2), file_name, file_line, stm_value_width); -- convert text_field to unsigned
+            ne.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
+            ne.var_org_value(0) := stim_to_stm_value(par_text_fields(2), file_name, file_line, stm_value_width); -- convert text_field to unsigned
+            ne.var_label := null;
+            ne.var_org_label := null;
+            ne.var_stm_text := null;
+            ne.var_stm_text_enclosing_quote := character'val(126);
+            ne.var_org_stm_text := null;
+            ne.var_org_stm_text_enclosing_quote := character'val(126);
+            ne.var_stm_array := null;
+            ne.var_org_stm_array := null;
+            ne.var_stm_lines := null;
+            ne.var_org_stm_lines := null;
+            ne.var_stm_type := var_stm_type;
+            ne.file_name := file_name;
+            ne.file_line := file_line;
+        end procedure;
 
     begin
-        np := new proc_field_ptr;
-        np.proc_name := par_text_fields(1);
-        if procs.size = 0 then
-            np.proc_element_num := 1;
-            np.proc_inst_element_num := proc_inst_elment_num;
-            np.next_ptr := null;
-            procs.num_to_ptr_map(1) := np;
-            procs.list := np;
-            procs.size := 1;
-        else
-        
-        end if;
-    
-    
-        -- if this is not the first one
-        if var_list /= null then
-            current_ptr := var_list;
-            index := index + 1;
-            while current_ptr.next_rec /= null loop
-                -- if we have defined the current before then die
-                assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
-                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
-                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
-                severity failure;
-                current_ptr := current_ptr.next_rec;
-                index := index + 1;
+        case var_stm_type is
+            when STM_LINES_TYPE =>
+                init_stm_lines_var;
+            when STM_ARRAY_TYPE =>
+                init_stm_array_var;
+            when STM_TEXT_TYPE =>
+                init_stm_text_var;
+            when STM_LABEL_TYPE =>
+                init_label_var;
+            when others =>
+                init_value_var;
+        end case;        
+        if vars.last_element_num < 8 then
+            insert_before := -1;
+            for i in 0 to vars.last_element_num loop
+                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
+                    insert_before_var_element_num := i;
+                    exit;
+                end if;              
             end loop;
-            -- if we have defined the current before then die. this checks the last one
-            assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
-                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
-                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
-            severity failure;
-            if var_stm_type = STM_LINES_TYPE then
-                init_stm_lines_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_ARRAY_TYPE then
-                init_stm_array_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_TEXT_TYPE then
-                init_stm_text_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_PROC_TYPE then
-                init_proc_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_LABEL_TYPE then
-                init_label_var;
-                current_ptr.next_rec := temp_var;
-            else
-                init_value_var;
-                current_ptr.next_rec := temp_var;
-            end if;
-        -- this is the first one
         else
-            if var_stm_type = STM_LINES_TYPE then
-                init_stm_lines_var;
-            elsif var_stm_type = STM_ARRAY_TYPE then
-                init_stm_array_var;
-            elsif var_stm_type = STM_TEXT_TYPE then
-                init_stm_text_var;
-            elsif var_stm_type = STM_PROC_TYPE then
-                init_proc_var;
-            elsif var_stm_type = STM_LABEL_TYPE then
-                init_label_var;
-            else
-                init_value_var;
-            end if;
-            var_list := temp_var;
-        end if;
-        assigned_index := index;
+            s.left := 0;
+            s.right := vars.last_element_num;           
+            while s.right - s.left > 8 loop
+                sl.left := s.left;
+                sl.right := s.right / 2 - 1;
+                su.left := sl.right + 1;
+                su.right := sl.right;
+                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
+                    s.left := sl.left;
+                    s.right := sl.right;
+                else
+                    s.left := su.left;
+                    s.right := su.right;
+                end if;    
+            end loop;
+            insert_before := -1;
+            for i in 0 to vars.last_element_num - 1 loop
+                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
+                    insert_before_var_element_num := i;
+                    exit;
+                end if;              
+            end loop;
+            insert_before := -1;
+            for i in s.left to s.right loop
+                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
+                    insert_before_var_element_num := i;
+                    exit;
+                end if;              
+            end loop;
+        end if;  
+        if insert_before_var_element_num >= 0 then
+           vars.element_ptrs(i + 1 to vars.last_element_num + 1) := vars.element_ptrs(i to vars.last_element_num);
+           vars.element_ptrs(i) := ne;
+           vars.last_element_num := vars.last_element_num + 1;
+        else
+           vars.element_ptrs(vars.last_element_num + 1) := ne;
+           vars.last_element_num := vars.last_element_num + 1;
+        end if;                
     end procedure;
 
 end package body;
