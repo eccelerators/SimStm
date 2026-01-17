@@ -190,8 +190,8 @@ package body tb_interpreter_pkg is
     end procedure;
     
     procedure collect_code_files(
-        constant absolute_code_file_name : in text_line;
-        variable code_files : inout file_def_list
+        variable code_files : inout file_def_list;
+        constant absolute_code_file_name : in text_line
     ) is 
         variable fos : file_open_status;
         variable absolut_file_name : text_line;
@@ -240,7 +240,6 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable inst_parse_context : stm_inst_parse_context;
         variable machine_value_width : integer       
     ) is
         variable fos : file_open_status;
@@ -322,7 +321,8 @@ package body tb_interpreter_pkg is
     procedure parse_instructions_and_procs(
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
-        variable vars : inout var_pool_ordered; 
+        variable insts : inout inst_sequence; 
+        variable procs : inout proc_pool_ordered; 
         variable machine_value_width : integer       
     ) is
         variable fos : file_open_status;

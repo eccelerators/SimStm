@@ -273,7 +273,6 @@ begin
         variable tmp_called_proc : text_field;
         variable no_scope : text_field;
         variable none : text_field;
-    stm_inst_parse_contextr;
         
         variable ipc : stm_inst_parse_context;
         variable rc : t_stm_runtime_context;
@@ -299,21 +298,24 @@ begin
         define_insts(inst_defs);
         
         init_file_def_list(code_files);
-        combine_to_absolute_file_name(stimulus_path, stimulus_file, top_code_file_name);
-        print("collect_code_files");
-        collect_code_files(top_code_file_name, code_files);        
+        combine_to_absolute_file_name(stimulus_path, stimulus_file, top_absolute_code_file_name);
+        print("collect stimulus code_files");
+        collect_code_files(code_files, top_absolute_code_file_name);
+        print(integer'image(code_files.last_element_num) & "stimulus code files");     
         
         init_var_pool_ordered(vars);
-        print("parsing constants");
-        parse_constants(code_files);
-        print("parsing variables");
-        parse_variables(code_files);
-        
+        print("parsing stimuli code files");
+        parse_constants(code_files, inst_defs, vars, machine_value_width); 
+        noc := inst_defs.last_elment_num;
+        print(integer'image(noc) & "constants");  
+        parse_variables(code_files, inst_defs, vars, machine_value_width); 
+        print(integer'image(inst_defs.last_elment_num - noc) & "variables");                 
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
-        print("parsing instructions and procs");
-        parse_instructions_and_procs(code_files);
-        print("parsing done");
+        parse_instructions_and_procs(code_files, inst_defs, insts, procs, machine_value_width); 
+        print(integer'image(procs.last_elment_num - noc) & "procedures"); 
+        print(integer'image(insts.last_elment_num - noc) & "instructions"); 
+        print("parsing stimuli done");
 
         init_inst_parse_context(inst_context);
         ien := 0;
