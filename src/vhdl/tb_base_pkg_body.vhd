@@ -50,17 +50,49 @@ use ieee.math_real.all;
 
 package body tb_base_pkg is
 
+    procedure init_inst_def_list(
+        variable inst_defs : inout inst_def_list
+    ) is
+    begin
+        inst_defs.element_ptrs := (others => null);
+        inst_defs.last_element_num := -1;
+    end procedure;
+    
+    procedure init_file_def_list(
+        variable files : inout file_def_list
+    ) is
+    begin
+        files.element_ptrs := (others => null);
+        files.last_element_num := -1;
+    end procedure;
+
     procedure init_inst_sequence(
         variable insts : inout inst_sequence
     ) is
     begin
-        insts.list := null;
-        insts.num_to_ptr_map := (others => null);
-        insts.size := 0;
+        insts.element_ptrs := (others => null);
+        insts.last_element_num := -1;
     end procedure;
+ 
+     procedure init_var_pool_ordered(
+        variable vars : inout var_pool_ordered
+    ) is
+    begin
+        vars.element_ptrs := (others => null);
+        vars.last_element_num := -1;
+    end procedure;   
+    
+    procedure init_proc_pool_ordered(
+        variable procs : inout proc_pool_ordered
+    ) is
+    begin
+        procs.element_ptrs := (others => null);
+        procs.last_element_num := -1;
+    end procedure;   
+    
 
     procedure init_inst_parse_context(
-        variable ipc : inout t_stm_inst_parse_context
+        variable ipc : inout stm_inst_parse_context
     ) is
     begin
         ipc.in_namespace := false;
@@ -136,7 +168,7 @@ package body tb_base_pkg is
         code_files.last_element_num := nen;
     end procedure;
     
-    procedure make_absolut_code_file_name(
+    procedure combine_to_absolute_file_name(
         variable path_name : in string; 
         variable file_name : in string;
         variable absolut_code_file_name : out text_line

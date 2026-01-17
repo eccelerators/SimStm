@@ -92,22 +92,6 @@ package tb_base_pkg is
          left :integer;
          right :integer;
     end record;
-
-    type inst_element;
-    type inst_element_ptr is access inst_element; -- pointer to inst_element record
-    type inst_element is record
-        file_name : text_line;
-        file_line : integer;
-        inst : text_field;
-        parameters : parameter_text_field_array;
-        txt : stm_text_ptr;
-        txt_enclosing_quote : character;
-    end record;
-    type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element;
-    type inst_sequence is record
-        element_ptrs : inst_element_ptrs;
-        last_element_num : integer;
-    end record;
    
     type inst_def_element;
     type inst_def_element_ptr is access inst_def_element;
@@ -130,7 +114,23 @@ package tb_base_pkg is
     type file_def_list is record
         element_ptrs : file_def_element_ptrs;
         last_element_num : integer;
-    end record;  
+    end record; 
+    
+    type inst_element;
+    type inst_element_ptr is access inst_element; -- pointer to inst_element record
+    type inst_element is record
+        file_name : text_line;
+        file_line : integer;
+        inst : text_field;
+        parameters : parameter_text_field_array;
+        txt : stm_text_ptr;
+        txt_enclosing_quote : character;
+    end record;
+    type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element;
+    type inst_sequence is record
+        element_ptrs : inst_element_ptrs;
+        last_element_num : integer;
+    end record; 
 
     type t_stm_array is array (natural range <>) of unsigned;
     type t_stm_array_ptr is access t_stm_array;
@@ -229,9 +229,9 @@ package tb_base_pkg is
         var_org_stm_lines : t_stm_lines_ptr;
         next_rec : var_field_ptr;
     end record;
-    
+    type var_element_ptrs is array ( 0 to max_num_of_var_elements - 1) of var_element_ptr;    
     type var_pool_ordered is record
-        element_ptrs : proc_element_ptrs;
+        element_ptrs : var_element_ptrs;
         last_element_num : integer;
     end record;
     
@@ -245,13 +245,11 @@ package tb_base_pkg is
         file_name : text_line;
         file_line : integer;
     end record;
-    
+    type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
     type proc_pool_ordered is record
         element_ptrs : proc_element_ptrs;
         last_element_num : integer;
     end record;
-    
-    type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
     
     procedure set_var_type(
         variable inst : in text_field;
@@ -268,7 +266,7 @@ package tb_base_pkg is
     );
 
     procedure init_inst_parse_context(
-        variable ipc : inout t_stm_inst_parse_context
+        variable ipc : inout stm_inst_parse_context
     );
 
     -- bin2integer    convert bin stimulus field to integer

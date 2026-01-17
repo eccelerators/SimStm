@@ -240,7 +240,7 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable inst_parse_context : t_stm_inst_parse_context;
+        variable inst_parse_context : stm_inst_parse_context;
         variable machine_value_width : integer       
     ) is
         variable fos : file_open_status;
@@ -250,9 +250,10 @@ package body tb_interpreter_pkg is
         variable len : integer;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
-        variable valid_tokenize : integer;
-        variable valid_ckeck : integer;
+        variable valid_tokens : integer;
+        variable ipc : stm_inst_parse_context;
     begin
+        init_inst_parse_context(ipc);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             file_open(fos, stimulus, afn, read_mode);
@@ -263,12 +264,12 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokens);
                 len := fld_len(ts(1));
-                if valid_tokenize /= 0 then
+                if valid_tokens /= 0 then
                     inst := ts(1);
                     extract_parameters(ts, ps);
-                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    check_valid_inst(afn, file_line, inst_defs, inst, valid_tokens);
                     add_var_on_constant_declaration(afn, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, machine_value_width);
                 end if;            
             end loop;
@@ -281,8 +282,7 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable inst_parse_context : t_stm_inst_parse_context;
-        variable machine_value_width : integer       
+        variable machine_value_width : in integer       
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
@@ -291,9 +291,11 @@ package body tb_interpreter_pkg is
         variable len : integer;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
-        variable valid_tokenize : integer;
+        variable valid_tokens : integer;
         variable valid_ckeck : integer;
+        variable ipc : stm_inst_parse_context;
     begin
+        init_inst_parse_context(ipc);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             file_open(fos, stimulus, afn, read_mode);
@@ -304,12 +306,12 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokens);
                 len := fld_len(ts(1));
-                if valid_tokenize /= 0 then
+                if valid_tokens /= 0 then
                     inst := ts(1);
                     extract_parameters(ts, ps);
-                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    check_valid_inst(afn, file_line, inst_defs, inst, valid_tokens);
                     add_var_on_variable_declaration(afn, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, machine_value_width);
                 end if;            
             end loop;
@@ -321,7 +323,6 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable inst_parse_context : t_stm_inst_parse_context;
         variable machine_value_width : integer       
     ) is
         variable fos : file_open_status;
@@ -331,9 +332,11 @@ package body tb_interpreter_pkg is
         variable len : integer;
         variable t_txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
-        variable valid_tokenize : integer;
+        variable valid_tokens : integer;
         variable valid_ckeck : integer;
+        variable ipc : stm_inst_parse_context;
     begin
+        init_inst_parse_context(ipc);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             file_open(fos, stimulus, afn, read_mode);
@@ -344,12 +347,12 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokenize);
+                tokenize_inst_line(tl, ts, t_txt, txt_enclosing_quote, valid_tokens);
                 len := fld_len(ts(1));
-                if valid_tokenize /= 0 then
+                if valid_tokens /= 0 then
                     inst := ts(1);
                     extract_parameters(ts, ps);
-                    check_valid_inst(inst, inst_def_list, valid, file_line, afn);
+                    check_valid_inst(afn, file_line, inst_defs, inst, valid_tokens);
                     add_inst_and_proc_on_proc(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
                  end if;            
             end loop;
@@ -357,274 +360,4 @@ package body tb_interpreter_pkg is
         end loop;
     end procedure;
         
-        
-        
-            
-    
-
-    procedure read_instruction_file(
-        variable pass : in integer;
-        constant path_name : string;
-        constant file_name : string;
-        variable inst_defs : inout inst_def_ptr;
-        variable vars : inout var_pool_ordered;
-        variable procss : inout proc_pool_ordered;
-        variable insts : inout inst_sequence;
-        variable s : inout inst_sequence; 
-        variable var_list : inout var_field_ptr;
-        variable file_list : inout file_def_ptr;
-        constant stm_value_width : in integer
-    ) is
-        variable inst_context : t_stm_inst_context;
-        variable inst : text_field;
-        variable ps : parameter_text_field_array;        
-        variable l : text_line; 
-        variable file_line : integer; 
-        
-        variable ts : token_text_field_array;
-        variable t_txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
-        variable valid : integer;
-        variable v_ostat : integer;
-        variable v_instr_ptr : inst_def_ptr;
-        variable v_var_ptr : var_field_ptr;
-        variable v_sequ_ptr : inst_element_ptr;
-        variable v_len : integer;
-        variable v_stat : file_open_status;
-        variable v_name : text_line;
-        variable v_iname : text_line;
-        variable v_tmp_fn : file_def_ptr;
-        variable v_fn_idx : integer;
-
-    begin
-        -- open the stimulus_file and check
-        file_open(v_stat, stimulus, path_name & file_name, read_mode);
-        assert v_stat = open_ok
-        report lf & "unable to open stimulus_file  " & path_name & file_name
-        severity failure;
-        -- copy file name to type text_line
-        for i in 1 to path_name'high loop
-            v_name(i) := path_name(i);
-        end loop;
-        for i in 1 to file_name'high loop
-            v_name(i + path_name'high) := file_name(i);
-        end loop;
-        -- the first item on the file names link list
-        file_list := null;
-        v_tmp_fn := new file_def;
-        v_tmp_fn.rec_idx := 1;
-        v_fn_idx := 1;
-        --  nul the text line
-        v_tmp_fn.file_name := (others => nul);
-        for i in 1 to path_name'high loop
-            v_tmp_fn.file_name(i) := path_name(i);
-        end loop;
-        for i in 1 to file_name'high loop
-            v_tmp_fn.file_name(i + path_name'high) := file_name(i);
-        end loop;
-        v_tmp_fn.next_rec := null;
-        file_line := 1;
-        inst_element_num := 1;
-        v_ostat := 0;
-        v_instr_ptr := inst_def_list;
-        v_var_ptr := var_list;
-        v_sequ_ptr := inst_list;
-        init_inst_context(inst_context);
-        -- while not the end of file read it
-        while not endfile(stimulus) loop
-            file_read_line(stimulus, l);
-            --  tokenize the line
-            tokenize_inst_line(l, ts, t_txt, txt_enclosing_quote, valid);
-            v_len := fld_len(ts(1));
-            -- if there is an include instruction
-            if ts(1)(1 to v_len) = "include" then
-                -- if file name is in par2
-                if valid = 2 then
-                    v_iname := (others => nul);
-                    for i in 1 to max_field_len loop
-                        v_iname(i) := ts(2)(i);
-                    end loop;
-                -- elsif the text string is not null
-                elsif t_txt /= null then
-                    v_iname := (others => nul);
-                    for i in 1 to c_stm_text_len loop
-                        v_iname(i) := t_txt(i);
-                        if t_txt(i) = txt_enclosing_quote then
-                            v_iname(i) := nul;
-                            exit;
-                        end if;
-                    end loop;
-                else
-                    assert false
-                    report lf & " include instruction has not file name included.  found on" & lf & "line " & integer'image(file_line) & " in file " & path_name & file_name & lf
-                    severity failure;
-                end if;
-                print("include found: loading file " & path_name & v_iname);
-                read_include_file(pass, path_name, v_iname, insts, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
-                -- if include file not found
-                if v_ostat = 1 then
-                    exit;
-                end if;
-            -- if there were valid tokens
-            elsif valid /= 0 then
-                inst := ts(1);
-                for i in 1 to 6 loop 
-                    ps(i) := ts(i + 1);
-                end loop;
-                check_valid_inst(inst, v_instr_ptr, valid, file_line, v_name);
-                case pass is
-                    when 0 =>
-                        add_var_on_constant_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
-                    when 1 =>
-                        add_var_on_variable_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
-                    when others =>
-                        add_inst_and_proc_on_proc(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
-                end if;
-            end if;
-            file_line := file_line + 1;
-        end loop; -- end loop read file
-        file_close(stimulus); -- close the file when done
-        assert v_ostat = 0
-        report lf & "include file specified on line " & (integer'image(file_line)) & " in file " & path_name & file_name & " was not found! test terminated" & lf
-        severity failure;
-        inst_def_list := v_instr_ptr;
-        var_list := v_var_ptr;
-        inst_list := v_sequ_ptr;
-        file_list := v_tmp_fn;
-    end procedure;
-
-    procedure read_include_file(
-        variable pass : in integer;
-        constant path_name : string;
-        variable name : text_line;
-        variable inst_element_num : inout integer;
-        variable file_list : inout file_def_ptr;
-        variable inst_def_list : inout inst_def_ptr;
-        variable var_list : inout var_field_ptr;
-        variable inst_list : inout inst_element_ptr;
-        variable status : inout integer;
-        constant stm_value_width : in integer
-    ) is
-        variable inst_context : t_stm_inst_context;
-        variable l : text_line; -- the line
-        variable file_line : integer; -- line number file
-        variable inst : text_field;
-        variable ps : parameter_text_field_array; 
-        variable ts : token_text_field_array;
-        variable t_txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
-        variable valid : integer;
-        variable v_instr_ptr : inst_def_ptr;
-        variable v_var_ptr : var_field_ptr;
-        variable v_sequ_ptr : inst_element_ptr;
-        variable v_len : integer;
-        variable v_stat : file_open_status;
-        variable v_tmp_fn_ptr : file_def_ptr;
-        variable v_new_fn : integer;
-        variable v_tmp_fn : file_def_ptr;
-        variable present : boolean;
-        variable v_iname : text_line;
-        variable include_file_path_name : text_line;
-        variable v_ostat : integer;
-        file include_file : text; -- file declaration for includes
-
-    begin
-        inst_element_num := inst_element_num;
-        v_tmp_fn_ptr := file_list;
-        for i in 1 to path_name'high loop
-            include_file_path_name(i) := path_name(i);
-        end loop;
-        for i in 1 to max_str_len - path_name'high loop
-            include_file_path_name(i + path_name'high) := name(i);
-        end loop;
-        --  open include file
-        file_open(v_stat, include_file, text_line_crop(include_file_path_name), read_mode);
-        if v_stat /= open_ok then
-            print("unable to open include file  " & text_line_crop(include_file_path_name));
-            status := 1;
-            return;
-        end if;
-        file_line := 1; -- initialize line number
-        --  the file is opened, put it on the file name ll
-        while v_tmp_fn_ptr.next_rec /= null loop
-            v_tmp_fn_ptr := v_tmp_fn_ptr.next_rec;
-        end loop;
-        v_new_fn := v_tmp_fn_ptr.rec_idx + 1;
-        v_tmp_fn := new file_def;
-        v_tmp_fn_ptr.next_rec := v_tmp_fn;
-        v_tmp_fn.rec_idx := v_new_fn;
-        --  nul the text line
-        v_tmp_fn.file_name := (others => nul);
-        for i in 1 to name'high loop
-            v_tmp_fn.file_name(i) := name(i);
-        end loop;
-        v_tmp_fn.next_rec := null;
-        v_instr_ptr := inst_def_list;
-        v_var_ptr := var_list;
-        v_sequ_ptr := inst_list;
-        -- while not the end of file read it
-        while not endfile(include_file) loop
-            file_read_line(include_file, l);
-            --  tokenize the line
-            tokenize_inst_line(l, ts, t_txt, txt_enclosing_quote, valid);
-            v_len := fld_len(ts(1));
-            if ts(1)(1 to v_len) = "include" then
-                -- if file name is in par2
-                if valid = 2 then
-                    v_iname := (others => nul);
-                    for i in 1 to max_field_len loop
-                        v_iname(i) := ts(2)(i);
-                    end loop;
-                -- elsif the text string is not null
-                elsif t_txt /= null then
-                    v_iname := (others => nul);
-                    for i in 1 to c_stm_text_len loop
-                        v_iname(i) := t_txt(i);
-                        if t_txt(i) = txt_enclosing_quote then
-                            v_iname(i) := nul;
-                            exit;
-                        end if;
-                    end loop;
-                else
-                    assert false
-                    report lf & " include instruction is missing included file name paramater , found at:" & lf & "line " & (integer'image(file_line)) & " in file " & include_file_path_name & lf
-                    severity failure;
-                end if;
-                print("nested include found in : " & include_file_path_name);
-                check_presence_inst_file_name(file_list, v_iname, present);
-                if present then
-                    print("nested include found: not loading file since already present " & text_line_crop(v_iname));
-                else
-                    print("nested include found: loading file " & path_name & v_iname);
-                    read_include_file(pass, path_name, v_iname, inst_element_num, v_tmp_fn, v_instr_ptr, v_var_ptr, v_sequ_ptr, v_ostat, stm_value_width);
-                    -- if include file not found
-                    if v_ostat = 1 then
-                        exit;
-                    end if;
-                end if;
-            -- if there were valid tokens
-            elsif valid /= 0 then
-                inst := ts(1);
-                for i in 1 to 6 loop 
-                    ps(i) := ts(i + 1);
-                end loop;
-                check_valid_inst(inst, v_instr_ptr, valid, file_line, v_iname);
-                case pass is
-                    when 0 =>
-                        add_var_on_constant_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
-                    when 1 =>
-                        add_var_on_non_local_variable_declaration(v_iname, file_line, vars, inst_parse_context, inst, ps, t_txt, txt_enclosing_quote, stm_value_width);
-                    when others =>
-                        add_var_on_variable_declaration(v_iname, file_line, insts, procs, inst, ps, t_txt, txt_enclosing_quote, file_line, v_iname, v_new_fn, inst_context, stm_value_width);
-                end if;
-            end if;
-            file_line := file_line + 1;
-        end loop; -- end loop read file
-        file_close(include_file);
-        inst_element_num := inst_element_num;
-        inst_def_list := v_instr_ptr;
-        var_list := v_var_ptr;
-        inst_list := v_sequ_ptr;
-    end procedure;
-
 end package body;

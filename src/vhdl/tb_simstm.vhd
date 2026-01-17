@@ -152,7 +152,7 @@ begin
         variable absolute_code_file_name : text_line;
         variable inst : text_field;
         variable il : integer;
-        variable inst_parse_context : t_stm_inst_parse_context;
+
         variable par_text_fields : parameter_text_field_array;
         variable par_indexes : parameter_index_array;
         variable par_values : parameter_value_array(1 to 6)(machine_value_width - 1 downto 0);
@@ -273,9 +273,9 @@ begin
         variable tmp_called_proc : text_field;
         variable no_scope : text_field;
         variable none : text_field;
-        variable pass : integer;
+    stm_inst_parse_contextr;
         
-        variable ipc : t_stm_inst_parse_context;
+        variable ipc : stm_inst_parse_context;
         variable rc : t_stm_runtime_context;
 
     begin
@@ -294,25 +294,29 @@ begin
         init_const_text_field(".", no_scope);
         init_const_text_field("no_proc", no_proc);
         init_const_text_line("no_file", no_file);
-        define_instructions(inst_def_list);
-        init_inst_parse_context(inst_context);
-        init_inst_sequence(insts);
         
-        make_absolut_code_file_name(stimulus_path, stimulus_file, absolute_code_file_name);
+        init_inst_def_list(inst_defs); 
+        define_insts(inst_defs);
+        
+        init_file_def_list(code_files);
+        combine_to_absolute_file_name(stimulus_path, stimulus_file, top_code_file_name);
         print("collect_code_files");
-        collect_code_files(absolute_code_file_name, code_files);
+        collect_code_files(top_code_file_name, code_files);        
+        
+        init_var_pool_ordered(vars);
         print("parsing constants");
         parse_constants(code_files);
         print("parsing variables");
         parse_variables(code_files);
+        
+        init_proc_pool_ordered(procs);
+        init_inst_sequence(insts);
         print("parsing instructions and procs");
         parse_instructions_and_procs(code_files);
         print("parsing done");
 
         init_inst_parse_context(inst_context);
         ien := 0;
-        last_searched_inst_element_number := 0;
-        last_searched_inst_element_ptr := inst_list;
         print("Checking if all variables are initially defined for all instructions");
         while ien < inst_list.element_count loop
             ien := ien + 1;

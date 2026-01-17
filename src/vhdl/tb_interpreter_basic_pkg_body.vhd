@@ -129,7 +129,7 @@ package body tb_interpreter_basic_pkg is
         variable file_name : in text_line;
         variable file_line : in integer;
         variable vars : inout var_pool_ordered;
-        variable inst_parse_context : inout t_stm_inst_parse_context;
+        variable inst_parse_context : inout stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
@@ -159,7 +159,7 @@ package body tb_interpreter_basic_pkg is
         variable file_name : in text_line;
         variable file_line : in integer;
         variable vars : inout var_pool_ordered;
-        variable inst_parse_context : inout t_stm_inst_parse_context;
+        variable inst_parse_context : inout stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
@@ -208,7 +208,7 @@ package body tb_interpreter_basic_pkg is
         variable file_line : in integer;
         variable insts : inout inst_sequence; 
         variable procs : inout var_field_ptr;
-        variable inst_parse_context : inout t_stm_inst_parse_context;
+        variable inst_parse_context : inout stm_inst_parse_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;  
         variable str_ptr : in stm_text_ptr;
@@ -258,249 +258,7 @@ package body tb_interpreter_basic_pkg is
             end if;
         end if;
     end procedure;
-    
-
-    
-    procedure add_var(
-        variable vars : inout var_pool_ordered;
-        variable var_scope : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : in integer;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        constant var_stm_type : in t_stm_var_type;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant stm_value_width : in integer;
-        variable assigned_index : out integer
-    ) is
-        variable temp_var : var_field_ptr;
-        variable current_ptr : var_field_ptr;
-        variable index : integer := 1;
-
-        procedure init_stm_lines_var is
-        begin
-            temp_var := new var_field;
-            temp_var.var_name := par_text_fields(1); -- direct write of text_field
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_label := null;
-            temp_var.var_org_label := null;
-            temp_var.var_index := index;
-            temp_var.var_stm_text := null;
-            temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_org_stm_text := null;
-            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := null;
-            temp_var.var_org_stm_array := null;
-            temp_var.var_stm_lines := new t_stm_lines;
-            temp_var.var_stm_lines.stm_line_list := null;
-            temp_var.var_stm_lines.size := 0;
-            temp_var.var_org_stm_lines := new t_stm_lines;
-            temp_var.var_org_stm_lines.stm_line_list := null;
-            temp_var.var_org_stm_lines.size := 0;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-
-        procedure init_stm_array_var is
-        begin
-            temp_var := new var_field;
-            temp_var.var_name := par_text_fields(1); -- direct write of text_field
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_index := index;
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_label := null;
-            temp_var.var_org_label := null;
-            temp_var.var_stm_text := null;
-            temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_org_stm_text := null;
-            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := new t_stm_array(0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1)(stm_value_width - 1 downto 0);
-            for i in 0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1 loop
-                temp_var.var_stm_array(i) := to_unsigned(0, stm_value_width);
-            end loop;
-            temp_var.var_org_stm_array := new t_stm_array(0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1)(stm_value_width - 1 downto 0);
-            for i in 0 to stim_to_integer(par_text_fields(2), file_name, file_line)-1 loop
-                temp_var.var_org_stm_array(i) := to_unsigned(0, stm_value_width);
-            end loop;
-            temp_var.var_stm_lines := null;
-            temp_var.var_org_stm_lines := null;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-
-        procedure init_stm_text_var is
-        begin
-            assert str_ptr /= null
-            report lf & "missing file name in file declaration " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
-            severity failure;
-            temp_var := new var_field;
-            temp_var.var_name := par_text_fields(1); -- direct write of text_field
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_index := index;
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_label := null;
-            temp_var.var_org_label := null;
-            temp_var.var_stm_text := str_ptr;
-            temp_var.var_stm_text_enclosing_quote := txt_enclosing_quote;
-            temp_var.var_org_stm_text := str_ptr;
-            temp_var.var_org_stm_text_enclosing_quote := txt_enclosing_quote;
-            temp_var.var_stm_array := null;
-            temp_var.var_org_stm_array := null;
-            temp_var.var_stm_lines := null;
-            temp_var.var_org_stm_lines := null;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-
-        procedure init_value_var is
-        begin
-            temp_var := new var_field;
-            temp_var.var_name := par_text_fields(1); -- direct write of text_field
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_index := index;
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := stim_to_stm_value(par_text_fields(2), file_name, file_line, stm_value_width); -- convert text_field to unsigned
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := stim_to_stm_value(par_text_fields(2), file_name, file_line, stm_value_width); -- convert text_field to unsigned
-            temp_var.var_label := null;
-            temp_var.var_org_label := null;
-            temp_var.var_stm_text := null;
-            temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_org_stm_text := null;
-            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := null;
-            temp_var.var_org_stm_array := null;
-            temp_var.var_stm_lines := null;
-            temp_var.var_org_stm_lines := null;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-
-        procedure init_label_var is
-        begin
-            temp_var := new var_field;
-            temp_var.var_name := par_text_fields(1); -- direct write of text_field
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_index := index;
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := to_unsigned(0, stm_value_width);
-            temp_var.var_label := new text_field;
-            text_field_to_text_field_ptr(par_text_fields(2), temp_var.var_label);
-            temp_var.var_org_label := new text_field;
-            text_field_to_text_field_ptr(par_text_fields(2), temp_var.var_org_label);
-            temp_var.var_stm_text := null;
-            temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_org_stm_text := null;
-            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := null;
-            temp_var.var_org_stm_array := null;
-            temp_var.var_stm_lines := null;
-            temp_var.var_org_stm_lines := null;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-
-        procedure init_proc_var is
-            variable l : integer;
-        begin
-            temp_var := new var_field;
-            l := fld_len(par_text_fields(1));
-            temp_var.var_name(1 to (l - 1)) := par_text_fields(1)(1 to (l - 1));
-            temp_var.var_scope := var_scope; -- direct write of text_field
-            temp_var.var_index := index;
-            temp_var.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_value(0) := to_unsigned(inst_list_elment_num, stm_value_width);
-            temp_var.var_org_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
-            temp_var.var_org_value(0) := to_unsigned(inst_list_elment_num, stm_value_width);
-            temp_var.var_label := null;
-            temp_var.var_org_label := null;
-            temp_var.var_stm_text := null;
-            temp_var.var_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_org_stm_text := null;
-            temp_var.var_org_stm_text_enclosing_quote := character'val(126);
-            temp_var.var_stm_array := null;
-            temp_var.var_org_stm_array := null;
-            temp_var.var_stm_lines := null;
-            temp_var.var_org_stm_lines := null;
-            temp_var.var_stm_type := var_stm_type;
-        end procedure;
-    begin
-        -- if this is not the first one
-        if var_list /= null then
-            current_ptr := var_list;
-            index := index + 1;
-            while current_ptr.next_rec /= null loop
-                -- if we have defined the current before then die
-                assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
-                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
-                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
-                severity failure;
-                current_ptr := current_ptr.next_rec;
-                index := index + 1;
-            end loop;
-            -- if we have defined the current before then die. this checks the last one
-            assert current_ptr.var_name /= par_text_fields(1) or current_ptr.var_scope /= var_scope
-                report lf & "attemping to add a duplicate variable definition var_name:'" & current_ptr.var_name(1 to fld_len(current_ptr.var_name))  
-                       & "' var_scope:'" & current_ptr.var_scope(1 to fld_len(current_ptr.var_scope)) & "' on line " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
-            severity failure;
-            if var_stm_type = STM_LINES_TYPE then
-                init_stm_lines_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_ARRAY_TYPE then
-                init_stm_array_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_TEXT_TYPE then
-                init_stm_text_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_PROC_TYPE then
-                init_proc_var;
-                current_ptr.next_rec := temp_var;
-            elsif var_stm_type = STM_LABEL_TYPE then
-                init_label_var;
-                current_ptr.next_rec := temp_var;
-            else
-                init_value_var;
-                current_ptr.next_rec := temp_var;
-            end if;
-        -- this is the first one
-        else
-            if var_stm_type = STM_LINES_TYPE then
-                init_stm_lines_var;
-            elsif var_stm_type = STM_ARRAY_TYPE then
-                init_stm_array_var;
-            elsif var_stm_type = STM_TEXT_TYPE then
-                init_stm_text_var;
-            elsif var_stm_type = STM_PROC_TYPE then
-                init_proc_var;
-            elsif var_stm_type = STM_LABEL_TYPE then
-                init_label_var;
-            else
-                init_value_var;
-            end if;
-            var_list := temp_var;
-        end if;
-        assigned_index := index;
-    end procedure;
-    
-    procedure add_proc(
-        variable procs : inout proc_pool_ordered;
-        variable par_text_fields : in parameter_text_field_array;
-        variable proc_inst_elment_num : in integer;
-        variable file_line : in integer;
-        variable file_name : in text_line
-    ) is
-    begin
-        insert_proc_element(procs, par_text_fields(1), proc_inst_elment_num);
-    end procedure;
-    
+          
     procedure insert_proc_element(
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
