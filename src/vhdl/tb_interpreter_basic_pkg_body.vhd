@@ -53,13 +53,13 @@ use work.tb_interpreter_util_pkg.all;
 
 package body tb_interpreter_basic_pkg is
 
-    procedure track_inst_parse_context(
+    procedure track_inst_initial_context(
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable file_line : in integer;
         variable file_name : in text_line;
         variable var_list : inout var_field_ptr;
-        variable inst_parse_context : inout stm_inst_parse_context
+        variable inst_initial_context : inout stm_inst_initial_context
     ) is
         variable il : integer;
         variable var_index : integer;
@@ -69,25 +69,25 @@ package body tb_interpreter_basic_pkg is
     begin
         il := fld_len(inst);
         if inst(1 to il) = INSTR_NAMESPACE then
-            inst_parse_context.in_namespace := true;
-            inst_parse_context.in_namespace_name := par_text_fields(1);
+            inst_initial_context.in_namespace := true;
+            inst_initial_context.in_namespace_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_NAMESPACE then
-            inst_parse_context.in_namespace := false;
-            inst_parse_context.in_namespace_name := (others => nul);
+            inst_initial_context.in_namespace := false;
+            inst_initial_context.in_namespace_name := (others => nul);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            inst_parse_context.in_proc_parameters := true;
-            inst_parse_context.in_proc_name := par_text_fields(1);
+            inst_initial_context.in_proc_parameters := true;
+            inst_initial_context.in_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_NOPAR then
-            inst_parse_context.in_proc_parameters := false;
-            inst_parse_context.in_proc_body := true;
-            inst_parse_context.in_proc_name := par_text_fields(1);
+            inst_initial_context.in_proc_parameters := false;
+            inst_initial_context.in_proc_body := true;
+            inst_initial_context.in_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_PROC then
-            inst_parse_context.in_proc_body := false;
-            inst_parse_context.in_proc_name := (others => nul);
+            inst_initial_context.in_proc_body := false;
+            inst_initial_context.in_proc_name := (others => nul);
         end if;
         if inst(1 to il) = INSTR_PAR_CLOSE
             or inst(1 to il) = INSTR_EQU_PAR_CLOSE
@@ -99,29 +99,29 @@ package body tb_interpreter_basic_pkg is
             or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-            if inst_parse_context.in_proc_parameters then
-                inst_parse_context.in_proc_parameters := false;
-                inst_parse_context.in_proc_body := true;
+            if inst_initial_context.in_proc_parameters then
+                inst_initial_context.in_proc_parameters := false;
+                inst_initial_context.in_proc_body := true;
             end if;
-            if inst_parse_context.in_call_parameters then
-                inst_parse_context.in_call_parameters := false;
+            if inst_initial_context.in_call_parameters then
+                inst_initial_context.in_call_parameters := false;
             end if;
-            if inst_parse_context.in_call_label_advanced_parameters then
-                inst_parse_context.in_call_label_advanced_parameters := false;
+            if inst_initial_context.in_call_label_advanced_parameters then
+                inst_initial_context.in_call_label_advanced_parameters := false;
             end if;
         end if;
         if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-            inst_parse_context.in_call_parameters := true;
-            inst_parse_context.in_called_proc_name := par_text_fields(1);
+            inst_initial_context.in_call_parameters := true;
+            inst_initial_context.in_called_proc_name := par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-            inst_parse_context.in_call_label_parameters := true;
-            access_var_label_ptr(var_list, inst_parse_context.in_namespace_name, inst_parse_context.in_called_proc_name, var_index, tmp_label_ptr, valid);
+            inst_initial_context.in_call_label_parameters := true;
+            access_var_label_ptr(var_list, inst_initial_context.in_namespace_name, inst_initial_context.in_called_proc_name, var_index, tmp_label_ptr, valid);
             assert valid /= 0
             report lf & "initial context call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
             severity failure;       
             text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);
-            inst_parse_context.in_called_proc_name := tmp_proc;
+            inst_initial_context.in_called_proc_name := tmp_proc;
         end if;
     end procedure;
 
@@ -129,7 +129,7 @@ package body tb_interpreter_basic_pkg is
         variable file_name : in text_line;
         variable file_line : in integer;
         variable vars : inout var_pool_ordered;
-        variable inst_parse_context : inout stm_inst_parse_context;
+        variable inst_initial_context : inout stm_inst_initial_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
@@ -142,7 +142,7 @@ package body tb_interpreter_basic_pkg is
         variable assigned_index : integer;
         constant debug : boolean := false;
     begin
-        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_initial_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
         var_type := STM_CONST_VALUE_TYPE;
         il := fld_len(inst);
@@ -159,7 +159,7 @@ package body tb_interpreter_basic_pkg is
         variable file_name : in text_line;
         variable file_line : in integer;
         variable vars : inout var_pool_ordered;
-        variable inst_parse_context : inout stm_inst_parse_context;
+        variable inst_initial_context : inout stm_inst_initial_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         variable str_ptr : in stm_text_ptr;
@@ -176,7 +176,7 @@ package body tb_interpreter_basic_pkg is
         variable n_par_text_fields : parameter_text_field_array;
         constant debug : boolean := false;
     begin
-        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_initial_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         var_scope := textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name);
         var_type := STM_NO_VAR;
         il := fld_len(inst);
@@ -208,7 +208,7 @@ package body tb_interpreter_basic_pkg is
         variable file_line : in integer;
         variable insts : inout inst_sequence; 
         variable procs : inout var_field_ptr;
-        variable inst_parse_context : inout stm_inst_parse_context;
+        variable inst_initial_context : inout stm_inst_initial_context;
         variable inst : in text_field;
         variable par_text_fields : in parameter_text_field_array;  
         variable str_ptr : in stm_text_ptr;
@@ -219,7 +219,7 @@ package body tb_interpreter_basic_pkg is
         variable proc_type : boolean;
         constant debug : boolean := false;
     begin
-        track_inst_parse_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+        track_inst_initial_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
         il := fld_len(inst);
         set_var_type(inst, il, var_type);
         set_proc_type(inst, il, proc_type);
@@ -327,10 +327,9 @@ package body tb_interpreter_basic_pkg is
     end procedure;
     
     procedure insert_var_element(
+        variable slc : src_locator;
         variable vars : inout var_pool_ordered;
         variable var_name : in text_field;
-        variable file_name : in text_line;
-        variable file_line : in integer;
         variable var_scope : in text_field;
         variable par_text_fields : in parameter_text_field_array;
         constant var_stm_type : in t_stm_var_type;
@@ -345,6 +344,7 @@ package body tb_interpreter_basic_pkg is
         procedure init_stm_lines_var is
         begin
             ne := new var_element;
+            ne.var_slc := slc;
             ne.var_name := par_text_fields(1); -- direct write of text_field
             ne.var_scope := var_scope; -- direct write of text_field
             ne.var_value := new t_stm_value(0 to 0)(stm_value_width - 1 downto 0);
@@ -374,6 +374,7 @@ package body tb_interpreter_basic_pkg is
         procedure init_stm_array_var is
         begin
             ne := new var_element;
+            ne.var_slc := slc;
             ne.var_name := par_text_fields(1); -- direct write of text_field
             ne.var_scope := var_scope; -- direct write of text_field
             ne.var_index := index;
@@ -398,8 +399,6 @@ package body tb_interpreter_basic_pkg is
             ne.var_stm_lines := null;
             ne.var_org_stm_lines := null;
             ne.var_stm_type := var_stm_type;
-            ne.file_name := file_name;
-            ne.file_line := file_line;
         end procedure;
 
         procedure init_stm_text_var is
@@ -408,6 +407,7 @@ package body tb_interpreter_basic_pkg is
             report lf & "missing file name in file declaration " & (integer'image(file_line)) & " of file " & text_line_crop(file_name)
             severity failure;
             ne := new var_element;
+            ne.var_slc := slc;
             ne.var_name := par_text_fields(1); -- direct write of text_field
             ne.var_scope := var_scope; -- direct write of text_field
             ne.var_index := index;
@@ -426,13 +426,12 @@ package body tb_interpreter_basic_pkg is
             ne.var_stm_lines := null;
             ne.var_org_stm_lines := null;
             ne.var_stm_type := var_stm_type;
-            ne.file_name := file_name;
-            ne.file_line := file_line;
         end procedure;
         
         procedure init_label_var is
         begin
             ne := new var_element;
+            ne.var_slc := slc;
             ne.var_name := par_text_fields(1); -- direct write of text_field
             ne.var_scope := var_scope; -- direct write of text_field
             ne.var_index := index;
@@ -453,13 +452,12 @@ package body tb_interpreter_basic_pkg is
             ne.var_stm_lines := null;
             ne.var_org_stm_lines := null;
             ne.var_stm_type := var_stm_type;
-            ne.file_name := file_name;
-            ne.file_line := file_line;
         end procedure;
 
         procedure init_value_var is
         begin
             ne := new var_element;
+            ne.var_slc := slc;
             ne.var_name := par_text_fields(1); -- direct write of text_field
             ne.var_scope := var_scope; -- direct write of text_field
             ne.var_index := index;
@@ -478,8 +476,6 @@ package body tb_interpreter_basic_pkg is
             ne.var_stm_lines := null;
             ne.var_org_stm_lines := null;
             ne.var_stm_type := var_stm_type;
-            ne.file_name := file_name;
-            ne.file_line := file_line;
         end procedure;
 
     begin
@@ -495,45 +491,37 @@ package body tb_interpreter_basic_pkg is
             when others =>
                 init_value_var;
         end case;        
-        if vars.last_element_num < 8 then
-            insert_before := -1;
-            for i in 0 to vars.last_element_num loop
-                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
-                    insert_before_var_element_num := i;
-                    exit;
-                end if;              
-            end loop;
-        else
-            s.left := 0;
-            s.right := vars.last_element_num;           
-            while s.right - s.left > 8 loop
-                sl.left := s.left;
-                sl.right := s.right / 2 - 1;
-                su.left := sl.right + 1;
-                su.right := sl.right;
-                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
-                    s.left := sl.left;
-                    s.right := sl.right;
-                else
-                    s.left := su.left;
-                    s.right := su.right;
-                end if;    
-            end loop;
-            insert_before := -1;
-            for i in 0 to vars.last_element_num - 1 loop
-                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
-                    insert_before_var_element_num := i;
-                    exit;
-                end if;              
-            end loop;
-            insert_before := -1;
-            for i in s.left to s.right loop
-                if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
-                    insert_before_var_element_num := i;
-                    exit;
-                end if;              
-            end loop;
-        end if;  
+
+        s.left := 0;
+        s.right := vars.last_element_num;           
+        while s.right - s.left > 8 loop
+            sl.left := s.left;
+            sl.right := s.right / 2 - 1;
+            su.left := sl.right + 1;
+            su.right := sl.right;
+            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(i), var_name) then
+                s.left := sl.left;
+                s.right := sl.right;
+            else
+                s.left := su.left;
+                s.right := su.right;
+            end if;    
+        end loop;
+        insert_before := -1;
+        for i in 0 to vars.last_element_num - 1 loop
+            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(i), var_name) then
+                insert_before_var_element_num := i;
+                exit;
+            end if;              
+        end loop;
+        insert_before := -1;
+        for i in s.left to s.right loop
+            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(i), var_name) then
+                insert_before_var_element_num := i;
+                exit;
+            end if;              
+        end loop;
+ 
         if insert_before_var_element_num >= 0 then
            vars.element_ptrs(i + 1 to vars.last_element_num + 1) := vars.element_ptrs(i to vars.last_element_num);
            vars.element_ptrs(i) := ne;
@@ -543,5 +531,37 @@ package body tb_interpreter_basic_pkg is
            vars.last_element_num := vars.last_element_num + 1;
         end if;                
     end procedure;
-
+    
+    function search_var_element_number( 
+        vars : var_pool_ordered;
+        var_name : text_field
+    ) return integer is
+        variable su : slice;
+        variable sl : slice;
+        variable en : integer;     
+    begin
+        en := -1;
+        s.left := 0;
+        s.right := vars.last_element_num;           
+        while s.right - s.left > 8 loop
+            sl.left := s.left;
+            sl.right := s.right / 2 - 1;
+            su.left := sl.right + 1;
+            su.right := sl.right;
+            if order_is_less_than_failure_on_equal(vars.element_ptrs(i), var_name, file_name, file_line) then
+                s.left := sl.left;
+                s.right := sl.right;
+            else
+                s.left := su.left;
+                s.right := su.right;
+            end if;    
+        end loop;    
+        for i in s.left to s.right loop
+            if vars.element_ptrs(i) = var_name then
+                en := i;
+                exit;
+            end if;              
+        end loop;
+    end function;
+    
 end package body;

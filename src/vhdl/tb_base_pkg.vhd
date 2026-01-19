@@ -92,6 +92,11 @@ package tb_base_pkg is
          left :integer;
          right :integer;
     end record;
+    
+    type src_locator is record
+         file_name : text_line;
+         file_line :integer;
+    end record;
    
     type inst_def_element;
     type inst_def_element_ptr is access inst_def_element;
@@ -115,16 +120,19 @@ package tb_base_pkg is
         element_ptrs : file_def_element_ptrs;
         last_element_num : integer;
     end record; 
+
+    type inst_arguments is record
+        par_text_fields : parameter_text_field_array;
+        txt : stm_text_ptr;
+        txt_enclosing_quote : character;    
+    end record;
     
     type inst_element;
-    type inst_element_ptr is access inst_element; -- pointer to inst_element record
+    type inst_element_ptr is access inst_element;
     type inst_element is record
-        file_name : text_line;
-        file_line : integer;
+        src_loc : src_locator;
         inst : text_field;
-        parameters : parameter_text_field_array;
-        txt : stm_text_ptr;
-        txt_enclosing_quote : character;
+        inst_args : inst_arguments;
     end record;
     type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element;
     type inst_sequence is record
@@ -170,7 +178,7 @@ package tb_base_pkg is
         STM_NO_VAR
     );
 
-    type stm_inst_parse_context is record
+    type stm_inst_initial_context is record
         in_namespace : boolean;
         in_proc_parameters : boolean;
         in_proc_body : boolean;
@@ -210,12 +218,11 @@ package tb_base_pkg is
     type var_element;
     type var_element_ptr is access var_element;
     type var_element is record
+        var_src_loc : src_locator;
         var_name : text_field;
         var_scope : text_field;
-        var_index : integer;
         var_value : t_stm_value_ptr;
         var_org_value : t_stm_value_ptr;
-        var_proc_inst_element_num : integer;
         var_label_proc_ref : text_field_ptr;
         var_org_label_proc_ref : text_field_ptr;
         var_stm_type : t_stm_var_type;
@@ -239,11 +246,10 @@ package tb_base_pkg is
     type proc_element;
     type proc_element_ptr is access proc_element;
     type proc_element is record
+        proc_src_loc : src_locator;
         proc_name : text_field;
         proc_element_num : integer;
         proc_inst_element_num : integer;
-        file_name : text_line;
-        file_line : integer;
     end record;
     type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
     type proc_pool_ordered is record
@@ -265,8 +271,8 @@ package tb_base_pkg is
         variable insts : inout inst_sequence
     );
 
-    procedure init_inst_parse_context(
-        variable ipc : inout stm_inst_parse_context
+    procedure init_inst_initial_context(
+        variable ipc : inout stm_inst_initial_context
     );
 
     -- bin2integer    convert bin stimulus field to integer

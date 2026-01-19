@@ -674,8 +674,7 @@ package body tb_instructions_pkg is
     end procedure;
     
     procedure check_valid_inst(
-        variable file_name : in text_line;
-        variable file_line : in integer;
+        variable slc : in src_locator;
         variable inst_defs : in inst_def_list;
         variable inst : in text_field;
         variable num_of_params : in integer
@@ -692,21 +691,21 @@ package body tb_instructions_pkg is
         end loop;
         assert hn >= 0
         report "undefined instruction found, inst " & inst & lf &
-               "file " & file_name & lf &
-               "line " & integer'image(file_line)
+               "file " & slc.file_name & lf &
+               "line " & integer'image(slc.file_line)
         severity failure;
         il := fld_len(inst);
         assert inst_defs.element_ptrs(hn).il = il
         report "instruction found, inst " & inst & lf &
                "but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & lf &
-               "file " & file_name & lf &
-               "line " & integer'image(file_line)
+               "file " & slc.file_name & lf &
+               "line " & integer'image(slc.file_line)
         severity failure;       
         assert inst_defs.element_ptrs(hn).num_of_params = num_of_params
         report "instruction found, inst " & inst & lf &
                "but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & lf &
-               "file " & file_name & lf &
-               "line " & integer'image(file_line)
+               "file " & slc.file_name & lf &
+               "line " & integer'image(slc.file_line)
         severity failure;       
     end procedure;
     

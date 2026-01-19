@@ -91,8 +91,8 @@ package body tb_base_pkg is
     end procedure;   
     
 
-    procedure init_inst_parse_context(
-        variable ipc : inout stm_inst_parse_context
+    procedure init_inst_initial_context(
+        variable ipc : inout stm_inst_initial_context
     ) is
     begin
         ipc.in_namespace := false;
@@ -185,16 +185,17 @@ package body tb_base_pkg is
         end loop;          
     end procedure;
     
-    procedure extract_parameters(
-        variable ts : in token_text_field_array; 
-        variable ps : inout parameter_text_field_array
-        )
+    function extract_parameters(
+        variable ts : token_text_field_array
+        ) return parameter_text_field_array
     is
+        variable ps : parameter_text_field_array;
     begin
         for i in 1 to 6 loop 
             ps(i) := ts(i + 1);
         end loop;
-    end procedure;    
+        return ps;
+    end function;    
     
     procedure set_var_type(
         variable inst : in text_field;
@@ -701,20 +702,19 @@ package body tb_base_pkg is
     end procedure;
     
     function order_is_less_than_failure_on_equal(
+        slc : in src_location;
         s1 : in text_field;
-        s2 : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        s2 : in text_field
     ) return boolean is
         variable is_equ : boolean;
         variable is_less : boolean;
     begin
         fld_order(s1, s2, is_equ, is_less);
         assert not is_equ
-        report "attemping to add a duplicate proc definition:" & lf &
-               " proc_name: " & proc_name & lf &
-               " file name: " & file_name & lf &
-               " file line: " & integer'image(file_line)
+        report "attemping to add a duplicate var or proc definition:" & lf &
+               " object name: " & s1 & lf &
+               " file name: " & slc.file_name & lf &
+               " file line: " & integer'image(slc.file_line)
         severity failure;
         return is_less;   
     end function;

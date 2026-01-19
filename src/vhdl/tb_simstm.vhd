@@ -274,7 +274,6 @@ begin
         variable no_scope : text_field;
         variable none : text_field;
         
-        variable ipc : stm_inst_parse_context;
         variable rc : t_stm_runtime_context;
 
     begin
@@ -299,12 +298,12 @@ begin
         
         init_file_def_list(code_files);
         combine_to_absolute_file_name(stimulus_path, stimulus_file, top_absolute_code_file_name);
-        print("collect stimulus code_files");
+        print("collect stimulus code files");
         collect_code_files(code_files, top_absolute_code_file_name);
-        print(integer'image(code_files.last_element_num) & "stimulus code files");     
+        print(integer'image(code_files.last_element_num) & "stimulus code files");   
         
         init_var_pool_ordered(vars);
-        print("parsing stimuli code files");
+        print("parsing stimulus code files");
         parse_constants(code_files, inst_defs, vars, machine_value_width); 
         noc := inst_defs.last_elment_num;
         print(integer'image(noc) & "constants");  
@@ -315,28 +314,12 @@ begin
         parse_instructions_and_procs(code_files, inst_defs, insts, procs, machine_value_width); 
         print(integer'image(procs.last_elment_num - noc) & "procedures"); 
         print(integer'image(insts.last_elment_num - noc) & "instructions"); 
-        print("parsing stimuli done");
 
-        init_inst_parse_context(inst_context);
+        print("checking if all variables are initially defined for all instructions");
+        check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
+     
+        print("starting stimuli execution");
         ien := 0;
-        print("Checking if all variables are initially defined for all instructions");
-        while ien < inst_list.element_count loop
-            ien := ien + 1;
-            search_inst_element_ptr(inst_list, ien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-            access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
-            track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
-            par_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
-            if inst_context.in_call_advanced_parameters
-                or inst_context.in_call_label_advanced_parameters then
-                par_scopes(2) := inst_context.in_called_proc_name;
-            end if;
-            access_inst_element_parameters(var_list, file_line, file_name, par_scopes, par_text_fields, par_indexes, par_values);
-        end loop;
-
-        ien := 0;
-        last_searched_inst_element_number := 0;
-        last_searched_inst_element_ptr := inst_list;
-
         sp := 0;
         for i in 0 to stack'length - 1 loop
             init_runtime_context(rcs(i));
@@ -365,8 +348,7 @@ begin
                 report lf & "Entry point proc Main:'" & main_proc_name(1 to fld_len(main_proc_name)) & "' scope:'.' not found !"
                 severity failure;  
                 ien := main_inst_element;
-                search_inst_element_ptr(inst_list, ien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
+                ie := insts.element_ptrs(ien);
                 print("exec main entry line " & (integer'image(file_line)) & " " & inst(1 to il) & " in file " & text_line_crop(file_name));
                 main_entered := 1;
                 sp := sp + 1; 
@@ -398,8 +380,7 @@ begin
                 report lf & "Interrupt entry point branch_to_interrupt_proc not found !"
                 severity failure;
                 ien := branch_to_interrupt_instruction_element_number;
-                search_inst_element_ptr(inst_list, ien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
+                ie := insts.element_ptrs(ien);
                 sp := sp + 1; 
                 init_runtime_context(rcs(sp));   
                 rcs(sp).inst_element_number_of_called_proc := ien;                     
@@ -411,9 +392,8 @@ begin
             else
 
                 ien := ien + 1;
-                search_inst_element_ptr(inst_list, ien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
-                access_inst_element_parameters(var_list, file_name, file_line, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);
+                ie := insts.element_ptrs(ien);
+                access_inst_element_parameters(ie, vars, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);
                 if trc_on(3) = '1' then
                     dump_file_defs(file_list);
                 end if;
