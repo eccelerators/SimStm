@@ -55,10 +55,6 @@ package tb_interpreter_util_pkg is
         variable file_line : out text_line
     );
 
-    --  tokenize_line
-    --    this procedure takes a type text_line in and returns up to 6
-    --    tokens and the count in integer valid, as well if text string
-    --    is found the pointer to that is returned.
     procedure tokenize_inst_line(
         variable itext_line : in text_line;
         variable otokens : out token_text_field_array;
@@ -67,7 +63,6 @@ package tb_interpreter_util_pkg is
         variable ovalid : out integer
     );
 
-    -- procedure print stim txt substitude variables found
     procedure txt_print_wvar(
         variable var_list : in var_field_ptr;
         variable scope : in text_field;
@@ -77,7 +72,7 @@ package tb_interpreter_util_pkg is
         variable stack_called_files : stack_text_line_array;
         variable stack_called_file_linebers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     );
 
     procedure stm_text_substitude_wvar(
@@ -87,327 +82,209 @@ package tb_interpreter_util_pkg is
         variable txt_enclosing_quote : in character;
         variable stack_ptr : integer;
         variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_linebers : stack_numbers_array;
+        variable stack_called_file_line_numbers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
         variable stm_text_substituded : out stm_text;
-        constant stm_value_width : in integer
-    );
-
-    --  access_var
-    --     inputs:
-    --               text field containing variable
-    --     outputs:
-    --               value  var  returns value of var
-    --               value  var   returns index of var
-    --
-    --               valid is 1, not valid is 0
-    procedure access_var(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
-        variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_value : out integer;
-        variable valid : out integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     );
 
     procedure access_var(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_value : out unsigned;
-        variable valid : out integer
+        variable var_element_num : out integer;
+        variable var_value : out integer
     );
 
+    procedure access_var(
+        variable vars : in var_pool_ordered;
+        variable var_name : in text_field;
+        variable var_element_num : out integer;
+        variable var_value : out integer
+    );
+
+    procedure access_var_value_ptr(
+        variable vars : in var_pool_ordered;
+        variable var_name : in text_field;
+        variable var_element_num : out integer;
+        variable var_values_ptr : out stm_values_ptr
+    );
+    
     procedure access_var_label_ptr(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_label_proc_ref_ptr : out text_field_ptr;
-        variable valid : out integer
+        variable var_element_num : out integer;
+        variable var_label_ptr : out text_field_ptr
     );
 
-    --  index_variable
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               variable value
-    --               valid  is 1 if valid 0 if not
     procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value : out unsigned;
-        variable valid : out integer
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : out unsigned
     );
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value : out unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : out unsigned
     );
 
-    procedure index_var_value_ptr(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value_ptr : out stm_values_ptr;
-        variable valid : out integer
+    procedure index_var_values_ptr(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value_ptr : out stm_values_ptr
     );
 
-    --  index_variable
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               variable stm_text
-    --               valid is 1, not valid is 0
     procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable var_stm_text : out stm_text_ptr;
-        variable var_stm_text_enclosing_quote : out character;
-        variable valid : out integer
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : out stm_text_ptr;
+        variable var_txt_enclosing_quote : out character
     );
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable var_stm_text : out stm_text_ptr;
-        variable var_stm_text_enclosing_quote : out character;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : out stm_text_ptr;
+        variable var_txt_enclosing_quote : out character
     );
 
-    --  index_stm_array
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               stm_array
-    --               valid is 1, not valid is 0
     procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_array : out stm_array_ptr;
-        variable valid : out integer
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : out stm_array_ptr
     );
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_array : out stm_array_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : out stm_array_ptr
     );
-
-    --  index_stm_label
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               stm_label
-    --               valid is 1, not valid is 0                             
+                          
     procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_label : out text_field_ptr;
-        variable valid : out integer
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : out text_field_ptr
     );
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_label : out text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : out text_field_ptr
     );
 
-    --  index_stm_lines
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               stm_lines
-    --               valid is 1, not valid is 0
     procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_lines : out stm_lines_ptr;
-        variable valid : out integer
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : out stm_lines_ptr
     );
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_lines : out stm_lines_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_stm_lines : out stm_lines_ptr
     );
 
-    --  update_variable
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               variable value
-    --               valid  is 1 if valid 0 if not
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value : in unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : in unsigned
     );
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value : in unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value : in unsigned
     );
 
-    procedure update_var_value_ptr(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value_ptr : in stm_values_ptr;
-        variable valid : out integer
+    procedure update_var_values_ptr(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value_ptr : in stm_values_ptr
     );
 
-    --  update_variable
-    --     inputs:
-    --               index:  the index of the variable being updated
-    --     outputs:
-    --               valid is 1, not valid is 0
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : in stm_text_ptr
     );
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : in stm_text_ptr
     );
 
-    --  update_array
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               new array
-    --               valid  is 1 if valid 0 if not
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_array : in stm_array_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : in stm_array_ptr
     );
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_array : in stm_array_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : in stm_array_ptr
     );
 
-    --  update_label
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               new label
-    --               valid  is 1 if valid 0 if not                              
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     );
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     );
 
     procedure init_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     );
 
-    --  update_lines
-    --     inputs:
-    --               index:  the index of the variable being accessed
-    --     outputs:
-    --               new lines
-    --               valid  is 1 if valid 0 if not
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_lines : in stm_lines_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : in stm_lines_ptr
     );
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_lines : in stm_lines_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : in stm_lines_ptr
     );
 
-    procedure print_file_def(
-        variable file_list : inout file_def_ptr;
-        variable index : in integer
+    procedure print_inst_element(
+        variable insts : in inst_sequence;
+        variable inst_element_num : in integer;
+        variable code_files : in file_def_list
     );
 
-    -- procedure to print instruction element number to stdout  *for debug*
-    procedure print_inst_element_number(
-        variable inst_list : in inst_element_ptr;
-        variable element_number : in integer;
-        variable file_list : inout file_def_ptr
+    procedure dump_inst_sequence(
+        variable insts : in inst_sequence;
+        variable code_files : in file_def_list
     );
 
-    -- procedure to print instruction pointer to stdout  *for debug*        
-    procedure print_inst_ptr(
-        variable inst_ptr : in inst_element_ptr;
-        file_list : inout file_def_ptr
+    procedure dump_var_pool_ordered(
+        variable vars : in var_pool_ordered;
+        constant machine_value_width : in integer
     );
 
-    -- dump_inst_list
-    --  this procedure dumps to the simulation window the current instruction
-    --  list.  the whole thing will be dumped, which could be big.
-    --   ** intended for testbench development debug**
-    procedure dump_inst_list(
-        variable inst_list : in inst_element_ptr;
-        variable file_list : inout file_def_ptr
+    procedure dump_var_element(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        constant machine_value_width : in integer
     );
-
-    -- dump all variables
-    procedure dump_vars(
-        variable var_list : in var_field_ptr;
-        constant stm_value_width : in integer
-    );
-
-    procedure dump_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        constant stm_value_width : in integer
-    );
-
-    procedure dump_var_field(
-        variable ptr : var_field_ptr;
-        constant stm_value_width : in integer
+    
+    procedure print_file_def_element(
+        variable files : in file_def_list;
+        variable file_element_num : in integer
     );
     
     procedure dump_file_defs(
-        variable file_list : inout file_def_ptr
+        variable files : in file_def_list
     );
     
     procedure print_runtime_context(

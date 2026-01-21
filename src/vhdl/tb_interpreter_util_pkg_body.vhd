@@ -230,7 +230,7 @@ package body tb_interpreter_util_pkg is
         variable txt_enclosing_quote : in character;
         variable stack_ptr : integer;
         variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_linebers : stack_numbers_array;
+        variable stack_called_file_line_numbers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
@@ -258,7 +258,7 @@ package body tb_interpreter_util_pkg is
         variable insert_call_stack_file : boolean;
         variable insert_call_stack_line_number : boolean;
         variable stack_called_file : text_field;
-        variable stack_called_file_lineber : integer;
+        variable stack_called_file_line_number : integer;
         variable stack_called_label : text_field;
 
     begin
