@@ -120,8 +120,6 @@ package body tb_interpreter_basic_pkg is
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_inst_element_num : in integer;
-        variable file_name : in text_line;
-        variable file_line : in integer;
         constant debug : boolean
     ) is
         variable ne : proc_element_ptr;

@@ -51,88 +51,35 @@ use work.tb_interpreter_util_pkg.all;
 
 package tb_interpreter_basic_pkg is
 
-    procedure track_inst_context(
+    procedure track_inst_initial_context(
+        variable slc : src_locator;
         variable inst : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable var_list : inout var_field_ptr;
-        variable inst_context : inout t_stm_inst_context
-    );
-
-    procedure add_var_on_constant_declaration(
-        variable var_list : inout var_field_ptr;
-        variable inst : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable inst_context : inout t_stm_inst_context;
-        constant stm_value_width : in integer
-    );
-
-    procedure add_var_on_non_local_variable_declaration(
-        variable var_list : inout var_field_ptr;
-        variable inst : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable inst_context : inout t_stm_inst_context;
-        constant stm_value_width : in integer
-    );
-
-    procedure add_inst(
-        variable inst_list : inout inst_element_ptr;
-        variable var_list : inout var_field_ptr;
-        variable inst : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : inout integer;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        variable file_idx : in integer;
-        variable inst_context : inout t_stm_inst_context;
-        constant stm_value_width : in integer
-    );
-
-    procedure add_var(
-        variable var_list : inout var_field_ptr;
-        variable var_scope : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        variable inst_list_elment_num : in integer;
-        variable file_line : in integer;
-        variable file_name : in text_line;
-        constant var_stm_type : in stm_var_type;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant stm_value_width : in integer;
-        variable assigned_index : out integer
+        variable inst_args : in inst_arguments;
+        variable vars : in var_pool_ordered;
+        variable iic : inout stm_inst_initial_context
     );
     
     procedure insert_proc_element(
-        variable file_name : in text_line;
-        variable file_line : in integer;
+        variable slc : src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable proc_inst_element_num : in integer
+        variable proc_inst_element_num : in integer;
+        constant debug : boolean
     );
     
     procedure insert_var_element(
-        variable file_name : in text_line;
-        variable file_line : in integer;
+        variable slc : src_locator;
         variable vars : inout var_pool_ordered;
-        variable var_scope : in text_field;
-        variable par_text_fields : in parameter_text_field_array;
-        constant var_stm_type : in stm_var_type;
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant stm_value_width : in integer
+        variable var_name : in text_field;
+        variable inst_args : inst_arguments;
+        constant var_type : in stm_var_type;
+        constant machine_value_width : in integer;
+        variable debug : boolean
     );
+
+    function search_var_element_number( 
+        vars : var_pool_ordered;
+        var_name : text_field
+    ) return integer;
 
 end package;

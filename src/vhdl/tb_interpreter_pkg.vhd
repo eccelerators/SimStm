@@ -52,58 +52,50 @@ use work.tb_interpreter_basic_pkg.all;
 
 package tb_interpreter_pkg is
 
-    procedure search_inst_element_ptr(
-        variable inst_list : in inst_element_ptr;
-        variable search_for_inst_element_number : in integer;
-        variable last_searched_inst_element_number : inout integer;
-        variable last_searched_inst_element_ptr : inout inst_element_ptr;
-        variable inst_element_ptr : out inst_element_ptr
-    );
-
-    procedure access_inst_element_ptr(
-        variable inst_element_ptr : in inst_element_ptr;
-        variable file_list : in file_def_ptr;
-        variable inst : out text_field;
-        variable inst_len : out integer;
-        variable par_text_fields : out parameter_text_field_array;
-        variable txt : out stm_text_ptr;
-        variable txt_enclosing_quote : out character;
-        variable file_line : out integer;
-        variable file_name : out text_line
-    );
-
     procedure access_inst_element_parameters(
-        variable var_list : in var_field_ptr;
-        variable file_line : in integer;
-        variable file_name : in text_line;
+        variable ie : inst_element;
+        variable vars : in var_field_ptr;
         variable par_scopes : in parameter_scope_text_field_array;
         variable par_text_fields : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
     );
-
-    procedure read_instruction_file(
-        variable pass : in integer;
-        constant path_name : string;
-        constant file_name : string;
-        variable inst_def_list : inout inst_def_ptr;
-        variable var_list : inout var_field_ptr;
-        variable inst_list : inout inst_element_ptr;
-        variable file_list : inout file_def_ptr;
-        constant stm_value_width : in integer
+    
+    procedure collect_code_files(
+        variable code_files : inout file_def_list;
+        constant absolute_code_file_name : in text_line
     );
 
-    procedure read_include_file(
-        variable pass : in integer;
-        constant path_name : string;
-        variable name : text_line;
-        variable inst_element_num : inout integer;
-        variable file_list : inout file_def_ptr;
-        variable inst_def_list : inout inst_def_ptr;
-        variable var_list : inout var_field_ptr;
-        variable inst_list : inout inst_element_ptr;
-        variable status : inout integer;
-        constant stm_value_width : in integer
+    procedure parse_constants(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered; 
+        variable machine_value_width : integer;
+        constant debug : boolean
+    );
+
+    procedure parse_variables(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered; 
+        variable machine_value_width : in integer;
+        constant debug : boolean      
+    );
+    
+    procedure parse_instructions_and_procs(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable insts : inout inst_sequence; 
+        variable procs : inout proc_pool_ordered; 
+        variable machine_value_width : integer;
+        constant debug : boolean         
+    );
+    
+    procedure check_instructions_in_initial_context(
+        variable insts : inout inst_sequence; 
+        variable vars : inout var_pool_ordered;
+        variable procs : inout proc_pool_ordered; 
+        variable machine_value_width : integer       
     );
 
 end package;
