@@ -74,7 +74,7 @@ package body tb_base_pkg is
         insts.last_element_num := -1;
     end procedure;
  
-     procedure init_var_pool_ordered(
+    procedure init_var_pool_ordered(
         variable vars : inout var_pool_ordered
     ) is
     begin
@@ -92,19 +92,13 @@ package body tb_base_pkg is
     
 
     procedure init_inst_initial_context(
-        variable ipc : inout stm_inst_initial_context
+        variable iic : inout stm_inst_initial_context
     ) is
     begin
-        ipc.in_namespace := false;
-        ipc.in_proc_conventional := false;
-        ipc.in_proc_advanced := false;
-        ipc.in_proc_advanced_parameters := false;
-        ipc.in_proc_advanced_body := false;
-        ipc.in_call_advanced_parameters := false;
-        ipc.in_call_label_advanced_parameters := false;
-        ipc.in_namespace_name := (others => nul);
-        ipc.in_proc_name := (others => nul);
-        ipc.in_called_proc_name := (others => nul);
+        iic.code_section := NONE;
+        iic.namespace_name := (others => nul);
+        iic.proc_name := (others => nul);
+        iic.called_proc_name := (others => nul);
     end procedure;
     
     procedure init_runtime_context(
@@ -160,7 +154,7 @@ package body tb_base_pkg is
     procedure append_code_file(
         variable absolute_code_file_name : in text_line; 
         variable code_files : inout file_def_list
-        )
+    )
     is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
@@ -176,7 +170,7 @@ package body tb_base_pkg is
         variable path_name : in string; 
         variable file_name : in string;
         variable absolut_code_file_name : out text_line
-        )
+    )
     is
         variable absolut_file_name : text_line;
     begin
@@ -243,8 +237,7 @@ package body tb_base_pkg is
     
     function bin2integer(
         bin_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        src_loc : in scr_locator
     ) return integer is
         variable len : integer;
         variable temp_int : integer;
@@ -262,7 +255,9 @@ package body tb_base_pkg is
                     int_number := 1;
                 when others =>
                     assert false
-                    report lf & "bin2integer found non binary digit on line " & (integer'image(file_line)) & " of file " & file_name
+                    report "bin2integer found non binary digit on line " & lf & 
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (2 ** power));
@@ -273,8 +268,7 @@ package body tb_base_pkg is
 
     function bin2stm_value(
         bin_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
+        src_loc : in scr_locator;
         machine_value_width : in integer
     ) return unsigned is
         variable len : integer;
@@ -291,7 +285,9 @@ package body tb_base_pkg is
                     vec_number := '1';
                 when others =>
                     assert false
-                    report lf & "bin2stm_value found non binary digit on line " & (integer'image(file_line)) & " of file " & file_name
+                    report "bin2stm_value found non binary digit on line " & lf &
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(machine_value_width - 2 downto 0) & vec_number;
@@ -352,26 +348,6 @@ package body tb_base_pkg is
                 return "XXXX";
         end case;
     end function;
-
-    procedure check_presence_inst_file_name(
-        variable file_list : inout file_def_ptr;
-        variable file_name : in text_line;
-        variable present : out boolean
-    ) is
-        variable temp_fn_prt : file_def_ptr;
-    begin
-        present := false;
-        -- recover the file name this line came from
-        temp_fn_prt := file_list;
-        while temp_fn_prt.next_rec /= null loop
-            if file_name = temp_fn_prt.file_name then
-                present := true;
-                return;
-            end if;
-            temp_fn_prt := temp_fn_prt.next_rec;
-        end loop;
-        return;
-    end procedure;
 
     function ew_str_cat(
         s1 : stm_text;
@@ -477,7 +453,24 @@ package body tb_base_pkg is
         end loop;
         return sc;
     end function;
-
+    
+    function textfield_truncate_text_after_second_dot(
+        s : text_field
+    ) return text_field is
+        variable i : integer;
+        variable sc : text_field;
+    begin
+        sc := s;
+        i := 1;
+        while sc(i) /= '.' loop
+            i := i + 1;
+        end loop;
+        while sc(i) /= '.' loop
+            i := i + 1;
+        end loop;
+        return sc;
+    end function;    
+    
     function ew_str_cat(
         s1 : stm_text;
         s2 : text_field;
@@ -755,7 +748,6 @@ package body tb_base_pkg is
         return is_less;   
     end function;
 
-
     function fld_len(
         s : in text_field
     ) return integer is
@@ -766,26 +758,6 @@ package body tb_base_pkg is
         end loop;
         return (i - 1);
     end function;
-
-    procedure get_inst_file_name(
-        variable file_list : inout file_def_ptr;
-        variable file_idx : integer;
-        variable file_name : inout text_line
-    ) is
-        variable temp_fn_prt : file_def_ptr;
-    begin
-        -- recover the file name this line came from
-        temp_fn_prt := file_list;
-        while temp_fn_prt.next_rec /= null loop
-            if temp_fn_prt.rec_idx = file_idx then
-                exit;
-            end if;
-            temp_fn_prt := temp_fn_prt.next_rec;
-        end loop;
-        for i in 1 to max_str_len loop
-            file_name(i) := temp_fn_prt.file_name(i);
-        end loop;
-    end procedure;
 
     procedure get_line_from_str(
         variable s : in string;
@@ -899,9 +871,8 @@ package body tb_base_pkg is
     end procedure;
 
     function hex2integer(
-        hex_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        src_loc : in src_locator;
+        hex_number : in text_field 
     ) return integer is
         variable len : integer;
         variable temp_int : integer;
@@ -947,7 +918,9 @@ package body tb_base_pkg is
                     int_number := 15;
                 when others =>
                     assert false
-                    report lf & "hex2integer found non hex digit on line " & (integer'image(file_line)) & " of file " & file_name
+                    report "hex2integer found non hex digit " & lf &
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (16 ** power));
@@ -957,9 +930,8 @@ package body tb_base_pkg is
     end function;
 
     function hex2stm_value(
+        src_loc : in src_locator;
         hex_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
         machine_value_width : in integer
     ) return unsigned is
         variable len : integer;
@@ -1004,7 +976,9 @@ package body tb_base_pkg is
                     vec_number := x"F";
                 when others =>
                     assert false
-                    report lf & "hex2stm_value found non hex digit on line " & (integer'image(file_line)) & " of file " & file_name
+                    report "hex2stm_value found non hex digit " & lf &
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(machine_value_width - 5 downto 0) & vec_number;
@@ -1128,9 +1102,7 @@ package body tb_base_pkg is
 
     function stim_to_integer(
         slc : src_file_locator;
-        field : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        field : in text_field
     ) return integer is
         variable value : integer := 1;
         variable temp_str : text_field;
@@ -1156,7 +1128,9 @@ package body tb_base_pkg is
                     value := bin2integer(slc, temp_str);
                 when others =>
                     assert false
-                    report lf & "strange # found ! " & (integer'image(file_line)) & " of file " & file_name
+                    report "stim_to_integer strange number found, non hex digit " & lf &
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
         else
@@ -1166,9 +1140,8 @@ package body tb_base_pkg is
     end function;
 
     function stim_to_stm_value(
+        slc : src_file_locator;
         field : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
         machine_value_width : in integer
     ) return unsigned is
         variable stmvalue : unsigned(machine_value_width - 1 downto 0) := to_unsigned(1, machine_value_width);
@@ -1196,7 +1169,9 @@ package body tb_base_pkg is
                     stmvalue := bin2stm_value(slc, temp_str, machine_value_width);
                 when others =>
                     assert false
-                    report lf & "strange # found ! " & (integer'image(file_line)) & " of file " & file_name
+                    report "stim_to_stm_value strange number found, non hex digit " & lf &
+                           "file " & src_loc.file_name & lf &
+                           "line" & integer'image(src_loc.file_line)
                     severity failure;
             end case;
         else

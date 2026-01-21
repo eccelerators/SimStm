@@ -47,24 +47,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
+
 package tb_base_pkg is
-
-    -- constants
-    constant max_str_len : integer := 512;
-    constant max_field_len : integer := 128;
-    constant c_stm_text_len : integer := 500;
-    constant max_num_of_inst_elements : integer := 1000000;
-
-    -- file handles
-    file stimulus : text; -- file main file
-
-
 
     type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
     type stack_int_array is array (0 to 127) of integer;
-    type stack_int_array_array is array (0 to 15) of stack_int_array;
     type boolean_array is array (0 to 127) of boolean;
     type interrupt_array is array (0 to 127) of integer;
 
@@ -81,7 +71,6 @@ package tb_base_pkg is
     type parameter_index_array is array (1 to 6) of integer;
     type parameter_value_array is array (natural range <>) of unsigned;
 
-    type stack_array_of_parameter_scope_text_field_array is array (31 downto 0) of parameter_scope_text_field_array;
     type stack_text_line_array is array (31 downto 0) of text_line;
     type stack_numbers_array is array (31 downto 0) of integer;
 
@@ -97,20 +86,7 @@ package tb_base_pkg is
          file_name : text_line;
          file_line :integer;
     end record;
-   
-    type inst_def_element;
-    type inst_def_element_ptr is access inst_def_element;
-    type inst_def_element is record
-        inst : text_field;
-        inst_len : integer;
-        num_of_params : integer;
-    end record;
-    type inst_def_element_ptrs is array (0 to max_num_of_inst_def_elements - 1) of inst_def_element;    
-    type inst_def_list is record
-        element_ptrs : inst_def_element_ptrs;
-        last_element_num : integer;
-    end record;    
-
+    
     type file_def_element;
     type file_def_element_ptr is access file_def_element;
     type file_def_element is record
@@ -126,7 +102,20 @@ package tb_base_pkg is
         txt : stm_text_ptr;
         txt_enclosing_quote : character;    
     end record;
-    
+   
+    type inst_def_element;
+    type inst_def_element_ptr is access inst_def_element;
+    type inst_def_element is record
+        inst : text_field;
+        inst_len : integer;
+        num_of_params : integer;
+    end record;
+    type inst_def_element_ptrs is array (0 to max_num_of_inst_def_elements - 1) of inst_def_element;    
+    type inst_def_list is record
+        element_ptrs : inst_def_element_ptrs;
+        last_element_num : integer;
+    end record;    
+
     type inst_element;
     type inst_element_ptr is access inst_element;
     type inst_element is record
@@ -173,25 +162,28 @@ package tb_base_pkg is
         STM_LINES,
         STM_BUS,
         STM_SIGNAL,
-        STM_PROC,
         STM_LABEL,
         STM_NO_VAR
     );
 
+    type stm_code_section is (
+        NONE,
+        PROC_BODY,
+        PROC_PARAMS,
+        CALL_PARAMS
+    );
+
     type stm_inst_initial_context is record
-        in_namespace : boolean;
-        in_proc_parameters : boolean;
-        in_proc_body : boolean;
-        in_call_parameters : boolean;
-        in_call_label_parameters : boolean;
-        in_namespace_name : text_field;
-        in_proc_name : text_field;
-        in_called_proc_name : text_field;
+        code_section : stm_code_section;
+        namespace_name : text_field;
+        proc_name : text_field;
+        called_proc_name : text_field;
     end record;
     
     type stm_call_process_state_type is (
         NONE,
         IN_PROC_PARAMS,
+        IN_PROC_BODY,
         IN_CALL_PARAMS
     );
 
@@ -212,9 +204,8 @@ package tb_base_pkg is
         loop_if_enter_level : integer;
     end record;
     
-    type stm_array_of_runtime_context is array (31 downto 0) of t_stm_runtime_context; 
+    type stm_array_of_runtime_context is array (max_num_of_stack_elements downto 0) of stm_runtime_context; 
 
-    -- define the variables element and pointer
     type var_element;
     type var_element_ptr is access var_element;
     type var_element is record
@@ -240,7 +231,6 @@ package tb_base_pkg is
         last_element_num : integer;
     end record;
     
-    -- define the proc element and pointer
     type proc_element;
     type proc_element_ptr is access proc_element;
     type proc_element is record
@@ -255,22 +245,66 @@ package tb_base_pkg is
         last_element_num : integer;
     end record;
     
-    type stm_var_type is (
-        STM_VALUE,
-        STM_CONST,
-        STM_TEXT,
-        STM_ARRAY,
-        STM_LINES,
-        STM_BUS,
-        STM_SIGNAL,
-        STM_PROC,
-        STM_LABEL,
-        STM_NO_VAR
+    procedure init_inst_def_list(
+        variable inst_defs : inout inst_def_list
+    );    
+    
+    procedure init_file_def_list(
+        variable files : inout file_def_list
     );
     
+    procedure init_inst_sequence(
+        variable insts : inout inst_sequence
+    );
+    
+    procedure init_var_pool_ordered(
+        variable vars : inout var_pool_ordered
+    );
+    
+    procedure init_proc_pool_ordered(
+        variable procs : inout proc_pool_ordered
+    );
+    
+    procedure init_inst_initial_context(
+        variable iic : inout stm_inst_initial_context
+    );
+    
+    procedure init_runtime_context(
+        variable rc : inout t_stm_runtime_context
+    );
+    
+    procedure append_inst(
+        variable file_name : in text_line; 
+        variable file_line : in integer;
+        variable insts : inout inst_sequence;
+        variable inst : text_field;
+        variable par_text_fields : in parameter_text_field_array;  
+        variable str_ptr : in stm_text_ptr;
+        variable txt_enclosing_quote : in character;
+        constant debug : boolean 
+    );
+    
+    procedure append_code_file(
+        variable absolute_code_file_name : in text_line; 
+        variable code_files : inout file_def_list
+    );
+    
+    procedure combine_to_absolute_file_name(
+        variable path_name : in string; 
+        variable file_name : in string;
+        variable absolut_code_file_name : out text_line
+    );
+        
     procedure set_var_type(
         variable inst : in text_field;
+        variable inst_len : in integer;
         variable var_type : out stm_var_type
+    );
+    
+    procedure set_proc_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable proc_type : out boolean
     );
  
     procedure insert_proc_element(
@@ -278,49 +312,24 @@ package tb_base_pkg is
         variable pe : proc_field_ptr
     );
     
-    procedure init_inst_sequence(
-        variable insts : inout inst_sequence
-    );
-
-    procedure init_inst_initial_context(
-        variable ipc : inout stm_inst_initial_context
-    );
-
-    -- bin2integer    convert bin stimulus field to integer
-    --          inputs :  string of type text_field containing only binary numbers
-    --          return :  integer value
     function bin2integer(
         bin_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        src_loc : in scr_locator
     ) return integer;
 
-    -- bin2stm_value    convert bin stimulus field to stm_value
-    --          inputs :  string of type text_field containing only binary numbers
-    --          return :  unsigned value
     function bin2stm_value(
         bin_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
-        stm_value_width : in integer
+        src_loc : in scr_locator;
+        machine_value_width : in integer
     ) return unsigned;
 
     function c2int(
         c : in character
     ) return integer;
 
-    -- convert character to 4 bit vector
-    --   input    character
-    --   output   std_logic_vector  4 bits
     function c2std_vec(
         c : in character
     ) return std_logic_vector;
-
-    procedure check_presence_inst_file_name(
-        variable file_list : inout file_def_ptr;
-        variable file_name : in text_line;
-        variable present : out boolean
-    );
 
     function ew_str_cat(
         s1 : stm_text;
@@ -336,6 +345,16 @@ package tb_base_pkg is
     function textfield_dot_cat(
         s1 : text_field;
         s2 : text_field
+    ) return text_field;
+    
+    function textfield_dot_cat(
+        s1 : text_field;
+        s2 : text_field;
+        s3 : text_field
+    )  return text_field;
+    
+    function textfield_truncate_text_after_second_dot(
+        s : text_field
     ) return text_field;
 
     function ew_str_cat(
@@ -355,59 +374,48 @@ package tb_base_pkg is
         int : integer
     ) return character;
 
-    --  to_str function  with base parameter
-    --     convert integer to number base
     function ew_to_text_field(
         int : integer;
         b : base
     ) return text_field;
 
-    --  to_str function  with base parameter
-    --     convert stm_value to number base
     function ew_to_text_field(
         stmvalue : unsigned;
         b : base
     ) return text_field;
 
-    -- fld_equal  check text field for equality
-    --          inputs :  text field s1 and s2
-    --          return :  true if text fields are equal; false otherwise.
     function fld_equal(
         s1 : in text_field;
         s2 : in text_field
     ) return boolean;
     
-    function fld_order_less_than(
+    procedure fld_order(
+        s1 : in text_field;
+        s2 : in text_field;
+        is_equ : out boolean;
+        is_less : out boolean
+    );
+    
+    function order_is_less_than_failure_on_equal(
+        slc : in src_location;
         s1 : in text_field;
         s2 : in text_field
     ) return boolean;
 
-    -- fld_len    field length
-    --          inputs :  string of type text_field
-    --          return :  integer number of non 'nul' chars
     function fld_len(
         s : in text_field
     ) return integer;
 
-    procedure get_inst_file_name(
-        variable file_list : inout file_def_ptr;
-        variable file_idx : integer;
-        variable file_name : inout text_line
-    );
-
-    -- procedure to get a line from a string
     procedure get_line_from_str(
         variable s : in string;
         variable std_line : inout line
     );
 
-    -- procedure to get stm_text pointer from a line
     procedure get_stm_text_ptr_from_line(
         variable std_line : inout line;
         variable var_stm_text_ptr : inout stm_text_ptr
     );
 
-    --  get a random intetger number
     procedure random(
         variable seed1 : inout positive;
         variable seed2 : inout positive;
@@ -436,23 +444,15 @@ package tb_base_pkg is
         variable rand : out unsigned
     );
 
-    -- hex2integer    convert hex stimulus field to integer
-    --          inputs :  string of type text_field containing only hex numbers
-    --          return :  integer value
     function hex2integer(
-        hex_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        src_loc : in src_locator;
+        hex_number : in text_field 
     ) return integer;
 
-    -- hex2integer    convert hex stimulus field to stm_value
-    --          inputs :  string of type text_field containing only hex numbers
-    --          return :  stm_value value
     function hex2stm_value(
+        src_loc : in src_locator;
         hex_number : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
-        stm_value_width : in integer
+        machine_value_width : in integer
     ) return unsigned;
 
     function is_digit(
@@ -477,35 +477,23 @@ package tb_base_pkg is
         variable destfield : out text_field
     );
 
-    -- procedure to print loggings to stdout
     procedure print(
         s : in string
     );
 
-    --  std_vec2c  convert 4 bit std_vector to a character
-    --     input  std_logic_vector 4 bits
-    --     output  character
     function std_vec2c(
         vec : in std_logic_vector(3 downto 0)
     ) return character;
 
-    -- stim_to_integer    convert stimulus field to integer
-    --          inputs :  string of type text_field "stimulus format of number"
-    --          return :  integer value
     function stim_to_integer(
-        field : in text_field;
-        file_name : in text_line;
-        file_line : in integer
+        slc : src_file_locator;
+        field : in text_field
     ) return integer;
 
-    -- stim_to_integer    convert stimulus field to stm_value
-    --          inputs :  string of type text_field "stimulus format of number"
-    --          return :  stm_value value
     function stim_to_stm_value(
+        slc : src_file_locator;
         field : in text_field;
-        file_name : in text_line;
-        file_line : in integer;
-        stm_value_width : in integer
+        machine_value_width : in integer
     ) return unsigned;
 
     procedure stm_file_append(
@@ -555,7 +543,7 @@ package tb_base_pkg is
         variable stm_lines : inout stm_lines_ptr;
         variable stm_array : in stm_array_ptr;
         variable valid : out integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     );
 
     procedure stm_lines_append(
@@ -583,7 +571,7 @@ package tb_base_pkg is
         variable stm_array : inout stm_array_ptr;
         variable number_found : out integer;
         variable valid : out integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     );
 
     procedure stm_lines_insert(
@@ -598,7 +586,7 @@ package tb_base_pkg is
         variable position : integer;
         variable stm_array : in stm_array_ptr;
         variable valid : out integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     );
 
     procedure stm_lines_print(
@@ -615,74 +603,53 @@ package tb_base_pkg is
         variable position : integer;
         variable stm_array : in stm_array_ptr;
         variable valid : out integer;
-        constant stm_value_width : in integer);
+        constant machine_value_width : in integer);
 
-    --  function short text_line (remove 'nul')
     function stm_text_crop(
         txt : in stm_text
     ) return string;
 
-    -- stm_text_len    stm_text length
-    --          inputs :  string of type stm_text
-    --          out :  integer number of non 'nul' chars
     function stm_text_len(
         s : in stm_text
     ) return integer;
 
-    --  procedure to get line of the txt pointer
     procedure stm_text_ptr_to_line(
         variable var_stm_text : in stm_text_ptr;
         variable line_out : out line
     );
 
-    -- stm_text_ptr_truncate_trailing_quote
-    --          inputs :  stm_text pointer
-    --          inout :  adjusted stm_text
     procedure stm_text_ptr_truncate_trailing_quote(
         variable si : stm_text_ptr;
         variable so : inout stm_text_ptr
     );
 
-    -- str2integer   convert a string to integer number.
-    --   inputs  :  string
-    --   output  :  int value
     function str2integer(
         str : in string
     ) return integer;
 
-    -- str2integer   convert a string to integer number.
-    --   inputs  :  string
-    --   output  :  stm_value
     function str2stm_value(
         str : in string;
-        stm_value_width : in integer
+        machine_value_width : in integer
     ) return unsigned;
 
-    --  function short text_line (remove 'nul')
     function text_line_crop(
         txt : in text_line
     ) return string;
 
-    -- text_line_len    text_line length
-    --          inputs :  string of type text_line
-    --          return :  integer number of non 'nul' chars
     function text_line_len(
         s : in text_line
     ) return integer;
 
-    --  procedure to print to the stdout the txt pointer
     procedure txt_print(
         variable ptr : in stm_text_ptr
     );
 
-    --  procedure copy text into an existing pointer
     procedure txt_ptr_copy(
         variable ptr : in stm_text_ptr;
         variable ptr_o : out stm_text_ptr;
         variable txt_str : in stm_text
     );
 
-    --  procedure to get string of the txt pointer
     procedure txt_to_string(
         variable ptr : in stm_text_ptr;
         variable str : out stm_text
@@ -698,7 +665,6 @@ package tb_base_pkg is
         variable ptr : inout text_field_ptr
     );
 
-    -- function to get string of the txt field
     function txt_field_to_string(
         s : in text_field
     ) return string;

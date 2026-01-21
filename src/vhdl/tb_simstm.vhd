@@ -143,7 +143,8 @@ begin
     --! records are drawn from the user inst list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_files : process       
+    read_files : process 
+        file stimulus : text; -- file main file      
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list; 
         variable insts : inst_sequence;
@@ -152,6 +153,9 @@ begin
         variable absolute_code_file_name : text_line;
         variable inst : text_field;
         variable il : integer;
+        variable slc : src_locator;
+        
+        variable noc : integer;
 
         variable par_text_fields : parameter_text_field_array;
         variable par_indexes : parameter_index_array;
@@ -159,9 +163,7 @@ begin
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable file_line : integer; -- line number in the stimulus file
-        variable tmp_file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
-        variable tmp_file_name : text_line; -- the file name the line came from
         variable ien : integer := 0; -- sequence number
         variable ie_ptr : inst_element_ptr;
 
@@ -390,7 +392,6 @@ begin
                 wait for 0 ns;
 
             else
-
                 ien := ien + 1;
                 ie := insts.element_ptrs(ien);
                 access_inst_element_parameters(ie, vars, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);

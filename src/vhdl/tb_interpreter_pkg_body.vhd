@@ -333,9 +333,9 @@ package body tb_interpreter_pkg is
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
         variable valid_ckeck : integer;
-        variable ipc : stm_inst_initial_context;
+        variable iic : stm_inst_initial_context;
     begin
-        init_inst_initial_context(ipc);
+        init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
             ie := insts.element_ptrs(i);
             track_inst_initial_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);

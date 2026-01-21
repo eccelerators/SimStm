@@ -58,35 +58,43 @@ package body tb_interpreter_basic_pkg is
         variable inst : in text_field;
         variable inst_args : in inst_arguments;
         variable vars : in var_pool_ordered;
-        variable inst_initial_context : inout stm_inst_initial_context
+        variable iic : inout stm_inst_initial_context
     ) is
         variable il : integer;
-        variable var_index : integer;
+        variable vn : text_field;
+        variable ven : integer;
         variable tmp_label_ptr : text_field_ptr;
         variable tmp_proc : text_field;
-        variable valid : integer;
     begin
         il := fld_len(inst);
         if inst(1 to il) = INSTR_NAMESPACE then
-            inst_initial_context.in_namespace := true;
-            inst_initial_context.in_namespace_name := par_text_fields(1);
+            iic.namespace_name := inst_args.par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_NAMESPACE then
-            inst_initial_context.in_namespace := false;
-            inst_initial_context.in_namespace_name := (others => nul);
+            iic.namespace_name := (others => nul);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            inst_initial_context.in_proc_parameters := true;
-            inst_initial_context.in_proc_name := par_text_fields(1);
+            iic.code_section := IN_PROC_PARAMS;
+            iic.proc_name := inst_args.par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_PROC_PAR_NOPAR then
-            inst_initial_context.in_proc_parameters := false;
-            inst_initial_context.in_proc_body := true;
-            inst_initial_context.in_proc_name := par_text_fields(1);
+            iic.code_section := IN_PROC_BODY;
+            iic.proc_name := inst_args.par_text_fields(1);
         end if;
         if inst(1 to il) = INSTR_END_PROC then
-            inst_initial_context.in_proc_body := false;
-            inst_initial_context.in_proc_name := (others => nul);
+            iic.code_section := IN_PROC_PARAMS;
+        end if;
+
+        if inst(1 to il) = INSTR_CALL_PAR_OPEN then
+            iic.code_section := IN_CALL_PARAMS;
+            iic.called_proc_name := inst_args.par_text_fields(1);
+        end if;
+        if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+            iic.code_section := IN_CALL_PARAMS;
+            vn := textfield_dot_cat(iic.namespace_name, inst_args.par_text_fields(1), iic.proc_name);
+            access_var_label_ptr(vars, vn, ven, tmp_label_ptr);
+            text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);
+            iic.called_proc_name := tmp_proc;
         end if;
         if inst(1 to il) = INSTR_PAR_CLOSE
             or inst(1 to il) = INSTR_EQU_PAR_CLOSE
@@ -98,34 +106,15 @@ package body tb_interpreter_basic_pkg is
             or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
             or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-            if inst_initial_context.in_proc_parameters then
-                inst_initial_context.in_proc_parameters := false;
-                inst_initial_context.in_proc_body := true;
+            if iic.code_section = IN_PROC_PARAMS then
+                iic.code_section := IN_PROC_BODY;
             end if;
-            if inst_initial_context.in_call_parameters then
-                inst_initial_context.in_call_parameters := false;
+            if iic.code_section = IN_CALL_PARAMS then
+                iic.code_section := IN_PROC_BODY;
             end if;
-            if inst_initial_context.in_call_label_advanced_parameters then
-                inst_initial_context.in_call_label_advanced_parameters := false;
-            end if;
-        end if;
-        if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-            inst_initial_context.in_call_parameters := true;
-            inst_initial_context.in_called_proc_name := par_text_fields(1);
-        end if;
-        if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-            inst_initial_context.in_call_label_parameters := true;
-            access_var_label_ptr(var_list, inst_initial_context.in_namespace_name, inst_initial_context.in_called_proc_name, var_index, tmp_label_ptr, valid);
-            assert valid /= 0
-            report "initial context call label variable is not valid:" & lf & 
-                   "file " & slc.file_name & lf &
-                   "line " & integer'image(slc.file_line)           
-            severity failure;       
-            text_field_ptr_to_text_field(tmp_label_ptr, tmp_proc);
-            inst_initial_context.in_called_proc_name := tmp_proc;
         end if;
     end procedure;
-          
+             
     procedure insert_proc_element(
         variable slc : src_locator;
         variable procs : inout proc_pool_ordered;
