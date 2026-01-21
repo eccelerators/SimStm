@@ -155,7 +155,7 @@ package tb_interpreter_util_pkg is
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
-        variable value_ptr : out t_stm_value_ptr;
+        variable value_ptr : out stm_values_ptr;
         variable valid : out integer
     );
 
@@ -193,7 +193,7 @@ package tb_interpreter_util_pkg is
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
-        variable stm_array : out t_stm_array_ptr;
+        variable stm_array : out stm_array_ptr;
         variable valid : out integer
     );
 
@@ -201,7 +201,7 @@ package tb_interpreter_util_pkg is
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
-        variable stm_array : out t_stm_array_ptr;
+        variable stm_array : out stm_array_ptr;
         variable valid : out integer
     );
 
@@ -237,7 +237,7 @@ package tb_interpreter_util_pkg is
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
-        variable stm_lines : out t_stm_lines_ptr;
+        variable stm_lines : out stm_lines_ptr;
         variable valid : out integer
     );
 
@@ -245,7 +245,7 @@ package tb_interpreter_util_pkg is
         variable var_list : in var_field_ptr;
         variable index : in integer;
         variable var_scope : out text_field;
-        variable stm_lines : out t_stm_lines_ptr;
+        variable stm_lines : out stm_lines_ptr;
         variable valid : out integer
     );
 
@@ -272,7 +272,7 @@ package tb_interpreter_util_pkg is
     procedure update_var_value_ptr(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        variable value_ptr : in t_stm_value_ptr;
+        variable value_ptr : in stm_values_ptr;
         variable valid : out integer
     );
 
@@ -304,14 +304,14 @@ package tb_interpreter_util_pkg is
     procedure update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        variable stm_array : in t_stm_array_ptr;
+        variable stm_array : in stm_array_ptr;
         variable valid : out integer
     );
 
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        variable stm_array : in t_stm_array_ptr;
+        variable stm_array : in stm_array_ptr;
         variable valid : out integer
     );
 
@@ -351,14 +351,14 @@ package tb_interpreter_util_pkg is
     procedure update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable valid : out integer
     );
 
     procedure reinit_and_update_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable valid : out integer
     );
 

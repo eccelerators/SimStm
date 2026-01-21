@@ -90,7 +90,7 @@ package body tb_interpreter_pkg is
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid : integer;
-        variable len : integer;
+        variable il : integer;
         variable absolut_include_file_name : text_line;
         variable file_line : integer; 
     begin
@@ -105,8 +105,8 @@ package body tb_interpreter_pkg is
             file_line := file_line + 1;
             file_read_line(stimulus, tl);
             tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid);
-            len := fld_len(ts(1));
-            if ts(1)(1 to len) = "include" then
+            il := fld_len(ts(1));
+            if ts(1)(1 to il) = "include" then
                 assert txt /= null
                 report "include instruction defines no file name as text parameter: " & lf &
                 "file " & path_name & file_name & lf &
@@ -130,19 +130,21 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable machine_value_width : integer       
+        variable machine_value_width : integer;
+        constant debug : boolean
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
         variable file_line : integer;        
         variable tl : text_line;
-        variable len : integer;
+        variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable ipc : stm_inst_initial_context;
+        variable iic : stm_inst_initial_context;
+        variable var_type : stm_var_type;
     begin
-        init_inst_initial_context(ipc);
+        init_inst_initial_context(iic);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             file_open(fos, stimulus, afn, read_mode);
@@ -154,7 +156,7 @@ package body tb_interpreter_pkg is
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
-                len := fld_len(ts(1));
+                il := fld_len(ts(1));
                 if valid_tokens /= 0 then
                     inst := ts(1);
                     ia.par_text_fields := extract_parameter_text_fields(ts);
@@ -163,7 +165,12 @@ package body tb_interpreter_pkg is
                     slc.file_name := afn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
-                    add_var_on_constant_declaration(afn, file_line, vars, inst_initial_context, inst, ps, txt, txt_enclosing_quote, machine_value_width);
+                    track_inst_initial_context(slc, inst, inst_args, vars, iic);
+                    if inst(1 to il) = INSTR_CONST then
+                        var_type := STM_CONST;
+                        vn := textfield_dot_cat(iic.in_namespace_name, inst_args.par_text_fields(1), iic.in_proc_name);
+                        insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
+                    end if;                
                 end if;            
             end loop;
             file_close(stimulus);
@@ -175,18 +182,25 @@ package body tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered; 
-        variable machine_value_width : in integer       
+        variable machine_value_width : in integer;
+        constant debug : boolean      
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
         variable file_line : integer;        
         variable tl : text_line;
-        variable len : integer;
+        variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
         variable valid_ckeck : integer;
-        variable ipc : stm_inst_initial_context;
+        variable iic : stm_inst_initial_context;
+        variable c_var_index : integer;
+        variable c_var_value : unsigned(machine_value_width -1 downto 0);
+        variable c_valid : integer;
+        variable n_par_text_fields : parameter_text_field_array;       
+        variable vn : text_field;
+        variable var_type : stm_var_type;
     begin
         init_inst_initial_context(ipc);
         for i in 0 to code_files.last_element_num loop
@@ -200,7 +214,7 @@ package body tb_interpreter_pkg is
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
-                len := fld_len(ts(1));
+                il := fld_len(ts(1));
                 if valid_tokens /= 0 then
                     inst := ts(1);
                     ia.par_text_fields := extract_parameter_text_fields(ts);
@@ -209,7 +223,22 @@ package body tb_interpreter_pkg is
                     slc.file_name := afn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
-                    add_var_on_variable_declaration(afn, file_line, vars, inst_initial_context, inst, ps, txt, txt_enclosing_quote, machine_value_width);
+                    track_inst_initial_context(slc, inst, inst_args, vars, iic);
+                    set_var_type(inst, il, var_type);
+                    if var_type /= STM_NO_VAR then
+                        vn := textfield_dot_cat(iic.in_namespace_name, inst_args.par_text_fields(1), iic.in_proc_name);
+                        if is_digit(par_text_fields(2)(1)) or var_type = STM_TEXT_TYPE or var_type = STM_LINES_TYPE or var_type = STM_LABEL_TYPE then                   
+                            insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
+                        else
+                            access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
+                            assert c_valid /= 0
+                            report "constant " & par_text_fields(2) & " to initialize variable " & par_text_fields(1) & ", var_scope:'" & var_scope & " not found"
+                            severity failure;
+                            n_par_text_fields := par_text_fields;
+                            n_par_text_fields(2) := to_text_field(c_var_value);
+                            insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
+                        end if;
+                    end if;
                 end if;            
             end loop;
             file_close(stimulus);
@@ -221,20 +250,23 @@ package body tb_interpreter_pkg is
         variable inst_defs : in inst_def_list;
         variable insts : inout inst_sequence; 
         variable procs : inout proc_pool_ordered; 
-        variable machine_value_width : integer       
+        variable machine_value_width : integer;
+        constant debug : boolean         
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
         variable file_line : integer;        
         variable tl : text_line;
-        variable len : integer;
+        variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
         variable valid_ckeck : integer;
-        variable ipc : stm_inst_initial_context;
+        variable iic : stm_inst_initial_context;
+        variable var_type : stm_var_type;
+        variable proc_type : boolean;
     begin
-        init_inst_initial_context(ipc);
+        init_inst_initial_context(iic);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             file_open(fos, stimulus, afn, read_mode);
@@ -246,7 +278,7 @@ package body tb_interpreter_pkg is
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
-                len := fld_len(ts(1));
+                il := fld_len(ts(1));
                 if valid_tokens /= 0 then
                     inst := ts(1);
                     ia.par_text_fields := extract_parameter_text_fields(ts);
@@ -255,7 +287,31 @@ package body tb_interpreter_pkg is
                     slc.file_name := afn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
-                    add_inst_and_proc_on_proc(v_iname, file_line, insts, procs, inst, ps, txt, txt_enclosing_quote, stm_value_width);
+                    track_inst_initial_context(slc, inst, inst_args, vars, iic);
+                    set_var_type(inst, il, var_type);
+                    set_proc_type(inst, il, proc_type);      
+                    if var_type = STM_NO_VAR and proc_type = false then
+                        -- anything but a constant, variable or proc definition, thus always an instruction
+                        append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                    else
+                        if var_type /= STM_CONST_VALUE then 
+                            -- constant definitions and declarations are already done in pass 0 and are never added as an instruction
+                            -- variable definitions and declaration already done in pass 1 but need to be an instruction too in case of living in proc parameters or proc local area be reinitilized on each call.
+                            -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
+                            if proc_type then
+                                if inst_context.in_proc_advanced then
+                                    -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
+                                    insert_proc_element(file_name, file_line, procs, par_text_fields(1), insts.last_element_num + 1);
+                                    append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                                end if;
+                            else
+                                if var_scope(var_scope'length) /= '.' then
+                                    -- any other local var definition and declaration living in proc parameters or proc local area to be added as instruction
+                                    append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                                end if;
+                            end if;
+                        end if;
+                    end if;                    
                  end if;            
             end loop;
             file_close(stimulus);

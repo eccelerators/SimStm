@@ -85,8 +85,8 @@ package tb_base_pkg is
     type stack_text_line_array is array (31 downto 0) of text_line;
     type stack_numbers_array is array (31 downto 0) of integer;
 
-    type t_stm_value is array (natural range <>) of unsigned;
-    type t_stm_value_ptr is access t_stm_value;
+    type stm_value is array (natural range <>) of unsigned;
+    type stm_values_ptr is access stm_value;
     
     type slice is record
          left :integer;
@@ -140,32 +140,32 @@ package tb_base_pkg is
         last_element_num : integer;
     end record; 
 
-    type t_stm_array is array (natural range <>) of unsigned;
-    type t_stm_array_ptr is access t_stm_array;
+    type stm_array is array (natural range <>) of unsigned;
+    type stm_array_ptr is access stm_array;
 
-    type t_stm_line_type is (STM_LINE_TEXT_TYPE,
+    type stm_line_type is (STM_LINE_TEXT_TYPE,
         STM_LINE_ARRAY_TYPE
     );
 
-    type t_stm_line;
-    type t_stm_line_ptr is access t_stm_line;
-    type t_stm_line is record
+    type stm_line;
+    type stm_line_ptr is access stm_line;
+    type stm_line is record
         line_number : integer;
         line_content : line;
-        line_type : t_stm_line_type;
+        line_type : stm_line_type;
         array_size : integer;
-        next_stm_line : t_stm_line_ptr;
+        nexstm_line : stm_line_ptr;
     end record;
 
-    type t_stm_lines;
-    type t_stm_lines_ptr is access t_stm_lines;
-    type t_stm_lines is record
-        stm_line_list : t_stm_line_ptr;
+    type stm_lines;
+    type stm_lines_ptr is access stm_lines;
+    type stm_lines is record
+        stm_line_list : stm_line_ptr;
         size : integer;
-        next_stm_lines : t_stm_lines_ptr;
+        nexstm_lines : stm_lines_ptr;
     end record;
 
-    type t_stm_var_type is (
+    type stm_var_type is (
         STM_VALUE,
         STM_CONST,
         STM_TEXT,
@@ -218,23 +218,21 @@ package tb_base_pkg is
     type var_element;
     type var_element_ptr is access var_element;
     type var_element is record
-        var_src_loc : src_locator;
-        var_name : text_field;
-        var_scope : text_field;
-        var_value : t_stm_value_ptr;
-        var_org_value : t_stm_value_ptr;
-        var_label_proc_ref : text_field_ptr;
-        var_org_label_proc_ref : text_field_ptr;
-        var_stm_type : t_stm_var_type;
-        var_stm_text : stm_text_ptr;
-        var_stm_text_enclosing_quote : character;
-        var_org_stm_text : stm_text_ptr;
-        var_org_stm_text_enclosing_quote : character;
-        var_stm_array : t_stm_array_ptr;
-        var_org_stm_array : t_stm_array_ptr;
-        var_stm_lines : t_stm_lines_ptr;
-        var_org_stm_lines : t_stm_lines_ptr;
-        next_rec : var_field_ptr;
+        src_loc : src_locator;
+        name : text_field;
+        values : stm_values_ptr;
+        values_org : stm_values_ptr;
+        label_proc_ref : text_field_ptr;
+        org_label_proc_ref_org : text_field_ptr;
+        typ : stm_var_type;
+        txt : stm_text_ptr;
+        txt_enclosing_quote : character;
+        txt_org : stm_text_ptr;
+        txt_enclosing_quote_org : character;
+        arr : stm_array_ptr;
+        arry_org : stm_array_ptr;
+        lines : stm_lines_ptr;
+        lines_org : stm_lines_ptr;
     end record;
     type var_element_ptrs is array ( 0 to max_num_of_var_elements - 1) of var_element_ptr;    
     type var_pool_ordered is record
@@ -246,10 +244,10 @@ package tb_base_pkg is
     type proc_element;
     type proc_element_ptr is access proc_element;
     type proc_element is record
-        proc_src_loc : src_locator;
-        proc_name : text_field;
-        proc_element_num : integer;
-        proc_inst_element_num : integer;
+        src_loc : src_locator;
+        name : text_field;
+        element_num : integer;
+        point_to_inst_element_num : integer;
     end record;
     type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
     type proc_pool_ordered is record
@@ -257,9 +255,22 @@ package tb_base_pkg is
         last_element_num : integer;
     end record;
     
+    type stm_var_type is (
+        STM_VALUE,
+        STM_CONST,
+        STM_TEXT,
+        STM_ARRAY,
+        STM_LINES,
+        STM_BUS,
+        STM_SIGNAL,
+        STM_PROC,
+        STM_LABEL,
+        STM_NO_VAR
+    );
+    
     procedure set_var_type(
         variable inst : in text_field;
-        variable var_type : out t_stm_var_type
+        variable var_type : out stm_var_type
     );
  
     procedure insert_proc_element(
@@ -284,7 +295,7 @@ package tb_base_pkg is
         file_line : in integer
     ) return integer;
 
-    -- bin2t_stm_value    convert bin stimulus field to t_stm_value
+    -- bin2stm_value    convert bin stimulus field to stm_value
     --          inputs :  string of type text_field containing only binary numbers
     --          return :  unsigned value
     function bin2stm_value(
@@ -352,7 +363,7 @@ package tb_base_pkg is
     ) return text_field;
 
     --  to_str function  with base parameter
-    --     convert t_stm_value to number base
+    --     convert stm_value to number base
     function ew_to_text_field(
         stmvalue : unsigned;
         b : base
@@ -434,9 +445,9 @@ package tb_base_pkg is
         file_line : in integer
     ) return integer;
 
-    -- hex2integer    convert hex stimulus field to t_stm_value
+    -- hex2integer    convert hex stimulus field to stm_value
     --          inputs :  string of type text_field containing only hex numbers
-    --          return :  t_stm_value value
+    --          return :  stm_value value
     function hex2stm_value(
         hex_number : in text_field;
         file_name : in text_line;
@@ -487,9 +498,9 @@ package tb_base_pkg is
         file_line : in integer
     ) return integer;
 
-    -- stim_to_integer    convert stimulus field to t_stm_value
+    -- stim_to_integer    convert stimulus field to stm_value
     --          inputs :  string of type text_field "stimulus format of number"
-    --          return :  t_stm_value value
+    --          return :  stm_value value
     function stim_to_stm_value(
         field : in text_field;
         file_name : in text_line;
@@ -498,7 +509,7 @@ package tb_base_pkg is
     ) return unsigned;
 
     procedure stm_file_append(
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer
     );
@@ -509,7 +520,7 @@ package tb_base_pkg is
     );
 
     procedure stm_file_read_all(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer
     );
@@ -524,7 +535,7 @@ package tb_base_pkg is
     ) return integer;
 
     procedure stm_file_write(
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable file_path : in stm_text_ptr;
         variable valid : out integer
     );
@@ -535,74 +546,74 @@ package tb_base_pkg is
     );
 
     procedure stm_lines_append(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable std_line : in line;
         variable valid : out integer
     );
 
     procedure stm_lines_append(
-        variable stm_lines : inout t_stm_lines_ptr;
-        variable stm_array : in t_stm_array_ptr;
+        variable stm_lines : inout stm_lines_ptr;
+        variable stm_array : in stm_array_ptr;
         variable valid : out integer;
         constant stm_value_width : in integer
     );
 
     procedure stm_lines_append(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable var_stm_text : in stm_text_ptr;
         variable valid : out integer
     );
 
     procedure stm_lines_delete(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
         variable valid : out integer
     );
 
     procedure stm_lines_get(
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
         variable std_line : out line;
         variable valid : out integer
     );
 
     procedure stm_lines_get(
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
-        variable stm_array : inout t_stm_array_ptr;
+        variable stm_array : inout stm_array_ptr;
         variable number_found : out integer;
         variable valid : out integer;
         constant stm_value_width : in integer
     );
 
     procedure stm_lines_insert(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
         variable var_stm_text : in stm_text_ptr;
         variable valid : out integer
     );
 
     procedure stm_lines_insert(
-        variable stm_lines : inout t_stm_lines_ptr;
+        variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
-        variable stm_array : in t_stm_array_ptr;
+        variable stm_array : in stm_array_ptr;
         variable valid : out integer;
         constant stm_value_width : in integer
     );
 
     procedure stm_lines_print(
-        variable stm_lines : in t_stm_lines_ptr;
+        variable stm_lines : in stm_lines_ptr;
         variable valid : out integer
     );
 
-    procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
+    procedure stm_lines_set(variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
         variable var_stm_text : in stm_text_ptr;
         variable valid : out integer);
 
-    procedure stm_lines_set(variable stm_lines : inout t_stm_lines_ptr;
+    procedure stm_lines_set(variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
-        variable stm_array : in t_stm_array_ptr;
+        variable stm_array : in stm_array_ptr;
         variable valid : out integer;
         constant stm_value_width : in integer);
 

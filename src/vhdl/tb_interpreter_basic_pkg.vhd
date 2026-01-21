@@ -108,7 +108,7 @@ package tb_interpreter_basic_pkg is
         variable inst_list_elment_num : in integer;
         variable file_line : in integer;
         variable file_name : in text_line;
-        constant var_stm_type : in t_stm_var_type;
+        constant var_stm_type : in stm_var_type;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         constant stm_value_width : in integer;
@@ -129,7 +129,7 @@ package tb_interpreter_basic_pkg is
         variable vars : inout var_pool_ordered;
         variable var_scope : in text_field;
         variable par_text_fields : in parameter_text_field_array;
-        constant var_stm_type : in t_stm_var_type;
+        constant var_stm_type : in stm_var_type;
         variable str_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
         constant stm_value_width : in integer

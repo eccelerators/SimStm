@@ -215,11 +215,11 @@ package body tb_interpreter_util_pkg is
         variable stack_called_files : stack_text_line_array;
         variable stack_called_file_linebers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
         variable stm_text_substituded : stm_text;
     begin
-        stm_text_substitude_wvar(var_list, scope, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, stm_text_substituded, stm_value_width);
+        stm_text_substitude_wvar(var_list, scope, ptr, txt_enclosing_quote, stack_ptr, stack_called_files, stack_called_file_linebers, stack_called_procs, stm_text_substituded, machine_value_width);
         print(stm_text_substituded);
     end procedure;
 
@@ -233,7 +233,7 @@ package body tb_interpreter_util_pkg is
         variable stack_called_file_linebers : stack_numbers_array;
         variable stack_called_procs : stack_text_field_array;
         variable stm_text_substituded : out stm_text;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
         variable src_i : integer;
         variable src_tail_i : integer;
@@ -244,7 +244,7 @@ package body tb_interpreter_util_pkg is
         variable k : integer;
         variable src_tail_begin : integer;
         variable dest_txt_str : stm_text;
-        variable v1 : unsigned(stm_value_width - 1 downto 0);
+        variable v1 : unsigned(machine_value_width - 1 downto 0);
         variable v1_index : integer;
         variable valid : integer;
         variable tmp_field : text_field;
@@ -476,882 +476,404 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure access_var(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
+        variable var_element_num : out integer;
         variable var_value : out integer;
-        variable valid : out integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
-        variable stmvalue : unsigned(stm_value_width - 1 downto 0) := to_unsigned(0, stm_value_width);
+        variable v : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
     begin
-        access_var(var_list, var_scope, var_name, var_index, stmvalue, valid);
-        var_value := to_integer(stmvalue(30 downto 0));
+        access_var(vars, var_name, var_element_num, v, valid);
+        var_value := to_integer(v(30 downto 0));
     end procedure;
 
     procedure access_var(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_value : out unsigned;
-        variable valid : out integer
+        variable var_element_num : out integer;
+        variable var_value : out integer
     ) is
-
-        variable var_ptr : var_field_ptr;
-        variable is_defined : boolean := false;
+        variable ven : integer;
+        variable tf : text_field;
     begin
-        valid := 0;
         -- if the variable is a special
         if var_name(1) = '=' then
             var_value := to_unsigned(0, var_value'length);
-            valid := 1;
         elsif var_name(1 to 2) = ">=" then
             var_value := to_unsigned(4, var_value'length);
-            valid := 1;
         elsif var_name(1 to 2) = "<=" then
             var_value := to_unsigned(5, var_value'length);
-            valid := 1;
         elsif var_name(1) = '>' then
             var_value := to_unsigned(1, var_value'length);
-            valid := 1;
         elsif var_name(1) = '<' then
             var_value := to_unsigned(2, var_value'length);
-            valid := 1;
         elsif var_name(1 to 2) = "!=" then
             var_value := to_unsigned(3, var_value'length);
-            valid := 1;
         else
-            assert var_list /= null
-            report lf & "no variables are defined." & lf
-            severity failure;
-            if fld_len(var_scope) > 0 then
-                var_ptr := var_list;
-                while var_ptr.next_rec /= null loop
-                    -- check for a local match
-                    if fld_equal(var_name, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                        var_index := var_ptr.var_index;
-                        var_value := var_ptr.var_value(0);
-                        valid := 1;
-                        is_defined := true;
-                        exit;
-                    end if;
-                    var_ptr := var_ptr.next_rec;
-                end loop;
-                if not is_defined then
-                    var_ptr := var_list;
-                    while var_ptr.next_rec /= null loop
-                        -- check for a global match
-                        if fld_equal(var_name, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                            var_index := var_ptr.var_index;
-                            var_value := var_ptr.var_value(0);
-                            valid := 1;
-                            is_defined := true;
-                            exit;
-                        end if;
-                        var_ptr := var_ptr.next_rec;
-                    end loop;
-                end if;
+            -- check for a local match
+            ven := search_var_element_number(vars, var_name);
+            if ven >= 0 then
+                var_value := vars.element_ptrs(ven).values(0);
+                var_element_num := ven;
             else
-                var_ptr := var_list;
-                while var_ptr.next_rec /= null loop
-                    -- check for a global match
-                    if fld_equal(var_name, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_value := var_ptr.var_value(0);
-                        valid := 1;
-                        is_defined := true;
-                        exit;
-                    end if;
-                    var_ptr := var_ptr.next_rec;
-                end loop;
-            end if;
-
-            if fld_len(var_scope) > 0 then
-                if var_ptr.next_rec = null then
-                    -- check for a local match in the last record
-                    if fld_equal(var_name, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                        var_index := var_ptr.var_index;
-                        var_value := var_ptr.var_value(0);
-                        valid := 1;
-                        is_defined := true;
-                    end if;
-                    if not is_defined then
-                        -- check for a global match in the last record
-                        if fld_equal(var_name, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                            var_index := var_ptr.var_index;
-                            var_value := var_ptr.var_value(0);
-                            valid := 1;
-                            is_defined := true;
-                        end if;
-                    end if;
-                end if;
-            else
-                if var_ptr.next_rec = null then
-                    -- check for a global match in the last record
-                    if fld_equal(var_name, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_value := var_ptr.var_value(0);
-                        valid := 1;
-                        is_defined := true;
-                    end if;
-                    var_ptr := var_ptr.next_rec;
+                -- check for a global match
+                tf := truncate_scope(var_name);
+                ven := search_var_element_number(vars, tf);
+                if ven >= 0 then 
+                    var_value := vars.element_ptrs(ven).values(0);
+                    var_element_num := ven;
+                else
+                    assert false
+                    report "access var values, neither local variable" & var_name & "nor global variable " & tf &  " is defined"
+                    severity failure;                    
                 end if;
             end if;
-            assert is_defined
-            report lf & "variable is not defined " & var_name & lf
-            severity error;
         end if;
     end procedure;
 
     procedure access_var_value_ptr(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_value_ptr : out t_stm_value_ptr;
-        variable valid : out integer
+        variable var_element_num : out integer;
+        variable var_values_ptr : out stm_values_ptr
     ) is
-        variable var_ptr : var_field_ptr;
-        variable temp_field : text_field;
-        variable is_defined : boolean := false;
     begin
-        valid := 0;
-        temp_field := var_name;
-        assert var_list /= null
-        report lf & "no variables are defined." & lf
-        severity failure;
-        if fld_len(var_scope) > 0 then
-            var_ptr := var_list;
-            while var_ptr.next_rec /= null loop
-                -- check for a local match
-                if fld_equal(temp_field, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                    var_index := var_ptr.var_index;
-                    var_value_ptr := var_ptr.var_value;
-                    valid := 1;
-                    is_defined := true;
-                    exit;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end loop;
-            if not is_defined then
-                var_ptr := var_list;
-                while var_ptr.next_rec /= null loop
-                    -- check for a global match
-                    if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_value_ptr := var_ptr.var_value;
-                        valid := 2;
-                        is_defined := true;
-                        exit;
-                    end if;
-                    var_ptr := var_ptr.next_rec;
-                end loop;
-            end if;
+        -- check for a local match
+        ven := search_var_element_number(vars, var_name);
+        if ven >= 0 then
+            var_values_ptr := vars.element_ptrs(ven).values;
+            var_element_num := ven;
         else
-            var_ptr := var_list;
-            while var_ptr.next_rec /= null loop
-                -- check for a global match
-                if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                    var_index := var_ptr.var_index;
-                    var_value_ptr := var_ptr.var_value;
-                    valid := 2;
-                    is_defined := true;
-                    exit;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end loop;
-        end if;
-
-        if fld_len(var_scope) > 0 then
-            if var_ptr.next_rec = null then
-                -- check for a local match in the last record
-                if fld_equal(temp_field, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                    var_index := var_ptr.var_index;
-                    var_value_ptr := var_ptr.var_value;
-                    valid := 1;
-                    is_defined := true;
-                end if;
-                if not is_defined then
-                    -- check for a global match in the last record
-                    if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_value_ptr := var_ptr.var_value;
-                        valid := 2;
-                        is_defined := true;
-                    end if;
-                end if;
-            end if;
-        else
-            if var_ptr.next_rec = null then
-                -- check for a global match in the last record
-                if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                    var_index := var_ptr.var_index;
-                    var_value_ptr := var_ptr.var_value;
-                    valid := 2;
-                    is_defined := true;
-                end if;
-                var_ptr := var_ptr.next_rec;
+            -- check for a global match
+            tf := truncate_scope(var_name);
+            ven := search_var_element_number(vars, tf);
+            if ven >= 0 then 
+                var_values_ptr := vars.element_ptrs(ven).values;
+                var_element_num := ven;
+            else
+                assert false
+                report "access var values ptr, neither local variable" & var_name & "nor global variable " & tf &  " is defined"
+                severity failure;                    
             end if;
         end if;
-        assert is_defined
-        report lf & "variable is not defined " & temp_field & lf
-        severity error;
-
     end procedure;
 
     procedure access_var_label_ptr(
-        variable var_list : in var_field_ptr;
-        variable var_scope : in text_field;
+        variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_index : out integer;
-        variable var_label_ptr : out text_field_ptr;
-        variable valid : out integer
+        variable var_element_num : out integer;
+        variable var_label_ptr : out text_field_ptr
+    ) is    
+    begin 
+        -- check for a local match
+        ven := search_var_element_number(vars, var_name);
+        if ven >= 0 then
+            var_label_ptr := vars.element_ptrs(ven).label_proc_ref;
+            var_element_num := ven;
+        else
+            -- check for a global match
+            tf := truncate_scope(var_name);
+            ven := search_var_element_number(vars, tf);
+            if ven >= 0 then 
+                var_label_ptr := vars.element_ptrs(ven).label_proc_ref;
+                var_element_num := ven;
+            else
+                assert false
+                report "access var label, neither local variable" & var_name & "nor global variable " & tf &  " is defined"
+                severity failure;                    
+            end if;
+        end if;        
+    end procedure;
+
+    procedure index_var(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : out unsigned
     ) is
-        variable var_ptr : var_field_ptr;
-        variable temp_field : text_field;
-        variable is_defined : boolean := false;
     begin
-        valid := 0;
-        temp_field := var_name;
-        assert var_list /= null
-        report lf & "no variables are defined." & lf
+        assert var_element_num <= vars.last_element_num
+        report "index var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        value := vars.element_ptrs(var_element_num).value(0);
+    end procedure;
+
+    procedure index_and_reinit_var(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : out unsigned
+    ) is
+    begin
+        vars.element_ptrs(var_element_num).var_value := vars.element_ptrs(var_element_num).var_org_value;
+        value := vars.element_ptrs(var_element_num).value(0);
+    end procedure;
+
+    procedure index_var_values_ptr(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value_ptr : out stm_values_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index var values ptr var, element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        value_ptr := vars.element_ptrs(var_element_num);
+    end procedure;
+
+    procedure index_var(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : out stm_text_ptr;
+        variable var_txt_enclosing_quote : out character
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        var_txt := vars.element_ptrs(var_element_num).txt;
+        var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
+    end procedure;
+
+    procedure index_and_reinit_var(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : out stm_text_ptr;
+        variable var_txt_enclosing_quote : out character
+    ) is
+    begin        
+        assert var_element_num <= vars.last_element_num
+        report "index and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
+        vars.element_ptrs(var_element_num).txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
+        var_txt := vars.element_ptrs(var_element_num).txt;
+        var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
+    end procedure;
+
+    procedure index_var(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : out stm_array_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        var_arr := vars.element_ptrs(var_element_num).arr;
+    end procedure;
+
+    procedure index_and_reinit_var(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : out stm_array_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
+        var_arr := vars.element_ptrs(var_element_num).arr;
+    end procedure;
+
+    procedure index_var(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : out text_field_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index var label , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
+    end procedure;
+
+    procedure index_and_reinit_var(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : out text_field_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
+        var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
+    end procedure;
+
+    procedure index_var(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : out stm_lines_ptr
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "index var lines , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
         severity failure;
-        if fld_len(var_scope) > 0 then
-            var_ptr := var_list;
-            while var_ptr.next_rec /= null loop
-                -- check for a local match
-                if fld_equal(temp_field, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                    var_index := var_ptr.var_index;
-                    var_label_ptr := var_ptr.var_label;
-                    valid := 1;
-                    is_defined := true;
-                    exit;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end loop;
-            if not is_defined then
-                var_ptr := var_list;
-                while var_ptr.next_rec /= null loop
-                    -- check for a global match
-                    if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_label_ptr := var_ptr.var_label;
-                        valid := 2;
-                        is_defined := true;
-                        exit;
-                    end if;
-                    var_ptr := var_ptr.next_rec;
-                end loop;
-            end if;
-        else
-            var_ptr := var_list;
-            while var_ptr.next_rec /= null loop
-                -- check for a global match
-                if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                    var_index := var_ptr.var_index;
-                    var_label_ptr := var_ptr.var_label;
-                    valid := 2;
-                    is_defined := true;
-                    exit;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end loop;
-        end if;
-
-        if fld_len(var_scope) > 0 then
-            if var_ptr.next_rec = null then
-                -- check for a local match in the last record
-                if fld_equal(temp_field, var_ptr.var_name) and fld_equal(var_scope, var_ptr.var_scope) then
-                    var_index := var_ptr.var_index;
-                    var_label_ptr := var_ptr.var_label;
-                    valid := 1;
-                    is_defined := true;
-                end if;
-                if not is_defined then
-                    -- check for a global match in the last record
-                    if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                        var_index := var_ptr.var_index;
-                        var_label_ptr := var_ptr.var_label;
-                        valid := 2;
-                        is_defined := true;
-                    end if;
-                end if;
-            end if;
-        else
-            if var_ptr.next_rec = null then
-                -- check for a global match in the last record
-                if fld_equal(temp_field, var_ptr.var_name) and fld_len(var_ptr.var_scope) = 0 then
-                    var_index := var_ptr.var_index;
-                    var_label_ptr := var_ptr.var_label;
-                    valid := 2;
-                    is_defined := true;
-                end if;
-                var_ptr := var_ptr.next_rec;
-            end if;
-        end if;
-        assert is_defined
-        report lf & "variable is not defined " & temp_field & lf
-        severity error;
-
-    end procedure;
-
-    procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value : out unsigned;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            value := ptr.var_value(0);
-            valid := 1;
-        end if;
+        var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
 
     procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value : out unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_stm_lines : out stm_lines_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            ptr.var_value := ptr.var_org_value;
-            value := ptr.var_value(0);
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_var_value_ptr(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable value_ptr : out t_stm_value_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            value_ptr := ptr.var_value;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable var_stm_text : out stm_text_ptr;
-        variable var_stm_text_enclosing_quote : out character;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            var_stm_text := ptr.var_stm_text;
-            var_stm_text_enclosing_quote := ptr.var_stm_text_enclosing_quote;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable var_stm_text : out stm_text_ptr;
-        variable var_stm_text_enclosing_quote : out character;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            var_stm_text := ptr.var_org_stm_text;
-            var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_array : out t_stm_array_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                stm_array := ptr.var_stm_array;
-                valid := 1;
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            stm_array := ptr.var_stm_array;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_array : out t_stm_array_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            ptr.var_stm_array := ptr.var_org_stm_array;
-            stm_array := ptr.var_stm_array;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_label : out text_field_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                stm_label := ptr.var_label;
-                valid := 1;
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            stm_label := ptr.var_label;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_label : out text_field_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            ptr.var_label := ptr.var_org_label;
-            stm_label := ptr.var_label;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_lines : out t_stm_lines_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                stm_lines := ptr.var_stm_lines;
-                valid := 1;
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            stm_lines := ptr.var_stm_lines;
-            valid := 1;
-        end if;
-    end procedure;
-
-    procedure index_and_reinit_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_scope : out text_field;
-        variable stm_lines : out t_stm_lines_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
-    begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            var_scope := ptr.var_scope;
-            ptr.var_stm_lines := ptr.var_org_stm_lines;
-            stm_lines := ptr.var_stm_lines;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "index and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
+        var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
 
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value : in unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable value : in unsigned
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-            ptr.var_value(0) := value;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).values(0) := value;
     end procedure;
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value : in unsigned;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value : in unsigned
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-            ptr.var_value := ptr.var_org_value;
-            ptr.var_value(0) := value;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).values:= vars.element_ptrs(var_element_num).values_org;
+        vars.element_ptrs(var_element_num).values(0) := var_value;
     end procedure;
 
-    procedure update_var_value_ptr(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable value_ptr : in t_stm_value_ptr;
-        variable valid : out integer
+    procedure update_var_values_ptr(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value_ptr : in stm_values_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if (ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE) then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-            ptr.var_value := value_ptr;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var values ptr, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).values := var_value_ptr;
     end procedure;
 
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : in stm_text_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            ptr.var_stm_text := var_stm_text;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).txt := var_txt;
     end procedure;
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : in stm_text_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            ptr.var_stm_text := ptr.var_org_stm_text;
-            ptr.var_stm_text_enclosing_quote := ptr.var_org_stm_text_enclosing_quote;
-            ptr.var_stm_text := var_stm_text;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
+        vars.element_ptrs(var_element_num).txt_enclosing_quote:= vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
+        vars.element_ptrs(var_element_num).txt := var_txt;
     end procedure;
 
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_array : in t_stm_array_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : in stm_array_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-            ptr.var_stm_array := stm_array;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).arr := var_arr;
     end procedure;
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_array : in t_stm_array_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr : in stm_array_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index and ptr.var_stm_type /= STM_CONST_VALUE_TYPE then
-            ptr.var_stm_array := ptr.var_org_stm_array;
-            ptr.var_stm_array := stm_array;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "reinit and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure; 
+        vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
+        vars.element_ptrs(var_element_num).arr := var_arr;        
     end procedure;
 
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index then
-            ptr.var_label := stm_label;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index then
-            ptr.var_label := ptr.var_org_label;
-            ptr.var_label := stm_label;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
+        vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
 
     procedure init_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_label : in text_field_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- check the current one
-        if ptr.var_index = index then
-            ptr.var_org_label := stm_label;
-            ptr.var_label := stm_label;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).label_proc_ref_org := var_label_proc_ref;
+        vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
 
     procedure update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_lines : in t_stm_lines_ptr;
-        variable valid : out integer
-    ) is
-        variable ptr : var_field_ptr;
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : in stm_lines_ptr
+    ) is      
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if (ptr.var_index = index) then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            ptr.var_stm_lines := stm_lines;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
 
     procedure reinit_and_update_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        variable stm_lines : in t_stm_lines_ptr;
-        variable valid : out integer
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_lines : in stm_lines_ptr
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
-        valid := 0;
-        while ptr.next_rec /= null loop
-            if (ptr.var_index = index) then
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        if ptr.var_index = index then
-            ptr.var_stm_lines := ptr.var_org_stm_lines;
-            ptr.var_stm_lines := stm_lines;
-            valid := 1;
-        end if;
+        assert var_element_num <= vars.last_element_num
+        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        severity failure;
+        vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
+        vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
 
     procedure print_file_def(
@@ -1435,7 +957,7 @@ package body tb_interpreter_util_pkg is
 
     procedure dump_vars(
         variable var_list : in var_field_ptr;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
         variable ptr : var_field_ptr;
     begin
@@ -1443,17 +965,17 @@ package body tb_interpreter_util_pkg is
         print("---- -----------------------------------------------------------------");
         print("---- -- dump variables start -----------------------------------------");
         while ptr.next_rec /= null loop
-            dump_var_field(ptr, stm_value_width);
+            dump_var_field(ptr, machine_value_width);
             ptr := ptr.next_rec;
         end loop;
         -- the last one
-        dump_var_field(ptr, stm_value_width);
+        dump_var_field(ptr, machine_value_width);
     end procedure;
 
     procedure dump_var(
         variable var_list : in var_field_ptr;
         variable index : in integer;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
         variable ptr : var_field_ptr;
         variable found : boolean;
@@ -1462,7 +984,7 @@ package body tb_interpreter_util_pkg is
         found := false;
         while ptr.next_rec /= null loop
             if ptr.var_index = index then
-                dump_var_field(ptr, stm_value_width);
+                dump_var_field(ptr, machine_value_width);
                 found := true;
                 exit;
             end if;
@@ -1471,26 +993,26 @@ package body tb_interpreter_util_pkg is
         -- the last one
         if not found then
             if ptr.var_index = index then
-                dump_var_field(ptr, stm_value_width);
+                dump_var_field(ptr, machine_value_width);
             end if;
         end if;
     end procedure;
 
     procedure dump_var_field(
         variable ptr : var_field_ptr;
-        constant stm_value_width : in integer
+        constant machine_value_width : in integer
     ) is
         variable std_line : line;
         variable tmp_label : text_field;
         variable tmp_str : stm_text;
         variable tmp_str_ptr : stm_text_ptr;
-        variable stm_line_ptr : t_stm_line_ptr;
+        variable stm_line_ptr : stm_line_ptr;
         variable success : boolean;
         variable array_index : integer;
-        variable array_value : unsigned(stm_value_width - 1 downto 0);
-        variable value_std_logic_vector : std_logic_vector(stm_value_width - 1 downto 0);
+        variable array_value : unsigned(machine_value_width - 1 downto 0);
+        variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
         variable tmp_std_line_print : line;
-        variable stm_array : t_stm_array_ptr;
+        variable stm_array : stm_array_ptr;
     begin
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
@@ -1557,7 +1079,7 @@ package body tb_interpreter_util_pkg is
                     end loop;
                     print("-------- stm_line_ptr.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
                 end if;
-                stm_line_ptr := stm_line_ptr.next_stm_line;
+                stm_line_ptr := stm_line_ptr.nexstm_line;
             end loop;
             stm_line_ptr := ptr.var_org_stm_lines.stm_line_list;
             while stm_line_ptr /= null loop
@@ -1586,7 +1108,7 @@ package body tb_interpreter_util_pkg is
                     end loop;
                     print("-------- stm_org_lines.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
                 end if;
-                stm_line_ptr := stm_line_ptr.next_stm_line;
+                stm_line_ptr := stm_line_ptr.nexstm_line;
             end loop;
         elsif ptr.var_stm_type = STM_BUS_TYPE then
             print("---- var_stm_type: STM_BUS_TYPE");

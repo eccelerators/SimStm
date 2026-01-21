@@ -166,7 +166,7 @@ begin
         variable ie_ptr : inst_element_ptr;
 
         variable sp : integer := 0; -- call stack pointer
-        variable rc_stack : t_stm_array_of_runtime_context; -- call stack
+        variable rc_stack : stm_array_of_runtime_context; -- call stack
 
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
@@ -208,7 +208,7 @@ begin
         variable var_scope : text_field;
         variable var_index : integer;
         variable number_found : integer;
-        variable stm_value_ptr : t_stm_value_ptr;
+        variable stm_values_ptr : stm_values_ptr;
 
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
 
@@ -222,7 +222,7 @@ begin
         variable bus_timeouts : bus_timeout_array := (others => 1 sec);
 
         -- Array
-        variable var_stm_array : t_stm_array_ptr;
+        variable var_stm_array : stm_array_ptr;
 
         -- Label
         variable var_stm_label : text_field_ptr;
@@ -255,7 +255,7 @@ begin
         variable stm_lines_append_valid : integer := 0;
 
         -- Lines
-        variable var_stm_lines : t_stm_lines_ptr;
+        variable var_stm_lines : stm_lines_ptr;
 
         variable main_proc_name : text_field;
         variable main_inst_element : integer := 0;
@@ -541,11 +541,11 @@ begin
                 -- d_var s_var
                 -- d_var s_var )
                 elsif inst(1 to il) = INSTR_VAR_POINTER_COPY or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
-                    index_var_value_ptr(var_list, par_indexes(2), var_scope, stm_value_ptr, valid);
+                    index_var_value_ptr(var_list, par_indexes(2), var_scope, stm_values_ptr, valid);
                     assert valid /= 0
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to il) & " var not found"
                     severity failure;
-                    update_var_value_ptr(var_list, par_indexes(1), stm_value_ptr, valid);
+                    update_var_value_ptr(var_list, par_indexes(1), stm_values_ptr, valid);
                     assert valid /= 0
                     report "var_pointer not a var name??"
                     severity failure;
@@ -1537,11 +1537,11 @@ begin
                     stack_curr_loop_count(sp)(act_loop_num) := act_curr_loop_count;
                     act_term_loop_count := stack_term_loop_count(sp)(act_loop_num);
                     if trc_on(5) = '1' then
-                        index_var_value_ptr(var_list, par_indexes(2), var_scope, stm_value_ptr, valid);
+                        index_var_value_ptr(var_list, par_indexes(2), var_scope, stm_values_ptr, valid);
                         assert valid /= 0
                         report " line " & (integer'image(file_line)) & ", " & inst(1 to il) & " var not found"
                         severity failure;
-                        update_var_value_ptr(var_list, par_indexes(1), stm_value_ptr, valid);
+                        update_var_value_ptr(var_list, par_indexes(1), stm_values_ptr, valid);
                         assert valid /= 0
                         report "var_pointer not a var name??"
                         severity failure; 
