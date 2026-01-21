@@ -1373,7 +1373,7 @@ package body tb_base_pkg is
             stm_line_ptr := new stm_line;
             stm_line_ptr.line_number := 0;
             stm_line_ptr.line_content := std_line;
-            stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_line_ptr.line_type := STM_LINE_TEXT;
             stm_line_ptr.array_size := 0;
             stm_line_ptr.nexstm_line := null;
             stm_lines.stm_line_list := stm_line_ptr;
@@ -1386,7 +1386,7 @@ package body tb_base_pkg is
             stm_next_line_ptr := new stm_line;
             stm_next_line_ptr.line_number := stm_line_ptr.line_number + 1;
             stm_next_line_ptr.line_content := std_line;
-            stm_next_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_next_line_ptr.line_type := STM_LINE_TEXT;
             stm_next_line_ptr.array_size := 0;
             stm_next_line_ptr.nexstm_line := null;
             stm_line_ptr.nexstm_line := stm_next_line_ptr;
@@ -1416,7 +1416,7 @@ package body tb_base_pkg is
             stm_line_ptr := new stm_line;
             stm_line_ptr.line_number := 0;
             stm_line_ptr.line_content := std_line;
-            stm_line_ptr.line_type := STM_LINE_ARRAY_TYPE;
+            stm_line_ptr.line_type := STM_LINE_ARRAY;
             stm_line_ptr.array_size := stm_array'length;
             stm_line_ptr.nexstm_line := null;
             stm_lines.stm_line_list := stm_line_ptr;
@@ -1429,7 +1429,7 @@ package body tb_base_pkg is
             stm_next_line_ptr := new stm_line;
             stm_next_line_ptr.line_number := stm_line_ptr.line_number + 1;
             stm_next_line_ptr.line_content := std_line;
-            stm_next_line_ptr.line_type := STM_LINE_ARRAY_TYPE;
+            stm_next_line_ptr.line_type := STM_LINE_ARRAY;
             stm_next_line_ptr.array_size := stm_array'length;
             stm_next_line_ptr.nexstm_line := null;
             stm_line_ptr.nexstm_line := stm_next_line_ptr;
@@ -1454,7 +1454,7 @@ package body tb_base_pkg is
             stm_line_ptr := new stm_line;
             stm_line_ptr.line_number := 0;
             stm_line_ptr.line_content := std_line;
-            stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_line_ptr.line_type := STM_LINE_TEXT;
             stm_line_ptr.array_size := 0;
             stm_line_ptr.nexstm_line := null;
             stm_lines.stm_line_list := stm_line_ptr;
@@ -1467,7 +1467,7 @@ package body tb_base_pkg is
             stm_next_line_ptr := new stm_line;
             stm_next_line_ptr.line_number := stm_line_ptr.line_number + 1;
             stm_next_line_ptr.line_content := std_line;
-            stm_next_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+            stm_next_line_ptr.line_type := STM_LINE_TEXT;
             stm_next_line_ptr.array_size := 0;
             stm_next_line_ptr.nexstm_line := null;
             stm_line_ptr.nexstm_line := stm_next_line_ptr;
@@ -1597,7 +1597,7 @@ package body tb_base_pkg is
                 stm_line_new.nexstm_line := stm_line_ptr.nexstm_line;
                 -- set current stm_line to new content
                 stm_line_ptr.line_content := tmp_std_line;
-                stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+                stm_line_ptr.line_type := STM_LINE_TEXT;
                 stm_line_ptr.array_size := 0;
                 stm_line_ptr.nexstm_line := stm_line_new;
                 stm_lines.size := stm_lines.size + 1;
@@ -1640,7 +1640,7 @@ package body tb_base_pkg is
                 stm_line_new.nexstm_line := stm_line_ptr.nexstm_line;
                 -- set current stm_line to new content
                 stm_line_ptr.line_content := tmp_std_line;
-                stm_line_ptr.line_type := STM_LINE_ARRAY_TYPE;
+                stm_line_ptr.line_type := STM_LINE_ARRAY;
                 stm_line_ptr.array_size := stm_array'length;
                 stm_line_ptr.nexstm_line := stm_line_new;
                 stm_lines.size := stm_lines.size + 1;
@@ -1668,14 +1668,14 @@ package body tb_base_pkg is
         valid := 0;
         stm_line_ptr := stm_lines.stm_line_list;
         while stm_line_ptr /= null loop
-            if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
+            if stm_line_ptr.line_type = STM_LINE_TEXT then
                 std_line := stm_line_ptr.line_content;
                 tmp_str_ptr := new stm_text;
                 get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
                 stm_text_ptr_to_line(tmp_str_ptr, std_line);
                 stm_line_ptr.line_content := std_line;
                 txt_print(tmp_str_ptr);
-            elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
+            elsif stm_line_ptr.line_type = STM_LINE_ARRAY then
                 tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                 writeline(output, tmp_std_line_print);
             end if;
@@ -1705,7 +1705,7 @@ package body tb_base_pkg is
                     end if;
                 end loop;
                 stm_line_ptr.line_content := std_line;
-                stm_line_ptr.line_type := STM_LINE_TEXT_TYPE;
+                stm_line_ptr.line_type := STM_LINE_TEXT;
                 stm_line_ptr.array_size := 0;
                 valid := 1;
                 return;

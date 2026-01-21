@@ -143,8 +143,8 @@ package tb_base_pkg is
     type stm_array is array (natural range <>) of unsigned;
     type stm_array_ptr is access stm_array;
 
-    type stm_line_type is (STM_LINE_TEXT_TYPE,
-        STM_LINE_ARRAY_TYPE
+    type stm_line_type is (STM_LINE_TEXT,
+        STM_LINE_ARRAY
     );
 
     type stm_line;
@@ -154,15 +154,15 @@ package tb_base_pkg is
         line_content : line;
         line_type : stm_line_type;
         array_size : integer;
-        nexstm_line : stm_line_ptr;
+        next_line_ptr : stm_line_ptr;
     end record;
 
     type stm_lines;
     type stm_lines_ptr is access stm_lines;
     type stm_lines is record
-        stm_line_list : stm_line_ptr;
+        line_list : stm_line_ptr;
         size : integer;
-        nexstm_lines : stm_lines_ptr;
+        next_lines_ptr : stm_lines_ptr;
     end record;
 
     type stm_var_type is (
@@ -223,7 +223,7 @@ package tb_base_pkg is
         values : stm_values_ptr;
         values_org : stm_values_ptr;
         label_proc_ref : text_field_ptr;
-        org_label_proc_ref_org : text_field_ptr;
+        label_proc_ref_org : text_field_ptr;
         typ : stm_var_type;
         txt : stm_text_ptr;
         txt_enclosing_quote : character;

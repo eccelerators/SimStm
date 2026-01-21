@@ -227,7 +227,7 @@ package body tb_interpreter_pkg is
                     set_var_type(inst, il, var_type);
                     if var_type /= STM_NO_VAR then
                         vn := textfield_dot_cat(iic.in_namespace_name, inst_args.par_text_fields(1), iic.in_proc_name);
-                        if is_digit(par_text_fields(2)(1)) or var_type = STM_TEXT_TYPE or var_type = STM_LINES_TYPE or var_type = STM_LABEL_TYPE then                   
+                        if is_digit(par_text_fields(2)(1)) or var_type = STM_TEXT or var_type = STM_LINES or var_type = STM_LABEL then                   
                             insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
                         else
                             access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);

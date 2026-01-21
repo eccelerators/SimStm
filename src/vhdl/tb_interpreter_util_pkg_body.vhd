@@ -593,7 +593,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         value := vars.element_ptrs(var_element_num).value(0);
     end procedure;
@@ -615,7 +615,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var values ptr var, element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var values ptr var, element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         value_ptr := vars.element_ptrs(var_element_num);
     end procedure;
@@ -628,7 +628,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         var_txt := vars.element_ptrs(var_element_num).txt;
         var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
@@ -642,7 +642,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin        
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
         vars.element_ptrs(var_element_num).txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
@@ -657,7 +657,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         var_arr := vars.element_ptrs(var_element_num).arr;
     end procedure;
@@ -669,7 +669,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
         var_arr := vars.element_ptrs(var_element_num).arr;
@@ -682,7 +682,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var label , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var label , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
     end procedure;
@@ -694,7 +694,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
         var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
@@ -707,7 +707,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var lines , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index var lines , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
@@ -719,7 +719,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "index and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
         var_lines := vars.element_ptrs(var_element_num).lines;
@@ -732,7 +732,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).values(0) := value;
     end procedure;
@@ -744,7 +744,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).values:= vars.element_ptrs(var_element_num).values_org;
         vars.element_ptrs(var_element_num).values(0) := var_value;
@@ -757,7 +757,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var values ptr, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var values ptr, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).values := var_value_ptr;
     end procedure;
@@ -769,7 +769,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).txt := var_txt;
     end procedure;
@@ -781,7 +781,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
         vars.element_ptrs(var_element_num).txt_enclosing_quote:= vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
@@ -795,7 +795,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).arr := var_arr;
     end procedure;
@@ -807,7 +807,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "reinit and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure; 
         vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
         vars.element_ptrs(var_element_num).arr := var_arr;        
@@ -820,7 +820,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
@@ -832,7 +832,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
@@ -845,7 +845,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).label_proc_ref_org := var_label_proc_ref;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
@@ -858,7 +858,7 @@ package body tb_interpreter_util_pkg is
     ) is      
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
@@ -870,136 +870,61 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(var_element_num)" 
+        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
         severity failure;
         vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
         vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
 
-    procedure print_file_def(
-        variable file_list : inout file_def_ptr;
-        variable index : in integer
+    procedure print_inst_element(
+        variable insts : in inst_sequence;
+        variable inst_element_num : in integer;
+        variable code_files : in file_def_list
     ) is
-        variable tmp_file_def_ptr : file_def_ptr;
     begin
-        tmp_file_def_ptr := file_list;
-        while tmp_file_def_ptr.next_rec /= null loop
-            if tmp_file_def_ptr.rec_idx = index then
-                exit;
-            else
-                tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
-            end if;
-        end loop;
+        assert inst_element_num <= insts.last_element_num
+        report "print instruction element, inst element number, " & integer'image(inst_element_num) & "greater than insts last element number & integer'image(inst.last_element_num)" 
+        severity failure;
         print(".... -----------------------------------------------------------------");
-        print(".... file_def is ");
-        print(".... index: " & to_text_field(tmp_file_def_ptr.rec_idx));
-        print(".... name: " & tmp_file_def_ptr.file_name);
-    end procedure;
-
-    procedure print_inst_element_number(
-        variable inst_list : in inst_element_ptr;
-        variable element_number : in integer;
-        variable file_list : inout file_def_ptr
-    ) is
-        variable inst_ptr : inst_element_ptr;
-    begin
-        inst_ptr := inst_list;
-        while inst_ptr.next_rec /= null loop
-            if inst_ptr.element_number = element_number then
-                print_inst_ptr(inst_ptr, file_list);
-                exit;
-            else
-                inst_ptr := inst_ptr.next_rec;
-            end if;
-        end loop;
-    end procedure;
-
-    procedure print_inst_ptr(
-        variable inst_ptr : in inst_element_ptr;
-        file_list : inout file_def_ptr
-    ) is
-        variable tmp_txt : stm_text;
-        variable fn : text_line;
-        variable pl : integer;
-    begin
-        print(".... -----------------------------------------------------------------");
-        print(".... instruction is " & inst_ptr.inst);
-        print(".... internal list element number: " & to_text_field(inst_ptr.element_number));
-        print(".... instruction file linenumber: " & to_text_field(inst_ptr.file_line));
-        print(".... instruction file idx: " & to_text_field(inst_ptr.file_idx));
-        get_inst_file_name(file_list, inst_ptr.file_idx, fn);
-        print(".... instruction file name: " & fn);
+        print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
+        print(".... instruction element number: " & to_text_field(inst_element_num));
+        print(".... instruction file name: " & insts.element_ptrs(inst_element_num).src_loc.file_name);
+        print(".... instruction file linenumber: " & to_text_field(insts.element_ptrs(inst_element_num).src_loc.file_line));              
         for i in 1 to 6 loop
-            pl := fld_len(inst_ptr.parameters(i));
+            pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
-                print(".... par " & to_text_field(i) & " text" & inst_ptr.parameters(i)(1 to pl));
+                print(".... par" & integer'image(i) & insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             end if;
         end loop;
-        txt_to_string(inst_ptr.txt, tmp_txt);
-        print(".... text: " & tmp_txt);
+        print(".... text: " & insts.element_ptrs(inst_element_num).inst_args.txt_enclosing_quote & insts.element_ptrs(inst_element_num).inst_args.txt & insts.element_ptrs(inst_element_num).inst_args.txt_enclosing_quote);
     end procedure;
 
-    procedure dump_inst_list(
-        variable inst_list : in inst_element_ptr;
-        variable file_list : inout file_def_ptr
+    procedure dump_inst_sequence(
+        variable insts : in inst_sequence;
+        variable code_files : in file_def_list
     ) is
-        variable inst_ptr : inst_element_ptr;
     begin
-        inst_ptr := inst_list;
-        print("++++ --dump_inst_list-----------------------------------------------------");
-        while inst_ptr.next_rec /= null loop
-            print_inst_ptr(inst_ptr, file_list);
-            inst_ptr := inst_ptr.next_rec;
+        print("++++ --dump_var_pool_ordered-----------------------------------------------------");
+        for i in 0 to insts.last_element_num loop
+            print_inst_element(insts, i, code_files);
         end loop;
-        -- get the last one
-        print_inst_ptr(inst_ptr, file_list);
     end procedure;
 
-    procedure dump_vars(
-        variable var_list : in var_field_ptr;
+    procedure dump_var_pool_ordered(
+        variable vars : in var_pool_ordered;
         constant machine_value_width : in integer
     ) is
-        variable ptr : var_field_ptr;
     begin
-        ptr := var_list;
         print("---- -----------------------------------------------------------------");
         print("---- -- dump variables start -----------------------------------------");
-        while ptr.next_rec /= null loop
-            dump_var_field(ptr, machine_value_width);
-            ptr := ptr.next_rec;
+        for i in 0 to vars.last_element_num loop
+            dump_var_element(vars, i, machine_value_width);
         end loop;
-        -- the last one
-        dump_var_field(ptr, machine_value_width);
     end procedure;
 
-    procedure dump_var(
-        variable var_list : in var_field_ptr;
-        variable index : in integer;
-        constant machine_value_width : in integer
-    ) is
-        variable ptr : var_field_ptr;
-        variable found : boolean;
-    begin
-        ptr := var_list;
-        found := false;
-        while ptr.next_rec /= null loop
-            if ptr.var_index = index then
-                dump_var_field(ptr, machine_value_width);
-                found := true;
-                exit;
-            end if;
-            ptr := ptr.next_rec;
-        end loop;
-        -- the last one
-        if not found then
-            if ptr.var_index = index then
-                dump_var_field(ptr, machine_value_width);
-            end if;
-        end if;
-    end procedure;
-
-    procedure dump_var_field(
-        variable ptr : var_field_ptr;
+    procedure dump_var_element(
+        variable vars : in var_pool_ordered;
+        variable var_element_num : in integer;
         constant machine_value_width : in integer
     ) is
         variable std_line : line;
@@ -1014,57 +939,58 @@ package body tb_interpreter_util_pkg is
         variable tmp_std_line_print : line;
         variable stm_array : stm_array_ptr;
     begin
+        assert var_element_num <= vars.last_element_num
+        report "dump  var element, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        severity failure;
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
-        print("---- var_name: " & ptr.var_name);
-        print("---- var_scope: " & ptr.var_scope);
-        print("---- var_index: " & to_text_field(ptr.var_index));
-        print("---- var_value: 0x" & to_text_field_hex(ptr.var_value(0)));
-        print("---- var_org_value: 0x" & to_text_field_hex(ptr.var_org_value(0)));
-        if ptr.var_stm_type = STM_VALUE_TYPE then
-            print("---- var_stm_type: STM_VALUE_TYPE");
-        elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
-            print("---- var_stm_type: STM_CONST_VALUE_TYPE");
-        elsif ptr.var_stm_type = STM_CONST_VALUE_TYPE then
-            print("---- var_stm_type: STM_CONST_VALUE_TYPE");
-        elsif ptr.var_stm_type = STM_TEXT_TYPE then
-            print("---- var_stm_type: STM_TEXT_TYPE");
+        print("---- var name: " & vars_element_ptrs(var_element_num).name);
+        print("---- var element num: " & to_text_field(var_element_num));
+        print("---- var_value: 0x" & to_text_field_hex(vars_element_ptrs(var_element_num).values(0)));
+        print("---- var_org_value: 0x" & to_text_field_hex(vars_element_ptrs(var_element_num).values_org(0)));
+        if vars_element_ptrs(var_element_num).typ = STM_VALUE then
+            print("---- var type: STM_VALUE");
+        elsif vars_element_ptrs(var_element_num).typ = STM_CONST_VALUE then
+            print("---- var type: STM_CONST_VALUE");
+        elsif vars_element_ptrs(var_element_num).typ = STM_CONST_VALUE then
+            print("---- var type: STM_CONST_VALUE");
+        elsif vars_element_ptrs(var_element_num).typ = STM_TEXT then
+            print("---- var type: STM_TEXT");
             txt_to_string(ptr.var_stm_text, tmp_str);
-            print("---- var_stm_text: " & tmp_str);
-            print("---- var_stm_text_enclosing_quote: " & ptr.var_stm_text_enclosing_quote);
-        elsif ptr.var_stm_type = STM_ARRAY_TYPE then
-            print("---- var_stm_type: STM_ARRAY_TYPE");
-            stm_array := ptr.var_stm_array;
+            print("---- var_txt: "& vars_element_ptrs(var_element_num).txt_enclosing_quote & vars_element_ptrs(var_element_num).txt & vars_element_ptrs(var_element_num).txt_enclosing_quote);
+        elsif vars_element_ptrs(var_element_num).typ = STM_ARRAY then
+            print("---- var_stm_type: STM_ARRAY");
+            stm_array := vars_element_ptrs(var_element_num).arr;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := ptr.var_stm_array(array_index);
                 print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
             end loop;
-            stm_array := ptr.var_org_stm_array;
+            stm_array := vars_element_ptrs(var_element_num).arr_org;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := ptr.var_stm_array(array_index);
                 print("-------- org index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
             end loop;
-        elsif ptr.var_stm_type = STM_LINES_TYPE then
-            print("---- var_stm_type: STM_LINES_TYPE");
-            assert ptr.var_stm_lines /= null
-            report " stm_lines_ptr pointer is null "
+        elsif vars_element_ptrs(var_element_num).typ = STM_LINES then
+            print("---- var_stm_type: STM_LINES");
+            assert vars_element_ptrs(var_element_num).lines /= null
+            report " dump  var element, stm_lines_ptr pointer is null "
             severity failure;
-            print("-------- stm_lines.size: " & to_text_field(ptr.var_stm_lines.size));
-            stm_line_ptr := ptr.var_stm_lines.stm_line_list;
+            print("-------- stm_lines.size: " & to_text_field(vars_element_ptrs(var_element_num).lines.size));
+            stm_line_ptr := vars_element_ptrs(var_element_num).lines.line_list;
             while stm_line_ptr /= null loop
                 print("-------- stm_line_ptr.line_number: " & to_text_field(stm_line_ptr.line_number));
-                if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
-                    print("-------- stm_line_ptr.line_type: STM_LINE_TEXT_TYPE");
+                if stm_line_ptr.line_type = STM_LINE_TEXT then
+                    print("-------- stm_line_ptr.line_type: STM_LINE_TEXT");
                     std_line := stm_line_ptr.line_content;
                     tmp_str_ptr := new stm_text;
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
                     stm_text_ptr_to_line(tmp_str_ptr, std_line);
                     stm_line_ptr.line_content := std_line;
                     txt_print(tmp_str_ptr);
-                elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
-                    print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY_TYPE");
+                elsif stm_line_ptr.line_type = STM_LINE_ARRAY then
+                    print("-------- stm_line_ptr.line_type: STM_LINE_ARRAY");
                     success := true;
                     print("-------- stm_line_ptr.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
                     array_index := 0;
@@ -1081,19 +1007,19 @@ package body tb_interpreter_util_pkg is
                 end if;
                 stm_line_ptr := stm_line_ptr.nexstm_line;
             end loop;
-            stm_line_ptr := ptr.var_org_stm_lines.stm_line_list;
+            stm_line_ptr := vars_element_ptrs(var_element_num).lines_org.line_list;
             while stm_line_ptr /= null loop
                 print("-------- stm_org_lines.line_number: " & to_text_field(stm_line_ptr.line_number));
-                if stm_line_ptr.line_type = STM_LINE_TEXT_TYPE then
-                    print("-------- stm_org_lines.line_type: STM_LINE_TEXT_TYPE");
+                if stm_line_ptr.line_type = STM_LINE_TEXT then
+                    print("-------- stm_org_lines.line_type: STM_LINE_TEXT");
                     std_line := stm_line_ptr.line_content;
                     tmp_str_ptr := new stm_text;
                     get_stm_text_ptr_from_line(std_line, tmp_str_ptr);
                     stm_text_ptr_to_line(tmp_str_ptr, std_line);
                     stm_line_ptr.line_content := std_line;
                     txt_print(tmp_str_ptr);
-                elsif stm_line_ptr.line_type = STM_LINE_ARRAY_TYPE then
-                    print("-------- stm_org_lines.line_type: STM_LINE_ARRAY_TYPE");
+                elsif stm_line_ptr.line_type = STM_LINE_ARRAY then
+                    print("-------- stm_org_lines.line_type: STM_LINE_ARRAY");
                     success := true;
                     print("-------- stm_org_lines.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
                     array_index := 0;
@@ -1110,46 +1036,52 @@ package body tb_interpreter_util_pkg is
                 end if;
                 stm_line_ptr := stm_line_ptr.nexstm_line;
             end loop;
-        elsif ptr.var_stm_type = STM_BUS_TYPE then
-            print("---- var_stm_type: STM_BUS_TYPE");
-        elsif ptr.var_stm_type = STM_SIGNAL_TYPE then
-            print("---- var_stm_type: STM_SIGNAL_TYPE");
-        elsif ptr.var_stm_type = STM_LABEL_TYPE then
-            if ptr.var_label /= null then
+        elsif vars_element_ptrs(var_element_num).typ = STM_BUS then
+            print("---- var_stm_type: STM_BUS");
+        elsif vars_element_ptrs(var_element_num).typ = STM_SIGNAL then
+            print("---- var_stm_type: STM_SIGNAL");
+        elsif vars_element_ptrs(var_element_num).typ = STM_LABEL then
+            if vars_element_ptrs(var_element_num).label_proc_ref /= null then
                 text_field_ptr_to_text_field(ptr.var_label, tmp_label);
-                print("---- var_label: " & tmp_label);
+                print("---- var_label_proc_ref: " & tmp_label);
             else
-                print("---- var_label: missing");
+                print("---- var_label_proc_ref: missing");
             end if;
-            if ptr.var_org_label /= null then
-                text_field_ptr_to_text_field(ptr.var_org_label, tmp_label);
-                print("---- var_org_label: " & tmp_label);
+            if vars_element_ptrs(var_element_num).label_proc_ref_org /= null then
+                text_field_ptr_to_text_field(ptr.label_proc_ref_org, tmp_label);
+                print("---- var_label_proc_ref_org: " & tmp_label);
             else
-                print("---- var_org_label: missing");
+                print("---- var_label_proc_ref_org: missing");
             end if;
-            print("---- var_stm_type: STM_LABEL_TYPE");
-        elsif ptr.var_stm_type = NO_VAR_TYPE then
-            print("---- var_stm_type: NO_VAR_TYPE");
+            print("---- var_stm_type: STM_LABEL");
+        elsif vars_element_ptrs(var_element_num).typ = NO_VAR then
+            print("---- var_stm_type: NO_VAR");
         end if;
     end procedure;
     
-    procedure dump_file_defs(
-        variable file_list : inout file_def_ptr
+    procedure print_file_def_element(
+        variable files : in file_def_list;
+        variable file_element_num : in integer
     ) is
-        variable tmp_file_def_ptr : file_def_ptr;
-        variable index : integer;
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "print file definition, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        severity failure;
+        print(".... -----------------------------------------------------------------");
+        print(".... file def is ");
+        print(".... file element num: " & integer'image(file_element_num));
+        print(".... file name: " & files.element_ptrs(file_element_num).absolute_file_name);
+    end procedure;
+    
+    procedure dump_file_defs(
+        variable files : in file_def_list
+    ) is
     begin
         print("---- -----------------------------------------------------------------");
         print("---- -- dump file defs start -----------------------------------------");
-        index := 0;
-        tmp_file_def_ptr := file_list;
-        while tmp_file_def_ptr.next_rec /= null loop
-            print_file_def(file_list, index);
-            tmp_file_def_ptr := tmp_file_def_ptr.next_rec;
-            index := index + 1;
+        for i in 0 to files.last_element_num loop
+            print_file_def_element(files, i);
         end loop;
-        -- the last one
-        print_file_def(file_list, index);
     end procedure;
     
     procedure print_runtime_context(
