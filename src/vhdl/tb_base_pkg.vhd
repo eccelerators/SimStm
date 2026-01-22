@@ -66,7 +66,6 @@ package tb_base_pkg is
 
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
-    type parameter_scope_text_field_array is array (1 to 6) of text_field;
     type parameter_text_field_array is array (1 to 6) of text_field;
     type parameter_index_array is array (1 to 6) of integer;
     type parameter_value_array is array (natural range <>) of unsigned;
@@ -196,7 +195,7 @@ package tb_base_pkg is
         called_proc_name : text_field;
         called_in_file_line : integer;
         called_in_file_name : text_line;    
-        par_scopes : parameter_scope_text_field_array;  
+        par_scopes : parameter_text_field_array;  
         loop_num : integer;
         curr_loop_count : stack_int_array;
         term_loop_count : stack_int_array;
@@ -264,6 +263,11 @@ package tb_base_pkg is
     procedure init_proc_pool_ordered(
         variable procs : inout proc_pool_ordered
     );
+        
+    function append_par_scopes(
+        variable par_text_fields : in parameter_text_field_array;
+        variable par_scopes : in parameter_text_field_array
+    ) return parameter_text_field_array;
     
     procedure init_inst_initial_context(
         variable iic : inout stm_inst_initial_context
@@ -341,6 +345,11 @@ package tb_base_pkg is
         variable s2_ptr : in text_field_ptr;
         variable so : out stm_text
     );
+
+    function textfield_cat(
+        s1 : text_field;
+        s2 : text_field
+    ) return text_field;
 
     function textfield_dot_cat(
         s1 : text_field;

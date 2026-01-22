@@ -88,8 +88,19 @@ package body tb_base_pkg is
     begin
         procs.element_ptrs := (others => null);
         procs.last_element_num := -1;
-    end procedure;   
+    end procedure;       
     
+    function append_par_scopes(
+        variable par_text_fields : in parameter_text_field_array;
+        variable par_scopes : in parameter_text_field_array
+    ) return parameter_text_field_array is
+        variable par_results : parameter_text_field_array;
+    begin
+        for i in 0 to 6 loop
+            par_results(i) := textfield_cat(par_text_fields, par_scopes);        
+        end loop;
+        return par_results;
+    end function;  
 
     procedure init_inst_initial_context(
         variable iic : inout stm_inst_initial_context
@@ -395,6 +406,27 @@ package body tb_base_pkg is
         end if;
         so := sc;
     end procedure;
+    
+    function textfield_cat(
+        s1 : text_field;
+        s2 : text_field
+    ) return text_field is
+        variable i : integer;
+        variable j : integer;
+        variable sc : text_field;
+    begin
+        sc := s1;
+        i := 1;
+        while sc(i) /= nul loop
+            i := i + 1;
+        end loop;
+        while s2(j) /= nul loop
+            sc(i) := s2(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
+        return sc;
+    end function;
 
     function textfield_dot_cat(
         s1 : text_field;

@@ -206,7 +206,7 @@ begin
         variable temp_int_b : integer;
         variable stm_value : unsigned(machine_value_width - 1 downto 0);
         variable stm_value_b : unsigned(machine_value_width - 1 downto 0);
-        variable par_scopes : parameter_scope_text_field_array;
+        variable par_scopes : parameter_text_field_array;
         variable var_scope : text_field;
         variable var_index : integer;
         variable number_found : integer;

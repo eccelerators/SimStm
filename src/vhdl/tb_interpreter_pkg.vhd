@@ -51,16 +51,7 @@ use work.tb_interpreter_util_pkg.all;
 use work.tb_interpreter_basic_pkg.all;
 
 package tb_interpreter_pkg is
-
-    procedure access_inst_element_parameters(
-        variable ie : inst_element;
-        variable vars : in var_field_ptr;
-        variable par_scopes : in parameter_scope_text_field_array;
-        variable par_text_fields : in parameter_text_field_array;
-        variable par_indexes : out parameter_index_array;
-        variable par_values : out parameter_value_array
-    );
-    
+  
     procedure collect_code_files(
         variable code_files : inout file_def_list;
         constant absolute_code_file_name : in text_line
@@ -94,8 +85,7 @@ package tb_interpreter_pkg is
     procedure check_instructions_in_initial_context(
         variable insts : inout inst_sequence; 
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
-        variable machine_value_width : integer       
+        variable procs : inout proc_pool_ordered     
     );
 
 end package;

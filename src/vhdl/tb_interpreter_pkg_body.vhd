@@ -53,32 +53,6 @@ use work.tb_interpreter_util_pkg.all;
 use work.tb_interpreter_basic_pkg.all;
 
 package body tb_interpreter_pkg is
- 
-    procedure access_inst_element_parameters(
-        variable ie : inst_element;
-        variable vars : in var_field_ptr;
-        variable par_scopes : in parameter_scope_text_field_array;
-        variable par_text_fields : in parameter_text_field_array;
-        variable par_indexes : out parameter_index_array;
-        variable par_values : out parameter_value_array
-    ) is
-        variable valid : integer;
-    begin
-        for i in 1 to 6 loop
-            if par_text_fields(i)(1) /= nul then
-                if is_digit(par_text_fields(i)(1)) then
-                    par_values(i) := stim_to_stm_value(par_text_fields(i), ie.src_loc, par_text_fields(i)'length);
-                else
-                    access_var(vars, par_scopes(i), par_text_fields(i), par_indexes(i), par_values(i), valid);
-                    assert valid /= 0
-                    report "variable in parameter number " & (integer'image(i)) & " is not valid!!" & lf &
-                    "file " & ie.src_loc.file_name & lf &
-                    "line " & (integer'image(ie.src_loc.file_line))
-                    severity failure;
-                end if;
-            end if;
-        end loop;
-    end procedure;
     
     procedure collect_code_files(
         variable code_files : inout file_def_list;
@@ -321,26 +295,26 @@ package body tb_interpreter_pkg is
     procedure check_instructions_in_initial_context(
         variable insts : inout inst_sequence; 
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
-        variable machine_value_width : integer       
-    ) is
-        variable fos : file_open_status;
-        variable afn : text_line;
-        variable file_line : integer;        
-        variable tl : text_line;
-        variable len : integer;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
-        variable valid_tokens : integer;
-        variable valid_ckeck : integer;
+        variable procs : inout proc_pool_ordered     
+    ) is   
         variable iic : stm_inst_initial_context;
+        variable par_scopes :parameter_text_field_array;
+        variable par_indexes : parameter_index_array;
+        variable par_values : parameter_value_array;
+        variable par_resolved_text_fields : parameter_text_field_array;
     begin
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
-            ie := insts.element_ptrs(i);
-            track_inst_initial_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
-            par_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
-            access_inst_element_parameters(var_list, file_line, file_name, par_scopes, par_text_fields, par_indexes, par_values);
+            track_inst_initial_context(insts.element_ptrs(i).slc, insts.element_ptrs(i).inst, insts.element_ptrs(i).inst_args, vars, iic);
+            init_par_scopes(par_scopes);
+            if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
+                par_scopes := (others => iic.proc_name);
+            end if;
+            if iic.code_section = CALL_PARAMS then
+                par_scopes := (1 => iic.called_proc_name, others => proc_name);
+            end if;
+            par_resolved_text_fields := append_par_scopes(insts.element_ptrs(i).inst_args.par_text_fields, par_scopes);
+            access_inst_element_parameters(insts.element_ptrs(i), vars, par_resolved_text_fields, par_scopes, par_indexes, par_values);
         end loop;
     end procedure;
         

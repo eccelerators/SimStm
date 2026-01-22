@@ -474,6 +474,30 @@ package body tb_interpreter_util_pkg is
         report lf & "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
     end procedure;
+    
+    procedure access_inst_element_parameters(
+        variable ie : inst_element;
+        variable vars : in var_field_ptr;
+        variable par_text_fields : in parameter_text_field_array;
+        variable par_scopes : in parameter_text_field_array;
+        variable par_indexes : out parameter_index_array;
+        variable par_values : out parameter_value_array
+    ) is
+        variable ptf : parameter_text_field_array;
+    begin
+        for i in 1 to 6 loop
+            if par_text_fields(i)(1) /= nul then
+                if is_digit(par_text_fields(i)(1)) then
+                    par_values(i) := stim_to_stm_value(par_text_fields(i), ie.src_loc, par_text_fields(i)'length);
+                else
+                    for i in 1 to 6 loop
+                        ptf := textfield_dot_cat(par_text_fields(i),par_scopes(i));
+                    end loop;
+                    access_var(vars, ptf(i), par_indexes(i), par_values(i));
+                end if;
+            end if;
+        end loop;
+    end procedure;
 
     procedure access_var(
         variable vars : in var_pool_ordered;
