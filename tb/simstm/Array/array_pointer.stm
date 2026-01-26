@@ -3,8 +3,7 @@ array test_array_pointer_des_array 1
 
 var test_array_pointer_var 0
 
-testArrayPointerCopy:
-proc
+proc testArrayPointerCopy ()
     call startStandardTestShell ()
 
     array size test_array_pointer_src_array test_array_pointer_var

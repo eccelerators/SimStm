@@ -189,14 +189,13 @@ package tb_instructions_pkg is
     );
 
     procedure append_inst_def(        
-        variable inst_defs : inout file_def_list;
+        variable inst_defs : inout inst_def_list;
         constant inst : in string;
         constant num_of_params : in integer
     );
 
     procedure check_valid_inst(
-        variable file_name : in text_line;
-        variable file_line : in integer;
+        variable slc : in src_locator;
         variable inst_defs : in inst_def_list;
         variable inst : in text_field;
         variable num_of_params : in integer

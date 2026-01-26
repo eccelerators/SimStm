@@ -184,3 +184,21 @@ proc failureTestCase ()
     lines insert message TestCaseLines TestCaseLinesPosition "<failure message=\""
      lines append message TestCaseLines "\"/>"
 end proc
+
+proc testTemplate ()
+    call startStandardTestShell ()
+    log message 0 "testTemplate shall never be called directly, it shall be overridden in any case"
+    call endStandardTestShell ()
+end proc
+
+proc testCase (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCase ()
+    call label TestToCall ()
+    call endTestCase ( 
+        equ  skipped skipped
+        equ failure StandardTestFailure
+    )
+end proc

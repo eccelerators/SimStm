@@ -47,6 +47,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 
 package body tb_instructions_pkg is
@@ -645,19 +646,19 @@ package body tb_instructions_pkg is
     
     
     procedure append_inst_def(        
-        variable inst_defs : inout file_def_list;
+        variable inst_defs : inout inst_def_list;
         constant inst : in string;
         constant num_of_params : in integer
     ) is
         variable nen : integer;
         variable ne_ptr : inst_def_element_ptr;
-        variable e_ptr : inst_def_element_pt;
+        variable e_ptr : inst_def_element_ptr;
     begin
         assert inst'high <= max_field_len
         report "creation of instruction with length greater than max_field_len attempted, inst " & inst
         severity failure;
         nen := inst_defs.last_element_num + 1;
-        ne_ptr := new inst_def_element_ptr;  
+        ne_ptr := new inst_def_element;  
         for i in 1 to inst'high loop
             ne_ptr.inst(i) := inst(i);
         end loop;   
@@ -695,7 +696,7 @@ package body tb_instructions_pkg is
                "line " & integer'image(slc.file_line)
         severity failure;
         il := fld_len(inst);
-        assert inst_defs.element_ptrs(hn).il = il
+        assert inst_defs.element_ptrs(hn).inst_len = il
         report "instruction found, inst " & inst & lf &
                "but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & lf &
                "file " & slc.file_name & lf &

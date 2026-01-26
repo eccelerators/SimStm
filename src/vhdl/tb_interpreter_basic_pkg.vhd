@@ -81,5 +81,17 @@ package tb_interpreter_basic_pkg is
         vars : var_pool_ordered;
         var_name : text_field
     ) return integer;
+    
+    procedure set_var_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable var_type : out stm_var_type
+    );
+    
+    procedure set_proc_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable proc_type : out boolean
+    );
 
 end package;

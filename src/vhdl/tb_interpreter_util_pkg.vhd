@@ -64,7 +64,7 @@ package tb_interpreter_util_pkg is
     );
 
     procedure txt_print_wvar(
-        variable var_list : in var_field_ptr;
+        variable var_list : in var_element_ptr;
         variable scope : in text_field;
         variable ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
@@ -76,7 +76,7 @@ package tb_interpreter_util_pkg is
     );
 
     procedure stm_text_substitude_wvar(
-        variable var_list : in var_field_ptr;
+        variable var_list : in var_element_ptr;
         variable scope : in text_field;
         variable ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
@@ -90,18 +90,23 @@ package tb_interpreter_util_pkg is
 
     procedure access_inst_element_parameters(
         variable ie : inst_element;
-        variable vars : in var_field_ptr;
+        variable vars : in var_element_ptr;
         variable par_text_fields : in parameter_text_field_array;
         variable par_scopes : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
         variable par_values : out parameter_value_array
     );
+    
+    procedure access_proc(
+        variable procs : in var_pool_ordered;
+        variable proc_name : in text_field;
+        variable proc_element_num : out integer
+    );
 
     procedure access_var(
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_element_num : out integer;
-        variable var_value : out integer
+        variable var_element_num : out integer
     );
 
     procedure access_var(

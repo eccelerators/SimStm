@@ -141,7 +141,7 @@ package body tb_interpreter_pkg is
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, inst_args, vars, iic);
                     if inst(1 to il) = INSTR_CONST then
-                        var_type := STM_CONST;
+                        var_type := T_CONST;
                         vn := textfield_dot_cat(iic.in_namespace_name, inst_args.par_text_fields(1), iic.in_proc_name);
                         insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
                     end if;                
@@ -199,9 +199,9 @@ package body tb_interpreter_pkg is
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, inst_args, vars, iic);
                     set_var_type(inst, il, var_type);
-                    if var_type /= STM_NO_VAR then
+                    if var_type /= T_NO_VAR then
                         vn := textfield_dot_cat(iic.in_namespace_name, inst_args.par_text_fields(1), iic.in_proc_name);
-                        if is_digit(par_text_fields(2)(1)) or var_type = STM_TEXT or var_type = STM_LINES or var_type = STM_LABEL then                   
+                        if is_digit(par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then                   
                             insert_var_element(slc, vars, vn, inst_args, var_type, var_element_num, machine_value_width, debug);
                         else
                             access_var(var_list, var_scope, par_text_fields(2), c_var_index, c_var_value, c_valid);
@@ -264,11 +264,11 @@ package body tb_interpreter_pkg is
                     track_inst_initial_context(slc, inst, inst_args, vars, iic);
                     set_var_type(inst, il, var_type);
                     set_proc_type(inst, il, proc_type);      
-                    if var_type = STM_NO_VAR and proc_type = false then
+                    if var_type = T_NO_VAR and proc_type = false then
                         -- anything but a constant, variable or proc definition, thus always an instruction
-                        append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                        append_inst(slc, insts, par_text_fields, str_ptr, txt_enclosing_quote);
                     else
-                        if var_type /= STM_CONST_VALUE then 
+                        if var_type /= T_CONST_VALUE then 
                             -- constant definitions and declarations are already done in pass 0 and are never added as an instruction
                             -- variable definitions and declaration already done in pass 1 but need to be an instruction too in case of living in proc parameters or proc local area be reinitilized on each call.
                             -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
@@ -276,12 +276,12 @@ package body tb_interpreter_pkg is
                                 if inst_context.in_proc_advanced then
                                     -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
                                     insert_proc_element(file_name, file_line, procs, par_text_fields(1), insts.last_element_num + 1);
-                                    append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                                    append_inst(slc, insts, par_text_fields, str_ptr, txt_enclosing_quote);
                                 end if;
                             else
                                 if var_scope(var_scope'length) /= '.' then
                                     -- any other local var definition and declaration living in proc parameters or proc local area to be added as instruction
-                                    append_inst(file_name, file_line, insts, par_text_fields, str_ptr, txt_enclosing_quote);
+                                    append_inst(slc, insts, par_text_fields, str_ptr, txt_enclosing_quote);
                                 end if;
                             end if;
                         end if;

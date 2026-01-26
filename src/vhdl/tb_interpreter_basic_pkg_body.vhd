@@ -330,27 +330,27 @@ package body tb_interpreter_basic_pkg is
 
     begin
         case var_stm_type is
-            when STM_LINES =>
+            when T_LINES =>
                 inistm_lines_var;
                 if debug then
                     print("add lines var " & vars.element_ptrs(ven).var_name);
                 end if;
-            when STM_ARRAY =>
+            when T_ARRAY =>
                 inistm_array_var;
                 if debug then
                     print("add array var " & vars.element_ptrs(ven).var_name & ", value " & par_text_fields(2));
                 end if;
-            when STM_TEXT =>
+            when T_TEXT =>
                 init_stm_text_var;
                 if debug then
                     print("add text var " & vars.element_ptrs(ven).var_name & ", text " & txt_enclosing_quote & str_ptr & txt_enclosing_quote);
                 end if;
-            when STM_LABEL =>
+            when T_LABEL =>
                 init_label_var;
                 if debug then
                     print("add label var " & vars.element_ptrs(ven).var_name & ", value " & par_text_fields(2));
                 end if;
-            when STM_CONST =>
+            when T_CONST =>
                 init_label_var;
                 if debug then
                     print("add constant var " & vars.element_ptrs(ven).var_name & ", value " & par_text_fields(2));
@@ -434,5 +434,45 @@ package body tb_interpreter_basic_pkg is
         end loop;
         return en;
     end function;
+    
+    procedure set_var_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable var_type : out stm_var_type
+    ) is
+    begin
+        var_type := T_NO_VAR;
+        if inst(1 to inst_len) = INSTR_VAR then
+            var_type := T_VALUE;
+        elsif inst(1 to inst_len) = INSTR_CONST then
+            var_type := T_CONST_VALUE;
+        elsif inst(1 to inst_len) = INSTR_ARRAY then
+            var_type := T_ARRAY;
+        elsif inst(1 to inst_len) = INSTR_LINES then
+            var_type := T_LINES;
+        elsif inst(1 to inst_len) = INSTR_FILE then
+            var_type := T_TEXT;
+        elsif inst(1 to inst_len) = INSTR_BUS then
+            var_type := T_BUS;
+        elsif inst(1 to inst_len) = INSTR_SIGNAL then
+            var_type := T_SIGNAL;
+        elsif inst(1 to inst_len) = INSTR_LABEL then
+            var_type := T_LABEL;
+        end if; 
+    end procedure;
+    
+    procedure set_proc_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable proc_type : out boolean
+    ) is
+    begin
+        proc_type := false;
+        if inst(1 to inst_len) = INSTR_PROC_PAR_OPEN then
+            proc_type := true;
+        elsif inst(1 to inst_len) = INSTR_PROC_PAR_NOPAR then
+            proc_type := true;
+        end if;
+    end procedure;
     
 end package body;

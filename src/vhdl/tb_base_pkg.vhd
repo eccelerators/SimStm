@@ -50,6 +50,14 @@ use ieee.numeric_std.all;
 use work.tb_limits_pkg.all;
 
 package tb_base_pkg is
+    
+    constant TRACE_EXECUTED_LINES : integer := 0;
+    constant TRACE_INSTRUCTIONS : integer := 1;
+    constant TRACE_VARIABLES : integer := 2;
+    constant TRACE_FILES : integer := 3;
+    constant TRACE_IF_TREES : integer := 4;
+    constant TRACE_CALLS : integer := 5;
+    constant TRACE_INTERRUPTS : integer := 6;
 
     type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
@@ -91,6 +99,7 @@ package tb_base_pkg is
     type file_def_element is record
         absolute_file_name : text_line;
     end record;
+    type file_def_element_ptrs is array (0 to max_num_of_file_def_elements - 1) of file_def_element_ptr; 
     type file_def_list is record
         element_ptrs : file_def_element_ptrs;
         last_element_num : integer;
@@ -109,7 +118,7 @@ package tb_base_pkg is
         inst_len : integer;
         num_of_params : integer;
     end record;
-    type inst_def_element_ptrs is array (0 to max_num_of_inst_def_elements - 1) of inst_def_element;    
+    type inst_def_element_ptrs is array (0 to max_num_of_inst_def_elements - 1) of inst_def_element_ptr;    
     type inst_def_list is record
         element_ptrs : inst_def_element_ptrs;
         last_element_num : integer;
@@ -118,11 +127,11 @@ package tb_base_pkg is
     type inst_element;
     type inst_element_ptr is access inst_element;
     type inst_element is record
-        src_loc : src_locator;
+        slc : src_locator;
         inst : text_field;
         inst_args : inst_arguments;
     end record;
-    type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element;
+    type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element_ptr;
     type inst_sequence is record
         element_ptrs : inst_element_ptrs;
         last_element_num : integer;
@@ -131,8 +140,8 @@ package tb_base_pkg is
     type stm_array is array (natural range <>) of unsigned;
     type stm_array_ptr is access stm_array;
 
-    type stm_line_type is (STM_LINE_TEXT,
-        STM_LINE_ARRAY
+    type stm_line_type is (T_LINE_TEXT,
+        T_LINE_ARRAY
     );
 
     type stm_line;
@@ -154,15 +163,15 @@ package tb_base_pkg is
     end record;
 
     type stm_var_type is (
-        STM_VALUE,
-        STM_CONST,
-        STM_TEXT,
-        STM_ARRAY,
-        STM_LINES,
-        STM_BUS,
-        STM_SIGNAL,
-        STM_LABEL,
-        STM_NO_VAR
+        T_VALUE,
+        T_CONST,
+        T_TEXT,
+        T_ARRAY,
+        T_LINES,
+        T_BUS,
+        T_SIGNAL,
+        T_LABEL,
+        T_NO_VAR
     );
 
     type stm_code_section is (
@@ -179,22 +188,22 @@ package tb_base_pkg is
         called_proc_name : text_field;
     end record;
     
-    type stm_call_process_state_type is (
-        NONE,
+    type stm_call_process_state is (
+        IN_NONE,
         IN_PROC_PARAMS,
         IN_PROC_BODY,
         IN_CALL_PARAMS
     );
 
     type stm_runtime_context is record
-        inst_element_number_to_return_to_after_call : integer;
-        inst_element_number_of_called_proc : integer;
-        inst_element_number_of_called_proc_params_end : integer;
-        inst_element_number_of_call_params : integer;
-        call_process_state : t_stm_call_process_state_type;    
+        ien : integer;
+        ien_to_return_to_after_call : integer;
+        ien_of_called_proc_name : integer;
+        ien_of_called_proc_params_end : integer;
+        ien_of_call_params : integer;
+        call_process_state : stm_call_process_state;    
         called_proc_name : text_field;
-        called_in_file_line : integer;
-        called_in_file_name : text_line;    
+        called_at_src_location : src_locator;
         par_scopes : parameter_text_field_array;  
         loop_num : integer;
         curr_loop_count : stack_int_array;
@@ -208,7 +217,7 @@ package tb_base_pkg is
     type var_element;
     type var_element_ptr is access var_element;
     type var_element is record
-        src_loc : src_locator;
+        slc : src_locator;
         name : text_field;
         values : stm_values_ptr;
         values_org : stm_values_ptr;
@@ -233,12 +242,12 @@ package tb_base_pkg is
     type proc_element;
     type proc_element_ptr is access proc_element;
     type proc_element is record
-        src_loc : src_locator;
+        slc : src_locator;
         name : text_field;
         element_num : integer;
-        point_to_inst_element_num : integer;
+        pointer_to_inst_element_num : integer;
     end record;
-    type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_field_ptr;
+    type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_element_ptr;
     type proc_pool_ordered is record
         element_ptrs : proc_element_ptrs;
         last_element_num : integer;
@@ -265,8 +274,8 @@ package tb_base_pkg is
     );
         
     function append_par_scopes(
-        variable par_text_fields : in parameter_text_field_array;
-        variable par_scopes : in parameter_text_field_array
+        par_text_fields : parameter_text_field_array;
+        par_scopes : parameter_text_field_array
     ) return parameter_text_field_array;
     
     procedure init_inst_initial_context(
@@ -274,12 +283,11 @@ package tb_base_pkg is
     );
     
     procedure init_runtime_context(
-        variable rc : inout t_stm_runtime_context
+        variable rc : inout stm_runtime_context
     );
     
     procedure append_inst(
-        variable file_name : in text_line; 
-        variable file_line : in integer;
+        variable slc : in src_locator; 
         variable insts : inout inst_sequence;
         variable inst : text_field;
         variable par_text_fields : in parameter_text_field_array;  
@@ -296,43 +304,30 @@ package tb_base_pkg is
     procedure combine_to_absolute_file_name(
         variable path_name : in string; 
         variable file_name : in string;
-        variable absolut_code_file_name : out text_line
-    );
-        
-    procedure set_var_type(
-        variable inst : in text_field;
-        variable inst_len : in integer;
-        variable var_type : out stm_var_type
+        variable absolut_file_name : out text_line
     );
     
-    procedure set_proc_type(
-        variable inst : in text_field;
-        variable inst_len : in integer;
-        variable proc_type : out boolean
-    );
+    function extract_parameters(
+        ts : token_text_field_array
+    ) return parameter_text_field_array;
  
-    procedure insert_proc_element(
-        variable procs : inout proc_pool_ordered;
-        variable pe : proc_field_ptr
-    );
-    
     function bin2integer(
-        bin_number : in text_field;
-        src_loc : in scr_locator
+        slc : src_locator;
+        bin_number : text_field
     ) return integer;
 
     function bin2stm_value(
-        bin_number : in text_field;
-        src_loc : in scr_locator;
-        machine_value_width : in integer
+        slc : src_locator;
+        bin_number : text_field;
+        machine_value_width : integer
     ) return unsigned;
 
     function c2int(
-        c : in character
+        c : character
     ) return integer;
 
     function c2std_vec(
-        c : in character
+        c : character
     ) return std_logic_vector;
 
     function ew_str_cat(
@@ -406,13 +401,13 @@ package tb_base_pkg is
     );
     
     function order_is_less_than_failure_on_equal(
-        slc : in src_location;
-        s1 : in text_field;
-        s2 : in text_field
+        slc : src_locator;
+        s1 : text_field;
+        s2 : text_field
     ) return boolean;
 
     function fld_len(
-        s : in text_field
+        s : text_field
     ) return integer;
 
     procedure get_line_from_str(
@@ -454,26 +449,26 @@ package tb_base_pkg is
     );
 
     function hex2integer(
-        src_loc : in src_locator;
-        hex_number : in text_field 
+        slc : src_locator;
+        hex_number : text_field 
     ) return integer;
 
     function hex2stm_value(
-        src_loc : in src_locator;
-        hex_number : in text_field;
-        machine_value_width : in integer
+        slc : src_locator;
+        hex_number : text_field;
+        machine_value_width : integer
     ) return unsigned;
 
     function is_digit(
-        constant c : in character
+        constant c : character
     ) return boolean;
 
     function is_txt_var_first_character(
-        constant c : in character
+        constant c : character
     ) return boolean;
 
     function is_space(
-        constant c : in character
+        constant c : character
     ) return boolean;
 
     procedure init_text_field(
@@ -495,14 +490,14 @@ package tb_base_pkg is
     ) return character;
 
     function stim_to_integer(
-        slc : src_file_locator;
-        field : in text_field
+        slc : src_locator;
+        field : text_field
     ) return integer;
 
     function stim_to_stm_value(
-        slc : src_file_locator;
-        field : in text_field;
-        machine_value_width : in integer
+        slc : src_locator;
+        field : text_field;
+        machine_value_width : integer
     ) return unsigned;
 
     procedure stm_file_append(
@@ -615,11 +610,11 @@ package tb_base_pkg is
         constant machine_value_width : in integer);
 
     function stm_text_crop(
-        txt : in stm_text
+        txt : stm_text
     ) return string;
 
     function stm_text_len(
-        s : in stm_text
+        s : stm_text
     ) return integer;
 
     procedure stm_text_ptr_to_line(
@@ -633,20 +628,20 @@ package tb_base_pkg is
     );
 
     function str2integer(
-        str : in string
+        str : string
     ) return integer;
 
     function str2stm_value(
-        str : in string;
-        machine_value_width : in integer
+        str : string;
+        machine_value_width : integer
     ) return unsigned;
 
     function text_line_crop(
-        txt : in text_line
+        txt : text_line
     ) return string;
 
     function text_line_len(
-        s : in text_line
+        s : text_line
     ) return integer;
 
     procedure txt_print(
@@ -675,7 +670,7 @@ package tb_base_pkg is
     );
 
     function txt_field_to_string(
-        s : in text_field
+        s : text_field
     ) return string;
 
     procedure stm_text_copy_to_ptr(

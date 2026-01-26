@@ -173,11 +173,6 @@ begin
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
         variable act_term_loop_count : integer := 0;
---        variable stack_loop_num : stack_int_array := (others => 0);
---        variable stack_curr_loop_count : stack_int_array_array := (others => (others => 0));
---        variable stack_term_loop_count : stack_int_array_array := (others => (others => 0));
---        variable stack_loop_line : stack_int_array_array := (others => (others => 0));
---        variable stack_loop_if_enter_level : stack_int_array := (others => 0);
         variable loglevel : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
         variable resume : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
         variable verify_passes_count : integer := 0;
@@ -268,16 +263,12 @@ begin
 
         variable interrupt_number : integer := 0;
         variable branch_to_interrupt : boolean := false;
-        variable branch_to_interrupt_proc : text_field;
-        variable branch_to_interrupt_proc_std_txt_io_line : line;
+        variable branch_to_interrupt_proc_name : text_field;
+        variable branch_to_interrupt_proc_name_std_txt_io_line : line;
         variable branch_to_interrupt_instruction_element_number : integer := 0;
 
-        variable tmp_called_proc : text_field;
         variable no_scope : text_field;
-        variable none : text_field;
         
-        variable rc : t_stm_runtime_context;
-
     begin
         nul_scope(1) := nul;
         marker <= (others => '0');
@@ -314,18 +305,17 @@ begin
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
         parse_instructions_and_procs(code_files, inst_defs, insts, procs, machine_value_width); 
-        print(integer'image(procs.last_elment_num - noc) & "procedures"); 
-        print(integer'image(insts.last_elment_num - noc) & "instructions"); 
+        print(integer'image(procs.last_elment_num) & "procedures"); 
+        print(integer'image(insts.last_elment_num) & "instructions"); 
 
         print("checking if all variables are initially defined for all instructions");
         check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
      
         print("starting stimuli execution");
-        ien := 0;
+
         sp := 0;
-        for i in 0 to stack'length - 1 loop
-            init_runtime_context(rcs(i));
-        end loop;
+        init_runtime_context(rcs(sp));
+        rcs(sp).ien := 0;
         
         -- using the inst list, get the inst element and execute it as per the statements in the elsif tree.
         while ien < inst_list.element_count loop
@@ -338,70 +328,57 @@ begin
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
                 if not inst_context.in_proc_advanced_parameters and not inst_context.in_call_advanced_parameters then
-                    resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_std_txt_io_line);
+                    resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_name_std_txt_io_line);
                 end if;
             end if;
 
             if main_entered = 0 then
-                -- main entry points have no parameters and have the form 'proc testMainSomething ()'.
-                -- main tests mustn't reach their end proc but must be terminated by a reasonable finish instruction inside the proc                  
-                access_var(vars, nul_scope, main_proc_name, var_index, main_inst_element, valid, machine_value_width);
-                assert valid /= 0
-                report lf & "Entry point proc Main:'" & main_proc_name(1 to fld_len(main_proc_name)) & "' scope:'.' not found !"
-                severity failure;  
-                ien := main_inst_element;
-                ie := insts.element_ptrs(ien);
-                print("exec main entry line " & (integer'image(file_line)) & " " & inst(1 to il) & " in file " & text_line_crop(file_name));
-                main_entered := 1;
-                sp := sp + 1; 
-                init_runtime_context(rcs(sp));    
-                rcs(sp).inst_element_number_of_called_proc := ien;                     
-                rcs(sp).called_proc := main_proc_name;
-                rcs(sp).called_in_file_line := file_line;
-                rcs(sp).called_in_file_name := file_name;
+                sp := sp + 1;
+                init_runtime_context(rcs(sp));
+                -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself               
+                access_proc(procs, main_proc_name, rcs(sp).ien); 
+                ie := insts.element_ptrs(rcs(sp).ien);
+                print("exec main entry proc line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                main_entered := 1;              
+                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
+                rcs(sp).called_proc_name := main_proc_name;
+                rcs(sp).called_at_src_location := ie.slc;
 
             elsif branch_to_interrupt then
-                if (sp >= 31) then
-                    assert false
-                    report " line " & (integer'image(file_line)) & " interrupt enter stack over run, calls to deeply nested!!"
-                    severity failure;
-                end if;
-                if (sp >= 31) then
-                    assert false
-                    report " line " & (integer'image(file_line)) & " interrupt enter interrupt number stack over run, interrupts to deeply nested!!"
-                    severity failure;
-                end if;
+                assert sp < max_num_of_stack_elements
+                report "branch to interrupt, stack over run" & proc_name & lf &
+                       "file " & slc.file_name & lf &
+                       "line" & integer'image(slc.file_line)
+                severity failure;
+                sp := sp + 1;
+                init_runtime_context(rcs(sp));
                 interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
                 interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
                 interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := sp;
                 v_set_interrupt_in_service := '1';
                 set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);               
-                line_to_text_field(branch_to_interrupt_proc_std_txt_io_line, branch_to_interrupt_proc);
-                access_var(vars, nul_scope, branch_to_interrupt_proc, var_index, branch_to_interrupt_instruction_element_number, valid, machine_value_width);
-                assert valid /= 0
-                report lf & "Interrupt entry point branch_to_interrupt_proc not found !"
-                severity failure;
-                ien := branch_to_interrupt_instruction_element_number;
-                ie := insts.element_ptrs(ien);
-                sp := sp + 1; 
-                init_runtime_context(rcs(sp));   
-                rcs(sp).inst_element_number_of_called_proc := ien;                     
-                rcs(sp).called_proc := main_proc_name;
-                rcs(sp).called_in_file_line := file_line;
-                rcs(sp).called_in_file_name := file_name;                             
+                line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
+                access_proc(procs, branch_to_interrupt_proc_name, rcs(sp).ien);                
+                ie := insts.element_ptrs(rcs(sp).ien);
+                if trc_on(TRACE_INTERRUPTS)then
+                    print("exec interrupt line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                end if;   
+                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
+                rcs(sp).called_proc := branch_to_interrupt_proc_name;
+                rcs(sp).called_at_src_location := ie.slc;                          
                 wait for 0 ns;
 
             else
-                ien := ien + 1;
-                ie := insts.element_ptrs(ien);
+                rcs(sp) := rcs(sp) + 1;
+                ie := insts.element_ptrs(rcs(sp));
                 access_inst_element_parameters(ie, vars, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);
-                if trc_on(3) = '1' then
+                if trc_on(TRACE_FILES) then
                     dump_file_defs(file_list);
                 end if;
-                if trc_on(2) = '1' then
+                if trc_on(TRACE_VARIABLES) then
                     dump_vars(vars, machine_value_width);
                 end if;
-                if trc_on(1) = '1' then
+                if trc_on(TRACE_INSTRUCTIONS) then
                     print_inst_element_number(inst_list, ien, file_list);
                 end if;
 
@@ -409,8 +386,8 @@ begin
                 executing_file <= file_name;
                 wait for 100 ps;
 
-                if trc_on(0) = '1' then
-                    print("exec line " & (integer'image(file_line)) & " " & inst(1 to il) & " (" & text_line_crop(file_name) & ")");
+                if trc_on(TRACE_EXECUTED_LINES) then
+                    print("exec instruction line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name);
                 end if;
 
                 -- namespace "a_namespace"
@@ -1047,10 +1024,7 @@ begin
                     end if;
                     if if_state(if_level) = false then
                         ien := ien + 1;
-                        ien := branch_to_interrupt_instruction_element_number;
-                        search_inst_element_ptr(inst_list, ien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                        access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
-                        track_inst_context(inst, par_text_fields, file_line, file_name, var_list, inst_context);
+                        ie := insts.element_ptrs(ien);
                         par_scopes := (others => textfield_dot_cat(inst_context.in_namespace_name, inst_context.in_proc_name));
                         access_inst_element_parameters(vars, file_name, file_line, par_scopes, par_text_fields, par_indexes, par_values);
                         num_of_if_in_false_if_leave(if_level) := 0;
@@ -1231,8 +1205,8 @@ begin
                 -- loop loop_num
                 -- loop 100
                 elsif inst(1 to il) = INSTR_LOOP then
-                    stack_loop_if_enter_level(sp) := if_level;
-                    act_loop_num := stack_loop_num(sp);
+                    rcs(sp).loop_if_enter_level := if_level;
+                    act_loop_num := rcs(sp).loop_num;
                     if trc_on(5) = '1' then
                         report inst(1 to il) & ": ien: " & integer'image(ien) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to il) & ":  sp:" & integer'image(sp);
@@ -1240,24 +1214,24 @@ begin
                         report inst(1 to il) & ":  act_loop_num: stack_loop_num(" & integer'image(sp) & ")=" & integer'image(act_loop_num);
                     end if;
                     act_loop_num := act_loop_num + 1;
-                    stack_loop_num(sp) := act_loop_num;
-                    stack_loop_line(sp)(act_loop_num) := ien;
-                    stack_curr_loop_count(sp)(act_loop_num) := 0;
-                    stack_term_loop_count(sp)(act_loop_num) := to_integer(par_values(1)(30 downto 0));
+                    rcs(sp).loop_num := act_loop_num;
+                    rcs(sp).loop_line(act_loop_num) := ien;
+                    rcs(sp).curr_loop_count(act_loop_num) := 0;
+                    rcs(sp).term_loop_count(act_loop_num) := to_integer(par_values(1)(30 downto 0));
                     if trc_on(5) = '1' then
                         report inst(1 to il) & ":  incremented stack_loop_num(" & integer'image(sp) & ")=" & integer'image(act_loop_num);
                         report inst(1 to il) & ":  set to goto ien: stack_loop_line(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(ien);
-                        report inst(1 to il) & ":  stack_curr_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(stack_curr_loop_count(sp)(act_loop_num));
-                        report inst(1 to il) & ":  stack_term_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(stack_term_loop_count(sp)(act_loop_num));
+                        report inst(1 to il) & ":  stack_curr_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(rcs(sp).curr_loop_count(act_loop_num));
+                        report inst(1 to il) & ":  stack_term_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(rcs(sp).term_loop_count(act_loop_num));
                     end if;
 
                 -- end loop
                 elsif inst(1 to il) = INSTR_END_LOOP then
-                    act_loop_num := stack_loop_num(sp);
-                    act_curr_loop_count := stack_curr_loop_count(sp)(act_loop_num);
+                    act_loop_num := rcs(sp).loop_num;
+                    act_curr_loop_count := rcs(sp).curr_loop_count(act_loop_num);
                     act_curr_loop_count := act_curr_loop_count + 1;
-                    stack_curr_loop_count(sp)(act_loop_num) := act_curr_loop_count;
-                    act_term_loop_count := stack_term_loop_count(sp)(act_loop_num);
+                    rcs(sp).curr_loop_count(act_loop_num) := act_curr_loop_count;
+                    act_term_loop_count := rcs(sp).term_loop_count(act_loop_num);
                     if trc_on(5) = '1' then
                         index_var_value_ptr(vars, par_indexes(2), var_scope, stm_values_ptr);
                         update_var_value_ptr(vars, par_indexes(1), stm_values_ptr);
@@ -1269,12 +1243,12 @@ begin
                     end if;
                     if (act_curr_loop_count = act_term_loop_count) then
                         act_loop_num := act_loop_num - 1;
-                        stack_loop_num(sp) := act_loop_num;
+                        rcs(sp).loop_num := act_loop_num;
                         if trc_on(5) = '1' then
                             report inst(1 to il) & ":  expired, set decremented stack_loop_num(" & integer'image(sp) & ")=" & integer'image(act_loop_num);
                         end if;
                     else
-                        ien := stack_loop_line(sp)(act_loop_num);
+                        ien := rcs(sp).loop_line(act_loop_num);
                         if trc_on(5) = '1' then
                             report inst(1 to il) & ":  next goto ien: stack_loop_line(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(ien);
                         end if;
@@ -1360,10 +1334,10 @@ begin
                         report inst(1 to il) & ": ien: " & integer'image(ien) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
                         report inst(1 to il) & ":  sp:" & integer'image(sp);
                     end if;
-                    act_loop_num := stack_loop_num(sp);
+                    act_loop_num := rcs(sp).loop_num;
                     if act_loop_num > 0 then
-                        if_level := stack_loop_if_enter_level(sp);
-                        stack_loop_num(sp) := 0;
+                        if_level := rcs(sp).loop_if_enter_level;
+                        rcs(sp).loop_num := 0;
                     end if;
                     if sp = 0 then
                         report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & inst(1 to il) & " file " & text_line_crop(file_name);
@@ -1401,17 +1375,21 @@ begin
                       or inst(1 to il) = INSTR_CALL_PAR_OPEN
                       or inst(1 to il) = INSTR_CALL_LABEL_NOPAR
                       or inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                    if trc_on(5) = '1' then
-                        report inst(1 to il) & ": ien: " & integer'image(ien) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
-                        report inst(1 to il) & ":  sp:" & integer'image(sp);
-                    end if;
-                    assert sp < 31
-                    report " line " & (integer'image(file_line)) & " call stack over run, calls to deeply nested!!"
+                    assert sp < max_num_of_stack_elements
+                    report "stack over run" & proc_name & lf &
+                           "instruction " & inst & lf &
+                           "file " & slc.file_name & lf &
+                           "line" & integer'image(slc.file_line)
                     severity failure;
-                    
+                    sp := sp + 1;
+                    init_runtime_context(rcs(sp));                    
+                    if trc_on(TRACE_CALLS) then
+                        print("exec call line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                    end if;
+                 
                     if inst(1 to il) = INSTR_CALL_NOPAR 
                        or inst(1 to il) = INSTR_CALL_LABEL_NOPAR then
-                        rcs(sp).inst_element_number_to_return_to_after_call := ien;
+                        rcs(sp).ien_to_return_to_after_call := ien;
                     else 
                         pien := ien:
                         while pinst(1 to il) = INSTR_PAR_CLOSE loop
@@ -1423,12 +1401,7 @@ begin
                     
                     
 
-                sp := sp + 1; 
-                init_runtime_context(rcs(sp));    
-                rcs(sp).inst_element_number_of_called_proc := ien;                     
-                rcs(sp).called_proc := main_proc_name;
-                rcs(sp).called_in_file_line := file_line;
-                rcs(sp).called_in_file_name := file_name;                   
+                 
                     
                     
                     sp := sp + 1; 
