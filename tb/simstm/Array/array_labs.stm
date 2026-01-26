@@ -1,12 +1,11 @@
 array array_name_pos 3
 var var_name_pos 0
 
-testArrayGetOutPos:
-proc
+proc testArrayGetOutPos ()
     array get array_name_pos 3 var_name_pos
 end proc
 
-testArraySetOutPos:
-proc
+
+proc testArraySetOutPos ()
     array set array_name_pos 3 var_name_pos
 end proc

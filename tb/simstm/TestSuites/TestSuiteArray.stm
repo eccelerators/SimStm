@@ -3,7 +3,7 @@ proc testSuiteArray ()
 
     label lblTestArray testArray
     call testCase (
-    	label pointer copy TestToCall lblTestArray
+    	label equ TestToCall lblTestArray
     )
     
     label lblTestCaseArrayGet testArrayGet

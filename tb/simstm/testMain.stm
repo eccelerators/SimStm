@@ -51,8 +51,8 @@ include "Label/label.stm"
 lines success_lines
 file simulation_success "simulation.success"
 
-testMain:
-proc
+
+proc testMain ()
     call initBase ()
 
     verbosity INFO_2

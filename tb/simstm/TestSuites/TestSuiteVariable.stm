@@ -92,7 +92,7 @@ proc testCaseVariableLd (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableLd
+    call testVariableLd ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -104,7 +104,7 @@ proc testCaseVariableInv (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableInv
+    call testVariableInv ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -116,7 +116,7 @@ proc testCaseVariableXor (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableXor
+    call testVariableXor ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -128,7 +128,7 @@ proc testCaseVariableSub (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableSub
+    call testVariableSub ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -140,7 +140,7 @@ proc testCaseVariableOr (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableOr
+    call testVariableOr ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -152,7 +152,7 @@ proc testCaseVariableMul (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableMul
+    call testVariableMul ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -164,7 +164,7 @@ proc testCaseVariableEqu (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableEqu
+    call testVariableEqu ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -176,7 +176,7 @@ proc testCaseVariableDiv (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableDiv
+    call testVariableDiv ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -188,7 +188,7 @@ proc testCaseVariableAnd (
 	var skipped 0
 )
     call beginTestCase ()    
-    call testVariableAnd
+    call testVariableAnd ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
@@ -200,7 +200,7 @@ proc testCaseVariableAdd (
 	var skipped 0
 )
     call beginTestCase ()
-    call testVariableAdd
+    call testVariableAdd ()
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure

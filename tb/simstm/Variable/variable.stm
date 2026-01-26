@@ -1,8 +1,7 @@
 var test_variable_add_1 1
 var test_variable_add_2 2
 
-testVariableAdd:
-proc
+proc testVariableAdd ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_add_1
@@ -31,8 +30,7 @@ end proc
 var test_variable_and_1 0xAAAA
 var test_variable_and_2 0x77777777
 
-testVariableAnd:
-proc
+proc testVariableAnd ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:x}" test_variable_and_1
@@ -61,8 +59,7 @@ end proc
 var test_variable_div_1 500
 var test_variable_div_2 5000
 
-testVariableDiv:
-proc
+proc testVariableDiv ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_div_1
@@ -94,8 +91,7 @@ var test_variable_equ_3 3
 var test_variable_equ_4 4
 var test_variable_equ_5 5
 
-testVariableEqu:
-proc
+proc testVariableEqu ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_equ_1
@@ -144,8 +140,7 @@ end proc
 var test_variable_mul_1 1
 var test_variable_mul_2 2
 
-testVariableMul:
-proc
+proc testVariableMul ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_mul_1
@@ -175,8 +170,7 @@ end proc
 var test_variable_or_1 0x1234
 var test_variable_or_2 0x80000000
 
-testVariableOr:
-proc
+proc testVariableOr ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_or_1
@@ -205,8 +199,7 @@ end proc
 var test_variable_sub_1 12345
 var test_variable_sub_2 88
 
-testVariableSub:
-proc
+proc testVariableSub ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {:d}" test_variable_sub_1
@@ -235,8 +228,7 @@ end proc
 var test_variable_xor_1 0xFFFFFFFF
 var test_variable_xor_2 0x00000000
 
-testVariableXor:
-proc
+proc testVariableXor ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_xor_1
@@ -265,8 +257,7 @@ end proc
 var test_variable_inv_1 0x12345678
 var test_variable_inv_2 0x0FEDCBA9
 
-testVariableInv:
-proc
+proc testVariableInv ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_inv_1
@@ -296,8 +287,7 @@ end proc
 var test_variable_ld_1 0x1000
 var test_variable_ld_2 0x80000000
 
-testVariableLd:
-proc
+proc testVariableLd ()
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_ld_1
