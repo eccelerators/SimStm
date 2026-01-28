@@ -45,6 +45,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.textio.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 
@@ -64,70 +65,50 @@ package tb_interpreter_util_pkg is
     );
 
     procedure txt_print_wvar(
-        variable var_list : in var_element_ptr;
-        variable scope : in text_field;
-        variable ptr : in stm_text_ptr;
+        variable slc : src_locator;
+        variable insts : inst_sequence;
+        variable vars : in var_pool_ordered;
+        variable rcs : stm_array_of_runtime_context;
+        variable txt_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable stack_ptr : integer;
-        variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_linebers : stack_numbers_array;
-        variable stack_called_procs : stack_text_field_array;
+        variable sp : integer;
         constant machine_value_width : in integer
     );
 
     procedure stm_text_substitude_wvar(
-        variable var_list : in var_element_ptr;
-        variable scope : in text_field;
-        variable ptr : in stm_text_ptr;
+        variable slc : src_locator;
+        variable insts : inst_sequence;
+        variable vars : in var_pool_ordered;
+        variable rcs : stm_array_of_runtime_context;
+        variable txt_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable stack_ptr : integer;
-        variable stack_called_files : stack_text_line_array;
-        variable stack_called_file_line_numbers : stack_numbers_array;
-        variable stack_called_procs : stack_text_field_array;
+        variable sp : integer;    
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     );
 
     procedure access_inst_element_parameters(
         variable ie : inst_element;
-        variable vars : in var_element_ptr;
+        variable vars : in var_pool_ordered;
         variable par_text_fields : in parameter_text_field_array;
         variable par_scopes : in parameter_text_field_array;
         variable par_indexes : out parameter_index_array;
-        variable par_values : out parameter_value_array
+        variable par_values : out parameter_value_array;
+        constant machine_value_width : in integer
     );
     
     procedure access_proc(
-        variable procs : in var_pool_ordered;
+        variable slc : src_locator;
+        variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     );
 
     procedure access_var(
+        variable slc : src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
         variable var_element_num : out integer
-    );
-
-    procedure access_var(
-        variable vars : in var_pool_ordered;
-        variable var_name : in text_field;
-        variable var_element_num : out integer;
-        variable var_value : out integer
-    );
-
-    procedure access_var_value_ptr(
-        variable vars : in var_pool_ordered;
-        variable var_name : in text_field;
-        variable var_element_num : out integer;
-        variable var_values_ptr : out stm_values_ptr
-    );
-    
-    procedure access_var_label_ptr(
-        variable vars : in var_pool_ordered;
-        variable var_name : in text_field;
-        variable var_element_num : out integer;
-        variable var_label_ptr : out text_field_ptr
     );
 
     procedure index_var(
@@ -302,7 +283,59 @@ package tb_interpreter_util_pkg is
     );
     
     procedure print_runtime_context(
-        variable rc : in t_stm_runtime_context
+        variable rc : in stm_runtime_context
+    );
+    
+    procedure search_var_element_number(
+        variable slc : in src_locator;
+        variable vars : in var_pool_ordered;
+        variable var_name : in text_field;
+        variable ien : out integer
+    );
+    
+    procedure search_proc_element_number( 
+        variable slc : in src_locator;
+        variable procs : in proc_pool_ordered;
+        variable proc_name : in text_field;
+        variable pen : out integer
+    );
+    
+    procedure set_var_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable var_type : out stm_var_type
+    );
+    
+    procedure set_proc_type(
+        variable inst : in text_field;
+        variable inst_len : in integer;
+        variable proc_type : out boolean
+    );
+    
+    procedure track_inst_initial_context(
+        variable slc : src_locator;
+        variable inst : in text_field;
+        variable inst_args : in inst_arguments;
+        variable vars : in var_pool_ordered;
+        variable iic : inout stm_inst_initial_context
+    );
+    
+    procedure insert_proc_element(
+        variable slc : src_locator;
+        variable procs : inout proc_pool_ordered;
+        variable proc_name : in text_field;
+        variable proc_inst_element_num : in integer;
+        constant debug : boolean
+    );
+    
+    procedure insert_var_element(
+        variable slc : src_locator;
+        variable vars : inout var_pool_ordered;
+        variable var_name : in text_field;
+        variable inst_args : inst_arguments;
+        constant var_type : in stm_var_type;
+        constant machine_value_width : in integer;
+        variable debug : boolean
     );
     
 end package;

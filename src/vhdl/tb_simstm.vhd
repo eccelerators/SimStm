@@ -55,10 +55,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
-use work.tb_interpreter_basic_pkg.all;
 use work.tb_interpreter_pkg.all;
 use work.tb_bus_pkg.all;
 use work.tb_signals_pkg.all;
@@ -168,7 +168,7 @@ begin
         variable ie_ptr : inst_element_ptr;
 
         variable sp : integer := 0; -- call stack pointer
-        variable rc_stack : stm_array_of_runtime_context; -- call stack
+        variable rcs : stm_array_of_runtime_context; -- call stack
 
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
@@ -290,9 +290,10 @@ begin
         define_insts(inst_defs);
         
         init_file_def_list(code_files);
-        combine_to_absolute_file_name(stimulus_path, stimulus_file, top_absolute_code_file_name);
         print("collect stimulus code files");
-        collect_code_files(code_files, top_absolute_code_file_name);
+        slc.file_name := string_to_text_field(stimulus_file);
+        slc.file_line := -1;
+        collect_code_files(slc, code_files, stimulus_path, stimulus_file);
         print(integer'image(code_files.last_element_num) & "stimulus code files");   
         
         init_var_pool_ordered(vars);
@@ -315,10 +316,9 @@ begin
 
         sp := 0;
         init_runtime_context(rcs(sp));
-        rcs(sp).ien := 0;
+        ien := 0;
         
-        -- using the inst list, get the inst element and execute it as per the statements in the elsif tree.
-        while ien < inst_list.element_count loop
+        while ien <= insts.last_element_num loop
 
             verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));
             verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
@@ -336,11 +336,11 @@ begin
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
                 -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself               
-                access_proc(procs, main_proc_name, rcs(sp).ien); 
-                ie := insts.element_ptrs(rcs(sp).ien);
+                access_proc(procs, main_proc_name, ien); 
+                ie := insts.element_ptrs(ien);
                 print("exec main entry proc line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
                 main_entered := 1;              
-                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
+                rcs(sp).ien_of_called_proc := ien;                     
                 rcs(sp).called_proc_name := main_proc_name;
                 rcs(sp).called_at_src_location := ie.slc;
 
@@ -359,18 +359,18 @@ begin
                 set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);               
                 line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
                 access_proc(procs, branch_to_interrupt_proc_name, rcs(sp).ien);                
-                ie := insts.element_ptrs(rcs(sp).ien);
+                ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_INTERRUPTS)then
-                    print("exec interrupt line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
                 end if;   
-                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
+                rcs(sp).ien_of_called_proc := ien;                     
                 rcs(sp).called_proc := branch_to_interrupt_proc_name;
                 rcs(sp).called_at_src_location := ie.slc;                          
                 wait for 0 ns;
 
             else
-                rcs(sp) := rcs(sp) + 1;
-                ie := insts.element_ptrs(rcs(sp));
+                ien := ien + 1;
+                ie := insts.element_ptrs(ien);
                 access_inst_element_parameters(ie, vars, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);
                 if trc_on(TRACE_FILES) then
                     dump_file_defs(file_list);
@@ -387,7 +387,7 @@ begin
                 wait for 100 ps;
 
                 if trc_on(TRACE_EXECUTED_LINES) then
-                    print("exec instruction line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name);
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & ", file " & ie.slc.file_name);
                 end if;
 
                 -- namespace "a_namespace"
@@ -650,11 +650,19 @@ begin
                         ien := access_next_instruction_line_to_execute;
                     end if;
 
-                -- equ label1_equ_target label2
-                -- equ label1_equ_target label2 )
+                -- label equ label1_target label2
+                -- label equ label1_target label2 )
                 elsif inst(1 to il) = INSTR_LABEL_EQU or inst(1 to il) =  INSTR_LABEL_EQU_PAR_CLOSE then
                     update_var(vars, par_indexes(1), par_values(2)); 
                     if inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE then
+                        ien := access_next_instruction_line_to_execute;
+                    end if;
+                    
+                -- label set label1_target label2
+                -- label set label1_target label2 )
+                elsif inst(1 to il) = INSTR_LABEL_SET or inst(1 to il) =  INSTR_LABEL_SET_PAR_CLOSE then
+                    update_var(vars, par_indexes(1), par_values(2)); 
+                    if inst(1 to il) = INSTR_LABEL_SET_PAR_CLOSE then
                         ien := access_next_instruction_line_to_execute;
                     end if;
 
@@ -1256,16 +1264,15 @@ begin
 
                 -- abort
                 elsif inst(1 to il) = INSTR_ABORT then
-                    assert false
-                    report "the test has aborted due to an error!!"
-                    severity failure;
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                    print("the simulation aborts");
                     finish;
 
                 -- stop
                 elsif inst(1 to il) = INSTR_STOP then
-                    assert false
-                    report "the test has been stopped for debugging by command !!"
-                    severity failure;
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                    print("the simulation has been stopped for debugging by command");
+                    stop;
 
                 -- finish
                 elsif inst(1 to il) = INSTR_FINISH then
@@ -1330,9 +1337,8 @@ begin
                 -- end interrupt
                 -- return
                 elsif inst(1 to il) = INSTR_RETURN or inst(1 to il) = INSTR_END_PROC or inst(1 to il) = INSTR_END_INTERRUPT then
-                    if trc_on(5) = '1' then
-                        report inst(1 to il) & ": ien: " & integer'image(ien) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
-                        report inst(1 to il) & ":  sp:" & integer'image(sp);
+                    if trc_on(TRACE_CALLS) then
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                     end if;
                     act_loop_num := rcs(sp).loop_num;
                     if act_loop_num > 0 then
@@ -1340,11 +1346,12 @@ begin
                         rcs(sp).loop_num := 0;
                     end if;
                     if sp = 0 then
-                        report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & inst(1 to il) & " file " & text_line_crop(file_name);
-                        wait;
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                        print("leaving proc Main shall not happen, simulation shall be ended by a finish or abort instruction inside proc Main, ");
+                        finish;
                     end if;
                     assert sp >= 0
-                    report " line " & (integer'image(file_line)) & " call stack under run??"
+                    report "stack underrun, exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp)
                     severity failure;
                     sp := sp - 1;
                     if interrupt_in_service > 0 then
@@ -1355,15 +1362,10 @@ begin
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
                     end if;     
-                    runtime_context := stack_runtime_context(sp);
-                    ien := runtime_context.inst_element_number_to_return_to_after_call;
-                    if trc_on(5) = '1' then
-                        print("Popping runtime_context from stack_runtime_context("  & integer'image(sp) & ")");
+                    ien := rcp(sp).ien_of_call;
+                    if trc_on(TRACE_STACK) then
+                        print("Entering runtime_context at stack pointer " & integer'image(sp));
                         print_runtime_context(runtime_context);       
-                    end if;                   
-                    if trc_on(5) = '1' then                        
-                        report inst(1 to il) & ":  restored if_level: stack_loop_if_enter_level(" & integer'image(sp) & ") = " & integer'image(if_level);
-                        report inst(1 to il) & ":  restored act_loop_num: stack_loop_num(" & integer'image(sp) & ") = " & integer'image(act_loop_num);
                     end if;
                     wait for 0 ns;
 
@@ -1381,85 +1383,41 @@ begin
                            "file " & slc.file_name & lf &
                            "line" & integer'image(slc.file_line)
                     severity failure;
+                    if trc_on(TRACE_STACK) then
+                        print("Leaving runtime_context at stack pointer " & integer'image(sp));
+                        print_runtime_context(runtime_context);       
+                    end if;
                     sp := sp + 1;
-                    init_runtime_context(rcs(sp));                    
+                    init_runtime_context(rcs(sp));         
                     if trc_on(TRACE_CALLS) then
-                        print("exec call line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                     end if;
-                 
-                    if inst(1 to il) = INSTR_CALL_NOPAR 
-                       or inst(1 to il) = INSTR_CALL_LABEL_NOPAR then
-                        rcs(sp).ien_to_return_to_after_call := ien;
-                    else 
-                        pien := ien:
-                        while pinst(1 to il) = INSTR_PAR_CLOSE loop
-                            search_inst_element_ptr(inst_list, pien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                        access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
-                    
-                        end loop;
-                    end if;                   
-                    
-                    
-
-                 
-                    
-                    
-                    sp := sp + 1; 
-                    runtime_context.inst_element_number_to_return_to_after_call := ien; 
-                    stack_runtime_context(sp) := runtime_context;
-                    if trc_on(5) = '1' then
-                        print("Pushing runtime_context to stack_runtime_context("  & integer'image(sp) & ")");
-                        print_runtime_context(runtime_context);       
-                    end if;
-                    runtime_context.inst_element_number_of_called_proc_params_end := -1;
-                    runtime_context.inst_element_number_of_call_params := -1;                     
-                    runtime_context.called_in_file_line := file_line;
-                    runtime_context.called_in_file_name := file_name;
-                    runtime_context.par_scopes := (others => no_scope);                                          
-                    if inst(1 to il) = INSTR_CALL 
-                       or inst(1 to il) = INSTR_CALL_PAR_NOPAR 
-                       or inst(1 to il) = INSTR_CALL_PAR_OPEN then
-                        runtime_context.inst_element_number_of_called_proc := to_integer(par1(30 downto 0)) - 1;                  
-                        runtime_context.in_call_of_proc_name := par_text_fields(1);   
-                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_NOPAR
-                          or inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                        access_var_label_ptr(vars, par_text_fields(1), par_text_fields(1), var_index, tmp_label_proc_ref_ptr);
-                        assert valid /= 0
-                        report lf & "call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
-                        severity failure;       
-                        text_field_ptr_to_text_field(tmp_label_proc_ref_ptr, tmp_label_proc_ref);
-                        access_var(vars, no_scope, tmp_label_proc_ref, var_index, tmp_var_value);
-                        assert valid /= 0
-                        report lf & "call label called proc on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
-                        severity failure;     
-                        runtime_context.inst_element_number_of_called_proc := to_integer(tmp_var_value(30 downto 0)) - 1;               
-                        runtime_context.in_call_of_proc_name := tmp_label_proc_ref;                                   
-                    end if;
-                    if inst(1 to il) = INSTR_CALL then 
-                        runtime_context.call_process_state := IN_PROC_CONVENTIONAL_BODY;                                          
-                    elsif inst(1 to il) = INSTR_CALL_PAR_NOPAR then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY;                   
-                    elsif inst(1 to il) = INSTR_CALL_PAR_OPEN then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_PARAMS;                   
+                    rcs(sp).ien_of_call := ien;         
+                    if inst(1 to il) = INSTR_CALL_PAR_NOPAR then
+                       access_proc(procs, par_text_fields(1), ien);
+                       rcs(sp).call_process_state := IN_PROC_BODY;    
+                    elsif inst(1 to il) = INSTR_CALL_PAR_OPEN then                       
+                       access_proc(procs, par_text_fields(1), ien);
+                       rcs(sp).call_process_state := IN_PROC_PARAMS;                                                            
                     elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_NOPAR then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY;                    
-                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then  
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_PARAMS;                   
-                    end if;
-                    if trc_on(5) = '1' then
-                        print("Setting actual runtime_context "  & integer'image(rc.ien));
-                        print_runtime_context(runtime_context);       
-                    end if;    
+                          access_var(vars, par_text_fields(1), ven);
+                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          rcs(sp).call_process_state := IN_PROC_BODY; 
+                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+                          access_var(vars, par_text_fields(1), ven);
+                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          rcs(sp).call_process_state := IN_PROC_PARAMS; 
+                    end if;      
                                   
                 -- ) 
                 elsif inst(1 to il) = INSTR_PAR_CLOSE then
-                    if runtime_context.call_process_state = IN_PROC_ADVANCED_PARAMS then
-                        runtime_context.call_process_state := IN_CALL_ADVANCED_PARAMS; 
-                        runtime_context.inst_element_number_of_called_proc_params_end := ien;
-                        ien := runtime_context.inst_element_number_of_call_params;
-                    elsif runtime_context.call_process_state = IN_CALL_ADVANCED_PARAMS then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY; 
-                        ien := runtime_context.inst_element_number_of_called_proc_params_end;                                 
+                    if rcs(sp).call_process_state = IN_PROC_PARAMS then
+                        rcs(sp).call_process_state := IN_CALL_PARAMS; 
+                        rcs(sp).ien_of_proc_params_end := ien;
+                        ien := rcs(sp).ien_of_call;
+                    elsif rcs(sp).call_process_state = IN_CALL_PARAMS then
+                        rcs(sp).call_process_state := IN_PROC_BODY;
+                        ien := rcs(sp).ien_of_proc_params_end;                                 
                     end if;
                     
                 -- log message INFO "some message"

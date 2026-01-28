@@ -58,11 +58,12 @@ package tb_base_pkg is
     constant TRACE_IF_TREES : integer := 4;
     constant TRACE_CALLS : integer := 5;
     constant TRACE_INTERRUPTS : integer := 6;
+    constant TRACE_STACK : integer := 7;
 
     type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
-    type stack_int_array is array (0 to 127) of integer;
+    type loop_nested_int_array is array (0 to 127) of integer;
     type boolean_array is array (0 to 127) of boolean;
     type interrupt_array is array (0 to 127) of integer;
 
@@ -90,14 +91,16 @@ package tb_base_pkg is
     end record;
     
     type src_locator is record
-         file_name : text_line;
+         file_name : text_field;
          file_line :integer;
     end record;
     
     type file_def_element;
     type file_def_element_ptr is access file_def_element;
     type file_def_element is record
+        slc : src_locator;
         absolute_file_name : text_line;
+        file_name : text_field;
     end record;
     type file_def_element_ptrs is array (0 to max_num_of_file_def_elements - 1) of file_def_element_ptr; 
     type file_def_list is record
@@ -196,20 +199,16 @@ package tb_base_pkg is
     );
 
     type stm_runtime_context is record
-        ien : integer;
-        ien_to_return_to_after_call : integer;
-        ien_of_called_proc_name : integer;
-        ien_of_called_proc_params_end : integer;
-        ien_of_call_params : integer;
-        call_process_state : stm_call_process_state;    
-        called_proc_name : text_field;
-        called_at_src_location : src_locator;
+        call_process_state : stm_call_process_state;  
+        ien_of_call : integer;
+        ien_of_proc_params_end : integer;
+        ien_of_called_proc : integer;
         par_scopes : parameter_text_field_array;  
         loop_num : integer;
-        curr_loop_count : stack_int_array;
-        term_loop_count : stack_int_array;
-        loop_line: stack_int_array;
         loop_if_enter_level : integer;
+        curr_loop_count : loop_nested_int_array;
+        term_loop_count : loop_nested_int_array;
+        loop_line: loop_nested_int_array;
     end record;
     
     type stm_array_of_runtime_context is array (max_num_of_stack_elements downto 0) of stm_runtime_context; 
@@ -245,7 +244,7 @@ package tb_base_pkg is
         slc : src_locator;
         name : text_field;
         element_num : integer;
-        pointer_to_inst_element_num : integer;
+        pointer_to_ien : integer;
     end record;
     type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_element_ptr;
     type proc_pool_ordered is record
@@ -296,17 +295,11 @@ package tb_base_pkg is
         constant debug : boolean 
     );
     
-    procedure append_code_file(
-        variable absolute_code_file_name : in text_line; 
-        variable code_files : inout file_def_list
-    );
-    
-    procedure combine_to_absolute_file_name(
-        variable path_name : in string; 
-        variable file_name : in string;
-        variable absolut_file_name : out text_line
-    );
-    
+    function combine_to_absolute_file_name(
+        path_name : in string; 
+        file_name : in string
+    ) return text_line;
+        
     function extract_parameters(
         ts : token_text_field_array
     ) return parameter_text_field_array;
@@ -669,9 +662,13 @@ package tb_base_pkg is
         variable ptr : inout text_field_ptr
     );
 
-    function txt_field_to_string(
-        s : text_field
+    function text_field_to_string(
+        tf : text_field
     ) return string;
+    
+    function string_to_text_field(
+        s : string
+    ) return text_field;
 
     procedure stm_text_copy_to_ptr(
         variable ptr : inout stm_text_ptr;

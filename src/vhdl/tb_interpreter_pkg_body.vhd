@@ -47,16 +47,18 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
-use work.tb_interpreter_basic_pkg.all;
 
 package body tb_interpreter_pkg is
     
     procedure collect_code_files(
+        variable slc : src_locator;
         variable code_files : inout file_def_list;
-        constant absolute_code_file_name : in text_line
+        constant stimulus_path : string;
+        variable stimulus_file : string
     ) is 
         variable fos : file_open_status;
         variable tl : text_line;
@@ -65,15 +67,15 @@ package body tb_interpreter_pkg is
         variable txt_enclosing_quote : character;
         variable valid : integer;
         variable il : integer;
-        variable absolut_include_file_name : text_line;
+        variable include_file_name : text_line;
         variable file_line : integer; 
     begin
         file_open(fos, stimulus, absolute_code_file_name, read_mode);
         assert fos = open_ok
         report "unable to open stimulus_file " & absolute_code_file_name
         severity failure; 
-        append_code_file(path_name, file_name, code_files);
-        print("loading codefile " & absolut_include_file_name);
+        append_code_file(slc, code_files, stimulus_path, stimulus_file);
+        print("loading codefile " & include_file_name);
         file_line := 0;  
         while not endfile(stimulus) loop
             file_line := file_line + 1;
@@ -88,13 +90,13 @@ package body tb_interpreter_pkg is
                 severity failure;            
                 absolut_include_file_name := (others => nul);
                 for i in 1 to c_stm_text_len loop
-                    absolut_include_file_name(i) := txt(i);
+                    include_file_name(i) := txt(i);
                     if txt(i) = txt_enclosing_quote then
-                        absolut_include_file_name(i) := nul;
+                        include_file_name(i) := nul;
                         exit;
                     end if;
                 end loop;
-                collect_code_files(absolut_include_file_name, code_files);
+                collect_code_files(slc, code_files, stimulus_path, include_file_name);
             end if;
         end loop;   
     end procedure;  

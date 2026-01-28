@@ -45,10 +45,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.textio.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
-use work.tb_interpreter_basic_pkg.all;
 
 package tb_interpreter_pkg is
   

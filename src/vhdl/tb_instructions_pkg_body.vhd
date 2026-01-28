@@ -127,6 +127,8 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_LABEL_POINTER_COPY_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_LABEL_EQU, 2);
         append_inst_def(inst_defs, INSTR_LABEL_EQU_PAR_CLOSE, 2);
+        append_inst_def(inst_defs, INSTR_LABEL_SET, 2);
+        append_inst_def(inst_defs, INSTR_LABEL_SET_PAR_CLOSE, 2);
         -- lines
         append_inst_def(inst_defs, INSTR_LINES, 1);
         append_inst_def(inst_defs, INSTR_LINES_GET_ARRAY, 4);
@@ -311,6 +313,13 @@ package body tb_instructions_pkg is
             elsif itokens(1)(1 to 5) = "label" then
                 token1_len := 5;
                 if itokens(2)(1 to 3) = "equ" then
+                    token2_len := 3;
+                    token_merge := 12;
+                    if itokens(3)(1 to 1) = ")" then
+                        token3_len := 1;
+                        token_merge := 123;
+                    end if;
+                elsif itokens(2)(1 to 3) = "set" then
                     token2_len := 3;
                     token_merge := 12;
                     if itokens(3)(1 to 1) = ")" then

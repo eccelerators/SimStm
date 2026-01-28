@@ -47,6 +47,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 
 package tb_instructions_pkg is
@@ -128,6 +129,8 @@ package tb_instructions_pkg is
     constant INSTR_LABEL_POINTER_COPY_PAR_CLOSE : string := "label_pointer_copy_)";
     constant INSTR_LABEL_EQU : string := "label_equ";
     constant INSTR_LABEL_EQU_PAR_CLOSE : string := "label_equ_)";
+    constant INSTR_LABEL_SET : string := "label_set";
+    constant INSTR_LABEL_SET_PAR_CLOSE : string := "label_set_)";
 
     -- lines
     constant INSTR_LINES : string := "lines";
