@@ -176,7 +176,7 @@ package tb_interpreter_util_pkg is
     procedure index_and_reinit_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_stm_lines : out stm_lines_ptr
+        variable var_lines : out stm_lines_ptr
     );
 
     procedure update_var(
@@ -317,6 +317,7 @@ package tb_interpreter_util_pkg is
         variable inst : in text_field;
         variable inst_args : in inst_arguments;
         variable vars : in var_pool_ordered;
+        variable procs : in proc_pool_ordered; 
         variable iic : inout stm_inst_initial_context
     );
     

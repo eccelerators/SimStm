@@ -228,7 +228,7 @@ package tb_base_pkg is
         txt_org : stm_text_ptr;
         txt_enclosing_quote_org : character;
         arr : stm_array_ptr;
-        arry_org : stm_array_ptr;
+        arr_org : stm_array_ptr;
         lines : stm_lines_ptr;
         lines_org : stm_lines_ptr;
     end record;
@@ -243,7 +243,6 @@ package tb_base_pkg is
     type proc_element is record
         slc : src_locator;
         name : text_field;
-        element_num : integer;
         pointer_to_ien : integer;
     end record;
     type proc_element_ptrs is array ( 0 to max_num_of_proc_elements - 1) of proc_element_ptr;
