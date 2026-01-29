@@ -185,6 +185,7 @@ package tb_base_pkg is
     );
 
     type stm_inst_initial_context is record
+        is_var_declaration : boolean;
         code_section : stm_code_section;
         namespace_name : text_field;
         proc_name : text_field;
@@ -288,10 +289,15 @@ package tb_base_pkg is
         variable slc : in src_locator; 
         variable insts : inout inst_sequence;
         variable inst : text_field;
-        variable par_text_fields : in parameter_text_field_array;  
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant debug : boolean 
+        variable ia: inst_arguments;
+        variable debug : boolean 
+        );
+    
+    procedure append_code_file(
+        variable slc : src_locator;
+        variable code_files : inout file_def_list;
+        constant stimulus_path : in string;
+        variable stimulus_file : in string
     );
     
     function combine_to_absolute_file_name(

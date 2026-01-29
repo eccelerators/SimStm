@@ -325,8 +325,7 @@ package tb_interpreter_util_pkg is
         variable slc : src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable proc_inst_element_num : in integer;
-        constant debug : boolean
+        variable debug : boolean
     );
     
     procedure insert_var_element(

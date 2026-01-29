@@ -1248,6 +1248,25 @@ package body tb_interpreter_util_pkg is
             if iic.code_section = CALL_PARAMS then
                 iic.code_section := PROC_BODY;
             end if;
+        iic.is_var_declaration := false;
+        if inst(1 to il) = INSTR_CONST
+            or inst(1 to il) = INSTR_VAR
+            or inst(1 to il) = INSTR_VAR_PAR_CLOSE
+            or inst(1 to il) = INSTR_SIGNAL
+            or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
+            or inst(1 to il) = INSTR_BUS
+            or inst(1 to il) = INSTR_BUS_PAR_CLOSE
+            or inst(1 to il) = INSTR_FILE
+            or inst(1 to il) = INSTR_FILE_PAR_CLOSE
+            or inst(1 to il) = INSTR_LABEL
+            or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
+            or inst(1 to il) = INSTR_LINES
+            or inst(1 to il) = INSTR_LINES_PAR_CLOSE
+            or inst(1 to il) = INSTR_ARRAY
+            or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
+            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+                iic.is_var_declaration := true;
+            end if;
         end if;
     end procedure;
              
@@ -1255,8 +1274,7 @@ package body tb_interpreter_util_pkg is
         variable slc : src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable proc_inst_element_num : in integer;
-        constant debug : boolean
+        variable debug : boolean
     ) is
         variable ne : proc_element_ptr;
         variable s : slice;
@@ -1317,7 +1335,7 @@ package body tb_interpreter_util_pkg is
            procs.last_element_num := procs.last_element_num + 1;
         end if;     
         if debug then
-            print("add proc " & proc_name & ", proc element_num " & integer'image(procs.last_element_num + 1) & ", pointing to inst element num " & integer'image(proc_inst_element_num));
+            print("add proc " & proc_name);
         end if;           
     end procedure;
     
@@ -1334,9 +1352,6 @@ package body tb_interpreter_util_pkg is
         variable s : slice;
         variable su : slice;
         variable sl : slice;
-        variable ts : stm_text;
-        variable ls : text_field;
-        variable txt : stm_text_ptr;
         variable insert_before : integer;
         
         procedure init_lines_var is
@@ -1476,29 +1491,27 @@ package body tb_interpreter_util_pkg is
             when T_ARRAY =>
                 init_array_var;
                 if debug then
-                    print("add array var " & ne.name & ", size " & integer'image(ne.arr'length));
+                    print("add array var " & ne.name);
                 end if;
             when T_TEXT =>
                 init_stm_text_var;
                 if debug then
-                    txt_to_string(txt, ts);
-                    print("add text var " & ne.name & ", text " & ne.txt_enclosing_quote & ts & ne.txt_enclosing_quote);
+                    print("add text var " & ne.name);
                 end if;
             when T_LABEL =>
                 init_label_var;
                 if debug then
-                    text_field_ptr_to_text_field(ne.label_proc_ref, ls);
-                    print("add label var " & ne.name & ", value " & ls);
+                    print("add label var " & ne.name);
                 end if;
             when T_CONST =>
                 init_value_var;
                 if debug then
-                    print("add constant var" & ne.name & ", value " & to_text_field_hex(ne.values(0)));
+                    print("add constant var" & ne.name);
                 end if;
             when others =>
                 init_value_var;
                 if debug then
-                    print("add value var " & ne.name & ", value " & to_text_field_hex(ne.values(0)));
+                    print("add value var " & ne.name);
                 end if;
         end case;        
 

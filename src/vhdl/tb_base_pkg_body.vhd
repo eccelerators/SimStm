@@ -103,6 +103,7 @@ package body tb_base_pkg is
         variable iic : inout stm_inst_initial_context
     ) is
     begin
+        iic.is_var_declaration := false;
         iic.code_section := NONE;
         iic.namespace_name := (others => nul);
         iic.proc_name := (others => nul);
@@ -130,10 +131,8 @@ package body tb_base_pkg is
         variable slc : in src_locator; 
         variable insts : inout inst_sequence;
         variable inst : text_field;
-        variable par_text_fields : in parameter_text_field_array;  
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant debug : boolean 
+        variable ia: inst_arguments;
+        variable debug : boolean 
         )
     is
         variable nen : integer;
@@ -143,9 +142,7 @@ package body tb_base_pkg is
         ne_ptr := new inst_element;
         ne_ptr.slc := slc;
         ne_ptr.inst := inst;
-        ne_ptr.inst_args.par_text_fields := par_text_fields;
-        ne_ptr.inst_args.txt := str_ptr;
-        ne_ptr.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+        ne_ptr.inst_args := ia;
         insts.element_ptrs(nen) := ne_ptr;
         insts.last_element_num := nen;
         if debug then
