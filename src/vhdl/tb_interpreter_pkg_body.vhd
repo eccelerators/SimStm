@@ -131,10 +131,12 @@ package body tb_interpreter_pkg is
         variable slc : src_locator;
         variable vn : text_field;
         variable ven : integer;
+        variable fn : text_field;
     begin
         init_inst_initial_context(iic);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
+            fn := code_files.element_ptrs(i).file_name;
             file_open(fos, stimulus, afn, read_mode);
             assert fos = open_ok
             report "unable to open code file  " & afn
@@ -150,7 +152,7 @@ package body tb_interpreter_pkg is
                     ia.par_text_fields := extract_parameters(ts);
                     ia.txt := txt;
                     ia.txt_enclosing_quote := txt_enclosing_quote;
-                    slc.file_name := afn;
+                    slc.file_name := fn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, ia, vars, procs, iic);
@@ -197,10 +199,12 @@ package body tb_interpreter_pkg is
         variable inst : text_field;
         variable ia : inst_arguments;
         variable slc : src_locator;
+        variable fn : text_field;
     begin
         init_inst_initial_context(iic);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
+            fn := code_files.element_ptrs(i).file_name;
             file_open(fos, stimulus, afn, read_mode);
             assert fos = open_ok
             report "unable to open code file  " & afn
@@ -216,7 +220,7 @@ package body tb_interpreter_pkg is
                     ia.par_text_fields := extract_parameters(ts);
                     ia.txt := txt;
                     ia.txt_enclosing_quote := txt_enclosing_quote;
-                    slc.file_name := afn;
+                    slc.file_name := fn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, ia, vars, procs, iic);
@@ -270,10 +274,12 @@ package body tb_interpreter_pkg is
         variable ia : inst_arguments;
         variable slc : src_locator;
         variable pen : integer;
+        variable fn : text_field;
     begin
         init_inst_initial_context(iic);
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
+            fn := code_files.element_ptrs(i).file_name;
             file_open(fos, stimulus, afn, read_mode);
             assert fos = open_ok
             report "unable to open code file  " & afn
@@ -289,7 +295,7 @@ package body tb_interpreter_pkg is
                     ia.par_text_fields := extract_parameters(ts);
                     ia.txt := txt;
                     ia.txt_enclosing_quote := txt_enclosing_quote;
-                    slc.file_name := afn;
+                    slc.file_name := fn;
                     slc.file_line := file_line;
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, ia, vars, procs, iic);
@@ -342,12 +348,14 @@ package body tb_interpreter_pkg is
         variable slc : src_locator;
         variable inst : text_field;
         variable ia : inst_arguments;
+        variable ie : inst_element_ptr;
     begin
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
-            slc := insts.element_ptrs(i).slc;
-            inst:= insts.element_ptrs(i).inst;
-            ia := insts.element_ptrs(i).inst_args;
+            ie := insts.element_ptrs(i);
+            slc := ie.slc;
+            inst:= ie.inst;
+            ia := ie.inst_args;
             track_inst_initial_context(slc, inst, ia, vars, procs, iic);
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
@@ -356,7 +364,7 @@ package body tb_interpreter_pkg is
                 par_scopes := (1 => iic.called_proc_name, others => iic.proc_name);
             end if;
             par_resolved_text_fields := append_par_scopes(insts.element_ptrs(i).inst_args.par_text_fields, par_scopes);
-            access_inst_element_parameters(insts.element_ptrs(i), vars, par_resolved_text_fields, par_scopes, par_indexes, par_values, machine_value_width);
+            access_inst_element_parameters(ie, vars, par_resolved_text_fields, par_scopes, par_indexes, par_values, machine_value_width);
         end loop;
     end procedure;
         

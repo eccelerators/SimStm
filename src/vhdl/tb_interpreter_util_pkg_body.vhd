@@ -477,7 +477,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_inst_element_parameters(
-        variable ie : inst_element;
+        variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_text_fields : in parameter_text_field_array;
         variable par_scopes : in parameter_text_field_array;
