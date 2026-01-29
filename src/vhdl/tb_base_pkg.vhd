@@ -59,6 +59,9 @@ package tb_base_pkg is
     constant TRACE_CALLS : integer := 5;
     constant TRACE_INTERRUPTS : integer := 6;
     constant TRACE_STACK : integer := 7;
+    
+    constant PREFER_LOCAL : boolean := true;
+    constant USE_GLOBAL : boolean := false;
 
     type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
@@ -108,12 +111,6 @@ package tb_base_pkg is
         last_element_num : integer;
     end record; 
 
-    type inst_arguments is record
-        par_text_fields : parameter_text_field_array;
-        txt : stm_text_ptr;
-        txt_enclosing_quote : character;    
-    end record;
-   
     type inst_def_element;
     type inst_def_element_ptr is access inst_def_element;
     type inst_def_element is record
@@ -125,8 +122,14 @@ package tb_base_pkg is
     type inst_def_list is record
         element_ptrs : inst_def_element_ptrs;
         last_element_num : integer;
-    end record;    
+    end record;
 
+    type inst_arguments is record
+        par_text_fields : parameter_text_field_array;
+        txt : stm_text_ptr;
+        txt_enclosing_quote : character;    
+    end record;
+   
     type inst_element;
     type inst_element_ptr is access inst_element;
     type inst_element is record
@@ -198,7 +201,7 @@ package tb_base_pkg is
         IN_PROC_BODY,
         IN_CALL_PARAMS
     );
-
+    
     type stm_runtime_context is record
         call_process_state : stm_call_process_state;  
         ien_of_call : integer;

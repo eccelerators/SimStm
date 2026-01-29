@@ -475,34 +475,143 @@ package body tb_interpreter_util_pkg is
         report lf & "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
     end procedure;
-    
-    procedure access_inst_element_parameters(
+         
+    function access_inst_par_value_global(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_text_fields : in parameter_text_field_array;
-        variable par_scopes : in parameter_text_field_array;
-        variable par_indexes : out parameter_index_array;
-        variable par_values : out parameter_value_array;
+        constant par_num : in integer;
         constant machine_value_width : in integer
-    ) is
-        variable ptf : parameter_text_field_array;
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable val : unsigned(machine_value_width downto 0);
+        variable ven : integer;
+        variable etf : text_field;
+    begin
+        etf := (others => nul);
+        ptf := ie.inst_args.par_text_fields(par_num);
+        val := to_unsigned(0, machine_value_width);
+        if is_digit(ptf) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        else 
+            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+            access_var(ie.slc, vars, vn, ven);
+            val := vars.element_ptrs(ven).values(0);
+        end if;     
+        return val; 
+    end function;
+    
+    function access_inst_par_value_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        constant par_num : in integer;
+        variable called_proc_name : in text_field;
+        constant machine_value_width : in integer
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable val : unsigned(machine_value_width downto 0);
         variable ven : integer;
     begin
-        for i in 1 to 6 loop
-            if par_text_fields(i)(1) /= nul then
-                if is_digit(par_text_fields(i)(1)) then
-                    par_values(i) := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(i), machine_value_width);
-                else
-                    for i in 1 to 6 loop
-                        ptf(i) := textfield_dot_cat(par_text_fields(i),par_scopes(i));
-                    end loop;
-                    access_var(ie.slc, vars, ptf(i), ven);
-                    par_indexes(i) := ven;
-                    par_values(i) := vars.element_ptrs(ven).values(0);
-                end if;
+        ptf := ie.inst_args.par_text_fields(par_num);
+        val := to_unsigned(0, machine_value_width);
+        if is_digit(ptf) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        else 
+            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+            access_var(ie.slc, vars, vn, ven);
+            val := vars.element_ptrs(ven).values(0);
+        end if;    
+        return val; 
+    end function;
+    
+    function access_inst_par_value_prefer_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        constant par_num : in integer;
+        variable called_proc_name : in text_field;
+        constant machine_value_width : in integer
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable val : unsigned(machine_value_width downto 0);
+        variable ven : integer;
+        variable etf : text_field;
+    begin
+        ptf := ie.inst_args.par_text_fields(par_num);
+        val := to_unsigned(0, machine_value_width);
+        if is_digit(ptf) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        else 
+            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+            access_var(ie.slc, vars, vn, ven);
+            if ven >= 0 then
+                val := vars.element_ptrs(ven).values(0);
+            else
+                vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+                access_var(ie.slc, vars, vn, ven);
+                val := vars.element_ptrs(ven).values(0);            
             end if;
-        end loop;
-    end procedure;
+        end if;     
+        return val; 
+    end function;
+    
+    function access_inst_par_index_global(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        constant par_num : in integer;
+        constant machine_value_width : in integer
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable ven : integer;
+        variable etf : text_field;
+    begin
+        etf := (others => nul);
+        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+        access_var(ie.slc, vars, vn, ven);    
+        return ven; 
+    end function;
+    
+    function access_inst_par_index_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        constant par_num : in integer;
+        variable called_proc_name : in text_field;
+        constant machine_value_width : in integer
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable ven : integer;
+    begin
+        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+        access_var(ie.slc, vars, vn, ven);
+        return ven; 
+    end function;
+    
+    function access_inst_par_index_prefer_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        constant par_num : in integer;
+        variable called_proc_name : in text_field;
+        constant machine_value_width : in integer
+    ) return unsigned is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable ven : integer;
+        variable etf : text_field;
+    begin
+        ptf := ie.inst_args.par_text_fields(par_num);
+            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+            access_var(ie.slc, vars, vn, ven);
+            if ven < 0 then
+                vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+                access_var(ie.slc, vars, vn, ven);          
+            end if;   
+        return val; 
+    end function;
     
     procedure access_proc(
         variable slc : src_locator;
