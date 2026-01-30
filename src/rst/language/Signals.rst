@@ -7,7 +7,7 @@ Signals
  signal a_signal a_const
  signal a_signal a_global_var
 
-The ``signal`` instruction declares a signal object with an ID.
+The instruction ``signal`` declares a signal object with an ID.
 
 The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
@@ -24,7 +24,9 @@ Signal Write
  signal write a_signal s_var
  signal write a_signal 0b11
 
-The ``signal write`` instruction writes a variable, constant, or numeric value to a signal.
+The instruction ``signal write`` writes a variable, constant, or numeric value to a signal.
+
+In the example, ``s_var`` is stored in ``a_signal``.
 
 Signal Read
 ^^^^^^^^^^^
@@ -33,7 +35,9 @@ Signal Read
 
  signal read a_signal t_var
 
-The ``signal read`` instruction reads the value of a signal into a variable.
+The instruction ``signal read`` reads the value of a signal into a variable.
+
+In the example, the value of ``a_signal`` is stored in ``t_var``.
 
 Signal Verify
 ^^^^^^^^^^^^^
@@ -43,8 +47,11 @@ Signal Verify
  signal verify a_signal t_var e_var m_var
  signal verify a_signal t_var 0x01 0x0F
 
-The ``signal verify`` instruction reads the value of a signal into a variable and compares it to an expected
+The instruction ``signal verify`` reads the value of a signal into a variable and compares it to an expected
 value with a given mask.
+
+In the example, it is verified that the value of ``a_signal``, which is stored in ``t_var``, is the same as ``e_var``, with the mask
+``m_var``.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
@@ -57,9 +64,11 @@ Signal Pointer Copy
 
  signal pointer copy t_signal s_signal
 
-The ``signal pointer copy`` instruction copies a signal pointer; for example, ``t_signal``
-points to ``s_signal`` after the instruction of the execution. Used, for
-instance, to hand over a signal to a subroutine. Changes to the source
+The instruction ``signal pointer copy`` creates a signal pointer; 
+
+In the example, ``t_signal`` points to ``s_signal`` after the instruction of the execution. 
+
+Used, for instance, to hand over a signal to a subroutine. Changes to the source
 object are applied to the target object as well.
 
 Signal Pointer Set
@@ -70,8 +79,9 @@ Signal Pointer Set
  signal pointer set t_signal 5
  signal pointer set t_signal ptr_var
 
-The ``signal pointer set`` instruction sets a signal pointer (for example, the pointer ``t_signal``)
-to an absolute address.
+The instruction ``signal pointer set`` sets a signal pointer to an absolute address.
+
+In the example, the pointer ``t_signal`` is set to 5.
 
 Signal Pointer Get
 ^^^^^^^^^^^^^^^^^^
@@ -80,5 +90,6 @@ Signal Pointer Get
 
  signal pointer get s_signal ptr_var
 
-The ``signal pointer get`` instruction gets the value of a signal pointer and stores it in a variable.
-For example, the pointer ``s_signal`` is stored in ``ptr_var``.
+The instruction ``signal pointer get`` gets the value of a signal pointer and stores it in a variable.
+
+In the example, the pointer ``s_signal`` is stored in ``ptr_var``.

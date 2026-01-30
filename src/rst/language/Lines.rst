@@ -24,7 +24,10 @@ Lines Get
  lines get array a_lines 9 t_array r_var
 
 The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
-into an array. The number of extracted values is stored in ``r_var``.
+into an array. The number of extracted values is stored in a variable.
+
+In the example, the content of the line at position ``p_var`` in ``a_lines`` is stored in ``t_array`` and the number of values is stored
+in ``r_var``.
 
 The line is expected to hold hex numbers (without 0x
 prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
@@ -46,6 +49,8 @@ Lines Set
 
 The ``lines set`` instruction sets a line at a given position of a lines object.
 
+In the example, the content of ``s_array`` is stored at position ``p_var`` of ``a_lines``.
+
 The line currently at this position is overwritten. The line can be derived from an array or a
 message. The message string can contain {} placeholders which are filled
 by values of variables given after the message string.
@@ -60,8 +65,9 @@ Lines Insert
  lines insert message a_lines p_var "Some message to be written to a file later"
  lines insert message a_lines p_var "Value1: {} Value2: {} to be written to a file later" mvar1 mvar2
 
-The ``lines insert`` instruction inserts a line at a given position of a lines object. The line currently
-at this position is moved to the next position. The line can be derived
+The ``lines insert`` instruction inserts a line at a given position of a lines object.
+
+The line currently at this position is moved to the next position. The line can be derived
 from an array or a message. The message string can contain {}
 placeholders which are filled by values of variables given after the
 message string.
@@ -75,8 +81,11 @@ Lines Append
  lines append message a_lines "Some message to be written to a file later"
  lines append message a_lines "Value1: {} Value2: {} to be written to a file later" m_var1 m_var2
 
-The ``lines append`` instruction appends a line at the end of a lines object. The line can be derived from
-an array or a message. The message string can contain {} placeholders
+The ``lines append`` instruction appends a line at the end of a lines object.
+
+In the example, the content of ``s_array`` is appended to ``a_lines``.
+
+The line can be derived from an array or a message. The message string can contain {} placeholders
 which are filled by values of variables given after the message string.
 
 Lines Delete
@@ -90,6 +99,8 @@ Lines Delete
 The ``lines delete`` instruction deletes a line at a given position of a lines object. The next line is
 moved to the given position if it exists.
 
+In the example, the line at position ``p_var`` in ``a_lines`` is deleted.
+
 Lines Size
 ^^^^^^^^^^
 
@@ -100,6 +111,8 @@ Lines Size
 The ``lines size`` instruction gets the size of a lines object, which is the number of lines it contains
 at that point.
 
+In the example, the size of ``a_lines`` is stored in ``r_var``.
+
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
@@ -107,7 +120,10 @@ Lines Pointer Copy
 
  lines pointer copy t_lines s_lines
 
-The ``lines pointer copy`` instruction copies a lines pointer; for example, ``t_lines``
-points to ``s_lines`` after the execution of the instruction. Used, for
-instance, to hand over a file to a subroutine. Changes to the source
+The ``lines pointer copy`` instruction copies a lines pointer.
+
+In the example, ``t_lines`` points to ``s_lines`` after the execution of the instruction.
+
+Used, forinstance, to hand over a file to a subroutine. Changes to the source
 object are applied to the target object as well.
+

@@ -29,6 +29,8 @@ without having content. The result for ``STATUSOK`` is 0, ``STATUSERROR`` is 1,
 ``STATUSNAMEERROR`` is 2, ``STATUSMODEERROR`` is 3 and may, in case of error, depend
 on the operating system.
 
+In the example, the value of the test for ``a_file`` is stored in ``r_var``.
+
 File Readable
 ^^^^^^^^^^^^^
 
@@ -39,6 +41,8 @@ File Readable
 The ``file readable`` instruction tests if a file is readable. The result for ``STATUSOK`` is 0, ``STATUSERROR`` is 1,
 ``STATUSNAMEERROR`` is  2, ``STATUSMODEERROR`` is 3 and may, in case of error, depend
 on the operating system.
+
+In the example, the value of the test for ``a_file`` is stored in ``r_var``.
 
 File Appendable
 ^^^^^^^^^^^^^^^
@@ -51,6 +55,8 @@ The ``file appendable`` instruction tests if a file is appendable. The result fo
 ``STATUSERROR`` is 1, ``STATUSNAMEERROR`` is 2, ``STATUSMODEERROR`` is 3 and may, in case of error,
 depend on the operating system.
 
+In the example, the value of the test for ``a_file`` is stored in ``r_var``.
+
 File Write
 ^^^^^^^^^^
 
@@ -60,6 +66,8 @@ File Write
 
 The ``file write`` instruction writes all lines of a lines object to a file. The file is
 overwritten if it exists.
+
+In the example, ``a_lines`` is written into ``a_file``.
 
 File Append
 ^^^^^^^^^^^
@@ -71,6 +79,9 @@ File Append
 The ``file append`` instruction appends all lines of a lines object to a file. The method will fail
 if the file doesn't exist.
 
+In the example, ``a_lines`` is appended to ``a_file``.
+
+
 File Read All
 ^^^^^^^^^^^^^
 
@@ -79,6 +90,8 @@ File Read All
  file read all a_file a_lines
 
 The ``file read all`` instruction reads all lines of a file into a lines object.
+
+In the example, the content of ``a_file`` is stored in ``a_lines``.
 
 File Read
 ^^^^^^^^^
@@ -89,6 +102,8 @@ File Read
    file read a_file a_lines 10
 
 The ``file read`` instruction reads a number of lines from a file into an lines object.
+
+In the example, the first ``n_var`` lines of ``a_file`` are stored in ``a_lines``.
 
 The first read opens the file for read, following reads start at the line after
 the last line which has been read by the previous read. Thus a file can
@@ -114,6 +129,9 @@ File Pointer Copy
    file pointer copy t_file s_file
 
 The ``file pointer copy`` instruction creates a file pointer; for example, ``t_file`` points to ``s_file`` after the
-execution of the instruction. Used, for
-instance, to hand over a file to a subroutine. Changes to the source
+execution of the instruction.
+
+In the example, ``t_file`` now points to ``s_file``.
+
+Used, for instance, to hand over a file to a subroutine. Changes to the source
 file are applied in the target file as well.

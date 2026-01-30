@@ -25,8 +25,9 @@ Equ
  equ operand1 operand2
  equ operand1 0xF0
 
-The ``equ`` instruction copies the value of operand2 (variable or constant) into
-operand1 (variable) or copies the value 0xF0 into operand1.
+The ``equ`` instruction sets the value of a variable or constant to a different variable.
+
+In the example, the value of ``operand1`` is set to ``operand2``.
 
 
 Var Verify
@@ -40,6 +41,8 @@ Var Verify
 The ``var verify`` instruction reads the value of a signal and compares it to an expected
 value with a given mask.
 
+In the example, it is verified that the values of ``a_var`` and ``e_var`` are the same with mask ``m_var``.
+
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
 severity Failure if the global resume is set to 0.
@@ -50,7 +53,8 @@ Var Pointer Copy
 
 .. code-block:: simstm
 	
- var pointer copy a_varA a_varB
+ var pointer copy a_var b_var
  
-The ``var pointer copy`` instruction copies an variable pointer; for example, the pointer ``a_varA``  
-is a copy of the pointer ``a_varB`` after the execution of the instruction.
+The instruction ``var pointer copy`` creates a variable pointer. 
+
+For example, ``a_var``  points to ``B_var`` after the execution of the instruction.
