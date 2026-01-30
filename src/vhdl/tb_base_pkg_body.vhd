@@ -103,6 +103,7 @@ package body tb_base_pkg is
         variable iic : inout stm_inst_initial_context
     ) is
     begin
+        iic.is_var_declaration := false;
         iic.code_section := NONE;
         iic.namespace_name := (others => nul);
         iic.proc_name := (others => nul);
@@ -114,16 +115,10 @@ package body tb_base_pkg is
     ) is
         variable no_scope : text_field;
     begin
-        rc.ien := -1;
         init_const_text_field(".", no_scope);
-        rc.inst_element_number_to_return_to_after_call := -1;
-        rc.inst_element_number_of_called_proc := -1;
-        rc.inst_element_number_of_called_proc_params_end := -1;
-        rc.inst_element_number_of_call_params := -1;
         rc.call_process_state := IN_NONE;
-        rc.called_proc_name := (others => nul);
-        rc.called_in_file_line := -1;
-        rc.called_in_file_name := (others => nul);  
+        rc.ien_of_call := -1;
+        rc.ien_of_proc_params_end := -1; 
         rc.par_scopes := (others => no_scope);
         rc.loop_num := 0;
         rc.curr_loop_count := (others => 0);
@@ -136,10 +131,8 @@ package body tb_base_pkg is
         variable slc : in src_locator; 
         variable insts : inout inst_sequence;
         variable inst : text_field;
-        variable par_text_fields : in parameter_text_field_array;  
-        variable str_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
-        constant debug : boolean 
+        variable ia: inst_arguments;
+        variable debug : boolean 
         )
     is
         variable nen : integer;
@@ -149,9 +142,7 @@ package body tb_base_pkg is
         ne_ptr := new inst_element;
         ne_ptr.slc := slc;
         ne_ptr.inst := inst;
-        ne_ptr.inst_args.par_text_fields := par_text_fields;
-        ne_ptr.inst_args.txt := str_ptr;
-        ne_ptr.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+        ne_ptr.inst_args := ia;
         insts.element_ptrs(nen) := ne_ptr;
         insts.last_element_num := nen;
         if debug then
@@ -160,26 +151,30 @@ package body tb_base_pkg is
     end procedure;
     
     procedure append_code_file(
-        variable absolute_code_file_name : in text_line; 
-        variable code_files : inout file_def_list
+        variable slc : src_locator;
+        variable code_files : inout file_def_list;
+        constant stimulus_path : in string;
+        variable stimulus_file : in string
     )
     is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
+        variable acfn : text_line; 
     begin
         nen := code_files.last_element_num + 1;
-        ne_ptr := new file_def_element;          
-        ne_ptr.absolute_file_name := absolute_code_file_name;
+        ne_ptr := new file_def_element;     
+        acfn := combine_to_absolute_file_name(stimulus_path, stimulus_file);
+        ne_ptr.slc := slc;
+        ne_ptr.absolute_file_name := acfn;
+        ne_ptr.file_name := string_to_text_field(stimulus_file);       
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
     end procedure;
     
-    procedure combine_to_absolute_file_name(
-        variable path_name : in string; 
-        variable file_name : in string;
-        variable absolut_file_name : out text_line
-    )
-    is
+    function combine_to_absolute_file_name(
+        path_name : in string; 
+        file_name : in string
+    ) return text_line is
         variable afn : text_line;
     begin
         afn := (others => nul);
@@ -189,8 +184,8 @@ package body tb_base_pkg is
         for i in 1 to file_name'high loop
             afn(i + path_name'high) := file_name(i);
         end loop; 
-        absolut_file_name := afn; 
-    end procedure;
+        return afn; 
+    end function;
     
     function extract_parameters(
         ts : token_text_field_array
@@ -1917,15 +1912,26 @@ package body tb_base_pkg is
         end loop;
     end procedure;
 
-    function txt_field_to_string(
-        s : text_field
+    function text_field_to_string(
+        tf : text_field
     ) return string is
-        variable os : string(1 to fld_len(s));
+        variable os : string(1 to fld_len(tf));
     begin
-        for i in 1 to fld_len(s) loop
-            os(i) := s(i);
+        for i in 1 to fld_len(tf) loop
+            os(i) := tf(i);
         end loop;
         return os;
+    end function;
+    
+    function string_to_text_field(
+        s : string
+    ) return text_field is
+        variable otf : text_field;
+    begin
+        for i in 1 to text_field'length loop
+            otf(i) := s(i);
+        end loop;
+        return otf;
     end function;
 
     procedure stm_text_copy_to_ptr(

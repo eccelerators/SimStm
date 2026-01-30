@@ -29,6 +29,7 @@ proc testSuiteVariable ()
     call testCase (
     	label pointer copy TestToCall lblTestVariableOr
     )
+<<<<<<< HEAD
     
     label lblTestVariableSub testVariableSub
     call testCase (
@@ -84,5 +85,126 @@ proc testSuiteVariable ()
     label lblTestVariableDefaultValue testVariableDefaultValue
     call testCase (
     	label pointer copy TestToCall lblTestVariableDefaultValue
+=======
+end proc
+
+
+proc testCaseVariableLd (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableLd ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableInv (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableInv ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableXor (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableXor ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableSub (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableSub ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableOr (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableOr ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableMul (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableMul ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableEqu (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableEqu ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableDiv (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableDiv ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableAnd (
+	var skipped 0
+)
+    call beginTestCase ()    
+    call testVariableAnd ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
+end proc
+
+
+proc testCaseVariableAdd (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testVariableAdd ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+>>>>>>> 48d9da1cf5db7592235916cb06e566839c5b1ee1
     )
 end proc

@@ -55,10 +55,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
-use work.tb_interpreter_basic_pkg.all;
 use work.tb_interpreter_pkg.all;
 use work.tb_bus_pkg.all;
 use work.tb_signals_pkg.all;
@@ -143,8 +143,7 @@ begin
     --! records are drawn from the user inst list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_files : process 
-        file stimulus : text; -- file main file      
+    read_files : process     
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list; 
         variable insts : inst_sequence;
@@ -156,6 +155,8 @@ begin
         variable slc : src_locator;
         
         variable noc : integer;
+        
+        variable stimulus_file_var : string (1 to stimulus_file'length) := stimulus_file;
 
         variable par_text_fields : parameter_text_field_array;
         variable par_indexes : parameter_index_array;
@@ -168,7 +169,7 @@ begin
         variable ie_ptr : inst_element_ptr;
 
         variable sp : integer := 0; -- call stack pointer
-        variable rc_stack : stm_array_of_runtime_context; -- call stack
+        variable rcs : stm_array_of_runtime_context; -- call stack
 
         variable act_loop_num : integer := 0;
         variable act_curr_loop_count : integer := 0;
@@ -199,6 +200,7 @@ begin
         --  scratchpad variables
         variable temp_int : integer;
         variable temp_int_b : integer;
+        variable val1 : unsigned(machine_value_width - 1 downto 0);
         variable stm_value : unsigned(machine_value_width - 1 downto 0);
         variable stm_value_b : unsigned(machine_value_width - 1 downto 0);
         variable par_scopes : parameter_text_field_array;
@@ -211,7 +213,6 @@ begin
 
         variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
 
-        file stimulus : text; -- file main file
         variable v_stat : file_open_status;
 
         -- Bus
@@ -268,9 +269,16 @@ begin
         variable branch_to_interrupt_instruction_element_number : integer := 0;
 
         variable no_scope : text_field;
+        variable no_proc : text_field;
+        variable no_file : text_field;
+        variable no_file_on_main_entry : text_field;
+        variable no_file_on_interrupt : text_field;
+        variable debug : boolean;
+        
+        variable ie : inst_element_ptr;
         
     begin
-        nul_scope(1) := nul;
+        debug:= false;
         marker <= (others => '0');
         verify_passes <= (others => '0');
         verify_failures <= (others => '0');
@@ -282,31 +290,35 @@ begin
         wait for 0 ns;
 
         init_const_text_field(stimulus_main_entry_label, main_proc_name);
+        init_const_text_field("", empty_text_field);
         init_const_text_field(".", no_scope);
         init_const_text_field("no_proc", no_proc);
-        init_const_text_line("no_file", no_file);
+        init_const_text_field("no_file", no_file);
+        init_const_text_field("no_file_on_main_entry", no_file);
+        init_const_text_field("no_file_on_interrupt", no_file);
         
         init_inst_def_list(inst_defs); 
         define_insts(inst_defs);
         
         init_file_def_list(code_files);
-        combine_to_absolute_file_name(stimulus_path, stimulus_file, top_absolute_code_file_name);
         print("collect stimulus code files");
-        collect_code_files(code_files, top_absolute_code_file_name);
+        slc.file_name := string_to_text_field(stimulus_file);
+        slc.file_line := -1;
+        collect_code_files(slc, code_files, stimulus_path, stimulus_file_var);
         print(integer'image(code_files.last_element_num) & "stimulus code files");   
         
         init_var_pool_ordered(vars);
         print("parsing stimulus code files");
-        parse_constants(code_files, inst_defs, vars, machine_value_width); 
-        noc := inst_defs.last_elment_num;
+        parse_constants(code_files, inst_defs, vars, procs, machine_value_width, debug); 
+        noc := vars.last_element_num;
         print(integer'image(noc) & "constants");  
-        parse_variables(code_files, inst_defs, vars, machine_value_width); 
-        print(integer'image(inst_defs.last_elment_num - noc) & "variables");                 
+        parse_variables(code_files, inst_defs, vars, procs, machine_value_width, debug); 
+        print(integer'image(vars.last_element_num - noc) & "variables");                 
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
-        parse_instructions_and_procs(code_files, inst_defs, insts, procs, machine_value_width); 
-        print(integer'image(procs.last_elment_num) & "procedures"); 
-        print(integer'image(insts.last_elment_num) & "instructions"); 
+        parse_instructions_and_procs(code_files, inst_defs, insts, vars, procs, machine_value_width, debug); 
+        print(integer'image(procs.last_element_num) & "procedures"); 
+        print(integer'image(insts.last_element_num) & "instructions"); 
 
         print("checking if all variables are initially defined for all instructions");
         check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
@@ -315,10 +327,9 @@ begin
 
         sp := 0;
         init_runtime_context(rcs(sp));
-        rcs(sp).ien := 0;
+        ien := 0;
         
-        -- using the inst list, get the inst element and execute it as per the statements in the elsif tree.
-        while ien < inst_list.element_count loop
+        while ien <= insts.last_element_num loop
 
             verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));
             verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
@@ -327,28 +338,24 @@ begin
 
             get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
-                if not inst_context.in_proc_advanced_parameters and not inst_context.in_call_advanced_parameters then
-                    resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_name_std_txt_io_line);
-                end if;
+                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_name_std_txt_io_line);
             end if;
 
             if main_entered = 0 then
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
-                -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself               
-                access_proc(procs, main_proc_name, rcs(sp).ien); 
-                ie := insts.element_ptrs(rcs(sp).ien);
-                print("exec main entry proc line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself 
+                slc.file_name := no_file_on_main_entry; 
+                slc.file_line := -1;              
+                access_proc(slc, procs, main_proc_name, ien); 
+                ie := insts.element_ptrs(ien);
+                print("exec main entry proc line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                 main_entered := 1;              
-                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
-                rcs(sp).called_proc_name := main_proc_name;
-                rcs(sp).called_at_src_location := ie.slc;
+                rcs(sp).ien_of_called_proc := ien;                     
 
             elsif branch_to_interrupt then
                 assert sp < max_num_of_stack_elements
-                report "branch to interrupt, stack over run" & proc_name & lf &
-                       "file " & slc.file_name & lf &
-                       "line" & integer'image(slc.file_line)
+                report "branch to interrupt, stack over run"
                 severity failure;
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
@@ -358,20 +365,19 @@ begin
                 v_set_interrupt_in_service := '1';
                 set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);               
                 line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
-                access_proc(procs, branch_to_interrupt_proc_name, rcs(sp).ien);                
-                ie := insts.element_ptrs(rcs(sp).ien);
+                slc.file_name := no_file_on_interrupt; 
+                slc.file_line := -1; 
+                access_proc(slc, procs, branch_to_interrupt_proc_name, ien);                
+                ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_INTERRUPTS)then
-                    print("exec interrupt line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                 end if;   
-                rcs(sp).ien_of_called_proc := rcs(sp).ien;                     
-                rcs(sp).called_proc := branch_to_interrupt_proc_name;
-                rcs(sp).called_at_src_location := ie.slc;                          
+                rcs(sp).ien_of_called_proc := ien;                                        
                 wait for 0 ns;
 
             else
-                rcs(sp) := rcs(sp) + 1;
-                ie := insts.element_ptrs(rcs(sp));
-                access_inst_element_parameters(ie, vars, rcs(sp).par_scopes, par_text_fields, par_indexes, par_values);
+                ien := ien + 1;
+                ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_FILES) then
                     dump_file_defs(file_list);
                 end if;
@@ -387,52 +393,60 @@ begin
                 wait for 100 ps;
 
                 if trc_on(TRACE_EXECUTED_LINES) then
-                    print("exec instruction line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name);
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & ", file " & ie.slc.file_name);
                 end if;
 
                 -- namespace "a_namespace"
                 if inst(1 to il) = INSTR_NAMESPACE then
-                    null; -- This inst was implemented while reading the file
+                    null; -- processed during inital parse
 
                 -- end namespace
                 elsif inst(1 to il) = INSTR_END_NAMESPACE then
-                    null; -- This inst was implemented while reading the file
+                    null; -- processed during inital parse
 
                 -- include "an_include.stm"
                 elsif inst(1 to il) = INSTR_INCLUDE then
-                    null; -- This inst was implemented while reading the file
+                    null; -- processed during inital code file collection
                 --
                 -- const a_const_num 0x03
                 -- const a_constB a_constA
                 -- const a_constC a_varA
                 elsif inst(1 to il) = INSTR_CONST then
-                    null; -- This inst was implemented while reading the file
+                    null; -- processed during inital parse
 
                 -- var a_varA 0x05
                 -- var a_varB a_varA
                 -- var a_varC a_constA
                 elsif inst(1 to il) = INSTR_VAR then
-                    -- This inst has been executed for global variables while reading the file
-                    reinit_and_update_var(vars, par_indexes(1), par_values(2));
-
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);                    
+                    index_and_reinit_var(vars, ven1, val1);
+                    
                 -- array an_array 16
                 elsif inst(1 to il) = INSTR_ARRAY then
-                    -- This inst has been executed for global arrays while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_stm_array);
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);                    
+                    index_and_reinit_var(vars, ven1, var_stm_array);
                     for i in 0 to var_stm_array'length - 1 loop
                         var_stm_array(i) := to_unsigned(0, machine_value_width);
                     end loop;
 
                 -- label a_label a_proc_label
                 elsif inst(1 to il) = INSTR_LABEL then
-                    -- This inst has been executed for global labels while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_scope, var_stm_label);
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width); 
+                    index_and_reinit_var(vars, ven1, var_stm_label);
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif inst(1 to il) = INSTR_FILE then
-                    -- This inst has been executed for global files while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);     
+                    index_and_reinit_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
@@ -456,20 +470,24 @@ begin
 
                 -- signal a_signal
                 elsif inst(1 to il) = INSTR_SIGNAL then
-                    -- This inst has been executed for global signals while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_scope, stm_value);
-                    update_var(vars, par_indexes(1), par_values(2));
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);
+                    index_and_reinit_var(vars, ven1, val1);
 
                 -- bus a_bus
                 elsif inst(1 to il) = INSTR_BUS then
-                    -- This inst has been executed for global busses while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_scope, stm_value);
-                    update_var(vars, par_indexes(1), par_values(2));
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);
+                    index_and_reinit_var(vars, ven1, val1);
 
                 -- lines a_lines
                 elsif inst(1 to il) = INSTR_LINES then
-                    -- This inst has been executed for global lines while reading the file
-                    index_and_reinit_var(vars, par_indexes(1), var_scope, var_stm_lines);
+                    -- processed during inital parse for global vars, executed as instruction only for local vars
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_element_parameter_var_index(ie, vars, 1, cpn, PREFER_LOCAL, machine_value_width); 
+                    index_and_reinit_var(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         temp_int := 0;
                         stm_lines_delete(var_stm_lines, temp_int);
@@ -481,61 +499,102 @@ begin
                 -- equ operand1_equ_target operand2
                 -- equ operand1_equ_target 0xF0
                 elsif inst(1 to il) = INSTR_EQU or inst(1 to il) =  INSTR_EQU_PAR_CLOSE then
-                    update_var(vars, par_indexes(1), par_values(2));
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    if rcs(sp).call_process_state = IN_CALL_PARAMS then
+                        ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);
+                    else
+                        ven1 := access_inst_par_value_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    end if;
+                    cipn := procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name;
+                    val2 := access_inst_par_value_prefer_local(ie, vars, 2, cipn, machine_value_width);
+                    update_var(vars, ven1, val2);
                     if inst(1 to il) = INSTR_EQU_PAR_CLOSE then
-                        ien := access_next_instruction_line_to_execute;
+                        rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
 
-                -- d_var s_var
-                -- d_var s_var )
+                -- var pointer copy d_var s_var
+                -- var pointer copy d_var s_var )
                 elsif inst(1 to il) = INSTR_VAR_POINTER_COPY or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
-                    index_var_value_ptr(vars, par_indexes(2), var_scope, stm_values_ptr);
-                    update_var_value_ptr(vars, par_indexes(1), stm_values_ptr);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    if rcs(sp).call_process_state = IN_CALL_PARAMS then
+                        ven1 := access_inst_par_index_local(ie, vars, 1, cpn, machine_value_width);
+                    else
+                        ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    end if;
+                    cipn := procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name;
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cipn, machine_value_width);
+                    index_var_value_ptr(vars, ven2, stm_values_ptr);
+                    update_var_value_ptr(vars, ven1, stm_values_ptr);
                     if inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE then
-                        ien := access_next_instruction_line_to_execute;
+                        rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
 
                 -- add operand1_and_target operand2
                 -- add operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_ADD then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value + par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 + val2;
+                    update_var(vars, ven1, val);
 
                 -- sub operand1_and_target operand2
                 -- sub operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_SUB then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value - par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 - val2;
+                    update_var(vars, ven1, val);
 
                 -- mul operand1_and_target operand2
                 -- mul operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_MUL then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := resize(resize(stm_value, machine_value_width * 2) * resize(par_values(2), machine_value_width * 2), machine_value_width);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 + val2;
+                    val := resize(resize(val1, machine_value_width * 2) * resize(val2, machine_value_width * 2), machine_value_width);
+                    update_var(vars, ven1, val);                
 
                 -- div operand1_and_target operand2
                 -- div operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_DIV then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value / par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 / val2;
+                    update_var(vars, ven1, val);
 
                 -- rem operand1_and_target operand2
                 -- rem operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_REM then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value rem par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 rem val2;
+                    update_var(vars, ven1, val);
 
                 -- and operand1_and_target operand2
                 -- and operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_AND then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value and par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 and val2;
+                    update_var(vars, ven1, val);
 
                 -- or operand1_and_target operand2
                 -- or operand1_and_target 0xF0
@@ -547,42 +606,61 @@ begin
                 -- xor operand1_and_target operand2
                 -- xor operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_XOR then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := stm_value xor par_values(2);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := val1 xor val2;
+                    update_var(vars, ven1, val);
 
                 -- shl operand1_and_target operand2
                 -- shl operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_SHL then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := shift_left(stm_value, to_integer(par_values(2)(30 downto 0)));
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := shift_left(val1, to_integer(val2(30 downto 0)));
+                    update_var(vars, ven1, val);                
 
                 -- shr operand1_and_target operand2
                 -- shr operand1_and_target 0xF0
                 elsif inst(1 to il) = INSTR_SHR then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := shift_right(stm_value, to_integer(par_values(2)(30 downto 0)));
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    ven2 := access_inst_par_index_prefer_local(ie, vars, 2, cpn, machine_value_width);                    
+                    index_var(vars, ven2, val2);
+                    val := shift_right(val1, to_integer(val2(30 downto 0)));
+                    update_var(vars, ven1, val); 
 
                 -- inv operand1_and_target
                 elsif inst(1 to il) = INSTR_INV then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := not stm_value;
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    val := not val1;
+                    update_var(vars, ven1, val);
 
                 -- ld operand1_and_target
                 elsif inst(1 to il) = INSTR_LD then
-                    index_var(vars, par_indexes(1), var_scope, stm_value);
-                    stm_value := ld(stm_value);
-                    update_var(vars, par_indexes(1), stm_value);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, val1);
+                    val := ld(val1);
+                    update_var(vars, ven1, val);
 
                 -- array set an_array array_position 0x07
                 -- array set an_array array_position a_varA
                 -- array set an_array 5 0x07
                 -- array set an_array 3 a_varA
                 elsif inst(1 to il) = INSTR_ARRAY_SET then
-                    index_var(vars, par_indexes(1), var_scope, var_stm_array);
+                    cpn := procs.element_ptrs(rcs(sp).ien_of_called_proc).name;
+                    ven1 := access_inst_par_index_prefer_local(ie, vars, 1, cpn, machine_value_width);
+                    index_var(vars, ven1, var_stm_array);
+                    
                     assert var_stm_array'length > par_values(2)
                     report " line " & (integer'image(file_line)) & ", " & inst(1 to il) & " index is out of array size"
                     severity failure;
@@ -650,11 +728,19 @@ begin
                         ien := access_next_instruction_line_to_execute;
                     end if;
 
-                -- equ label1_equ_target label2
-                -- equ label1_equ_target label2 )
+                -- label equ label1_target label2
+                -- label equ label1_target label2 )
                 elsif inst(1 to il) = INSTR_LABEL_EQU or inst(1 to il) =  INSTR_LABEL_EQU_PAR_CLOSE then
                     update_var(vars, par_indexes(1), par_values(2)); 
                     if inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE then
+                        ien := access_next_instruction_line_to_execute;
+                    end if;
+                    
+                -- label set label1_target label2
+                -- label set label1_target label2 )
+                elsif inst(1 to il) = INSTR_LABEL_SET or inst(1 to il) =  INSTR_LABEL_SET_PAR_CLOSE then
+                    update_var(vars, par_indexes(1), par_values(2)); 
+                    if inst(1 to il) = INSTR_LABEL_SET_PAR_CLOSE then
                         ien := access_next_instruction_line_to_execute;
                     end if;
 
@@ -1256,16 +1342,15 @@ begin
 
                 -- abort
                 elsif inst(1 to il) = INSTR_ABORT then
-                    assert false
-                    report "the test has aborted due to an error!!"
-                    severity failure;
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                    print("the simulation aborts");
                     finish;
 
                 -- stop
                 elsif inst(1 to il) = INSTR_STOP then
-                    assert false
-                    report "the test has been stopped for debugging by command !!"
-                    severity failure;
+                    print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                    print("the simulation has been stopped for debugging by command");
+                    stop;
 
                 -- finish
                 elsif inst(1 to il) = INSTR_FINISH then
@@ -1330,9 +1415,8 @@ begin
                 -- end interrupt
                 -- return
                 elsif inst(1 to il) = INSTR_RETURN or inst(1 to il) = INSTR_END_PROC or inst(1 to il) = INSTR_END_INTERRUPT then
-                    if trc_on(5) = '1' then
-                        report inst(1 to il) & ": ien: " & integer'image(ien) & ";  code line: " & (ew_to_text_field(file_line, dec)) & ";  file: " & text_line_crop(file_name);
-                        report inst(1 to il) & ":  sp:" & integer'image(sp);
+                    if trc_on(TRACE_CALLS) then
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                     end if;
                     act_loop_num := rcs(sp).loop_num;
                     if act_loop_num > 0 then
@@ -1340,11 +1424,12 @@ begin
                         rcs(sp).loop_num := 0;
                     end if;
                     if sp = 0 then
-                        report "Leaving proc Main and halt at line " & (integer'image(file_line)) & " " & inst(1 to il) & " file " & text_line_crop(file_name);
-                        wait;
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
+                        print("leaving proc Main shall not happen, simulation shall be ended by a finish or abort instruction inside proc Main, ");
+                        finish;
                     end if;
                     assert sp >= 0
-                    report " line " & (integer'image(file_line)) & " call stack under run??"
+                    report "stack underrun, exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp)
                     severity failure;
                     sp := sp - 1;
                     if interrupt_in_service > 0 then
@@ -1355,15 +1440,10 @@ begin
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
                     end if;     
-                    runtime_context := stack_runtime_context(sp);
-                    ien := runtime_context.inst_element_number_to_return_to_after_call;
-                    if trc_on(5) = '1' then
-                        print("Popping runtime_context from stack_runtime_context("  & integer'image(sp) & ")");
+                    ien := rcp(sp).ien_of_call;
+                    if trc_on(TRACE_STACK) then
+                        print("Entering runtime_context at stack pointer " & integer'image(sp));
                         print_runtime_context(runtime_context);       
-                    end if;                   
-                    if trc_on(5) = '1' then                        
-                        report inst(1 to il) & ":  restored if_level: stack_loop_if_enter_level(" & integer'image(sp) & ") = " & integer'image(if_level);
-                        report inst(1 to il) & ":  restored act_loop_num: stack_loop_num(" & integer'image(sp) & ") = " & integer'image(act_loop_num);
                     end if;
                     wait for 0 ns;
 
@@ -1381,85 +1461,41 @@ begin
                            "file " & slc.file_name & lf &
                            "line" & integer'image(slc.file_line)
                     severity failure;
+                    if trc_on(TRACE_STACK) then
+                        print("Leaving runtime_context at stack pointer " & integer'image(sp));
+                        print_runtime_context(runtime_context);       
+                    end if;
                     sp := sp + 1;
-                    init_runtime_context(rcs(sp));                    
+                    init_runtime_context(rcs(sp));         
                     if trc_on(TRACE_CALLS) then
-                        print("exec call line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(ie.slc.sp));
+                        print("exec " & inst & " line " & integer'image(ie.slc.file_line) & " " & inst(1 to il) & ", file " & ie.slc.file_name & ", stack pointer " & integer'image(sp));
                     end if;
-                 
-                    if inst(1 to il) = INSTR_CALL_NOPAR 
-                       or inst(1 to il) = INSTR_CALL_LABEL_NOPAR then
-                        rcs(sp).ien_to_return_to_after_call := ien;
-                    else 
-                        pien := ien:
-                        while pinst(1 to il) = INSTR_PAR_CLOSE loop
-                            search_inst_element_ptr(inst_list, pien, last_searched_inst_element_number, last_searched_inst_element_ptr, ie_ptr);
-                        access_inst_element_ptr(ie_ptr, file_list, inst, il, par_text_fields, txt, txt_enclosing_quote, file_line, file_name);
-                    
-                        end loop;
-                    end if;                   
-                    
-                    
-
-                 
-                    
-                    
-                    sp := sp + 1; 
-                    runtime_context.inst_element_number_to_return_to_after_call := ien; 
-                    stack_runtime_context(sp) := runtime_context;
-                    if trc_on(5) = '1' then
-                        print("Pushing runtime_context to stack_runtime_context("  & integer'image(sp) & ")");
-                        print_runtime_context(runtime_context);       
-                    end if;
-                    runtime_context.inst_element_number_of_called_proc_params_end := -1;
-                    runtime_context.inst_element_number_of_call_params := -1;                     
-                    runtime_context.called_in_file_line := file_line;
-                    runtime_context.called_in_file_name := file_name;
-                    runtime_context.par_scopes := (others => no_scope);                                          
-                    if inst(1 to il) = INSTR_CALL 
-                       or inst(1 to il) = INSTR_CALL_PAR_NOPAR 
-                       or inst(1 to il) = INSTR_CALL_PAR_OPEN then
-                        runtime_context.inst_element_number_of_called_proc := to_integer(par1(30 downto 0)) - 1;                  
-                        runtime_context.in_call_of_proc_name := par_text_fields(1);   
-                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_NOPAR
-                          or inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                        access_var_label_ptr(vars, par_text_fields(1), par_text_fields(1), var_index, tmp_label_proc_ref_ptr);
-                        assert valid /= 0
-                        report lf & "call label variable on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
-                        severity failure;       
-                        text_field_ptr_to_text_field(tmp_label_proc_ref_ptr, tmp_label_proc_ref);
-                        access_var(vars, no_scope, tmp_label_proc_ref, var_index, tmp_var_value);
-                        assert valid /= 0
-                        report lf & "call label called proc on stimulus line " & (integer'image(file_line)) & " is not valid!!" & lf & "in file " & file_name & "line number " & (integer'image(file_line))
-                        severity failure;     
-                        runtime_context.inst_element_number_of_called_proc := to_integer(tmp_var_value(30 downto 0)) - 1;               
-                        runtime_context.in_call_of_proc_name := tmp_label_proc_ref;                                   
-                    end if;
-                    if inst(1 to il) = INSTR_CALL then 
-                        runtime_context.call_process_state := IN_PROC_CONVENTIONAL_BODY;                                          
-                    elsif inst(1 to il) = INSTR_CALL_PAR_NOPAR then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY;                   
-                    elsif inst(1 to il) = INSTR_CALL_PAR_OPEN then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_PARAMS;                   
+                    rcs(sp).ien_of_call := ien;         
+                    if inst(1 to il) = INSTR_CALL_PAR_NOPAR then
+                       access_proc(procs, par_text_fields(1), ien);
+                       rcs(sp).call_process_state := IN_PROC_BODY;    
+                    elsif inst(1 to il) = INSTR_CALL_PAR_OPEN then                       
+                       access_proc(procs, par_text_fields(1), ien);
+                       rcs(sp).call_process_state := IN_PROC_PARAMS;                                                            
                     elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_NOPAR then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY;                    
-                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then  
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_PARAMS;                   
-                    end if;
-                    if trc_on(5) = '1' then
-                        print("Setting actual runtime_context "  & integer'image(rc.ien));
-                        print_runtime_context(runtime_context);       
-                    end if;    
+                          access_var(vars, par_text_fields(1), ven);
+                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          rcs(sp).call_process_state := IN_PROC_BODY; 
+                    elsif inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+                          access_var(vars, par_text_fields(1), ven);
+                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          rcs(sp).call_process_state := IN_PROC_PARAMS; 
+                    end if;      
                                   
                 -- ) 
                 elsif inst(1 to il) = INSTR_PAR_CLOSE then
-                    if runtime_context.call_process_state = IN_PROC_ADVANCED_PARAMS then
-                        runtime_context.call_process_state := IN_CALL_ADVANCED_PARAMS; 
-                        runtime_context.inst_element_number_of_called_proc_params_end := ien;
-                        ien := runtime_context.inst_element_number_of_call_params;
-                    elsif runtime_context.call_process_state = IN_CALL_ADVANCED_PARAMS then
-                        runtime_context.call_process_state := IN_PROC_ADVANCED_BODY; 
-                        ien := runtime_context.inst_element_number_of_called_proc_params_end;                                 
+                    if rcs(sp).call_process_state = IN_PROC_PARAMS then
+                        rcs(sp).call_process_state := IN_CALL_PARAMS; 
+                        rcs(sp).ien_of_proc_params_end := ien;
+                        ien := rcs(sp).ien_of_call;
+                    elsif rcs(sp).call_process_state = IN_CALL_PARAMS then
+                        rcs(sp).call_process_state := IN_PROC_BODY;
+                        ien := rcs(sp).ien_of_proc_params_end;                                 
                     end if;
                     
                 -- log message INFO "some message"

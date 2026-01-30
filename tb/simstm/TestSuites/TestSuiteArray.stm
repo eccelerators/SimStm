@@ -1,14 +1,12 @@
 
 proc testSuiteArray ()
 
-    label lblTestArray testArray
     call testCase (
-    	label pointer copy TestToCall lblTestArray
+    	label set TestToCall testArray
     )
     
-    label lblTestCaseArrayGet testArrayGet
     call testCase (
-        label pointer copy TestToCall lblTestCaseArrayGet
+        label set TestToCall testArrayGet
     )
     
     label lblTestCaseArraySet testArraySet

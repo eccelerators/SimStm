@@ -1,5 +1,5 @@
 
 proc testLabArrayGetOutPos ()
 
-    call testArrayGetOutPos
+    call testArrayGetOutPos ()
 end proc
