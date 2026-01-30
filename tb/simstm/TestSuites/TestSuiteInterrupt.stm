@@ -1,18 +1,7 @@
 
 proc testSuiteInterrupt ()
-    label lblTestInterrupt testInterrupt
-    call testCase (
-    	label pointer copy TestToCall lblTestInterrupt
-    )
-end proc
 
-proc testCaseInterrupt (
-	var skipped 0
-)
-    call beginTestCase ()
-	call testInterrupt ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label pointer copy TestToCall testInterrupt
     )
 end proc

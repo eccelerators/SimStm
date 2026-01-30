@@ -1,53 +1,43 @@
 
 proc testSuiteOther ()
 
- 	label lblTestOtherRandom testOtherRandom
     call testCase (
-    	label pointer copy TestToCall lblTestOtherRandom
+    	label set TestToCall testOtherRandom
+    )
+
+    call testCase (
+    	label set TestToCall testOtherSeed
+    )
+
+    call testCase (
+    	label set TestToCall testOtherTrace
     )
     
-     label lblTestOtherSeed testOtherSeed
     call testCase (
-    	label pointer copy TestToCall lblTestOtherSeed
+    	label set TestToCall testOtheMarker
     )
-    
-    label lblTestOtherTrace testOtherTrace
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtherTrace
+    	label set TestToCall testOtherWait
     )
-    
-    label lblTestOtherMarker testOtherMarker
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtheMarker
+    	label set TestToCall testOtherLogSubstitutions
     )
-    
-    label lblTestOtherWait testOtherWait
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtherWait
+    	label set TestToCall testOtherLogFormats
     )
-    
-    label lblTestOtherLogSubstitutions testOtherLogSubstitutions
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtherLogSubstitutions
+    	label set TestToCall testOtherLog
     )
-    
-     label lblTestOtherLogFormats testOtherLogFormats
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtherLogFormats
+    	label set TestToCall testOtherHelloWorld
     )
-    
-     label lblTestOtherLog testOtherLog
+
     call testCase (
-    	label pointer copy TestToCall lblTestOtherLog
-    )
-    
-     label lblTestOtherHelloWorld testOtherHelloWorld
-    call testCase (
-    	label pointer copy TestToCall lblTestOtherHelloWorld
-    )
-    
-     label lblTestOtherCall testOtherCall
-    call testCase (
-    	label pointer copy TestToCall lblTestOtherCall
+    	label set TestToCall testOtherCall
     )
 end proc

@@ -1,75 +1,63 @@
 proc testSuiteLines ()
 
-	label lblTestLinesAppendArray testLinesAppendArray
     call testCase (
-    	label pointer copy TestToCall lblTestLinesAppendArray
+    	label set TestToCall testLinesAppendArray
     )
-    label lblTestLinesAppendText testLinesAppendText
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesAppendText
+    	label set TestToCall testLinesAppendText
     )
-    label lblTestLinesDeleteAllArray testLinesDeleteAllArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesDeleteAllArray
+    	label set TestToCall testLinesDeleteAllArray
     )
-    label lblTestLinesDeleteArray testLinesDeleteArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesDeleteArray
+    	label set TestToCall testLinesDeleteArray
     )
-    
-    label lblTestLinesGetArray testLinesGetArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesGetArray
+    	label set TestToCall testLinesGetArray
     )
-    
-    label lblTestLinesInsertArray testLinesInsertArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesInsertArray
+    	label set TestToCall testLinesInsertArray
     )
-    
-    label lblTestLinesInsertText testLinesInsertText
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesInsertText
+    	label set TestToCall testLinesInsertText
     )
-    
-    label lblTestLinesPointerCopy testLinesPointerCopy
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesPointerCopy
+    	label set TestToCall testLinesPointerCopy
     )
-    
-    label lblTestLinesSetArray testLinesSetArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesSetArray
+    	label set TestToCall testLinesSetArray
     )
-    
-    label lblTestLinesSetText testLinesSetText
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesSetText
+    	label set TestToCall testLinesSetText
     )
-    
-    label lblTestLinesSize testLinesSize
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesSize
+    	label set TestToCall testLinesSize
     )
-    
-    label lblTestLinesLocal testLinesLocal
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesLocal
+    	label set TestToCall testLinesLocal
     )
-    
-    label lblTestLinesParameterIn testLinesParameterIn
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesParameterIn
+    	label set TestToCall testLinesParameterIn
     )
-    
-    label lblTestLinesParameterOut testLinesParameterOut
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesParameterOut
+    	label set TestToCall testLinesParameterOut
     )
-    
-    label lblTestLinesLocalOverride testLinesLocalOverride
+
     call testCase (
-    	label pointer copy TestToCall lblTestLinesLocalOverride
+    	label set TestToCall testLinesLocalOverride
     )
 end proc
 

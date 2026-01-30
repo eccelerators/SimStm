@@ -1,34 +1,28 @@
 
 proc testSuiteBasic ()
 
-	label lblTestBasicConst testBasicConst
     call testCase (
-    	label pointer copy TestToCall lblTestBasicConst
+    	label set TestToCall testBasicConst
     )
-    
-    label lblTestBasicIfElseElsif testBasicIfElseElsif
+
     call testCase (
-    	label pointer copy TestToCall lblTestBasicIfElseElsif
+    	label set TestToCall testBasicIfElseElsif
     )
-    
-    label lblTestBasicNestedIfElseElsif testBasicNestedIfElseElsif
+
     call testCase (
-    	label pointer copy TestToCall lblTestBasicNestedIfElseElsif
+    	label set TestToCall testBasicNestedIfElseElsif
     )
-    
-    label lblTestBasicLoop testBasicLoop
+
     call testCase (
-    	label pointer copy TestToCall lblTestBasicLoop
+    	label set TestToCall testBasicLoop
     )
-    
-    label lblTestBasicVar testBasicVar
+
     call testCase (
-    	label pointer copy TestToCall lblTestBasicVar
+    	label set TestToCall testBasicVar
     )
-    
-    label lblTestBasicVar3 testBasicVar3
+
     call testCase (
-    	label pointer copy TestToCall lblTestBasicVar3
+    	label set TestToCall testBasicVar3
     )
 
 end proc

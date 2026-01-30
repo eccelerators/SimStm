@@ -9,44 +9,36 @@ proc testSuiteArray ()
         label set TestToCall testArrayGet
     )
     
-    label lblTestCaseArraySet testArraySet
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArraySet
+    	label set TestToCall testCaseArraySet
     )
-    
-    label lblTestCaseArraySize testArraySize
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArraySize
+    	label set TestToCall testCaseArraySize
     )
-    
-    label lblTestCaseArrayPointerCopy testArrayPointerCopy
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArrayPointerCopy
+    	label set TestToCall testCaseArrayPointerCopy
     )
-    
-    label lblTestCaseArrayParameterIn testArrayParameterIn
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArrayParameterIn
+    	label set TestToCall testCaseArrayParameterIn
     )
-    
-    label lblTestCaseArrayParameterOut testArrayParameterout
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArrayParameterOut
+    	label set TestToCall testCaseArrayParameterOut
     )
-    
-    label lblTestCaseArrayLocal testArrayLocal
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseLocal
+    	label set TestToCall testCaseLocal
     )
-    
-    label lblTestCaseArrayLocalOverride testArrayLocalOverride
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArrayLocalOverride
+    	label set TestToCall testCaseArrayLocalOverride
     )
-    
-    label lblTestCaseArrayParameterIn testArrayDefaultValue
+
     call testCase (
-    	label pointer copy TestToCall lblTestCaseArrayDefaultValue
+    	label set TestToCall testCaseArrayDefaultValue
     )
 
 end proc

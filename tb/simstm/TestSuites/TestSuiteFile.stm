@@ -1,53 +1,43 @@
 proc testSuiteFile ()
 	
-	label lblTestFileAppendArray testFileAppendArray
     call testCase (
-    	label pointer copy TestToCall lblTestFileAppendArray
+    	label set TestToCall testFileAppendArray
     )
-    
-    label lblTestFileReadAllArray testFileReadAllArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileReadAllArray
+    	label set TestToCall testFileReadAllArray
     )
-    
-    label lblTestFileReadArray testFileReadArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileReadArray
+    	label set TestToCall testFileReadArray
     )
-    
-    label lblTestFileStatus testFileStatus
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileStatus
+    	label set TestToCall testFileStatus
     )
-    
-    label lblTestFileWriteArray testFileWriteArray
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileWriteArray
+    	label set TestToCall testFileWriteArray
     )
-    
-    label lblTestFilePointerCopy testFilePointerCopy
+
     call testCase (
-    	label pointer copy TestToCall lblTestFilePointerCopy
+    	label set TestToCall testFilePointerCopy
     )
-    
-    label lblTestFileLocalOverride testFileLocalOverride
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileLocalOverride
+    	label set TestToCall testFileLocalOverride
     )
-    
-    label lblTestFileLocal testFileLocal
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileLocal
+    	label set TestToCall testFileLocal
     )
-    
-    label lblTestFileParameterIn testFileParameterIn
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileParameterIn
+    	label set TestToCall testFileParameterIn
     )
-    
-    label lblTestFileParameterOut testFileParameterOut
+
     call testCase (
-    	label pointer copy TestToCall lblTestFileParameterOut
+    	label set TestToCall testFileParameterOut
     )
 end proc
 

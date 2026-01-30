@@ -1,23 +1,19 @@
 
 proc testSuiteSignal ()
 
-label lblTestSignalWriteReadVerify testSignalWriteReadVerify
     call testCase (
-    	label pointer copy TestToCall lblTestSignalWriteReadVerify
+    	label set TestToCall testSignalWriteReadVerify
     )
-    
-    label lblTestSignalVerifyFail testSignalVerifyFail
+
     call testCase (
-    	label pointer copy TestToCall lblTestSignalVerifyFail
+    	label set TestToCall testSignalVerifyFail
     )
-    
-    label lblTestSignalPointerCopy testSignalPointerCopy
+
     call testCase (
-    	label pointer copy TestToCall lblTestSignalPointerCopy
+    	label set TestToCall testSignalPointerCopy
     )
-    
-    label lblTestSignalPointerGetSet testSignalPointerGetSet
+
     call testCase (
-    	label pointer copy TestToCall lblTestSignalPointerGetSet
+    	label set TestToCall testSignalPointerGetSet
     )
 end proc

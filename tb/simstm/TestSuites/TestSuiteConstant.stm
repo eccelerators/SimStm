@@ -1,7 +1,6 @@
 proc testSuiteConstant ()
 
-    label lblTesstConstantAdd testConstantAdd
     call testCase (
-    	label pointer copy TestToCall lblTestConstantAdd
+    	label set TestToCall testConstantAdd
     )
 end proc

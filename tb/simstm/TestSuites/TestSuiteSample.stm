@@ -1,36 +1,11 @@
 
 proc testSuiteSample ()
 
- label lblTestSampleA testSampleA
     call testCase (
-    	label pointer copy TestToCall lblTestSampleA
+    	label set TestToCall testSampleA
     )
-    
-    label lblTestSampleB testSampleB
+
     call testCase (
-    	label pointer copy TestToCall lblTestSampleB
-    )
-end proc
-
-
-proc testCaseSampleA (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseSampleB (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    	label set TestToCall testSampleB
     )
 end proc
