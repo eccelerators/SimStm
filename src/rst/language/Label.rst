@@ -15,9 +15,9 @@ Label Equ
 
 .. code-block:: simstm
 	
- label equ lbl_var a_var
+ label equ lbl_varA lbl_varB
  
-The instruction ``label equ`` sets the value of a label to a variable.
+The instruction ``label equ`` sets the value of a label to a different label.
 
 In the example, ``lbl_var`` is set to the value of ``a_var``.
 
