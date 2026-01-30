@@ -1,130 +1,53 @@
 proc testSuiteFile ()
-
-    call testCaseFileAppendArray ()
-    call testCaseFileReadAllArray ()
-    call testCaseFileReadArray ()
-    call testCaseFileStatus ()
-    call testCaseFileWriteArray ()
-    call testCaseFilePointerCopy ()
-    call testCaseFileLocalOverride ()
-    call testCaseFileLocal ()
-    call testCaseFileParameterIn ()
-    call testCaseFileParameterOut ()
-end proc
-
-proc testCaseFileAppendArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFileAppendArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+	
+	label lblTestFileAppendArray testFileAppendArray
+    call testCase (
+    	label pointer copy TestToCall lblTestFileAppendArray
+    )
+    
+    label lblTestFileReadAllArray testFileReadAllArray
+    call testCase (
+    	label pointer copy TestToCall lblTestFileReadAllArray
+    )
+    
+    label lblTestFileReadArray testFileReadArray
+    call testCase (
+    	label pointer copy TestToCall lblTestFileReadArray
+    )
+    
+    label lblTestFileStatus testFileStatus
+    call testCase (
+    	label pointer copy TestToCall lblTestFileStatus
+    )
+    
+    label lblTestFileWriteArray testFileWriteArray
+    call testCase (
+    	label pointer copy TestToCall lblTestFileWriteArray
+    )
+    
+    label lblTestFilePointerCopy testFilePointerCopy
+    call testCase (
+    	label pointer copy TestToCall lblTestFilePointerCopy
+    )
+    
+    label lblTestFileLocalOverride testFileLocalOverride
+    call testCase (
+    	label pointer copy TestToCall lblTestFileLocalOverride
+    )
+    
+    label lblTestFileLocal testFileLocal
+    call testCase (
+    	label pointer copy TestToCall lblTestFileLocal
+    )
+    
+    label lblTestFileParameterIn testFileParameterIn
+    call testCase (
+    	label pointer copy TestToCall lblTestFileParameterIn
+    )
+    
+    label lblTestFileParameterOut testFileParameterOut
+    call testCase (
+    	label pointer copy TestToCall lblTestFileParameterOut
     )
 end proc
-
-proc testCaseFileReadAllArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFileReadAllArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseFileReadArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFileReadArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseFileStatus (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFileStatus ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseFileWriteArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFileWriteArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseFilePointerCopy (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testFilePointerCopy ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseFileLocalOverride (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testFileLocalOverride ()
-	call endTestCase (
-		equ skipped skipped
-		equ failure StandardTestFailure
-	)
-end proc
-
-proc testCaseFileLocal (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testFileLocal ()
-	call endTestCase (
-		equ skipped skipped
-		equ failure StandardTestFailure
-	)
-end proc
-
-proc testCaseFileParameterIn (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testFileParameterIn ()
-	call endTestCase (
-		equ skipped skipped
-		equ failure StandardTestFailure
-	)
-end proc
-
-proc testCaseFileParameterOut (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testFileParameterOut ()
-	call endTestCase (
-		equ skipped skipped
-		equ failure StandardTestFailure
-	)
-end proc
-
-
-
-
-
-
 

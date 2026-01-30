@@ -9,8 +9,8 @@ include "File/file_local.stm"
 include "File/file_parameter.stm"
 include "File/file_pointer.stm"
 
-testMainSuiteFile:
-proc
+proc testMainSuiteFile ()
+
     call initBase ()
 
     verbosity INFO_2

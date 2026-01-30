@@ -1,123 +1,53 @@
 
 proc testSuiteOther ()
-    call testCaseOtherRandom ()
-    call testCaseOtherSeed ()
-    call testCaseOtherTrace ()
-    call testCaseOtherMarker ()
-    call testCaseOtherWait ()
-    call testCaseOtherLogSubstitutions ()
-    call testCaseOtherLogFormats ()
-    call testCaseOtherLog ()
-    call testCaseOtherHelloWorld ()
-    call testCaseOtherCall ()
-end proc
 
-proc testCaseOtherRandom (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+ 	label lblTestOtherRandom testOtherRandom
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherRandom
     )
-end proc
-
-proc testCaseOtherSeed (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherSeed ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     label lblTestOtherSeed testOtherSeed
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherSeed
     )
-end proc
-
-proc testCaseOtherTrace (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherTrace ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestOtherTrace testOtherTrace
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherTrace
     )
-end proc
-
-proc testCaseOtherMarker (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherMarker ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestOtherMarker testOtherMarker
+    call testCase (
+    	label pointer copy TestToCall lblTestOtheMarker
     )
-end proc
-
-proc testCaseOtherWait (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherWait ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestOtherWait testOtherWait
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherWait
     )
-end proc
-
-proc testCaseOtherLogSubstitutions (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLogSubstitutions ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestOtherLogSubstitutions testOtherLogSubstitutions
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherLogSubstitutions
     )
-end proc
-
-proc testCaseOtherLogFormats (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLogFormats ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     label lblTestOtherLogFormats testOtherLogFormats
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherLogFormats
     )
-end proc
-
-proc testCaseOtherLog (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLog ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     label lblTestOtherLog testOtherLog
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherLog
     )
-end proc
-
-proc testCaseOtherHelloWorld (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherHelloWorld ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     label lblTestOtherHelloWorld testOtherHelloWorld
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherHelloWorld
     )
-end proc
-
-proc testCaseOtherCall (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherHelloWorld ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     label lblTestOtherCall testOtherCall
+    call testCase (
+    	label pointer copy TestToCall lblTestOtherCall
     )
 end proc

@@ -1,186 +1,75 @@
 proc testSuiteLines ()
 
-    call testCaseLinesAppendArray ()
-    call testCaseLinesAppendText ()
-    call testCaseLinesDeleteAllArray ()
-    call testCaseLinesDeleteArray ()
-    call testCaseLinesGetArray ()
-    call testCaseLinesInsertArray ()
-    call testCaseLinesInsertText ()
-    call testCaseLinesPointerCopy ()
-    call testCaseLinesSetArray ()
-    call testCaseLinesSetText ()
-    call testCaseLinesSize ()
-    call testCaseLinesLocal ()
-    call testCaseLinesParameterIn ()
-    call testCaseLinesParameterOut ()
-    call testLinesLocalOverride ()
-end proc
-
-proc testCaseLinesLocalOverride (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+	label lblTestLinesAppendArray testLinesAppendArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesAppendArray
+    )
+    label lblTestLinesAppendText testLinesAppendText
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesAppendText
+    )
+    label lblTestLinesDeleteAllArray testLinesDeleteAllArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesDeleteAllArray
+    )
+    label lblTestLinesDeleteArray testLinesDeleteArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesDeleteArray
+    )
+    
+    label lblTestLinesGetArray testLinesGetArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesGetArray
+    )
+    
+    label lblTestLinesInsertArray testLinesInsertArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesInsertArray
+    )
+    
+    label lblTestLinesInsertText testLinesInsertText
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesInsertText
+    )
+    
+    label lblTestLinesPointerCopy testLinesPointerCopy
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesPointerCopy
+    )
+    
+    label lblTestLinesSetArray testLinesSetArray
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesSetArray
+    )
+    
+    label lblTestLinesSetText testLinesSetText
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesSetText
+    )
+    
+    label lblTestLinesSize testLinesSize
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesSize
+    )
+    
+    label lblTestLinesLocal testLinesLocal
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesLocal
+    )
+    
+    label lblTestLinesParameterIn testLinesParameterIn
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesParameterIn
+    )
+    
+    label lblTestLinesParameterOut testLinesParameterOut
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesParameterOut
+    )
+    
+    label lblTestLinesLocalOverride testLinesLocalOverride
+    call testCase (
+    	label pointer copy TestToCall lblTestLinesLocalOverride
     )
 end proc
-
-proc testCaseLinesAppendArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesAppendArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesAppendText (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesAppendText ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesDeleteAllArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesDeleteAllArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesDeleteArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesDeleteArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesGetArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesGetArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesInsertArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesInsertArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesInsertText (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesInsertText ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesPointerCopy (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesPointerCopy ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesSetArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesSetArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesSetText (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesSetText ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesSize (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testLinesSize ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesLocal (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testLinesLocal ()
-	call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesParameterIn (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testLinesParameterIn ()
-	call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseLinesParameterOut (
-	var skipped 0
-)
-	call beginTestCase ()
-	call testLinesParameterOut ()
-	call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
 

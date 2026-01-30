@@ -1,55 +1,23 @@
 
 proc testSuiteSignal ()
-    call testCaseSignalWriteReadVerify ()
-    call testCaseSignalVerifyFail ()
-    call testCaseSignalPointerCopy ()
-    call testCaseSignalPointerGetSet ()
-end proc
 
-
-proc testCaseSignalWriteReadVerify (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalWriteReadVerify ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+label lblTestSignalWriteReadVerify testSignalWriteReadVerify
+    call testCase (
+    	label pointer copy TestToCall lblTestSignalWriteReadVerify
     )
-end proc
-
-
-proc testCaseSignalVerifyFail (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalVerifyFail ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestSignalVerifyFail testSignalVerifyFail
+    call testCase (
+    	label pointer copy TestToCall lblTestSignalVerifyFail
     )
-end proc
-
-
-proc testCaseSignalPointerCopy (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalPointerCopy ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestSignalPointerCopy testSignalPointerCopy
+    call testCase (
+    	label pointer copy TestToCall lblTestSignalPointerCopy
     )
-end proc
-
-
-proc testCaseSignalPointerGetSet (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalPointerGetSet ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestSignalPointerGetSet testSignalPointerGetSet
+    call testCase (
+    	label pointer copy TestToCall lblTestSignalPointerGetSet
     )
 end proc

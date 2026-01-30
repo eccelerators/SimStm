@@ -1,6 +1,15 @@
 
 proc testSuiteSample ()
-    call testCaseSampleA ()
+
+ label lblTestSampleA testSampleA
+    call testCase (
+    	label pointer copy TestToCall lblTestSampleA
+    )
+    
+    label lblTestSampleB testSampleB
+    call testCase (
+    	label pointer copy TestToCall lblTestSampleB
+    )
 end proc
 
 

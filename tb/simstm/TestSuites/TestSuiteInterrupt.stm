@@ -1,5 +1,9 @@
+
 proc testSuiteInterrupt ()
-    call testCaseInterrupt ()
+    label lblTestInterrupt testInterrupt
+    call testCase (
+    	label pointer copy TestToCall lblTestInterrupt
+    )
 end proc
 
 proc testCaseInterrupt (

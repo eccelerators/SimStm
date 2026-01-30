@@ -1,208 +1,88 @@
 proc testSuiteVariable ()
-
-    call testCaseVariableAdd ()
-    call testCaseVariableAnd ()
-    call testCaseVariableDiv ()
-    call testCaseVariableEqu ()
-    call testCaseVariableMul ()
-    call testCaseVariableOr ()
-    call testCaseVariableSub ()
-    call testCaseVariableXor ()
-    call testCaseVariableInv ()
-    call testCaseVariableLd ()
-    call testCaseVariableLocal ()
-    call testCaseVariableLocalOverride ()
-    call testCaseVariablePointer ()
-    call testCaseVariableParameterIn ()
-    call testCaseVariableParameterOut ()
-    call testCaseVariableDefaultValue ()
-end proc
-
-
-proc testCaseVariableDefaultValue (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+	
+	label lblTestVariableAdd testVariableAdd
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableAdd
     )
-end proc
-
-proc testCaseVariableLocalOverride (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableAnd testVariableAnd
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableAnd
     )
-end proc
-
-proc testCaseVariableLocal (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocal ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableDiv testVariableDiv
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableDiv
     )
-end proc
-
-proc testCaseVariablePointer (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariablePointer ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableEqu testVariableEqu
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableEqu
     )
-end proc
-
-
-proc testCaseVariableParameterIn (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableParameterIn ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableMul testVariableMul
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableMul
     )
-end proc
-
-
-proc testCaseVariableParameterOut (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableParameterOut ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableOr testVariableOr
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableOr
     )
-end proc
-
-
-proc testCaseVariableLd (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLd
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableSub testVariableSub
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableSub
     )
-end proc
-
-
-proc testCaseVariableInv (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableInv
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableXor testVariableXor
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableXor
     )
-end proc
-
-
-proc testCaseVariableXor (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableXor
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariableInv testVariableInv
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableInv
     )
-end proc
-
-
-proc testCaseVariableSub (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableSub
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariableLd testVariableLd
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableLd
     )
-end proc
-
-
-proc testCaseVariableOr (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableOr
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariableLocal testVariableLocal
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableLocal
     )
-end proc
-
-
-proc testCaseVariableMul (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableMul
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariableLocalOverride testVariableLocalOverride
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableLocalOverride
     )
-end proc
-
-
-proc testCaseVariableEqu (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableEqu
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariablePointer testVariablePointer
+    call testCase (
+    	label pointer copy TestToCall lblTestVariablePointer
     )
-end proc
-
-
-proc testCaseVariableDiv (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableDiv
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+     
+    label lblTestVariableParameterIn testVariableParameterIn
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableParameterIn
     )
-end proc
-
-
-proc testCaseVariableAnd (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableAnd
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableParameterOut testVariableParameterOut
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableParameterOut
     )
-end proc
-
-
-proc testCaseVariableAdd (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testVariableAdd
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    label lblTestVariableDefaultValue testVariableDefaultValue
+    call testCase (
+    	label pointer copy TestToCall lblTestVariableDefaultValue
     )
 end proc
