@@ -29,7 +29,6 @@ proc testSuiteVariable ()
     call testCase (
     	label pointer copy TestToCall lblTestVariableOr
     )
-<<<<<<< HEAD
     
     label lblTestVariableSub testVariableSub
     call testCase (
@@ -85,7 +84,7 @@ proc testSuiteVariable ()
     label lblTestVariableDefaultValue testVariableDefaultValue
     call testCase (
     	label pointer copy TestToCall lblTestVariableDefaultValue
-=======
+    	)
 end proc
 
 
@@ -205,6 +204,6 @@ proc testCaseVariableAdd (
     call endTestCase ( 
     	equ  skipped skipped
     	equ failure StandardTestFailure
->>>>>>> 48d9da1cf5db7592235916cb06e566839c5b1ee1
+
     )
 end proc

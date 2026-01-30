@@ -10,10 +10,7 @@ include "File/file_parameter.stm"
 include "File/file_pointer.stm"
 
 proc testMainSuiteFile ()
-<<<<<<< HEAD
 
-=======
->>>>>>> 48d9da1cf5db7592235916cb06e566839c5b1ee1
     call initBase ()
 
     verbosity INFO_2
