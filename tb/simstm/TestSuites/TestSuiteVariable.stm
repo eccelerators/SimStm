@@ -1,208 +1,66 @@
 proc testSuiteVariable ()
-
-    call testCaseVariableAdd ()
-    call testCaseVariableAnd ()
-    call testCaseVariableDiv ()
-    call testCaseVariableEqu ()
-    call testCaseVariableMul ()
-    call testCaseVariableOr ()
-    call testCaseVariableSub ()
-    call testCaseVariableXor ()
-    call testCaseVariableInv ()
-    call testCaseVariableLd ()
-    call testCaseVariableLocal ()
-    call testCaseVariableLocalOverride ()
-    call testCaseVariablePointer ()
-    call testCaseVariableParameterIn ()
-    call testCaseVariableParameterOut ()
-    call testCaseVariableDefaultValue ()
-end proc
-
-
-proc testCaseVariableDefaultValue (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+	
+    call testCase (
+    	label set testToCall testVariableAdd
     )
-end proc
-
-proc testCaseVariableLocalOverride (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableAnd
     )
-end proc
-
-proc testCaseVariableLocal (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLocal ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableDiv
     )
-end proc
-
-proc testCaseVariablePointer (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariablePointer ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableEqu
     )
-end proc
-
-
-proc testCaseVariableParameterIn (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableParameterIn ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableMul
     )
-end proc
-
-
-proc testCaseVariableParameterOut (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableParameterOut ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableOr
     )
-end proc
 
-
-proc testCaseVariableLd (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableLd ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set testToCall testVariableSub
     )
-end proc
-
-
-proc testCaseVariableInv (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableInv ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableXor
     )
-end proc
-
-
-proc testCaseVariableXor (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableXor ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableInv
     )
-end proc
-
-
-proc testCaseVariableSub (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableSub ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableLd
     )
-end proc
-
-
-proc testCaseVariableOr (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableOr ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableLocal
     )
-end proc
-
-
-proc testCaseVariableMul (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableMul ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariableLocalOverride
     )
-end proc
-
-
-proc testCaseVariableEqu (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableEqu ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call testCase (
+    	label set testToCall testVariablePointer
     )
-end proc
 
-
-proc testCaseVariableDiv (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableDiv ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set testToCall testVariableParameterIn
     )
-end proc
-
-
-proc testCaseVariableAnd (
-	var skipped 0
-)
-    call beginTestCase ()    
-    call testVariableAnd ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+ 
+    call testCase (
+    	label set testToCall testVariableParameterOut
     )
-end proc
 
-
-proc testCaseVariableAdd (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testVariableAdd ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
+    call testCase (
+    	label set testToCall testVariableDefaultValue
+    	)
 end proc

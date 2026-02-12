@@ -53,6 +53,9 @@ file simulation_success "simulation.success"
 
 
 proc testMain ()
+
+proc testMain ()
+
     call initBase ()
 
     verbosity INFO_2

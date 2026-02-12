@@ -1,16 +1,6 @@
 proc testSuiteConstant ()
 
-    call testCaseConstantAdd ()
-end proc
-
-
-proc testCaseConstantAdd (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testConstantAdd ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testConstantAdd
     )
 end proc

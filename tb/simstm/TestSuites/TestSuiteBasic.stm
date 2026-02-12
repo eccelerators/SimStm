@@ -1,75 +1,28 @@
 
 proc testSuiteBasic ()
-    call testCaseBasicConst ()
-    call testCaseBasicIfElseElsif ()
-    call testCaseBasicNestedIfElseElsif ()
-    call testCaseBasicLoop ()
-    call testCaseBasicVar ()
-    call testCaseBasicVar3 ()
-end proc
 
-proc testCaseBasicLoop (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicLoop ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicConst
     )
-end proc
 
-proc testCaseBasicVar (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicVar ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicIfElseElsif
     )
-end proc
 
-proc testCaseBasicVar3 (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicVar3 ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicNestedIfElseElsif
     )
-end proc
 
-proc testCaseBasicIfElseElsif (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicIfElseElsif ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicLoop
     )
-end proc
 
-proc testCaseBasicNestedIfElseElsif (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicNestedIfElseElsif ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicVar
     )
-end proc
 
-proc testCaseBasicConst (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicConst ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testBasicVar3
     )
+
 end proc

@@ -1,27 +1,11 @@
 
 proc testSuiteSample ()
-    call testCaseSampleA ()
-end proc
 
-
-proc testCaseSampleA (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSampleA
     )
-end proc
 
-proc testCaseSampleB (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSampleB
     )
 end proc

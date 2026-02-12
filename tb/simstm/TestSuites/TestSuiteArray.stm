@@ -8,140 +8,37 @@ proc testSuiteArray ()
     call testCase (
         label set TestToCall testArrayGet
     )
---    call testCaseArray ()
---    call testCaseArrayGet ()
---    call testCaseArraySet ()
---    call testCaseArraySize ()
---    call testCaseArrayPointerCopy ()
---    call testCaseArrayParameterIn ()
---    call testCaseArrayParameterOut ()
---    call testCaseArrayLocal ()
---    call testCaseArrayLocalOverride ()
---    call testCaseArrayDefaultValue ()
+    
+    call testCase (
+    	label set TestToCall testCaseArraySet
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArraySize
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArrayPointerCopy
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArrayParameterIn
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArrayParameterOut
+    )
+
+    call testCase (
+    	label set TestToCall testCaseLocal
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArrayLocalOverride
+    )
+
+    call testCase (
+    	label set TestToCall testCaseArrayDefaultValue
+    )
+
 end proc
-
-
---proc testCaseArray (
---    var skipped 0
---)
---    call beginTestCase ()
---    call testArray ()
---    call endTestCase ( 
---        equ  skipped skipped
---        equ failure StandardTestFailure
---    )
---end proc
---proc testCaseArrayDefaultValue (
---    var skipped 0
---)
---    call beginTestCase ()
---    call testArrayDefaultValue ()
---    call endTestCase ( 
---        equ  skipped skipped
---        equ failure StandardTestFailure
---    )
---end proc
---
---proc testCaseArrayLocalOverride (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArrayLocalOverride ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---proc testCaseArrayLocal (
---	var skipped 0
---)
---    call beginTestCase ()
---	call testArrayParameterIn ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---proc testCaseArrayParameterIn (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArrayParameterIn ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---proc testCaseArrayParameterOut (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArrayParameterOut ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---
---proc testCaseArray (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArray ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---
---proc testCaseArrayGet (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArrayGet ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---
---proc testCaseArraySet (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArraySet ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---
---proc testCaseArraySize (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArraySize ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
---
---
---proc testCaseArrayPointerCopy (
---	var skipped 0
---)
---    call beginTestCase ()
---    call testArrayPointerCopy ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc

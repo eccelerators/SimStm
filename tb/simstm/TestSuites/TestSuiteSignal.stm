@@ -1,55 +1,19 @@
 
 proc testSuiteSignal ()
-    call testCaseSignalWriteReadVerify ()
-    call testCaseSignalVerifyFail ()
-    call testCaseSignalPointerCopy ()
-    call testCaseSignalPointerGetSet ()
-end proc
 
-
-proc testCaseSignalWriteReadVerify (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalWriteReadVerify ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSignalWriteReadVerify
     )
-end proc
 
-
-proc testCaseSignalVerifyFail (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalVerifyFail ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSignalVerifyFail
     )
-end proc
 
-
-proc testCaseSignalPointerCopy (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalPointerCopy ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSignalPointerCopy
     )
-end proc
 
-
-proc testCaseSignalPointerGetSet (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testSignalPointerGetSet ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call testCase (
+    	label set TestToCall testSignalPointerGetSet
     )
 end proc
