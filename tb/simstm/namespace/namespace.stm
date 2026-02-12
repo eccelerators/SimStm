@@ -1,3 +1,34 @@
-namespace a_namespace
+namespace nnn
+
+    var abc 2
+
+    proc a_ppp ()
+    
+    end proc
 
 end namespace
+
+namespace mmm
+
+    var abc 0
+
+    proc a_ppp ()
+    
+    end proc
+
+end namespace
+
+proc testNamespace ()
+
+    call nnn.a_ppp ()
+    call mmm.a_ppp ()
+    call a_ppp ()
+
+end proc
+
+var abc 0
+proc a_ppp ()
+
+    log message 0 "bla {}" abc
+
+end proc
