@@ -9,5 +9,5 @@ functionalities of files are grouped in TestSuiteFile.
 
 TestMains launch the TestSuites. They can also provide a user interface for better readability.
 
-TestLabs are for experimenting with specific test cases.
+TestLabs are meant for experimenting with specific test cases.
 
