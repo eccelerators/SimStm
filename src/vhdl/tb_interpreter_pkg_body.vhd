@@ -1346,9 +1346,12 @@ package body tb_interpreter_pkg is
         end loop;
         --  open include file
         file_open(v_stat, include_file, text_line_crop(include_file_path_name), read_mode);
-        if v_stat /= open_ok then
-            print("error: unable to open include file  " & text_line_crop(include_file_path_name));
-            status := 1;
+        assert v_stat = open_ok
+        report ("unable to open include file  " & text_line_crop(include_file_path_name))
+        severity failure;
+        if v_stat /= open_ok then -- when severity of assertion is reduced to error
+            print ("error: unable to open include file  " & text_line_crop(include_file_path_name));
+            status := 1; 
             return;
         end if;
         l_num := 1; -- initialize line number
@@ -1496,7 +1499,7 @@ package body tb_interpreter_pkg is
         -- open the stimulus_file and check
         file_open(v_stat, stimulus, path_name & file_name, read_mode);
         assert v_stat = open_ok
-        report lf & "error: unable to open stimulus_file  " & path_name & file_name
+        report "error: unable to open stimulus_file  " & path_name & file_name
         severity failure;
         -- copy file name to type text_line
         for i in 1 to path_name'high loop
