@@ -1,83 +1,53 @@
--- intern
-file TestCaseSampleSuiteAndCaseIndexAStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex sampleCaseIndexA
-file TestCaseSampleSuiteAndCaseIndexAFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex sampleCaseIndexA
-
-file TestCaseSampleSuiteAndCaseIndexBStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex sampleCaseIndexB
-file TestCaseSampleSuiteAndCaseIndexBFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex sampleCaseIndexB
-
 var sampleCaseIndexA 0
 var sampleCaseIndexB 0
 
-testSuiteIndexedSampleSuiteAndCaseIndex:
-proc
+proc testSuiteIndexedSampleSuiteAndCaseIndex ()
     equ sampleCaseIndexA 0
     equ sampleCaseIndexB 0
     loop 3
-        call testCaseSampleSuiteAndCaseIndexA
+        call testCaseSampleSuiteAndCaseIndexA ()
         add sampleCaseIndexA 5
     end loop
     loop 4
-        call testCaseSampleSuiteAndCaseIndexB
+        call testCaseSampleSuiteAndCaseIndexB ()
         add sampleCaseIndexB 10
     end loop
 end proc
 
-var tmpSampleSuiteAndCaseIndexA 0
 
-testCaseSampleSuiteAndCaseIndexA:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteAndCaseIndexAStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteAndCaseIndexAFile
-    call beginTestCaseIndexedSuiteIndexed
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    equ tmpSampleSuiteAndCaseIndexA TestSuiteIndex
-    add tmpSampleSuiteAndCaseIndexA 1
-    add tmpSampleSuiteAndCaseIndexA TestSuiteIndex
-    seed tmpSampleSuiteAndCaseIndexA
-    call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteAndCaseIndexA test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseSampleSuiteAndCaseIndexA (
+	var skipped 0
+)
+    var t 0
+    equ TestCaseIndex sampleCaseIndexA
+    call beginTestCaseIndexedSuiteIndexed ()
+    equ t TestSuiteIndex
+    add t 1
+    add t TestSuiteIndex
+    seed t
+    call testOtherRandom ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-var tmpSampleSuiteAndCaseIndexB 0
 
-testCaseSampleSuiteAndCaseIndexB:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteAndCaseIndexBStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteAndCaseIndexBFile
-    call beginTestCaseIndexedSuiteIndexed
+proc testCaseSampleSuiteAndCaseIndexB (
+	var skipped 0
+)
+    var t 0
+    equ TestCaseIndex sampleCaseIndexB
+    call beginTestCaseIndexedSuiteIndexed ()
+    equ t TestSuiteIndex
+    add t 100000
+    add t TestSuiteIndex
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-    equ tmpSampleSuiteAndCaseIndexB TestSuiteIndex
-    add tmpSampleSuiteAndCaseIndexB 100000
-    add tmpSampleSuiteAndCaseIndexB TestSuiteIndex
-
-    seed tmpSampleSuiteAndCaseIndexB
-    call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteAndCaseIndexB test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
+    seed t
+    call testOtherRandom ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 
 end proc

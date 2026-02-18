@@ -1,5 +1,5 @@
 
-testLabBasicDoubleConst:
-proc
-    call testBasicDoubleConst
+proc testLabBasicDoubleConst ()
+
+    call testBasicDoubleConst ()
 end proc

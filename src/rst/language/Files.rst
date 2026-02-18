@@ -1,7 +1,7 @@
 Files
 -----
 
-.. code-block:: none
+.. code-block:: simstm
 
  file a_file "filename.stm"
  file a_file "filename{:d}{:d}.stm" index1 index2
@@ -20,7 +20,7 @@ File Access
 File Writable
 ^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file writable a_file r_var
 
@@ -32,7 +32,7 @@ on the operating system.
 File Readable
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file readable a_file r_var
 
@@ -43,7 +43,7 @@ on the operating system.
 File Appendable
 ^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file appendable a_file r_var
 
@@ -54,7 +54,7 @@ depend on the operating system.
 File Write
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file write a_file a_lines
 
@@ -64,7 +64,7 @@ overwritten if it exists.
 File Append
 ^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file append a_file a_lines
 
@@ -74,7 +74,7 @@ if the file doesn't exist.
 File Read All
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  file read all a_file a_lines
 
@@ -83,7 +83,7 @@ The ``file read all`` instruction reads all lines of a file into a lines object.
 File Read
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file read a_file a_lines n_var
    file read a_file a_lines 10
@@ -100,7 +100,7 @@ limited to 4.
 File Read End
 ^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file read end a_file
 
@@ -109,11 +109,11 @@ The ``file read end`` instruction ends the piecewise read process of a file.
 File Pointer Copy
 ^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
    file pointer copy t_file s_file
 
-The ``file pointer copy`` instruction copies a file pointer; for example, the pointer ``t_file`` is a copy of
-the pointer ``s_file`` after the execution of the instruction. Used, for
+The ``file pointer copy`` instruction creates a file pointer; for example, ``t_file`` points to ``s_file`` after the
+execution of the instruction. Used, for
 instance, to hand over a file to a subroutine. Changes to the source
 file are applied in the target file as well.

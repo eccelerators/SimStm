@@ -6,31 +6,27 @@ SimStm
    :maxdepth: 2
    :caption: Contents:
 
-   Top
-   HistoryAndLicense
-   Focus
-   FeaturesAndAdvantages
-   InstallationAndUsageOfThePlugins
+   About
    OverviewAndIntegrationIntoUserTestbench
-   ContributionsAndBugs
-   RepositoryGuide
-   TopSimStmLanguageInstructions
-   DefinitionsAndDeclarations
-   Assignments
-   Operations
-   Subroutines
-   Interrupts
-   Branches
-   Loops
-   RandomNumbers
-   Assertions
-   FlowControl
-   Wait
-   LogMethods
-   DebugMethods
-   HelloWorldExample
-   RealLifeExamples
+   InstallationAndUsageOfThePlugins
+   language/Arrays
+   language/Bus
+   language/DebugMethods
+   language/Files
+   language/FlowControl
+   language/General
+   language/Include
+   language/Lines
+   language/Log
+   language/Objects
+   language/Operations
+   language/RandomNumbers
+   language/Signals
+   language/Variables
+   language/Wait   
+   Examples
    UnitTests
+   RepositoryGuide
    
 Indices and tables
 ==================

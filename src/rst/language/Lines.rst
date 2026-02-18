@@ -1,7 +1,7 @@
 Lines
 -----
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines a_lines
 
@@ -18,13 +18,13 @@ Lines Access
 Lines Get
 ^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines get array a_lines p_var t_array r_var
  lines get array a_lines 9 t_array r_var
 
 The ``lines get array`` instruction gets a line from a lines object at a given position and write its content
-into an array.
+into an array. The number of extracted values is stored in ``r_var``.
 
 The line is expected to hold hex numbers (without 0x
 prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
@@ -37,7 +37,7 @@ mismatch.
 
 Lines Set
 ^^^^^^^^^
-.. code-block:: none
+.. code-block:: simstm
 
  lines set array a_lines p_var s_array
  lines set array a_lines 9 s_array
@@ -53,7 +53,7 @@ by values of variables given after the message string.
 Lines Insert
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines insert array a_lines p_var s_array
  lines insert array a_lines 9 s_array
@@ -69,7 +69,7 @@ message string.
 Lines Append
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines append array a_lines s_array
  lines append message a_lines "Some message to be written to a file later"
@@ -82,7 +82,7 @@ which are filled by values of variables given after the message string.
 Lines Delete
 ^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines delete a_lines p_var
  lines delete a_lines 3
@@ -93,7 +93,7 @@ moved to the given position if it exists.
 Lines Size
 ^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines size a_lines r_var
 
@@ -103,9 +103,11 @@ at that point.
 Lines Pointer Copy
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  lines pointer copy t_lines s_lines
 
-The ``lines pointer copy`` instruction copies a lines pointer; for example, the pointer ``t_lines``
-is a copy of ``s_lines``.
+The ``lines pointer copy`` instruction copies a lines pointer; for example, ``t_lines``
+points to ``s_lines`` after the execution of the instruction. Used, for
+instance, to hand over a file to a subroutine. Changes to the source
+object are applied to the target object as well.

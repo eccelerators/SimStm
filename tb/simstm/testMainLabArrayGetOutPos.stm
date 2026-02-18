@@ -7,9 +7,9 @@ include "TestLabs/TestLabArrayGetOutPos.stm"
 file simulation_success "simulation.success"
 lines success_lines
 
-testMainLabArrayGetOutPos:
-proc
-    call initBase
+
+proc testMainLabArrayGetOutPos ()
+    call initBase ()
 
     verbosity INFO_2
     trace 0
@@ -19,7 +19,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test started"
 
-    call testLabArrayGetOutPos
+    call testLabArrayGetOutPos ()
 
     log message INFO "Main test finished"
     wait 1000

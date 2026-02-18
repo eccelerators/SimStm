@@ -73,19 +73,20 @@ begin
     Clk <= transport (not Clk) after 10 ns / 2; -- 100MHz
 
     -- standard inputs
-    -- signals_in.in_signal_0 actual simulation time already supplied by package
-    signals_in.in_signal_1 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
-    -- signals_in.in_signal_2 constant 0 already supplied by package
-    signals_in.in_signal_3 <= verify_passes;
-    signals_in.in_signal_4 <= verify_failures;
-    signals_in.in_signal_5 <= bus_timeout_passes;
-    signals_in.in_signal_6 <= bus_timeout_failures;
-    -- signals_in.in_signal_7 Machine value width
+    -- signals_in.in_signal_0 constant 0 used to indicate yet unsassigned signal (None) e.g. in locally defined signals to be set by a parameter later
+    -- signals_in.in_signal_1 actual simulation time already supplied by package
+    signals_in.in_signal_2 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
+    -- signals_in.in_signal_3 constant 0 already supplied by package
+    signals_in.in_signal_4 <= verify_passes;
+    signals_in.in_signal_5 <= verify_failures;
+    signals_in.in_signal_6 <= bus_timeout_passes;
+    signals_in.in_signal_7 <= bus_timeout_failures;
+    -- signals_in.in_signal_8 Machine value width
 
     -- standard outputs
-    InitDut <= signals_out.out_signal_0;
-    -- signals_out.out_signal_4 <= expected_standard_test_verify_failure_count already connected in tb_simstm
-    -- signals_out.out_signal_6 <= expected_bus_timeout_test_failure_count already connected in tb_simstm
+    InitDut <= signals_out.out_signal_1;
+    -- signals_out.out_signal_5 <= expected_standard_test_verify_failure_count already connected in tb_simstm
+    -- signals_out.out_signal_7 <= expected_bus_timeout_test_failure_count already connected in tb_simstm
 
     -- interrupts
     signals_in.in_signal_1000 <= signals_out.out_signal_3002;

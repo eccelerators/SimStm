@@ -1,0 +1,40 @@
+
+proc testFileLocal ()
+
+	file a_file "a_file.dat"
+	var is_writable 0
+	var is_readable 0
+	lines a_lines
+	lines b_lines
+	lines final_lines
+	array b_array 2
+	call startStandardTestShell ()
+	
+	lines delete all a_lines
+	lines append message a_lines "some message to be overwritten"
+	
+	file writable a_file is_writable
+	file write a_file a_lines
+	
+	lines delete all b_lines
+	array set b_array 0 1
+	array set b_array 1 2
+	lines append array b_lines b_array
+	file write a_file b_lines
+	
+
+	
+	file read all a_file final_lines
+	log lines INFO_2 final_lines
+	array first_array 2
+	var a_var 99
+	lines get array final_lines 0 first_array a_var
+	log message INFO_2 "a_var: {:d}" a_var
+	array verify first_array 0 1 MAX
+	array verify first_array 1 2 MAX
+	
+	
+	call endStandardTestShell ()
+	--NOT WORKINHVCVWCCVWVCVWCVCEVWCUV
+		
+end proc

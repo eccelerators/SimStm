@@ -1,0 +1,17 @@
+
+proc testBus32DefaultValue (
+	bus busToTest 0
+)
+	call startStandardTestShell ()
+	call checkBusDefaultValue ()
+	call endStandardTestShell ()
+end proc
+
+
+proc checkBusDefaultValue (
+	bus a_bus 6
+)
+	var a_var 99
+	bus verify a_bus 32 0 a_var 6 MAX
+
+end proc

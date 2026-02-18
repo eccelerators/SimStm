@@ -1,11 +1,10 @@
 
-testBasicAbort:
-proc
+proc testBasicAbort ()
+
     abort
 end proc
 
-testBasicFinish:
-proc
+proc testBasicFinish ()
     finish
 end proc
 
@@ -16,12 +15,12 @@ include "Basic/lib4.stm"
 include "Basic/lib5.stm"
 include "Basic/lib6.stm"
 
-testBasicIncludeFlat:
-proc
+
+proc testBasicIncludeFlat ()
     log message 0 "load file test.stm"
-    call Lib1
-    call Lib2
-    call Lib3
+    call Lib1 ()
+    call Lib2 ()
+    call Lib3 ()
     finish
 
 end proc
@@ -29,13 +28,13 @@ end proc
 include "Basic/lib4.stm"
 include "Basic/lib5.stm"
 
-testBasicIncludeNested:
-proc
+
+proc testBasicIncludeNested ()
 
     log message 0 "load file test.stm"
-    call Lib4
-    call Lib5
-    call Lib6
+    call Lib4 ()
+    call Lib5 ()
+    call Lib6 ()
     finish
 
 end proc

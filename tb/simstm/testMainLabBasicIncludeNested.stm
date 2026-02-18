@@ -6,9 +6,9 @@ include "Basic/basic_labs.stm"
 file simulation_success "simulation.success"
 lines success_lines
 
-testMainLabBasicIncludeNested:
-proc
-    call initBase
+proc testMainLabBasicIncludeNested ()
+
+    call initBase ()
 
     verbosity INFO_2
     trace 0
@@ -18,7 +18,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test started"
 
-    call testLabBasicIncludeNested
+    call testLabBasicIncludeNested ()
 
     log message INFO "Main test finished"
     wait 1000

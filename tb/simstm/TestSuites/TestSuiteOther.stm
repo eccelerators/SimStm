@@ -1,285 +1,123 @@
 
--- intern
-file TestCaseOtherRandomStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherRandomFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherSeedStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherSeedFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherTraceStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherTraceFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherMarkerStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherMarkerFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherWaitStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherWaitFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherLogSubstitutionsStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherLogSubstitutionsFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherLogFormatsStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherLogFormatsFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherLogStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherLogFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherHelloWorldStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherHelloWorldFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-file TestCaseOtherCallStartFile "../../SimulationResults/{@c3}_{@c2}.start"
-file TestCaseOtherCallFile "../../SimulationResults/{@c3}_{@c2}.xml"
-
-testSuiteOther:
-proc
-    call testCaseOtherRandom
-    call testCaseOtherSeed
-    call testCaseOtherTrace
-    call testCaseOtherMarker
-    call testCaseOtherWait
-    call testCaseOtherLogSubstitutions
-    call testCaseOtherLogFormats
-    call testCaseOtherLog
-    call testCaseOtherHelloWorld
-    call testCaseOtherCall
+proc testSuiteOther ()
+    call testCaseOtherRandom ()
+    call testCaseOtherSeed ()
+    call testCaseOtherTrace ()
+    call testCaseOtherMarker ()
+    call testCaseOtherWait ()
+    call testCaseOtherLogSubstitutions ()
+    call testCaseOtherLogFormats ()
+    call testCaseOtherLog ()
+    call testCaseOtherHelloWorld ()
+    call testCaseOtherCall ()
 end proc
 
-testCaseOtherRandom:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherRandomStartFile
-    file pointer copy TestCaseFile TestCaseOtherRandomFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherRandom test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherRandom (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherRandom ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherSeed:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherSeedStartFile
-    file pointer copy TestCaseFile TestCaseOtherSeedFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherSeed
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherSeed test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherSeed (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherSeed ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherTrace:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherTraceStartFile
-    file pointer copy TestCaseFile TestCaseOtherTraceFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherTrace
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherTrace test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherTrace (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherTrace ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherMarker:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherMarkerStartFile
-    file pointer copy TestCaseFile TestCaseOtherMarkerFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherMarker
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherMarker test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherMarker (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherMarker ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherWait:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherWaitStartFile
-    file pointer copy TestCaseFile TestCaseOtherWaitFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherWait
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherWait test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherWait (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherWait ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherLogSubstitutions:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherLogSubstitutionsStartFile
-    file pointer copy TestCaseFile TestCaseOtherLogSubstitutionsFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherLogSubstitutions
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherLogSubstitutions test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherLogSubstitutions (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherLogSubstitutions ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherLogFormats:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherLogFormatsStartFile
-    file pointer copy TestCaseFile TestCaseOtherLogFormatsFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherLogFormats
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherLogFormats test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherLogFormats (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherLogFormats ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherLog:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherLogStartFile
-    file pointer copy TestCaseFile TestCaseOtherLogFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherLog
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherLog test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherLog (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherLog ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherHelloWorld:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherHelloWorldStartFile
-    file pointer copy TestCaseFile TestCaseOtherHelloWorldFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherHelloWorld
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherHelloWorld test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherHelloWorld (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherHelloWorld ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc
 
-testCaseOtherCall:
-proc
-    file pointer copy TestCaseStartFile TestCaseOtherCallStartFile
-    file pointer copy TestCaseFile TestCaseOtherCallFile
-    call beginTestCase
-
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-
-    call testOtherHelloWorld
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "OtherHelloWorld test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
-
+proc testCaseOtherCall (
+	var skipped 0
+)
+    call beginTestCase ()
+    call testOtherHelloWorld ()
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 end proc

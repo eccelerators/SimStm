@@ -1,8 +1,8 @@
 const test_constant_1 1
 const test_constant_2 2
 
-testConstantAdd:
-proc
+proc testConstantAdd ()
+
 
     log message 0 "test_variable_1: {}" test_constant_1
     log message 0 "test_variable_2: {}" test_constant_2
@@ -16,9 +16,8 @@ end proc
 
 const test_constant_3 1
 
-testConstantEqu:
-proc
-    equ   test_constant_3 10
+proc testConstantEqu ()
+    equ test_constant_3 10
 
     finish
 

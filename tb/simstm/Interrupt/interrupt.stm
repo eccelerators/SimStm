@@ -1,9 +1,9 @@
 var InterruptHappenedA 0
 var InterruptHappenedB 0
 
-testInterrupt:
-proc
-     call startStandardTestShell
+ proc testInterrupt ()
+
+     call startStandardTestShell ()
 
      equ InterruptHappenedA 0
      equ InterruptHappenedB 0
@@ -19,7 +19,7 @@ proc
     var verify InterruptHappenedA 1 MAX
     var verify InterruptHappenedB 1 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 InterruptA:

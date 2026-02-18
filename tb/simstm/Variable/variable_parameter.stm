@@ -1,18 +1,18 @@
 
 proc testVariableParameterIn ()
     var in_val 0xBB
-    call startStandardTestShell
+    call startStandardTestShell ()
     
-    call checkParameterInput ( 
+    call checkVariableParameterInput ( 
     	equ par_in_1 0xAA
     	equ par_in_2 in_val
     )
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 
-proc checkParameterInput ( 
+proc checkVariableParameterInput ( 
 	var par_in_1 0
 	var par_in_2 0
 )
@@ -26,14 +26,14 @@ end proc
 proc testVariableParameterOut ()
     
     var out_val 0
-    call startStandardTestShell
+    call startStandardTestShell ()
     -- trace TRACE_INSTRUCTIONS
     call setParameterOutput ( 
     	var pointer copy par_out out_val
     )
     var verify out_val 0xAB MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 

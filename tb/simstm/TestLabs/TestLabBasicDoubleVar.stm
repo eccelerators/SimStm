@@ -1,5 +1,5 @@
 
-testLabBasicDoubleVar:
-proc
-    call testBasicDoubleVar
+proc testLabBasicDoubleVar ()
+
+    call testBasicDoubleVar ()
 end proc

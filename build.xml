@@ -7,43 +7,23 @@
         <os family="windows" />
     </condition>
 
-    <condition property="drawio-executable" value="submodules/pacusc_drawio/runner.sh">
-        <istrue value="${env.CI}"/>
-    </condition>
-
-    <condition property="drawio-executable" value="draw.io.exe">
-        <and>
-            <os family="windows" />
-            <not>
-                <istrue value="${env.CI}"/>
-            </not>
-        </and>
-    </condition>
-
-    <condition property="drawio-executable" value="drawio">
-        <and>
-            <not>
-                <os family="windows" />
-            </not>
-            <not>
-                <istrue value="${env.CI}"/>
-            </not>
-        </and>
-    </condition>
-
-	<property name="ip.name" value="SimStm"/>
-
     <!-- To adapt properties for local purposes put a file build-local-overrides.xml beneath this file -->
 	<!-- It is ignored by git -->
-    <!-- e.g. to overide python executable used deeper in build-hxs.xml, put following line into build-local-overrides.xml: -->
+    <!-- e.g. to overide python executable, put following line into build-local-overrides.xml: -->
     <!-- <property name="python-executable" value="/bin/python38"/> -->
-	<!-- or -->
-	<!-- to set and fix a Flavour Number, put following line into build-local-overrides.xml:-->
-	<!-- <property name="flavour.number" value="0" /> -->
     <import file="build-local-overrides.xml" optional="true"/>
 
+	<import file="ant/build-html.xml" optional="false"/>
 	<import file="helper/build-helper.xml" optional="true"/>
 	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
 	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${basedir}/ant/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
+	
+
 
 </project>

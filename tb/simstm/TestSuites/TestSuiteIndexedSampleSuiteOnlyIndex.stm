@@ -1,70 +1,43 @@
--- intern
-file TestCaseSampleSuiteOnlyIndexAStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
-file TestCaseSampleSuiteOnlyIndexAFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
 
-file TestCaseSampleSuiteOnlyIndexBStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
-file TestCaseSampleSuiteOnlyIndexBFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
-
-testSuiteIndexedSampleSuiteOnlyIndex:
-proc
-    call testCaseSampleSuiteOnlyIndexA
-    call testCaseSampleSuiteOnlyIndexB
+proc testSuiteIndexedSampleSuiteOnlyIndex ()
+    call testCaseSampleSuiteOnlyIndexA ()
+    call testCaseSampleSuiteOnlyIndexB ()
 end proc
 
-var tmpSampleSuiteOnlyIndexA 0
 
-testCaseSampleSuiteOnlyIndexA:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteOnlyIndexAStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteOnlyIndexAFile
-    call beginTestCaseSuiteIndexed
+proc testCaseSampleSuiteOnlyIndexA (
+	var skipped 0
+)
+    var t 0
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
+    call beginTestCaseSuiteIndexed ()
+    equ t TestSuiteIndex
+    add t 1
+    seed t
+    call testOtherRandom ()
 
-    equ tmpSampleSuiteOnlyIndexA TestSuiteIndex
-    add tmpSampleSuiteOnlyIndexA 1
-    seed tmpSampleSuiteOnlyIndexA
-    call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteOnlyIndexA test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 
 end proc
 
-var tmpSampleSuiteOnlyIndexB 0
 
-testCaseSampleSuiteOnlyIndexB:
-proc
-    file pointer copy TestCaseStartFile TestCaseSampleSuiteOnlyIndexBStartFile
-    file pointer copy TestCaseFile TestCaseSampleSuiteOnlyIndexBFile
-    call beginTestCaseSuiteIndexed
+proc testCaseSampleSuiteOnlyIndexB (
+	var skipped 0
+)
+    var t 0
 
-    if SKIP = NOT_SKIPPED
-        lines append message TestCaseLines "TestCase not implemented yet"
-        call skipTestCase
-        call endTestCase
-        return
-    end if
-    equ tmpSampleSuiteOnlyIndexB TestSuiteIndex
-    add tmpSampleSuiteOnlyIndexB 100000
+    call beginTestCaseSuiteIndexed ()
+    equ t TestSuiteIndex
+    add t 1
+    seed t
+    call testOtherRandom ()
 
-    seed tmpSampleSuiteOnlyIndexB
-    call testOtherRandom
-
-    if StandardTestFailure != 0
-        lines append message TestCaseLines "SampleSuiteOnlyIndexB test failed"
-        call failureTestCase
-    end if
-
-    call endTestCase
+    call endTestCase ( 
+    	equ  skipped skipped
+    	equ failure StandardTestFailure
+    )
 
 end proc

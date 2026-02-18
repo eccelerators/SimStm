@@ -33,8 +33,8 @@ proc NmsTest ()
      equ a.nma b.nma
 end proc
 
-ArithProc:
-proc
+proc ArithProc ()
+
     equ operand1_and_target operand2
     equ operand1_and_target 0xF0
 
@@ -78,8 +78,8 @@ array another_array 16
 
 -------------------------------------------
 -- begin advanced
-VarPointer:
-proc
+proc VarPointer ()
+
     var pointer copy a_varA a_varB
 end proc
 
@@ -91,13 +91,13 @@ proc procNoPar2 ( )
 	var test_variable_scope_add_1 1
 end proc
 
-callNoPar1:
-proc 
+proc callNoPar1 ()
+ 
 	call procNoPar1 ()
 end proc
 
-callNoPar2:
-proc 
+proc callNoPar2 ()
+ 
 	call procNoPar2 ( )
 end proc
 
@@ -116,16 +116,15 @@ proc procPar2 (
 	 add a_varC parB
 end proc
 
-callPar1:
-proc 
+proc callPar1 ()
+ 
 	call procPar1 (
 		equ parA 0
 		var pointer copy parB a_varC
 	)
 end proc
 
-callPar2:
-proc 
+proc callPar2 () 
 	call procPar2 ( 
 		equ parA 0
 		var pointer copy parB a_varC )
@@ -134,14 +133,45 @@ end proc
 -- end advanced
 -------------------------------------------
 
-VarVerify:
+-------------------------------------------
+-- more advanced
+
+label ExistingLabel ToBeCalledByLabel
+
+callLabel:
 proc
+	call UseLabelForCall (
+		label pointer copy  LabelToCall ExistingLabel
+	)
+end proc
+
+callLabelEqu:
+proc
+	call UseLabelForCall ( 
+		label equ LabelToCall ToBeCalledByLabel
+	)
+end proc
+
+proc UseLabelForCall (
+	label LabelToCall ExistingLabel
+)
+	call label LabelToCall ()
+end proc
+
+proc ToBeCalledByLabel ()
+	log message 0 "Having been called by label"
+end proc
+
+-- end more advanced
+-------------------------------------------
+
+proc VarVerify ()
     var verify position expected_value mask_value
     var verify position 8 0xFF
 end proc
 
-array_proc:
-proc
+proc array_proc ()
+
     array set an_array position 0x07
     array set an_array position a_varA
     array set an_array 5 0x07
@@ -157,8 +187,8 @@ proc
     array pointer copy an_array another_array
 end proc
 
-file_proc:
-proc
+proc file_proc ()
+
     file writable a_fileA result
     file readable a_fileA result
     file appendable a_fileA result
@@ -175,8 +205,8 @@ lines a_lines_target
 lines a_lines_source
 var read_size 0
 
-lines_proc:
-proc
+proc lines_proc ()
+
     lines get array a_lines position an_array result
     lines get array a_lines 8 an_array result
 
@@ -208,8 +238,8 @@ end proc
 
 var another_var 1
 
-if_proc:
-proc
+proc if_proc ()
+
     if a_varA = another_var
         equ a_varA 5
     elsif a_varA > another_var
@@ -245,8 +275,8 @@ end proc
 
 var loop_num 1
 
-loop_return_proc:
-proc
+proc loop_return_proc ()
+
     loop loop_num
         if a_varA = another_var
             return
@@ -254,18 +284,17 @@ proc
     end loop
 end proc
 
-abort_proc:
-proc
+proc abort_proc ()
+
     abort
 end proc
 
-some_proc:
-proc
+proc some_proc ()
+
     finish
 end proc
 
-a_proc:
-proc
+proc a_proc ()
 
 end proc
 
@@ -274,9 +303,8 @@ interrupt
 
 end interrupt
 
-call_proc:
-proc
-    call some_proc
+proc call_proc ()
+    call some_proc ()
 end proc
 
 const INFO 5
@@ -289,8 +317,8 @@ const EXIT_ON_VERIFY_ERROR 0
 
 var time_to_wait 5000
 
-misc_proc:
-proc
+proc misc_proc ()
+
     log message INFO "some message"
     log message INFO "misc_proc severity: {}" INFO
     log lines 0 a_lines_target
@@ -318,8 +346,8 @@ var signal_read_value 0
 var signal_expected_value 0
 var signal_mask_value 0
 
-signal_proc:
-proc
+proc signal_proc ()
+
     signal write a_signal signal_to_be_set_value
     signal write a_signal 0x1234
     signal read a_signal signal_read_value
@@ -343,8 +371,8 @@ var bus_expected_value 0
 var bus_mask_value 0
 var bus_timeout_value 0
 
-bus_proc:
-proc
+proc bus_proc ()
+
     bus write a_bus bus_width  bus_address bus_to_be_set_value
     bus write a_bus 16 0x00001000 0x1233
     bus read  a_bus bus_width  bus_address  bus_read_value

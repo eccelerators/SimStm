@@ -4,9 +4,9 @@ include "Other/other.stm"
 
 include "TestSuites/TestSuiteSample.stm"
 
-testMainSuiteSample:
-proc
-    call initBase
+proc testMainSuiteSample ()
+
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF
@@ -17,7 +17,7 @@ proc
     signal read sigInTestSuiteIndex TestSuiteIndex
     log message INFO "Main test main suite Sample started"
 
-    call testSuiteSample
+    call testSuiteSample ()
 
     log message INFO "Main test main suite Sample ended"
     wait 1000

@@ -4,9 +4,9 @@ include "Constant/constant.stm"
 
 include "TestSuites/TestSuiteConstant.stm"
 
-testMainSuiteConstant:
-proc
-    call initBase
+proc testMainSuiteConstant ()
+
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF
@@ -16,7 +16,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Constant started"
 
-    call testSuiteConstant
+    call testSuiteConstant ()
 
     log message INFO "Main test suite Constant ended"
     wait 1000

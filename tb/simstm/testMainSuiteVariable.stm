@@ -2,15 +2,16 @@ include "Common/Common.stm"
 
 include "Variable/variable.stm"
 include "Variable/variable_local.stm"
-include "Variable/variable_scope.stm"
 include "Variable/variable_pointer.stm"
 include "Variable/variable_parameter.stm"
+include "Variable/variable_local_override.stm"
+include "Variable/variable_default_value.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
 
-testMainSuiteVariable:
-proc
-    call initBase
+proc testMainSuiteVariable ()
+
+    call initBase ()
 
     verbosity INFO_2
     trace TRACE_OFF
@@ -20,7 +21,7 @@ proc
     signal write out_signal_init_dut 0
     log message INFO "Main test suite Variable started"
 
-    call testSuiteVariable
+    call testSuiteVariable ()
 
     log message INFO "Main test suite Variable ended"
     wait 1000

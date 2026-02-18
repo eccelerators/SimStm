@@ -1,5 +1,4 @@
 
-Lib3:
-proc
+proc Lib3 ()
     log message 0 "load file lib3.stm"
 end proc

@@ -7,233 +7,238 @@ file user_data_out_not_present "user_data_out_not_present.dat"
 file user_data_out_present "user_data_out_present.dat"
 file user_data_out_writable "user_data_out_writable.dat"
 file user_data_out_appendable "user_data_out_appendable.dat"
-file tmp_file "unused"
-lines a_lines
-lines b_lines
-lines a_read_lines
-lines b_read_lines
-lines c_read_lines
-array a_array 8
-array z_array 8
+file test_file_tmp_file "unused"
+lines test_file_a_lines
+lines test_file_b_lines
+lines test_file_a_read_lines
+lines test_file_b_read_lines
+lines test_file_c_read_lines
+array test_file_a_array 8
+array test_file_z_array 8
 
-array a_read_array 8
-array b_read_array 8
-array c_read_array 8
+array test_file_a_read_array 8
+array test_file_b_read_array 8
+array test_file_c_read_array 8
 
 var FileTmpResult 0
 
-testFileWriteArray:
-proc
-    call startStandardTestShell
+proc testFileWriteArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array a_lines a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_write_array a_lines
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
 
-    lines delete all b_lines
-    file read all user_data_out_write_array b_lines
-    lines size b_lines FileTmpResult
+    file write user_data_out_write_array test_file_a_lines
+
+    lines delete all test_file_b_lines
+    file read all user_data_out_write_array test_file_b_lines
+    lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
-testFileAppendArray:
-proc
-    call startStandardTestShell
+proc testFileAppendArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array a_lines a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_append_array a_lines
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
 
-    file append user_data_out_append_array a_lines
+    file write user_data_out_append_array test_file_a_lines
 
-    lines delete all b_lines
-    file read all user_data_out_append_array b_lines
-    lines size b_lines FileTmpResult
+    file append user_data_out_append_array test_file_a_lines
+
+    lines delete all test_file_b_lines
+    file read all user_data_out_append_array test_file_b_lines
+    lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 6 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 
-testFileReadAllArray:
-proc
-    call startStandardTestShell
+proc testFileReadAllArray ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array a_lines a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_read_all_array a_lines
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
 
-    lines delete all b_lines
-    file read all user_data_out_read_all_array b_lines
-    lines size b_lines FileTmpResult
+    file write user_data_out_read_all_array test_file_a_lines
+
+    lines delete all test_file_b_lines
+    file read all user_data_out_read_all_array test_file_b_lines
+    lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
 var read_elements_got 0
 
-testFileReadArray:
-proc
-    call startStandardTestShell
+proc testFileReadArray ()
 
-    array set a_read_array 0 0
-    array set a_read_array 1 0
-    array set a_read_array 2 0
-    array set a_read_array 3 0
-    array set a_read_array 4 0
-    array set a_read_array 5 0
-    array set a_read_array 6 0
-    array set a_read_array 7 0
+    call startStandardTestShell ()
 
-    array verify a_read_array 0 0 MAX
+    array set test_file_a_read_array 0 0
+    array set test_file_a_read_array 1 0
+    array set test_file_a_read_array 2 0
+    array set test_file_a_read_array 3 0
+    array set test_file_a_read_array 4 0
+    array set test_file_a_read_array 5 0
+    array set test_file_a_read_array 6 0
+    array set test_file_a_read_array 7 0
 
-    array set b_read_array 0 0
-    array set b_read_array 1 0
-    array set b_read_array 2 0
-    array set b_read_array 3 0
-    array set b_read_array 4 0
-    array set b_read_array 5 0
-    array set b_read_array 6 0
-    array set b_read_array 7 0
+    array verify test_file_a_read_array 0 0 MAX
 
-    array set c_read_array 0 0
-    array set c_read_array 1 0
-    array set c_read_array 2 0
-    array set c_read_array 3 0
-    array set c_read_array 4 0
-    array set c_read_array 5 0
-    array set c_read_array 6 0
-    array set c_read_array 7 0
+    array set test_file_b_read_array 0 0
+    array set test_file_b_read_array 1 0
+    array set test_file_b_read_array 2 0
+    array set test_file_b_read_array 3 0
+    array set test_file_b_read_array 4 0
+    array set test_file_b_read_array 5 0
+    array set test_file_b_read_array 6 0
+    array set test_file_b_read_array 7 0
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
+    array set test_file_c_read_array 0 0
+    array set test_file_c_read_array 1 0
+    array set test_file_c_read_array 2 0
+    array set test_file_c_read_array 3 0
+    array set test_file_c_read_array 4 0
+    array set test_file_c_read_array 5 0
+    array set test_file_c_read_array 6 0
+    array set test_file_c_read_array 7 0
 
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
-    file write user_data_out_read_array a_lines
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
+
+    file write user_data_out_read_array test_file_a_lines
 
     wait 1000
 
-    file read user_data_out_read_array a_read_lines 1
-    lines size a_read_lines FileTmpResult
+    file read user_data_out_read_array test_file_a_read_lines 1
+    lines size test_file_a_read_lines FileTmpResult
     var verify FileTmpResult 1 MAX
 
-    file read user_data_out_read_array b_read_lines 1
-    lines size b_read_lines FileTmpResult
+    file read user_data_out_read_array test_file_b_read_lines 1
+    lines size test_file_b_read_lines FileTmpResult
     var verify FileTmpResult 1 MAX
 
-    file read user_data_out_read_array c_read_lines 1
-    lines size c_read_lines FileTmpResult
+    file read user_data_out_read_array test_file_c_read_lines 1
+    lines size test_file_c_read_lines FileTmpResult
     var verify FileTmpResult 1 MAX
 
     file read end user_data_out_read_array
 
-    lines get array a_read_lines 0 a_read_array read_elements_got
+    lines get array test_file_a_read_lines 0 test_file_a_read_array read_elements_got
     var verify read_elements_got 8 MAX
-    lines get array b_read_lines 0 b_read_array read_elements_got
+    lines get array test_file_b_read_lines 0 test_file_b_read_array read_elements_got
     var verify read_elements_got 8 MAX
-    lines get array c_read_lines 0 c_read_array read_elements_got
+    lines get array test_file_c_read_lines 0 test_file_c_read_array read_elements_got
     var verify read_elements_got 8 MAX
 
-    array pointer copy ArrayToDump a_read_array
-    call arrayDump
-    array pointer copy ArrayToDump b_read_array
-    call arrayDump
-    array pointer copy ArrayToDump c_read_array
-    call arrayDump
+    call arrayDump (
+    	array pointer copy Array test_file_b_read_array
+    )
+    call arrayDump (
+    	array pointer copy Array test_file_b_read_array
+    )
+    call arrayDump (
+    	array pointer copy Array test_file_c_read_array
+    )
 
-    array verify a_read_array 0 0 MAX
-    array verify b_read_array 0 1 MAX
-    array verify c_read_array 0 2 MAX
+    array verify test_file_a_read_array 0 0 MAX
+    array verify test_file_b_read_array 0 1 MAX
+    array verify test_file_c_read_array 0 2 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
-testFileStatus:
-proc
-    call startStandardTestShell
+proc testFileStatus ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array a_lines a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
+	var FileStatus 0
     log message 0 "Check if file is readable, which doesn't exist"
     file readable user_data_out_not_present FileStatus
-    call printFileStatus
+    call printFileStatus (
+    	equ FileStatus FileStatus
+    )
     var verify FileStatus FILE_STATUS_NAME_ERROR MAX
 
     -- No means to delete a file with VHDL, thus not testable since file is constructed if it doesn't exist by writable test
@@ -249,58 +254,61 @@ proc
     -- call printFileStatus
 
     log message 0 "Check if file is readable, which exist"
-    file writeable user_data_out_present FileStatus -- constructs file
-    call printFileStatus
+  
+    file writable user_data_out_present FileStatus -- constructs file
+    call printFileStatus (
+    	equ FileStatus FileStatus
+    )
     var verify FileStatus FILE_STATUS_OK MAX
 
     log message 0 "Check if file is readable, which exist"
     file appendable user_data_out_present FileStatus
-    call printFileStatus
+    call printFileStatus ()
     var verify FileStatus FILE_STATUS_OK MAX
 
     log message 0 "Check if file is readable, which exist"
     file readable user_data_out_present FileStatus
-    call printFileStatus
+    call printFileStatus ()
     var verify FileStatus FILE_STATUS_OK MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
-testFilePointerCopy:
-proc
-    call startStandardTestShell
+proc testFilePointerCopy ()
 
-    array set a_array 0 0
-    array set a_array 1 1
-    array set a_array 2 0xA
-    array set a_array 3 2
-    array set a_array 4 0xB
-    array set a_array 5 0x7FFFFFFF
-    array set a_array 6 0x80000000
-    array set a_array 7 0xFFFFFFFF
-    lines delete all a_lines
-    lines append array a_lines a_array
+    call startStandardTestShell ()
 
-    array set a_array 0 1
-    lines append array a_lines a_array
+    array set test_file_a_array 0 0
+    array set test_file_a_array 1 1
+    array set test_file_a_array 2 0xA
+    array set test_file_a_array 3 2
+    array set test_file_a_array 4 0xB
+    array set test_file_a_array 5 0x7FFFFFFF
+    array set test_file_a_array 6 0x80000000
+    array set test_file_a_array 7 0xFFFFFFFF
+    lines delete all test_file_a_lines
+    lines append array test_file_a_lines test_file_a_array
 
-    array set a_array 0 2
-    lines append array a_lines a_array
+    array set test_file_a_array 0 1
+    lines append array test_file_a_lines test_file_a_array
 
-    -- log lines 0 a_lines
+    array set test_file_a_array 0 2
+    lines append array test_file_a_lines test_file_a_array
 
-    file pointer copy tmp_file user_data_out_pointer_copy
-    call WriteFile
+    -- log lines 0 test_file_a_lines
 
-    lines delete all b_lines
-    file read all user_data_out_pointer_copy b_lines
-    lines size b_lines FileTmpResult
+    file pointer copy test_file_tmp_file user_data_out_pointer_copy
+    call WriteFile ()
+
+    lines delete all test_file_b_lines
+    file read all user_data_out_pointer_copy test_file_b_lines
+    lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 end proc
 
-WriteFile:
-proc
-    file write tmp_file a_lines
+proc WriteFile ()
+
+    file write test_file_tmp_file test_file_a_lines
 end proc

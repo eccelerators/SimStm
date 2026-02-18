@@ -1,9 +1,9 @@
 
 var val_signal_read_back 0xffff
 
-testSignalWriteReadVerify:
-proc
-    call startStandardTestShell
+proc testSignalWriteReadVerify ()
+
+    call startStandardTestShell ()
 
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_read_back
@@ -41,21 +41,21 @@ proc
     var verify val_signal_read_back 0xff MAX
     signal verify in_signal_2001 val_signal_read_back 0xff MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc
 
-testSignalVerifyFail:
-proc
+proc testSignalVerifyFail ()
 
-    call startStandardTestShell
+
+    call startStandardTestShell ()
 
     signal write out_signal_3000 0
 
     log message ALWAYS "signal verify intended error on no match"
     signal verify in_signal_2000 val_signal_read_back 1 1
-    call incExpectedStandardTestVerifyFailureCount
+    call incExpectedStandardTestVerifyFailureCount ()
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc

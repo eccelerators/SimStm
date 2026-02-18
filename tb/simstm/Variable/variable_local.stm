@@ -4,7 +4,7 @@ proc testVariableLocal ()
 	var test_variable_local_add_1 1
 	var test_variable_local_add_2 2
 
-    call startStandardTestShell
+    call startStandardTestShell ()
     
     log message INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_local_add_1
     log message INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_local_add_2
@@ -17,6 +17,6 @@ proc testVariableLocal ()
     var verify test_variable_local_add_1 11 MAX
     var verify test_variable_local_add_2 22 MAX
 
-    call endStandardTestShell
+    call endStandardTestShell ()
 
 end proc

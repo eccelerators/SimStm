@@ -1,5 +1,5 @@
 
-testLabConstantEqu:
-proc
-    call testConstantEqu
+proc testLabConstantEqu ()
+
+    call testConstantEqu ()
 end proc

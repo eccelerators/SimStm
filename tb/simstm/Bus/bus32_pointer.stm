@@ -1,0 +1,10 @@
+
+proc testBus32Pointer (
+	bus busToTest 0
+)
+	bus write avalon32 32 0 5
+	bus pointer copy busToTest avalon32
+	var a_var 40
+	bus verify busToTest 32 0 a_var 5 MAX
+	bus verify avalon32 32 0 a_var 5 MAX
+end proc

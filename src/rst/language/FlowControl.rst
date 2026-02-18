@@ -4,7 +4,7 @@ Subroutines, Branches, and Loops
 proc, end proc
 ^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  a_proc:
  proc
@@ -21,7 +21,7 @@ indicator.
 call
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  call a_proc
 
@@ -31,7 +31,7 @@ in the next line after an ``end proc`` or a ``return`` in the subroutine.
 return
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  return
 
@@ -40,7 +40,7 @@ The ``return`` instruction returns to calling code from a subroutine.
 interrupt, end interrupt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  an_interrupt:
  interrupt
@@ -60,7 +60,7 @@ resolved there too.
 if, elsif, else, end if
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  if a_var = b_var
      -- ... some code
@@ -86,7 +86,7 @@ The ``if`` ``elsif`` or ``else`` instructions can be nested.
 loop
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  loop l_var
      -- ... some code
@@ -111,7 +111,7 @@ which is a good practice.
 abort
 ^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  abort
 
@@ -120,7 +120,7 @@ The ``abort`` instruction aborts the simulation with severity Failure.
 finish
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  finish
 
@@ -129,7 +129,7 @@ The ``finish`` instruction exits the simulation.
 stop
 ^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 	
 	stop
 	
@@ -138,7 +138,7 @@ The ``stop`` instruction stops the simulation with the severity Failure. The sim
 Resume
 ^^^^^^
 
-.. code-block:: none
+.. code-block:: simstm
 
  resume EXIT_ON_VERIFY_ERROR
  resume 0
