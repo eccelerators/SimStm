@@ -274,12 +274,7 @@ package tb_base_pkg is
     procedure init_proc_pool_ordered(
         variable procs : inout proc_pool_ordered
     );
-        
-    function append_par_scopes(
-        par_text_fields : parameter_text_field_array;
-        par_scopes : parameter_text_field_array
-    ) return parameter_text_field_array;
-    
+            
     procedure init_inst_initial_context(
         variable iic : inout stm_inst_initial_context
     );
@@ -502,9 +497,9 @@ package tb_base_pkg is
     ) return unsigned;
 
     procedure stm_file_append(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     );
 
     procedure stm_file_appendable(
@@ -513,9 +508,9 @@ package tb_base_pkg is
     );
 
     procedure stm_file_read_all(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     );
 
     procedure stm_file_readable(
@@ -528,9 +523,9 @@ package tb_base_pkg is
     ) return integer;
 
     procedure stm_file_write(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     );
 
     procedure stm_file_writeable(
@@ -539,75 +534,77 @@ package tb_base_pkg is
     );
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable std_line : in line;
-        variable valid : out integer
+        variable std_line : in line
     );
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
         constant machine_value_width : in integer
     );
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable var_stm_text : in stm_text_ptr
     );
 
     procedure stm_lines_delete(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable position : in integer;
-        variable valid : out integer
+        variable position : in integer
     );
 
     procedure stm_lines_get(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
-        variable std_line : out line;
-        variable valid : out integer
+        variable std_line : out line
     );
 
     procedure stm_lines_get(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
         variable stm_array : inout stm_array_ptr;
         variable number_found : out integer;
-        variable valid : out integer;
         constant machine_value_width : in integer
     );
 
     procedure stm_lines_insert(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable var_stm_text : in stm_text_ptr
     );
 
     procedure stm_lines_insert(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
         variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
         constant machine_value_width : in integer
     );
 
     procedure stm_lines_print(
-        variable stm_lines : in stm_lines_ptr;
-        variable valid : out integer
+        variable stm_lines : in stm_lines_ptr
     );
 
-    procedure stm_lines_set(variable stm_lines : inout stm_lines_ptr;
+    procedure stm_lines_set(
+        variable slc : src_locator;
+        variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer);
+        variable var_stm_text : in stm_text_ptr
+    );
 
-    procedure stm_lines_set(variable stm_lines : inout stm_lines_ptr;
+    procedure stm_lines_set(
+        variable slc : src_locator;
+        variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
         variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
         constant machine_value_width : in integer);
 
     function stm_text_crop(

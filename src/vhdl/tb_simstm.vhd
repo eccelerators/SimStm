@@ -276,64 +276,78 @@ begin
         variable no_file : text_field;
         variable no_file_on_main_entry : text_field;
         variable no_file_on_interrupt : text_field;
+        variable empty_text_field : text_field;
         variable debug : boolean;
         
         variable ie : inst_element_ptr;
+        variable ven1 : integer;
+        variable ven2 : integer;
+        variable val : unsigned(machine_value_width - 1 downto 0);
+        variable val2 : unsigned(machine_value_width - 1 downto 0);
         
-        function get_ven_in_called_scope_prefer_local(variable par_num : integer) return integer is
-        begin
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);         
-        end function;
+        variable pn1 : integer := 1;
+        variable pn2 : integer := 2;
+        variable pn3 : integer := 3;
+        variable pn4 : integer := 4;
+        variable pn5 : integer := 5;
+        variable pn6 : integer := 6    ;
         
-        function get_ven_in_caller_scope_prefer_local(variable par_num : integer) return integer is
+        procedure get_ven_in_called_scope_prefer_local(variable par_num : in integer; variable ven : out integer) is
         begin
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, machine_value_width);         
-        end function;
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);     
+        end procedure;
         
-        function get_ven_in_called_scope_local(variable par_num : integer) return integer is
+        procedure get_ven_in_caller_scope_prefer_local(variable par_num : in integer; variable ven : out integer) is
         begin
-            return access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);         
-        end function;
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);        
+        end procedure;
         
-        function get_ven_in_caller_scope_local(variable par_num : integer) return integer is
+        procedure get_ven_in_called_scope_local(variable par_num : in integer; variable ven : out integer) is
         begin
-            return access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, machine_value_width);         
-        end function;
+            access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);        
+        end procedure;
+        
+        procedure get_ven_in_caller_scope_local(variable par_num : in integer; variable ven : out integer) is
+        begin
+            access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);        
+        end procedure;
      
-        function get_ven_in_called_scope_call_params_target_sensitive(variable par_num : integer) return integer is
+        procedure get_ven_in_called_scope_call_params_target_sensitive(variable par_num : in integer; variable ven : out integer) is
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                return access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width); 
+                access_inst_par_index_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);
+                return;
             end if;
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);           
-        end function;
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);           
+        end procedure;
         
-        function get_ven_in_called_scope_call_params_source_sensitive(variable par_num : integer) return integer is
+        procedure get_ven_in_called_scope_call_params_source_sensitive(variable par_num : in integer; variable ven : out integer) is
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, machine_value_width); 
+                access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);
+                return;
             end if;
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);           
-        end function;      
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);         
+        end procedure;      
          
-        
-        function get_val_in_called_scope_prefer_local(variable par_num : integer) return integer is
+        procedure get_val_in_called_scope_prefer_local(variable par_num : in integer; variable ven : out integer) is
         begin
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);         
-        end function;
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);       
+        end procedure;
         
-        function get_val_in_caller_scope_prefer_local(variable par_num : integer) return integer is
+        procedure get_val_in_caller_scope_prefer_local(variable par_num : in integer; variable ven : out integer) is
         begin
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, machine_value_width);         
-        end function; 
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);        
+        end procedure; 
         
-        function get_val_in_called_scope_call_params_source_sensitive(variable par_num : integer) return integer is
+        procedure get_val_in_called_scope_call_params_source_sensitive(variable par_num : in integer; variable ven : out integer) is
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                return access_inst_par_val_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, machine_value_width); 
+                access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);
+                return;
             end if;
-            return access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, machine_value_width);           
-        end function;        
+            access_inst_par_index_prefer_local(ie, vars, par_num, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);        
+        end procedure;        
      
              
     begin
@@ -438,13 +452,13 @@ begin
                 ien := ien + 1;
                 ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_FILES) then
-                    dump_file_defs(file_list);
+                    dump_file_defs(code_files);
                 end if;
                 if trc_on(TRACE_VARIABLES) then
-                    dump_vars(vars, machine_value_width);
+                    dump_var_pool_ordered(vars, machine_value_width);
                 end if;
                 if trc_on(TRACE_INSTRUCTIONS) then
-                    print_inst_element_number(inst_list, ien, file_list);
+                    print_inst_element(insts, ien, code_files);
                 end if;
 
                 executing_line <= file_line;
@@ -478,13 +492,13 @@ begin
                 -- var a_varC a_constA
                 elsif inst(1 to il) = INSTR_VAR then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1);                    
+                    get_ven_in_called_scope_local(pn1, ven1);                    
                     index_and_reinit_var(vars, ven1, val1);
                     
                 -- array an_array 16
                 elsif inst(1 to il) = INSTR_ARRAY then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1);                    
+                    get_ven_in_called_scope_local(pn1, ven1);                    
                     index_and_reinit_var(vars, ven1, var_stm_array);
                     for i in 0 to var_stm_array'length - 1 loop
                         var_stm_array(i) := to_unsigned(0, machine_value_width);
@@ -493,16 +507,16 @@ begin
                 -- label a_label a_proc_label
                 elsif inst(1 to il) = INSTR_LABEL then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1); 
+                    get_ven_in_called_scope_local(pn1, ven1); 
                     index_and_reinit_var(vars, ven1, var_stm_label);
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif inst(1 to il) = INSTR_FILE then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1);    
+                    get_ven_in_called_scope_local(pn1, ven1);    
                     index_and_reinit_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -526,19 +540,19 @@ begin
                 -- signal a_signal
                 elsif inst(1 to il) = INSTR_SIGNAL then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1); 
+                    get_ven_in_called_scope_local(pn1, ven1); 
                     index_and_reinit_var(vars, ven1, val1);
 
                 -- bus a_bus
                 elsif inst(1 to il) = INSTR_BUS then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1); 
+                    get_ven_in_called_scope_local(pn1, ven1); 
                     index_and_reinit_var(vars, ven1, val1);
 
                 -- lines a_lines
                 elsif inst(1 to il) = INSTR_LINES then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    ven1 := get_ven_in_called_scope_local(1); 
+                    get_ven_in_called_scope_local(pn1, ven1); 
                     index_and_reinit_var(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         temp_int := 0;
@@ -804,7 +818,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_readable(var_stm_text_substituded_ptr, temp_int);
@@ -816,7 +830,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_writeable(var_stm_text_substituded_ptr, temp_int);
@@ -828,7 +842,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_appendable(var_stm_text_substituded_ptr, temp_int);
@@ -841,7 +855,7 @@ begin
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, par_indexes(2), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_write(var_stm_lines, var_stm_text_substituded_ptr);
@@ -852,7 +866,7 @@ begin
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, par_indexes(2), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_append(var_stm_lines, var_stm_text_substituded_ptr);
@@ -920,7 +934,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                        stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -997,7 +1011,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -1024,7 +1038,7 @@ begin
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, par_indexes(2), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, var_stm_text, var_stm_text_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_read_all(var_stm_lines, var_stm_text_substituded_ptr);
@@ -1071,7 +1085,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, txt, txt_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par_values(2)(30 downto 0));
@@ -1095,7 +1109,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, txt, txt_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     temp_int := to_integer(par_values(2)(30 downto 0));
@@ -1115,7 +1129,7 @@ begin
                     ven1 := get_ven_in_called_scope_prefer_local(1);
                     
                     index_var(vars, par_indexes(1), var_scope, var_stm_lines);
-                    stm_text_substitude_wvar(vars, var_scope, txt, txt_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(var_stm_lines, var_stm_text_out);

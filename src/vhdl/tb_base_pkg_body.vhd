@@ -87,18 +87,6 @@ package body tb_base_pkg is
         procs.last_element_num := -1;
     end procedure;       
     
-    function append_par_scopes(
-        par_text_fields : parameter_text_field_array;
-        par_scopes : parameter_text_field_array
-    ) return parameter_text_field_array is
-        variable par_results : parameter_text_field_array;
-    begin
-        for i in 0 to 6 loop
-            par_results(i) := textfield_cat(par_text_fields(i), par_scopes(i));        
-        end loop;
-        return par_results;
-    end function;  
-
     procedure init_inst_initial_context(
         variable iic : inout stm_inst_initial_context
     ) is
@@ -1166,9 +1154,9 @@ package body tb_base_pkg is
     end function;
 
     procedure stm_file_append(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     ) is
         variable v_stat : file_open_status;
         file user_file : text;
@@ -1177,7 +1165,6 @@ package body tb_base_pkg is
         variable position : integer;
         variable file_path_string : stm_text;
     begin
-        valid := 0;
         txt_to_string(file_path, file_path_string);
         file_open(v_stat, user_file, stm_text_crop(file_path_string), append_mode);
         if v_stat /= open_ok then
@@ -1185,13 +1172,9 @@ package body tb_base_pkg is
         end if;
         for i in 0 to stm_lines.size - 1 loop
             position := i;
-            stm_lines_get(stm_lines, position, std_line, stm_lines_get_valid);
-            writeline(user_file, std_line);
-            if stm_lines_get_valid = 0 then
-                return;
-            end if;
+            stm_lines_get(slc, stm_lines, position, std_line);
+            writeline(user_file, std_line);           
         end loop;
-        valid := 1;
         file_close(user_file);
     end procedure;
 
@@ -1212,9 +1195,9 @@ package body tb_base_pkg is
     end procedure;
 
     procedure stm_file_read_all(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     ) is
         variable v_stat : file_open_status;
         file user_file : text;
@@ -1223,7 +1206,6 @@ package body tb_base_pkg is
         variable stm_lines_append_valid : integer := 0;
         variable file_path_string : stm_text;
     begin
-        valid := 0;
         txt_to_string(file_path, file_path_string);
         file_open(v_stat, user_file, stm_text_crop(file_path_string), read_mode);
         if v_stat /= open_ok then
@@ -1232,12 +1214,8 @@ package body tb_base_pkg is
         while not endfile(user_file) loop
             readline(user_file, std_line);
             tmp_std_line := new string'(std_line.all);
-            stm_lines_append(stm_lines, tmp_std_line, stm_lines_append_valid);
-            if stm_lines_append_valid = 0 then
-                return;
-            end if;
+            stm_lines_append(slc, stm_lines, tmp_std_line);
         end loop;
-        valid := 1;
         file_close(user_file);
     end procedure;
 
@@ -1275,18 +1253,16 @@ package body tb_base_pkg is
     end function;
 
     procedure stm_file_write(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
-        variable file_path : in stm_text_ptr;
-        variable valid : out integer
+        variable file_path : in stm_text_ptr
     ) is
         variable v_stat : file_open_status;
         file user_file : text;
         variable std_line : line;
-        variable stm_lines_get_valid : integer := 0;
         variable position : integer;
         variable file_path_string : stm_text;
     begin
-        valid := 0;
         txt_to_string(file_path, file_path_string);
         file_open(v_stat, user_file, stm_text_crop(file_path_string), write_mode);
         if v_stat /= open_ok then
@@ -1294,13 +1270,9 @@ package body tb_base_pkg is
         end if;
         for i in 0 to stm_lines.size - 1 loop
             position := i;
-            stm_lines_get(stm_lines, position, std_line, stm_lines_get_valid);
+            stm_lines_get(slc, stm_lines, position, std_line);
             writeline(user_file, std_line);
-            if stm_lines_get_valid = 0 then
-                return;
-            end if;
         end loop;
-        valid := 1;
         file_close(user_file);
     end procedure;
 
@@ -1321,12 +1293,13 @@ package body tb_base_pkg is
     end procedure;
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable std_line : in line;
-        variable valid : out integer
+        variable std_line : in line       
     ) is
         variable lp : stm_line_ptr;
         variable nlp : stm_line_ptr;
+        variable valid : integer;
     begin
         valid := 0;
         if stm_lines.size = 0 then
@@ -1353,19 +1326,24 @@ package body tb_base_pkg is
             stm_lines.size := stm_lines.size + 1;
             valid := 1;
         end if;
-        valid := 1;
+        assert valid = 1;
+        report "stm_lines_append line not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
+        variable stm_array : in stm_array_ptr;       
         constant machine_value_width : in integer
     ) is
         variable lp : stm_line_ptr;
         variable std_line : line;
         variable nlp : stm_line_ptr;
         variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
+        variable valid : integer;
     begin
         valid := 0;
         for j in 0 to stm_array'length - 1 loop
@@ -1396,17 +1374,22 @@ package body tb_base_pkg is
             stm_lines.size := stm_lines.size + 1;
             valid := 1;
         end if;
-        valid := 1;
+        assert valid = 1;
+        report "stm_lines_append array not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_append(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable var_stm_text : in stm_text_ptr
     ) is
         variable lp : stm_line_ptr;
         variable nlp : stm_line_ptr;
         variable std_line : line;
+        variable valid : integer;
     begin
         valid := 0;
         stm_text_ptr_to_line(var_stm_text, std_line);
@@ -1434,17 +1417,22 @@ package body tb_base_pkg is
             stm_lines.size := stm_lines.size + 1;
             valid := 1;
         end if;
-        valid := 1;
+        assert valid = 1;
+        report "stm_lines_append text not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_delete(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
-        variable position : in integer;
-        variable valid : out integer
+        variable position : in integer
     ) is
         variable lp : stm_line_ptr;
         variable lpb : stm_line_ptr := null;
         variable lpa : stm_line_ptr := null;
+        variable valid : integer;
     begin
         valid := 0;
         lp := stm_lines.line_list;
@@ -1468,6 +1456,11 @@ package body tb_base_pkg is
             lpb := lp;
             lp := lp.next_line_ptr;
         end loop;
+        assert valid = 1;
+        report "stm_lines_delete at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             lp.line_number := i;
@@ -1476,31 +1469,34 @@ package body tb_base_pkg is
     end procedure;
 
     procedure stm_lines_get(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
-        variable std_line : out line;
-        variable valid : out integer
+        variable std_line : out line
     ) is
         variable lp : stm_line_ptr;
     begin
-        valid := 0;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
                 std_line := new string'(lp.line_content.all);
-                valid := 1;
                 return;
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert false
+        report "stm_lines_get line at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_get(
+        variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
         variable position : in integer;
         variable stm_array : inout stm_array_ptr;
         variable number_found : out integer;
-        variable valid : out integer;
         constant machine_value_width : in integer
     ) is
         variable lp : stm_line_ptr;
@@ -1509,7 +1505,6 @@ package body tb_base_pkg is
         variable array_index : integer := 0;
         variable tmp_std_line : line;
     begin
-        valid := 0;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
@@ -1522,22 +1517,27 @@ package body tb_base_pkg is
                     end if;
                 end loop;
                 number_found := array_index;
-                valid := 1;
                 return;
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert false
+        report "stm_lines_get array at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_insert(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable var_stm_text : in stm_text_ptr       
     ) is
         variable lp : stm_line_ptr;
         variable tmp_std_line : line;
         variable stm_line_new : stm_line_ptr := new stm_line;
+        variable valid : integer;
     begin
         valid := 0;
         lp := stm_lines.line_list;
@@ -1566,6 +1566,11 @@ package body tb_base_pkg is
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert valid = 1
+        report "stm_lines_insert text at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             lp.line_number := i;
@@ -1574,16 +1579,17 @@ package body tb_base_pkg is
     end procedure;
 
     procedure stm_lines_insert(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
-        variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
+        variable stm_array : in stm_array_ptr;        
         constant machine_value_width : in integer
     ) is
         variable lp : stm_line_ptr;
         variable tmp_std_line : line;
         variable stm_line_new : stm_line_ptr := new stm_line;
         variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
+        variable valid : integer;
     begin
         valid := 0;
         lp := stm_lines.line_list;
@@ -1609,6 +1615,11 @@ package body tb_base_pkg is
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert valid = 1
+        report "stm_lines_insert array at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure;        
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             lp.line_number := i;
@@ -1617,15 +1628,13 @@ package body tb_base_pkg is
     end procedure;
 
     procedure stm_lines_print(
-        variable stm_lines : in stm_lines_ptr;
-        variable valid : out integer
+        variable stm_lines : in stm_lines_ptr
     ) is
         variable std_line : line;
         variable tmp_str_ptr : stm_text_ptr;
         variable lp : stm_line_ptr;
         variable tmp_std_line_print : line;
     begin
-        valid := 0;
         lp := stm_lines.line_list;
         while lp /= null loop
             if lp.line_type = T_LINE_TEXT then
@@ -1641,19 +1650,17 @@ package body tb_base_pkg is
             end if;
             lp := lp.next_line_ptr;
         end loop;
-        valid := 1;
     end procedure;
 
     procedure stm_lines_set(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : in integer;
-        variable var_stm_text : in stm_text_ptr;
-        variable valid : out integer
+        variable var_stm_text : in stm_text_ptr
     ) is
         variable lp : stm_line_ptr;
         variable std_line : line;
     begin
-        valid := 0;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
@@ -1667,25 +1674,28 @@ package body tb_base_pkg is
                 lp.line_content := std_line;
                 lp.line_type := T_LINE_TEXT;
                 lp.array_size := 0;
-                valid := 1;
                 return;
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert false
+        report "stm_lines_set text at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     procedure stm_lines_set(
+        variable slc : src_locator;
         variable stm_lines : inout stm_lines_ptr;
         variable position : integer;
         variable stm_array : in stm_array_ptr;
-        variable valid : out integer;
         constant machine_value_width : in integer
     ) is
         variable lp : stm_line_ptr;
         variable std_line : line;
         variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
     begin
-        valid := 0;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
             if i = position then
@@ -1694,11 +1704,15 @@ package body tb_base_pkg is
                     hwrite(std_line, value_std_logic_vector, left, machine_value_width / 4 + 1);
                 end loop;
                 lp.line_content := std_line;
-                valid := 1;
                 return;
             end if;
             lp := lp.next_line_ptr;
         end loop;
+        assert false
+        report "stm_lines_set array at position not possible" & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure; 
     end procedure;
 
     function stm_text_crop(
