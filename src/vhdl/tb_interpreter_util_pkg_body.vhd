@@ -476,72 +476,68 @@ package body tb_interpreter_util_pkg is
         severity failure;
     end procedure;
          
-    function access_inst_par_value_global(
+    procedure access_inst_par_value_global(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable par_num : in integer;
+        variable val : out unsigned
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable val : unsigned(machine_value_width downto 0);
         variable ven : integer;
         variable etf : text_field;
     begin
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-        val := to_unsigned(0, machine_value_width);
-        if is_digit(ptf) then
-            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        val := to_unsigned(0, val'length);
+        if is_digit(ptf(1)) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
             access_var(ie.slc, vars, vn, ven);
             val := vars.element_ptrs(ven).values(0);
         end if;     
-        return val; 
-    end function;
+    end procedure;
     
-    function access_inst_par_value_local(
+    procedure access_inst_par_value_local(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
+        variable par_num : in integer;
         variable called_proc_name : in text_field;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable val : out unsigned
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable val : unsigned(machine_value_width downto 0);
         variable ven : integer;
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
-        val := to_unsigned(0, machine_value_width);
-        if is_digit(ptf) then
-            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        val := to_unsigned(0, val'length);
+        if is_digit(ptf(1)) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
             access_var(ie.slc, vars, vn, ven);
             val := vars.element_ptrs(ven).values(0);
-        end if;    
-        return val; 
-    end function;
+        end if;     
+    end procedure;
     
-    function access_inst_par_value_prefer_local(
+    procedure access_inst_par_value_prefer_local(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
+        variable par_num : in integer;
         variable called_proc_name : in text_field;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable val : out unsigned
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable val : unsigned(machine_value_width downto 0);
         variable ven : integer;
         variable etf : text_field;
     begin
+        etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-        val := to_unsigned(0, machine_value_width);
-        if is_digit(ptf) then
-            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), machine_value_width);
+        val := to_unsigned(0, val'length);
+        if is_digit(ptf(1)) then
+            val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
             access_var(ie.slc, vars, vn, ven);
@@ -553,65 +549,61 @@ package body tb_interpreter_util_pkg is
                 val := vars.element_ptrs(ven).values(0);            
             end if;
         end if;     
-        return val; 
-    end function;
+    end procedure;
     
-    function access_inst_par_index_global(
+    procedure access_inst_par_index_global(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable par_num : in integer;
+        variable ven : out integer        
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable ven : integer;
         variable etf : text_field;
     begin
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-        vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+        vn := textfield_dot_cat(ptf, etf);
         access_var(ie.slc, vars, vn, ven);    
-        return ven; 
-    end function;
+    end procedure;
     
-    function access_inst_par_index_local(
+    procedure access_inst_par_index_local(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
+        variable par_num : in integer;
         variable called_proc_name : in text_field;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable ven : out integer 
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable ven : integer;
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
-        vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+        vn := textfield_dot_cat(ptf, called_proc_name);                   
         access_var(ie.slc, vars, vn, ven);
-        return ven; 
-    end function;
+    end procedure;
     
-    function access_inst_par_index_prefer_local(
+    procedure access_inst_par_index_prefer_local(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        constant par_num : in integer;
+        variable par_num : in integer;
         variable called_proc_name : in text_field;
-        constant machine_value_width : in integer
-    ) return unsigned is
+        variable ven : out integer 
+    ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable ven : integer;
+        variable veni : integer;
         variable etf : text_field;
     begin
+        etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
-            access_var(ie.slc, vars, vn, ven);
-            if ven < 0 then
-                vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
-                access_var(ie.slc, vars, vn, ven);          
-            end if;   
-        return val; 
-    end function;
+        vn := textfield_dot_cat(ptf, called_proc_name);                   
+        access_var(ie.slc, vars, vn, veni);
+        if veni < 0 then
+            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+            access_var(ie.slc, vars, vn, veni);          
+        end if;  
+        ven := veni;  
+    end procedure;
     
     procedure access_proc(
         variable slc : src_locator;

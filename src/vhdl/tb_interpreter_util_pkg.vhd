@@ -86,25 +86,53 @@ package tb_interpreter_util_pkg is
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     );
-    
-    function access_inst_element_parameter_var_value(
+
+    procedure access_inst_par_value_global(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable called_proc_name : in text_field;
         variable par_num : in integer;
-        variable prefer_local : in boolean;
-        constant machine_value_width : in integer
-    ) return unsigned;
-    
-    function access_inst_element_parameter_var_index(
+        variable val : out unsigned
+    );
+        
+    procedure access_inst_par_value_local(
         variable ie : inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable called_proc_name : in text_field;
         variable par_num : in integer;
-        variable prefer_local : in boolean;
-        constant machine_value_width : in integer
-    ) return integer;
-   
+        variable called_proc_name : in text_field;
+        variable val : out unsigned
+    );
+    
+    procedure access_inst_par_value_prefer_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable val : out unsigned
+    );
+      
+    procedure access_inst_par_index_global(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable ven : out integer        
+    );    
+    
+    procedure access_inst_par_index_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    );    
+    
+    procedure access_inst_par_index_prefer_local(
+        variable ie : inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    );    
+    
     procedure access_proc(
         variable slc : src_locator;
         variable procs : in proc_pool_ordered;

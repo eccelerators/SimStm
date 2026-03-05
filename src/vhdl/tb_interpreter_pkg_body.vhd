@@ -341,10 +341,10 @@ package body tb_interpreter_pkg is
         constant machine_value_width : integer  
     ) is   
         variable iic : stm_inst_initial_context;
-        variable par_scopes :parameter_text_field_array;
-        variable par_indexes : parameter_index_array;
-        variable par_values : parameter_value_array(1 to 6)(machine_value_width downto 0);
-        variable par_resolved_text_fields : parameter_text_field_array;
+        variable par_scopes : parameter_text_field_array;
+        variable par_index : integer;
+        variable par_value : unsigned(machine_value_width downto 0);
+        variable ptf : text_field;
         variable slc : src_locator;
         variable inst : text_field;
         variable ia : inst_arguments;
@@ -363,8 +363,20 @@ package body tb_interpreter_pkg is
             if iic.code_section = CALL_PARAMS then
                 par_scopes := (1 => iic.called_proc_name, others => iic.proc_name);
             end if;
-            par_resolved_text_fields := append_par_scopes(insts.element_ptrs(i).inst_args.par_text_fields, par_scopes);
-            access_inst_element_parameters(ie, vars, par_resolved_text_fields, par_scopes, par_indexes, par_values, machine_value_width);
+            for i in 1 to 6 loop
+                if ia.par_text_fields(i)(1) /= nul then
+                    if is_digit(ia.par_text_fields(i)(1)) then
+                        -- test if it ia a valid literal
+                        par_value := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(i), machine_value_width);
+                    else
+                        for i in 1 to 6 loop
+                            ptf := textfield_dot_cat(ia.par_text_fields(i), par_scopes(i));
+                        end loop;
+                        -- test if it can be found
+                        access_var(ie.slc, vars, ptf, par_index);
+                    end if;
+                end if;
+            end loop;
         end loop;
     end procedure;
         
