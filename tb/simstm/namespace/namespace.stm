@@ -1,34 +1,51 @@
 namespace nnn
-
-    var abc 2
-
-    proc a_ppp ()
+ 
+ 	var abc 10
+    proc a_ppp (
+    	var x 0
+    	)
     
+    add x 1
     end proc
-
+ 
 end namespace
-
+ 
 namespace mmm
-
-    var abc 0
-
-    proc a_ppp ()
+    var abc 20
+    proc a_ppp (
+    	var x 0
+    )
+    add x 2
     
     end proc
-
+ 
 end namespace
+ 
+proc testNamespaceTwoDifferentOnes ()
+ 	
+ 	var a 0
+    call nnn.a_ppp (var pointer copy x a)
+    var verify a 1 MAX
+    call mmm.a_ppp (var pointer copy x a)
+    var verify a 3 MAX
+    var verify nnn.abc 10 MAX
+    var verify mmm.abc 20 MAX
+end proc
+ 
 
-proc testNamespace ()
+proc a_ppp (
+	var x 0
+	)
+    add x 3
+end proc
 
-    call nnn.a_ppp ()
-    call mmm.a_ppp ()
+proc testNamespaceLocalAndGlobal ()
+	
+	var a 0
+	call mmm.a_ppp ()
+	var verify a 1 MAX
     call a_ppp ()
-
+    var verify a 4 MAX
+    
 end proc
-
-var abc 0
-proc a_ppp ()
-
-    log message 0 "bla {}" abc
-
-end proc
+ 

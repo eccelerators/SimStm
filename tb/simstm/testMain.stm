@@ -14,6 +14,8 @@ include "Common/Common.stm"
 --include "Bus/bus32_pointer.stm"
 --include "Base/Array.stm"
 
+include "namespace/namespace.stm"
+
 --include "Other/other.stm"
 --include "Variable/variable.stm"
 --include "Variable/variable_local.stm"
@@ -85,6 +87,9 @@ proc testMain ()
     --call testFileParameterOut ()
     --call testVariableInv ()
     --call testOtherRandom ()
+    
+    call testNamespaceTwoDifferentOnes ()
+    call testNamespaceLocalAndGlobal
 
     --bus pointer copy busToTest wishbone256
     --bus timeout set busToTest 1000
