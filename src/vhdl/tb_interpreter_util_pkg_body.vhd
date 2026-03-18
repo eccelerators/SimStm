@@ -208,13 +208,13 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure txt_print_wvar(
-        variable slc : src_locator;
-        variable insts : inst_sequence;
+        variable slc : in src_locator;
+        variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
-        variable rcs : stm_array_of_runtime_context;
+        variable rcs : in stm_array_of_runtime_context;
         variable txt_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable sp : integer;
+        variable sp : in integer;
         constant machine_value_width : in integer
     ) is
         variable stm_text_substituded : stm_text;
@@ -224,13 +224,13 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure stm_text_substitude_wvar(
-        variable slc : src_locator;
-        variable insts : inst_sequence;
+        variable slc : in src_locator;
+        variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
-        variable rcs : stm_array_of_runtime_context;
+        variable rcs : in stm_array_of_runtime_context;
         variable txt_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable sp : integer;    
+        variable sp : in integer;    
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     ) is
@@ -475,9 +475,9 @@ package body tb_interpreter_util_pkg is
         report lf & "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
     end procedure;
-         
+              
     procedure access_inst_par_value_global(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable val : out unsigned
@@ -500,7 +500,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_inst_par_value_local(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
@@ -520,9 +520,9 @@ package body tb_interpreter_util_pkg is
             val := vars.element_ptrs(ven).values(0);
         end if;     
     end procedure;
-    
+        
     procedure access_inst_par_value_prefer_local(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
@@ -550,9 +550,9 @@ package body tb_interpreter_util_pkg is
             end if;
         end if;     
     end procedure;
-    
+        
     procedure access_inst_par_index_global(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable ven : out integer        
@@ -568,7 +568,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_inst_par_index_local(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
@@ -583,7 +583,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_inst_par_index_prefer_local(
-        variable ie : inst_element_ptr;
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
@@ -606,7 +606,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_proc(
-        variable slc : src_locator;
+        variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
@@ -623,7 +623,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure access_var(
-        variable slc : src_locator;
+        variable slc : in src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
         variable var_element_num : out integer
@@ -1288,7 +1288,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure track_inst_initial_context(
-        variable slc : src_locator;
+        variable slc : in src_locator;
         variable inst : in text_field;
         variable inst_args : in inst_arguments;
         variable vars : in var_pool_ordered;
@@ -1372,7 +1372,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
              
     procedure insert_proc_element(
-        variable slc : src_locator;
+        variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
         variable debug : boolean
@@ -1441,7 +1441,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure insert_var_element(
-        variable slc : src_locator;
+        variable slc : in src_locator;
         variable vars : inout var_pool_ordered;
         variable var_name : in text_field;
         variable inst_args : inst_arguments;

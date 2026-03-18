@@ -60,9 +60,6 @@ package tb_base_pkg is
     constant TRACE_INTERRUPTS : integer := 6;
     constant TRACE_STACK : integer := 7;
     
-    constant PREFER_LOCAL : boolean := true;
-    constant USE_GLOBAL : boolean := false;
-
     type base is (bin, oct, hex, dec);  
     type state_register is array (7 downto 0) of boolean;
     type int_array is array (1 to 128) of integer;
@@ -495,6 +492,13 @@ package tb_base_pkg is
         field : text_field;
         machine_value_width : integer
     ) return unsigned;
+    
+    procedure stm_user_file_open(
+        variable slc : in src_locator;   
+        file file_handle : text;        
+        variable user_file_path_string : in stm_text;
+        open_kind : in file_open_kind
+    );
 
     procedure stm_file_append(
         variable slc : src_locator;

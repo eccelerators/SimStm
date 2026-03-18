@@ -1152,7 +1152,25 @@ package body tb_base_pkg is
         end if;
         return stmvalue;
     end function;
-
+    
+    procedure stm_user_file_open(
+        variable slc : in src_locator;   
+        file file_handle : text;        
+        variable user_file_path_string : in stm_text;
+        open_kind : in file_open_kind
+    ) is  
+        variable v_stat : file_open_status;
+        variable file_path_string : stm_text;
+    begin  
+        file_path_string := stm_text_crop(user_file_path_string);
+        file_open(v_stat, file_handle, file_path_string, open_kind);
+        assert v_stat = open_ok
+        report " file object not found" & lf &
+               " file name: " & slc.file_name & lf &
+               " file line: " & integer'image(slc.file_line)
+        severity failure;        
+    end procedure;
+    
     procedure stm_file_append(
         variable slc : src_locator;
         variable stm_lines : in stm_lines_ptr;
