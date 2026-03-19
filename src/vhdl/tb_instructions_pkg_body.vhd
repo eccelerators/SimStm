@@ -692,7 +692,7 @@ package body tb_instructions_pkg is
         variable e_ptr : inst_def_element_ptr;
     begin
         assert inst'high <= max_field_len
-        report "creation of instruction with length greater than max_field_len attempted, inst " & inst
+        report "creation of instruction with length greater than max_field_len attempted "
         severity failure;
         nen := inst_defs.last_element_num + 1;
         ne_ptr := new inst_def_element;  
@@ -704,7 +704,7 @@ package body tb_instructions_pkg is
         for i in 0 to inst_defs.last_element_num loop
             e_ptr := inst_defs.element_ptrs(i);
             assert ne_ptr.inst /= e_ptr.inst
-            report "creation of duplicate instruction attempted, inst " & ne_ptr.inst
+            report "creation of duplicate instruction attempted, inst " & ne_ptr.inst(1 to fld_len(ne_ptr.inst))
             severity failure;            
         end loop;
         inst_defs.element_ptrs(nen) := ne_ptr;
@@ -727,23 +727,23 @@ package body tb_instructions_pkg is
                 exit;
             end if;
         end loop;
-        assert hn >= 0
-        report "undefined instruction found, inst " & inst & lf &
-               "file " & slc.file_name & lf &
-               "line " & integer'image(slc.file_line)
-        severity failure;
         il := fld_len(inst);
+        assert hn >= 0
+        report "found undefined instruction " & inst(1 to il) & 
+               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               ", line " & integer'image(slc.file_line)
+        severity failure;
         assert inst_defs.element_ptrs(hn).inst_len = il
-        report "instruction found, inst " & inst & lf &
-               "but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & lf &
-               "file " & slc.file_name & lf &
-               "line " & integer'image(slc.file_line)
+        report "found instruction found " & inst(1 to il) & 
+               " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & 
+               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               ", line " & integer'image(slc.file_line)
         severity failure;       
         assert inst_defs.element_ptrs(hn).num_of_params = num_of_params
-        report "instruction found, inst " & inst & lf &
-               "but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & lf &
-               "file " & slc.file_name & lf &
-               "line " & integer'image(slc.file_line)
+        report "found instruction " & inst(1 to il) & 
+               " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & 
+               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               ", line " & integer'image(slc.file_line)
         severity failure;       
     end procedure;
     

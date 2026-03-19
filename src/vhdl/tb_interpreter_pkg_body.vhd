@@ -124,6 +124,7 @@ package body tb_interpreter_pkg is
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
+        variable valid_params : integer;        
         variable iic : stm_inst_initial_context;
         variable var_type : stm_var_type;
         file stimulus : text; 
@@ -156,7 +157,8 @@ package body tb_interpreter_pkg is
                     ia.txt_enclosing_quote := txt_enclosing_quote;
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    check_valid_inst(slc, inst_defs, inst, valid_tokens);
+                    valid_params := valid_tokens - 1;
+                    check_valid_inst(slc, inst_defs, inst, valid_params);
                     track_inst_initial_context(slc, inst, ia, vars, procs, iic);
                     if inst(1 to il) = INSTR_CONST then
                         vn := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);

@@ -401,7 +401,7 @@ begin
         slc.file_name := string_to_text_field(stimulus_file);
         slc.file_line := -1;
         collect_code_files(slc, code_files, stimulus_path, stimulus_file_var);
-        print(integer'image(code_files.last_element_num) & "stimulus code files");   
+        print(integer'image(code_files.last_element_num) & " stimulus code files");   
         
         init_var_pool_ordered(vars);
         print("parsing stimulus code files");
@@ -409,12 +409,12 @@ begin
         noc := vars.last_element_num;
         print(integer'image(noc) & "constants");  
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, debug); 
-        print(integer'image(vars.last_element_num - noc) & "variables");                 
+        print(integer'image(vars.last_element_num - noc) & " variables");                 
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
         parse_instructions_and_procs(code_files, inst_defs, insts, vars, procs, machine_value_width, debug); 
-        print(integer'image(procs.last_element_num) & "procedures"); 
-        print(integer'image(insts.last_element_num) & "instructions"); 
+        print(integer'image(procs.last_element_num) & " procedures"); 
+        print(integer'image(insts.last_element_num) & " instructions"); 
 
         print("checking if all variables are initially defined for all instructions");
         check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
