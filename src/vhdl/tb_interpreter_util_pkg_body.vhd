@@ -97,7 +97,7 @@ package body tb_interpreter_util_pkg is
     begin
         tmp_text_line := (others => nul);
         j := 1;
-        for i in 1 to itext_line'high - 1 loop
+        for i in 1 to text_line'high - 1 loop
             c(1) := itext_line(i);
             c(2) := itext_line(i + 1);
             if c(2) = '(' and not is_space(c(1)) then
@@ -113,6 +113,9 @@ package body tb_interpreter_util_pkg is
             else
                 tmp_text_line(j) := c(1);
                 j := j + 1;
+            end if;
+            if j > text_line'high then
+                exit;
             end if;
         end loop;
 
@@ -161,8 +164,8 @@ package body tb_interpreter_util_pkg is
                 current_token(token_index) := tmp_text_line(i);
             -- else is a space, deal with pointers
             elsif is_space(tmp_text_line(i + 1)) = false and tmp_text_line(i + 1) /= nul then
-                for i in 0 to 9 loop
-                    if i = 0 then
+                for k in 0 to 9 loop
+                    if k = 0 then
                         if token_index /= 0 then
                             itokens(1) := current_token;
                             current_token := (others => nul);
@@ -171,9 +174,9 @@ package body tb_interpreter_util_pkg is
                             token_index := 0;
                         end if;
                     else
-                        if i = token_number then
-                            itokens(i) := current_token;
-                            valid := 1;
+                        if k = token_number then
+                            itokens(k + 1) := current_token;
+                            valid := valid + 1;
                             exit;
                         end if;
                     end if;
@@ -182,12 +185,22 @@ package body tb_interpreter_util_pkg is
             -- break from loop if is null
             if tmp_text_line(i) = nul then
                 if token_index /= 0 then
-                    for i in 0 to 9 loop
-                        if i = token_number then
-                            itokens(i) := current_token;
+                    for k in 0 to 9 loop
+                    if k = 0 then
+                        if token_index /= 0 then
+                            itokens(1) := current_token;
+                            current_token := (others => nul);
+                            token_number := 1;
                             valid := 1;
+                            token_index := 0;
+                        end if;
+                    else
+                        if k = token_number then
+                            itokens(k + 1) := current_token;
+                            valid := valid + 1;
                             exit;
                         end if;
+                    end if;
                     end loop;
                 end if;
                 exit;
@@ -196,11 +209,21 @@ package body tb_interpreter_util_pkg is
         -- did we find a comment and there is a token
         if comment_found = 1 then
             if token_index /= 0 then
-                for i in 0 to 9 loop
-                    if i = token_number then
-                        itokens(i) := current_token;
-                        valid := 1;
-                        exit;
+                for k in 0 to 9 loop
+                    if k = 0 then
+                        if token_index /= 0 then
+                            itokens(1) := current_token;
+                            current_token := (others => nul);
+                            token_number := 1;
+                            valid := 1;
+                            token_index := 0;
+                        end if;
+                    else
+                        if k = token_number then
+                            itokens(k + 1) := current_token;
+                            valid := valid + 1;
+                            exit;
+                        end if;
                     end if;
                 end loop;
             end if;

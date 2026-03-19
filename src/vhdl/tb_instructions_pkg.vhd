@@ -90,7 +90,7 @@ package tb_instructions_pkg is
 
     -- signals
     constant INSTR_SIGNAL : string := "signal";
-    constant INSTR_SIGNAL_PAR_CLOSE : string := "var_)";
+    constant INSTR_SIGNAL_PAR_CLOSE : string := "signal_)";
     constant INSTR_SIGNAL_READ : string := "signal_read";
     constant INSTR_SIGNAL_VERIFY : string := "signal_verify";
     constant INSTR_SIGNAL_WRITE : string := "signal_write";
@@ -101,7 +101,7 @@ package tb_instructions_pkg is
 
     -- bus
     constant INSTR_BUS : string := "bus";
-    constant INSTR_BUS_PAR_CLOSE : string := "var_)";
+    constant INSTR_BUS_PAR_CLOSE : string := "bus_)";
     constant INSTR_BUS_READ : string := "bus_read";
     constant INSTR_BUS_VERIFY : string := "bus_verify";
     constant INSTR_BUS_WRITE : string := "bus_write";
@@ -114,7 +114,7 @@ package tb_instructions_pkg is
 
     -- file
     constant INSTR_FILE : string := "file";
-    constant INSTR_FILE_PAR_CLOSE : string := "var_)";
+    constant INSTR_FILE_PAR_CLOSE : string := "file_)";
     constant INSTR_FILE_READABLE : string := "file_readable";
     constant INSTR_FILE_WRITABLE : string := "file_writable";
     constant INSTR_FILE_APPENDABLE : string := "file_appendable";
@@ -128,7 +128,7 @@ package tb_instructions_pkg is
 
     -- label
     constant INSTR_LABEL : string := "label";
-    constant INSTR_LABEL_PAR_CLOSE : string := "var_)";
+    constant INSTR_LABEL_PAR_CLOSE : string := "label_)";
     constant INSTR_LABEL_POINTER_COPY : string := "label_pointer_copy";
     constant INSTR_LABEL_POINTER_COPY_PAR_CLOSE : string := "label_pointer_copy_)";
     constant INSTR_LABEL_EQU : string := "label_equ";
@@ -138,7 +138,7 @@ package tb_instructions_pkg is
 
     -- lines
     constant INSTR_LINES : string := "lines";
-    constant INSTR_LINES_PAR_CLOSE : string := "var_)";
+    constant INSTR_LINES_PAR_CLOSE : string := "lines_)";
     constant INSTR_LINES_GET_ARRAY : string := "lines_get_array";
     constant INSTR_LINES_SET_ARRAY : string := "lines_set_array";
     constant INSTR_LINES_SET_MESSAGE : string := "lines_set_message";
@@ -154,7 +154,7 @@ package tb_instructions_pkg is
 
     -- array
     constant INSTR_ARRAY : string := "array";
-    constant INSTR_ARRAY_PAR_CLOSE : string := "var_)";
+    constant INSTR_ARRAY_PAR_CLOSE : string := "array_)";
     constant INSTR_ARRAY_GET : string := "array_get";
     constant INSTR_ARRAY_SET : string := "array_set";
     constant INSTR_ARRAY_SIZE : string := "array_size";

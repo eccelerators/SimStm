@@ -1960,7 +1960,7 @@ package body tb_base_pkg is
     ) return text_field is
         variable otf : text_field;
     begin
-        for i in 1 to text_field'length loop
+        for i in 1 to s'length loop
             otf(i) := s(i);
         end loop;
         return otf;

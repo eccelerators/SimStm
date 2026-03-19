@@ -67,6 +67,7 @@ package body tb_interpreter_pkg is
         variable txt_enclosing_quote : character;
         variable valid : integer;
         variable il : integer;
+        variable tll : integer;
         variable include_file_name : text_line;
         variable file_line : integer; 
         file stimulus : text;
@@ -78,7 +79,7 @@ package body tb_interpreter_pkg is
         report "unable to open stimulus_file " & absolute_code_file_name
         severity failure; 
         append_code_file(slc, code_files, stimulus_path, stimulus_file);
-        print("loading codefile " & include_file_name);
+        print("loading codefile " & absolute_code_file_name);
         file_line := 0;  
         while not endfile(stimulus) loop
             file_line := file_line + 1;
@@ -99,7 +100,8 @@ package body tb_interpreter_pkg is
                         exit;
                     end if;
                 end loop;
-                collect_code_files(slc, code_files, stimulus_path, include_file_name);
+                tll := text_line_len(include_file_name);
+                collect_code_files(slc, code_files, stimulus_path, include_file_name(1 to tll));
             end if;
         end loop;
         file_close(stimulus);  

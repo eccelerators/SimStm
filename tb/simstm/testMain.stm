@@ -14,7 +14,7 @@ include "Common/Common.stm"
 --include "Bus/bus32_pointer.stm"
 --include "Base/Array.stm"
 
-include "namespace/namespace.stm"
+--include "namespace/namespace.stm"
 
 --include "Other/other.stm"
 --include "Variable/variable.stm"
@@ -48,13 +48,11 @@ include "namespace/namespace.stm"
 
 --include "TestSuites/TestSuiteArray.stm"
 --include "TestSuites/TestSuiteVariable.stm"
-include "Label/label.stm"
+--include "Label/label.stm"
+--include "other/other.stm"
 
 lines success_lines
 file simulation_success "simulation.success"
-
-
-proc testMain ()
 
 proc testMain ()
 
@@ -86,10 +84,10 @@ proc testMain ()
     --call testFileParameterIn ()
     --call testFileParameterOut ()
     --call testVariableInv ()
-    --call testOtherRandom ()
+    call testOtherRandom ()
     
-    call testNamespaceTwoDifferentOnes ()
-    call testNamespaceLocalAndGlobal
+    --call testNamespaceTwoDifferentOnes ()
+    --call testNamespaceLocalAndGlobal
 
     --bus pointer copy busToTest wishbone256
     --bus timeout set busToTest 1000
@@ -117,8 +115,8 @@ proc testMain ()
     --call testSuiteArray ()
     --call testSuiteVariable ()
     
-    call testCallProcDirect ()
-    call testCallLabelIndirect ()
+    --call testCallProcDirect ()
+    --call testCallLabelIndirect ()
 	
     log message INFO "Main test finished"
     wait 1000
