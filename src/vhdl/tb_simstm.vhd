@@ -287,6 +287,7 @@ begin
         variable val2_int : integer;                
         variable signal_valid : integer;
         variable bus_valid : integer;
+        variable pen : integer; 
                 
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
@@ -1524,7 +1525,7 @@ begin
                     ien := rcs(sp).ien_of_call;
                     if trc_on(TRACE_STACK) then
                         print_instr("entering previous runtime_context ");
-                        print_runtime_context(rsp);       
+                        print_runtime_context(rcs(sp));       
                     end if;
                     wait for 0 ns;
 
@@ -1536,7 +1537,6 @@ begin
                       or ie.inst(1 to il) = INSTR_CALL_PAR_OPEN
                       or ie.inst(1 to il) = INSTR_CALL_LABEL_NOPAR
                       or ie.inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
                     assert sp < max_num_of_stack_elements
                     report "stack overrun:" & lf &
                        " stack pointer " & integer'image(sp) & lf &
@@ -1545,7 +1545,7 @@ begin
                     severity failure;
                     if trc_on(TRACE_STACK) then
                         print_instr("leaving runtime_context ");
-                        print_runtime_context(rsp);       
+                        print_runtime_context(rcs(sp));       
                     end if;
                     sp := sp + 1;
                     init_runtime_context(rcs(sp));         
@@ -1554,18 +1554,22 @@ begin
                     end if;
                     rcs(sp).ien_of_call := ien;         
                     if ie.inst(1 to il) = INSTR_CALL_NOPAR then
-                       access_proc(procs, par_text_fields(1), ien);
+                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), ien);
                        rcs(sp).call_process_state := IN_PROC_BODY;    
                     elsif ie.inst(1 to il) = INSTR_CALL_PAR_OPEN then                       
-                       access_proc(procs, par_text_fields(1), ien);
+                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), ien);
                        rcs(sp).call_process_state := IN_PROC_PARAMS;                                                            
                     elsif ie.inst(1 to il) = INSTR_CALL_LABEL_NOPAR then
-                          access_var(vars, par_text_fields(1), ven);
-                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          get_ven_in_called_scope_prefer_local(1, ven1); 
+                          index_var(vars, ven1, var_stm_label);                        
+                          access_proc(slc, procs, var_stm_label, pen);
+                          ien := procs.element_ptrs(pen).pointer_to_ien;
                           rcs(sp).call_process_state := IN_PROC_BODY; 
                     elsif ie.inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                          access_var(vars, par_text_fields(1), ven);
-                          ien := vars.element_ptrs(ven).pointer_to_ien;
+                          get_ven_in_called_scope_prefer_local(1, ven1); 
+                          index_var(vars, ven1, var_stm_label);                        
+                          access_proc(slc, procs, var_stm_label, pen);
+                          ien := procs.element_ptrs(pen).pointer_to_ien;
                           rcs(sp).call_process_state := IN_PROC_PARAMS; 
                     end if;      
                                   
@@ -1585,7 +1589,7 @@ begin
                 elsif ie.inst(1 to il) = INSTR_LOG_MESSAGE then
                     get_val_in_called_scope_prefer_local(1, val1); 
                     if val1 <= loglevel then
-                        txt_print_wvar(vars, scope, txt, txt_enclosing_quote, sp, stack_called_file_names, stack_called_file_lines, stack_called_procs, machine_value_width);
+                        txt_print_wvar(slc, insts, vars, rcs, txt, txt_enclosing_quote, sp, machine_value_width);
                     end if;
 
                 -- log lines INFO a_lines

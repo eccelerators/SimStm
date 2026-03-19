@@ -50,6 +50,7 @@ use ieee.numeric_std.all;
 use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
 use work.tb_instructions_pkg.all;
+use work.tb_interpreter_util_pkg.all;
 
 package body tb_interpreter_util_pkg is
 
@@ -613,6 +614,25 @@ package body tb_interpreter_util_pkg is
     ) is
         variable pen : integer;
     begin
+        search_proc_element_number(slc, procs, proc_name, pen);
+        assert pen >= 0
+        report "access proc, couldn't find proc" & proc_name & lf &
+               "file " & slc.file_name & lf &
+               "line" & integer'image(slc.file_line)
+        severity failure;
+        proc_element_num := pen;
+    end procedure;
+    
+    procedure access_proc(
+        variable slc : in src_locator;
+        variable procs : in proc_pool_ordered;
+        variable proc_name_ptr : in text_field_ptr;
+        variable proc_element_num : out integer
+    ) is
+        variable pen : integer;
+        variable proc_name : text_field;
+    begin
+        text_field_ptr_to_text_field(proc_name_ptr, proc_name);
         search_proc_element_number(slc, procs, proc_name, pen);
         assert pen >= 0
         report "access proc, couldn't find proc" & proc_name & lf &

@@ -139,6 +139,13 @@ package tb_interpreter_util_pkg is
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     );
+    
+     procedure access_proc(
+        variable slc : in src_locator;
+        variable procs : in proc_pool_ordered;
+        variable proc_name_ptr : in text_field_ptr;
+        variable proc_element_num : out integer
+    );
 
     procedure access_var(
         variable slc : in src_locator;
