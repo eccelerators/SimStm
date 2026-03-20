@@ -88,8 +88,8 @@ package body tb_interpreter_pkg is
             il := fld_len(ts(1));
             if ts(1)(1 to il) = "include" then
                 assert txt /= null
-                report "include instruction defines no file name as text parameter: " & lf &
-                "file " & stimulus_path & stimulus_file & lf &
+                report "include instruction defines no file name as text parameter: " & 
+                "file " & stimulus_path & stimulus_file & 
                 "line " & integer'image(file_line)
                 severity failure;            
                 include_file_name := (others => nul);

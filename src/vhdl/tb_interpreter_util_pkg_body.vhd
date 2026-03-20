@@ -93,6 +93,7 @@ package body tb_interpreter_util_pkg is
         variable valid : integer := 0;
         constant SINGLE_QUOTE : character := character'val(39);
         constant DOUBLE_QUOTE : character := character'val(34);
+        constant DEBUG : boolean := false;
 
     begin
         tmp_text_line := (others => nul);
@@ -118,7 +119,10 @@ package body tb_interpreter_util_pkg is
                 exit;
             end if;
         end loop;
-
+        
+        if DEBUG then dump_text_line(itext_line, "itext_line:"); end if;
+        if DEBUG then dump_text_line(itext_line, "tmp_text_line:"); end if;
+        
         -- null outputs
         itokens := (others => (others => nul));
         txt_ptr := null;
@@ -146,10 +150,9 @@ package body tb_interpreter_util_pkg is
             -- if we have found a txt string
             if txt_found = 1 and tmp_text_line(i) /= nul then
                 -- if string too long, prevent tool hang, truncate and notify
-                if j > c_stm_text_len then
-                    print("tokenize_line: truncated txt line, it was larger than c_stm_text_len");
-                    exit;
-                end if;
+                assert j <= c_stm_text_len
+                report("tokenize_line: code line larger than c_stm_text_len")
+                severity failure;
                 -- till the very end of tmp_text_line
                 if tmp_text_line(i) /= nul then
                     txt_str(j) := tmp_text_line(i);
@@ -162,45 +165,40 @@ package body tb_interpreter_util_pkg is
             elsif is_space(tmp_text_line(i)) = false and tmp_text_line(i) /= nul then
                 token_index := token_index + 1;
                 current_token(token_index) := tmp_text_line(i);
-            -- else is a space, deal with pointers
+            -- else is a space, deal with parameters
             elsif is_space(tmp_text_line(i + 1)) = false and tmp_text_line(i + 1) /= nul then
-                for k in 0 to 9 loop
-                    if k = 0 then
+                for k in 0 to 8 loop
+                    if k = 0 and token_number = 0 then
                         if token_index /= 0 then
-                            itokens(1) := current_token;
+                            itokens(k + 1) := current_token; 
+                            if DEBUG then print("0k" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
                             current_token := (others => nul);
-                            token_number := 1;
+                            token_number := k + 1;
                             valid := 1;
                             token_index := 0;
-                        end if;
-                    else
-                        if k = token_number then
-                            itokens(k + 1) := current_token;
-                            valid := valid + 1;
                             exit;
                         end if;
+                    elsif k = token_number then
+                        itokens(k + 1) := current_token;
+                        if DEBUG then print("ek" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                        current_token := (others => nul);
+                        token_number := k + 1;
+                        valid := k + 1;
+                        token_index := 0;
+                        exit;
                     end if;
                 end loop;
             end if;
             -- break from loop if is null
             if tmp_text_line(i) = nul then
                 if token_index /= 0 then
-                    for k in 0 to 9 loop
-                    if k = 0 then
-                        if token_index /= 0 then
-                            itokens(1) := current_token;
-                            current_token := (others => nul);
-                            token_number := 1;
-                            valid := 1;
-                            token_index := 0;
-                        end if;
-                    else
+                    for k in 0 to 8 loop
                         if k = token_number then
                             itokens(k + 1) := current_token;
-                            valid := valid + 1;
+                            if DEBUG then print("nk" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                            valid := k + 1;
                             exit;
                         end if;
-                    end if;
                     end loop;
                 end if;
                 exit;
@@ -209,26 +207,28 @@ package body tb_interpreter_util_pkg is
         -- did we find a comment and there is a token
         if comment_found = 1 then
             if token_index /= 0 then
-                for k in 0 to 9 loop
-                    if k = 0 then
-                        if token_index /= 0 then
-                            itokens(1) := current_token;
-                            current_token := (others => nul);
-                            token_number := 1;
-                            valid := 1;
-                            token_index := 0;
-                        end if;
-                    else
-                        if k = token_number then
-                            itokens(k + 1) := current_token;
-                            valid := valid + 1;
-                            exit;
-                        end if;
+                for k in 0 to 8 loop
+                    if k = token_number then
+                        itokens(k + 1) := current_token;
+                        if DEBUG then print("ck" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                        valid := k + 1;
+                        exit;
                     end if;
                 end loop;
             end if;
         end if;
+        if DEBUG then 
+            for y in 1 to valid loop
+                print("itokens(" & integer'image(y) &") " & itokens(y)(1 to fld_len(itokens(y))));     
+            end loop;
+        end if;
         token_merge_words(itokens, valid, otokens, ovalid);
+        if DEBUG then 
+            for y in 1 to ovalid loop
+                print("otokens(" & integer'image(y) &") " & otokens(y)(1 to fld_len(otokens(y))));   
+            end loop;
+        end if;
+        if DEBUG then print("-----"); end if;
     end procedure;
 
     procedure txt_print_wvar(
@@ -407,7 +407,7 @@ package body tb_interpreter_util_pkg is
                                 insert_call_stack_file_line := true;
                             else
                                 assert (false)
-                                report lf & "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                                report  "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
                                 severity failure;
                             end if;
                             src_i := src_i + 1;
@@ -421,7 +421,7 @@ package body tb_interpreter_util_pkg is
                             end if;
                         else
                             assert (false)
-                            report lf & "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                            report  "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
                             severity failure;
                         end if;
                     end if;
@@ -431,7 +431,7 @@ package body tb_interpreter_util_pkg is
                 src_i := src_i + 1;
             else
                 assert (false)
-                report lf & "missing closing } bracket " & stm_text_crop(input_txt)
+                report  "missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;
             end if;
 
@@ -444,7 +444,7 @@ package body tb_interpreter_util_pkg is
                     end if;
                 end loop;
                 assert is_txt_var_first_character(txt_ptr(src_tail_i))
-                report lf & "missing variable for substitution bracket " & stm_text_crop(input_txt)
+                report  "missing variable for substitution bracket " & stm_text_crop(input_txt)
                 severity failure;
                 tmp_field := (others => nul);
                 tmp_i := 1;
@@ -496,7 +496,7 @@ package body tb_interpreter_util_pkg is
             end if;
         end loop;
         assert false
-        report lf & "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
+        report  "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
     end procedure;
               
@@ -639,8 +639,8 @@ package body tb_interpreter_util_pkg is
     begin
         search_proc_element_number(slc, procs, proc_name, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc" & proc_name & lf &
-               "file " & slc.file_name & lf &
+        report "access proc, couldn't find proc" & proc_name & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
@@ -658,8 +658,8 @@ package body tb_interpreter_util_pkg is
         text_field_ptr_to_text_field(proc_name_ptr, proc_name);
         search_proc_element_number(slc, procs, proc_name, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc" & proc_name & lf &
-               "file " & slc.file_name & lf &
+        report "access proc, couldn't find proc" & proc_name & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
@@ -675,8 +675,8 @@ package body tb_interpreter_util_pkg is
     begin
         search_var_element_number(slc, vars, var_name, ven);
         assert ven >= 0
-        report "access var, couldn't find var" & var_name & lf &
-               "file " & slc.file_name & lf &
+        report "access var, couldn't find var" & var_name & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
         var_element_num := ven;
@@ -987,7 +987,7 @@ package body tb_interpreter_util_pkg is
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
         print(".... instruction element number: " & to_text_field(inst_element_num));
-        print(".... instruction file name: " & insts.element_ptrs(inst_element_num).slc.file_name);
+        print(".... instruction file name: " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
         print(".... instruction file linenumber: " & to_text_field(insts.element_ptrs(inst_element_num).slc.file_line));              
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
@@ -1177,7 +1177,7 @@ package body tb_interpreter_util_pkg is
         print(".... -----------------------------------------------------------------");
         print(".... file def is ");
         print(".... file element num: " & integer'image(file_element_num));
-        print(".... absolute file name: " & files.element_ptrs(file_element_num).absolute_file_name);
+        print(".... absolute file name: " & text_line_crop(files.element_ptrs(file_element_num).absolute_file_name));
         print(".... file name: " & files.element_ptrs(file_element_num).file_name);
     end procedure;
     
@@ -1555,8 +1555,8 @@ package body tb_interpreter_util_pkg is
         procedure init_stm_text_var is
         begin
             assert inst_args.txt /= null
-            report "missing file name in file declaration " & lf &
-                   "file " & slc.file_name & lf &
+            report "missing file name in file declaration " & 
+                   "file " & slc.file_name & 
                    "line" & integer'image(slc.file_line)
             severity failure;
             ne := new var_element;

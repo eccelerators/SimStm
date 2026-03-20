@@ -365,7 +365,7 @@ begin
  
         procedure print_instr( constant pre : in string; constant post: in string) is
         begin
-            print(pre & ie.inst(1 to il) & "#" & integer'image(ien) & " sp: " & integer'image(sp) & " file name: " & ie.slc.file_name & " file line: " & integer'image(ie.slc.file_line) & post);         
+            print(pre & ie.inst(1 to il) & "#" & integer'image(ien) & " sp: " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line) & post);         
         end procedure; 
         
         procedure print_instr( constant pre : in string) is
@@ -556,8 +556,8 @@ begin
                         user_file_in_use_3 := false;
                     else
                         assert false
-                        report "trying to end file not started or already ended for read:" & lf &
-                               " file name: " & ie.slc.file_name & lf &
+                        report "trying to end file not started or already ended for read:" & 
+                               " file name: " & crop(ie.slc.file_name) & 
                                " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
@@ -583,8 +583,8 @@ begin
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & lf &
-                               " file name: " & ie.slc.file_name & lf &
+                        report "lines delete all not successful:" & 
+                               " file name: " & crop(ie.slc.file_name) & 
                                " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
@@ -724,8 +724,8 @@ begin
                     index_var(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array set position is out of array size:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                    report "array set position is out of array size:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     get_val_in_called_scope_prefer_local(3, val3);
@@ -737,8 +737,8 @@ begin
                     index_var(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);                    
                     assert var_stm_array'length > val2
-                    report "array get position is out of array size:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                    report "array get position is out of array size:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     val := var_stm_array(to_integer(val2(30 downto 0)));
@@ -773,8 +773,8 @@ begin
                     index_var(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);    
                     assert var_stm_array'length > val2
-                    report "array verify position is out of array size:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                    report "array verify position is out of array size:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     verify_passes_count := verify_passes_count + 1;
@@ -788,13 +788,13 @@ begin
                         print(" expected = 0x" & to_hstring(val3));
                         print(" mask     = 0x" & to_hstring(val4));
                         assert resume(0) /= '0'
-                        report "array verify has difference:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                        report "array verify has difference:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                         assert false
-                        report "array verify has difference:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                        report "array verify has difference:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity error;
                         verify_failure_count := verify_failure_count + 1;
@@ -982,8 +982,8 @@ begin
                             end loop;
                         else
                             assert false
-                            report "only 4 files are allowed for file read concurrently:" & lf &
-                               " file name: " & ie.slc.file_name & lf &
+                            report "only 4 files are allowed for file read concurrently:" & 
+                               " file name: " & crop(ie.slc.file_name) & 
                                " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                         end if;
@@ -1010,8 +1010,8 @@ begin
                         user_file_in_use_3 := false;
                     else
                         assert false
-                        report "trying to end file not started or already ended for read:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                        report "trying to end file not started or already ended for read:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
@@ -1141,8 +1141,8 @@ begin
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & lf &
-                           " file name: " & ie.slc.file_name & lf &
+                        report "lines delete all not successful:" & 
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
@@ -1201,8 +1201,8 @@ begin
                             end if;
                         when others =>
                             assert false
-                            report "if instruction got an unknown compare operation as parameter 2" & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                            report "if instruction got an unknown compare operation as parameter 2" &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                     end case;
@@ -1229,8 +1229,8 @@ begin
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) - 1;
                             end if;
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                             bien := bien + 1;
@@ -1261,8 +1261,8 @@ begin
                               and bie.inst(1 to il) /= INSTR_END_IF 
                         loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                             bien := bien + 1;
@@ -1290,8 +1290,8 @@ begin
                                 end if;
                             when others =>
                             assert false
-                                report "elsif instruction got an unknown compare operation as parameter 2" & lf & 
-                                       " file name: " & ie.slc.file_name & lf &
+                                report "elsif instruction got an unknown compare operation as parameter 2" &  
+                                       " file name: " & crop(ie.slc.file_name) & 
                                        " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                         end case;
@@ -1318,8 +1318,8 @@ begin
                                     num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) - 1;
                                 end if;
                                 assert bien <= insts.last_element_num
-                                report "if instruction unable to find terminating else, elsif or end_if statement." & lf & 
-                                       " file name: " & ie.slc.file_name & lf &
+                                report "if instruction unable to find terminating else, elsif or end_if statement." &  
+                                       " file name: " & crop(ie.slc.file_name) & 
                                        " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                                 bien := bien + 1;
@@ -1356,8 +1356,8 @@ begin
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) - 1;
                             end if;
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                             bien := ien + 1;
@@ -1508,9 +1508,9 @@ begin
                         finish;
                     end if;
                     assert sp >= 0
-                    report "stack underrun:" & lf &
-                       " stack pointer " & integer'image(sp) & lf &
-                       " file name: " & ie.slc.file_name & lf &
+                    report "stack underrun:" & 
+                       " stack pointer " & integer'image(sp) & 
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     sp := sp - 1;
@@ -1538,9 +1538,9 @@ begin
                       or ie.inst(1 to il) = INSTR_CALL_LABEL_NOPAR
                       or ie.inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
                     assert sp < max_num_of_stack_elements
-                    report "stack overrun:" & lf &
-                       " stack pointer " & integer'image(sp) & lf &
-                       " file name: " & ie.slc.file_name & lf &
+                    report "stack overrun:" & 
+                       " stack pointer " & integer'image(sp) & 
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     if trc_on(TRACE_STACK) then
@@ -1600,8 +1600,8 @@ begin
                     if val1 <= loglevel then
                         stm_lines_print(var_stm_lines);
                         assert valid_bus /= 0
-                        report "lines object access failed:" & lf &
-                       " file name: " & ie.slc.file_name & lf &
+                        report "lines object access failed:" & 
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
@@ -1628,8 +1628,8 @@ begin
                 elsif ie.inst(1 to il) = INSTR_SEED then
                     get_val_in_called_scope_prefer_local(1, val1); 
                     assert val1 > 0
-                    report "seed expects a value > 0" & lf & 
-                           " file name: " & ie.slc.file_name & lf &
+                    report "seed expects a value > 0" &  
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     seed1 := to_integer(val1(30 downto 0));
@@ -1675,8 +1675,8 @@ begin
                         
                     else
                         assert false
-                        report "16 markers are provided only:" & lf &
-                       " file name: " & ie.slc.file_name & lf &
+                        report "16 markers are provided only:" & 
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
@@ -1697,14 +1697,14 @@ begin
                         print(" mask     = 0x" & to_hstring(val3));
                         if resume(0) = '0' then
                             assert false
-                            report "verify failure assertion" & lf & 
-                               " file name: " & ie.slc.file_name & lf &
+                            report "verify failure assertion" &  
+                               " file name: " & crop(ie.slc.file_name) & 
                                " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                         else
                             assert false
-                            report "verify error assertion" & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                            report "verify error assertion" &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                             severity error;
                             verify_failure_count := verify_failure_count + 1;
@@ -1719,8 +1719,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_write(signals_out, val_int, val2, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to write invalid signal" & lf & 
-                       " file name: " & ie.slc.file_name & lf &
+                    report "trying to write invalid signal" &  
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;                  
                     wait for 0 ns;
@@ -1737,8 +1737,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to read invalid signal" & lf & 
-                       " file name: " & ie.slc.file_name & lf &
+                    report "trying to read invalid signal" &  
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;                    
                     update_var(vars, ven2, val);
@@ -1752,14 +1752,14 @@ begin
                             print(" mask     = 0x" & to_hstring(val4));
                             if resume(0) = '0' then
                                 assert false
-                                report "verify failure assertion" & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                                report "verify failure assertion" &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                             else
                                 assert false
-                                report "verify error assertion" & lf & 
-                                       " file name: " & ie.slc.file_name & lf &
+                                report "verify error assertion" &  
+                                       " file name: " & crop(ie.slc.file_name) & 
                                        " file line: " & integer'image(ie.slc.file_line)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
@@ -1802,15 +1802,15 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_write(bus_down, bus_up, val3, val4, val2_int, val_int, bus_valid, successfull, bus_timeouts(to_integer(val1(30 downto 0))));
                     assert bus_valid /= 0
-                    report "trying to write to invalid bus" & lf & 
-                       " file name: " & ie.slc.file_name & lf &
+                    report "trying to write to invalid bus" &  
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;                  
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
                     if resume(1) = '0' then
                         assert successfull
-                        report "bus write timeout failure assertion" & lf & 
-                           " file name: " & ie.slc.file_name & lf &
+                        report "bus write timeout failure assertion" &  
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     else
@@ -1818,8 +1818,8 @@ begin
                             bus_timeout_failure_count := bus_timeout_failure_count + 1;
                         end if;
                         assert successfull
-                        report "bus write timeout error assertion" & lf & 
-                           " file name: " & ie.slc.file_name & lf &
+                        report "bus write timeout error assertion" &  
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                         severity error;
                     end if;
@@ -1840,8 +1840,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
                     assert bus_valid /= 0
-                    report "trying to read from invalid bus" & lf & 
-                       " file name: " & ie.slc.file_name & lf &
+                    report "trying to read from invalid bus" &  
+                       " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;   
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
@@ -1869,14 +1869,14 @@ begin
                             print(" mask     = 0x" & to_hstring(val6));
                             if resume(0) = '0' then
                                 assert false
-                                report "verify failure assertion" & lf & 
-                                   " file name: " & ie.slc.file_name & lf &
+                                report "verify failure assertion" &  
+                                   " file name: " & crop(ie.slc.file_name) & 
                                    " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                             else
                                 assert false
-                                report "verify error assertion" & lf & 
-                                       " file name: " & ie.slc.file_name & lf &
+                                report "verify error assertion" &  
+                                       " file name: " & crop(ie.slc.file_name) & 
                                        " file line: " & integer'image(ie.slc.file_line)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
@@ -1927,9 +1927,9 @@ begin
                 -- undefined instructions
                 else
                     assert false
-                    report "seems the command  " & ", " & ie.inst(1 to il) & " was defined but" & lf & 
-                           "was not found in the elsif chain, please check spelling" & lf & 
-                           " file name: " & ie.slc.file_name & lf &
+                    report "seems the command  " & ", " & ie.inst(1 to il) & " was defined but" &  
+                           "was not found in the elsif chain, please check spelling" &  
+                           " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                 end if;

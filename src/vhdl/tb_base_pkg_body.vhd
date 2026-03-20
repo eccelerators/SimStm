@@ -207,8 +207,8 @@ package body tb_base_pkg is
                     int_number := 1;
                 when others =>
                     assert false
-                    report "bin2integer found non binary digit on line " & lf & 
-                           "file " & slc.file_name & lf &
+                    report "bin2integer found non binary digit on line " &  
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -237,8 +237,8 @@ package body tb_base_pkg is
                     vec_number := '1';
                 when others =>
                     assert false
-                    report "bin2stm_value found non binary digit on line " & lf &
-                           "file " & slc.file_name & lf &
+                    report "bin2stm_value found non binary digit on line " & 
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -266,7 +266,7 @@ package body tb_base_pkg is
             when '9' => i := 9;
             when others =>
                 assert (false)
-                report lf & "c2int was given a non number digit."
+                report  "c2int was given a non number digit."
                 severity failure;
         end case;
         return i;
@@ -295,7 +295,7 @@ package body tb_base_pkg is
             when 'f' | 'F' => return "1111";
             when others =>
                 assert (false)
-                report lf & "c2std_vec found non hex digit on file line "
+                report  "c2std_vec found non hex digit on file line "
                 severity failure;
                 return "XXXX";
         end case;
@@ -517,7 +517,7 @@ package body tb_base_pkg is
             when 15 => c := 'F';
             when others =>
                 assert false
-                report lf & "ew_to_char was given a non number digit."
+                report  "ew_to_char was given a non number digit."
                 severity failure;
         end case;
         return c;
@@ -713,9 +713,9 @@ package body tb_base_pkg is
     begin
         fld_order(s1, s2, is_equ, is_less);
         assert not is_equ
-        report "attemping to add a duplicate var or proc definition:" & lf &
-               " object name: " & s1 & lf &
-               " file name: " & slc.file_name & lf &
+        report "attemping to add a duplicate var or proc definition:" & 
+               " object name: " & s1 & 
+               " file name: " & text_line_crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
         severity failure;
         return is_less;   
@@ -891,8 +891,8 @@ package body tb_base_pkg is
                     int_number := 15;
                 when others =>
                     assert false
-                    report "hex2integer found non hex digit " & lf &
-                           "file " & slc.file_name & lf &
+                    report "hex2integer found non hex digit " & 
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -949,8 +949,8 @@ package body tb_base_pkg is
                     vec_number := x"F";
                 when others =>
                     assert false
-                    report "hex2stm_value found non hex digit " & lf &
-                           "file " & slc.file_name & lf &
+                    report "hex2stm_value found non hex digit " & 
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -1067,7 +1067,7 @@ package body tb_base_pkg is
             when "1111" => return 'F';
             when others =>
                 assert (false)
-                report lf & "std_vec2c found non-binary digit in vec "
+                report  "std_vec2c found non-binary digit in vec "
                 severity failure;
                 return 'X';
         end case;
@@ -1089,7 +1089,7 @@ package body tb_base_pkg is
                         value := value + 1;
                     end loop;
                     -- assert(false)
-                    -- report lf & "hex2integer: " & temp_str
+                    -- report  "hex2integer: " & temp_str
                     -- severity warning;
                     value := hex2integer(slc, temp_str);
                 when 'b' =>
@@ -1101,8 +1101,8 @@ package body tb_base_pkg is
                     value := bin2integer(slc, temp_str);
                 when others =>
                     assert false
-                    report "stim_to_integer strange number found, non hex digit " & lf &
-                           "file " & slc.file_name & lf &
+                    report "stim_to_integer strange number found, non hex digit " & 
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -1130,7 +1130,7 @@ package body tb_base_pkg is
                         ci := ci + 1;
                     end loop;
                     -- assert(false)
-                    -- report lf & "hex2integer: " & temp_str
+                    -- report  "hex2integer: " & temp_str
                     -- severity warning;
                     stmvalue := hex2stm_value(slc, temp_str, machine_value_width);
                 when 'b' =>
@@ -1142,8 +1142,8 @@ package body tb_base_pkg is
                     stmvalue := bin2stm_value(slc, temp_str, machine_value_width);
                 when others =>
                     assert false
-                    report "stim_to_stm_value strange number found, non hex digit " & lf &
-                           "file " & slc.file_name & lf &
+                    report "stim_to_stm_value strange number found, non hex digit " & 
+                           "file " & slc.file_name & 
                            "line" & integer'image(slc.file_line)
                     severity failure;
             end case;
@@ -1165,8 +1165,8 @@ package body tb_base_pkg is
         file_path_string := stm_text_crop(user_file_path_string);
         file_open(v_stat, file_handle, file_path_string, open_kind);
         assert v_stat = open_ok
-        report " file object not found" & lf &
-               " file name: " & slc.file_name & lf &
+        report " file object not found" & 
+               " file name: " & text_line_crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
         severity failure;        
     end procedure;
@@ -1345,8 +1345,8 @@ package body tb_base_pkg is
             valid := 1;
         end if;
         assert valid = 1;
-        report "stm_lines_append line not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_append line not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1393,8 +1393,8 @@ package body tb_base_pkg is
             valid := 1;
         end if;
         assert valid = 1;
-        report "stm_lines_append array not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_append array not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1436,8 +1436,8 @@ package body tb_base_pkg is
             valid := 1;
         end if;
         assert valid = 1;
-        report "stm_lines_append text not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_append text not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1475,8 +1475,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1;
-        report "stm_lines_delete at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_delete at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
         lp := stm_lines.line_list;
@@ -1503,8 +1503,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get line at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_get line at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1540,8 +1540,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get array at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_get array at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1585,8 +1585,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert text at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_insert text at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
         lp := stm_lines.line_list;
@@ -1634,8 +1634,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert array at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_insert array at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;        
         lp := stm_lines.line_list;
@@ -1697,8 +1697,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set text at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_set text at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1727,8 +1727,8 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set array at position not possible" & lf &
-               "file " & slc.file_name & lf &
+        report "stm_lines_set array at position not possible" & 
+               "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
     end procedure;
@@ -1851,6 +1851,17 @@ package body tb_base_pkg is
         return txt(1 to l);
     end function;
     
+    function crop(
+        s : string
+    ) return string is
+        variable i : integer := 1;       
+    begin        
+        while s(i) /= nul and i /= max_str_len loop
+            i := i + 1;
+        end loop;
+        return s(1 to i - 1);                    
+    end function;
+
     function text_line_len(
         s : text_line
     ) return integer is
@@ -2008,5 +2019,85 @@ package body tb_base_pkg is
     begin
         return ew_to_text_field(stmvalue, dec);
     end function;
+    
+    procedure dump_text_line(
+        variable tl : in text_line;
+        constant prefix : in string
+    ) is
+        variable l : integer;
+    begin   
+        l := text_line_len(tl);
+        print(prefix & tl(1 to l));
+        for i in 0 to l/64 loop
+            if tl(i*64+1) /= nul then
+                print(
+                    integer'image(character'pos(tl(i*64+1))) & " " &
+                    integer'image(character'pos(tl(i*64+2))) & " " &
+                    integer'image(character'pos(tl(i*64+3))) & " " &
+                    integer'image(character'pos(tl(i*64+4))) & " " &
+                    integer'image(character'pos(tl(i*64+5))) & " " &
+                    integer'image(character'pos(tl(i*64+6))) & " " &
+                    integer'image(character'pos(tl(i*64+7))) & " " &
+                    integer'image(character'pos(tl(i*64+8))) & " " &
+                    integer'image(character'pos(tl(i*64+9))) & " " &
+                    integer'image(character'pos(tl(i*64+10))) & " " &
+                    integer'image(character'pos(tl(i*64+11))) & " " &
+                    integer'image(character'pos(tl(i*64+12))) & " " &
+                    integer'image(character'pos(tl(i*64+13))) & " " &
+                    integer'image(character'pos(tl(i*64+14))) & " " &
+                    integer'image(character'pos(tl(i*64+15))) & " " &
+                    integer'image(character'pos(tl(i*64+16))) & " " &  
+                    integer'image(character'pos(tl(i*64+16+1))) & " " &
+                    integer'image(character'pos(tl(i*64+16+2))) & " " &
+                    integer'image(character'pos(tl(i*64+16+3))) & " " &
+                    integer'image(character'pos(tl(i*64+16+4))) & " " &
+                    integer'image(character'pos(tl(i*64+16+5))) & " " &
+                    integer'image(character'pos(tl(i*64+16+6))) & " " &
+                    integer'image(character'pos(tl(i*64+16+7))) & " " &
+                    integer'image(character'pos(tl(i*64+16+8))) & " " &
+                    integer'image(character'pos(tl(i*64+16+9))) & " " &
+                    integer'image(character'pos(tl(i*64+16+10))) & " " &
+                    integer'image(character'pos(tl(i*64+16+11))) & " " &
+                    integer'image(character'pos(tl(i*64+16+12))) & " " &
+                    integer'image(character'pos(tl(i*64+16+13))) & " " &
+                    integer'image(character'pos(tl(i*64+16+14))) & " " &
+                    integer'image(character'pos(tl(i*64+16+15))) & " " &
+                    integer'image(character'pos(tl(i*64+16+16))) & " " &  
+                    integer'image(character'pos(tl(i*64+32+1))) & " " &
+                    integer'image(character'pos(tl(i*64+32+2))) & " " &
+                    integer'image(character'pos(tl(i*64+32+3))) & " " &
+                    integer'image(character'pos(tl(i*64+32+4))) & " " &
+                    integer'image(character'pos(tl(i*64+32+5))) & " " &
+                    integer'image(character'pos(tl(i*64+32+6))) & " " &
+                    integer'image(character'pos(tl(i*64+32+7))) & " " &
+                    integer'image(character'pos(tl(i*64+32+8))) & " " &
+                    integer'image(character'pos(tl(i*64+32+9))) & " " &
+                    integer'image(character'pos(tl(i*64+32+10))) & " " &
+                    integer'image(character'pos(tl(i*64+32+11))) & " " &
+                    integer'image(character'pos(tl(i*64+32+12))) & " " &
+                    integer'image(character'pos(tl(i*64+32+13))) & " " &
+                    integer'image(character'pos(tl(i*64+32+14))) & " " &
+                    integer'image(character'pos(tl(i*64+32+15))) & " " &
+                    integer'image(character'pos(tl(i*64+32+16))) & " " &  
+                    integer'image(character'pos(tl(i*64+48+1))) & " " &
+                    integer'image(character'pos(tl(i*64+48+2))) & " " &
+                    integer'image(character'pos(tl(i*64+48+3))) & " " &
+                    integer'image(character'pos(tl(i*64+48+4))) & " " &
+                    integer'image(character'pos(tl(i*64+48+5))) & " " &
+                    integer'image(character'pos(tl(i*64+48+6))) & " " &
+                    integer'image(character'pos(tl(i*64+48+7))) & " " &
+                    integer'image(character'pos(tl(i*64+48+8))) & " " &
+                    integer'image(character'pos(tl(i*64+48+9))) & " " &
+                    integer'image(character'pos(tl(i*64+48+10))) & " " &
+                    integer'image(character'pos(tl(i*64+48+11))) & " " &
+                    integer'image(character'pos(tl(i*64+48+12))) & " " &
+                    integer'image(character'pos(tl(i*64+48+13))) & " " &
+                    integer'image(character'pos(tl(i*64+48+14))) & " " &
+                    integer'image(character'pos(tl(i*64+48+15))) & " " &
+                    integer'image(character'pos(tl(i*64+48+16)))   
+                );
+            end if;
+        end loop;
+    end procedure;
 
 end package body;

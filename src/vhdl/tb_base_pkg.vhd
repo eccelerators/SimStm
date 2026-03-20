@@ -641,6 +641,10 @@ package tb_base_pkg is
     function text_line_crop(
         txt : text_line
     ) return string;
+    
+    function crop(
+        s : string
+    ) return string;
 
     function text_line_len(
         s : text_line
@@ -699,5 +703,10 @@ package tb_base_pkg is
     function to_text_field(
         stmvalue : unsigned
     ) return text_field;
-
+    
+    procedure dump_text_line(
+        variable tl : in text_line;
+        constant prefix : in string
+    );
+    
 end package;

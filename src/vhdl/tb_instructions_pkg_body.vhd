@@ -68,7 +68,7 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_STOP, 0);
         append_inst_def(inst_defs, INSTR_FINISH, 0);
         append_inst_def(inst_defs, INSTR_IF, 3);
-        append_inst_def(inst_defs, INSTR_INCLUDE, 1);
+        append_inst_def(inst_defs, INSTR_INCLUDE, 0);
         append_inst_def(inst_defs, INSTR_LOOP, 1);
         append_inst_def(inst_defs, INSTR_VAR, 2);
         append_inst_def(inst_defs, INSTR_VAR_PAR_CLOSE, 2);
@@ -552,7 +552,7 @@ package body tb_instructions_pkg is
             end if;
         end if;
         if token_merge = 134 then
-            token(token1_len + 2 to token1_len + token4_len + 1) := itokens(4)(1 to token4_len);
+            token(token1_len + 2 to token1_len + token3_len + 1) := itokens(3)(1 to token3_len);
             token(token1_len + 1) := '_';
             token(token1_len + token3_len + 3 to token1_len + token3_len + token4_len + 2) := itokens(4)(1 to token4_len);
             token(token1_len + 1 + token3_len + 1) := '_';
