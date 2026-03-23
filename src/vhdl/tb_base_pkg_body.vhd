@@ -115,6 +115,28 @@ package body tb_base_pkg is
         rc.loop_if_enter_level:= 0;
     end procedure;
     
+    function var_type_to_string( 
+        vt :stm_var_type
+    ) return string is
+        variable vts : string(1 to 5);
+    begin
+        case vt is
+            when T_LINES =>
+                    vts :="lines";
+            when T_ARRAY =>
+                    vts :="array";                        
+            when T_TEXT =>
+                    vts :="text ";
+            when T_LABEL =>
+                    vts :="label";
+            when T_CONST =>
+                    vts :="const";
+            when others =>
+                    vts :="value";
+        end case;   
+        return vts;
+    end function;
+    
     procedure append_inst(
         variable slc : in src_locator; 
         variable insts : inout inst_sequence;
@@ -715,7 +737,7 @@ package body tb_base_pkg is
         assert not is_equ
         report "attemping to add a duplicate var or proc definition:" & 
                " object name: " & s1 & 
-               " file name: " & text_line_crop(slc.file_name) & 
+               " file name: " & crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
         severity failure;
         return is_less;   

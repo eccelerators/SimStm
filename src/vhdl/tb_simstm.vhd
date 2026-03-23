@@ -374,7 +374,7 @@ begin
         end procedure;         
              
     begin
-        debug:= false;
+        debug:= true;
         marker <= (others => '0');
         verify_passes <= (others => '0');
         verify_failures <= (others => '0');
@@ -407,7 +407,7 @@ begin
         print("parsing stimulus code files");
         parse_constants(code_files, inst_defs, vars, procs, machine_value_width, debug); 
         noc := vars.last_element_num;
-        print(integer'image(noc) & "constants");  
+        print(integer'image(noc) & " constants");  
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, debug); 
         print(integer'image(vars.last_element_num - noc) & " variables");                 
         init_proc_pool_ordered(procs);

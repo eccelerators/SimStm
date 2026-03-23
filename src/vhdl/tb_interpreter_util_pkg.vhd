@@ -324,6 +324,10 @@ package tb_interpreter_util_pkg is
     procedure dump_file_defs(
         variable files : in file_def_list
     );
+
+    procedure print_initial_instruction_context(
+        variable iic : in stm_inst_initial_context
+    );
     
     procedure print_runtime_context(
         variable rc : in stm_runtime_context

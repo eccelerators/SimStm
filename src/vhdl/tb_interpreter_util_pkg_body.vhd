@@ -1050,8 +1050,10 @@ package body tb_interpreter_util_pkg is
         severity failure;
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
+        print("---- var definition in file: " & crop(vars.element_ptrs(var_element_num).slc.file_name));
+        print("---- var definition in line: " & integer'image(vars.element_ptrs(var_element_num).slc.file_line));
         print("---- var name: " & vars.element_ptrs(var_element_num).name);
-        print("---- var element num: " & to_text_field(var_element_num));
+        print("---- var element num: " & to_text_field(var_element_num) & "(0x" & to_text_field_hex(var_element_num) & ")");
         print("---- var_value: 0x" & to_text_field_hex(vars.element_ptrs(var_element_num).values(0)));
         print("---- var_org_value: 0x" & to_text_field_hex(vars.element_ptrs(var_element_num).values_org(0)));
         if vars.element_ptrs(var_element_num).typ = T_VALUE then
@@ -1194,6 +1196,25 @@ package body tb_interpreter_util_pkg is
         end loop;
     end procedure;
     
+    procedure print_initial_instruction_context(
+        variable iic : in stm_inst_initial_context
+    ) is
+    begin       
+        case iic.code_section is
+            when NONE =>    
+                print("code section NONE");
+            when PROC_BODY =>    
+                print("code section PROC_PARAMS");
+            when PROC_PARAMS =>    
+                print("code section IN_PROC_BODY");
+            when CALL_PARAMS =>    
+                print("code section IN_CALL_PARAMS");       
+        end case;            
+        print("namespace name " & crop(iic.namespace_name));
+        print("proc name " & crop(iic.proc_name));
+        print("called proc name " & crop(iic.called_proc_name));  
+    end procedure;  
+    
     procedure print_runtime_context(
         variable rc : in stm_runtime_context
     ) is
@@ -1227,17 +1248,22 @@ package body tb_interpreter_util_pkg is
         variable s : slice;
         variable su : slice;
         variable sl : slice;
-        variable en : integer;     
+        variable en : integer;
+        variable cmp_name : text_field;    
+        variable is_equ : boolean;
+        variable is_less : boolean;
     begin
         en := -1;
         s.left := 0;
         s.right := vars.last_element_num;           
         while s.right - s.left > 8 loop
             sl.left := s.left;
-            sl.right := s.right / 2 - 1;
+            sl.right := s.left + (s.right - s.left) / 2 - 1;
             su.left := sl.right + 1;
-            su.right := sl.right;
-            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(su.left).name, var_name) then
+            su.right := s.right;
+            cmp_name := vars.element_ptrs(sl.right).name;
+            fld_order(var_name, cmp_name, is_equ, is_less);
+            if is_less or is_equ then
                 s.left := sl.left;
                 s.right := sl.right;
             else
@@ -1263,17 +1289,22 @@ package body tb_interpreter_util_pkg is
         variable s : slice;
         variable su : slice;
         variable sl : slice;
-        variable en : integer;     
+        variable en : integer; 
+        variable cmp_name : text_field;
+        variable is_equ : boolean;
+        variable is_less : boolean; 
     begin
         en := -1;
         s.left := 0;
         s.right := procs.last_element_num;           
         while s.right - s.left > 8 loop
             sl.left := s.left;
-            sl.right := s.right / 2 - 1;
+            sl.right := s.left + (s.right - s.left) / 2 - 1;
             su.left := sl.right + 1;
-            su.right := sl.right;
-            if order_is_less_than_failure_on_equal(slc, procs.element_ptrs(su.left).name, proc_name) then
+            su.right := s.right;
+            cmp_name := procs.element_ptrs(sl.right).name;
+            fld_order(proc_name, cmp_name, is_equ, is_less);
+            if is_less or is_equ then
                 s.left := sl.left;
                 s.right := sl.right;
             else
@@ -1427,57 +1458,48 @@ package body tb_interpreter_util_pkg is
         variable is_equ : boolean;
         variable is_less : boolean;
         variable insert_before : integer;
+        variable ne_num: integer;
+        variable cmp_name : text_field;
     begin
         ne := new proc_element;    
         ne.name := proc_name;
         ne.slc := slc;
-        if procs.last_element_num < 8 then
-            insert_before := -1;
-            for i in 0 to procs.last_element_num loop
-                if order_is_less_than_failure_on_equal(slc, procs.element_ptrs(i).name, proc_name) then
-                    insert_before := i;
-                    exit;
-                end if;              
-            end loop;
-        else
+        
+        insert_before := -1;   
+        if procs.last_element_num > 0 then          
             s.left := 0;
-            s.right := procs.last_element_num;           
+            s.right := procs.last_element_num;                       
             while s.right - s.left > 8 loop
                 sl.left := s.left;
-                sl.right := s.right / 2 - 1;
+                sl.right := s.left + (s.right - s.left) / 2 - 1;
                 su.left := sl.right + 1;
-                su.right := sl.right;
-                if order_is_less_than_failure_on_equal(slc, procs.element_ptrs(su.left).name, proc_name) then
+                su.right := s.right;
+                cmp_name := procs.element_ptrs(sl.right).name;
+                if order_is_less_than_failure_on_equal(slc, proc_name, cmp_name) then
                     s.left := sl.left;
                     s.right := sl.right;
                 else
                     s.left := su.left;
                     s.right := su.right;
                 end if;    
-            end loop;
-            insert_before := -1;
-            for i in 0 to procs.last_element_num - 1 loop
-                if order_is_less_than_failure_on_equal(slc, procs.element_ptrs(su.left).name, proc_name) then
-                    insert_before := i;
-                    exit;
-                end if;              
-            end loop;
-            insert_before := -1;
+            end loop;                       
             for i in s.left to s.right loop
-                if order_is_less_than_failure_on_equal(slc, procs.element_ptrs(su.left).name, proc_name) then
+                cmp_name := procs.element_ptrs(i).name;
+                if order_is_less_than_failure_on_equal(slc, proc_name, cmp_name) then
                     insert_before := i;
                     exit;
                 end if;              
             end loop;
-        end if;  
+        end if;
+ 
         if insert_before >= 0 then
            procs.element_ptrs(insert_before + 1 to procs.last_element_num + 1) := procs.element_ptrs(insert_before to procs.last_element_num);
-           procs.element_ptrs(insert_before) := ne;
-           procs.last_element_num := procs.last_element_num + 1;
+           ne_num := insert_before;
         else
-           procs.element_ptrs(procs.last_element_num + 1) := ne;
-           procs.last_element_num := procs.last_element_num + 1;
-        end if;     
+           ne_num := procs.last_element_num + 1;
+        end if;   
+        procs.element_ptrs(ne_num) := ne;
+        procs.last_element_num := procs.last_element_num + 1;     
         if debug then
             print("add proc " & proc_name);
         end if;           
@@ -1497,6 +1519,8 @@ package body tb_interpreter_util_pkg is
         variable su : slice;
         variable sl : slice;
         variable insert_before : integer;
+        variable ne_num: integer;
+        variable cmp_name : text_field;
         
         procedure init_lines_var is
         begin
@@ -1629,74 +1653,57 @@ package body tb_interpreter_util_pkg is
         case var_type is
             when T_LINES =>
                 init_lines_var;
-                if debug then
-                    print("add lines var " & ne.name);
-                end if;
             when T_ARRAY =>
                 init_array_var;
-                if debug then
-                    print("add array var " & ne.name);
-                end if;
             when T_TEXT =>
                 init_stm_text_var;
-                if debug then
-                    print("add text var " & ne.name);
-                end if;
             when T_LABEL =>
                 init_label_var;
-                if debug then
-                    print("add label var " & ne.name);
-                end if;
             when T_CONST =>
                 init_value_var;
-                if debug then
-                    print("add constant var" & ne.name);
-                end if;
             when others =>
                 init_value_var;
-                if debug then
-                    print("add value var " & ne.name);
-                end if;
         end case;        
-
-        s.left := 0;
-        s.right := vars.last_element_num;           
-        while s.right - s.left > 8 loop
-            sl.left := s.left;
-            sl.right := s.right / 2 - 1;
-            su.left := sl.right + 1;
-            su.right := sl.right;
-            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(su.left).name, var_name) then
-                s.left := sl.left;
-                s.right := sl.right;
-            else
-                s.left := su.left;
-                s.right := su.right;
-            end if;    
-        end loop;
-        insert_before := -1;
-        for i in 0 to vars.last_element_num - 1 loop
-            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(su.left).name, var_name) then
-                insert_before := i;
-                exit;
-            end if;              
-        end loop;
-        insert_before := -1;
-        for i in s.left to s.right loop
-            if order_is_less_than_failure_on_equal(slc, vars.element_ptrs(su.left).name, var_name) then
-                insert_before := i;
-                exit;
-            end if;              
-        end loop;
+   
+        insert_before := -1;   
+        if vars.last_element_num > 0 then          
+            s.left := 0;
+            s.right := vars.last_element_num;                       
+            while s.right - s.left > 8 loop
+                sl.left := s.left;
+                sl.right := s.left + (s.right - s.left) / 2 - 1;
+                su.left := sl.right + 1;
+                su.right := s.right;
+                cmp_name := vars.element_ptrs(sl.right).name;
+                if order_is_less_than_failure_on_equal(slc, var_name, cmp_name) then
+                    s.left := sl.left;
+                    s.right := sl.right;
+                else
+                    s.left := su.left;
+                    s.right := su.right;
+                end if;    
+            end loop;                       
+            for i in s.left to s.right loop
+                cmp_name := vars.element_ptrs(i).name;
+                if order_is_less_than_failure_on_equal(slc, var_name, cmp_name) then
+                    insert_before := i;
+                    exit;
+                end if;              
+            end loop;
+        end if;
  
         if insert_before >= 0 then
            vars.element_ptrs(insert_before + 1 to vars.last_element_num + 1) := vars.element_ptrs(insert_before to vars.last_element_num);
-           vars.element_ptrs(insert_before) := ne;
-           vars.last_element_num := vars.last_element_num + 1;
+           ne_num := insert_before;
         else
-           vars.element_ptrs(vars.last_element_num + 1) := ne;
-           vars.last_element_num := vars.last_element_num + 1;
-        end if;                
+           ne_num := vars.last_element_num + 1;
+        end if;   
+        vars.element_ptrs(ne_num) := ne;
+        vars.last_element_num := vars.last_element_num + 1;
+        if debug then 
+            print("add var #" & integer'image(ne_num) & " " &  var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
+        end if;       
+                     
     end procedure;
 
 end package body;

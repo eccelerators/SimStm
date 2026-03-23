@@ -280,6 +280,10 @@ package tb_base_pkg is
         variable rc : inout stm_runtime_context
     );
     
+    function var_type_to_string( 
+        vt :stm_var_type
+    ) return string;
+    
     procedure append_inst(
         variable slc : in src_locator; 
         variable insts : inout inst_sequence;

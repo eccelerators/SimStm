@@ -126,7 +126,6 @@ package body tb_interpreter_pkg is
         variable valid_tokens : integer;
         variable valid_params : integer;        
         variable iic : stm_inst_initial_context;
-        variable var_type : stm_var_type;
         file stimulus : text; 
         variable ts : token_text_field_array;
         variable inst : text_field;
@@ -135,8 +134,7 @@ package body tb_interpreter_pkg is
         variable vn : text_field;
         variable ven : integer;
         variable fn : text_field;
-    begin
-        init_inst_initial_context(iic);
+    begin 
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -145,6 +143,10 @@ package body tb_interpreter_pkg is
             report "unable to open code file  " & afn
             severity failure;
             file_line := 0;
+            init_inst_initial_context(iic);
+            if debug then 
+                print("parsing code file for constants " & crop(fn));
+            end if;
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
@@ -159,10 +161,12 @@ package body tb_interpreter_pkg is
                     slc.file_line := file_line;
                     valid_params := valid_tokens - 1;
                     check_valid_inst(slc, inst_defs, inst, valid_params);
-                    track_inst_initial_context(slc, inst, ia, vars, procs, iic);
+                    track_inst_initial_context(slc, inst, ia, vars, procs, iic);                    
                     if inst(1 to il) = INSTR_CONST then
+                        -- print_initial_instruction_context(iic);
                         vn := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);
-                        insert_var_element(slc, vars, vn, ia, var_type, machine_value_width, debug);
+                        insert_var_element(slc, vars, vn, ia, T_CONST, machine_value_width, debug);
+                        dump_var_pool_ordered(vars, machine_value_width);
                         access_var(slc, vars, vn, ven);
                         vars.element_ptrs(ven).values(0) := stim_to_stm_value(slc, ia.par_text_fields(2), machine_value_width);
                     end if;                
@@ -189,7 +193,7 @@ package body tb_interpreter_pkg is
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable valid_ckeck : integer;
+        variable valid_params : integer;  
         variable iic : stm_inst_initial_context;
         variable c_var_index : integer;
         variable c_var_value : unsigned(machine_value_width -1 downto 0);
@@ -205,7 +209,7 @@ package body tb_interpreter_pkg is
         variable slc : src_locator;
         variable fn : text_field;
     begin
-        init_inst_initial_context(iic);
+        
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -214,6 +218,10 @@ package body tb_interpreter_pkg is
             report "unable to open code file  " & afn
             severity failure;
             file_line := 0;
+            init_inst_initial_context(iic);
+            if debug then 
+                print("parsing code file for variables " & crop(fn));
+            end if;
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
@@ -226,10 +234,13 @@ package body tb_interpreter_pkg is
                     ia.txt_enclosing_quote := txt_enclosing_quote;
                     slc.file_name := fn;
                     slc.file_line := file_line;
+                    valid_params := valid_tokens - 1;
+                    check_valid_inst(slc, inst_defs, inst, valid_params);
                     check_valid_inst(slc, inst_defs, inst, valid_tokens);
                     track_inst_initial_context(slc, inst, ia, vars, procs, iic);
                     set_var_type(inst, il, var_type);
                     if var_type /= T_NO_VAR then
+                        -- print_initial_instruction_context(iic);
                         vn := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);
                         if is_digit(ia.par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then                   
                             insert_var_element(slc, vars, vn, ia, var_type, machine_value_width, debug);
@@ -289,6 +300,9 @@ package body tb_interpreter_pkg is
             report "unable to open code file  " & afn
             severity failure;
             file_line := 0;
+            if debug then 
+                print("parsing code file for procs and instructions " & crop(fn));
+            end if;
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
@@ -320,6 +334,7 @@ package body tb_interpreter_pkg is
                                 procs.element_ptrs(pen).pointer_to_ien := insts.last_element_num + 1;
                                 append_inst(slc, insts, inst, ia, debug);
                             else
+                                -- print_initial_instruction_context(iic);
                                 if iic.is_var_declaration then
                                     if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                                         -- any local var definition and declaration living in proc parameters or proc local area to be added as instruction
