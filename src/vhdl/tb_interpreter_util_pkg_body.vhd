@@ -1701,7 +1701,7 @@ package body tb_interpreter_util_pkg is
         vars.element_ptrs(ne_num) := ne;
         vars.last_element_num := vars.last_element_num + 1;
         if debug then 
-            print("add var #" & integer'image(ne_num) & " " &  var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
+            print("add var #" & integer'image(ne_num) & "(" & integer'image(vars.last_element_num) & ") " &  var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
         end if;       
                      
     end procedure;

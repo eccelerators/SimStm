@@ -413,6 +413,7 @@ package body tb_base_pkg is
             i := i + 1;
             j := j + 1;
         end loop;
+        sc(i) := '.';
         return sc;
     end function;
     
