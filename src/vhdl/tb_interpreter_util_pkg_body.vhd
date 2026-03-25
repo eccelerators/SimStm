@@ -517,7 +517,7 @@ package body tb_interpreter_util_pkg is
         if is_digit(ptf(1)) then
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
-            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+            vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
             access_var(ie.slc, vars, vn, ven);
             val := vars.element_ptrs(ven).values(0);
         end if;     
@@ -539,7 +539,7 @@ package body tb_interpreter_util_pkg is
         if is_digit(ptf(1)) then
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
-            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+            vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
             access_var(ie.slc, vars, vn, ven);
             val := vars.element_ptrs(ven).values(0);
         end if;     
@@ -563,12 +563,12 @@ package body tb_interpreter_util_pkg is
         if is_digit(ptf(1)) then
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
-            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
+            vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
             access_var(ie.slc, vars, vn, ven);
             if ven >= 0 then
                 val := vars.element_ptrs(ven).values(0);
             else
-                vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+                vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
                 access_var(ie.slc, vars, vn, ven);
                 val := vars.element_ptrs(ven).values(0);            
             end if;
@@ -587,7 +587,7 @@ package body tb_interpreter_util_pkg is
     begin
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-        vn := textfield_dot_cat(ptf, etf);
+        vn := cat_var_name_local_scope(ptf, etf);
         access_var(ie.slc, vars, vn, ven);    
     end procedure;
     
@@ -602,7 +602,7 @@ package body tb_interpreter_util_pkg is
         variable vn : text_field;
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
-        vn := textfield_dot_cat(ptf, called_proc_name);                   
+        vn := cat_var_name_local_scope(ptf, called_proc_name);                   
         access_var(ie.slc, vars, vn, ven);
     end procedure;
     
@@ -620,15 +620,69 @@ package body tb_interpreter_util_pkg is
     begin
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
-        vn := textfield_dot_cat(ptf, called_proc_name);                   
+        vn := cat_var_name_local_scope(ptf, called_proc_name);                   
         access_var(ie.slc, vars, vn, veni);
         if veni < 0 then
-            vn := textfield_dot_cat(ie.inst_args.par_text_fields(par_num), etf);
+            vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
             access_var(ie.slc, vars, vn, veni);          
         end if;  
         ven := veni;  
     end procedure;
     
+    procedure access_inst_par_index_global(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable ven : out integer        
+    ) is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable etf : text_field;
+    begin
+        etf := (others => nul);
+        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := cat_var_name_local_scope(ptf, etf);
+        access_var(ie.slc, vars, vn, ven);    
+    end procedure;
+    
+    procedure access_inst_par_index_local(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    ) is
+        variable ptf : text_field;
+        variable vn : text_field;
+    begin
+        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := cat_var_name_local_scope(ptf, called_proc_name);                   
+        access_var(ie.slc, vars, vn, ven);
+    end procedure;
+    
+    procedure access_inst_par_index_prefer_local(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    ) is
+        variable ptf : text_field;
+        variable vn : text_field;
+        variable veni : integer;
+        variable etf : text_field;
+    begin
+        etf := (others => nul);
+        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := cat_var_name_local_scope(ptf, called_proc_name);                   
+        access_var(ie.slc, vars, vn, veni);
+        if veni < 0 then
+            vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
+            access_var(ie.slc, vars, vn, veni);          
+        end if;  
+        ven := veni;  
+    end procedure;    
+       
     procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
@@ -639,7 +693,7 @@ package body tb_interpreter_util_pkg is
     begin
         search_proc_element_number(slc, procs, proc_name, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc" & proc_name & 
+        report "access proc, couldn't find proc " & proc_name & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
@@ -658,7 +712,7 @@ package body tb_interpreter_util_pkg is
         text_field_ptr_to_text_field(proc_name_ptr, proc_name);
         search_proc_element_number(slc, procs, proc_name, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc" & proc_name & 
+        report "access proc, couldn't find proc " & proc_name & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
@@ -675,7 +729,7 @@ package body tb_interpreter_util_pkg is
     begin
         search_var_element_number(slc, vars, var_name, ven);
         assert ven >= 0
-        report "access var, couldn't find var" & var_name & 
+        report "access var, couldn't find var " & var_name & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;
@@ -1362,9 +1416,7 @@ package body tb_interpreter_util_pkg is
     end procedure;
     
     procedure track_inst_initial_context(
-        variable slc : in src_locator;
-        variable inst : in text_field;
-        variable inst_args : in inst_arguments;
+        variable ie : inst_element;
         variable vars : in var_pool_ordered;
         variable procs : in proc_pool_ordered; 
         variable iic : inout stm_inst_initial_context
@@ -1376,47 +1428,47 @@ package body tb_interpreter_util_pkg is
         variable pn : text_field;
         variable pn_ptr : text_field_ptr;
     begin
-        il := fld_len(inst);
-        if inst(1 to il) = INSTR_NAMESPACE then
-            iic.namespace_name := inst_args.par_text_fields(1);
+        il := fld_len(ie.inst);
+        if ie.inst(1 to il) = INSTR_NAMESPACE then
+            iic.namespace_name := ie.inst_args.par_text_fields(1);
         end if;
-        if inst(1 to il) = INSTR_END_NAMESPACE then
+        if ie.inst(1 to il) = INSTR_END_NAMESPACE then
             iic.namespace_name := (others => nul);
         end if;
-        if inst(1 to il) = INSTR_PROC_PAR_OPEN then
+        if ie.inst(1 to il) = INSTR_PROC_PAR_OPEN then
             iic.code_section := PROC_PARAMS;
-            iic.proc_name := inst_args.par_text_fields(1);
+            iic.proc_name := ie.inst_args.par_text_fields(1);
         end if;
-        if inst(1 to il) = INSTR_PROC_NOPAR then
+        if ie.inst(1 to il) = INSTR_PROC_NOPAR then
             iic.code_section := PROC_BODY;
-            iic.proc_name := inst_args.par_text_fields(1);
+            iic.proc_name := ie.inst_args.par_text_fields(1);
         end if;
-        if inst(1 to il) = INSTR_END_PROC then
+        if ie.inst(1 to il) = INSTR_END_PROC then
             iic.code_section := NONE;
         end if;
 
-        if inst(1 to il) = INSTR_CALL_PAR_OPEN then
+        if ie.inst(1 to il) = INSTR_CALL_PAR_OPEN then
             iic.code_section := CALL_PARAMS;
-            iic.called_proc_name := inst_args.par_text_fields(1);
+            iic.called_proc_name := ie.inst_args.par_text_fields(1);
         end if;
-        if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+        if ie.inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
             iic.code_section := CALL_PARAMS;
-            vn := textfield_dot_cat(iic.namespace_name, inst_args.par_text_fields(1), iic.proc_name);
-            access_var(slc, vars, vn, ven);
+            vn := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
+            access_var(ie.slc, vars, vn, ven);
             pn_ptr := vars.element_ptrs(ven).label_proc_ref;
             text_field_ptr_to_text_field(pn_ptr, pn);
             iic.called_proc_name := pn;
         end if;
-        if inst(1 to il) = INSTR_PAR_CLOSE
-            or inst(1 to il) = INSTR_EQU_PAR_CLOSE
-            or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
-            or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+        if ie.inst(1 to il) = INSTR_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_EQU_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
             if iic.code_section = PROC_PARAMS then
                 iic.code_section := PROC_BODY;
             end if;
@@ -1424,22 +1476,22 @@ package body tb_interpreter_util_pkg is
                 iic.code_section := PROC_BODY;
             end if;
         iic.is_var_declaration := false;
-        if inst(1 to il) = INSTR_CONST
-            or inst(1 to il) = INSTR_VAR
-            or inst(1 to il) = INSTR_VAR_PAR_CLOSE
-            or inst(1 to il) = INSTR_SIGNAL
-            or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS
-            or inst(1 to il) = INSTR_BUS_PAR_CLOSE
-            or inst(1 to il) = INSTR_FILE
-            or inst(1 to il) = INSTR_FILE_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL
-            or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
-            or inst(1 to il) = INSTR_LINES
-            or inst(1 to il) = INSTR_LINES_PAR_CLOSE
-            or inst(1 to il) = INSTR_ARRAY
-            or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+        if ie.inst(1 to il) = INSTR_CONST
+            or ie.inst(1 to il) = INSTR_VAR
+            or ie.inst(1 to il) = INSTR_VAR_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_SIGNAL
+            or ie.inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_BUS
+            or ie.inst(1 to il) = INSTR_BUS_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_FILE
+            or ie.inst(1 to il) = INSTR_FILE_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_LABEL
+            or ie.inst(1 to il) = INSTR_LABEL_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_LINES
+            or ie.inst(1 to il) = INSTR_LINES_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_ARRAY
+            or ie.inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
+            or ie.inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
                 iic.is_var_declaration := true;
             end if;
         end if;
@@ -1449,14 +1501,13 @@ package body tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable debug : boolean
+        variable debug : boolean;
+        variable pen  : out integer
     ) is
         variable ne : proc_element_ptr;
         variable s : slice;
         variable su : slice;
         variable sl : slice;
-        variable is_equ : boolean;
-        variable is_less : boolean;
         variable insert_before : integer;
         variable ne_num: integer;
         variable cmp_name : text_field;
@@ -1502,7 +1553,8 @@ package body tb_interpreter_util_pkg is
         procs.last_element_num := procs.last_element_num + 1;     
         if debug then
             print("add proc " & proc_name);
-        end if;           
+        end if; 
+        pen := ne_num;          
     end procedure;
     
     procedure insert_var_element(
@@ -1512,7 +1564,8 @@ package body tb_interpreter_util_pkg is
         variable inst_args : inst_arguments;
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
-        variable debug : boolean
+        variable debug : in boolean;
+        variable ven  : out integer
     ) is
         variable ne : var_element_ptr;
         variable s : slice;
@@ -1703,7 +1756,7 @@ package body tb_interpreter_util_pkg is
         if debug then 
             print("add var #" & integer'image(ne_num) & "(" & integer'image(vars.last_element_num) & ") " &  var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
         end if;       
-                     
+        ven := ne_num;             
     end procedure;
 
 end package body;

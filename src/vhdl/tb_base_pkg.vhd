@@ -72,7 +72,7 @@ package tb_base_pkg is
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
-
+    
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
     type parameter_text_field_array is array (1 to 6) of text_field;
@@ -285,12 +285,10 @@ package tb_base_pkg is
     ) return string;
     
     procedure append_inst(
-        variable slc : in src_locator; 
         variable insts : inout inst_sequence;
-        variable inst : text_field;
-        variable ia: inst_arguments;
+        variable ie : inst_element;
         variable debug : boolean 
-        );
+    );
     
     procedure append_code_file(
         variable slc : src_locator;
@@ -343,12 +341,12 @@ package tb_base_pkg is
         s2 : text_field
     ) return text_field;
 
-    function textfield_dot_cat(
+    function cat_var_name_local_scope(
         s1 : text_field;
         s2 : text_field
     ) return text_field;
     
-    function textfield_dot_cat(
+    function cat_namespace_var_name_local_scope(
         s1 : text_field;
         s2 : text_field;
         s3 : text_field

@@ -138,25 +138,22 @@ package body tb_base_pkg is
     end function;
     
     procedure append_inst(
-        variable slc : in src_locator; 
         variable insts : inout inst_sequence;
-        variable inst : text_field;
-        variable ia: inst_arguments;
+        variable ie : inst_element;
         variable debug : boolean 
-        )
-    is
+    ) is
         variable nen : integer;
         variable ne_ptr : inst_element_ptr;
     begin
         nen := insts.last_element_num + 1;
         ne_ptr := new inst_element;
-        ne_ptr.slc := slc;
-        ne_ptr.inst := inst;
-        ne_ptr.inst_args := ia;
+        ne_ptr.slc := ie.slc;
+        ne_ptr.inst := ie.inst;
+        ne_ptr.inst_args := ie.inst_args;
         insts.element_ptrs(nen) := ne_ptr;
         insts.last_element_num := nen;
         if debug then
-            print("append instruction " & inst & ", element number " & integer'image(insts.last_element_num));
+            print("append instruction " & ie.inst & ", element number " & integer'image(insts.last_element_num));
         end if;
     end procedure;
     
@@ -165,8 +162,7 @@ package body tb_base_pkg is
         variable code_files : inout file_def_list;
         constant stimulus_path : in string;
         variable stimulus_file : in string
-    )
-    is
+    ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
         variable acfn : text_line; 
@@ -391,7 +387,7 @@ package body tb_base_pkg is
         return sc;
     end function;
 
-    function textfield_dot_cat(
+    function cat_var_name_local_scope(
         s1 : text_field;
         s2 : text_field
     ) return text_field is
@@ -404,7 +400,6 @@ package body tb_base_pkg is
         while sc(i) /= nul loop
             i := i + 1;
         end loop;
-
         sc(i) := '.';
         i := i + 1;
         j := 1;
@@ -413,11 +408,10 @@ package body tb_base_pkg is
             i := i + 1;
             j := j + 1;
         end loop;
-        sc(i) := '.';
         return sc;
     end function;
     
-    function textfield_dot_cat(
+    function cat_namespace_var_name_local_scope(
         s1 : text_field;
         s2 : text_field;
         s3 : text_field
@@ -431,8 +425,10 @@ package body tb_base_pkg is
         while sc(i) /= nul loop
             i := i + 1;
         end loop;
-        sc(i) := '.';
-        i := i + 1;
+        if i > 1 then
+            sc(i) := '.';
+            i := i + 1;
+        end if;
         j := 1;
         while s2(j) /= nul loop
             sc(i) := s2(j);
@@ -1189,7 +1185,7 @@ package body tb_base_pkg is
         file_open(v_stat, file_handle, file_path_string, open_kind);
         assert v_stat = open_ok
         report " file object not found" & 
-               " file name: " & text_line_crop(slc.file_name) & 
+               " file name: " & crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
         severity failure;        
     end procedure;

@@ -128,9 +128,7 @@ package body tb_interpreter_pkg is
         variable iic : stm_inst_initial_context;
         file stimulus : text; 
         variable ts : token_text_field_array;
-        variable inst : text_field;
-        variable ia : inst_arguments;
-        variable slc : src_locator;
+        variable ie : inst_element;
         variable vn : text_field;
         variable ven1 : integer;
         variable val2 : unsigned(machine_value_width -1 downto 0);  
@@ -154,20 +152,19 @@ package body tb_interpreter_pkg is
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
                 il := fld_len(ts(1));
                 if valid_tokens /= 0 then
-                    inst := ts(1);
-                    ia.par_text_fields := extract_parameters(ts);
-                    ia.txt := txt;
-                    ia.txt_enclosing_quote := txt_enclosing_quote;
-                    slc.file_name := fn;
-                    slc.file_line := file_line;
+                    ie.slc.file_name := fn;
+                    ie.slc.file_line := file_line;
+                    ie.inst := ts(1);
+                    ie.inst_args.par_text_fields := extract_parameters(ts);
+                    ie.inst_args.txt := txt;
+                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
                     valid_params := valid_tokens - 1;
-                    check_valid_inst(slc, inst_defs, inst, valid_params);
-                    track_inst_initial_context(slc, inst, ia, vars, procs, iic);                    
-                    if inst(1 to il) = INSTR_CONST then
-                        vn := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);
-                        insert_var_element(slc, vars, vn, ia, T_CONST, machine_value_width, debug);
-                        access_var(slc, vars, vn, ven1);
-                        val2 := stim_to_stm_value(slc, ia.par_text_fields(2), machine_value_width);
+                    check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
+                    track_inst_initial_context(ie, vars, procs, iic);                    
+                    if ie.inst(1 to il) = INSTR_CONST then
+                        vn := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
+                        insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
+                        val2 := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(2), machine_value_width);
                         vars.element_ptrs(ven1).values(0) := val2;
                         vars.element_ptrs(ven1).values_org(0) := val2;
                     end if;                
@@ -198,16 +195,14 @@ package body tb_interpreter_pkg is
         variable iic : stm_inst_initial_context;
         variable n_par_text_fields : parameter_text_field_array;  
         variable vn1 : text_field;
-        variable vn2 : text_field;
+        variable pn2 : integer := 2;
         variable ven1 : integer;
         variable ven2 : integer;
         variable val2 : unsigned(machine_value_width -1 downto 0);    
         variable var_type : stm_var_type;
         file stimulus : text; 
         variable ts : token_text_field_array;
-        variable inst : text_field;
-        variable ia : inst_arguments;
-        variable n_ia : inst_arguments;
+        variable ie : inst_element;
         variable slc : src_locator;
         variable fn : text_field;
     begin
@@ -230,34 +225,27 @@ package body tb_interpreter_pkg is
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
                 il := fld_len(ts(1));
                 if valid_tokens /= 0 then
-                    inst := ts(1);
-                    if inst(1 to il) /= INSTR_CONST then
-                        ia.par_text_fields := extract_parameters(ts);
-                        ia.txt := txt;
-                        ia.txt_enclosing_quote := txt_enclosing_quote;
-                        slc.file_name := fn;
-                        slc.file_line := file_line;
+                    if ts(1)(1 to il) /= INSTR_CONST then
+                        ie.slc.file_name := fn;
+                        ie.slc.file_line := file_line;
+                        ie.inst := ts(1);
+                        ie.inst_args.par_text_fields := extract_parameters(ts);
+                        ie.inst_args.txt := txt;
+                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
                         valid_params := valid_tokens - 1;
-                        check_valid_inst(slc, inst_defs, inst, valid_params);
-                        track_inst_initial_context(slc, inst, ia, vars, procs, iic);  
-                        set_var_type(inst, il, var_type);
+                        check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
+                        track_inst_initial_context(ie, vars, procs, iic);  
+                        set_var_type(ie.inst, il, var_type);
                         if var_type /= T_NO_VAR then
-                            vn1 := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);
-                            if is_digit(ia.par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then                   
-                                insert_var_element(slc, vars, vn1, ia, var_type, machine_value_width, debug);
-                                access_var(slc, vars, vn1, ven1);
-                                val2 := stim_to_stm_value(slc, ia.par_text_fields(2), machine_value_width);
-                                vars.element_ptrs(ven1).values(0) := val2;
+                            vn1 := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
+                            if is_digit(ie.inst_args.par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then                                              
+                                insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             else
-                                vn2 := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(2));
-                                access_var(slc, vars, vn2, ven2);
+                                access_inst_par_index_prefer_local(ie, vars, pn2, iic.called_proc_name, ven2);
                                 val2 := vars.element_ptrs(ven2).values(0);
-                                ia.par_text_fields(2) := to_text_field(val2);                              
-                                vn1 := textfield_dot_cat(iic.namespace_name, ia.par_text_fields(1), iic.proc_name);
-                                insert_var_element(slc, vars, vn1, ia, var_type, machine_value_width, debug);
-                                access_var(slc, vars, vn1, ven1);
-                                vars.element_ptrs(ven1).values(0) := val2;
-                                vars.element_ptrs(ven1).values_org(0) := val2;
+                                ie.inst_args.par_text_fields(2) := to_text_field(val2);                              
+                                vn1 := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
+                                insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             end if;
                         end if;
                     end if;
@@ -284,15 +272,13 @@ package body tb_interpreter_pkg is
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable valid_ckeck : integer;
+        variable valid_params : integer;  
         variable iic : stm_inst_initial_context;
         variable var_type : stm_var_type;
         variable proc_type : boolean;
         file stimulus : text;
         variable ts : token_text_field_array;
-        variable inst : text_field;
-        variable ia : inst_arguments;
-        variable slc : src_locator;
+        variable ie : inst_element;
         variable pen : integer;
         variable fn : text_field;
     begin
@@ -314,19 +300,20 @@ package body tb_interpreter_pkg is
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
                 il := fld_len(ts(1));
                 if valid_tokens /= 0 then
-                    inst := ts(1);
-                    ia.par_text_fields := extract_parameters(ts);
-                    ia.txt := txt;
-                    ia.txt_enclosing_quote := txt_enclosing_quote;
-                    slc.file_name := fn;
-                    slc.file_line := file_line;
-                    check_valid_inst(slc, inst_defs, inst, valid_tokens);
-                    track_inst_initial_context(slc, inst, ia, vars, procs, iic);
-                    set_var_type(inst, il, var_type);
-                    set_proc_type(inst, il, proc_type);      
+                    ie.slc.file_name := fn;
+                    ie.slc.file_line := file_line;
+                    ie.inst := ts(1);
+                    ie.inst_args.par_text_fields := extract_parameters(ts);
+                    ie.inst_args.txt := txt;
+                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
+                    valid_params := valid_tokens - 1;
+                    check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
+                    track_inst_initial_context(ie, vars, procs, iic);
+                    set_var_type(ie.inst, il, var_type);
+                    set_proc_type(ie.inst, il, proc_type);      
                     if var_type = T_NO_VAR and proc_type = false then
                         -- anything but a constant, variable or proc definition, thus always an instruction
-                        append_inst(slc, insts, inst, ia, debug);
+                        append_inst(insts, ie, debug);
                     else
                         if var_type /= T_CONST then 
                             -- constant definitions and declarations are already done in pass 0 and are never added as an instruction
@@ -334,19 +321,18 @@ package body tb_interpreter_pkg is
                             -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
                             if proc_type then
                                 -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
-                                insert_proc_element(slc, procs, ia.par_text_fields(1), debug);
-                                access_proc(slc, procs, ia.par_text_fields(1), pen);
+                                insert_proc_element(ie.slc, procs, ie.inst_args.par_text_fields(1), debug, pen);
                                 procs.element_ptrs(pen).pointer_to_ien := insts.last_element_num + 1;
-                                append_inst(slc, insts, inst, ia, debug);
+                                append_inst(insts, ie, debug);
                             else
                                 if iic.is_var_declaration then
                                     if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                                         -- any local var definition and declaration living in proc parameters or proc local area to be added as instruction
-                                        append_inst(slc, insts, inst, ia, debug);
+                                        append_inst(insts, ie, debug);
                                     end if;                               
                                 else
                                     -- any other instruction
-                                    append_inst(slc, insts, inst, ia, debug);
+                                    append_inst(insts, ie, debug);
                                 end if;
                             end if;
                         end if;
@@ -371,15 +357,16 @@ package body tb_interpreter_pkg is
         variable slc : src_locator;
         variable inst : text_field;
         variable ia : inst_arguments;
-        variable ie : inst_element_ptr;
+        variable ie_ptr : inst_element_ptr;
+        variable ie : inst_element;
     begin
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
-            ie := insts.element_ptrs(i);
-            slc := ie.slc;
-            inst:= ie.inst;
-            ia := ie.inst_args;
-            track_inst_initial_context(slc, inst, ia, vars, procs, iic);
+            ie_ptr := insts.element_ptrs(i);
+            ie.slc := ie_ptr.slc;
+            ie.inst := ie_ptr.inst;
+            ie.inst_args := ie_ptr.inst_args;                                 
+            track_inst_initial_context(ie, vars, procs, iic);
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
             end if;
@@ -389,11 +376,11 @@ package body tb_interpreter_pkg is
             for i in 1 to 6 loop
                 if ia.par_text_fields(i)(1) /= nul then
                     if is_digit(ia.par_text_fields(i)(1)) then
-                        -- test if it ia a valid literal
+                        -- test if it is a valid literal
                         par_value := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(i), machine_value_width);
                     else
                         for i in 1 to 6 loop
-                            ptf := textfield_dot_cat(ia.par_text_fields(i), par_scopes(i));
+                            ptf := cat_var_name_local_scope(ia.par_text_fields(i), par_scopes(i));
                         end loop;
                         -- test if it can be found
                         access_var(ie.slc, vars, ptf, par_index);

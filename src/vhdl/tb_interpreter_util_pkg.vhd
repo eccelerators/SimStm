@@ -133,6 +133,29 @@ package tb_interpreter_util_pkg is
         variable ven : out integer 
     );    
     
+    procedure access_inst_par_index_global(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable ven : out integer        
+    );    
+    
+    procedure access_inst_par_index_local(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    );    
+    
+    procedure access_inst_par_index_prefer_local(
+        variable ie : in inst_element;
+        variable vars : in var_pool_ordered;
+        variable par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable ven : out integer 
+    ); 
+    
     procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
@@ -360,9 +383,7 @@ package tb_interpreter_util_pkg is
     );
     
     procedure track_inst_initial_context(
-        variable slc : in src_locator;
-        variable inst : in text_field;
-        variable inst_args : in inst_arguments;
+        variable ie : inst_element;
         variable vars : in var_pool_ordered;
         variable procs : in proc_pool_ordered; 
         variable iic : inout stm_inst_initial_context
@@ -372,7 +393,8 @@ package tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable debug : boolean
+        variable debug : boolean;
+        variable pen  : out integer
     );
     
     procedure insert_var_element(
@@ -382,7 +404,8 @@ package tb_interpreter_util_pkg is
         variable inst_args : inst_arguments;
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
-        variable debug : boolean
+        variable debug : in boolean;
+        variable ven  : out integer
     );
     
 end package;
