@@ -203,8 +203,7 @@ package tb_base_pkg is
         call_process_state : stm_call_process_state;  
         ien_of_call : integer;
         ien_of_proc_params_end : integer;
-        ien_of_called_proc : integer;
-        par_scopes : parameter_text_field_array;  
+        ien_of_called_proc : integer; 
         loop_num : integer;
         loop_if_enter_level : integer;
         curr_loop_count : loop_nested_int_array;

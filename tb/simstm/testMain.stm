@@ -1,4 +1,4 @@
-include "Variable/variable_parameter.stm"
+include "Other/other.stm"
 
 include "Common/Common.stm"
 --include "Signal/signal.stm"

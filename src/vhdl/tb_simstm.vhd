@@ -200,7 +200,6 @@ begin
         variable seed1 : positive := 1;
         variable seed2 : positive := 1;
        
-        variable par_scopes : parameter_text_field_array;
         variable var_scope : text_field;
         variable var_index : integer;
         variable number_found : integer;
@@ -346,7 +345,12 @@ begin
                     return;
                 end if;
             end if;
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);           
+            if called_ien > -1 then
+                access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);     
+            else
+                access_inst_par_index_global(ie, vars, pn, ven); 
+            end if;
+                  
         end procedure;
         
         procedure get_ven_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable ven : out integer) is
@@ -1550,7 +1554,7 @@ begin
                        " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    sp := sp - 1;
+                    
                     if interrupt_in_service > 0 then
                         interrupt_number := interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);
                         if interrupt_entry_call_stack_ptr_stack(interrupt_number) = sp then
@@ -1560,6 +1564,7 @@ begin
                         end if;
                     end if;     
                     ien := rcs(sp).ien_of_call;
+                    sp := sp - 1;
                     if trc_on(TRACE_STACK) then
                         print_instr("entering previous runtime_context ");
                         print_runtime_context(rcs(sp));       
@@ -1591,22 +1596,28 @@ begin
                     end if;
                     rcs(sp).ien_of_call := ien;         
                     if crop(ie.inst) = INSTR_CALL_NOPAR then
-                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), ien);
+                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                       ien := procs.element_ptrs(pen).pointer_to_ien;
+                       rcs(sp).ien_of_called_proc := ien; 
                        rcs(sp).call_process_state := IN_PROC_BODY;    
                     elsif crop(ie.inst) = INSTR_CALL_PAR_OPEN then                       
-                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), ien);
+                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                       ien := procs.element_ptrs(pen).pointer_to_ien;
+                       rcs(sp).ien_of_called_proc := ien; 
                        rcs(sp).call_process_state := IN_PROC_PARAMS;                                                            
                     elsif crop(ie.inst) = INSTR_CALL_LABEL_NOPAR then
                           get_ven_in_called_scope_prefer_local(1, ven1); 
                           index_var(vars, ven1, var_stm_label);                        
                           access_proc(slc, procs, var_stm_label, pen);
                           ien := procs.element_ptrs(pen).pointer_to_ien;
+                          rcs(sp).ien_of_called_proc := ien; 
                           rcs(sp).call_process_state := IN_PROC_BODY; 
                     elsif crop(ie.inst) = INSTR_CALL_LABEL_PAR_OPEN then
                           get_ven_in_called_scope_prefer_local(1, ven1); 
                           index_var(vars, ven1, var_stm_label);                        
                           access_proc(slc, procs, var_stm_label, pen);
                           ien := procs.element_ptrs(pen).pointer_to_ien;
+                          rcs(sp).ien_of_called_proc := ien; 
                           rcs(sp).call_process_state := IN_PROC_PARAMS; 
                     end if;      
                                   
@@ -1769,8 +1780,6 @@ begin
                 elsif crop(ie.inst) = INSTR_SIGNAL_VERIFY or crop(ie.inst) = INSTR_SIGNAL_READ then
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    get_val_in_called_scope_prefer_local(3, val3);
-                    get_val_in_called_scope_prefer_local(4, val4);
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
@@ -1780,6 +1789,8 @@ begin
                     severity failure;                    
                     update_var(vars, ven2, val);
                     if (crop(ie.inst) = INSTR_SIGNAL_VERIFY) then
+                        get_val_in_called_scope_prefer_local(3, val3);
+                        get_val_in_called_scope_prefer_local(4, val4);
                         verify_passes_count := verify_passes_count + 1;
                         if (val4 and val) /= (val4 and val3) then
                             print_instr("exec ");
@@ -1871,8 +1882,6 @@ begin
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_val_in_called_scope_prefer_local(3, val3);
                     get_ven_in_called_scope_prefer_local(4, ven4);
-                    get_val_in_called_scope_prefer_local(5, val5);
-                    get_val_in_called_scope_prefer_local(6, val6);
                     val2_int := to_integer(val2(30 downto 0));
                     val_int := to_integer(val1(30 downto 0));
                     bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
@@ -1896,6 +1905,8 @@ begin
                     end if;
                     update_var(vars, ven4, val);
                     if crop(ie.inst) = INSTR_BUS_VERIFY then
+                        get_val_in_called_scope_prefer_local(5, val5);
+                        get_val_in_called_scope_prefer_local(6, val6);
                         verify_passes_count := verify_passes_count + 1;
                         if (val6 and val) /= (val6 and val5) then
                             print_instr("exec ");

@@ -1043,9 +1043,9 @@ package body tb_interpreter_util_pkg is
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
-        print(".... instruction element number: " & to_text_field(inst_element_num));
+        print(".... instruction element number: " & crop(to_text_field(inst_element_num))& "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
         print(".... instruction file name: " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
-        print(".... instruction file linenumber: " & to_text_field(insts.element_ptrs(inst_element_num).slc.file_line));              
+        print(".... instruction file linenumber: " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));              
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
@@ -1318,9 +1318,6 @@ package body tb_interpreter_util_pkg is
         print("ien_of_call " & integer'image(rc.ien_of_call));
         print("ien_of_proc_params_end " & integer'image(rc.ien_of_proc_params_end));
         print("ien_of_called_proc " & integer'image(rc.ien_of_called_proc));    
-        for i in 1 to 6 loop
-            print("par 0 scope " & rc.par_scopes(i));
-        end loop; 
         print("loop_num " & integer'image(rc.loop_num));
         print("loop_if_enter_level " & integer'image(rc.loop_if_enter_level));   
     end procedure;    

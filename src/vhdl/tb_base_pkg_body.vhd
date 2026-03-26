@@ -108,7 +108,6 @@ package body tb_base_pkg is
         rc.ien_of_call := -1;
         rc.ien_of_proc_params_end := -1; 
         rc.ien_of_called_proc := -1;    
-        rc.par_scopes := (others => no_scope);
         rc.loop_num := 0;
         rc.loop_if_enter_level:= 0;
         rc.curr_loop_count := (others => 0);
