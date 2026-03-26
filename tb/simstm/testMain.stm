@@ -56,17 +56,15 @@ file simulation_success "simulation.success"
 
 proc testMain ()
 
-    call initBase ()
-
-    verbosity INFO_2
-    trace TRACE_OFF
     trace TRACE_EXECUTED_LINES
     -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
     resume RESUME_ON_ALL_ERRORS
+    verbosity INFO_2
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
+    call initBase ()
     log message INFO "Main test started"
 
     --call testSignalWriteReadVerify ()

@@ -146,7 +146,8 @@ begin
     --! records are drawn from the user inst list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_files : process     
+    read_files : process    
+        constant DUMP_PARSE_RESULTS : boolean := true; 
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list; 
         variable insts : inst_sequence;
@@ -164,10 +165,11 @@ begin
         variable txt_enclosing_quote : character;
         variable file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
-        variable ien : integer := 0; -- sequence number
-        variable bien : integer := 0; -- branch sequence number
-        variable ie : inst_element_ptr;
-        variable bie : inst_element_ptr;
+        variable ien : integer := 0; -- instruction element number
+        variable bien : integer := 0; -- branch instruction element number
+        variable ie : inst_element_ptr; -- instruction element
+        variable bie : inst_element_ptr; -- branch instruction element
+        variable pen : integer := 0; -- proc element number
 
         variable sp : integer := 0; -- call stack pointer
         variable rcs : stm_array_of_runtime_context; -- call stack
@@ -287,80 +289,103 @@ begin
         variable val2_int : integer;                
         variable signal_valid : integer;
         variable bus_valid : integer;
-        variable pen : integer; 
                 
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
+            variable called_ien : integer;
+            variable called_proc_name : text_field;
         begin
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);     
+            called_ien := rcs(sp).ien_of_called_proc; 
+            if called_ien > -1 then
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
+            else
+                access_inst_par_index_global(ie, vars, pn, ven);
+            end if;
         end procedure;
         
-        procedure get_ven_in_caller_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
-            variable pn : integer := par_num;
+        procedure get_val_in_called_scope_prefer_local(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
+            variable ven : integer;
+            variable ptxt : text_field;
         begin
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);        
+            ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
+            if is_digit(ptxt(1)) then
+                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+            else
+                get_ven_in_called_scope_prefer_local(par_num, ven);
+                val := vars.element_ptrs(ven).values(0);
+            end if;         
         end procedure;
-        
+          
         procedure get_ven_in_called_scope_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
+            variable called_ien : integer;
+            variable called_proc_name : text_field;
         begin
-            access_inst_par_index_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);        
+            called_ien := rcs(sp).ien_of_called_proc; 
+            if called_ien > -1 then
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);   
+            else
+                assert false
+                report "local variable not found in called scope"
+                severity failure;
+            end if;     
         end procedure;
         
-        procedure get_ven_in_caller_scope_local(constant par_num : in integer; variable ven : out integer) is
-            variable pn : integer := par_num;
-        begin
-            access_inst_par_index_local(ie, vars, pn, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);        
-        end procedure;
-     
         procedure get_ven_in_called_scope_call_params_target_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
+            variable called_ien : integer;
+            variable called_proc_name : text_field;
         begin
+            called_ien := rcs(sp).ien_of_called_proc; 
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                access_inst_par_index_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);
-                return;
+                if called_ien > -1 then
+                    called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);           
+                    access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);
+                    return;
+                end if;
             end if;
             access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);           
         end procedure;
         
         procedure get_ven_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
+            variable caller_ien : integer;
+            variable caller_proc_name : text_field;
+            variable called_ien : integer;
+            variable called_proc_name : text_field;
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);
-                return;
+            caller_ien := rcs(sp).ien_of_call; 
+                if caller_ien > -1 then
+                    caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(par_num);
+                    access_inst_par_index_prefer_local(ie, vars, pn, caller_proc_name, ven);
+                    return;
+                end if;
             end if;
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);         
+            called_ien := rcs(sp).ien_of_called_proc; 
+            if called_ien > -1 then
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
+            else
+                assert false
+                report "get_ven_in_called_scope_call_params_source_sensitive: global or local variable not found"
+                severity failure;
+            end if;         
         end procedure;  
             
-         
-        procedure get_val_in_called_scope_prefer_local(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
-            variable pn : integer := par_num;
-            variable ven : integer;
-        begin
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);   
-            val := vars.element_ptrs(ven).values(0);
-        end procedure;
-        
-        procedure get_val_in_caller_scope_prefer_local(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
-            variable pn : integer := par_num;
-            variable ven : integer;
-        begin
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven); 
-            val := vars.element_ptrs(ven).values(0);
-        end procedure; 
-        
         procedure get_val_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0) ) is
-            variable pn : integer := par_num;
             variable ven : integer;
+            variable ptxt : text_field;
         begin
-            if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp - 1).ien_of_called_proc).name, ven);
+            ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
+            if is_digit(ptxt(1)) then
+                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+            else
+                get_ven_in_called_scope_call_params_source_sensitive(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
-                return;
-            end if;
-            access_inst_par_index_prefer_local(ie, vars, pn, procs.element_ptrs(rcs(sp).ien_of_called_proc).name, ven);
-            val := vars.element_ptrs(ven).values(0);        
+            end if;        
         end procedure;      
  
         procedure print_instr( constant pre : in string; constant post: in string) is
@@ -408,16 +433,21 @@ begin
         parse_constants(code_files, inst_defs, vars, procs, machine_value_width, debug); 
         noc := vars.last_element_num;
         print(integer'image(noc) & " constants");  
-        dump_var_pool_ordered( vars, machine_value_width);
         
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, debug); 
-        print(integer'image(vars.last_element_num - noc) & " variables");                 
+        print(integer'image(vars.last_element_num - noc) & " variables");  
+        
+        if DUMP_PARSE_RESULTS then dump_var_pool_ordered(vars, machine_value_width); end if;
+                             
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
         parse_instructions_and_procs(code_files, inst_defs, insts, vars, procs, machine_value_width, debug); 
         print(integer'image(procs.last_element_num) & " procedures"); 
         print(integer'image(insts.last_element_num) & " instructions"); 
 
+        if DUMP_PARSE_RESULTS then dump_inst_sequence(insts, code_files); end if;
+        if DUMP_PARSE_RESULTS then dump_proc_pool_ordered(procs); end if;
+        
         print("checking if all variables are initially defined for all instructions");
         check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
      
@@ -445,11 +475,13 @@ begin
                 -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself 
                 slc.file_name := no_file_on_main_entry; 
                 slc.file_line := -1;              
-                access_proc(slc, procs, main_proc_name, ien); 
+                access_proc(slc, procs, main_proc_name, pen);
+                ien := procs.element_ptrs(pen).pointer_to_ien; 
                 ie := insts.element_ptrs(ien);
                 print_instr("exec main entry ");
                 main_entered := 1;              
-                rcs(sp).ien_of_called_proc := ien;                     
+                rcs(sp).ien_of_called_proc := ien;    
+                print_runtime_context(rcs(sp));                 
 
             elsif branch_to_interrupt then
                 assert sp < max_num_of_stack_elements
@@ -465,15 +497,18 @@ begin
                 line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
                 slc.file_name := no_file_on_interrupt; 
                 slc.file_line := -1; 
-                access_proc(slc, procs, branch_to_interrupt_proc_name, ien);                
-                ie := insts.element_ptrs(ien);
+                access_proc(slc, procs, branch_to_interrupt_proc_name, pen);
+                ien := procs.element_ptrs(pen).pointer_to_ien; 
+                ie := insts.element_ptrs(ien);               
                 if trc_on(TRACE_INTERRUPTS)then
                     print_instr("exec interrupt entry ");                    
-                end if;   
-                rcs(sp).ien_of_called_proc := ien;                                        
+                end if;
+                rcs(sp).ien_of_called_proc := ien;   
+                print_runtime_context(rcs(sp));                                     
                 wait for 0 ns;
 
             else
+                print_runtime_context(rcs(sp));
                 ien := ien + 1;
                 ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_FILES) then
@@ -1074,7 +1109,7 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1); 
                     get_val_in_called_scope_prefer_local(2, val2); 
                     index_var(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
@@ -1101,13 +1136,13 @@ begin
                     get_ven_in_called_scope_prefer_local(3, ven3);   
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven3, var_stm_array);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_insert(slc, var_stm_lines, val_int, var_stm_text_out);
                     
-                -- lines append a_lines an_array
+                -- lines append array a_lines an_array
                 elsif crop(ie.inst) = INSTR_LINES_APPEND_ARRAY then
                     get_ven_in_called_scope_prefer_local(1, ven1); 
                     get_ven_in_called_scope_prefer_local(2, ven2);
@@ -1115,12 +1150,12 @@ begin
                     index_var(vars, ven2, var_stm_array);
                     stm_lines_append(slc, var_stm_lines, var_stm_array, machine_value_width);
 
-                -- lines append a_lines "abc"
-                -- lines append a_lines "abc{}" a_varB
+                -- lines append message a_lines "abc"
+                -- lines append message a_lines "abc{}" a_varB
                 elsif crop(ie.inst) = INSTR_LINES_APPEND_MESSAGE then
                     get_ven_in_called_scope_prefer_local(1, ven1); 
                     index_var(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(slc, var_stm_lines, var_stm_text_out);

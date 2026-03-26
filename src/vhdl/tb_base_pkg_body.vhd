@@ -107,12 +107,13 @@ package body tb_base_pkg is
         rc.call_process_state := IN_NONE;
         rc.ien_of_call := -1;
         rc.ien_of_proc_params_end := -1; 
+        rc.ien_of_called_proc := -1;    
         rc.par_scopes := (others => no_scope);
         rc.loop_num := 0;
+        rc.loop_if_enter_level:= 0;
         rc.curr_loop_count := (others => 0);
         rc.term_loop_count := (others => 0);
         rc.loop_line := (others => 0);
-        rc.loop_if_enter_level:= 0;
     end procedure;
     
     function var_type_to_string( 
@@ -284,7 +285,7 @@ package body tb_base_pkg is
             when '9' => i := 9;
             when others =>
                 assert (false)
-                report  "c2int was given a non number digit."
+                report  "c2int was given a non number digit"
                 severity failure;
         end case;
         return i;
@@ -536,7 +537,7 @@ package body tb_base_pkg is
             when 15 => c := 'F';
             when others =>
                 assert false
-                report  "ew_to_char was given a non number digit."
+                report  "ew_to_char was given a non number digit"
                 severity failure;
         end case;
         return c;
@@ -732,7 +733,7 @@ package body tb_base_pkg is
     begin
         fld_order(s1, s2, is_equ, is_less);
         assert not is_equ
-        report "attemping to add a duplicate var or proc definition:" & 
+        report "attemping to add a duplicate var or proc definition: " & 
                " object name: " & s1 & 
                " file name: " & crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
@@ -1184,7 +1185,7 @@ package body tb_base_pkg is
         file_path_string := stm_text_crop(user_file_path_string);
         file_open(v_stat, file_handle, file_path_string, open_kind);
         assert v_stat = open_ok
-        report " file object not found" & 
+        report " file object not found " & 
                " file name: " & crop(slc.file_name) & 
                " file line: " & integer'image(slc.file_line)
         severity failure;        
@@ -1336,9 +1337,7 @@ package body tb_base_pkg is
     ) is
         variable lp : stm_line_ptr;
         variable nlp : stm_line_ptr;
-        variable valid : integer;
     begin
-        valid := 0;
         if stm_lines.size = 0 then
             lp := new stm_line;
             lp.line_number := 0;
@@ -1361,13 +1360,7 @@ package body tb_base_pkg is
             nlp.next_line_ptr := null;
             lp.next_line_ptr := nlp;
             stm_lines.size := stm_lines.size + 1;
-            valid := 1;
         end if;
-        assert valid = 1;
-        report "stm_lines_append line not possible" & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
-        severity failure; 
     end procedure;
 
     procedure stm_lines_append(
@@ -1380,9 +1373,7 @@ package body tb_base_pkg is
         variable std_line : line;
         variable nlp : stm_line_ptr;
         variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
-        variable valid : integer;
     begin
-        valid := 0;
         for j in 0 to stm_array'length - 1 loop
             value_std_logic_vector := std_logic_vector(stm_array(j));
             hwrite(std_line, value_std_logic_vector, left, machine_value_width / 4 + 1);
@@ -1409,13 +1400,7 @@ package body tb_base_pkg is
             nlp.next_line_ptr := null;
             lp.next_line_ptr := nlp;
             stm_lines.size := stm_lines.size + 1;
-            valid := 1;
         end if;
-        assert valid = 1;
-        report "stm_lines_append array not possible" & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
-        severity failure; 
     end procedure;
 
     procedure stm_lines_append(
@@ -1428,7 +1413,6 @@ package body tb_base_pkg is
         variable std_line : line;
         variable valid : integer;
     begin
-        valid := 0;
         stm_text_ptr_to_line(var_stm_text, std_line);
         if stm_lines.size = 0 then
             lp := new stm_line;
@@ -1452,13 +1436,7 @@ package body tb_base_pkg is
             nlp.next_line_ptr := null;
             lp.next_line_ptr := nlp;
             stm_lines.size := stm_lines.size + 1;
-            valid := 1;
-        end if;
-        assert valid = 1;
-        report "stm_lines_append text not possible" & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
-        severity failure; 
+        end if; 
     end procedure;
 
     procedure stm_lines_delete(
@@ -1494,7 +1472,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1;
-        report "stm_lines_delete at position not possible" & 
+        report "stm_lines_delete at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
@@ -1522,7 +1500,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get line at position not possible" & 
+        report "stm_lines_get line at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
@@ -1559,7 +1537,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get array at position not possible" & 
+        report "stm_lines_get array at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
@@ -1604,7 +1582,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert text at position not possible" & 
+        report "stm_lines_insert text at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
@@ -1653,7 +1631,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert array at position not possible" & 
+        report "stm_lines_insert array at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure;        
@@ -1716,7 +1694,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set text at position not possible" & 
+        report "stm_lines_set text at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 
@@ -1746,7 +1724,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set array at position not possible" & 
+        report "stm_lines_set array at position not possible " & 
                "file " & slc.file_name & 
                "line" & integer'image(slc.file_line)
         severity failure; 

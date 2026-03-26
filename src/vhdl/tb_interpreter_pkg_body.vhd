@@ -160,7 +160,7 @@ package body tb_interpreter_pkg is
                     ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
                     valid_params := valid_tokens - 1;
                     check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
-                    track_inst_initial_context(ie, vars, procs, iic);                    
+                    track_inst_initial_context(ie, vars, iic);                    
                     if ie.inst(1 to il) = INSTR_CONST then
                         vn := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
@@ -234,7 +234,7 @@ package body tb_interpreter_pkg is
                         ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
-                        track_inst_initial_context(ie, vars, procs, iic);  
+                        track_inst_initial_context(ie, vars, iic);  
                         set_var_type(ie.inst, il, var_type);
                         if var_type /= T_NO_VAR then
                             vn1 := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
@@ -282,7 +282,7 @@ package body tb_interpreter_pkg is
         variable pen : integer;
         variable fn : text_field;
     begin
-        init_inst_initial_context(iic);
+        
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -291,6 +291,7 @@ package body tb_interpreter_pkg is
             report "unable to open code file  " & afn
             severity failure;
             file_line := 0;
+            init_inst_initial_context(iic);
             if debug then 
                 print("parsing code file for procs and instructions " & crop(fn));
             end if;
@@ -308,7 +309,7 @@ package body tb_interpreter_pkg is
                     ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
                     valid_params := valid_tokens - 1;
                     check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
-                    track_inst_initial_context(ie, vars, procs, iic);
+                    track_inst_initial_context(ie, vars, iic);
                     set_var_type(ie.inst, il, var_type);
                     set_proc_type(ie.inst, il, proc_type);      
                     if var_type = T_NO_VAR and proc_type = false then
@@ -366,7 +367,7 @@ package body tb_interpreter_pkg is
             ie.slc := ie_ptr.slc;
             ie.inst := ie_ptr.inst;
             ie.inst_args := ie_ptr.inst_args;                                 
-            track_inst_initial_context(ie, vars, procs, iic);
+            track_inst_initial_context(ie, vars, iic);
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
             end if;
@@ -383,7 +384,7 @@ package body tb_interpreter_pkg is
                             ptf := cat_var_name_local_scope(ia.par_text_fields(i), par_scopes(i));
                         end loop;
                         -- test if it can be found
-                        access_var(ie.slc, vars, ptf, par_index);
+                        access_var(ie.slc, vars, ptf, par_index, true);
                     end if;
                 end if;
             end loop;

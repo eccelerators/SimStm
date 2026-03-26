@@ -457,7 +457,7 @@ package body tb_interpreter_util_pkg is
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;
                 end loop;
-                access_var(slc, vars, tmp_field, ven);
+                access_var(slc, vars, tmp_field, ven, true);
                 v1 := vars.element_ptrs(ven).values(0);
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
                 k := 1;
@@ -518,7 +518,7 @@ package body tb_interpreter_util_pkg is
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
-            access_var(ie.slc, vars, vn, ven);
+            access_var(ie.slc, vars, vn, ven, true);
             val := vars.element_ptrs(ven).values(0);
         end if;     
     end procedure;
@@ -540,7 +540,7 @@ package body tb_interpreter_util_pkg is
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
-            access_var(ie.slc, vars, vn, ven);
+            access_var(ie.slc, vars, vn, ven, true);
             val := vars.element_ptrs(ven).values(0);
         end if;     
     end procedure;
@@ -564,12 +564,12 @@ package body tb_interpreter_util_pkg is
             val := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(par_num), val'length);
         else 
             vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), called_proc_name);                   
-            access_var(ie.slc, vars, vn, ven);
+            access_var(ie.slc, vars, vn, ven, false);
             if ven >= 0 then
                 val := vars.element_ptrs(ven).values(0);
             else
                 vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
-                access_var(ie.slc, vars, vn, ven);
+                access_var(ie.slc, vars, vn, ven, true);
                 val := vars.element_ptrs(ven).values(0);            
             end if;
         end if;     
@@ -588,7 +588,7 @@ package body tb_interpreter_util_pkg is
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, etf);
-        access_var(ie.slc, vars, vn, ven);    
+        access_var(ie.slc, vars, vn, ven, true);    
     end procedure;
     
     procedure access_inst_par_index_local(
@@ -603,7 +603,7 @@ package body tb_interpreter_util_pkg is
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, called_proc_name);                   
-        access_var(ie.slc, vars, vn, ven);
+        access_var(ie.slc, vars, vn, ven, true);
     end procedure;
     
     procedure access_inst_par_index_prefer_local(
@@ -621,10 +621,10 @@ package body tb_interpreter_util_pkg is
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, called_proc_name);                   
-        access_var(ie.slc, vars, vn, veni);
+        access_var(ie.slc, vars, vn, veni, false);
         if veni < 0 then
             vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
-            access_var(ie.slc, vars, vn, veni);          
+            access_var(ie.slc, vars, vn, veni, true);          
         end if;  
         ven := veni;  
     end procedure;
@@ -642,7 +642,7 @@ package body tb_interpreter_util_pkg is
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, etf);
-        access_var(ie.slc, vars, vn, ven);    
+        access_var(ie.slc, vars, vn, ven, true);    
     end procedure;
     
     procedure access_inst_par_index_local(
@@ -657,7 +657,7 @@ package body tb_interpreter_util_pkg is
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, called_proc_name);                   
-        access_var(ie.slc, vars, vn, ven);
+        access_var(ie.slc, vars, vn, ven, true);
     end procedure;
     
     procedure access_inst_par_index_prefer_local(
@@ -675,10 +675,10 @@ package body tb_interpreter_util_pkg is
         etf := (others => nul);
         ptf := ie.inst_args.par_text_fields(par_num);
         vn := cat_var_name_local_scope(ptf, called_proc_name);                   
-        access_var(ie.slc, vars, vn, veni);
+        access_var(ie.slc, vars, vn, veni, false);
         if veni < 0 then
             vn := cat_var_name_local_scope(ie.inst_args.par_text_fields(par_num), etf);
-            access_var(ie.slc, vars, vn, veni);          
+            access_var(ie.slc, vars, vn, veni, true);          
         end if;  
         ven := veni;  
     end procedure;    
@@ -723,16 +723,19 @@ package body tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_element_num : out integer
+        variable var_element_num : out integer;
+        constant fail_if_not_found : boolean
     ) is
         variable ven : integer;
     begin
         search_var_element_number(slc, vars, var_name, ven);
-        assert ven >= 0
-        report "access var, couldn't find var " & var_name & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
-        severity failure;
+        if fail_if_not_found then
+            assert ven >= 0
+            report "access var, couldn't find var " & var_name & 
+                   "file " & slc.file_name & 
+                   "line" & integer'image(slc.file_line)
+            severity failure;
+        end if;
         var_element_num := ven;
     end procedure;
 
@@ -1046,7 +1049,7 @@ package body tb_interpreter_util_pkg is
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
-                print(".... par" & integer'image(i) & insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
+                print(".... par" & integer'image(i) & " " & insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             end if;
         end loop;
         txt_to_string(insts.element_ptrs(inst_element_num).inst_args.txt, txt);
@@ -1071,13 +1074,13 @@ package body tb_interpreter_util_pkg is
         variable vars : in var_pool_ordered;
         constant machine_value_width : in integer
     ) is
-        variable ien : integer;
+        variable ven : integer;
     begin
         print("---- -----------------------------------------------------------------");
         print("---- -- dump variables start -----------------------------------------");
         for i in 0 to vars.last_element_num loop
-            ien := i;
-            dump_var_element(vars, ien, machine_value_width);
+            ven := i;
+            dump_var_element(vars, ven, machine_value_width);
         end loop;
     end procedure;
 
@@ -1100,16 +1103,16 @@ package body tb_interpreter_util_pkg is
         variable eq : character;
     begin
         assert var_element_num <= vars.last_element_num
-        report "dump  var element, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "dump  var element, var element number, " & integer'image(var_element_num) & "greater than vars last element number " & integer'image(vars.last_element_num) 
         severity failure;
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
         print("---- var definition in file: " & crop(vars.element_ptrs(var_element_num).slc.file_name));
         print("---- var definition in line: " & integer'image(vars.element_ptrs(var_element_num).slc.file_line));
-        print("---- var name: " & vars.element_ptrs(var_element_num).name);
-        print("---- var element num: " & to_text_field(var_element_num) & "(0x" & to_text_field_hex(var_element_num) & ")");
-        print("---- var_value: 0x" & to_text_field_hex(vars.element_ptrs(var_element_num).values(0)));
-        print("---- var_org_value: 0x" & to_text_field_hex(vars.element_ptrs(var_element_num).values_org(0)));
+        print("---- var name: " & crop(vars.element_ptrs(var_element_num).name));
+        print("---- var element num: " & crop(to_text_field(var_element_num)) & "(0x" & crop(to_text_field_hex(var_element_num)) & ")");
+        print("---- var_value: 0x" & crop(to_text_field_hex(vars.element_ptrs(var_element_num).values(0))));
+        print("---- var_org_value: 0x" & crop(to_text_field_hex(vars.element_ptrs(var_element_num).values_org(0))));
         if vars.element_ptrs(var_element_num).typ = T_VALUE then
             print("---- var type: T_VALUE");
         elsif vars.element_ptrs(var_element_num).typ = T_CONST then
@@ -1120,30 +1123,30 @@ package body tb_interpreter_util_pkg is
             print("---- var type: T_TEXT");
             txt_to_string(vars.element_ptrs(var_element_num).txt, tmp_str);
             eq := vars.element_ptrs(var_element_num).txt_enclosing_quote;
-            print("---- var_txt: " & eq & tmp_str & eq);
+            print("---- var_txt: " & eq & crop(tmp_str) & eq);
         elsif vars.element_ptrs(var_element_num).typ = T_ARRAY then
             print("---- var_stm_type: T_ARRAY");
             stm_array := vars.element_ptrs(var_element_num).arr;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := stm_array(array_index);
-                print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
+                print("-------- index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
             end loop;
             stm_array := vars.element_ptrs(var_element_num).arr_org;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := stm_array(array_index);
-                print("-------- org index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
+                print("-------- org index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
             end loop;
         elsif vars.element_ptrs(var_element_num).typ = T_LINES then
             print("---- var_stm_type: T_LINES");
             assert vars.element_ptrs(var_element_num).lines /= null
             report " dump  var element, stm_lines_ptr pointer is null "
             severity failure;
-            print("-------- stm_lines.size: " & to_text_field(vars.element_ptrs(var_element_num).lines.size));
+            print("-------- stm_lines.size: " & crop(to_text_field(vars.element_ptrs(var_element_num).lines.size)));
             stm_line_ptr := vars.element_ptrs(var_element_num).lines.line_list;
             while stm_line_ptr /= null loop
-                print("-------- stm_line_ptr.line_number: " & to_text_field(stm_line_ptr.line_number));
+                print("-------- stm_line_ptr.line_number: " & crop(to_text_field(stm_line_ptr.line_number)));
                 if stm_line_ptr.line_type = T_LINE_TEXT then
                     print("-------- stm_line_ptr.line_type: T_LINE_TEXT");
                     std_line := stm_line_ptr.line_content;
@@ -1155,24 +1158,24 @@ package body tb_interpreter_util_pkg is
                 elsif stm_line_ptr.line_type = T_LINE_ARRAY then
                     print("-------- stm_line_ptr.line_type: T_LINE_ARRAY");
                     success := true;
-                    print("-------- stm_line_ptr.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
+                    print("-------- stm_line_ptr.line_content'length before reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
                     array_index := 0;
                     tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                     while success loop
                         hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
                             array_value := unsigned(value_std_logic_vector);
-                            print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
+                            print("-------- index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    print("-------- stm_line_ptr.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
+                    print("-------- stm_line_ptr.line_content'length after reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
                 end if;
                 stm_line_ptr := stm_line_ptr.next_line_ptr;
             end loop;
             stm_line_ptr := vars.element_ptrs(var_element_num).lines_org.line_list;
             while stm_line_ptr /= null loop
-                print("-------- stm_org_lines.line_number: " & to_text_field(stm_line_ptr.line_number));
+                print("-------- stm_org_lines.line_number: " & crop(to_text_field(stm_line_ptr.line_number)));
                 if stm_line_ptr.line_type = T_LINE_TEXT then
                     print("-------- stm_org_lines.line_type: T_LINE_TEXT");
                     std_line := stm_line_ptr.line_content;
@@ -1184,18 +1187,18 @@ package body tb_interpreter_util_pkg is
                 elsif stm_line_ptr.line_type = T_LINE_ARRAY then
                     print("-------- stm_org_lines.line_type: T_LINE_ARRAY");
                     success := true;
-                    print("-------- stm_org_lines.line_content'length before reading: " & to_text_field(stm_line_ptr.line_content'length));
+                    print("-------- stm_org_lines.line_content'length before reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
                     array_index := 0;
                     tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                     while success loop
                         hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
                             array_value := unsigned(value_std_logic_vector);
-                            print("-------- index: " & to_text_field(array_index) & ", value: " & to_text_field_hex(array_value));
+                            print("-------- index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    print("-------- stm_org_lines.line_content'length after reading: " & to_text_field(stm_line_ptr.line_content'length));
+                    print("-------- stm_org_lines.line_content'length after reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
                 end if;
                 stm_line_ptr := stm_line_ptr.next_line_ptr;
             end loop;
@@ -1220,6 +1223,35 @@ package body tb_interpreter_util_pkg is
         elsif vars.element_ptrs(var_element_num).typ = T_NO_VAR then
             print("---- var_stm_type: T_NO_VAR");
         end if;
+    end procedure;
+    
+    procedure dump_proc_pool_ordered(
+        variable procs : in proc_pool_ordered
+    ) is
+        variable pen : integer;
+    begin
+        print("---- -----------------------------------------------------------------");
+        print("---- -- dump procedures start ----------------------------------------");
+        for i in 0 to procs.last_element_num loop
+            pen := i;
+            dump_proc_element(procs, pen);
+        end loop;
+    end procedure;
+    
+    procedure dump_proc_element(
+        variable procs : in proc_pool_ordered;
+        variable proc_element_num : in integer
+    ) is
+    begin
+        assert proc_element_num <= procs.last_element_num
+        report "dump  proc element, proc element number, " & integer'image(proc_element_num) & "greater than vars last element number " & integer'image(procs.last_element_num)
+        severity failure;
+        print("-----------------------------------------------------------------");
+        print("---- proc definition in file: " & crop(procs.element_ptrs(proc_element_num).slc.file_name));
+        print("---- proc definition in line: " & integer'image(procs.element_ptrs(proc_element_num).slc.file_line));
+        print("---- proc name: " & procs.element_ptrs(proc_element_num).name);
+        print("---- proc element num: " & crop(to_text_field(proc_element_num)) & "(0x" & to_text_field_hex(proc_element_num) & ")");
+        print("---- proc_pointer_to_ien: " &  crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
     end procedure;
     
     procedure print_file_def_element(
@@ -1418,13 +1450,11 @@ package body tb_interpreter_util_pkg is
     procedure track_inst_initial_context(
         variable ie : inst_element;
         variable vars : in var_pool_ordered;
-        variable procs : in proc_pool_ordered; 
         variable iic : inout stm_inst_initial_context
     ) is
         variable il : integer;
         variable vn : text_field;
         variable ven : integer;
-        variable pen : integer;
         variable pn : text_field;
         variable pn_ptr : text_field_ptr;
     begin
@@ -1445,6 +1475,8 @@ package body tb_interpreter_util_pkg is
         end if;
         if ie.inst(1 to il) = INSTR_END_PROC then
             iic.code_section := NONE;
+            iic.proc_name := (others => nul); 
+            iic.called_proc_name := (others => nul);
         end if;
 
         if ie.inst(1 to il) = INSTR_CALL_PAR_OPEN then
@@ -1454,7 +1486,7 @@ package body tb_interpreter_util_pkg is
         if ie.inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
             iic.code_section := CALL_PARAMS;
             vn := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
-            access_var(ie.slc, vars, vn, ven);
+            access_var(ie.slc, vars, vn, ven, true);
             pn_ptr := vars.element_ptrs(ven).label_proc_ref;
             text_field_ptr_to_text_field(pn_ptr, pn);
             iic.called_proc_name := pn;
@@ -1475,6 +1507,7 @@ package body tb_interpreter_util_pkg is
             if iic.code_section = CALL_PARAMS then
                 iic.code_section := PROC_BODY;
             end if;
+        end if;
         iic.is_var_declaration := false;
         if ie.inst(1 to il) = INSTR_CONST
             or ie.inst(1 to il) = INSTR_VAR
@@ -1493,7 +1526,6 @@ package body tb_interpreter_util_pkg is
             or ie.inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
             or ie.inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
                 iic.is_var_declaration := true;
-            end if;
         end if;
     end procedure;
              

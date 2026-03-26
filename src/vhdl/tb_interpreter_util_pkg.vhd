@@ -174,7 +174,8 @@ package tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
-        variable var_element_num : out integer
+        variable var_element_num : out integer;
+        constant fail_if_not_found : boolean
     );
 
     procedure index_var(
@@ -339,6 +340,15 @@ package tb_interpreter_util_pkg is
         constant machine_value_width : in integer
     );
     
+    procedure dump_proc_pool_ordered(
+        variable procs : in proc_pool_ordered
+    );
+    
+    procedure dump_proc_element(
+        variable procs : in proc_pool_ordered;
+        variable proc_element_num : in integer
+    );
+    
     procedure print_file_def_element(
         variable files : in file_def_list;
         variable file_element_num : in integer
@@ -385,7 +395,6 @@ package tb_interpreter_util_pkg is
     procedure track_inst_initial_context(
         variable ie : inst_element;
         variable vars : in var_pool_ordered;
-        variable procs : in proc_pool_ordered; 
         variable iic : inout stm_inst_initial_context
     );
     
