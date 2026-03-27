@@ -285,6 +285,9 @@ package body tb_interpreter_util_pkg is
         variable stack_called_file_name : text_field;
         variable stack_called_file_line : integer;
         variable stack_called_proc : text_field;
+        variable called_proc_name : text_field;
+        variable vn : text_field;
+        variable etf : text_field;
 
     begin
         if txt_ptr = null then
@@ -456,9 +459,18 @@ package body tb_interpreter_util_pkg is
                     tmp_field(tmp_i) := txt_ptr(src_tail_i);
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;
-                end loop;
-                access_var(slc, vars, tmp_field, ven, true);
-                v1 := vars.element_ptrs(ven).values(0);
+                end loop;    
+                cien := rcs(sp).ien_of_called_proc;
+                called_proc_name := insts.element_ptrs(cien).inst_args.par_text_fields(1);
+                vn := cat_var_name_local_scope(tmp_field, called_proc_name);                   
+                access_var(slc, vars, vn, ven, false);
+                if ven >= 0 then
+                    v1 := vars.element_ptrs(ven).values(0);
+                else
+                    vn := cat_var_name_local_scope(tmp_field, etf);
+                    access_var(slc, vars, vn, ven, true);
+                    v1 := vars.element_ptrs(ven).values(0);            
+                end if;            
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -1530,7 +1542,7 @@ package body tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable debug : boolean;
+        constant debug : boolean;
         variable pen  : out integer
     ) is
         variable ne : proc_element_ptr;
@@ -1593,7 +1605,7 @@ package body tb_interpreter_util_pkg is
         variable inst_args : inst_arguments;
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
-        variable debug : in boolean;
+        constant debug : in boolean;
         variable ven  : out integer
     ) is
         variable ne : var_element_ptr;

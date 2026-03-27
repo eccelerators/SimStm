@@ -65,7 +65,7 @@ package tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : integer;
-        variable debug : boolean
+        constant debug : boolean
     );
 
     procedure parse_variables(
@@ -74,7 +74,7 @@ package tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : in integer;
-        variable debug : boolean      
+        constant debug : boolean      
     );
     
     procedure parse_instructions_and_procs(
@@ -84,7 +84,7 @@ package tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : integer;
-        variable debug : boolean         
+        constant debug : boolean         
     );
     
     procedure check_instructions_in_initial_context(

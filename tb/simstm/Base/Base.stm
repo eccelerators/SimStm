@@ -172,7 +172,7 @@ proc endStandardTestShell ()
     
     log message 0 "Passed {:d} verify instructions" StandardTestVerifyPassCountResult
     log message 0 "Passed {:d} timeout monitored bus access instructions" StandardTestBusTimeoutPassCountResult
-    
+
     if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult
         if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult            
             log message 0 "Expected {:d} verify failures, got {:d}" ExpectedStandardTestVerifyFailureCountResult StandardTestVerifyFailureCountResult

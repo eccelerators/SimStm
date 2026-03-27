@@ -132,6 +132,7 @@ package tb_base_pkg is
     type inst_element is record
         slc : src_locator;
         inst : text_field;
+        inst_len : integer;
         inst_args : inst_arguments;
     end record;
     type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element_ptr;
@@ -282,11 +283,11 @@ package tb_base_pkg is
     function var_type_to_string( 
         vt :stm_var_type
     ) return string;
-    
+        
     procedure append_inst(
         variable insts : inout inst_sequence;
         variable ie : inst_element;
-        variable debug : boolean 
+        constant debug : boolean 
     );
     
     procedure append_code_file(

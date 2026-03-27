@@ -402,7 +402,7 @@ package tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
-        variable debug : boolean;
+        constant debug : boolean;
         variable pen  : out integer
     );
     
@@ -413,7 +413,7 @@ package tb_interpreter_util_pkg is
         variable inst_args : inst_arguments;
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
-        variable debug : in boolean;
+        constant debug : in boolean;
         variable ven  : out integer
     );
     

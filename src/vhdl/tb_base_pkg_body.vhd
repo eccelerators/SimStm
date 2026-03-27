@@ -136,11 +136,11 @@ package body tb_base_pkg is
         end case;   
         return vts;
     end function;
-    
+     
     procedure append_inst(
         variable insts : inout inst_sequence;
         variable ie : inst_element;
-        variable debug : boolean 
+        constant debug : boolean 
     ) is
         variable nen : integer;
         variable ne_ptr : inst_element_ptr;
@@ -149,6 +149,7 @@ package body tb_base_pkg is
         ne_ptr := new inst_element;
         ne_ptr.slc := ie.slc;
         ne_ptr.inst := ie.inst;
+        ne_ptr.inst_len := fld_len(ie.inst);
         ne_ptr.inst_args := ie.inst_args;
         insts.element_ptrs(nen) := ne_ptr;
         insts.last_element_num := nen;

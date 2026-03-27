@@ -114,7 +114,7 @@ package body tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : integer;
-        variable debug : boolean
+        constant debug : boolean
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
@@ -181,7 +181,7 @@ package body tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : in integer;
-        variable debug : boolean      
+        constant debug : boolean      
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
@@ -262,7 +262,7 @@ package body tb_interpreter_pkg is
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered; 
         constant machine_value_width : integer;
-        variable debug : boolean         
+        constant debug : boolean         
     ) is
         variable fos : file_open_status;
         variable afn : text_line;

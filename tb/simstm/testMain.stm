@@ -56,7 +56,8 @@ file simulation_success "simulation.success"
 
 proc testMain ()
 
-    trace TRACE_EXECUTED_LINES
+    trace TRACE_OFF
+    -- trace TRACE_EXECUTED_LINES
     -- trace TRACE_INSTRUCTIONS
     -- trace TRACE_CALLS
     resume RESUME_ON_ALL_ERRORS
