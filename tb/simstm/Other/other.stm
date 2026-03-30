@@ -5,7 +5,6 @@ var random_min 0
 var random_max 10
 
 proc testOtherRandom ()
-
     call startStandardTestShell ()
     loop 20
         random random_number 0 10
@@ -16,7 +15,6 @@ proc testOtherRandom ()
 end proc
 
 proc testOtherSeed ()
-
     call startStandardTestShell ()
     seed 1
     loop 5
@@ -43,7 +41,6 @@ const val_trace_off 0
 const val_trace_on 1
 
 proc testOtherTrace ()
-
     call startStandardTestShell ()
     trace 1
     wait 100
@@ -73,7 +70,6 @@ proc testOtherTrace ()
 end proc
 
 proc testOtherMarker ()
-
     call startStandardTestShell ()
 
     wait 100
@@ -101,7 +97,6 @@ proc testOtherMarker ()
 end proc
 
 proc testOtherWait ()
-
     call startStandardTestShell ()
 
     trace 1
@@ -118,7 +113,6 @@ var test_variable_4 0xE4
 var test_variable_5 0xF5
 
 proc testOtherLogSubstitutions ()
-
     call startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_1
@@ -145,9 +139,7 @@ var test_variable_lf_3 0xC3
 var test_variable_lf_4 0xE4
 
 proc testOtherLogFormats ()
-
     call startStandardTestShell ()
-
     call testContent () -- to have a reasonable call stack
 
     log message INFO "Main test call endStandardTestShell ()ed {}" INFO
@@ -156,7 +148,6 @@ proc testOtherLogFormats ()
 end proc
 
 proc testContent ()
-
     call startStandardTestShell ()
 
     log message 0 "test_variable_lf_1: {}" test_variable_lf_1
@@ -180,7 +171,6 @@ proc testContent ()
 end proc
 
 proc testOtherLog ()
-
     call startStandardTestShell ()
     log message 0 "log 0"
     log message 1 "log 1"
@@ -236,12 +226,9 @@ var test_variable_call_4 4
 var test_variable_call_5 5
 
 proc testOtherCall ()
-
     call startStandardTestShell ()
-
     call callLabel1 ()
     call callLabel2 ()
-
     log message 0 "test_variable_call_1: {}" test_variable_call_1
     log message 0 "test_variable_call_2: {}" test_variable_call_2
     log message 0 "test_variable_call_3: {}" test_variable_call_3
@@ -249,29 +236,22 @@ proc testOtherCall ()
     log message 0 "test_variable_call_5: {}" test_variable_call_5
 
     call endStandardTestShell ()
-
 end proc
 
 proc callLabel5 ()
-
     return
 end proc
 
 proc callLabel1 ()
-
     return
 end proc
 
 proc callLabel2 ()
-
-
     call callLabel3 ()
     return
 end proc
 
 proc callLabel3 ()
-
-
     call callLabel4 ()
     log message 0 "test_variable_call_3: {}" test_variable_call_3
     log message 0 "test_variable_call_4: {}" test_variable_call_4
@@ -280,7 +260,6 @@ proc callLabel3 ()
 end proc
 
 proc callLabel4 ()
-
     call callLabel5 ()
     log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
