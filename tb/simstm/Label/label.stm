@@ -1,19 +1,19 @@
-label lLabel iLabel 
+label lLabel iLabel
 
 proc iLabel (
 	var p 0
 	var r 0
 )
-end proc 
+end proc
 
 proc testCallLabelIndirect ()
 	var v 0
-	
-	call label lLabel (
+
+	call lLabel (
 		equ p 5
 		var pointer copy r v
 	)
-	var verify v 6 MAX	
+	var verify v 6 MAX
 end proc
 
 proc pLabel (
@@ -29,7 +29,7 @@ end proc
 
 proc testCallProcDirect ()
 	var v 0
-	
+
 	call pLabel (
 		equ p 5
 		var pointer copy r v
