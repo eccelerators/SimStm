@@ -197,7 +197,7 @@ package tb_instructions_pkg is
         variable ovalid : out integer
     );
 
-    procedure append_inst_def(        
+    procedure append_inst_def(
         variable inst_defs : inout inst_def_list;
         constant inst : in string;
         constant num_of_params : in integer
@@ -211,4 +211,3 @@ package tb_instructions_pkg is
     );
 
 end package;
-

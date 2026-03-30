@@ -82,7 +82,7 @@ package tb_interpreter_util_pkg is
         variable rcs : in stm_array_of_runtime_context;
         variable txt_ptr : in stm_text_ptr;
         variable txt_enclosing_quote : in character;
-        variable sp : in integer;    
+        variable sp : in integer;
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     );
@@ -93,7 +93,7 @@ package tb_interpreter_util_pkg is
         variable par_num : in integer;
         variable val : out unsigned
     );
-        
+
     procedure access_inst_par_value_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -101,7 +101,7 @@ package tb_interpreter_util_pkg is
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
-    
+
     procedure access_inst_par_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -109,61 +109,61 @@ package tb_interpreter_util_pkg is
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
-      
+
     procedure access_inst_par_index_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
-        variable ven : out integer        
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_global(
         variable ie : in inst_element;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
-        variable ven : out integer        
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_local(
         variable ie : in inst_element;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_prefer_local(
         variable ie : in inst_element;
         variable vars : in var_pool_ordered;
         variable par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    ); 
-    
+        variable ven : out integer
+    );
+
     procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     );
-    
-     procedure access_proc(
+
+    procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name_ptr : in text_field_ptr;
@@ -221,7 +221,7 @@ package tb_interpreter_util_pkg is
         variable var_element_num : in integer;
         variable var_arr : out stm_array_ptr
     );
-                          
+
     procedure index_var(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
@@ -339,21 +339,21 @@ package tb_interpreter_util_pkg is
         variable var_element_num : in integer;
         constant machine_value_width : in integer
     );
-    
+
     procedure dump_proc_pool_ordered(
         variable procs : in proc_pool_ordered
     );
-    
+
     procedure dump_proc_element(
         variable procs : in proc_pool_ordered;
         variable proc_element_num : in integer
     );
-    
+
     procedure print_file_def_element(
         variable files : in file_def_list;
         variable file_element_num : in integer
     );
-    
+
     procedure dump_file_defs(
         variable files : in file_def_list
     );
@@ -361,51 +361,51 @@ package tb_interpreter_util_pkg is
     procedure print_initial_instruction_context(
         variable iic : in stm_inst_initial_context
     );
-    
+
     procedure print_runtime_context(
         variable rc : in stm_runtime_context
     );
-    
+
     procedure search_var_element_number(
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
         variable ien : out integer
     );
-    
-    procedure search_proc_element_number( 
+
+    procedure search_proc_element_number(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable pen : out integer
     );
-    
+
     procedure set_var_type(
         variable inst : in text_field;
         variable inst_len : in integer;
         variable var_type : out stm_var_type
     );
-    
+
     procedure set_proc_type(
         variable inst : in text_field;
         variable inst_len : in integer;
         variable proc_type : out boolean
     );
-    
+
     procedure track_inst_initial_context(
         variable ie : inst_element;
         variable vars : in var_pool_ordered;
         variable iic : inout stm_inst_initial_context
     );
-    
+
     procedure insert_proc_element(
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
         constant debug : boolean;
-        variable pen  : out integer
+        variable pen : out integer
     );
-    
+
     procedure insert_var_element(
         variable slc : in src_locator;
         variable vars : inout var_pool_ordered;
@@ -414,7 +414,7 @@ package tb_interpreter_util_pkg is
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
         constant debug : in boolean;
-        variable ven  : out integer
+        variable ven : out integer
     );
-    
+
 end package;

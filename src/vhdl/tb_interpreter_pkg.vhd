@@ -51,7 +51,7 @@ use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
 
 package tb_interpreter_pkg is
-  
+
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
@@ -63,7 +63,7 @@ package tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : integer;
         constant debug : boolean
     );
@@ -72,26 +72,26 @@ package tb_interpreter_pkg is
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : in integer;
-        constant debug : boolean      
+        constant debug : boolean
     );
-    
+
     procedure parse_instructions_and_procs(
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : integer;
-        constant debug : boolean         
+        constant debug : boolean
     );
-    
+
     procedure check_instructions_in_initial_context(
-        variable insts : inout inst_sequence; 
+        variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered;
-        constant machine_value_width : integer  
+        constant machine_value_width : integer
     );
 
 end package;

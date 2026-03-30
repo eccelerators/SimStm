@@ -2,13 +2,13 @@
 --             Copyright 2023  Ken Campbell
 --               All rights reserved.
 -------------------------------------------------------------------------------
--- Author: sckoarn 
+-- Author: sckoarn
 --
--- Date:  
+-- Date:
 --
--- Id:  
+-- Id:
 --
--- Source:  
+-- Source:
 --
 -- Description :  The the testbench template file.
 --
@@ -54,6 +54,7 @@ use std.env.all;
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_textio.all;
 
 use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
@@ -130,9 +131,6 @@ architecture behavioural of tb_simstm is
             end loop;
         end if;
     end procedure;
-    
-
-
 
 begin
     --------------------------------------------------------------------------------
@@ -146,21 +144,21 @@ begin
     --! records are drawn from the user inst list, variables are converted
     --! to integers and put through the elsif structure for exicution.
 
-    read_files : process    
-        constant DUMP_PARSE_FLOW : boolean := false; 
-        constant DUMP_PARSE_RESULTS : boolean := false; 
+    read_files : process
+        constant DUMP_PARSE_FLOW : boolean := true;
+        constant DUMP_PARSE_RESULTS : boolean := true;
         variable inst_defs : inst_def_list;
-        variable code_files : file_def_list; 
+        variable code_files : file_def_list;
         variable insts : inst_sequence;
         variable vars : var_pool_ordered;
         variable procs : proc_pool_ordered;
         variable absolute_code_file_name : text_line;
         variable il : integer;
         variable slc : src_locator;
-        
+
         variable noc : integer;
-        
-        variable stimulus_file_var : string (1 to stimulus_file'length) := stimulus_file;
+
+        variable stimulus_file_var : string(1 to stimulus_file'length) := stimulus_file;
 
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
@@ -200,12 +198,12 @@ begin
         -- random generator seed variables
         variable seed1 : positive := 1;
         variable seed2 : positive := 1;
-       
+
         variable comparator_valid : boolean;
         variable comparator_text_field : text_field;
         variable number_found : integer;
         variable stm_values_ptr : stm_values_ptr;
-       
+
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
         variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
 
@@ -265,7 +263,7 @@ begin
         variable no_file_on_main_entry : text_field;
         variable no_file_on_interrupt : text_field;
         variable empty_text_field : text_field;
-        
+
         variable ven1 : integer;
         variable ven2 : integer;
         variable ven3 : integer;
@@ -279,16 +277,16 @@ begin
         variable val6 : unsigned(machine_value_width - 1 downto 0);
         variable val_int : integer;
         variable val1_int : integer;
-        variable val2_int : integer;                
+        variable val2_int : integer;
         variable signal_valid : integer;
         variable bus_valid : integer;
-                
+
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_ien : integer;
             variable called_proc_name : text_field;
         begin
-            called_ien := rcs(sp).ien_of_called_proc; 
+            called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
                 called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
                 access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
@@ -296,7 +294,7 @@ begin
                 access_inst_par_index_global(ie, vars, pn, ven);
             end if;
         end procedure;
-        
+
         procedure get_val_in_called_scope_prefer_local(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
             variable ven : integer;
             variable ptxt : text_field;
@@ -307,47 +305,47 @@ begin
             else
                 get_ven_in_called_scope_prefer_local(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
-            end if;         
+            end if;
         end procedure;
-          
+
         procedure get_ven_in_called_scope_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_ien : integer;
             variable called_proc_name : text_field;
         begin
-            called_ien := rcs(sp).ien_of_called_proc; 
+            called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
                 called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
-                access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);   
+                access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);
             else
                 assert false
                 report "local variable not found in called scope"
                 severity failure;
-            end if;     
+            end if;
         end procedure;
-        
+
         procedure get_ven_in_called_scope_call_params_target_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_ien : integer;
             variable called_proc_name : text_field;
         begin
-            called_ien := rcs(sp).ien_of_called_proc; 
+            called_ien := rcs(sp).ien_of_called_proc;
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 if called_ien > -1 then
-                    called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);           
+                    called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
                     access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);
                     return;
                 end if;
             end if;
             if called_ien > -1 then
-                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);  
-                access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);     
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
             else
-                access_inst_par_index_global(ie, vars, pn, ven); 
+                access_inst_par_index_global(ie, vars, pn, ven);
             end if;
-                  
+
         end procedure;
-        
+
         procedure get_ven_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable caller_ien : integer;
@@ -356,14 +354,14 @@ begin
             variable called_proc_name : text_field;
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-            caller_ien := rcs(sp).ien_of_call; 
+                caller_ien := rcs(sp).ien_of_call;
                 if caller_ien > -1 then
                     caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(par_num);
                     access_inst_par_index_prefer_local(ie, vars, pn, caller_proc_name, ven);
                     return;
                 end if;
             end if;
-            called_ien := rcs(sp).ien_of_called_proc; 
+            called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
                 called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
                 access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
@@ -371,10 +369,10 @@ begin
                 assert false
                 report "get_ven_in_called_scope_call_params_source_sensitive: global or local variable not found"
                 severity failure;
-            end if;         
-        end procedure;  
-            
-        procedure get_val_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0) ) is
+            end if;
+        end procedure;
+
+        procedure get_val_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
             variable ven : integer;
             variable ptxt : text_field;
         begin
@@ -384,65 +382,54 @@ begin
             else
                 get_ven_in_called_scope_call_params_source_sensitive(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
-            end if;        
-        end procedure;      
- 
-        procedure print_instr( constant pre : in string; constant post: in string) is
+            end if;
+        end procedure;
+
+        procedure print_instr(constant pre : in string; constant post : in string) is
         begin
-            print(pre & 
-                ie.inst(1 to ie.inst_len) & 
-                " " & crop(ie.inst_args.par_text_fields(1)) & 
-                " " & crop(ie.inst_args.par_text_fields(2)) & 
-                " " & crop(ie.inst_args.par_text_fields(3)) & 
-                " " & crop(ie.inst_args.par_text_fields(4)) & 
-                " " & crop(ie.inst_args.par_text_fields(5)) & 
-                " " & crop(ie.inst_args.par_text_fields(6)) & 
-                " #" & integer'image(ien) & 
-                " sp " & integer'image(sp) & 
-                " file name: " & crop(ie.slc.file_name) & 
-                " file line: " & integer'image(ie.slc.file_line) & post);         
-        end procedure; 
-        
-        procedure print_instr( constant pre : in string) is
+            print(pre & ie.inst(1 to ie.inst_len) & " " & crop(ie.inst_args.par_text_fields(1)) & " " & crop(ie.inst_args.par_text_fields(2)) & " " & crop(ie.inst_args.par_text_fields(3)) & " " & crop(ie.inst_args.par_text_fields(4)) & " " & crop(ie.inst_args.par_text_fields(5)) & " " & crop(ie.inst_args.par_text_fields(6)) & " #" & integer'image(ien) & " sp " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line) & post);
+        end procedure;
+
+        procedure print_instr(constant pre : in string) is
         begin
-            print_instr(pre, "");        
-        end procedure;    
-        
+            print_instr(pre, "");
+        end procedure;
+
         procedure decide is
         begin
             comparator_valid := true;
-            comparator_text_field := ie.inst_args. par_text_fields(2);
+            comparator_text_field := ie.inst_args.par_text_fields(2);
             if comparator_text_field(2) = nul then
                 case comparator_text_field(1) is
                     when '=' => if (val1 = val3) then
-                                    if_state(if_level) := true;
-                                end if;
+                            if_state(if_level) := true;
+                        end if;
                     when '>' => if (val1 > val3) then
-                                    if_state(if_level) := true;
-                                end if;
+                            if_state(if_level) := true;
+                        end if;
                     when '<' => if (val1 < val3) then
-                                    if_state(if_level) := true;
-                                end if;                        
+                            if_state(if_level) := true;
+                        end if;
                     when others =>
                         comparator_valid := false;
-                end case; 
+                end case;
             else
                 case comparator_text_field(1 to 2) is
-                    when "/="  => if (val1 /= val3) then
-                                      if_state(if_level) := true;
-                                  end if;
+                    when "/=" => if (val1 /= val3) then
+                            if_state(if_level) := true;
+                        end if;
                     when ">=" => if (val1 >= val3) then
-                                     if_state(if_level) := true;
-                                 end if;
+                            if_state(if_level) := true;
+                        end if;
                     when "<=" => if (val1 <= val3) then
-                                     if_state(if_level) := true;
-                                 end if;
+                            if_state(if_level) := true;
+                        end if;
                     when others =>
-                        comparator_valid := false; 
-                end case;             
-            end if;     
-        end procedure;    
-             
+                        comparator_valid := false;
+                end case;
+            end if;
+        end procedure;
+
     begin
         marker <= (others => '0');
         verify_passes <= (others => '0');
@@ -461,46 +448,52 @@ begin
         init_const_text_field("no_file", no_file);
         init_const_text_field("no_file_on_main_entry", no_file);
         init_const_text_field("no_file_on_interrupt", no_file);
-        
-        init_inst_def_list(inst_defs); 
+
+        init_inst_def_list(inst_defs);
         define_insts(inst_defs);
-        
+
         init_file_def_list(code_files);
         print("collect stimulus code files");
         slc.file_name := string_to_text_field(stimulus_file);
         slc.file_line := -1;
         collect_code_files(slc, code_files, stimulus_path, stimulus_file_var);
-        print(integer'image(code_files.last_element_num) & " stimulus code files");   
-        
+        print(integer'image(code_files.last_element_num) & " stimulus code files");
+
         init_var_pool_ordered(vars);
         print("parsing stimulus code files");
-        parse_constants(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW); 
+        parse_constants(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
         noc := vars.last_element_num;
-        print(integer'image(noc) & " constants");  
-        
-        parse_variables(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW); 
-        print(integer'image(vars.last_element_num - noc) & " variables");  
-        
-        if DUMP_PARSE_RESULTS then dump_var_pool_ordered(vars, machine_value_width); end if;
-                             
+        print(integer'image(noc) & " constants");
+
+        parse_variables(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
+        print(integer'image(vars.last_element_num - noc) & " variables");
+
+        if DUMP_PARSE_RESULTS then
+            dump_var_pool_ordered(vars, machine_value_width);
+        end if;
+
         init_proc_pool_ordered(procs);
         init_inst_sequence(insts);
-        parse_instructions_and_procs(code_files, inst_defs, insts, vars, procs, machine_value_width, DUMP_PARSE_FLOW); 
-        print(integer'image(procs.last_element_num) & " procedures"); 
-        print(integer'image(insts.last_element_num) & " instructions"); 
+        parse_instructions_and_procs(code_files, inst_defs, insts, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
+        print(integer'image(procs.last_element_num) & " procedures");
+        print(integer'image(insts.last_element_num) & " instructions");
 
-        if DUMP_PARSE_RESULTS then dump_inst_sequence(insts, code_files); end if;
-        if DUMP_PARSE_RESULTS then dump_proc_pool_ordered(procs); end if;
-        
+        if DUMP_PARSE_RESULTS then
+            dump_inst_sequence(insts, code_files);
+        end if;
+        if DUMP_PARSE_RESULTS then
+            dump_proc_pool_ordered(procs);
+        end if;
+
         print("checking if all variables are initially defined for all instructions");
         check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
-     
+
         print("starting stimuli execution");
 
         sp := 0;
         init_runtime_context(rcs(sp));
         ien := 0;
-        
+
         while ien <= insts.last_element_num loop
 
             verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));
@@ -516,15 +509,15 @@ begin
             if main_entered = 0 then
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
-                -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself 
-                slc.file_name := no_file_on_main_entry; 
-                slc.file_line := -1;              
+                -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself
+                slc.file_name := no_file_on_main_entry;
+                slc.file_line := -1;
                 access_proc(slc, procs, main_proc_name, pen);
-                ien := procs.element_ptrs(pen).pointer_to_ien; 
+                ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
                 print_instr("exec main entry ");
-                main_entered := 1;              
-                rcs(sp).ien_of_called_proc := ien;                   
+                main_entered := 1;
+                rcs(sp).ien_of_called_proc := ien;
 
             elsif branch_to_interrupt then
                 assert sp < max_num_of_stack_elements
@@ -536,29 +529,29 @@ begin
                 interrupt_number_entered_stack(interrupt_number_entered_stack_pointer) := interrupt_number;
                 interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := sp;
                 v_set_interrupt_in_service := '1';
-                set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);               
+                set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);
                 line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
-                slc.file_name := no_file_on_interrupt; 
-                slc.file_line := -1; 
+                slc.file_name := no_file_on_interrupt;
+                slc.file_line := -1;
                 access_proc(slc, procs, branch_to_interrupt_proc_name, pen);
-                ien := procs.element_ptrs(pen).pointer_to_ien; 
-                ie := insts.element_ptrs(ien);               
-                if trc_on(TRACE_INTERRUPTS)then
-                    print_instr("exec interrupt entry ");                    
+                ien := procs.element_ptrs(pen).pointer_to_ien;
+                ie := insts.element_ptrs(ien);
+                if trc_on(TRACE_INTERRUPTS) = '1' then
+                    print_instr("exec interrupt entry ");
                 end if;
-                rcs(sp).ien_of_called_proc := ien;                                      
+                rcs(sp).ien_of_called_proc := ien;
                 wait for 0 ns;
 
             else
                 ien := ien + 1;
                 ie := insts.element_ptrs(ien);
-                if trc_on(TRACE_FILES) then
+                if trc_on(TRACE_FILES) = '1' then
                     dump_file_defs(code_files);
                 end if;
-                if trc_on(TRACE_VARIABLES) then
+                if trc_on(TRACE_VARIABLES) = '1' then
                     dump_var_pool_ordered(vars, machine_value_width);
                 end if;
-                if trc_on(TRACE_INSTRUCTIONS) then
+                if trc_on(TRACE_INSTRUCTIONS) = '1' then
                     print_inst_element(insts, ien, code_files);
                 end if;
 
@@ -566,7 +559,7 @@ begin
                 executing_file <= file_name;
                 wait for 100 ps;
 
-                if trc_on(TRACE_EXECUTED_LINES) then
+                if trc_on(TRACE_EXECUTED_LINES) = '1' then
                     print_instr("exec ");
                 end if;
 
@@ -593,13 +586,13 @@ begin
                 -- var a_varC a_constA
                 elsif ie.inst(1 to ie.inst_len) = INSTR_VAR then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1);                    
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, val1);
-                    
+
                 -- array an_array 16
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1);                    
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, var_stm_array);
                     for i in 0 to var_stm_array'length - 1 loop
                         var_stm_array(i) := to_unsigned(0, machine_value_width);
@@ -608,14 +601,14 @@ begin
                 -- label a_label a_proc_label
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1); 
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, var_stm_label);
 
                 -- file a_fileA "file_name"
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1);    
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
@@ -634,42 +627,38 @@ begin
                         user_file_in_use_3 := false;
                     else
                         assert false
-                        report "trying to end file not started or already ended for read:" & 
-                               " file name: " & crop(ie.slc.file_name) & 
-                               " file line: " & integer'image(ie.slc.file_line)
+                        report "trying to end file not started or already ended for read:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
 
                 -- signal a_signal
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1); 
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, val1);
 
                 -- bus a_bus
                 elsif ie.inst(1 to ie.inst_len) = INSTR_BUS then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1); 
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, val1);
 
                 -- lines a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1); 
+                    get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & 
-                               " file name: " & crop(ie.slc.file_name) & 
-                               " file line: " & integer'image(ie.slc.file_line)
+                        report "lines delete all not successful:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
 
                 -- equ operand1_equ_target operand2
                 -- equ operand1_equ_target 0xF0
-                elsif ie.inst(1 to ie.inst_len) = INSTR_EQU or ie.inst(1 to ie.inst_len) =  INSTR_EQU_PAR_CLOSE then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_EQU or ie.inst(1 to ie.inst_len) = INSTR_EQU_PAR_CLOSE then
                     get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
                     get_val_in_called_scope_call_params_source_sensitive(2, val2);
                     update_var(vars, ven1, val2);
@@ -714,7 +703,7 @@ begin
                     get_val_in_called_scope_prefer_local(2, val2);
                     val := val1 + val2;
                     val := resize(resize(val1, machine_value_width * 2) * resize(val2, machine_value_width * 2), machine_value_width);
-                    update_var(vars, ven1, val);                
+                    update_var(vars, ven1, val);
 
                 -- div operand1_and_target operand2
                 -- div operand1_and_target 0xF0
@@ -768,7 +757,7 @@ begin
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     val := shift_left(val1, to_integer(val2(30 downto 0)));
-                    update_var(vars, ven1, val);                
+                    update_var(vars, ven1, val);
 
                 -- shr operand1_and_target operand2
                 -- shr operand1_and_target 0xF0
@@ -777,7 +766,7 @@ begin
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     val := shift_right(val1, to_integer(val2(30 downto 0)));
-                    update_var(vars, ven1, val); 
+                    update_var(vars, ven1, val);
 
                 -- inv operand1_and_target
                 elsif ie.inst(1 to ie.inst_len) = INSTR_INV then
@@ -802,22 +791,18 @@ begin
                     index_var(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array set position is out of array size:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "array set position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     get_val_in_called_scope_prefer_local(3, val3);
                     var_stm_array(to_integer(val2(30 downto 0))) := val3;
 
                 -- array get an_array array_position a_varB
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY_GET then
-                    get_ven_in_called_scope_prefer_local(1, ven1);     
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_array);
-                    get_val_in_called_scope_prefer_local(2, val2);                    
+                    get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array get position is out of array size:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "array get position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     val := var_stm_array(to_integer(val2(30 downto 0)));
                     get_ven_in_called_scope_prefer_local(3, ven3);
@@ -833,7 +818,7 @@ begin
 
                 -- array pointer an_array another_array
                 -- array pointer an_array another_array )
-                elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY_POINTER_COPY or ie.inst(1 to ie.inst_len) =  INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY_POINTER_COPY or ie.inst(1 to ie.inst_len) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE then
                     get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
                     get_ven_in_called_scope_call_params_source_sensitive(2, ven2);
                     index_var(vars, ven2, var_stm_array);
@@ -849,16 +834,14 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY_VERIFY then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_array);
-                    get_val_in_called_scope_prefer_local(2, val2);    
+                    get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array verify position is out of array size:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "array verify position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     verify_passes_count := verify_passes_count + 1;
-                    val := var_stm_array(to_integer(val2(30 downto 0)));    
-                    get_val_in_called_scope_call_params_source_sensitive(3, val3);                  
-                    get_val_in_called_scope_call_params_source_sensitive(4, val4);                
+                    val := var_stm_array(to_integer(val2(30 downto 0)));
+                    get_val_in_called_scope_call_params_source_sensitive(3, val3);
+                    get_val_in_called_scope_call_params_source_sensitive(4, val4);
                     if (val4 and val) /= (val4 and val3) then
                         print_instr("exec ");
                         print(" index    = 0x" & to_hstring(val2));
@@ -866,14 +849,10 @@ begin
                         print(" expected = 0x" & to_hstring(val3));
                         print(" mask     = 0x" & to_hstring(val4));
                         assert resume(0) /= '0'
-                        report "array verify has difference:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "array verify has difference:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                         assert false
-                        report "array verify has difference:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "array verify has difference:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity error;
                         verify_failure_count := verify_failure_count + 1;
                     end if;
@@ -891,20 +870,20 @@ begin
 
                 -- label equ label1_target label2
                 -- label equ label1_target label2 )
-                elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL_EQU or ie.inst(1 to ie.inst_len) =  INSTR_LABEL_EQU_PAR_CLOSE then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL_EQU or ie.inst(1 to ie.inst_len) = INSTR_LABEL_EQU_PAR_CLOSE then
                     get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
-                    get_val_in_called_scope_call_params_source_sensitive(2, val2); 
-                    update_var(vars, ven1, val2); 
+                    get_val_in_called_scope_call_params_source_sensitive(2, val2);
+                    update_var(vars, ven1, val2);
                     if ie.inst(1 to ie.inst_len) = INSTR_LABEL_EQU_PAR_CLOSE then
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
-                    
+
                 -- label set label1_target label2
                 -- label set label1_target label2 )
-                elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET or ie.inst(1 to ie.inst_len) =  INSTR_LABEL_SET_PAR_CLOSE then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET or ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET_PAR_CLOSE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    get_val_in_called_scope_prefer_local(2, val2);                     
-                    update_var(vars, ven1, val2); 
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    update_var(vars, ven1, val2);
                     if ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET_PAR_CLOSE then
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
@@ -912,7 +891,7 @@ begin
                 -- file readable a_fileA target
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    get_val_in_called_scope_prefer_local(2, val2);                      
+                    get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
@@ -923,7 +902,7 @@ begin
 
                 -- file writeable a_fileA target
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_WRITABLE then
-                    get_ven_in_called_scope_prefer_local(1, ven1);                   
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
@@ -934,7 +913,7 @@ begin
 
                 -- file appendable a_fileA target
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPENDABLE then
-                    get_ven_in_called_scope_prefer_local(1, ven1);                   
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
@@ -945,8 +924,8 @@ begin
 
                 -- file write a_fileA a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_WRITE then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
-                    get_ven_in_called_scope_prefer_local(2, ven2);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
@@ -956,8 +935,8 @@ begin
 
                 -- file append a_fileB  a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPEND then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
-                    get_ven_in_called_scope_prefer_local(2, ven2);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
@@ -968,9 +947,9 @@ begin
                 -- file read a_fileA a_lines number_of_lines
                 -- file read a_fileA a_lines 256
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    get_val_in_called_scope_prefer_local(3, val3);  
+                    get_val_in_called_scope_prefer_local(3, val3);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
                     user_file_append_done := false;
@@ -1023,7 +1002,7 @@ begin
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
                         user_file_open_done := false;
                         if not user_file_in_use_0 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_0, user_file_path_string, read_mode); 
+                            stm_user_file_open(slc, user_file_0, user_file_path_string, read_mode);
                             user_file_name_0 := var_stm_text;
                             user_file_in_use_0 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
@@ -1032,7 +1011,7 @@ begin
                                 stm_lines_append(slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_1 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_1, user_file_path_string, read_mode); 
+                            stm_user_file_open(slc, user_file_1, user_file_path_string, read_mode);
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
@@ -1041,7 +1020,7 @@ begin
                                 stm_lines_append(slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_2 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_2, user_file_path_string, read_mode); 
+                            stm_user_file_open(slc, user_file_2, user_file_path_string, read_mode);
                             user_file_name_2 := var_stm_text;
                             user_file_in_use_2 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
@@ -1050,7 +1029,7 @@ begin
                                 stm_lines_append(slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_3 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_3, user_file_path_string, read_mode); 
+                            stm_user_file_open(slc, user_file_3, user_file_path_string, read_mode);
                             user_file_name_3 := var_stm_text;
                             user_file_in_use_3 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
@@ -1060,16 +1039,14 @@ begin
                             end loop;
                         else
                             assert false
-                            report "only 4 files are allowed for file read concurrently:" & 
-                               " file name: " & crop(ie.slc.file_name) & 
-                               " file line: " & integer'image(ie.slc.file_line)
+                            report "only 4 files are allowed for file read concurrently:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                         end if;
                     end if;
 
                 -- file read end a_fileA a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ_END then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
@@ -1088,16 +1065,14 @@ begin
                         user_file_in_use_3 := false;
                     else
                         assert false
-                        report "trying to end file not started or already ended for read:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "trying to end file not started or already ended for read:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
 
                 -- file read all a_fileA a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ_ALL then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
-                    get_ven_in_called_scope_prefer_local(2, ven2);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
@@ -1108,8 +1083,8 @@ begin
                 --  file pointer copy a_file_target a_file_source
                 --  file pointer copy a_file_target a_file_source )
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY or ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
-                    get_ven_in_called_scope_call_params_target_sensitive(1, ven1);  
-                    get_ven_in_called_scope_call_params_source_sensitive(2, ven2);  
+                    get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
+                    get_ven_in_called_scope_call_params_source_sensitive(2, ven2);
                     index_var(vars, ven2, var_stm_text, var_stm_text_enclosing_quote);
                     update_var(vars, ven1, var_stm_text);
                     if ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
@@ -1119,12 +1094,12 @@ begin
                 -- lines get a_lines position an_array number_found
                 -- lines get a_lines 8 an_array number_found
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_GET_ARRAY then
-                    get_ven_in_called_scope_prefer_local(1, ven1);  
-                    get_val_in_called_scope_prefer_local(2, val2);  
-                    get_ven_in_called_scope_prefer_local(3, ven3);  
-                    get_ven_in_called_scope_prefer_local(4, ven4);  
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_ven_in_called_scope_prefer_local(3, ven3);
+                    get_ven_in_called_scope_prefer_local(4, ven4);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    index_var(vars, ven3, var_stm_lines);                   
+                    index_var(vars, ven3, var_stm_lines);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_get(slc, var_stm_lines, val_int, var_stm_array, number_found, machine_value_width);
                     update_var(vars, ven3, var_stm_array);
@@ -1134,9 +1109,9 @@ begin
                 -- lines set a_lines position an_array
                 -- lines set a_lines 9 an_array
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_SET_ARRAY then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
-                    get_ven_in_called_scope_prefer_local(3, ven3);   
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_ven_in_called_scope_prefer_local(3, ven3);
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven3, var_stm_array);
                     val_int := to_integer(val2(30 downto 0));
@@ -1147,8 +1122,8 @@ begin
                 -- lines set a_lines position "abc{}" a_varB
                 -- lines set a_lines 7 "abc{}" a_varB
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_SET_MESSAGE then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_lines);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
@@ -1159,9 +1134,9 @@ begin
                 -- lines insert a_lines position an_array
                 -- lines insert a_lines 9 an_array
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_INSERT_ARRAY then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
-                    get_ven_in_called_scope_prefer_local(3, ven3);   
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_ven_in_called_scope_prefer_local(3, ven3);
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven3, var_stm_array);
                     val_int := to_integer(val2(30 downto 0));
@@ -1172,9 +1147,9 @@ begin
                 -- lines insert a_lines position "abc{}" a_varB
                 -- lines insert a_lines 7 "abc{}" a_varB
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_INSERT_MESSAGE then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
-                    get_ven_in_called_scope_prefer_local(3, ven3);   
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_ven_in_called_scope_prefer_local(3, ven3);
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven3, var_stm_array);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
@@ -1182,10 +1157,10 @@ begin
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_insert(slc, var_stm_lines, val_int, var_stm_text_out);
-                    
+
                 -- lines append array a_lines an_array
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_ARRAY then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven2, var_stm_array);
@@ -1194,7 +1169,7 @@ begin
                 -- lines append message a_lines "abc"
                 -- lines append message a_lines "abc{}" a_varB
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_MESSAGE then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_lines);
                     stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
@@ -1204,40 +1179,38 @@ begin
                 -- lines delete a_lines position
                 -- lines delete a_lines 13
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_DELETE then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_lines);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_delete(slc, var_stm_lines, val_int);
 
                 -- lines delete all a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_DELETE_ALL then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & 
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "lines delete all not successful:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
 
                 -- lines size a_lines read_size
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_SIZE then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_lines);
                     val := to_unsigned(var_stm_lines.size, machine_value_width);
                     update_var(vars, ven2, val);
 
                 --  lines pointer copy a_lines_target a_lines_source
-                --  lines pointer copy a_lines_target a_lines_source 
+                --  lines pointer copy a_lines_target a_lines_source
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_POINTER_COPY or ie.inst(1 to ie.inst_len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE then
-                    get_ven_in_called_scope_call_params_target_sensitive(1, ven1); 
-                    get_ven_in_called_scope_call_params_source_sensitive(2, ven2);                  
+                    get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
+                    get_ven_in_called_scope_call_params_source_sensitive(2, ven2);
                     index_var(vars, ven2, var_stm_lines);
                     update_var(vars, ven1, var_stm_lines);
                     if ie.inst(1 to ie.inst_len) = INSTR_LINES_POINTER_COPY_PAR_CLOSE then
@@ -1249,20 +1222,18 @@ begin
                 -- if a_varA = 0x09
                 -- if 0x09 = 0x09
                 elsif ie.inst(1 to ie.inst_len) = INSTR_IF then
-                    get_val_in_called_scope_prefer_local(1, val1); 
-                    get_val_in_called_scope_prefer_local(3, val3); 
+                    get_val_in_called_scope_prefer_local(1, val1);
+                    get_val_in_called_scope_prefer_local(3, val3);
                     if_level := if_level + 1;
                     if_state(if_level) := false;
                     if trc_on(TRACE_IF_TREES) = '1' then
-                        print_instr("exec ");                      
+                        print_instr("exec ");
                         print(" incremented if_level " & integer'image(if_level));
                     end if;
                     decide;
 
                     assert comparator_valid
-                    report "if instruction got an unknown compare operation as parameter 2" &  
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "if instruction got an unknown compare operation as parameter 2" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
 
                     if trc_on(TRACE_IF_TREES) = '1' then
@@ -1274,18 +1245,12 @@ begin
                     end if;
                     if if_state(if_level) = false then
                         bien := ien + 1;
-                        bie := insts.element_ptrs(bien);       
+                        bie := insts.element_ptrs(bien);
                         num_of_if_in_false_if_leave(if_level) := 0;
-                        while num_of_if_in_false_if_leave(if_level) /= 0 
-                              or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE 
-                                  and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF 
-                                  and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) 
-                        loop
+                        while num_of_if_in_false_if_leave(if_level) /= 0 or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
-                            severity failure;                           
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            severity failure;
                             if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
                             end if;
@@ -1307,8 +1272,8 @@ begin
                 -- a_varA > 0x09
                 -- elsif 0x0A > 0x09
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ELSIF then
-                    get_val_in_called_scope_prefer_local(1, val1);  
-                    get_val_in_called_scope_prefer_local(3, val3); 
+                    get_val_in_called_scope_prefer_local(1, val1);
+                    get_val_in_called_scope_prefer_local(3, val3);
                     if trc_on(TRACE_IF_TREES) = '1' then
                         print_instr("exec ");
                         print(" if_level is " & integer'image(if_level));
@@ -1316,13 +1281,9 @@ begin
                     if if_state(if_level) then -- if the if_state is true then skip to the end
                         bien := ien + 1;
                         bie := insts.element_ptrs(bien);
-                        while bie.inst(1 to bie.inst_len) /= INSTR_IF
-                              and bie.inst(1 to bie.inst_len) /= INSTR_END_IF 
-                        loop
+                        while bie.inst(1 to bie.inst_len) /= INSTR_IF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                             bien := bien + 1;
                             bie := insts.element_ptrs(bien);
@@ -1339,17 +1300,11 @@ begin
                         end if;
                         if if_state(if_level) = false then
                             bien := ien + 1;
-                            bie := insts.element_ptrs(bien);    
+                            bie := insts.element_ptrs(bien);
                             num_of_if_in_false_if_leave(if_level) := 0;
-                            while num_of_if_in_false_if_leave(if_level) /= 0 
-                                  or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE 
-                                      and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF 
-                                      and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) 
-                            loop
+                            while num_of_if_in_false_if_leave(if_level) /= 0 or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) loop
                                 assert bien <= insts.last_element_num
-                                report "if instruction unable to find terminating else, elsif or end_if statement." &  
-                                       " file name: " & crop(ie.slc.file_name) & 
-                                       " file line: " & integer'image(ie.slc.file_line)
+                                report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                                 if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                     num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
@@ -1379,16 +1334,12 @@ begin
                         end if;
                     end if;
                     if if_state(if_level) then -- if the if_state is true then skip the else
-                        bien := ien + 1; 
-                        bie := insts.element_ptrs(bien);                 
+                        bien := ien + 1;
+                        bie := insts.element_ptrs(bien);
                         num_of_if_in_false_if_leave(if_level) := 0;
-                        while num_of_if_in_false_if_leave(if_level) /= 0 
-                              or bie.inst(1 to bie.inst_len) /= INSTR_END_IF 
-                        loop
+                        while num_of_if_in_false_if_leave(if_level) /= 0 or bie.inst(1 to bie.inst_len) /= INSTR_END_IF loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                             if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
@@ -1412,7 +1363,7 @@ begin
                 -- loop loop_num
                 -- loop 100
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LOOP then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     rcs(sp).loop_if_enter_level := if_level;
                     act_loop_num := rcs(sp).loop_num;
                     if trc_on(TRACE_CALLS) = '1' then
@@ -1473,6 +1424,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FINISH then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
                     expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_7(30 downto 0)));
+
                     print("Verify passes " & (integer'image(verify_passes_count)));
                     print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then
@@ -1522,9 +1474,7 @@ begin
                     finish;
 
                 -- proc
-                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC
-                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN
-                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC or ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
                     null; -- no action necessary
 
                 -- end proc
@@ -1545,12 +1495,9 @@ begin
                         finish;
                     end if;
                     assert sp >= 0
-                    report "stack underrun:" & 
-                       " stack pointer " & integer'image(sp) & 
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
+                    report "stack underrun:" & " stack pointer " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    
+
                     if interrupt_in_service > 0 then
                         interrupt_number := interrupt_number_entered_stack(interrupt_number_entered_stack_pointer);
                         if interrupt_entry_call_stack_ptr_stack(interrupt_number) = sp then
@@ -1558,12 +1505,12 @@ begin
                             set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);
                             interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer - 1;
                         end if;
-                    end if;     
+                    end if;
                     ien := rcs(sp).ien_of_call;
                     sp := sp - 1;
-                    if trc_on(TRACE_STACK) then
+                    if trc_on(TRACE_STACK) = '1' then
                         print_instr("entering previous runtime_context ");
-                        print_runtime_context(rcs(sp));       
+                        print_runtime_context(rcs(sp));
                     end if;
                     wait for 0 ns;
 
@@ -1571,110 +1518,100 @@ begin
                 -- call some_proc (
                 -- call label some_label ()
                 -- call label some_label (
-                elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR 
-                      or ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN
-                      or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR
-                      or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR or ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
                     assert sp < max_num_of_stack_elements
-                    report "stack overrun:" & 
-                       " stack pointer " & integer'image(sp) & 
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
+                    report "stack overrun:" & " stack pointer " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    if trc_on(TRACE_STACK) then
+                    if trc_on(TRACE_STACK) = '1' then
                         print_instr("leaving runtime_context ");
-                        print_runtime_context(rcs(sp));       
+                        print_runtime_context(rcs(sp));
                     end if;
                     sp := sp + 1;
-                    init_runtime_context(rcs(sp));         
-                    if trc_on(TRACE_CALLS) then
+                    init_runtime_context(rcs(sp));
+                    if trc_on(TRACE_CALLS) = '1' then
                         print_instr("exec ");
                     end if;
-                    rcs(sp).ien_of_call := ien;         
+                    rcs(sp).ien_of_call := ien;
                     if ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR then
-                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
-                       ien := procs.element_ptrs(pen).pointer_to_ien;
-                       rcs(sp).ien_of_called_proc := ien; 
-                       rcs(sp).call_process_state := IN_PROC_BODY;    
-                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN then                       
-                       access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
-                       ien := procs.element_ptrs(pen).pointer_to_ien;
-                       rcs(sp).ien_of_called_proc := ien; 
-                       rcs(sp).call_process_state := IN_PROC_PARAMS;                                                            
+                        access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                        ien := procs.element_ptrs(pen).pointer_to_ien;
+                        rcs(sp).ien_of_called_proc := ien;
+                        rcs(sp).call_process_state := IN_PROC_BODY;
+                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN then
+                        access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                        ien := procs.element_ptrs(pen).pointer_to_ien;
+                        rcs(sp).ien_of_called_proc := ien;
+                        rcs(sp).call_process_state := IN_PROC_PARAMS;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR then
-                          get_ven_in_called_scope_prefer_local(1, ven1); 
-                          index_var(vars, ven1, var_stm_label);                        
-                          access_proc(slc, procs, var_stm_label, pen);
-                          ien := procs.element_ptrs(pen).pointer_to_ien;
-                          rcs(sp).ien_of_called_proc := ien; 
-                          rcs(sp).call_process_state := IN_PROC_BODY; 
+                        get_ven_in_called_scope_prefer_local(1, ven1);
+                        index_var(vars, ven1, var_stm_label);
+                        access_proc(slc, procs, var_stm_label, pen);
+                        ien := procs.element_ptrs(pen).pointer_to_ien;
+                        rcs(sp).ien_of_called_proc := ien;
+                        rcs(sp).call_process_state := IN_PROC_BODY;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
-                          get_ven_in_called_scope_prefer_local(1, ven1); 
-                          index_var(vars, ven1, var_stm_label);                        
-                          access_proc(slc, procs, var_stm_label, pen);
-                          ien := procs.element_ptrs(pen).pointer_to_ien;
-                          rcs(sp).ien_of_called_proc := ien; 
-                          rcs(sp).call_process_state := IN_PROC_PARAMS; 
-                    end if;      
-                                  
-                -- ) 
+                        get_ven_in_called_scope_prefer_local(1, ven1);
+                        index_var(vars, ven1, var_stm_label);
+                        access_proc(slc, procs, var_stm_label, pen);
+                        ien := procs.element_ptrs(pen).pointer_to_ien;
+                        rcs(sp).ien_of_called_proc := ien;
+                        rcs(sp).call_process_state := IN_PROC_PARAMS;
+                    end if;
+
+                -- )
                 elsif ie.inst(1 to ie.inst_len) = INSTR_PAR_CLOSE then
                     if rcs(sp).call_process_state = IN_PROC_PARAMS then
-                        rcs(sp).call_process_state := IN_CALL_PARAMS; 
+                        rcs(sp).call_process_state := IN_CALL_PARAMS;
                         rcs(sp).ien_of_proc_params_end := ien;
                         ien := rcs(sp).ien_of_call;
                     elsif rcs(sp).call_process_state = IN_CALL_PARAMS then
                         rcs(sp).call_process_state := IN_PROC_BODY;
-                        ien := rcs(sp).ien_of_proc_params_end;                                 
+                        ien := rcs(sp).ien_of_proc_params_end;
                     end if;
-                    
+
                 -- log message INFO "some message"
                 -- log message  INFO "misc_proc severity: {}" INFO
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LOG_MESSAGE then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     if val1 <= loglevel then
                         txt_print_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, machine_value_width);
                     end if;
 
                 -- log lines INFO a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LOG_LINES then
-                    get_val_in_called_scope_prefer_local(1, val1); 
-                    get_ven_in_called_scope_prefer_local(2, ven2); 
+                    get_val_in_called_scope_prefer_local(1, val1);
+                    get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven2, var_stm_lines);
                     if val1 <= loglevel then
                         stm_lines_print(var_stm_lines);
                         assert valid_bus /= 0
-                        report "lines object access failed:" & 
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
+                        report "lines object access failed:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
 
                 -- trace 1
                 elsif ie.inst(1 to ie.inst_len) = INSTR_TRACE then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     trc_on := val1;
 
                 -- verbosity INFO
                 -- verbosity 25
                 elsif ie.inst(1 to ie.inst_len) = INSTR_VERBOSITY then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     loglevel := val1;
 
                 -- resume ON_VERIFY (Flag Bit0) or BUS_TIMEOUT (Flag Bit1) failure
                 -- if respective flag in resume value is set
                 elsif ie.inst(1 to ie.inst_len) = INSTR_RESUME then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     resume := val1;
 
                 -- seed seed_var
                 -- seed 1397
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SEED then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     assert val1 > 0
-                    report "seed expects a value > 0" &  
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "seed expects a value > 0" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     seed1 := to_integer(val1(30 downto 0));
                     if seed1 > 1 then
@@ -1688,9 +1625,9 @@ begin
                 -- random rand_var rand_min_var 9
                 -- random rand_var 3 9
                 elsif ie.inst(1 to ie.inst_len) = INSTR_RANDOM then
-                    get_ven_in_called_scope_prefer_local(1, ven1); 
-                    get_val_in_called_scope_prefer_local(2, val2); 
-                    get_val_in_called_scope_prefer_local(3, val3); 
+                    get_ven_in_called_scope_prefer_local(1, ven1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_val_in_called_scope_prefer_local(3, val3);
                     index_var(vars, ven1, val);
                     random(seed1, seed2, val2, val3, val);
                     update_var(vars, ven1, val);
@@ -1698,14 +1635,14 @@ begin
                 -- wait time_to_wait
                 -- wait 10000
                 elsif ie.inst(1 to ie.inst_len) = INSTR_WAIT then
-                    get_val_in_called_scope_prefer_local(1, val1); 
+                    get_val_in_called_scope_prefer_local(1, val1);
                     wait for to_integer(val1(30 downto 0)) * 1 ns;
 
                 -- marker 5 1 sets marker number 5 to high
                 -- marker 7 0 sets marker number 7 to low
                 elsif ie.inst(1 to ie.inst_len) = INSTR_MARKER then
                     get_val_in_called_scope_prefer_local(1, val1);
-                    get_val_in_called_scope_prefer_local(2, val2); 
+                    get_val_in_called_scope_prefer_local(2, val2);
                     if val1 < 16 then
                         for i in 0 to 15 loop
                             if val1 = i then
@@ -1716,12 +1653,10 @@ begin
                                 end if;
                             end if;
                         end loop;
-                        
+
                     else
                         assert false
-                        report "16 markers are provided only:" & 
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
+                        report "16 markers are provided only:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
                     marker <= temp_marker;
@@ -1741,15 +1676,11 @@ begin
                         print(" mask     = 0x" & to_hstring(val3));
                         if resume(0) = '0' then
                             assert false
-                            report "verify failure assertion" &  
-                               " file name: " & crop(ie.slc.file_name) & 
-                               " file line: " & integer'image(ie.slc.file_line)
+                            report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                             severity failure;
                         else
                             assert false
-                            report "verify error assertion" &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
+                            report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                             severity error;
                             verify_failure_count := verify_failure_count + 1;
                         end if;
@@ -1763,10 +1694,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_write(signals_out, val_int, val2, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to write invalid signal" &  
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
-                    severity failure;                  
+                    report "trying to write invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
                     wait for 0 ns;
 
                 -- signal read a_signal signal_read_value
@@ -1779,10 +1708,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to read invalid signal" &  
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
-                    severity failure;                    
+                    report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
                     update_var(vars, ven2, val);
                     if (ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY) then
                         get_val_in_called_scope_prefer_local(3, val3);
@@ -1796,15 +1723,11 @@ begin
                             print(" mask     = 0x" & to_hstring(val4));
                             if resume(0) = '0' then
                                 assert false
-                                report "verify failure assertion" &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
+                                report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                             else
                                 assert false
-                                report "verify error assertion" &  
-                                       " file name: " & crop(ie.slc.file_name) & 
-                                       " file line: " & integer'image(ie.slc.file_line)
+                                report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
                             end if;
@@ -1846,25 +1769,19 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_write(bus_down, bus_up, val3, val4, val2_int, val_int, bus_valid, successfull, bus_timeouts(to_integer(val1(30 downto 0))));
                     assert bus_valid /= 0
-                    report "trying to write to invalid bus" &  
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
-                    severity failure;                  
+                    report "trying to write to invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
                     if resume(1) = '0' then
                         assert successfull
-                        report "bus write timeout failure assertion" &  
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "bus write timeout failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity failure;
                     else
                         if not successfull then
                             bus_timeout_failure_count := bus_timeout_failure_count + 1;
                         end if;
                         assert successfull
-                        report "bus write timeout error assertion" &  
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                        report "bus write timeout error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                         severity error;
                     end if;
                     wait for 0 ns;
@@ -1882,10 +1799,8 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
                     assert bus_valid /= 0
-                    report "trying to read from invalid bus" &  
-                       " file name: " & crop(ie.slc.file_name) & 
-                       " file line: " & integer'image(ie.slc.file_line)
-                    severity failure;   
+                    report "trying to read from invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
                     bus_timeout_passes_count := bus_timeout_passes_count + 1;
                     if resume(1) = '0' then
                         assert successfull
@@ -1913,15 +1828,11 @@ begin
                             print(" mask     = 0x" & to_hstring(val6));
                             if resume(0) = '0' then
                                 assert false
-                                report "verify failure assertion" &  
-                                   " file name: " & crop(ie.slc.file_name) & 
-                                   " file line: " & integer'image(ie.slc.file_line)
+                                report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;
                             else
                                 assert false
-                                report "verify error assertion" &  
-                                       " file name: " & crop(ie.slc.file_name) & 
-                                       " file line: " & integer'image(ie.slc.file_line)
+                                report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
                             end if;
@@ -1971,10 +1882,7 @@ begin
                 -- undefined instructions
                 else
                     assert false
-                    report "seems the command  " & ", " & ie.inst(1 to ie.inst_len) & " was defined but" &  
-                           "was not found in the elsif chain, please check spelling" &  
-                           " file name: " & crop(ie.slc.file_name) & 
-                           " file line: " & integer'image(ie.slc.file_line)
+                    report "seems the command  " & ", " & ie.inst(1 to ie.inst_len) & " was defined but" & "was not found in the elsif chain, please check spelling" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                 end if;
 

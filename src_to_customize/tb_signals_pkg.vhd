@@ -11,17 +11,17 @@ package tb_signals_pkg is
 
     type t_signals_in is record
 
-        in_signal_0 : std_logic; -- None
-        in_signal_2 : std_logic_vector(31 downto 0); -- stimulus_test_suite_index
-        in_signal_4 : std_logic_vector(31 downto 0); -- standard_test_verify_passes_count
-        in_signal_5 : std_logic_vector(31 downto 0); -- standard_test_verify_failure_count
-        in_signal_6 : std_logic_vector(31 downto 0); -- bus_timeout_passes_count
-        in_signal_7 : std_logic_vector(31 downto 0); -- bus_timeout_failure_count
+        -- TODO: Add here all your inputs
+        in_signal_0 : std_logic;
+        in_signal_2 : std_logic_vector(31 downto 0);
+        in_signal_4 : std_logic_vector(31 downto 0);
+        in_signal_5 : std_logic_vector(31 downto 0);
+        in_signal_6 : std_logic_vector(31 downto 0);
+        in_signal_7 : std_logic_vector(31 downto 0);
 
         in_signal_1000 : std_logic;
         in_signal_1001 : std_logic;
 
-        -- TODO: Add here all your inputs
         in_signal_2000 : std_logic;
         in_signal_2001 : std_logic_vector(7 downto 0);
         in_signal_2002 : std_logic;
@@ -32,9 +32,9 @@ package tb_signals_pkg is
     type t_signals_out is record
 
         -- TODO: Add here all your outputs
-        out_signal_1 : std_logic; -- init dut
-        out_signal_5 : std_logic_vector(31 downto 0); -- expected standard_test_error_count
-        out_signal_7 : std_logic_vector(31 downto 0); -- expected bus_timeout_test_error_count
+        out_signal_1 : std_logic;
+        out_signal_5 : std_logic_vector(31 downto 0);
+        out_signal_7 : std_logic_vector(31 downto 0);
         out_signal_3000 : std_logic;
         out_signal_3001 : std_logic_vector(7 downto 0);
         out_signal_3002 : std_logic;
@@ -95,9 +95,9 @@ package body tb_signals_pkg is
 
         -- TODO: Set here your init values
         signals.in_signal_0 := '0'; -- None
-        signals.in_signal_2 := (others => '0'); -- stimulus_test_suite_index
-        signals.in_signal_5 := (others => '0'); -- expected_standard_test_verify_failure_count
-        signals.in_signal_7 := (others => '0'); -- expected_bus_timeout_failure_count
+        signals.in_signal_2 := (others => '0');
+        signals.in_signal_5 := (others => '0');
+        signals.in_signal_7 := (others => '0');
 
         signals.in_signal_1000 := '0';
         signals.in_signal_1001 := '0';
@@ -141,8 +141,8 @@ package body tb_signals_pkg is
         case signal_number is
             when 0 =>
                 assert false
-                report  "read of unassigned signal e.g., local signal in procedure"
-                severity failure;    
+                report "read of unassigned signal e.g., local signal in procedure"
+                severity failure;
             -- TODO: add here your SimStm mapping
             when 1 =>
                 value := to_unsigned((now / 1 ns), value'length);
@@ -195,8 +195,8 @@ package body tb_signals_pkg is
         case signal_number is
             when 0 =>
                 assert false
-                report  "write to unassigned signal e.g., local signal in procedure"
-                severity failure;    
+                report "write to unassigned signal e.g., local signal in procedure"
+                severity failure;
             when 1 =>
                 signals.out_signal_1 <= value(0);
             when 5 =>

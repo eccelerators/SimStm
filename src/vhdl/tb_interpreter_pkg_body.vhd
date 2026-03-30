@@ -53,13 +53,13 @@ use work.tb_instructions_pkg.all;
 use work.tb_interpreter_util_pkg.all;
 
 package body tb_interpreter_pkg is
-    
+
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
         constant stimulus_path : string;
         variable stimulus_file : string
-    ) is 
+    ) is
         variable fos : file_open_status;
         variable tl : text_line;
         variable ts : token_text_field_array;
@@ -69,7 +69,7 @@ package body tb_interpreter_pkg is
         variable il : integer;
         variable tll : integer;
         variable include_file_name : text_line;
-        variable file_line : integer; 
+        variable file_line : integer;
         file stimulus : text;
         variable absolute_code_file_name : text_line;
     begin
@@ -77,10 +77,10 @@ package body tb_interpreter_pkg is
         file_open(fos, stimulus, absolute_code_file_name, read_mode);
         assert fos = open_ok
         report "unable to open stimulus_file " & absolute_code_file_name
-        severity failure; 
+        severity failure;
         append_code_file(slc, code_files, stimulus_path, stimulus_file);
         print("loading codefile " & absolute_code_file_name);
-        file_line := 0;  
+        file_line := 0;
         while not endfile(stimulus) loop
             file_line := file_line + 1;
             file_read_line(stimulus, tl);
@@ -88,10 +88,8 @@ package body tb_interpreter_pkg is
             il := fld_len(ts(1));
             if ts(1)(1 to il) = "include" then
                 assert txt /= null
-                report "include instruction defines no file name as text parameter: " & 
-                "file " & stimulus_path & stimulus_file & 
-                "line " & integer'image(file_line)
-                severity failure;            
+                report "include instruction defines no file name as text parameter: " & "file " & stimulus_path & stimulus_file & "line " & integer'image(file_line)
+                severity failure;
                 include_file_name := (others => nul);
                 for i in 1 to c_stm_text_len loop
                     include_file_name(i) := txt(i);
@@ -104,36 +102,35 @@ package body tb_interpreter_pkg is
                 collect_code_files(slc, code_files, stimulus_path, include_file_name(1 to tll));
             end if;
         end loop;
-        file_close(stimulus);  
-    end procedure;  
-    
-      
+        file_close(stimulus);
+    end procedure;
+
     procedure parse_constants(
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : integer;
         constant debug : boolean
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
-        variable file_line : integer;        
+        variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable valid_params : integer;        
+        variable valid_params : integer;
         variable iic : stm_inst_initial_context;
-        file stimulus : text; 
+        file stimulus : text;
         variable ts : token_text_field_array;
         variable ie : inst_element;
         variable vn : text_field;
         variable ven1 : integer;
-        variable val2 : unsigned(machine_value_width -1 downto 0);  
+        variable val2 : unsigned(machine_value_width - 1 downto 0);
         variable fn : text_field;
-    begin 
+    begin
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -143,7 +140,7 @@ package body tb_interpreter_pkg is
             severity failure;
             file_line := 0;
             init_inst_initial_context(iic);
-            if debug then 
+            if debug then
                 print("parsing code file for constants " & crop(fn));
             end if;
             while not endfile(stimulus) loop
@@ -157,56 +154,55 @@ package body tb_interpreter_pkg is
                     ie.inst := ts(1);
                     ie.inst_args.par_text_fields := extract_parameters(ts);
                     ie.inst_args.txt := txt;
-                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
+                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
                     valid_params := valid_tokens - 1;
                     check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
-                    track_inst_initial_context(ie, vars, iic);                    
+                    track_inst_initial_context(ie, vars, iic);
                     if ie.inst(1 to il) = INSTR_CONST then
                         vn := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
                         val2 := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(2), machine_value_width);
                         vars.element_ptrs(ven1).values(0) := val2;
                         vars.element_ptrs(ven1).values_org(0) := val2;
-                    end if;                
-                end if;            
+                    end if;
+                end if;
             end loop;
             file_close(stimulus);
         end loop;
     end procedure;
-    
-    
+
     procedure parse_variables(
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : in integer;
-        constant debug : boolean      
+        constant debug : boolean
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
-        variable file_line : integer;        
+        variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable valid_params : integer;  
+        variable valid_params : integer;
         variable iic : stm_inst_initial_context;
-        variable n_par_text_fields : parameter_text_field_array;  
+        variable n_par_text_fields : parameter_text_field_array;
         variable vn1 : text_field;
         variable pn2 : integer := 2;
         variable ven1 : integer;
         variable ven2 : integer;
-        variable val2 : unsigned(machine_value_width -1 downto 0);    
+        variable val2 : unsigned(machine_value_width - 1 downto 0);
         variable var_type : stm_var_type;
-        file stimulus : text; 
+        file stimulus : text;
         variable ts : token_text_field_array;
         variable ie : inst_element;
         variable slc : src_locator;
         variable fn : text_field;
     begin
-        
+
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -216,7 +212,7 @@ package body tb_interpreter_pkg is
             severity failure;
             file_line := 0;
             init_inst_initial_context(iic);
-            if debug then 
+            if debug then
                 print("parsing code file for variables " & crop(fn));
             end if;
             while not endfile(stimulus) loop
@@ -231,48 +227,48 @@ package body tb_interpreter_pkg is
                         ie.inst := ts(1);
                         ie.inst_args.par_text_fields := extract_parameters(ts);
                         ie.inst_args.txt := txt;
-                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
+                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
-                        track_inst_initial_context(ie, vars, iic);  
+                        track_inst_initial_context(ie, vars, iic);
                         set_var_type(ie.inst, il, var_type);
                         if var_type /= T_NO_VAR then
                             vn1 := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
-                            if is_digit(ie.inst_args.par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then                                              
+                            if is_digit(ie.inst_args.par_text_fields(2)(1)) or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then
                                 insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             else
                                 access_inst_par_index_prefer_local(ie, vars, pn2, iic.called_proc_name, ven2);
                                 val2 := vars.element_ptrs(ven2).values(0);
-                                ie.inst_args.par_text_fields(2) := to_text_field(val2);                              
+                                ie.inst_args.par_text_fields(2) := to_text_field(val2);
                                 vn1 := cat_namespace_var_name_local_scope(iic.namespace_name, ie.inst_args.par_text_fields(1), iic.proc_name);
                                 insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             end if;
                         end if;
                     end if;
-                end if;            
+                end if;
             end loop;
             file_close(stimulus);
         end loop;
     end procedure;
-    
+
     procedure parse_instructions_and_procs(
         variable code_files : in file_def_list;
         variable inst_defs : in inst_def_list;
         variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
-        variable procs : inout proc_pool_ordered; 
+        variable procs : inout proc_pool_ordered;
         constant machine_value_width : integer;
-        constant debug : boolean         
+        constant debug : boolean
     ) is
         variable fos : file_open_status;
         variable afn : text_line;
-        variable file_line : integer;        
+        variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
         variable txt : stm_text_ptr;
         variable txt_enclosing_quote : character;
         variable valid_tokens : integer;
-        variable valid_params : integer;  
+        variable valid_params : integer;
         variable iic : stm_inst_initial_context;
         variable var_type : stm_var_type;
         variable proc_type : boolean;
@@ -282,7 +278,7 @@ package body tb_interpreter_pkg is
         variable pen : integer;
         variable fn : text_field;
     begin
-        
+
         for i in 0 to code_files.last_element_num loop
             afn := code_files.element_ptrs(i).absolute_file_name;
             fn := code_files.element_ptrs(i).file_name;
@@ -292,7 +288,7 @@ package body tb_interpreter_pkg is
             severity failure;
             file_line := 0;
             init_inst_initial_context(iic);
-            if debug then 
+            if debug then
                 print("parsing code file for procs and instructions " & crop(fn));
             end if;
             while not endfile(stimulus) loop
@@ -306,17 +302,17 @@ package body tb_interpreter_pkg is
                     ie.inst := ts(1);
                     ie.inst_args.par_text_fields := extract_parameters(ts);
                     ie.inst_args.txt := txt;
-                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
+                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
                     valid_params := valid_tokens - 1;
                     check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                     track_inst_initial_context(ie, vars, iic);
                     set_var_type(ie.inst, il, var_type);
-                    set_proc_type(ie.inst, il, proc_type);      
+                    set_proc_type(ie.inst, il, proc_type);
                     if var_type = T_NO_VAR and proc_type = false then
                         -- anything but a constant, variable or proc definition, thus always an instruction
                         append_inst(insts, ie, debug);
                     else
-                        if var_type /= T_CONST then 
+                        if var_type /= T_CONST then
                             -- constant definitions and declarations are already done in pass 0 and are never added as an instruction
                             -- variable definitions and declaration already done in pass 1 but need to be an instruction too in case of living in proc parameters or proc local area be reinitilized on each call.
                             -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
@@ -330,26 +326,26 @@ package body tb_interpreter_pkg is
                                     if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                                         -- any local var definition and declaration living in proc parameters or proc local area to be added as instruction
                                         append_inst(insts, ie, debug);
-                                    end if;                               
+                                    end if;
                                 else
                                     -- any other instruction
                                     append_inst(insts, ie, debug);
                                 end if;
                             end if;
                         end if;
-                    end if;                    
-                 end if;            
+                    end if;
+                end if;
             end loop;
             file_close(stimulus);
         end loop;
     end procedure;
-    
+
     procedure check_instructions_in_initial_context(
-        variable insts : inout inst_sequence; 
+        variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered;
-        constant machine_value_width : integer  
-    ) is   
+        constant machine_value_width : integer
+    ) is
         variable iic : stm_inst_initial_context;
         variable par_scopes : parameter_text_field_array;
         variable par_index : integer;
@@ -366,7 +362,7 @@ package body tb_interpreter_pkg is
             ie_ptr := insts.element_ptrs(i);
             ie.slc := ie_ptr.slc;
             ie.inst := ie_ptr.inst;
-            ie.inst_args := ie_ptr.inst_args;                                 
+            ie.inst_args := ie_ptr.inst_args;
             track_inst_initial_context(ie, vars, iic);
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
@@ -390,5 +386,5 @@ package body tb_interpreter_pkg is
             end loop;
         end loop;
     end procedure;
-        
+
 end package body;

@@ -38,7 +38,7 @@ use work.basic.all;
 
 entity tbTop is
     generic(
-        stimulus_path : string := "tb/simstm/";
+        stimulus_path : string := "../tb/simstm/";
         stimulus_file : string := "testMain.stm";
         stimulus_main_entry_label : string := "testMain";
         stimulus_test_suite_index : integer := 255;
