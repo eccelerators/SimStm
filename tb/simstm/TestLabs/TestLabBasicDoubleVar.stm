@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabBasicDoubleVar ()
 
     call testBasicDoubleVar ()
 end proc
+
+end namespace

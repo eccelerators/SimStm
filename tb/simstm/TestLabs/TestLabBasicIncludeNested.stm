@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabBasicIncludeNested ()
 
     call testBasicIncludeNested ()
 end proc
+
+end namespace

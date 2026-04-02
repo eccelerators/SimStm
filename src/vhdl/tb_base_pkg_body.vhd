@@ -139,7 +139,7 @@ package body tb_base_pkg is
      
     procedure append_inst(
         variable insts : inout inst_sequence;
-        variable ie : inst_element;
+        variable ie : inst_element_ptr;
         constant debug : boolean 
     ) is
         variable nen : integer;
@@ -173,7 +173,7 @@ package body tb_base_pkg is
         acfn := combine_to_absolute_file_name(stimulus_path, stimulus_file);
         ne_ptr.slc := slc;
         ne_ptr.absolute_file_name := acfn;
-        ne_ptr.file_name := string_to_text_field(stimulus_file);       
+        ne_ptr.file_name := string_to_text_field(stimulus_file);
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
     end procedure;
@@ -194,17 +194,47 @@ package body tb_base_pkg is
         return afn; 
     end function;
     
-    function extract_parameters(
-        ts : token_text_field_array
-    ) return parameter_text_field_array
-    is
+    procedure extract_parameters(
+        variable slc : in src_locator;
+        variable ts : in token_text_field_array;
+        variable ptfs : out parameter_text_field_array;
+        variable ptps : out parameter_type_array;
+        variable plit_vals : out parameter_value_array_ptr;
+        constant machine_value_width : integer
+    ) is
         variable ps : parameter_text_field_array;
     begin
         for i in 1 to 6 loop 
-            ps(i) := ts(i + 1);
+            ptps(i) := PAR_NM;
+            ptfs(i) := ts(i + 1);
+            if is_digit(ptfs(i)(1)) then
+                ptps(i) := PAR_LIT;
+                plit_vals(i) := stim_to_stm_value(slc, ptfs(i), machine_value_width);
+            elsif contains_dot(ptfs(i)) then
+                ptps(i) := PAR_FQN;
+            else
+                ptps(i) := PAR_NM;
+            end if;     
         end loop;
-        return ps;
-    end function;    
+    end procedure; 
+    
+    function contains_dot(
+        s : text_field
+    ) return boolean is
+        variable i : integer;
+        variable r : boolean;  
+    begin
+        r := false;
+        i := 1;
+        while s(i) /= nul loop
+            if s(i) = '.' then
+                r := true;
+                exit;
+            end if;
+            i := i + 1;
+        end loop;    
+        return r;
+    end function;
        
     function bin2integer(
         slc : src_locator; 
@@ -326,20 +356,20 @@ package body tb_base_pkg is
     ) return stm_text is
         variable i : integer;
         variable j : integer;
-        variable sc : stm_text;
+        variable sr : stm_text;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
         j := 1;
         while s2(j) /= nul loop
-            sc(i) := s2(j);
+            sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-        return sc;
+        return sr;
     end function;
 
     procedure ew_str_cat_ptr(
@@ -349,22 +379,22 @@ package body tb_base_pkg is
     ) is
         variable i : integer;
         variable j : integer;
-        variable sc : stm_text;
+        variable sr : stm_text;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
         j := 1;
         if s2_ptr /= null then
             while s2_ptr(j) /= nul loop
-                sc(i) := s2_ptr(j);
+                sr(i) := s2_ptr(j);
                 i := i + 1;
                 j := j + 1;
             end loop;
         end if;
-        so := sc;
+        so := sr;
     end procedure;
     
     function textfield_cat(
@@ -373,97 +403,139 @@ package body tb_base_pkg is
     ) return text_field is
         variable i : integer;
         variable j : integer;
-        variable sc : text_field;
+        variable sr : text_field;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
         while s2(j) /= nul loop
-            sc(i) := s2(j);
+            sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-        return sc;
+        return sr;
     end function;
+    
+    -- s  naaa.
+    -- sr naaa.nbbb.    
+    function append_trailing_namespace(
+        s : text_field;
+        sa : text_field
+    ) return text_field is
+        variable i : integer;
+        variable j : integer;
+        variable sr : text_field;
+    begin
+        sr := s;
+        i := 1;
+        while sr(i) /= nul loop
+            i := i + 1;
+        end loop;
+        sr(i) := '.';
+        j := 1;
+        while sa(j) /= nul loop
+            sr(i) := sa(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
 
-    function cat_var_name_local_scope(
+        return sr;
+    end function;  
+    
+    -- s  naaa.nbbb. 
+    -- sr naaa.   
+    function cut_trailing_namespace(
+        s : text_field
+    ) return text_field is
+        variable e : integer;
+        variable ld : integer;
+        variable pd : integer;
+        variable sr : text_field;
+    begin
+        e := 1;
+        ld := 0;
+        pd := 0;
+        while s(e) /= nul loop
+            e := e + 1;
+            if s(e) = '.' then
+                pd := ld;
+                ld := e;
+            end if;
+        end loop;    
+        sr := (others => nul);
+        for i in 1 to pd loop
+            sr(i) := s(i);
+        end loop;
+        return sr;
+    end function;         
+    
+    function prepend_namespace(
+        s : text_field;
+        sp : text_field
+    ) return text_field is
+        variable i : integer;
+        variable j : integer;
+        variable sr : text_field;
+    begin
+        sr := sp;
+        i := 1;
+        while sr(i) /= nul loop
+            i := i + 1;
+        end loop;
+        if i > 1 then
+            sr(i) := '.';
+            i := i + 1;
+        end if;
+        j := 1;
+        while s(j) /= nul loop
+            sr(i) := s(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
+        return sr;
+    end function;    
+
+    function append_local_scope(
         s1 : text_field;
         s2 : text_field
     ) return text_field is
         variable i : integer;
         variable j : integer;
-        variable sc : text_field;
+        variable sr : text_field;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
-        sc(i) := '.';
+        sr(i) := '.';
         i := i + 1;
         j := 1;
         while s2(j) /= nul loop
-            sc(i) := s2(j);
+            sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-        return sc;
+        return sr;
     end function;
     
-    function cat_namespace_var_name_local_scope(
-        s1 : text_field;
-        s2 : text_field;
-        s3 : text_field
+    function append_dot(
+        s1 : text_field
     ) return text_field is
         variable i : integer;
-        variable j : integer;
-        variable sc : text_field;
+        variable sr : text_field;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
-        if i > 1 then
-            sc(i) := '.';
-            i := i + 1;
-        end if;
-        j := 1;
-        while s2(j) /= nul loop
-            sc(i) := s2(j);
-            i := i + 1;
-            j := j + 1;
-        end loop;
-        sc(i) := '.';
-        i := i + 1;
-        j := 1;
-        while s3(j) /= nul loop
-            sc(i) := s3(j);
-            i := i + 1;
-            j := j + 1;
-        end loop;
-        return sc;
+        sr(i) := '.';
+        return sr;
     end function;
-    
-    function textfield_truncate_text_after_second_dot(
-        s : text_field
-    ) return text_field is
-        variable i : integer;
-        variable sc : text_field;
-    begin
-        sc := s;
-        i := 1;
-        while sc(i) /= '.' loop
-            i := i + 1;
-        end loop;
-        while sc(i) /= '.' loop
-            i := i + 1;
-        end loop;
-        return sc;
-    end function;    
-    
+     
     function ew_str_cat(
         s1 : stm_text;
         s2 : text_field;
@@ -471,20 +543,20 @@ package body tb_base_pkg is
     ) return stm_text is
         variable i : integer;
         variable j : integer;
-        variable sc : stm_text;
+        variable sr : stm_text;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
         j := s3;
         while s2(j) /= nul loop
-            sc(i) := s2(j);
+            sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-        return sc;
+        return sr;
     end function;
 
     function ew_str_cat(
@@ -495,21 +567,21 @@ package body tb_base_pkg is
     ) return stm_text is
         variable i : integer;
         variable j : integer;
-        variable sc : stm_text;
+        variable sr : stm_text;
     begin
-        sc := s1;
+        sr := s1;
         i := 1;
-        while sc(i) /= nul loop
+        while sr(i) /= nul loop
             i := i + 1;
         end loop;
         j := s3;
         while s2(j) /= nul loop
-            sc(i) := s2(j);
+            sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
         end loop;
-        sc(i) := s4;
-        return sc;
+        sr(i) := s4;
+        return sr;
     end function;
 
     function ew_to_char(

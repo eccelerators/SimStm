@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testFilePointer ()
 
@@ -10,7 +11,7 @@ proc testFilePointer ()
 	array an_array 2
 	var is_readable_a 0
 	var is_readable_b 0
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	
 	array set an_array 0 7
 	array set an_array 1 8
@@ -36,14 +37,16 @@ proc testFilePointer ()
 	var a_var 99
 	-- verifies file_a content
 	lines get array a_lines_result 0 final_array a_var
-	array verify final_array 0 7 MAX
-	array verify final_array 1 8 MAX
+	array verify final_array 0 7 stm.MAX
+	array verify final_array 1 8 stm.MAX
 
 	-- verifies file_b content
 	lines get array b_lines_result 0 final_array a_var
-	array verify final_array 0 7 MAX
-	array verify final_array 1 8 MAX
+	array verify final_array 0 7 stm.MAX
+	array verify final_array 1 8 stm.MAX
 	
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 	
 end proc
+
+end namespace

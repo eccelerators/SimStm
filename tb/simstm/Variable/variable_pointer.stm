@@ -1,19 +1,22 @@
+namespace SimStmTest
 
 proc testVariablePointer ()
 
 	var test_variable_pointer_1 1
 	var test_variable_pointer_2 2
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     
-    log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
-    log message INFO_2 "test_variable_pointer_2: {:d}" test_variable_pointer_2
+    log message stm.INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
+    log message stm.INFO_2 "test_variable_pointer_2: {:d}" test_variable_pointer_2
 
     var pointer copy test_variable_pointer_1 test_variable_pointer_2
 
-    log message INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
-    var verify test_variable_pointer_1 2 MAX
+    log message stm.INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
+    var verify test_variable_pointer_1 2 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
+
+end namespace

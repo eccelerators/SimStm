@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabBasicIncludeFlat ()
 
     call testBasicIncludeFlat ()
 end proc
+
+end namespace

@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testSuiteInterrupt ()
 
@@ -5,3 +6,5 @@ proc testSuiteInterrupt ()
     	label pointer copy TestToCall testInterrupt
     )
 end proc
+
+end namespace

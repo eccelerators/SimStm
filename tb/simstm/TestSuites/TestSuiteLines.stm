@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 proc testSuiteLines ()
 
     call testCase (
@@ -60,4 +62,6 @@ proc testSuiteLines ()
     	label set TestToCall testLinesLocalOverride
     )
 end proc
+
+end namespace
 

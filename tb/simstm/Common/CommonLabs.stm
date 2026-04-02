@@ -1,3 +1,5 @@
+namespace SimTtmTest
+
 include "Base/Base.stm"
 
 bus wishbone 0
@@ -19,3 +21,5 @@ signal out_signal_3000 3000
 signal out_signal_3001 3001
 signal out_signal_3002 3002
 signal out_signal_3003 3003
+
+end namespace

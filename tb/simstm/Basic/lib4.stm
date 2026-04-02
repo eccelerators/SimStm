@@ -1,5 +1,7 @@
-
+namespace SimStmTest
 
 proc Lib4 ()
     log message 0 "load file lib4.stm"
 end proc
+
+end namespace

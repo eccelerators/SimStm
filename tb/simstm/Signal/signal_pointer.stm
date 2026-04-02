@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 var val_signal_pointer_read_back 0xffff
 signal a_in_signal_pointer 0
@@ -7,7 +8,7 @@ signal b_out_signal_pointer 0
 
 proc testSignalPointerCopy ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     signal pointer copy a_in_signal_pointer in_signal_2000
     signal pointer copy b_in_signal_pointer in_signal_2001
@@ -22,38 +23,38 @@ proc testSignalPointerCopy ()
     signal write out_signal_3001 0
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3001 1
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3001 0xffff
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
+    signal verify in_signal_2001 val_signal_pointer_read_back 1 stm.MAX
 
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3000 1
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3000 0xffff
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0xff MAX
+    var verify val_signal_pointer_read_back 0xff stm.MAX
+    signal verify in_signal_2000 val_signal_pointer_read_back 0xff stm.MAX
 
     signal pointer copy in_signal_2000 a_in_signal_pointer
     signal pointer copy in_signal_2001 b_in_signal_pointer
@@ -64,40 +65,40 @@ proc testSignalPointerCopy ()
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3000 1
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3000 0xffff
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
+    signal verify in_signal_2000 val_signal_pointer_read_back 1 stm.MAX
 
     signal write out_signal_3001 0
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3001 1
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3001 0xffff
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0xff MAX
+    var verify val_signal_pointer_read_back 0xff stm.MAX
+    signal verify in_signal_2001 val_signal_pointer_read_back 0xff stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
 
@@ -108,7 +109,7 @@ var b_out_signal_pointer_value_absolut 0
 
 proc testSignalPointerGetSet ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     signal pointer get in_signal_2000 a_in_signal_pointer_value_absolut
     signal pointer get in_signal_2001 b_in_signal_pointer_value_absolut
@@ -123,38 +124,38 @@ proc testSignalPointerGetSet ()
     signal write out_signal_3001 0
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3001 1
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3001 0xffff
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
+    signal verify in_signal_2001 val_signal_pointer_read_back 1 stm.MAX
 
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3000 1
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3000 0xffff
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0xff MAX
+    var verify val_signal_pointer_read_back 0xff stm.MAX
+    signal verify in_signal_2000 val_signal_pointer_read_back 0xff stm.MAX
 
     signal pointer set in_signal_2000 a_in_signal_pointer_value_absolut
     signal pointer set in_signal_2001 b_in_signal_pointer_value_absolut
@@ -165,39 +166,41 @@ proc testSignalPointerGetSet ()
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3000 1
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2000 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3000 0xffff
     signal read in_signal_2000 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
+    signal verify in_signal_2000 val_signal_pointer_read_back 1 stm.MAX
 
     signal write out_signal_3001 0
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0 MAX
+    var verify val_signal_pointer_read_back 0 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 0 1
 
     signal write out_signal_3001 1
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 1 MAX
+    var verify val_signal_pointer_read_back 1 stm.MAX
     signal verify in_signal_2001 val_signal_pointer_read_back 1 1
 
     signal write out_signal_3001 0xffff
     signal read in_signal_2001 val_signal_pointer_read_back
 
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0xff MAX
+    var verify val_signal_pointer_read_back 0xff stm.MAX
+    signal verify in_signal_2001 val_signal_pointer_read_back 0xff stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
+
+end namespace

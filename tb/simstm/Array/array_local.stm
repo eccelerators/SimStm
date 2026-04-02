@@ -1,4 +1,4 @@
-
+namespace SimStmTest
 
 proc testArrayLocal ()
 
@@ -9,7 +9,7 @@ proc testArrayLocal ()
 	var pos_2 7
 	var array_size 100
 	
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	
 	array set test_array_local 0 1
 	array set test_array_local 1 2
@@ -20,15 +20,17 @@ proc testArrayLocal ()
 	array get test_array_local 2 pos_2
 	array size test_array_local array_size
 	
-	log message INFO_2 "position 0 of test_array_local: {:d}" pos_0
-	log message INFO_2 "position 1 of test_array_local: {:d}" pos_1
-	log message INFO_2 "position 2 of test_array_local: {:d}" pos_2
-	log message INFO_2 "size of test_array_local: {:d}" array_size
+	log message stm.INFO_2 "position 0 of test_array_local: {:d}" pos_0
+	log message stm.INFO_2 "position 1 of test_array_local: {:d}" pos_1
+	log message stm.INFO_2 "position 2 of test_array_local: {:d}" pos_2
+	log message stm.INFO_2 "size of test_array_local: {:d}" array_size
 	
-	array verify test_array_local 0 1 MAX
-	array verify test_array_local 1 2 MAX
-	array verify test_array_local 2 3 MAX
+	array verify test_array_local 0 1 stm.MAX
+	array verify test_array_local 1 2 stm.MAX
+	array verify test_array_local 2 3 stm.MAX
 	
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 	
 end proc
+
+end namespace

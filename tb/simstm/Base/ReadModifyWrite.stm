@@ -27,7 +27,7 @@
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 --  SOFTWARE.
 -- ******************************************************************************
-
+namespace stm
 
 proc readModifyWrite (	
     bus Bus 0
@@ -48,3 +48,5 @@ proc readModifyWrite (
     or WriteData ReadData -- combine to new value
     bus write Bus Width Adr WriteData
 end proc
+
+end namespace

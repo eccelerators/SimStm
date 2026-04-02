@@ -6,19 +6,19 @@ include "TestSuites/TestSuiteInterrupt.stm"
 
 proc testMainSuiteInterrupt ()
 
-    call initBase ()
+    call stm.initBase ()
 
-    verbosity INFO_2
-    trace TRACE_OFF
-    resume RESUME_ON_ALL_ERRORS
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
-    log message INFO "Main test suite Interrupt started"
+    log message stm.INFO "Main test suite Interrupt started"
 
     call testSuiteInterrupt ()
 
-    log message INFO "Main test suite Interrupt ended"
+    log message stm.INFO "Main test suite Interrupt ended"
     wait 1000
     finish
 end proc

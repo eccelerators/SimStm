@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabBasicFinish ()
 
     call testBasicFinish ()
 end proc
+
+end namespace

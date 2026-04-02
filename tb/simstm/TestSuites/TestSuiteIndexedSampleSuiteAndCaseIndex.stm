@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var sampleCaseIndexA 0
 var sampleCaseIndexB 0
 
@@ -51,3 +53,5 @@ proc testCaseSampleSuiteAndCaseIndexB (
     )
 
 end proc
+
+end namespace

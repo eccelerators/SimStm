@@ -27,6 +27,7 @@
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 --  SOFTWARE.
 -- ******************************************************************************
+namespace stm
 
 -- parameter
 const ALWAYS 0
@@ -128,11 +129,11 @@ var StandardTestBusTimeoutPassCountResult 0
 
 -- A standard test is usually wrapped by a 
 --
---  call startStandardTestShell at its begin
+--  call stm.startStandardTestShell at its begin
 --   producing a standard message that the test has been started
 --   and recording the standard verify and but timeout failure counters state before the test
 --
---  call endStandardTestShell at its end
+--  call stm.endStandardTestShell at its end
 --   producing a standard message that the test has ended successfully or with failures
 --   returning the StandardTestVerifyFailureCountResult and StandardTestBusTimeoutFailureCountResult 
 --   the number of respective failures occurred within the test shell
@@ -210,19 +211,19 @@ end proc
 
 -- method to increment the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
 proc incExpectedStandardTestVerifyFailureCount ()
-    add ExpectedStandardTestVerifyFailureCount 1
-    signal write sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
+    add stm.ExpectedStandardTestVerifyFailureCount 1
+    signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
 end proc
 
 -- method to increment the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
 proc incExpectedStandardTestBusTimeoutFailureCount ()
-    add ExpectedStandardTestBusTimeoutFailureCount 1
-    signal write sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
+    add stm.ExpectedStandardTestBusTimeoutFailureCount 1
+    signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
 end proc    
            
 -- manual method to increment the StandardTestVerifyFailureCount based on if instruction decisions  
 proc incStandardTestVerifyFailureCount ()
-    signal verify sigInZero BasicZero 1 1 
+    signal verify stm.sigInZero stm.BasicZero 1 1 
     -- fail intentionally thus incrementing standard error counter
     -- shown when a test ends with a finish instruction
 end proc    
@@ -269,3 +270,5 @@ proc ror (
     or RorVal tv
     and RorVal m
 end proc
+
+end namespace

@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 proc testSuiteConstant ()
 
     call testCase (

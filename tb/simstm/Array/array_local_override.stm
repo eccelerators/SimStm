@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 array test_array_local_override 3
 
@@ -11,7 +12,7 @@ proc testArrayLocalOverride ()
 	var e_4 14
     var s 0
 
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 
 	call setTestArrayGlobal ()
 
@@ -28,23 +29,23 @@ proc testArrayLocalOverride ()
 	array get test_array_local_override 4 e_4
 	array size test_array_local_override s
 	
-	log message INFO_2 "position 0 of test_array_local_override local: {:d}" e_0
-	log message INFO_2 "position 1 of test_array_local_override local: {:d}" e_1
-	log message INFO_2 "position 2 of test_array_local_override local: {:d}" e_2
-	log message INFO_2 "position 3 of test_array_local_override local: {:d}" e_3
-	log message INFO_2 "position 4 of test_array_local_override local: {:d}" e_4
-	log message INFO_2 "size of test_array_local_override local: {:d}" s
+	log message stm.INFO_2 "position 0 of test_array_local_override local: {:d}" e_0
+	log message stm.INFO_2 "position 1 of test_array_local_override local: {:d}" e_1
+	log message stm.INFO_2 "position 2 of test_array_local_override local: {:d}" e_2
+	log message stm.INFO_2 "position 3 of test_array_local_override local: {:d}" e_3
+	log message stm.INFO_2 "position 4 of test_array_local_override local: {:d}" e_4
+	log message stm.INFO_2 "size of test_array_local_override local: {:d}" s
 	
-	array verify test_array_local_override 0 100 MAX
-	array verify test_array_local_override 1 101 MAX 
-	array verify test_array_local_override 2 3 MAX
-	array verify test_array_local_override 3 4 MAX 
-	array verify test_array_local_override 4 5 MAX
-	var verify s 5 MAX
+	array verify test_array_local_override 0 100 stm.MAX
+	array verify test_array_local_override 1 101 stm.MAX 
+	array verify test_array_local_override 2 3 stm.MAX
+	array verify test_array_local_override 3 4 stm.MAX 
+	array verify test_array_local_override 4 5 stm.MAX
+	var verify s 5 stm.MAX
 	
 	call checkArrayGlobal ()
 
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 	
 end proc
 
@@ -62,10 +63,10 @@ proc setTestArrayGlobal ()
 	array get test_array_local_override 0 e_0
 	array get test_array_local_override 1 e_1
 	array get test_array_local_override 2 e_2
-	log message INFO_2 "position 0 of test_array_local_override global: {:d}" e_0
-	log message INFO_2 "position 1 of test_array_local_override global: {:d}" e_1
-	log message INFO_2 "position 2 of test_array_local_override global: {:d}" e_2
-	log message INFO_2 "size of test_array_local_override global: {:d}" s
+	log message stm.INFO_2 "position 0 of test_array_local_override global: {:d}" e_0
+	log message stm.INFO_2 "position 1 of test_array_local_override global: {:d}" e_1
+	log message stm.INFO_2 "position 2 of test_array_local_override global: {:d}" e_2
+	log message stm.INFO_2 "size of test_array_local_override global: {:d}" s
 
 end proc
 
@@ -81,14 +82,15 @@ proc checkArrayGlobal ()
 	array get test_array_local_override 2 e_2
 	array size test_array_local_override s
 	
-	log message INFO_2 "position 0 of test_array_local_override global: {:d}" e_0	
-	log message INFO_2 "position 1 of test_array_local_override global: {:d}" e_1
-	log message INFO_2 "position 2 of test_array_local_override global: {:d}" e_2
-	log message INFO_2 "size of test_array_local_override global: {:d}" s
+	log message stm.INFO_2 "position 0 of test_array_local_override global: {:d}" e_0	
+	log message stm.INFO_2 "position 1 of test_array_local_override global: {:d}" e_1
+	log message stm.INFO_2 "position 2 of test_array_local_override global: {:d}" e_2
+	log message stm.INFO_2 "size of test_array_local_override global: {:d}" s
 
-	array verify test_array_local_override 0 1 MAX
-	array verify test_array_local_override 1 2 MAX
-	array verify test_array_local_override 2 3 MAX
-	var verify s 3 MAX
+	array verify test_array_local_override 0 1 stm.MAX
+	array verify test_array_local_override 1 2 stm.MAX
+	array verify test_array_local_override 2 3 stm.MAX
+	var verify s 3 stm.MAX
 end proc
 
+end namespace

@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 array file_array 8
 array another_array 8
 
@@ -11,7 +13,7 @@ lines a_lines_aa
 
 proc testLinesAppendArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -32,16 +34,16 @@ proc testLinesAppendArray ()
     log lines 0 a_lines_aa
 
     lines size a_lines_aa number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_at
 
 proc testLinesAppendText ()
 
-     call startStandardTestShell ()
+     call stm.startStandardTestShell ()
 
     lines append message a_lines_at "line 1"
     lines append message a_lines_at "line 2"
@@ -50,16 +52,16 @@ proc testLinesAppendText ()
     log lines 0 a_lines_at
 
     lines size a_lines_at number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_daa
 
 proc testLinesDeleteAllArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -80,22 +82,22 @@ proc testLinesDeleteAllArray ()
     log lines 0 a_lines_daa
 
     lines size a_lines_daa number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     lines delete all a_lines_daa
     log lines 0 a_lines_daa
 
     lines size a_lines_daa number_of_lines
-    var verify number_of_lines 0 MAX
+    var verify number_of_lines 0 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_da
 
 proc testLinesDeleteArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -116,34 +118,34 @@ proc testLinesDeleteArray ()
     log lines 0 a_lines_da
 
     lines size a_lines_da number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     lines delete a_lines_da 1
     log lines 0 a_lines_da
 
     lines size a_lines_da number_of_lines
-    var verify number_of_lines 2 MAX
+    var verify number_of_lines 2 stm.MAX
 
     lines delete a_lines_da 1
     log lines 0 a_lines_da
 
     lines size a_lines_da number_of_lines
-    var verify number_of_lines 1 MAX
+    var verify number_of_lines 1 stm.MAX
 
     lines delete a_lines_da 0
     log lines 0 a_lines_da
 
     lines size a_lines_da number_of_lines
-    var verify number_of_lines 0 MAX
+    var verify number_of_lines 0 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ga
 
 proc testLinesGetArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -166,7 +168,7 @@ proc testLinesGetArray ()
     log lines 0 a_lines_ga
 
     lines size a_lines_ga number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     equ index_of_line 0
     loop number_of_lines
@@ -176,25 +178,25 @@ proc testLinesGetArray ()
         call arrayDump (
         	array pointer copy Array another_array
         )
-        array verify another_array 0 index_of_line MAX
-        array verify another_array 1 1 MAX
-        array verify another_array 2 0xA MAX
-        array verify another_array 3 2 MAX
-        array verify another_array 4 0xB MAX
-        array verify another_array 5 0x7FFFFFFF MAX
-        array verify another_array 6 0x80000000 MAX
-        array verify another_array 7 0xFFFFFFFF MAX
+        array verify another_array 0 index_of_line stm.MAX
+        array verify another_array 1 1 stm.MAX
+        array verify another_array 2 0xA stm.MAX
+        array verify another_array 3 2 stm.MAX
+        array verify another_array 4 0xB stm.MAX
+        array verify another_array 5 0x7FFFFFFF stm.MAX
+        array verify another_array 6 0x80000000 stm.MAX
+        array verify another_array 7 0xFFFFFFFF stm.MAX
         add index_of_line 1
     end loop
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ia
 
 proc testLinesInsertArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -219,7 +221,7 @@ proc testLinesInsertArray ()
     log lines 0 a_lines_ia
 
     lines size a_lines_ia number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     equ index_of_line 0
     loop number_of_lines
@@ -228,14 +230,14 @@ proc testLinesInsertArray ()
         call arrayDump (
         	array pointer copy Array another_array
         )
-        array verify another_array 0 index_of_line MAX
-        array verify another_array 1 1 MAX
-        array verify another_array 2 0xA MAX
-        array verify another_array 3 2 MAX
-        array verify another_array 4 0xB MAX
-        array verify another_array 5 0x7FFFFFFF MAX
-        array verify another_array 6 0x80000000 MAX
-        array verify another_array 7 0xFFFFFFFF MAX
+        array verify another_array 0 index_of_line stm.MAX
+        array verify another_array 1 1 stm.MAX
+        array verify another_array 2 0xA stm.MAX
+        array verify another_array 3 2 stm.MAX
+        array verify another_array 4 0xB stm.MAX
+        array verify another_array 5 0x7FFFFFFF stm.MAX
+        array verify another_array 6 0x80000000 stm.MAX
+        array verify another_array 7 0xFFFFFFFF stm.MAX
         add index_of_line 1
     end loop
 
@@ -260,7 +262,7 @@ proc testLinesInsertArray ()
     log lines 0 a_lines_ia
 
     lines size a_lines_ia number_of_lines
-    var verify number_of_lines 6 MAX
+    var verify number_of_lines 6 stm.MAX
 
     equ index_of_line 1
     equ index_of_line_offset 0
@@ -270,14 +272,14 @@ proc testLinesInsertArray ()
         call arrayDump (
         	array pointer copy Array another_array
         )
-        array verify another_array 0 index_of_line_offset MAX
-        array verify another_array 1 1 MAX
-        array verify another_array 2 0xA MAX
-        array verify another_array 3 2 MAX
-        array verify another_array 4 0xB MAX
-        array verify another_array 5 0x7FFFFFFF MAX
-        array verify another_array 6 0x80000000 MAX
-        array verify another_array 7 0xFFFFFFFF MAX
+        array verify another_array 0 index_of_line_offset stm.MAX
+        array verify another_array 1 1 stm.MAX
+        array verify another_array 2 0xA stm.MAX
+        array verify another_array 3 2 stm.MAX
+        array verify another_array 4 0xB stm.MAX
+        array verify another_array 5 0x7FFFFFFF stm.MAX
+        array verify another_array 6 0x80000000 stm.MAX
+        array verify another_array 7 0xFFFFFFFF stm.MAX
         add index_of_line 2
         add index_of_line_offset 1
     end loop
@@ -290,14 +292,14 @@ proc testLinesInsertArray ()
         call arrayDump (
         	array pointer copy Array another_array
         )
-        array verify another_array 0 index_of_line_offset MAX
-        array verify another_array 1 0x22 MAX
-        array verify another_array 2 0x33 MAX
-        array verify another_array 3 0 MAX
-        array verify another_array 4 0x12345678 MAX
-        array verify another_array 5 0x777 MAX
-        array verify another_array 6 0x800 MAX
-        array verify another_array 7 0xFFF MAX
+        array verify another_array 0 index_of_line_offset stm.MAX
+        array verify another_array 1 0x22 stm.MAX
+        array verify another_array 2 0x33 stm.MAX
+        array verify another_array 3 0 stm.MAX
+        array verify another_array 4 0x12345678 stm.MAX
+        array verify another_array 5 0x777 stm.MAX
+        array verify another_array 6 0x800 stm.MAX
+        array verify another_array 7 0xFFF stm.MAX
         add index_of_line 2
         if index_of_line_offset = 4
             equ index_of_line_offset 3
@@ -306,14 +308,14 @@ proc testLinesInsertArray ()
         end if
     end loop
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_it
 
 proc testLinesInsertText ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     lines append message a_lines_it "line 0"
     lines append message a_lines_it "line 1"
@@ -322,24 +324,24 @@ proc testLinesInsertText ()
     log lines 0 a_lines_it
 
     lines size a_lines_it number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     lines insert message a_lines_it 0 "line insert 1"
     log lines 0 a_lines_it
     lines size a_lines_it number_of_lines
-    var verify number_of_lines 4 MAX
+    var verify number_of_lines 4 stm.MAX
 
     lines insert message a_lines_it 1 "line insert 0"
     log lines 0 a_lines_it
     lines size a_lines_it number_of_lines
-    var verify number_of_lines 5 MAX
+    var verify number_of_lines 5 stm.MAX
 
     lines insert message a_lines_it 4 "line insert 4"
     log lines 0 a_lines_it
     lines size a_lines_it number_of_lines
-    var verify number_of_lines 6 MAX
+    var verify number_of_lines 6 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_pc
@@ -347,7 +349,7 @@ lines b_lines_pc
 
 proc testLinesPointerCopy ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -369,18 +371,18 @@ proc testLinesPointerCopy ()
     log lines 0 b_lines_pc
 
     lines size a_lines_pc number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
     lines size b_lines_pc number_of_lines
-    var verify number_of_lines 0 MAX
+    var verify number_of_lines 0 stm.MAX
 
     lines pointer copy b_lines_pc a_lines_pc
     log lines 0 a_lines_pc
     log lines 0 b_lines_pc
 
     lines size a_lines_pc number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
     lines size b_lines_pc number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     array set file_array 0 0xAFAFAFEE
     lines append array b_lines_pc file_array
@@ -389,18 +391,18 @@ proc testLinesPointerCopy ()
 
 
     lines size a_lines_pc number_of_lines
-    var verify number_of_lines 4 MAX
+    var verify number_of_lines 4 stm.MAX
     lines size b_lines_pc number_of_lines
-    var verify number_of_lines 4 MAX
+    var verify number_of_lines 4 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_sa
 
 proc testLinesSetArray ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -425,7 +427,7 @@ proc testLinesSetArray ()
     log lines 0 a_lines_sa
 
     lines size a_lines_sa number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     equ index_of_line 0
     loop number_of_lines
@@ -434,14 +436,14 @@ proc testLinesSetArray ()
         call arrayDump (
         	array pointer copy Array another_array
         )
-        array verify another_array 0 index_of_line MAX
-        array verify another_array 1 1 MAX
-        array verify another_array 2 0xA MAX
-        array verify another_array 3 2 MAX
-        array verify another_array 4 0xB MAX
-        array verify another_array 5 0x7FFFFFFF MAX
-        array verify another_array 6 0x80000000 MAX
-        array verify another_array 7 0xFFFFFFFF MAX
+        array verify another_array 0 index_of_line stm.MAX
+        array verify another_array 1 1 stm.MAX
+        array verify another_array 2 0xA stm.MAX
+        array verify another_array 3 2 stm.MAX
+        array verify another_array 4 0xB stm.MAX
+        array verify another_array 5 0x7FFFFFFF stm.MAX
+        array verify another_array 6 0x80000000 stm.MAX
+        array verify another_array 7 0xFFFFFFFF stm.MAX
         add index_of_line 1
     end loop
 
@@ -467,7 +469,7 @@ proc testLinesSetArray ()
     end loop
 
     lines size a_lines_sa number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     equ index_of_line 0
     loop number_of_lines
@@ -477,35 +479,35 @@ proc testLinesSetArray ()
         	array pointer copy Array another_array
         )
         if index_of_line = 1
-            array verify another_array 0 3 MAX
-            array verify another_array 1 0x22 MAX
-            array verify another_array 2 0x33 MAX
-            array verify another_array 3 0 MAX
-            array verify another_array 4 0x12345678 MAX
-            array verify another_array 5 0x777 MAX
-            array verify another_array 6 0x800 MAX
-            array verify another_array 7 0xFFF MAX
+            array verify another_array 0 3 stm.MAX
+            array verify another_array 1 0x22 stm.MAX
+            array verify another_array 2 0x33 stm.MAX
+            array verify another_array 3 0 stm.MAX
+            array verify another_array 4 0x12345678 stm.MAX
+            array verify another_array 5 0x777 stm.MAX
+            array verify another_array 6 0x800 stm.MAX
+            array verify another_array 7 0xFFF stm.MAX
         else
-            array verify another_array 0 index_of_line MAX
-            array verify another_array 1 1 MAX
-            array verify another_array 2 0xA MAX
-            array verify another_array 3 2 MAX
-            array verify another_array 4 0xB MAX
-            array verify another_array 5 0x7FFFFFFF MAX
-            array verify another_array 6 0x80000000 MAX
-            array verify another_array 7 0xFFFFFFFF MAX
+            array verify another_array 0 index_of_line stm.MAX
+            array verify another_array 1 1 stm.MAX
+            array verify another_array 2 0xA stm.MAX
+            array verify another_array 3 2 stm.MAX
+            array verify another_array 4 0xB stm.MAX
+            array verify another_array 5 0x7FFFFFFF stm.MAX
+            array verify another_array 6 0x80000000 stm.MAX
+            array verify another_array 7 0xFFFFFFFF stm.MAX
         end if
         add index_of_line 1
     end loop
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_st
 
 proc testLinesSetText ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     lines append message a_lines_st "line 1"
     lines append message a_lines_st "line 2"
@@ -514,7 +516,7 @@ proc testLinesSetText ()
     log lines 0 a_lines_st
 
     lines size a_lines_st number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     lines set message a_lines_st 0 "line set 1"
     lines set message a_lines_st 1 "line set 2"
@@ -523,16 +525,16 @@ proc testLinesSetText ()
     log lines 0 a_lines_st
 
     lines size a_lines_st number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ls
 
 proc testLinesSize ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array set file_array 0 0
     array set file_array 1 1
@@ -544,17 +546,17 @@ proc testLinesSize ()
     array set file_array 7 0xFFFFFFFF
     lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
-    var verify number_of_lines 1 MAX
+    var verify number_of_lines 1 stm.MAX
 
     array set file_array 0 1
     lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
-    var verify number_of_lines 2 MAX
+    var verify number_of_lines 2 stm.MAX
 
     array set file_array 0 2
     lines append array a_lines_ls file_array
     lines size a_lines_ls number_of_lines
-    var verify number_of_lines 3 MAX
+    var verify number_of_lines 3 stm.MAX
 
     log lines 0 a_lines_ls
 
@@ -562,5 +564,7 @@ proc testLinesSize ()
 
     log message 0 "lines size is {}" lines_size
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
+
+end namespace

@@ -307,7 +307,7 @@ proc call_proc ()
     call some_proc ()
 end proc
 
-const INFO 5
+const stm.INFO 5
 var seed_var 589043
 var rand_var 0
 var rand_min_var 0
@@ -319,12 +319,12 @@ var time_to_wait 5000
 
 proc misc_proc ()
 
-    log message INFO "some message"
-    log message INFO "misc_proc severity: {}" INFO
+    log message stm.INFO "some message"
+    log message stm.INFO "misc_proc severity: {}" stm.INFO
     log lines 0 a_lines_target
     trace a_varA
     trace 1
-    verbosity INFO
+    verbosity stm.INFO
     verbosity 25
     resume RESUME_ON_VERIFY_ERROR
     resume EXIT_ON_VERIFY_ERROR

@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabArrayZeroSize ()
 
     call testArrayZeroSize ()
 end proc
+
+end namespace

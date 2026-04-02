@@ -1,17 +1,18 @@
+namespace SimStmTest
 
 signal out_signal_local_override 0 
 
 proc testSignalLocalOverride ()
 
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	signal pointer copy out_signal_local_override out_signal_3000
 	signal write out_signal_local_override 0
 	wait 100
 	call setSignalToOverwrite ()
 	var res 100
-	signal verify in_signal_2000 res 0 MAX
+	signal verify in_signal_2000 res 0 stm.MAX
 	call checkSignalGlobal ()
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 
 
 end proc
@@ -23,11 +24,13 @@ proc setSignalToOverwrite ()
 	signal write out_signal_local_override 1
 	wait 100
 	var res 99
-	signal verify out_signal_local_override res 1 MAX
+	signal verify out_signal_local_override res 1 stm.MAX
 end proc
 
 proc checkSignalGlobal ()
 
 	var global_res 1000
-	signal verify in_signal_2000 global_res 1 MAX
+	signal verify in_signal_2000 global_res 1 stm.MAX
 end proc
+
+end namespace

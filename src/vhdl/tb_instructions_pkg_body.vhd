@@ -211,6 +211,9 @@ package body tb_instructions_pkg is
                 elsif itokens(2)(1 to 9) = "interrupt" then
                     token2_len := 9;
                     token_merge := 12;
+                elsif itokens(2)(1 to 9) = "namespace" then
+                    token2_len := 9;
+                    token_merge := 12;
                 end if;
             elsif itokens(1)(1 to 3) = "log" then
                 token1_len := 3;
@@ -730,20 +733,20 @@ package body tb_instructions_pkg is
         il := fld_len(inst);
         assert hn >= 0
         report "found undefined instruction " & inst(1 to il) & 
-               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
-               ", line " & integer'image(slc.file_line)
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               " line " & integer'image(slc.file_line)
         severity failure;
         assert inst_defs.element_ptrs(hn).inst_len = il
-        report "found instruction found " & inst(1 to il) & 
+        report "found instruction " & inst(1 to il) & 
                " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & 
-               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
-               ", line " & integer'image(slc.file_line)
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               " line " & integer'image(slc.file_line)
         severity failure;       
         assert inst_defs.element_ptrs(hn).num_of_params = num_of_params
         report "found instruction " & inst(1 to il) & 
                " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & 
-               ", file " & slc.file_name(1 to fld_len(slc.file_name)) & 
-               ", line " & integer'image(slc.file_line)
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+               " line " & integer'image(slc.file_line)
         severity failure;       
     end procedure;
     

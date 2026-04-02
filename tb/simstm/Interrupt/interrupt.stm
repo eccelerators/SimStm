@@ -1,9 +1,11 @@
+namespace SimStmTest
+
 var InterruptHappenedA 0
 var InterruptHappenedB 0
 
  proc testInterrupt ()
 
-     call startStandardTestShell ()
+     call stm.startStandardTestShell ()
 
      equ InterruptHappenedA 0
      equ InterruptHappenedB 0
@@ -16,10 +18,10 @@ var InterruptHappenedB 0
     loop 1000
     end loop
 
-    var verify InterruptHappenedA 1 MAX
-    var verify InterruptHappenedB 1 MAX
+    var verify InterruptHappenedA 1 stm.MAX
+    var verify InterruptHappenedB 1 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 interrupt InterruptA ()
@@ -33,3 +35,5 @@ interrupt InterruptB ()
     signal write out_signal_3003 0
     equ InterruptHappenedB 1
 end interrupt
+
+end namespace

@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testFileLocal ()
 
@@ -8,7 +9,7 @@ proc testFileLocal ()
 	lines b_lines
 	lines final_lines
 	array b_array 2
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	
 	lines delete all a_lines
 	lines append message a_lines "some message to be overwritten"
@@ -25,16 +26,18 @@ proc testFileLocal ()
 
 	
 	file read all a_file final_lines
-	log lines INFO_2 final_lines
+	log lines stm.INFO_2 final_lines
 	array first_array 2
 	var a_var 99
 	lines get array final_lines 0 first_array a_var
-	log message INFO_2 "a_var: {:d}" a_var
-	array verify first_array 0 1 MAX
-	array verify first_array 1 2 MAX
+	log message stm.INFO_2 "a_var: {:d}" a_var
+	array verify first_array 0 1 stm.MAX
+	array verify first_array 1 2 stm.MAX
 	
 	
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 	--NOT WORKINHVCVWCCVWVCVWCVCEVWCUV
 		
 end proc
+
+end namespace

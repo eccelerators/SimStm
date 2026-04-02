@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabBasicDoubleConst ()
 
     call testBasicDoubleConst ()
 end proc
+
+end namespace

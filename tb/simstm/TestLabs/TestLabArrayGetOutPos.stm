@@ -1,5 +1,8 @@
+namespace SimStmTest
 
 proc testLabArrayGetOutPos ()
 
     call testArrayGetOutPos ()
 end proc
+
+end namespace

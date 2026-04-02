@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 const test_constant_1 1
 const test_constant_2 2
 
@@ -22,3 +24,5 @@ proc testConstantEqu ()
     finish
 
 end proc
+
+end namespace

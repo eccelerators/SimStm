@@ -1,9 +1,10 @@
+namespace SimStmTest
 
 proc testLinesParameterIn ()
 
 	lines a_lines
 	array a_array 1
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	array set a_array 0 1
 	lines delete all a_lines
 	lines append array a_lines a_array
@@ -12,7 +13,7 @@ proc testLinesParameterIn ()
 		lines pointer copy this_lines a_lines
 	)
 
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 end proc
 
 proc checkLinesParameterInput (
@@ -22,7 +23,7 @@ proc checkLinesParameterInput (
 	array this_array 1
 	var a_var 99
 	lines get array this_lines 0 this_array a_var
-	array verify this_array 0 1 MAX
+	array verify this_array 0 1 stm.MAX
 end proc
 
 
@@ -30,7 +31,7 @@ proc testLinesParameterOut ()
 
 	lines b_lines
 	array a_array 1
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	array set a_array 0 1
 	lines delete all b_lines
 	lines append array b_lines a_array
@@ -42,14 +43,16 @@ proc testLinesParameterOut ()
 	array final_array_b 1
 	var a_var 99
 	var b_var 99
-	log lines INFO_2 b_lines
+	log lines stm.INFO_2 b_lines
 	lines get array b_lines 0 final_array_a a_var
 	lines get array b_lines 1 final_array_b b_var
-	array verify final_array_a 0 1 MAX
-	array verify final_array_b 0 2 MAX
-	call endStandardTestShell ()
+	array verify final_array_a 0 1 stm.MAX
+	array verify final_array_b 0 2 stm.MAX
+	call stm.endStandardTestShell ()
 	
 end proc
+
+end namespace
 
 proc checkLinesParameterOutput (
 	lines this_lines

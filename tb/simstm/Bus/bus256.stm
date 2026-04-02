@@ -1,10 +1,11 @@
+namespace SimStmTest
 
 proc testBus256 (
 	bus busToTest 0
 )
     var r 0   
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     wait 1000
 
     bus write busToTest 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
@@ -138,7 +139,7 @@ proc testBus256 (
     bus verify busToTest 256 0 r 0x0000000000000000000000000000000000000000000000000000000000000000 0x8000000000000000000000000000000000000000000000000000000000000000
     bus verify busToTest 256 0 r 0x0000000000000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testBus256VerifySuccess (
@@ -146,7 +147,7 @@ proc testBus256VerifySuccess (
 )
     var r 0   
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     wait 1000
     bus write busToTest  256 0 0x5555555555555555555555555555555555555555555555555555555555555555
     bus write busToTest  256 32 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -156,7 +157,7 @@ proc testBus256VerifySuccess (
     bus verify busToTest 256 32 r 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 256 64 r 0x000000000000000000000000000000000000000000000000 0x000000000000000000000000000000000000000000000000
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testBus256VerifyFail (
@@ -164,7 +165,7 @@ proc testBus256VerifyFail (
 )
     var r 0   
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     wait 1000
     bus write busToTest 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
     bus write busToTest 256 32 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -172,11 +173,11 @@ proc testBus256VerifyFail (
     bus verify busToTest 256 0 r 0x5555555555555555555555555555555555555555555555555555555555555555 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     bus verify busToTest 256 32 r 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 256 64 r 0x0000000000000000000000000000000000000000000000000000000000000000 0x0000000000000000000000000000000000000000000000000000000000000000
-    log message ALWAYS "bus verify intended error on no match"
+    log message stm.ALWAYS "bus verify intended error on no match"
     bus verify busToTest 256 0 r 0x00000000000000000000000000000000000000000000000000000000 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    call incExpectedStandardTestVerifyFailureCount ()
+    call stm.incExpectedStandardTestVerifyFailureCount ()
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testBus256TimeOutRead (
@@ -184,20 +185,20 @@ proc testBus256TimeOutRead (
 )
     var r 0   
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     wait 1000
     bus write busToTest 256 0 0x5555555555555555555555555555555555555555555555555555555555555555
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus read busToTest 256 0 r
-    call incExpectedStandardTestBusTimeoutFailureCount ()
+    call stm.incExpectedStandardTestBusTimeoutFailureCount ()
 
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
+    var verify r 1000000000 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 
@@ -206,17 +207,19 @@ proc testBus256TimeOutWrite (
 )
     var r 0  
     
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     wait 1000
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus write busToTest 256 0 0x55555555555555555555555555555555
-    call incExpectedStandardTestBusTimeoutFailureCount ()
+    call stm.incExpectedStandardTestBusTimeoutFailureCount ()
 
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
+    var verify r 1000000000 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
+
+end namespace

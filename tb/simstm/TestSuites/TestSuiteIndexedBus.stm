@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var TestCaseBus32Index 0
 var TestCaseBus64Index 0
 var TestCaseBus128Index 0
@@ -6,13 +8,13 @@ var RepeatedTestSuiteIndex 0
 
 proc testSuiteIndexedBus ()
     bus busToTest NO_BUS
-    equ RepeatedTestSuiteIndex TestSuiteIndex
+    equ RepeatedTestSuiteIndex stm.TestSuiteIndex
     rem RepeatedTestSuiteIndex 8
     if RepeatedTestSuiteIndex <= 3
-        if MachineValueWidth >= 32
+        if stm.MachineValueWidth >= 32
             bus pointer copy busToTest wishbone32
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
+            equ stm.TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
 			bus pointer copy busToTest busToTest
 		)
@@ -30,10 +32,10 @@ proc testSuiteIndexedBus ()
 		)
             add TestCaseBus32Index 1
         end if
-        if MachineValueWidth >= 64
+        if stm.MachineValueWidth >= 64
             bus pointer copy busToTest wishbone64
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus64Index
+            equ stm.TestCaseIndex TestCaseBus64Index
             call testCaseBus64 (
 			bus pointer copy busToTest busToTest
 		)
@@ -51,10 +53,10 @@ proc testSuiteIndexedBus ()
 		)
             add TestCaseBus64Index 1
         end if
-        if MachineValueWidth >= 128
+        if stm.MachineValueWidth >= 128
             bus pointer copy busToTest wishbone128
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus128Index
+            equ stm.TestCaseIndex TestCaseBus128Index
             call testCaseBus128 (
 			bus pointer copy busToTest busToTest
 		)
@@ -72,10 +74,10 @@ proc testSuiteIndexedBus ()
 		)
             add TestCaseBus128Index 1
         end if
-        if MachineValueWidth >= 256
+        if stm.MachineValueWidth >= 256
             bus pointer copy busToTest wishbone256
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus256Index
+            equ stm.TestCaseIndex TestCaseBus256Index
             call testCaseBus256 (
 			bus pointer copy busToTest busToTest
 		)
@@ -94,10 +96,10 @@ proc testSuiteIndexedBus ()
             add TestCaseBus256Index 1
         end if
     elsif RepeatedTestSuiteIndex <= 5
-        if MachineValueWidth >= 32
+        if stm.MachineValueWidth >= 32
             bus pointer copy busToTest avalon32
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
+            equ stm.TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
 			bus pointer copy busToTest busToTest
 		)
@@ -115,10 +117,10 @@ proc testSuiteIndexedBus ()
 		)
             add TestCaseBus32Index 1
         end if
-        if MachineValueWidth >= 64
+        if stm.MachineValueWidth >= 64
             bus pointer copy busToTest avalon64
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus64Index
+            equ stm.TestCaseIndex TestCaseBus64Index
             call testCaseBus64 (
 			bus pointer copy busToTest busToTest
 		)
@@ -137,10 +139,10 @@ proc testSuiteIndexedBus ()
             add TestCaseBus64Index 1
         end if
     elsif RepeatedTestSuiteIndex = 6
-        if MachineValueWidth >= 32
+        if stm.MachineValueWidth >= 32
             bus pointer copy busToTest axi4lite32
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
+            equ stm.TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
 			bus pointer copy busToTest busToTest
 		)
@@ -159,10 +161,10 @@ proc testSuiteIndexedBus ()
             add TestCaseBus32Index 1
         end if
     elsif RepeatedTestSuiteIndex = 7
-        if MachineValueWidth >= 32
+        if stm.MachineValueWidth >= 32
             bus pointer copy busToTest ram32
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
+            equ stm.TestCaseIndex TestCaseBus32Index
             call testCaseBus32 (
 			bus pointer copy busToTest busToTest
 		)
@@ -188,16 +190,16 @@ proc testCaseBus32 (
 	bus busToTest 0
 	var skipped 0
 )
-    call beginTestCaseIndexedSuiteIndexed ()
+    call stm.beginTestCaseIndexedSuiteIndexed ()
     call logBusToTest (
     	bus pointer copy busToTest busToTest
     )
     call testBus32 (
     	bus pointer copy busToTest busToTest
     )
-    call endTestCase ( 
+    call stm.endTestCase ( 
     	equ  skipped skipped
-    	equ failure StandardTestFailure
+    	equ failure stm.StandardTestFailure
     )
 end proc
 

@@ -1,5 +1,8 @@
+namespace stm
 
 proc testLabConstantAdd ()
 
     call testConstantAdd ()
 end proc
+
+end namespace

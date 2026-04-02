@@ -1,14 +1,15 @@
+namespace SimStmTest
 
 proc testSignalParameterIn ()
 
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	--trace TRACE_INSTRUCTIONS
 	signal write out_signal_3000 0
 	call checkSignalParameterInput (
 		signal pointer copy this_signal out_signal_3000
 	)
 	
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 
 end proc
 
@@ -17,6 +18,8 @@ proc checkSignalParameterInput (
 )
 	var res 0
 	signal read this_signal res
-	log message INFO_2 "signal: {:d}" res
-	signal verify this_signal res 1 MAX
+	log message stm.INFO_2 "signal: {:d}" res
+	signal verify this_signal res 1 stm.MAX
 end proc
+
+end namespace

@@ -1,4 +1,7 @@
+namespace stm
 
 proc testLabArraySetOutPos ()
     call testArraySetOutPos ()
 end proc
+
+end namespace

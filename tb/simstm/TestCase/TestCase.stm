@@ -1,3 +1,4 @@
+namespace stm
 
 lines TestCaseStartLines
 lines TestCaseLines
@@ -14,22 +15,22 @@ var TestCaseSimulatedEndTime 0
 var TestCaseSimulatedDurationTime 0
 
 proc beginTestCaseIndexedSuiteIndexed ()
-    log message ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" TestSuiteIndex TestCaseIndex
+    log message stm.ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" stm.TestSuiteIndex TestCaseIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
-    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime 
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime 
     lines append message TestCaseStartLines "test case started"
     
-    file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" TestSuiteIndex TestCaseIndex   
+    file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" stm.TestSuiteIndex TestCaseIndex   
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
-    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}_{:d}"' TestSuiteIndex TestCaseIndex
+    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}_{:d}"' stm.TestSuiteIndex TestCaseIndex
     lines size TestCaseLines TestCaseLinesPosition
     equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
 
-    lines append message TestCaseLines ' classname="{@c3}_{:d}"' TestSuiteIndex
+    lines append message TestCaseLines ' classname="{@c3}_{:d}"' stm.TestSuiteIndex
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"'
     lines append message TestCaseLines '>'
@@ -39,21 +40,21 @@ proc beginTestCaseIndexedSuiteIndexed ()
 end proc
 
 proc beginTestCaseSuiteIndexed ()
-    log message ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" TestSuiteIndex
+    log message stm.ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}**********" stm.TestSuiteIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 0
     lines delete all TestCaseLines
-    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
-	file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" TestSuiteIndex
+	file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}.start" stm.TestSuiteIndex
     file write TestCaseStartFile TestCaseStartLines
 
     lines append message TestCaseLines '<testcase'
-    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}"' TestSuiteIndex
+    lines append message TestCaseLines ' name="{@c3}_{:d}_{@c2}"' stm.TestSuiteIndex
     lines size TestCaseLines TestCaseLinesPosition
     equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
 
-    lines append message TestCaseLines ' classname="{@c3}_{:d}"' TestSuiteIndex
+    lines append message TestCaseLines ' classname="{@c3}_{:d}"' stm.TestSuiteIndex
     lines append message TestCaseLines ' file="{@f1}"'
     lines append message TestCaseLines ' line="{@l1}"'
     lines append message TestCaseLines '>'
@@ -64,11 +65,11 @@ end proc
 
 
 proc beginTestCaseIndexed ()
-    log message ALWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
+    log message stm.ALWAYS "**********START*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 1
     lines delete all TestCaseLines
-    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
     file TestCaseStartFile "../../SimulationResults/{@c3}_{@c2}_{:d}.start" TestCaseIndex
     file write TestCaseStartFile TestCaseStartLines
@@ -89,12 +90,12 @@ end proc
 
 
 proc beginTestCase ()
-    log message ALWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
+    log message stm.ALWAYS "**********START*TESTCASE*{@c3}_{@c2}**********"
     equ TestSuiteHasIndex 0
     equ TestCaseHasIndex 0
     lines delete all TestCaseLines
-    signal read sigInSimulatedTimeNow TestCaseSimulatedStartTime
-    log message ALWAYS "Started at simulation time of {:d}ns" TestCaseSimulatedStartTime
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    log message stm.ALWAYS "Started at simulation time of {:d}ns" TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
     file TestCaseStartFile "../../SimulationResults/{@c3}_{@c2}.start"
     file write TestCaseStartFile TestCaseStartLines
@@ -126,11 +127,11 @@ proc endTestCase (
     elsif failure != 0
         call failureTestCase ()
     end if
-    signal read sigInSimulatedTimeNow TestCaseSimulatedEndTime
-    log message ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedEndTime
+    log message stm.ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
-    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' StandardTestVerifyPassCountResult
+    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' stm.StandardTestVerifyPassCountResult
     add TestCasePropertiesInsertionPoint 1
     lines append message TestCaseLines '</testcase>'
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'
@@ -142,23 +143,23 @@ proc endTestCase (
 
     if TestSuiteHasIndex = 1
         if TestCaseHasIndex = 1
-            file TestCaseIndexedSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" TestSuiteIndex TestCaseIndex
+            file TestCaseIndexedSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.xml" stm.TestSuiteIndex TestCaseIndex
             file append TestCaseIndexedSuiteIndexedFile TestCaseLines
-            log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" TestSuiteIndex TestCaseIndex
+            log message stm.ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" stm.TestSuiteIndex TestCaseIndex
         else
-            file TestSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" TestSuiteIndex
+            file TestSuiteIndexedFile "../../SimulationResults/{@c3}_{:d}_{@c2}.xml" stm.TestSuiteIndex
             file append TestSuiteIndexedFile TestCaseLines
-            log message ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" TestSuiteIndex
+            log message stm.ALWAYS "**********END*TESTCASE*{@c3}_{:d}_{@c2}**********" stm.TestSuiteIndex
         end if
      else
         if TestCaseHasIndex = 1
             file TestCaseIndexedFile "../../SimulationResults/{@c3}_{@c2}_{:d}.xml" TestCaseIndex
             file append TestCaseIndexedFile TestCaseLines
-            log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
+            log message stm.ALWAYS "**********END*TESTCASE*{@c3}_{@c2}_{:d}**********" TestCaseIndex
         else
             file TestCaseFile "../../SimulationResults/{@c3}_{@c2}.xml"
             file append TestCaseFile TestCaseLines
-            log message ALWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
+            log message stm.ALWAYS "**********END*TESTCASE*{@c3}_{@c2}**********"
         end if
      end if
 end proc
@@ -186,9 +187,9 @@ proc failureTestCase ()
 end proc
 
 proc testTemplate ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     log message 0 "testTemplate shall never be called directly, it shall be overridden in any case"
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testCase (
@@ -199,6 +200,8 @@ proc testCase (
     call label TestToCall ()
     call endTestCase ( 
         equ  skipped skipped
-        equ failure StandardTestFailure
+        equ failure stm.StandardTestFailure
     )
 end proc
+
+end namespace

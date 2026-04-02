@@ -1,54 +1,55 @@
+namespace SimStmTest
 
 var val_signal_read_back 0xffff
 
 proc testSignalWriteReadVerify ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     signal write out_signal_3000 0
     signal read in_signal_2000 val_signal_read_back
 
-    var verify val_signal_read_back 0 MAX
+    var verify val_signal_read_back 0 stm.MAX
     signal verify in_signal_2000 val_signal_read_back 0 1
 
     signal write out_signal_3000 1
     signal read in_signal_2000 val_signal_read_back
 
-    var verify val_signal_read_back 1 MAX
+    var verify val_signal_read_back 1 stm.MAX
     signal verify in_signal_2000 val_signal_read_back 1 1
 
     signal write out_signal_3000 0xffff
     signal read in_signal_2000 val_signal_read_back
 
-    var verify val_signal_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_read_back 1 MAX
+    var verify val_signal_read_back 1 stm.MAX
+    signal verify in_signal_2000 val_signal_read_back 1 stm.MAX
 
     signal write out_signal_3001 0
     signal read in_signal_2001 val_signal_read_back
 
-    var verify val_signal_read_back 0 MAX
+    var verify val_signal_read_back 0 stm.MAX
     signal verify in_signal_2001 val_signal_read_back 0 1
 
     signal write out_signal_3001 1
     signal read in_signal_2001 val_signal_read_back
 
-    var verify val_signal_read_back 1 MAX
+    var verify val_signal_read_back 1 stm.MAX
     signal verify in_signal_2001 val_signal_read_back 1 1
 
     signal write out_signal_3001 0xffff
     signal read in_signal_2001 val_signal_read_back
 
-    var verify val_signal_read_back 0xff MAX
-    signal verify in_signal_2001 val_signal_read_back 0xff MAX
+    var verify val_signal_read_back 0xff stm.MAX
+    signal verify in_signal_2001 val_signal_read_back 0xff stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
 
 proc testSignalVerifyFail ()
 
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     signal write out_signal_3000 0
 
@@ -56,6 +57,8 @@ proc testSignalVerifyFail ()
     signal verify in_signal_2000 val_signal_read_back 1 1
     call incExpectedStandardTestVerifyFailureCount ()
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
+
+end namespace

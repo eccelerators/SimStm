@@ -1,14 +1,14 @@
 
 proc testVariableParameterIn ()
     var in_val 0xBB
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     
     call checkVariableParameterInput ( 
     	equ par_in_1 0xAA
     	equ par_in_2 in_val
     )
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 
@@ -16,24 +16,24 @@ proc checkVariableParameterInput (
 	var par_in_1 0
 	var par_in_2 0
 )
-    log message INFO_2 "par_in_1 local: {:d}" par_in_1
-    log message INFO_2 "par_in_2 local: {:d}" par_in_2
-	var verify par_in_1 0xAA MAX
-	var verify par_in_2 0xBB MAX	
+    log message stm.INFO_2 "par_in_1 local: {:d}" par_in_1
+    log message stm.INFO_2 "par_in_2 local: {:d}" par_in_2
+	var verify par_in_1 0xAA stm.MAX
+	var verify par_in_2 0xBB stm.MAX	
 end proc
 
 
 proc testVariableParameterOut ()
     
     var out_val 0
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     -- trace TRACE_INSTRUCTIONS
     call setParameterOutput ( 
     	var pointer copy par_out out_val
     )
-    var verify out_val 0xAB MAX
+    var verify out_val 0xAB stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 

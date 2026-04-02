@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var sampleCaseOnlyIndexA 1
 
 proc testSuiteSampleCaseOnlyIndex ()
@@ -24,3 +26,5 @@ proc testCaseSampleCaseOnlyIndexA (
     )
 
 end proc
+
+end namespace

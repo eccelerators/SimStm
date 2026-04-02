@@ -65,23 +65,19 @@ package tb_interpreter_util_pkg is
     );
 
     procedure txt_print_wvar(
-        variable slc : in src_locator;
+        variable ie : in inst_element_ptr;
         variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
         variable rcs : in stm_array_of_runtime_context;
-        variable txt_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
         variable sp : in integer;
         constant machine_value_width : in integer
     );
 
     procedure stm_text_substitude_wvar(
-        variable slc : in src_locator;
+        variable ie : in inst_element_ptr;
         variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
         variable rcs : in stm_array_of_runtime_context;
-        variable txt_ptr : in stm_text_ptr;
-        variable txt_enclosing_quote : in character;
         variable sp : in integer;    
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
@@ -90,14 +86,14 @@ package tb_interpreter_util_pkg is
     procedure access_inst_par_value_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
         variable val : out unsigned
     );
         
     procedure access_inst_par_value_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
@@ -105,7 +101,16 @@ package tb_interpreter_util_pkg is
     procedure access_inst_par_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
+        variable called_proc_name : in text_field;
+        variable val : out unsigned
+    );
+    
+    procedure access_inst_wvar_value_prefer_local(
+        variable ie : in inst_element_ptr;
+        variable vars : in var_pool_ordered;
+        variable wvar_name : in text_field; 
+        variable wvar_is_fqn : in boolean; 
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
@@ -113,14 +118,14 @@ package tb_interpreter_util_pkg is
     procedure access_inst_par_index_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
         variable ven : out integer        
     );    
     
     procedure access_inst_par_index_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
         variable called_proc_name : in text_field;
         variable ven : out integer 
     );    
@@ -128,48 +133,36 @@ package tb_interpreter_util_pkg is
     procedure access_inst_par_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        constant par_num : in integer;
         variable called_proc_name : in text_field;
         variable ven : out integer 
-    );    
+    );  
     
-    procedure access_inst_par_index_global(
-        variable ie : in inst_element;
+    procedure access_inst_wvar_index_prefer_local(
+        variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable par_num : in integer;
-        variable ven : out integer        
-    );    
-    
-    procedure access_inst_par_index_local(
-        variable ie : in inst_element;
-        variable vars : in var_pool_ordered;
-        variable par_num : in integer;
+        variable wvar_name : in text_field; 
+        variable wvar_is_fqn : in boolean; 
         variable called_proc_name : in text_field;
         variable ven : out integer 
-    );    
-    
-    procedure access_inst_par_index_prefer_local(
-        variable ie : in inst_element;
-        variable vars : in var_pool_ordered;
-        variable par_num : in integer;
-        variable called_proc_name : in text_field;
-        variable ven : out integer 
-    ); 
-    
+    ) ;
+            
     procedure access_proc(
+        variable slc : in src_locator;
+        variable procs : in proc_pool_ordered;
+        variable proc_namespace : in text_field;
+        variable proc_name : in text_field;
+        variable proc_name_is_fqn : in boolean;
+        variable proc_element_num : out integer
+    );
+    
+    procedure access_proc_fqn(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     );
     
-     procedure access_proc(
-        variable slc : in src_locator;
-        variable procs : in proc_pool_ordered;
-        variable proc_name_ptr : in text_field_ptr;
-        variable proc_element_num : out integer
-    );
-
     procedure access_var(
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
@@ -367,14 +360,12 @@ package tb_interpreter_util_pkg is
     );
     
     procedure search_var_element_number(
-        variable slc : in src_locator;
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
         variable ien : out integer
     );
     
     procedure search_proc_element_number( 
-        variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable pen : out integer
@@ -393,11 +384,12 @@ package tb_interpreter_util_pkg is
     );
     
     procedure track_inst_initial_context(
-        variable ie : inst_element;
+        variable slc : in src_locator;
+        variable ts : token_text_field_array;
         variable vars : in var_pool_ordered;
         variable iic : inout stm_inst_initial_context
     );
-    
+      
     procedure insert_proc_element(
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;

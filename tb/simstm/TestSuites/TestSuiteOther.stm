@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testSuiteOther ()
 
@@ -41,3 +42,5 @@ proc testSuiteOther ()
     	label set TestToCall testOtherCall
     )
 end proc
+
+end namespace
