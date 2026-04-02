@@ -491,7 +491,7 @@ begin
         print(integer'image(procs.last_element_num) & " procedures"); 
         print(integer'image(insts.last_element_num) & " instructions"); 
 
-        if DUMP_PARSE_RESULTS then dump_inst_sequence(insts, code_files); end if;
+        if DUMP_PARSE_RESULTS then dump_inst_sequence(insts); end if;
         if DUMP_PARSE_RESULTS then dump_proc_pool_ordered(procs); end if;
         
         print("checking if all variables are initially defined for all instructions");
@@ -561,7 +561,7 @@ begin
                     dump_var_pool_ordered(vars, machine_value_width);
                 end if;
                 if trc_on(TRACE_INSTRUCTIONS) then
-                    print_inst_element(insts, ien, code_files);
+                    print_inst_element(insts, ien);
                 end if;
 
                 executing_line <= file_line;
@@ -1524,8 +1524,7 @@ begin
                     finish;
 
                 -- proc
-                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC
-                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN
+                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN
                       or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
                     null; -- no action necessary
 

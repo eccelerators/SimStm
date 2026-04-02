@@ -169,8 +169,8 @@ package body tb_interpreter_pkg is
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);                                         
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
                         vn := append_local_scope(vn, iic.proc_name); 
-                        insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
-                        val2 := stim_to_stm_value(ie.slc, ie.inst_args.par_text_fields(2), machine_value_width);
+                        insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);         
+                        val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
                         vars.element_ptrs(ven1).values_org(0) := val2;
                     end if;                
@@ -252,7 +252,7 @@ package body tb_interpreter_pkg is
                             else
                                 access_inst_par_index_prefer_local(ie, vars, 2, iic.called_proc_name, ven2);
                                 val2 := vars.element_ptrs(ven2).values(0);
-                                ie.inst_args.par_text_fields(2) := to_text_field(val2);                              
+                                ie.inst_args.par_literal_values(2) := val2;                              
                                 insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             end if;
                         end if;
@@ -288,6 +288,7 @@ package body tb_interpreter_pkg is
         variable ts : token_text_field_array;
         variable ie : inst_element_ptr;
         variable pen : integer;
+        variable pn : text_field;
         variable fn : text_field;
         variable slc : src_locator;
     begin
@@ -335,7 +336,11 @@ package body tb_interpreter_pkg is
                             -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
                             if proc_type then
                                 -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
-                                insert_proc_element(ie.slc, procs, ie.inst_args.par_text_fields(1), debug, pen);
+                                    pn := ie.inst_args.par_text_fields(1);
+                                    if not contains_dot(pn) then
+                                        pn := prepend_namespace(pn, ie.inst_namespace);
+                                    end if;
+                                insert_proc_element(ie.slc, procs, pn, debug, pen);
                                 procs.element_ptrs(pen).pointer_to_ien := insts.last_element_num + 1;
                                 append_inst(insts, ie, debug);
                             else
@@ -365,13 +370,19 @@ package body tb_interpreter_pkg is
     ) is   
         variable iic : stm_inst_initial_context;
         variable par_scopes : parameter_text_field_array;
-        variable par_value : unsigned(machine_value_width downto 0);
+        variable par_value : unsigned(machine_value_width - 1 downto 0);
         variable slc : src_locator;
         variable ts : token_text_field_array;
         variable ie : inst_element_ptr;
+        variable ien : integer;
+        variable pn : text_field;
+        variable pn_is_fqn : boolean;
+        variable pen : integer;
     begin
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
+            ien := i;
+            print_inst_element(insts, ien);
             ie := insts.element_ptrs(i);
             slc := ie.slc;            
             ts(1) := ie.inst;
@@ -385,24 +396,45 @@ package body tb_interpreter_pkg is
             if iic.code_section = CALL_PARAMS then
                 par_scopes := (1 => iic.called_proc_name, others => iic.proc_name);
             end if;
-            for i in 1 to 6 loop
-                if ie.inst_args.par_text_fields(i)(1) /= nul then
-                    case i is
-                        when 1 => 
-                            access_inst_par_value_prefer_local(ie, vars, 1, par_scopes(1), par_value);
-                        when 2 => 
-                            access_inst_par_value_prefer_local(ie, vars, 2, par_scopes(2), par_value);
-                        when 3 => 
-                            access_inst_par_value_prefer_local(ie, vars, 3, par_scopes(3), par_value);
-                        when 4 => 
-                            access_inst_par_value_prefer_local(ie, vars, 4, par_scopes(4), par_value);
-                        when 5 => 
-                            access_inst_par_value_prefer_local(ie, vars, 5, par_scopes(5), par_value);
-                        when 6 => 
-                            access_inst_par_value_prefer_local(ie, vars, 6, par_scopes(6), par_value);
-                    end case;
-                end if;
-            end loop;
+            if ie.inst(1 to ie.inst_len) /= INSTR_NAMESPACE 
+               and ie.inst(1 to ie.inst_len) /= INSTR_PROC_PAR_OPEN
+               and ie.inst(1 to ie.inst_len) /= INSTR_PROC_NOPAR
+               and ie.inst(1 to ie.inst_len) /= INSTR_CALL_PAR_OPEN
+               and ie.inst(1 to ie.inst_len) /= INSTR_CALL_NOPAR
+            then
+                for i in 1 to 6 loop
+                    if ie.inst_args.par_text_fields(i)(1) /= nul then
+                        case i is
+                            when 1 => 
+                                access_inst_par_value_prefer_local(ie, vars, 1, par_scopes(1), par_value);
+                            when 2 => 
+                                if ie.inst(1 to ie.inst_len) = INSTR_LABEL then
+                                    pn := ie.inst_args.par_text_fields(2);
+                                    if contains_dot(pn) then
+                                        pn_is_fqn := true;
+                                    else
+                                        pn_is_fqn := false;
+                                    end if;
+                                    access_proc(slc, procs, ie.inst_namespace, pn, pn_is_fqn, pen);                               
+                                else
+                                    if ie.inst(1 to ie.inst_len) /= INSTR_IF
+                                        and ie.inst(1 to ie.inst_len) /= INSTR_ELSIF
+                                    then
+                                        access_inst_par_value_prefer_local(ie, vars, 2, par_scopes(2), par_value);
+                                    end if;
+                                end if;
+                            when 3 => 
+                                access_inst_par_value_prefer_local(ie, vars, 3, par_scopes(3), par_value);
+                            when 4 => 
+                                access_inst_par_value_prefer_local(ie, vars, 4, par_scopes(4), par_value);
+                            when 5 => 
+                                access_inst_par_value_prefer_local(ie, vars, 5, par_scopes(5), par_value);
+                            when 6 => 
+                                access_inst_par_value_prefer_local(ie, vars, 6, par_scopes(6), par_value);
+                        end case;
+                    end if;
+                end loop;
+            end if;
         end loop;
     end procedure;
         

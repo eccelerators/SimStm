@@ -150,6 +150,7 @@ package body tb_base_pkg is
         ne_ptr.slc := ie.slc;
         ne_ptr.inst := ie.inst;
         ne_ptr.inst_len := fld_len(ie.inst);
+        ne_ptr.inst_namespace := ie.inst_namespace;
         ne_ptr.inst_args := ie.inst_args;
         insts.element_ptrs(nen) := ne_ptr;
         insts.last_element_num := nen;
@@ -202,18 +203,20 @@ package body tb_base_pkg is
         variable plit_vals : out parameter_value_array_ptr;
         constant machine_value_width : integer
     ) is
-        variable ps : parameter_text_field_array;
     begin
+        plit_vals := new parameter_value_array(1 to 6)(machine_value_width - 1 downto 0);
         for i in 1 to 6 loop 
             ptps(i) := PAR_NM;
             ptfs(i) := ts(i + 1);
             if is_digit(ptfs(i)(1)) then
-                ptps(i) := PAR_LIT;
+                ptps(i) := PAR_LIT;                
                 plit_vals(i) := stim_to_stm_value(slc, ptfs(i), machine_value_width);
             elsif contains_dot(ptfs(i)) then
                 ptps(i) := PAR_FQN;
+                plit_vals(i) := to_unsigned(0, machine_value_width);
             else
                 ptps(i) := PAR_NM;
+                plit_vals(i) := to_unsigned(0, machine_value_width);
             end if;     
         end loop;
     end procedure; 

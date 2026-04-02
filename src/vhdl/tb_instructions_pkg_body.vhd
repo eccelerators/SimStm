@@ -159,7 +159,6 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_ARRAY_POINTER_COPY_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_ARRAY_VERIFY, 4);
         -- others
-        append_inst_def(inst_defs, INSTR_PROC, 0);
         append_inst_def(inst_defs, INSTR_PROC_PAR_OPEN, 1);
         append_inst_def(inst_defs, INSTR_PROC_NOPAR, 1);
         append_inst_def(inst_defs, INSTR_CALL_PAR_OPEN, 1);

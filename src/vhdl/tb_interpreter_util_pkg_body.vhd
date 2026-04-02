@@ -527,7 +527,6 @@ package body tb_interpreter_util_pkg is
         variable val : out unsigned
     ) is
         variable ptf : text_field;
-        variable vn : text_field;
         variable ven : integer;
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
@@ -678,7 +677,7 @@ package body tb_interpreter_util_pkg is
         variable pen : integer;
     begin
         if proc_name_is_fqn then
-             pn := proc_name;
+            pn := proc_name;
         else
             pn := prepend_namespace(proc_name, proc_namespace);
         end if;
@@ -1022,8 +1021,7 @@ package body tb_interpreter_util_pkg is
 
     procedure print_inst_element(
         variable insts : in inst_sequence;
-        variable inst_element_num : in integer;
-        variable code_files : in file_def_list
+        variable inst_element_num : in integer
     ) is
         variable pl : integer;
         variable eq : character;
@@ -1035,29 +1033,37 @@ package body tb_interpreter_util_pkg is
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
         print(".... instruction element number: " & crop(to_text_field(inst_element_num))& "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
+        print(".... instruction namespace: " & crop(insts.element_ptrs(inst_element_num).inst_namespace));
         print(".... instruction file name: " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
         print(".... instruction file linenumber: " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));              
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
                 print(".... par" & integer'image(i) & " " & insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
+                if insts.element_ptrs(inst_element_num).inst_args.par_types(i) = PAR_LIT then
+                    print(".... par_type" & integer'image(i) & " PAR_LIT");
+                elsif insts.element_ptrs(inst_element_num).inst_args.par_types(i) = PAR_FQN then
+                    print(".... par_type" & integer'image(i) & " PAR_FQN");
+                else
+                    print(".... par_type" & integer'image(i) & " PAR_NM");
+                end if;
+                print(".... par_literal_value" & integer'image(i) & " " & crop(to_text_field_hex(insts.element_ptrs(inst_element_num).inst_args.par_literal_values(i))));
             end if;
         end loop;
         txt_to_string(insts.element_ptrs(inst_element_num).inst_args.txt, txt);
         eq := insts.element_ptrs(inst_element_num).inst_args.txt_enclosing_quote;
-        print(".... text: " & txt);
+        print(".... text: " & eq & txt & eq);
     end procedure;
 
     procedure dump_inst_sequence(
-        variable insts : in inst_sequence;
-        variable code_files : in file_def_list
+        variable insts : in inst_sequence
     ) is
         variable ien : integer;
     begin
         print("++++ --dump_var_pool_ordered-----------------------------------------------------");
         for i in 0 to insts.last_element_num loop
             ien := i;
-            print_inst_element(insts, ien, code_files);
+            print_inst_element(insts, ien);
         end loop;
     end procedure;
 

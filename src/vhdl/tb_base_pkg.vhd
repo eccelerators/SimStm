@@ -78,7 +78,7 @@ package tb_base_pkg is
     type parameter_text_field_array is array (1 to 6) of text_field;
     type parameter_index_array is array (1 to 6) of integer;
     
-    type parameter_value_array is array (1 to 6) of unsigned;
+    type parameter_value_array is array (natural range <>) of unsigned;
     type parameter_value_array_ptr is access parameter_value_array;
     
     type parameter_type is (PAR_LIT, PAR_FQN, PAR_NM);

@@ -313,13 +313,11 @@ package tb_interpreter_util_pkg is
 
     procedure print_inst_element(
         variable insts : in inst_sequence;
-        variable inst_element_num : in integer;
-        variable code_files : in file_def_list
+        variable inst_element_num : in integer
     );
 
     procedure dump_inst_sequence(
-        variable insts : in inst_sequence;
-        variable code_files : in file_def_list
+        variable insts : in inst_sequence
     );
 
     procedure dump_var_pool_ordered(
