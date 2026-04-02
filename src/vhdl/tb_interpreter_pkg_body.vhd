@@ -107,6 +107,79 @@ package body tb_interpreter_pkg is
         file_close(stimulus);  
     end procedure;  
     
+
+    procedure parse_labels(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered;
+        variable procs : inout proc_pool_ordered; 
+        constant machine_value_width : integer;
+        constant debug : boolean
+    ) is
+        variable fos : file_open_status;
+        variable afn : text_line;
+        variable file_line : integer;        
+        variable tl : text_line;
+        variable il : integer;
+        variable txt : stm_text_ptr;
+        variable txt_enclosing_quote : character;
+        variable valid_tokens : integer;
+        variable valid_params : integer;        
+        variable iic : stm_inst_initial_context;
+        file stimulus : text; 
+        variable ts : token_text_field_array;
+        variable ie : inst_element_ptr;
+        variable vn : text_field;
+        variable ven1 : integer;
+        variable val2 : unsigned(machine_value_width -1 downto 0);  
+        variable fn : text_field;
+        variable slc : src_locator;
+    begin 
+        for i in 0 to code_files.last_element_num loop
+            afn := code_files.element_ptrs(i).absolute_file_name;
+            fn := code_files.element_ptrs(i).file_name;
+            file_open(fos, stimulus, afn, read_mode);
+            assert fos = open_ok
+            report "unable to open code file  " & afn
+            severity failure;
+            file_line := 0;
+            init_inst_initial_context(iic);
+            if debug then 
+                print("parsing code file for labels " & crop(fn));
+            end if;
+            while not endfile(stimulus) loop
+                file_line := file_line + 1;
+                file_read_line(stimulus, tl);
+                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);  
+                if valid_tokens /= 0 then
+                    slc.file_name := fn;
+                    slc.file_line := file_line;
+                    track_inst_initial_context(slc, ts, vars, iic, false);                  
+                    il := fld_len(ts(1));              
+                    if ts(1)(1 to il) = INSTR_LABEL then
+                        ie := new inst_element;
+                        ie.slc := slc;
+                        ie.inst := ts(1);
+                        ie.inst_len := il;
+                        ie.inst_namespace := iic.namespace_name;
+                        extract_parameters(slc, ts, ie.inst_args.par_text_fields, ie.inst_args.par_types, ie.inst_args.par_literal_values, machine_value_width);
+                        ie.inst_args.txt := txt;
+                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;                        
+                        valid_params := valid_tokens - 1;
+                        check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);                                         
+                        vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
+                        vn := append_dot(vn);                  
+                        insert_var_element(ie.slc, vars, vn, ie.inst_args, T_LABEL, machine_value_width, debug, ven1);         
+                        val2 := ie.inst_args.par_literal_values(2);
+                        vars.element_ptrs(ven1).values(0) := val2;
+                        vars.element_ptrs(ven1).values_org(0) := val2;
+                    end if;                
+                end if;            
+            end loop;
+            file_close(stimulus);
+        end loop;
+    end procedure;
+
       
     procedure parse_constants(
         variable code_files : in file_def_list;
@@ -147,14 +220,14 @@ package body tb_interpreter_pkg is
             if debug then 
                 print("parsing code file for constants " & crop(fn));
             end if;
-            while not endfile(stimulus) loop
+            while not endfile(stimulus) loop               
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
                 tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);  
-                if valid_tokens /= 0 then
+                if valid_tokens /= 0 then                   
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic);
+                    track_inst_initial_context(slc, ts, vars, iic, true);
                     il := fld_len(ts(1));              
                     if ts(1)(1 to il) = INSTR_CONST then
                         ie := new inst_element;
@@ -173,6 +246,7 @@ package body tb_interpreter_pkg is
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
                         vars.element_ptrs(ven1).values_org(0) := val2;
+                        dump_var_pool_ordered(vars, machine_value_width);
                     end if;                
                 end if;            
             end loop;
@@ -230,9 +304,11 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic);
+                    track_inst_initial_context(slc, ts, vars, iic, true);
                     il := fld_len(ts(1));       
-                    if ts(1)(1 to il) /= INSTR_CONST then
+                    if ts(1)(1 to il) /= INSTR_CONST 
+                       and ts(1)(1 to il) /= INSTR_LABEL 
+                    then
                         ie := new inst_element;
                         ie.slc := slc;
                         ie.inst := ts(1);
@@ -312,7 +388,7 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic);
+                    track_inst_initial_context(slc, ts, vars, iic, true);
                     il := fld_len(ts(1));
                     ie := new inst_element; 
                     ie.slc := slc;
@@ -389,7 +465,7 @@ package body tb_interpreter_pkg is
             for k in 1 to 6 loop
                 ts(k + 1) := ie.inst_args.par_text_fields(k);
             end loop;                                   
-            track_inst_initial_context(slc, ts, vars, iic);
+            track_inst_initial_context(slc, ts, vars, iic, true);
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
             end if;

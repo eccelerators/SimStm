@@ -1351,7 +1351,8 @@ package body tb_interpreter_util_pkg is
             end if;    
         end loop;    
         for i in s.left to s.right loop
-            if vars.element_ptrs(i).name = var_name then
+            cmp_name := vars.element_ptrs(i).name;
+            if cmp_name = var_name then
                 en := i;
                 exit;
             end if;              
@@ -1391,7 +1392,8 @@ package body tb_interpreter_util_pkg is
             end if;    
         end loop;    
         for i in s.left to s.right loop
-            if procs.element_ptrs(i).name = proc_name then
+            cmp_name := procs.element_ptrs(i).name;
+            if cmp_name = proc_name then
                 en := i;
                 exit;
             end if;              
@@ -1443,7 +1445,8 @@ package body tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable ts : in token_text_field_array;
         variable vars : in var_pool_ordered;
-        variable iic : inout stm_inst_initial_context
+        variable iic : inout stm_inst_initial_context;
+        constant others_but_namespace_too : boolean
     ) is
         variable inst : text_field;
         variable il : integer;
@@ -1461,71 +1464,74 @@ package body tb_interpreter_util_pkg is
         if inst(1 to il) = INSTR_END_NAMESPACE then
             iic.namespace_name := cut_trailing_namespace(iic.namespace_name);
         end if;
-        if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-            iic.code_section := PROC_PARAMS;
-            iic.proc_name := ts(2);
-        end if;
-        if inst(1 to il) = INSTR_PROC_NOPAR then
-            iic.code_section := PROC_BODY;
-            iic.proc_name := ts(2);
-        end if;
-        if inst(1 to il) = INSTR_END_PROC then
-            iic.code_section := NONE;
-            iic.proc_name := (others => nul); 
-            iic.called_proc_name := (others => nul);
-        end if;
-
-        if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-            iic.code_section := CALL_PARAMS;
-            iic.called_proc_name := ts(2);
-        end if;
-        if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-            iic.code_section := CALL_PARAMS;
-            ie := new inst_element;
-            ie.slc := slc;
-            ie.inst := inst;
-            ie.inst_len := il;
-            ie.inst_args.par_text_fields(1) := ts(2);
-            access_inst_par_index_prefer_local(ie, vars, 1, iic.proc_name, ven);
-            pn_ptr := vars.element_ptrs(ven).label_proc_ref;
-            text_field_ptr_to_text_field(pn_ptr, pn);
-            iic.called_proc_name := pn;
-        end if;
-        if inst(1 to il) = INSTR_PAR_CLOSE
-            or inst(1 to il) = INSTR_EQU_PAR_CLOSE
-            or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
-            or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-            if iic.code_section = PROC_PARAMS then
-                iic.code_section := PROC_BODY;
+        if others_but_namespace_too then
+            if inst(1 to il) = INSTR_PROC_PAR_OPEN then
+                iic.code_section := PROC_PARAMS;
+                iic.proc_name := ts(2);
             end if;
-            if iic.code_section = CALL_PARAMS then
+            if inst(1 to il) = INSTR_PROC_NOPAR then
                 iic.code_section := PROC_BODY;
+                iic.proc_name := ts(2);
             end if;
-        end if;
-        iic.is_var_declaration := false;
-        if inst(1 to il) = INSTR_CONST
-            or inst(1 to il) = INSTR_VAR
-            or inst(1 to il) = INSTR_VAR_PAR_CLOSE
-            or inst(1 to il) = INSTR_SIGNAL
-            or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS
-            or inst(1 to il) = INSTR_BUS_PAR_CLOSE
-            or inst(1 to il) = INSTR_FILE
-            or inst(1 to il) = INSTR_FILE_PAR_CLOSE
-            or inst(1 to il) = INSTR_LABEL
-            or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
-            or inst(1 to il) = INSTR_LINES
-            or inst(1 to il) = INSTR_LINES_PAR_CLOSE
-            or inst(1 to il) = INSTR_ARRAY
-            or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
-            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-                iic.is_var_declaration := true;
+            if inst(1 to il) = INSTR_END_PROC then
+                iic.code_section := NONE;
+                iic.proc_name := (others => nul); 
+                iic.called_proc_name := (others => nul);
+            end if;
+    
+            if inst(1 to il) = INSTR_CALL_PAR_OPEN then
+                iic.code_section := CALL_PARAMS;
+                iic.called_proc_name := ts(2);
+            end if;
+            if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+                iic.code_section := CALL_PARAMS;
+                ie := new inst_element;
+                ie.slc := slc;
+                ie.inst := inst;
+                ie.inst_len := il;
+                ie.inst_namespace := iic.namespace_name;
+                ie.inst_args.par_text_fields(1) := ts(2);
+                access_inst_par_index_prefer_local(ie, vars, 1, iic.proc_name, ven);
+                pn_ptr := vars.element_ptrs(ven).label_proc_ref;
+                text_field_ptr_to_text_field(pn_ptr, pn);
+                iic.called_proc_name := pn;
+            end if;
+            if inst(1 to il) = INSTR_PAR_CLOSE
+                or inst(1 to il) = INSTR_EQU_PAR_CLOSE
+                or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
+                or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
+                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+                if iic.code_section = PROC_PARAMS then
+                    iic.code_section := PROC_BODY;
+                end if;
+                if iic.code_section = CALL_PARAMS then
+                    iic.code_section := PROC_BODY;
+                end if;
+            end if;
+            iic.is_var_declaration := false;
+            if inst(1 to il) = INSTR_CONST
+                or inst(1 to il) = INSTR_VAR
+                or inst(1 to il) = INSTR_VAR_PAR_CLOSE
+                or inst(1 to il) = INSTR_SIGNAL
+                or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
+                or inst(1 to il) = INSTR_BUS
+                or inst(1 to il) = INSTR_BUS_PAR_CLOSE
+                or inst(1 to il) = INSTR_FILE
+                or inst(1 to il) = INSTR_FILE_PAR_CLOSE
+                or inst(1 to il) = INSTR_LABEL
+                or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
+                or inst(1 to il) = INSTR_LINES
+                or inst(1 to il) = INSTR_LINES_PAR_CLOSE
+                or inst(1 to il) = INSTR_ARRAY
+                or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
+                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+                    iic.is_var_declaration := true;
+            end if;
         end if;
     end procedure;
                
@@ -1549,7 +1555,7 @@ package body tb_interpreter_util_pkg is
         ne.slc := slc;
         
         insert_before := -1;   
-        if procs.last_element_num > 0 then          
+        if procs.last_element_num >= 0 then          
             s.left := 0;
             s.right := procs.last_element_num;                       
             while s.right - s.left > 8 loop
@@ -1751,7 +1757,7 @@ package body tb_interpreter_util_pkg is
         end case;        
    
         insert_before := -1;   
-        if vars.last_element_num > 0 then          
+        if vars.last_element_num >= 0 then          
             s.left := 0;
             s.right := vars.last_element_num;                       
             while s.right - s.left > 8 loop

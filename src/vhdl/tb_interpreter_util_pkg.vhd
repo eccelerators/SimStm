@@ -383,9 +383,10 @@ package tb_interpreter_util_pkg is
     
     procedure track_inst_initial_context(
         variable slc : in src_locator;
-        variable ts : token_text_field_array;
+        variable ts : in token_text_field_array;
         variable vars : in var_pool_ordered;
-        variable iic : inout stm_inst_initial_context
+        variable iic : inout stm_inst_initial_context;
+        constant others_but_namespace_too : boolean
     );
       
     procedure insert_proc_element(

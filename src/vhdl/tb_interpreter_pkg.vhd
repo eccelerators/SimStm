@@ -58,6 +58,15 @@ package tb_interpreter_pkg is
         constant stimulus_path : string;
         variable stimulus_file : string
     );
+    
+    procedure parse_labels(
+        variable code_files : in file_def_list;
+        variable inst_defs : in inst_def_list;
+        variable vars : inout var_pool_ordered;
+        variable procs : inout proc_pool_ordered; 
+        constant machine_value_width : integer;
+        constant debug : boolean
+    );
 
     procedure parse_constants(
         variable code_files : in file_def_list;

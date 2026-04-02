@@ -158,6 +158,7 @@ begin
         variable il : integer;
         variable slc : src_locator;
         
+        variable nol : integer;
         variable noc : integer;
         
         variable stimulus_file_var : string (1 to stimulus_file'length) := stimulus_file;
@@ -476,12 +477,19 @@ begin
         
         init_var_pool_ordered(vars);
         print("parsing stimulus code files");
+        
+        parse_labels(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
+        nol := vars.last_element_num;
+        print(integer'image(nol) & " labels");
+        
+        dump_var_pool_ordered(vars, machine_value_width);
+        
         parse_constants(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW); 
-        noc := vars.last_element_num;
+        noc := vars.last_element_num - nol;
         print(integer'image(noc) & " constants");  
         
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW); 
-        print(integer'image(vars.last_element_num - noc) & " variables");  
+        print(integer'image(vars.last_element_num - noc - nol) & " variables");  
         
         if DUMP_PARSE_RESULTS then dump_var_pool_ordered(vars, machine_value_width); end if;
                              
