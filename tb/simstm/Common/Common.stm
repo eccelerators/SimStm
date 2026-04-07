@@ -1,7 +1,7 @@
-namespace SimStmTest
-
 include "Base/Base.stm"
 include "TestCase/TestCase.stm"
+
+namespace SimStmTest
 
 const NO_BUS 0
 bus wishbone32 1

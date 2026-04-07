@@ -1,11 +1,11 @@
-namespace SimStmTest
+
 
 include "Common/Common.stm"
 
 include "Constant/constant.stm"
 
 include "TestSuites/TestSuiteConstant.stm"
-
+namespace SimStmTest
 proc testMainSuiteConstant ()
 
     call stm.initBase ()

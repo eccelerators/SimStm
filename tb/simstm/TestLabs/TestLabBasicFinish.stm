@@ -1,4 +1,4 @@
-namespace stm
+namespace SimStmTest
 
 proc testLabBasicFinish ()
 

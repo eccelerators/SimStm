@@ -1,13 +1,16 @@
-namespace SimStmTest
+
 
 include "Common/CommonLabs.stm"
 include "TestLabs/TestLabArrayZeroSize.stm"
 
 include "Array/array_labs_zero_size.stm"
 
+
+
+namespace SimStmTest
+
 file simulation_success "simulation.success"
 lines success_lines
-
 
 proc testMainLabArrayZeroSize ()
     call stm.initBase ()

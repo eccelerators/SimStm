@@ -8,7 +8,7 @@ include "Lines/lines_pointer.stm"
 include "Lines/lines_local_override.stm"
 
 include "TestSuites/TestSuiteLines.stm"
-
+namespace SimStmTest
 proc testMainSuiteLines ()
 
     call stm.initBase ()
@@ -27,3 +27,4 @@ proc testMainSuiteLines ()
     wait 1000
     finish
 end proc
+end namespace

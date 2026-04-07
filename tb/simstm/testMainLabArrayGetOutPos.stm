@@ -4,6 +4,7 @@ include "Array/array_labs.stm"
 
 include "TestLabs/TestLabArrayGetOutPos.stm"
 
+namespace SimStmTest
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -16,7 +17,7 @@ proc testMainLabArrayGetOutPos ()
     resume 1
     signal write out_signal_init_dut 1
     wait 1000
-    signal write out_signal_init_dut 0
+    signal write out_signal_init_dut 0 
     log message stm.INFO "Main test started"
 
     call testLabArrayGetOutPos ()
@@ -27,3 +28,5 @@ proc testMainLabArrayGetOutPos ()
     file write simulation_success success_lines
     finish
 end proc
+
+end namespace

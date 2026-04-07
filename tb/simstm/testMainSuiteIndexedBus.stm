@@ -1,4 +1,4 @@
-namespace SimStmTest
+
 
 include "Common/Common.stm"
 
@@ -8,7 +8,7 @@ include "Bus/bus128.stm"
 include "Bus/bus256.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
-
+namespace SimStmTest
 const testMainSuiteIndexedBusMaximumIndex 32
 
 proc testMainSuiteIndexedBus ()

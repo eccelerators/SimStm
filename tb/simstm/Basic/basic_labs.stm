@@ -1,3 +1,10 @@
+include "Basic/lib1.stm"
+include "Basic/lib2.stm"
+include "Basic/lib3.stm"
+include "Basic/lib4.stm"
+include "Basic/lib5.stm"
+include "Basic/lib6.stm"
+
 namespace SimStmTest
 
 proc testBasicAbort ()
@@ -9,14 +16,6 @@ proc testBasicFinish ()
     finish
 end proc
 
-include "Basic/lib1.stm"
-include "Basic/lib2.stm"
-include "Basic/lib3.stm"
-include "Basic/lib4.stm"
-include "Basic/lib5.stm"
-include "Basic/lib6.stm"
-
-
 proc testBasicIncludeFlat ()
     log message 0 "load file test.stm"
     call Lib1 ()
@@ -25,9 +24,6 @@ proc testBasicIncludeFlat ()
     finish
 
 end proc
-
-include "Basic/lib4.stm"
-include "Basic/lib5.stm"
 
 
 proc testBasicIncludeNested ()

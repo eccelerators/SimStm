@@ -1,55 +1,55 @@
+include "Common/Common.stm"
+--include "Signal/signal.stm"
+--include "Signal/signal_pointer.stm"
+--include "Signal/signal_parameter.stm"
+--include "Signal/signal_local_override.stm"
+
+--include "Bus/bus32.stm"
+--include "Bus/bus64.stm"
+--include "Bus/bus128.stm"
+--include "Bus/bus256.stm"
+--include "Bus/bus32_parameter.stm"
+--include "Bus/bus32_pointer.stm"
+--include "Base/Array.stm"
+
+--include "namespace/namespace.stm"
+
+--include "Other/other.stm"
+--include "Variable/variable.stm"
+--include "Variable/variable_local.stm"
+--include "Variable/variable_local_override.stm"
+--include "Variable/variable_pointer.stm"
+--include "Variable/variable_default_value.stm"
+
+
+--include "Array/array.stm"
+--include "Array/array_local.stm"
+--include "Array/array_local_override.stm"
+--include "Array/array_parameter.stm"
+--include "Array/array_default_value.stm"
+--include "Array/array_size.stm"
+--include "Array/array_pointer.stm"
+
+--include "Lines/lines.stm"
+--include "Lines/lines_local_override.stm"
+--include "Lines/lines_local.stm"
+--include "Lines/lines_parameter.stm"
+--include "Lines/lines_pointer.stm"
+
+--include "File/file.stm"
+--include "File/file_pointer.stm"
+--include "File/file_parameter.stm"
+--include "File/file_local.stm"
+--include "File/file_local_override.stm"
+
+--include "TestSuites/TestSuiteIndexedBus.stm"
+
+--include "TestSuites/TestSuiteArray.stm"
+--include "TestSuites/TestSuiteVariable.stm"
+include "Label/label.stm"
+include "other/other.stm"
+
 namespace SimStmTest
-
-    include "Common/Common.stm"
-    --include "Signal/signal.stm"
-    --include "Signal/signal_pointer.stm"
-    --include "Signal/signal_parameter.stm"
-    --include "Signal/signal_local_override.stm"
-
-    --include "Bus/bus32.stm"
-    --include "Bus/bus64.stm"
-    --include "Bus/bus128.stm"
-    --include "Bus/bus256.stm"
-    --include "Bus/bus32_parameter.stm"
-    --include "Bus/bus32_pointer.stm"
-    --include "Base/Array.stm"
-
-    --include "namespace/namespace.stm"
-
-    --include "Other/other.stm"
-    --include "Variable/variable.stm"
-    --include "Variable/variable_local.stm"
-    --include "Variable/variable_local_override.stm"
-    --include "Variable/variable_pointer.stm"
-    --include "Variable/variable_default_value.stm"
-
-
-    --include "Array/array.stm"
-    --include "Array/array_local.stm"
-    --include "Array/array_local_override.stm"
-    --include "Array/array_parameter.stm"
-    --include "Array/array_default_value.stm"
-    --include "Array/array_size.stm"
-    --include "Array/array_pointer.stm"
-
-    --include "Lines/lines.stm"
-    --include "Lines/lines_local_override.stm"
-    --include "Lines/lines_local.stm"
-    --include "Lines/lines_parameter.stm"
-    --include "Lines/lines_pointer.stm"
-
-    --include "File/file.stm"
-    --include "File/file_pointer.stm"
-    --include "File/file_parameter.stm"
-    --include "File/file_local.stm"
-    --include "File/file_local_override.stm"
-
-    --include "TestSuites/TestSuiteIndexedBus.stm"
-
-    --include "TestSuites/TestSuiteArray.stm"
-    --include "TestSuites/TestSuiteVariable.stm"
-    include "Label/label.stm"
-    --include "other/other.stm"
 
     lines success_lines
     file simulation_success "simulation.success"

@@ -3,7 +3,7 @@ include "Common/Common.stm"
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteIndexedSampleSuiteOnlyIndex.stm"
-
+namespace SimStmTest
 const testMainSuiteIndexedSampleSuiteOnlyIndexMaximumIndex 4
 
 proc testMainSuiteIndexedSampleSuiteOnlyIndex ()
@@ -25,3 +25,4 @@ proc testMainSuiteIndexedSampleSuiteOnlyIndex ()
     wait 1000
     finish
 end proc
+end namespace

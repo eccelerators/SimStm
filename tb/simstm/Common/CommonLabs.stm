@@ -1,6 +1,6 @@
-namespace SimTtmTest
-
 include "Base/Base.stm"
+
+namespace SimTtmTest
 
 bus wishbone 0
 bus avalon 1

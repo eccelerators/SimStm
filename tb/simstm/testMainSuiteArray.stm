@@ -11,6 +11,8 @@ include "Array/array_parameter.stm"
 
 include "TestSuites/TestSuiteArray.stm"
 
+namespace SimStmTest
+
 proc testMainSuiteArray ()
 
     call stm.initBase ()
@@ -29,3 +31,4 @@ proc testMainSuiteArray ()
     wait 1000
     finish
 end proc
+end namespace

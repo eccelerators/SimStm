@@ -1,9 +1,11 @@
-namespace SimStmTest
+
 
 include "Common/CommonLabs.stm"
 include "TestLabs/TestLabBasicAbort.stm"
 
 include "Basic/basic_labs.stm"
+
+namespace SimStmTest
 
 file simulation_success "simulation.success"
 lines success_lines

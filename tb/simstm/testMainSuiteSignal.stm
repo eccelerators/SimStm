@@ -4,7 +4,7 @@ include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
 
 include "TestSuites/TestSuiteSignal.stm"
-
+namespace SimStmTest
 proc testMainSuiteSignal ()
 
     call stm.initBase ()
@@ -23,3 +23,4 @@ proc testMainSuiteSignal ()
     wait 1000
     finish
 end proc
+end namespace

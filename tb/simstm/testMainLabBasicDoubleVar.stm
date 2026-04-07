@@ -3,6 +3,7 @@ include "TestLabs/TestLabBasicDoubleVar.stm"
 
 include "Basic/basic_labs_double_var.stm"
 
+namespace SimStmTest
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -26,3 +27,4 @@ proc testMainLabBasicDoubleVar ()
     file write simulation_success success_lines
     finish
 end proc
+end namespace

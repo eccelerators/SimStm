@@ -3,7 +3,7 @@ include "Common/Common.stm"
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteSample.stm"
-
+namespace SimStmTest
 proc testMainSuiteSample ()
 
     call stm.initBase ()
@@ -23,3 +23,4 @@ proc testMainSuiteSample ()
     wait 1000
     finish
 end proc
+end namespace

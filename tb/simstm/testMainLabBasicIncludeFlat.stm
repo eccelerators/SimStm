@@ -3,6 +3,8 @@ include "TestLabs/TestLabBasicIncludeFlat.stm"
 
 include "Basic/basic_labs.stm"
 
+namespace SimStmTest
+
 file simulation_success "simulation.success"
 lines success_lines
 
@@ -26,3 +28,4 @@ proc testMainLabBasicIncludeFlat ()
     file write simulation_success success_lines
     finish
 end proc
+end namespace

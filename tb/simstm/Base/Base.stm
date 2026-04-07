@@ -154,7 +154,7 @@ proc startStandardTestShell ()
     signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountStartSnapShot   
     
     log message 0 "{@c2} started" 
-end proc    
+end proc   
 
 proc endStandardTestShell ()
     signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountResult
@@ -181,7 +181,7 @@ proc endStandardTestShell ()
             log message 0 "Failures"
             log message 0 "{@c2} ended" 
             equ StandardTestFailure 1
-            return
+            return 
         end if
     end if  
     if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult    

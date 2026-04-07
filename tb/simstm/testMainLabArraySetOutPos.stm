@@ -1,10 +1,12 @@
-namespace SimStmTest
+
 
 include "Common/CommonLabs.stm"
 
 include "TestLabs/TestLabArraySetOutPos.stm"
 
 include "Array/array_labs.stm"
+
+namespace SimStmTest
 
 file simulation_success "simulation.success"
 lines success_lines

@@ -1,4 +1,4 @@
-
+namespace SimStmTest
 proc testVariableDefaultValue ()
 
 	var y_val 17
@@ -17,3 +17,5 @@ proc checkVariableParameter (
 	log message stm.INFO_2 "new value of parameter: {:d}" z_val
 	var verify z_val 3 stm.MAX
 end proc
+
+end namespace

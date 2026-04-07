@@ -31,6 +31,6 @@ proc testConstantAdd ()
 
 call stm.endStandardTestShell ()
 
-end proc
+end proc 
 
 end namespace

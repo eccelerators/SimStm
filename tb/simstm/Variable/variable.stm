@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var test_variable_add_1 1
 var test_variable_add_2 2
 
@@ -304,3 +306,5 @@ proc testVariableLd ()
     call stm.endStandardTestShell ()
 
 end proc
+
+end namespace

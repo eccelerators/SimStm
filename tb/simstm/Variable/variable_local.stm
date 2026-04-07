@@ -1,6 +1,6 @@
 namespace SimStmTest
 
-proc testVariableLocal ()
+proc testVariableLocal () 
 
 	var test_variable_local_add_1 1
 	var test_variable_local_add_2 2
@@ -22,4 +22,4 @@ proc testVariableLocal ()
 
 end proc
 
-end namespace
+end namespace  

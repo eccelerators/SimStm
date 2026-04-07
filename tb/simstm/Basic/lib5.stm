@@ -1,7 +1,6 @@
-namespace SimStmTest
-
 include "Basic/lib6.stm"
 
+namespace SimStmTest
 
 proc Lib5 ()
     log message 0 "load file lib5.stm"

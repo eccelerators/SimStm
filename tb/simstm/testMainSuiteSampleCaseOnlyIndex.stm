@@ -3,7 +3,7 @@ include "Common/Common.stm"
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteSampleCaseOnlyIndex.stm"
-
+namespace SimStmTest
 proc testMainSuiteSampleCaseOnlyIndex ()
 
     call stm.initBase ()
@@ -23,3 +23,4 @@ proc testMainSuiteSampleCaseOnlyIndex ()
     wait 1000
     finish
 end proc
+end namespace
