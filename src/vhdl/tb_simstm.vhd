@@ -1808,7 +1808,6 @@ begin
                 -- signal_read or signal_verify
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY or ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_READ then
                     get_val_in_called_scope_prefer_local(1, val1);
-                    get_ven_in_called_scope_prefer_local(2, ven2);
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
@@ -1816,17 +1815,16 @@ begin
                        " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;                    
-                    update_var(vars, ven2, val);
                     if (ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY) then
+                        get_val_in_called_scope_prefer_local(2, val2);
                         get_val_in_called_scope_prefer_local(3, val3);
-                        get_val_in_called_scope_prefer_local(4, val4);
                         verify_passes_count := verify_passes_count + 1;
                         if (val4 and val) /= (val4 and val3) then
                             print_instr("exec ");
                             print(" signal   = 0x" & to_hstring(val1));
                             print(" read     = 0x" & to_hstring(val));
-                            print(" expected = 0x" & to_hstring(val3));
-                            print(" mask     = 0x" & to_hstring(val4));
+                            print(" expected = 0x" & to_hstring(val2));
+                            print(" mask     = 0x" & to_hstring(val3));
                             if resume(0) = '0' then
                                 assert false
                                 report "verify failure assertion" &  
@@ -1910,7 +1908,6 @@ begin
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_val_in_called_scope_prefer_local(3, val3);
-                    get_ven_in_called_scope_prefer_local(4, ven4);
                     val2_int := to_integer(val2(30 downto 0));
                     val_int := to_integer(val1(30 downto 0));
                     bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
@@ -1932,18 +1929,17 @@ begin
                         report "bus read timeout"
                         severity error;
                     end if;
-                    update_var(vars, ven4, val);
                     if ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
+                        get_val_in_called_scope_prefer_local(4, val4);
                         get_val_in_called_scope_prefer_local(5, val5);
-                        get_val_in_called_scope_prefer_local(6, val6);
                         verify_passes_count := verify_passes_count + 1;
-                        if (val6 and val) /= (val6 and val5) then
+                        if (val5 and val) /= (val5 and val5) then
                             print_instr("exec ");
                             print(" bus      = 0x" & to_hstring(val));
                             print(" address  = 0x" & to_hstring(val3));
                             print(" read     = 0x" & to_hstring(val));
-                            print(" expected = 0x" & to_hstring(val5));
-                            print(" mask     = 0x" & to_hstring(val6));
+                            print(" expected = 0x" & to_hstring(val4));
+                            print(" mask     = 0x" & to_hstring(val5));
                             if resume(0) = '0' then
                                 assert false
                                 report "verify failure assertion" &  

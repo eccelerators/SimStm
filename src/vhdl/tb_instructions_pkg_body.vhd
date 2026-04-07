@@ -94,7 +94,7 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_SIGNAL, 2);
         append_inst_def(inst_defs, INSTR_SIGNAL_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_SIGNAL_READ, 2);
-        append_inst_def(inst_defs, INSTR_SIGNAL_VERIFY, 4);
+        append_inst_def(inst_defs, INSTR_SIGNAL_VERIFY, 3);
         append_inst_def(inst_defs, INSTR_SIGNAL_WRITE, 2);
         append_inst_def(inst_defs, INSTR_SIGNAL_POINTER_COPY, 2);
         append_inst_def(inst_defs, INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE, 2);
@@ -104,7 +104,7 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_BUS, 2);
         append_inst_def(inst_defs, INSTR_BUS_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_BUS_READ, 4);
-        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 6);
+        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 3);
         append_inst_def(inst_defs, INSTR_BUS_WRITE, 4);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_SET, 2);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_GET, 2);
