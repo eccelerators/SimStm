@@ -68,9 +68,8 @@ proc testMain ()
 
     call testSignalWriteReadVerify ()
     call testSignalVerifyFail ()
-    -- call testSignalLocal ()
-    -- call testSignalParameterIn ()
-    -- call testSignalLocalOverride ()
+    call testSignalParameterIn ()
+    call testSignalLocalOverride ()
 
     -- call testFileAppendArray ()
     -- call testFileWriteArray ()

@@ -47,6 +47,10 @@ entity tb_simstm is
         verify_failures : out std_logic_vector(31 downto 0);
         bus_timeout_passes : out std_logic_vector(31 downto 0);
         bus_timeout_failures : out std_logic_vector(31 downto 0);
+        expected_verify_failure  : in std_logic_vector(31 downto 0) := (others => '0');
+        expected_bus_timeout_failure  : in std_logic_vector(31 downto 0) := (others => '0');
+
+
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
         signals_in : in t_signals_in := signals_in_init;
@@ -1390,12 +1394,12 @@ begin
 
                 -- finish
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FINISH then
-                    expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
-                    expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_7(30 downto 0)));
+                    expected_verify_failure_count := to_integer(unsigned(expected_verify_failure));
+                    expected_bus_timeout_failure_count := to_integer(unsigned(expected_bus_timeout_failure));
 
                     print("Verify passes " & (integer'image(verify_passes_count)));
                     print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
-                    if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then
+                    if verify_failure_count /= 0 and bus_timeout_failure_count /= 0 then
                         print("Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
                         print("Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
                         if expected_verify_failure_count /= verify_failure_count then
@@ -1413,7 +1417,7 @@ begin
                         print("SUCCESS");
                         wait for 1000 ns;
                         finish;
-                    elsif expected_verify_failure_count /= 0 then
+                    elsif verify_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
                         if expected_verify_failure_count /= verify_failure_count then
                             print("FAILURES");
@@ -1424,7 +1428,7 @@ begin
                         print("SUCCESS");
                         wait for 1000 ns;
                         finish;
-                    elsif expected_bus_timeout_failure_count /= 0 then
+                    elsif bus_timeout_failure_count /= 0 then
                         report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
                         if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
                             print("FAILURES");
@@ -1667,10 +1671,7 @@ begin
                     wait for 0 ns;
 
                 -- signal read a_signal signal_read_value
-                -- signal verify a_signal signal_read_value signal_expected_value signal_mask_value
-                -- signal verify a_signal signal_read_value 0x0002 0x00FF
-                -- signal_read or signal_verify
-                elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY or ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_READ then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_READ then
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     val_int := to_integer(val1(30 downto 0));
@@ -1679,29 +1680,40 @@ begin
                     report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
                     update_var(vars, ven2, val);
-                    if (ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY) then
-                        get_val_in_called_scope_prefer_local(3, val3);
-                        get_val_in_called_scope_prefer_local(4, val4);
-                        verify_passes_count := verify_passes_count + 1;
-                        if (val4 and val) /= (val4 and val3) then
-                            print_instr("exec ");
-                            print(" signal   = 0x" & to_hstring(val1));
-                            print(" read     = 0x" & to_hstring(val));
-                            print(" expected = 0x" & to_hstring(val3));
-                            print(" mask     = 0x" & to_hstring(val4));
-                            if resume(0) = '0' then
-                                assert false
-                                report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
-                                severity failure;
-                            else
-                                assert false
-                                report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
-                                severity error;
-                                verify_failure_count := verify_failure_count + 1;
-                            end if;
+                    wait for 0 ns;
+
+                -- signal verify a_signal signal_expected_value signal_mask_value
+                -- signal verify a_signal 0x0002 0x00FF
+                elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY then
+                    get_val_in_called_scope_prefer_local(1, val1);
+                    val_int := to_integer(val1(30 downto 0));
+                    signal_read(signals_in, val_int, val, signal_valid);
+                    assert signal_valid /= 0
+                    report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
+
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_val_in_called_scope_prefer_local(3, val3);
+                    verify_passes_count := verify_passes_count + 1;
+                    if (val3 and val) /= (val3 and val2) then
+                        print_instr("exec ");
+                        print(" signal   = 0x" & to_hstring(val1));
+                        print(" read     = 0x" & to_hstring(val));
+                        print(" expected = 0x" & to_hstring(val2));
+                        print(" mask     = 0x" & to_hstring(val3));
+                        if resume(0) = '0' then
+                            assert false
+                            report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            severity failure;
+                        else
+                            assert false
+                            report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            severity error;
+                            verify_failure_count := verify_failure_count + 1;
                         end if;
                     end if;
                     wait for 0 ns;
+
 
                 --  signal pointer copy a_signal_target a_signal_source
                 --  signal pointer copy a_signal_target a_signal_source )

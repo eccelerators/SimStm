@@ -1,0 +1,32 @@
+-- Error verification
+
+include "interface.stm"
+
+var expected_verify_failure_counter 0
+proc increase_verify_failure_counter (
+    var steps 1
+)
+    add    expected_verify_failure_counter                          steps
+    signal write simstm_loopback_expected_verify_failure           expected_verify_failure_counter
+end proc
+
+proc check_verify_failures ()
+    var verify_failures 0
+    signal read  simstm_loopback_verify_failures                   verify_failures
+    -- ToDo: add check for verify failures
+end proc
+
+
+var expected_bus_timeout_failure_counter 0
+proc increase_bus_timeout_failure_counter (
+    var steps 1
+)
+    add    expected_bus_timeout_failure_counter                     steps
+    signal write simstm_loopback_expected_bus_timeout_failure      expected_bus_timeout_failure_counter
+end proc
+
+proc check_bus_timeout_failures ()
+    var timeout_failures 0
+    signal read  simstm_loopback_bus_timeout_failures              timeout_failures
+    -- ToDo: add check for bus timeout failures
+end proc

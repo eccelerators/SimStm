@@ -1,6 +1,5 @@
 
 proc testSuiteSignal ()
-
     call testCase (
     	label set TestToCall testSignalWriteReadVerify
     )

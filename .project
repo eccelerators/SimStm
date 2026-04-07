@@ -19,5 +19,29 @@
 	<natures>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.python.pydev.pythonNature</nature>
+		<nature>com.sigasi.hdt.vhdl.ui.vhdlNature</nature>
+		<nature>com.sigasi.hdt.verilog.ui.verilogNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Common Libraries</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Common Libraries/IEEE</name>
+			<type>2</type>
+			<locationURI>sigasiresource:/vhdl/2008/IEEE</locationURI>
+		</link>
+		<link>
+			<name>Common Libraries/IEEE Synopsys</name>
+			<type>2</type>
+			<locationURI>sigasiresource:/vhdl/2008/IEEE%20Synopsys</locationURI>
+		</link>
+		<link>
+			<name>Common Libraries/STD</name>
+			<type>2</type>
+			<locationURI>sigasiresource:/vhdl/2008/STD</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
