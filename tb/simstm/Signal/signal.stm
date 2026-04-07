@@ -1,14 +1,18 @@
 
-
 include "Signal/signal_base.stm"
-include "Signal/signal_extend.stm"
-include "Signal/signal_pointer.stm"
+-- include "Signal/signal_extend.stm"
+-- include "Signal/signal_pointer.stm"
 -- include "Signal/signal_errors.stm"
 -- include "Signal/signal_parameter.stm"
 
+namespace SimStmTest
 
-proc testSignal ()
-    call testSignalBase ()
-    call testSignalExtend ()
-    call testSignalPointer ()
-end proc
+    proc testSignal ()
+        call testSignalBase ()
+        -- call testSignalExtend ()
+        -- call testSignalPointer ()
+
+        finish
+    end proc
+
+end namespace

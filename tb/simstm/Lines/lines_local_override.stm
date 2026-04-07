@@ -1,9 +1,10 @@
+namespace SimStmTest
 
 lines test_lines_local_override_a
 
 proc testLinesLocalOverride ()
 
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	call setLinesToOverwrite ()
 	array b_array 1
 	array set b_array 0 2
@@ -13,15 +14,15 @@ proc testLinesLocalOverride ()
 	array final_array_b 1
 	var a_var 99
 	var b_var 99
-	log lines INFO_2 test_lines_local_override_a
+	log lines stm.INFO_2 test_lines_local_override_a
 	-- lines get array test_lines_local_override_a 1 final_array_a a_var
 	lines get array test_lines_local_override_a 0 final_array_b b_var
-	--array verify final_array_b 0 2 MAX
-	array verify final_array_b 0 2 MAX
+	--array verify final_array_b 0 2 stm.MAX
+	array verify final_array_b 0 2 stm.MAX
 
 	
 	call checkLinesGlobal ()
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 end proc
 
 proc setLinesToOverwrite ()
@@ -34,7 +35,7 @@ proc setLinesToOverwrite ()
 	array override_array 1
 	var a_var 99
 	lines get array test_lines_local_override_a 0 override_array a_var
-	array verify override_array 0 1 MAX
+	array verify override_array 0 1 stm.MAX
 end proc
 
 
@@ -47,6 +48,8 @@ proc checkLinesGlobal ()
 	lines get array test_lines_local_override_a 0 global_array_a a_var
 	--lines get array test_lines_local_override_a 1 global_array_b b_var
 	
-	array verify global_array_a 0 2 MAX
-	--array verify global_array_b 0 2 MAX
+	array verify global_array_a 0 2 stm.MAX
+	--array verify global_array_b 0 2 stm.MAX
 end proc
+
+end namespace

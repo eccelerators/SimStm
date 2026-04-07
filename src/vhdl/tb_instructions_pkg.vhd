@@ -136,7 +136,6 @@ package tb_instructions_pkg is
     constant INSTR_ARRAY_VERIFY : string := "array_verify";
 
     -- others
-    constant INSTR_PROC : string := "proc";
     constant INSTR_PROC_PAR_OPEN : string := "proc_(";
     constant INSTR_PROC_NOPAR : string := "proc_(_)";
     constant INSTR_CALL_PAR_OPEN : string := "call_(";

@@ -1,7 +1,10 @@
+namespace SimStmTest
 
 proc testSuiteInterrupt ()
 
-    call testCase (
-    	label pointer copy TestToCall testInterrupt
+    call stm.testCase (
+    	label set TestToCall testInterrupt
     )
 end proc
+
+end namespace

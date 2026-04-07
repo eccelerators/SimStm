@@ -1,66 +1,70 @@
+namespace SimStmTest
+
 proc testSuiteVariable ()
 	
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableAdd
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableAnd
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableDiv
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableEqu
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableMul
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableOr
     )
 
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableSub
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableXor
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableInv
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableLd
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableLocal
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableLocalOverride
     )
     
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariablePointer
     )
 
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableParameterIn
     )
  
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableParameterOut
     )
 
-    call testCase (
+    call stm.testCase (
     	label set testToCall testVariableDefaultValue
     	)
 end proc
+
+end namespace

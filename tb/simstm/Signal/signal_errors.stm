@@ -2,16 +2,22 @@
 include "interface.stm"
 include "error_verification.stm"
 
-var val_signal_read_back 0x12345678
 
-proc testSignalVerifyFail ()
-    -- var val_signal_read_back 0x12345678
-    resume 1
+namespace SimStmTest
 
-    signal write loopback_32bit 0
-    wait 1000
-    signal read loopback_32bit val_signal_read_back
-    signal verify loopback_32bit val_signal_read_back 0x12345678 0xffffffff
 
-    resume 0
-end proc
+    var val_signal_read_back 0x12345678
+
+    proc testSignalVerifyFail ()
+        -- var val_signal_read_back 0x12345678
+        resume 1
+
+        signal write loopback_32bit 0
+        wait 1000
+        signal read loopback_32bit val_signal_read_back
+        signal verify loopback_32bit val_signal_read_back 0x12345678 0xffffffff
+
+        resume 0
+    end proc
+
+end namespace

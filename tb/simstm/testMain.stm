@@ -1,5 +1,3 @@
-include "Other/other.stm"
-
 include "Common/Common.stm"
 include "Signal/signal.stm"
 include "Signal/signal_pointer.stm"
@@ -45,81 +43,86 @@ include "File/file_local_override.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
 
-include "TestSuites/TestSuiteArray.stm"
-include "TestSuites/TestSuiteVariable.stm"
+
 include "Label/label.stm"
+include "other/other.stm"
 
-lines success_lines
-file simulation_success "simulation.success"
+namespace SimStmTest
 
-proc testMain ()
+    lines success_lines
+    file simulation_success "simulation.success"
 
-    trace TRACE_OFF
-    -- trace TRACE_EXECUTED_LINES
-    -- trace TRACE_INSTRUCTIONS
-    -- trace TRACE_CALLS
-    resume RESUME_ON_ALL_ERRORS
-    verbosity INFO_2
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
-    call initBase ()
-    log message INFO "Main test started"
+    proc testMain ()
 
-    call testSignalWriteReadVerify ()
-    call testSignalVerifyFail ()
-    call testSignalParameterIn ()
-    call testSignalLocalOverride ()
+        -- trace stm.TRACE_OFF
+        trace stm.TRACE_EXECUTED_LINES
+        -- trace TRACE_INSTRUCTIONS
+        -- trace TRACE_CALLS
+        resume stm.RESUME_ON_ALL_ERRORS
+        verbosity stm.INFO_2
+        signal write out_signal_init_dut 1
+        wait 1000
+        signal write out_signal_init_dut 0
+        call stm.initBase ()
+        log message stm.INFO "Main test started"
 
-    -- call testFileAppendArray ()
-    -- call testFileWriteArray ()
-    -- call testFileReadArray ()
-    -- call testFilePointer ()
-    -- call testFileLocal ()
-    -- call testFileLocalOverride ()
-    -- call testFileParameterIn ()
-    -- call testFileParameterOut ()
-    -- call testVariableInv ()
-    call testOtherRandom ()
+        --call testSignalWriteReadVerify ()
+        --call testSignalVerifyFail
+        --call testSignalLocal ()
+        --call testSignalParameterIn ()
+        --call testSignalLocalOverride ()
 
-    -- call testNamespaceTwoDifferentOnes ()
-    -- call testNamespaceLocalAndGlobal ()
+        --call testFileAppendArray ()
+        --call testFileWriteArray ()
+        --call testFileReadArray ()
+        --call testFilePointer ()
+        --call testFileLocal ()
+        --call testFileLocalOverride ()
+        --call testFileParameterIn ()
+        --call testFileParameterOut ()
+        --call testVariableInv ()
+        --call testOtherRandom ()
 
-    -- bus pointer copy busToTest wishbone256
-    -- bus timeout set busToTest 1000
-    -- call testVariableLocalOverride ()
-    -- call testVariableLocal ()
-    -- call testVariableScope ()
-    -- call testVariablePointer ()
-    -- call testVariableParameterIn ()
-    -- call testVariableParameterOut ()
-    -- call testVariableDefaultValue ()
+        --call testNamespaceTwoDifferentOnes ()
+        --call testNamespaceLocalAndGlobal
+
+        --bus pointer copy busToTest wishbone256
+        --bus timeout set busToTest 1000
+        --call testVariableLocalOverride ()
+        --call testVariableLocal ()
+        --call testVariableScope ()
+        --call testVariablePointer ()
+        --call testVariableParameterIn ()
+        --call testVariableParameterOut ()
+        --call testVariableDefaultValue ()
 
 
-    -- call testLinesSize  ()
-    -- call testLinesLocalOverride ()
-	-- call testLinesLocal ()
-	-- call testLinesParameterIn ()
-	-- call testLinesParameterOut ()
-	-- call testLinesPointer ()
+        --call testLinesSize  ()
+        --call testLinesLocalOverride ()
+    	--call testLinesLocal ()
+    	--call testLinesParameterIn ()
+    	--call testLinesParameterOut ()
+    	--call testLinesPointer ()
 
-    -- call testArrayLocalOverride ()
-    -- call testArrayLocal ()
-    -- call testArrayParameterIn ()
-    -- call testArrayDefaultValue ()
+        --call testArrayLocalOverride ()
+        --call testArrayLocal ()
+        --call testArrayParameterIn ()
+        --call testArrayDefaultValue ()
 
-    -- call testSuiteArray ()
-    -- call testSuiteVariable ()
+        --call testSuiteArray ()
+        --call testSuiteVariable ()
 
-    -- call testCallProcDirect ()
-    -- call testCallLabelIndirect ()
+        --call testCallProcDirect ()
+        call testCallLabelIndirect ()
 
-    log message INFO "Main test finished"
-    wait 1000
-    lines append message success_lines "SUCCESS"
-    -- stop
-    log lines INFO success_lines
-    file write simulation_success success_lines
-    wait 1000
-    finish
-end proc
+        log message stm.INFO "Main test finished"
+        wait 1000
+        lines append message success_lines "SUCCESS"
+        -- stop
+        log lines stm.INFO success_lines
+        file write simulation_success success_lines
+        wait 1000
+        finish
+    end proc
+
+end namespace

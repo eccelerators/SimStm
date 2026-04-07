@@ -1,19 +1,21 @@
-
+namespace SimStmTest
 proc testVariableDefaultValue ()
 
 	var y_val 17
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
     call checkVariableParameter ()
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 end proc
 
 proc checkVariableParameter (
 	var z_val 1
 	)
 
-	log message INFO_2 "value of parameter: {:d}" z_val
-	var verify z_val 1 MAX
+	log message stm.INFO_2 "value of parameter: {:d}" z_val
+	var verify z_val 1 stm.MAX
 	add z_val 2
-	log message INFO_2 "new value of parameter: {:d}" z_val
-	var verify z_val 3 MAX
+	log message stm.INFO_2 "new value of parameter: {:d}" z_val
+	var verify z_val 3 stm.MAX
 end proc
+
+end namespace

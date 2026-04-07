@@ -27,6 +27,7 @@
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 --  SOFTWARE.
 -- ******************************************************************************
+namespace stm
 
 proc arrayFill (
 	array Array 1
@@ -739,3 +740,5 @@ proc arrayDumpSliceOct (
         log message Verbosity " {:o}" v0
     end if             
 end proc
+
+end namespace

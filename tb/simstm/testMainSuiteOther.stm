@@ -3,22 +3,23 @@ include "Common/Common.stm"
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteOther.stm"
-
+namespace SimStmTest
 proc testMainSuiteOther ()
 
-    call initBase ()
+    call stm.initBase ()
 
-    verbosity INFO_2
-    trace TRACE_OFF
-    resume RESUME_ON_ALL_ERRORS
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
-    log message INFO "Main test suite Other started"
+    log message stm.INFO "Main test suite Other started"
 
     call testSuiteOther ()
 
-    log message INFO "Main test suite Other ended"
+    log message stm.INFO "Main test suite Other ended"
     wait 1000
     finish
 end proc
+end namespace

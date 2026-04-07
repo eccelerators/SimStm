@@ -1,30 +1,32 @@
 
-const NO_BUS 0
-bus wishbone32 1
-bus wishbone64 2
-bus wishbone128 3
-bus wishbone256 4
-bus avalon32 5
-bus avalon64 6
-bus axi4lite32 7
-bus ram32 8
 
-const NO_SIGNAL 0
+namespace SimStmTest
+
+    const NO_BUS 0
+    bus wishbone32 1
+    bus wishbone64 2
+    bus wishbone128 3
+    bus wishbone256 4
+    bus avalon32 5
+    bus avalon64 6
+    bus axi4lite32 7
+    bus ram32 8
+
+    const NO_SIGNAL 0
+
+    -- general
+    signal simstm_loopback_verify_passes 10000
+    signal simstm_loopback_verify_failures 10001
+    signal simstm_loopback_bus_timeout_passes 10002
+    signal simstm_loopback_bus_timeout_failures 10003
+
+    signal simstm_loopback_expected_verify_failure 10000
+    signal simstm_loopback_expected_bus_timeout_failure 10001
+
+    -- signals unittests
+    signal loopback_1bit 11000
+    signal loopback_32bit 11001
+    signal loopback_16bit_cross 11002
 
 
-
-
-
--- general
-signal simstm_loopback_verify_passes 10000
-signal simstm_loopback_verify_failures 10001
-signal simstm_loopback_bus_timeout_passes 10002
-signal simstm_loopback_bus_timeout_failures 10003
-
-signal simstm_loopback_expected_verify_failure 10000
-signal simstm_loopback_expected_bus_timeout_failure 10001
-
--- signals unittests
-signal loopback_1bit 11000
-signal loopback_32bit 11001
-signal loopback_16bit_cross 11002
+end namespace

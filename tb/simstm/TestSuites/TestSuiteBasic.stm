@@ -1,28 +1,31 @@
+namespace SimStmTest
 
 proc testSuiteBasic ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicConst
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicIfElseElsif
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicNestedIfElseElsif
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicLoop
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicVar
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testBasicVar3
     )
 
 end proc
+
+end namespace

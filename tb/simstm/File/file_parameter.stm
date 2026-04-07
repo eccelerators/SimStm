@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testFileParameterIn ()
 
@@ -6,7 +7,7 @@ proc testFileParameterIn ()
 	array a_array 2
 	array set a_array 0 1
 	array set a_array 1 2
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	lines delete all a_lines
 	lines append array a_lines a_array
 	file write a_file a_lines
@@ -15,7 +16,7 @@ proc testFileParameterIn ()
 		file pointer copy this_file a_file
 	)
 	
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 end proc
 
 proc checkFileParameterInput (
@@ -28,9 +29,9 @@ proc checkFileParameterInput (
 	var b_var 99
 	file read all this_file result_lines
 	lines get array result_lines 0 this_array a_var
-	array verify this_array 0 1 MAX
-	array verify this_array 1 2 MAX
-	log lines INFO_2 result_lines
+	array verify this_array 0 1 stm.MAX
+	array verify this_array 1 2 stm.MAX
+	log lines stm.INFO_2 result_lines
 
 end proc
 
@@ -42,7 +43,7 @@ proc testFileParameterOut ()
 	array set a_array 1 2
 	lines b_lines
 	lines result_lines
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	lines delete all b_lines
 	lines append array b_lines a_array
 	file write b_file b_lines
@@ -58,11 +59,11 @@ proc testFileParameterOut ()
 	var b_var 99
 	lines get array result_lines 0 final_array_a a_var 
 	lines get array result_lines 1 final_array_b b_var 
-	array verify final_array_a 0 1 MAX
-	array verify final_array_a 1 2 MAX
-	array verify final_array_b 0 3 MAX
-	log lines INFO_2 result_lines
-	call endStandardTestShell ()
+	array verify final_array_a 0 1 stm.MAX
+	array verify final_array_a 1 2 stm.MAX
+	array verify final_array_b 0 3 stm.MAX
+	log lines stm.INFO_2 result_lines
+	call stm.endStandardTestShell ()
 end proc
 
 proc checkFileParameterOutput (
@@ -75,4 +76,6 @@ proc checkFileParameterOutput (
 	lines append array more_numbers b_array
 	file append this_file more_numbers
 end proc
+
+end namespace
 

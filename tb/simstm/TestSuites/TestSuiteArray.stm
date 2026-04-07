@@ -1,44 +1,47 @@
+namespace SimStmTest
 
 proc testSuiteArray ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testArray
     )
     
-    call testCase (
+    call stm.testCase (
         label set TestToCall testArrayGet
     )
     
-    call testCase (
-    	label set TestToCall testCaseArraySet
+    call stm.testCase (
+    	label set TestToCall testArraySet
     )
 
-    call testCase (
-    	label set TestToCall testCaseArraySize
+    call stm.testCase (
+    	label set TestToCall testArraySize
     )
 
-    call testCase (
-    	label set TestToCall testCaseArrayPointerCopy
+    call stm.testCase (
+    	label set TestToCall testArrayPointerCopy
     )
 
-    call testCase (
-    	label set TestToCall testCaseArrayParameterIn
+    call stm.testCase (
+    	label set TestToCall testArrayParameterIn
     )
 
-    call testCase (
-    	label set TestToCall testCaseArrayParameterOut
+    call stm.testCase (
+    	label set TestToCall testArrayParameterOut
     )
 
-    call testCase (
-    	label set TestToCall testCaseLocal
+    call stm.testCase (
+    	label set TestToCall testArrayLocal
     )
 
-    call testCase (
-    	label set TestToCall testCaseArrayLocalOverride
+    call stm.testCase (
+    	label set TestToCall testArrayLocalOverride
     )
 
-    call testCase (
-    	label set TestToCall testCaseArrayDefaultValue
+    call stm.testCase (
+    	label set TestToCall testArrayDefaultValue
     )
 
 end proc
+
+end namespace

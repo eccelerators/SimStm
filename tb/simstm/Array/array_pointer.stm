@@ -1,16 +1,18 @@
+namespace SimStmTest
+
 array test_array_pointer_src_array 10
 array test_array_pointer_des_array 1
 
 var test_array_pointer_var 0
 
 proc testArrayPointerCopy ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array size test_array_pointer_src_array test_array_pointer_var
-    var verify test_array_pointer_var 10 MAX
+    var verify test_array_pointer_var 10 stm.MAX
 
     array size test_array_pointer_des_array test_array_pointer_var
-    var verify test_array_pointer_var 1 MAX
+    var verify test_array_pointer_var 1 stm.MAX
 
     array set test_array_pointer_src_array 0 10
     array set test_array_pointer_src_array 1 11
@@ -19,24 +21,26 @@ proc testArrayPointerCopy ()
     array pointer copy test_array_pointer_des_array test_array_pointer_src_array
 
     array size test_array_pointer_src_array test_array_pointer_var
-    var verify test_array_pointer_var 10 MAX
+    var verify test_array_pointer_var 10 stm.MAX
 
     array size test_array_pointer_des_array test_array_pointer_var
-    var verify test_array_pointer_var 10 MAX
+    var verify test_array_pointer_var 10 stm.MAX
 
     array get test_array_pointer_des_array 0 test_array_pointer_var
-    var verify test_array_pointer_var 10 MAX
+    var verify test_array_pointer_var 10 stm.MAX
 
     array get test_array_pointer_des_array 1 test_array_pointer_var
-    var verify test_array_pointer_var 11 MAX
+    var verify test_array_pointer_var 11 stm.MAX
 
     array get test_array_pointer_des_array 2 test_array_pointer_var
-    var verify test_array_pointer_var 12 MAX
+    var verify test_array_pointer_var 12 stm.MAX
 
     array set test_array_pointer_des_array 5 55
 
     array get test_array_pointer_src_array 5 test_array_pointer_var
-    var verify test_array_pointer_var 55 MAX
+    var verify test_array_pointer_var 55 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
+
+end namespace

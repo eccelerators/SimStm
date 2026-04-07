@@ -1,12 +1,16 @@
+namespace SimStmTest
+
 array array_name_sz 5544
 
 var var_name_sz 10
 proc testArraySize ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     array size array_name_sz var_name_sz
-    var verify var_name_sz 5544 MAX
+    var verify var_name_sz 5544 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
+
+end namespace

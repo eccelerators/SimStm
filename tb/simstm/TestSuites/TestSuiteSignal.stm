@@ -1,18 +1,26 @@
+namespace SimStmTest
 
 proc testSuiteSignal ()
+<<<<<<< HEAD
     call testCase (
+=======
+
+    call stm.testCase (
+>>>>>>> origin/to_call_label
     	label set TestToCall testSignalWriteReadVerify
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testSignalVerifyFail
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testSignalPointerCopy
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testSignalPointerGetSet
     )
 end proc
+
+end namespace

@@ -27,8 +27,14 @@
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 --  SOFTWARE.
 -- ******************************************************************************
+<<<<<<< HEAD
 
 proc readModifyWrite (
+=======
+namespace stm
+
+proc readModifyWrite (	
+>>>>>>> origin/to_call_label
     bus Bus 0
     var Width 32
     var Adr 0
@@ -47,3 +53,5 @@ proc readModifyWrite (
     or WriteData ReadData -- combine to new value
     bus write Bus Width Adr WriteData
 end proc
+
+end namespace

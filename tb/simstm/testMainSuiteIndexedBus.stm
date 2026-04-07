@@ -1,3 +1,5 @@
+
+
 include "Common/Common.stm"
 
 include "Bus/bus32.stm"
@@ -6,25 +8,27 @@ include "Bus/bus128.stm"
 include "Bus/bus256.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
-
+namespace SimStmTest
 const testMainSuiteIndexedBusMaximumIndex 32
 
 proc testMainSuiteIndexedBus ()
 
-    call initBase ()
+    call stm.initBase ()
 
-    verbosity INFO_2
-    trace TRACE_OFF
-    resume RESUME_ON_ALL_ERRORS
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
-    signal read sigInTestSuiteIndex TestSuiteIndex
-    log message INFO "Main test main suite indexed Bus {:d} started" TestSuiteIndex
+    signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
+    log message stm.INFO "Main test main suite indexed Bus {:d} started" stm.TestSuiteIndex
 
     call testSuiteIndexedBus ()
 
-    log message INFO "Main test main suite indexed Bus {:d} ended" TestSuiteIndex
+    log message stm.INFO "Main test main suite indexed Bus {:d} ended" stm.TestSuiteIndex
     wait 1000
     finish
 end proc
+
+end namespace

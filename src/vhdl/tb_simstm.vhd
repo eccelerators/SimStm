@@ -47,8 +47,8 @@ entity tb_simstm is
         verify_failures : out std_logic_vector(31 downto 0);
         bus_timeout_passes : out std_logic_vector(31 downto 0);
         bus_timeout_failures : out std_logic_vector(31 downto 0);
-        expected_verify_failure  : in std_logic_vector(31 downto 0) := (others => '0');
-        expected_bus_timeout_failure  : in std_logic_vector(31 downto 0) := (others => '0');
+        expected_verify_failure : in std_logic_vector(31 downto 0) := (others => '0');
+        expected_bus_timeout_failure : in std_logic_vector(31 downto 0) := (others => '0');
 
 
         marker : out std_logic_vector(15 downto 0);
@@ -118,7 +118,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := true;
-        constant DUMP_PARSE_RESULTS : boolean := true;
+        constant DUMP_PARSE_RESULTS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -128,6 +128,7 @@ begin
         variable il : integer;
         variable slc : src_locator;
 
+        variable nol : integer;
         variable noc : integer;
 
         variable stimulus_file_var : string(1 to stimulus_file'length) := stimulus_file;
@@ -177,7 +178,7 @@ begin
         variable stm_values_ptr : stm_values_ptr;
 
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
-        variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
+        variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(255, machine_value_width);
 
         -- Bus
         type bus_timeout_array is array (0 to 127) of time;
@@ -235,6 +236,8 @@ begin
         variable no_file_on_main_entry : text_field;
         variable no_file_on_interrupt : text_field;
         variable empty_text_field : text_field;
+        variable proc_name : text_field;
+        variable proc_name_is_fqn : boolean;
 
         variable ven1 : integer;
         variable ven2 : integer;
@@ -433,12 +436,19 @@ begin
 
         init_var_pool_ordered(vars);
         print("parsing stimulus code files");
+
+        parse_labels(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
+        nol := vars.last_element_num;
+        print(integer'image(nol) & " labels");
+
+        dump_var_pool_ordered(vars, machine_value_width);
+
         parse_constants(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
-        noc := vars.last_element_num;
+        noc := vars.last_element_num - nol;
         print(integer'image(noc) & " constants");
 
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
-        print(integer'image(vars.last_element_num - noc) & " variables");
+        print(integer'image(vars.last_element_num - noc - nol) & " variables");
 
         if DUMP_PARSE_RESULTS then
             dump_var_pool_ordered(vars, machine_value_width);
@@ -451,7 +461,7 @@ begin
         print(integer'image(insts.last_element_num) & " instructions");
 
         if DUMP_PARSE_RESULTS then
-            dump_inst_sequence(insts, code_files);
+            dump_inst_sequence(insts);
         end if;
         if DUMP_PARSE_RESULTS then
             dump_proc_pool_ordered(procs);
@@ -484,7 +494,7 @@ begin
                 -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself
                 slc.file_name := no_file_on_main_entry;
                 slc.file_line := -1;
-                access_proc(slc, procs, main_proc_name, pen);
+                access_proc_fqn(slc, procs, main_proc_name, pen);
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
                 print_instr("exec main entry ");
@@ -505,10 +515,10 @@ begin
                 line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
                 slc.file_name := no_file_on_interrupt;
                 slc.file_line := -1;
-                access_proc(slc, procs, branch_to_interrupt_proc_name, pen);
+                access_proc_fqn(slc, procs, branch_to_interrupt_proc_name, pen);
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
-                if trc_on(TRACE_INTERRUPTS) = '1' then
+                if trc_on(TRACE_INTERRUPTS) then
                     print_instr("exec interrupt entry ");
                 end if;
                 rcs(sp).ien_of_called_proc := ien;
@@ -523,8 +533,8 @@ begin
                 if trc_on(TRACE_VARIABLES) = '1' then
                     dump_var_pool_ordered(vars, machine_value_width);
                 end if;
-                if trc_on(TRACE_INSTRUCTIONS) = '1' then
-                    print_inst_element(insts, ien, code_files);
+                if trc_on(TRACE_INSTRUCTIONS) then
+                    print_inst_element(insts, ien);
                 end if;
 
                 executing_line <= file_line;
@@ -582,7 +592,7 @@ begin
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
                     index_and_reinit_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -865,7 +875,7 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_readable(var_stm_text_substituded_ptr, val_int);
@@ -876,7 +886,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_WRITABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_writeable(var_stm_text_substituded_ptr, val_int);
@@ -887,7 +897,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPENDABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_appendable(var_stm_text_substituded_ptr, val_int);
@@ -900,7 +910,7 @@ begin
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_write(slc, var_stm_lines, var_stm_text_substituded_ptr);
@@ -911,7 +921,7 @@ begin
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_append(slc, var_stm_lines, var_stm_text_substituded_ptr);
@@ -968,7 +978,7 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                        stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                         var_stm_text_substituded_ptr := new stm_text;
                         stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
@@ -1020,7 +1030,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ_END then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
@@ -1047,7 +1057,7 @@ begin
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, var_stm_text, var_stm_text_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
                     stm_file_read_all(slc, var_stm_lines, var_stm_text_substituded_ptr);
@@ -1097,7 +1107,7 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
@@ -1124,7 +1134,7 @@ begin
                     get_ven_in_called_scope_prefer_local(3, ven3);
                     index_var(vars, ven1, var_stm_lines);
                     index_var(vars, ven3, var_stm_array);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
@@ -1143,7 +1153,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_MESSAGE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, var_stm_text_substituded, machine_value_width);
+                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     stm_lines_append(slc, var_stm_lines, var_stm_text_out);
@@ -1446,7 +1456,8 @@ begin
                     finish;
 
                 -- proc
-                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC or ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN
+                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
                     null; -- no action necessary
 
                 -- end proc
@@ -1505,26 +1516,50 @@ begin
                     end if;
                     rcs(sp).ien_of_call := ien;
                     if ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR then
-                        access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                        proc_name := ie.inst_args.par_text_fields(1);
+                        if contains_dot(proc_name) then
+                            proc_name_is_fqn := true;
+                        else
+                            proc_name_is_fqn := false;
+                        end if;
+                        access_proc(slc, procs, ie.inst_namespace, proc_name, proc_name_is_fqn, pen);
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN then
-                        access_proc(slc, procs, ie.inst_args.par_text_fields(1), pen);
+                        proc_name := ie.inst_args.par_text_fields(1);
+                        if contains_dot(proc_name) then
+                            proc_name_is_fqn := true;
+                        else
+                            proc_name_is_fqn := false;
+                        end if;
+                        access_proc(slc, procs, ie.inst_namespace, proc_name, proc_name_is_fqn, pen);
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_PARAMS;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR then
                         get_ven_in_called_scope_prefer_local(1, ven1);
                         index_var(vars, ven1, var_stm_label);
-                        access_proc(slc, procs, var_stm_label, pen);
+                        text_field_ptr_to_text_field(var_stm_label, proc_name);
+                        if contains_dot(proc_name) then
+                            proc_name_is_fqn := true;
+                        else
+                            proc_name_is_fqn := false;
+                        end if;
+                        access_proc(slc, procs, ie.inst_namespace, proc_name, proc_name_is_fqn, pen);
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
                         get_ven_in_called_scope_prefer_local(1, ven1);
                         index_var(vars, ven1, var_stm_label);
-                        access_proc(slc, procs, var_stm_label, pen);
+                        text_field_ptr_to_text_field(var_stm_label, proc_name);
+                        if contains_dot(proc_name) then
+                            proc_name_is_fqn := true;
+                        else
+                            proc_name_is_fqn := false;
+                        end if;
+                        access_proc(slc, procs, ie.inst_namespace, proc_name, proc_name_is_fqn, pen);
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_PARAMS;
@@ -1546,7 +1581,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LOG_MESSAGE then
                     get_val_in_called_scope_prefer_local(1, val1);
                     if val1 <= loglevel then
-                        txt_print_wvar(slc, insts, vars, rcs, ie.inst_args.txt, ie.inst_args.txt_enclosing_quote, sp, machine_value_width);
+                        txt_print_wvar(ie, insts, vars, rcs, sp, machine_value_width);
                     end if;
 
                 -- log lines INFO a_lines

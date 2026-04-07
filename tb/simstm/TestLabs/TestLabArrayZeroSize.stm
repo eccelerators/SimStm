@@ -1,5 +1,8 @@
+namespace SimStmTest
 
 proc testLabArrayZeroSize ()
 
     call testArrayZeroSize ()
 end proc
+
+end namespace

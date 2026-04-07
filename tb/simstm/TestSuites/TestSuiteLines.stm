@@ -1,63 +1,67 @@
+namespace SimStmTest
+
 proc testSuiteLines ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesAppendArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesAppendText
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesDeleteAllArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesDeleteArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesGetArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesInsertArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesInsertText
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesPointerCopy
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesSetArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesSetText
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesSize
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesLocal
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesParameterIn
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesParameterOut
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testLinesLocalOverride
     )
 end proc
+
+end namespace
 

@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var random_number 0
 
 var seed_set 5
@@ -5,17 +7,27 @@ var random_min 0
 var random_max 10
 
 proc testOtherRandom ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
     loop 20
         random random_number 0 10
         log message 0 "random_number: {:d}" random_number
     end loop
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherSeed ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
     seed 1
     loop 5
         random random_number 0 10
@@ -28,7 +40,7 @@ proc testOtherSeed ()
         log message 0 "random_number: {:d}" random_number
     end loop
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 const marker_1 1
@@ -41,7 +53,12 @@ const val_trace_off 0
 const val_trace_on 1
 
 proc testOtherTrace ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
     trace 1
     wait 100
     marker 0 1
@@ -66,11 +83,16 @@ proc testOtherTrace ()
     marker 14 0
     marker marker_15 val_marker_low
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherMarker ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
 
     wait 100
     marker 0 1
@@ -93,17 +115,22 @@ proc testOtherMarker ()
     marker 14 0
     marker marker_15 val_marker_low
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherWait ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
 
     trace 1
     wait 1000
     trace 0
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_1 0xA1
@@ -113,7 +140,12 @@ var test_variable_4 0xE4
 var test_variable_5 0xF5
 
 proc testOtherLogSubstitutions ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
 
     log message 0 "test_variable_1: {}" test_variable_1
     log message 0 "test_variable_1: {} test_variable_2: {}" test_variable_1 test_variable_2
@@ -128,9 +160,9 @@ proc testOtherLogSubstitutions ()
     log message 0 "test_variable_4: {}" test_variable_4
     log message 0 "test_variable_5: {}" test_variable_5
 
-    log message INFO "Main test call endStandardTestShell ()ed {}" INFO
+    log message stm.INFO "Main test call stm.endStandardTestShell ()ed {}" stm.INFO
     wait 1000
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_lf_1 0xA1
@@ -139,16 +171,27 @@ var test_variable_lf_3 0xC3
 var test_variable_lf_4 0xE4
 
 proc testOtherLogFormats ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+
+>>>>>>> origin/to_call_label
     call testContent () -- to have a reasonable call stack
 
-    log message INFO "Main test call endStandardTestShell ()ed {}" INFO
+    log message stm.INFO "Main test call stm.endStandardTestShell ()ed {}" stm.INFO
     wait 1000
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 proc testContent ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
 
     log message 0 "test_variable_lf_1: {}" test_variable_lf_1
     log message 0 "test_variable_lf_1: {} test_variable_lf_2: {}" test_variable_lf_1 test_variable_lf_2
@@ -171,7 +214,12 @@ proc testContent ()
 end proc
 
 proc testOtherLog ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+>>>>>>> origin/to_call_label
     log message 0 "log 0"
     log message 1 "log 1"
     log message 2 "log 2"
@@ -201,7 +249,7 @@ proc testOtherLog ()
     log message 1 "log 1"
     log message 2 "log 2"
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 const year 0x2023
@@ -210,13 +258,13 @@ var day 0x22
 
 proc testOtherHelloWorld ()
 
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     loop 3
         -- currently values are only printed in hex format
         log message 0 "Hello World {}-{}-{}" year month day
         wait 1000
     end loop
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_call_1 1
@@ -226,7 +274,13 @@ var test_variable_call_4 4
 var test_variable_call_5 5
 
 proc testOtherCall ()
+<<<<<<< HEAD
     call startStandardTestShell ()
+=======
+
+    call stm.startStandardTestShell ()
+
+>>>>>>> origin/to_call_label
     call callLabel1 ()
     call callLabel2 ()
     log message 0 "test_variable_call_1: {}" test_variable_call_1
@@ -235,7 +289,12 @@ proc testOtherCall ()
     log message 0 "test_variable_call_4: {}" test_variable_call_4
     log message 0 "test_variable_call_5: {}" test_variable_call_5
 
+<<<<<<< HEAD
     call endStandardTestShell ()
+=======
+    call stm.endStandardTestShell ()
+
+>>>>>>> origin/to_call_label
 end proc
 
 proc callLabel5 ()
@@ -264,3 +323,5 @@ proc callLabel4 ()
     log message 0 "test_variable_call_5: {}" test_variable_call_5
     return
 end proc
+
+end namespace

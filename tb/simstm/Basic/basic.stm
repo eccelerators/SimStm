@@ -1,3 +1,5 @@
+namespace SimStmTest
+
 var tmp_variable 0
 
 const test_constant_1 1
@@ -7,25 +9,25 @@ const test_constant_4 4
 const test_constant_5 5
 
 proc testBasicConst ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     log message 0 "test_constant_1: {}" test_constant_1
     equ tmp_variable test_constant_1
-    var verify tmp_variable 1 MAX
+    var verify tmp_variable 1 stm.MAX
     log message 0 "test_constant_2: {}" test_constant_2
     equ tmp_variable test_constant_2
-    var verify tmp_variable 2 MAX
+    var verify tmp_variable 2 stm.MAX
     log message 0 "test_constant_3: {}" test_constant_3
     equ tmp_variable test_constant_3
-    var verify tmp_variable 3 MAX
+    var verify tmp_variable 3 stm.MAX
     log message 0 "test_constant_4: {}" test_constant_4
     equ tmp_variable test_constant_4
-    var verify tmp_variable 4 MAX
+    var verify tmp_variable 4 stm.MAX
     log message 0 "test_constant_5: {}" test_constant_5
     equ tmp_variable test_constant_5
-    var verify tmp_variable 5 MAX
+    var verify tmp_variable 5 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
 
@@ -36,20 +38,20 @@ var test_variable_4 4
 var test_variable_5 5
 
 proc testBasicVar ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     log message 0 "test_variable_1: {}" test_variable_1
-    var verify test_variable_1 0b1 MAX
+    var verify test_variable_1 0b1 stm.MAX
     log message 0 "test_variable_2: {}" test_variable_2
-    var verify test_variable_2 0x2 MAX
+    var verify test_variable_2 0x2 stm.MAX
     log message 0 "test_variable_3: {}" test_variable_3
-    var verify test_variable_3 3 MAX
+    var verify test_variable_3 3 stm.MAX
     log message 0 "test_variable_4: {}" test_variable_4
-    var verify test_variable_4 4 MAX
+    var verify test_variable_4 4 stm.MAX
     log message 0 "test_variable_5: {}" test_variable_5
-    var verify test_variable_5 5 MAX
+    var verify test_variable_5 5 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 var aab 1
@@ -59,20 +61,20 @@ var cbb 4
 var aba 5
 
 proc testBasicVar3 ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     log message 0 "aab: {}" aab
-    var verify test_variable_1 1 MAX
+    var verify test_variable_1 1 stm.MAX
     log message 0 "abb: {}" abb
-    var verify test_variable_2 2 MAX
+    var verify test_variable_2 2 stm.MAX
     log message 0 "bba: {}" bba
-    var verify test_variable_3 3 MAX
+    var verify test_variable_3 3 stm.MAX
     log message 0 "cbb: {}" cbb
-    var verify test_variable_4 4 MAX
+    var verify test_variable_4 4 stm.MAX
     log message 0 "aba: {}" aba
-    var verify test_variable_5 5 MAX
+    var verify test_variable_5 5 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
 
@@ -80,13 +82,13 @@ var loop_counta 0
 var loop_countb 0
 
 proc testBasicLoop ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
     equ loop_counta 0
     loop 4
         log message 0 "log 0"
         add loop_counta 1
     end loop
-    var verify loop_counta 4 MAX
+    var verify loop_counta 4 stm.MAX
 
     equ loop_counta 0
     equ loop_countb 0
@@ -98,12 +100,12 @@ proc testBasicLoop ()
             add loop_countb 1
         end loop
     end loop
-    var verify loop_counta 5 MAX
-    var verify loop_countb 10 MAX
+    var verify loop_counta 5 stm.MAX
+    var verify loop_countb 10 stm.MAX
 
     log message 0 "log 2"
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 end proc
 
 var resulta 0
@@ -139,10 +141,10 @@ proc testBasicNestedIfElseElsif ()
         log message 0 "enter multiple if 4"
         equ resultd 5
     end if
-    var verify resulta 2 MAX
-    var verify resultb 3 MAX
-    var verify resultc 4 MAX
-    var verify resultd 5 MAX
+    var verify resulta 2 stm.MAX
+    var verify resultb 3 stm.MAX
+    var verify resultc 4 stm.MAX
+    var verify resultd 5 stm.MAX
 
     log message 0 "test multiple if (2)"
     equ resulta 0
@@ -188,15 +190,15 @@ proc testBasicNestedIfElseElsif ()
         log message 0 "no enter multiple else"
         equ resulti 10
     end if
-    var verify resulta 2 MAX
-    var verify resultb 0 MAX
-    var verify resultc 0 MAX
-    var verify resultd 0 MAX
-    var verify resulte 0 MAX
-    var verify resultf 0 MAX
-    var verify resultg 0 MAX
-    var verify resulth 0 MAX
-    var verify resulti 0 MAX
+    var verify resulta 2 stm.MAX
+    var verify resultb 0 stm.MAX
+    var verify resultc 0 stm.MAX
+    var verify resultd 0 stm.MAX
+    var verify resulte 0 stm.MAX
+    var verify resultf 0 stm.MAX
+    var verify resultg 0 stm.MAX
+    var verify resulth 0 stm.MAX
+    var verify resulti 0 stm.MAX
 
     log message 0 "test multiple if (3)"
     equ resulta 0
@@ -226,11 +228,11 @@ proc testBasicNestedIfElseElsif ()
         log message 0 "no enter multiple else"
         equ resulte 6
     end if
-    var verify resulta 2 MAX
-    var verify resultb 0 MAX
-    var verify resultc 0 MAX
-    var verify resultd 0 MAX
-    var verify resulte 0 MAX
+    var verify resulta 2 stm.MAX
+    var verify resultb 0 stm.MAX
+    var verify resultc 0 stm.MAX
+    var verify resultd 0 stm.MAX
+    var verify resulte 0 stm.MAX
 
     log message 0 "test multiple if (4)"
     equ resulta 0
@@ -260,11 +262,11 @@ proc testBasicNestedIfElseElsif ()
         log message 0 "no enter multiple else"
         equ resulte 6
     end if
-    var verify resulta 0 MAX
-    var verify resultb 0 MAX
-    var verify resultc 0 MAX
-    var verify resultd 5 MAX
-    var verify resulte 0 MAX
+    var verify resulta 0 stm.MAX
+    var verify resultb 0 stm.MAX
+    var verify resultc 0 stm.MAX
+    var verify resultd 5 stm.MAX
+    var verify resulte 0 stm.MAX
 
     log message 0 "test multiple if (5)"
     equ resulta 0
@@ -297,13 +299,13 @@ proc testBasicNestedIfElseElsif ()
             end if
         end if
     end if
-    var verify resulta 0 MAX
-    var verify resultb 3 MAX
-    var verify resultc 0 MAX
-    var verify resultd 0 MAX
-    var verify resulte 0 MAX
+    var verify resulta 0 stm.MAX
+    var verify resultb 3 stm.MAX
+    var verify resultc 0 stm.MAX
+    var verify resultd 0 stm.MAX
+    var verify resulte 0 stm.MAX
 
-    call endStandardTestShell ()
+    call stm.endStandardTestShell ()
 
 end proc
 
@@ -312,7 +314,7 @@ var zero 0
 var one  1
 
 proc testBasicIfElseElsif ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
 
     -- equal
 
@@ -321,41 +323,41 @@ proc testBasicIfElseElsif ()
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 0 = 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 2 = 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     if zero = 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero = zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero = one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero = one
@@ -363,7 +365,7 @@ proc testBasicIfElseElsif ()
     else
         log message 0 "enter else"
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 = 1
@@ -376,7 +378,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 0 = 1
@@ -389,7 +391,7 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
     -- not equal
     equ result 0
@@ -397,42 +399,42 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 != 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 2 != 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero != 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero != zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero != one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 0 != 0
@@ -445,7 +447,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 0 != 0
@@ -458,7 +460,7 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
     -- greater
     equ result 0
@@ -466,42 +468,42 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 > 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 2 > 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero > 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero > zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero > one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 > 0
@@ -514,7 +516,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 0 > 0
@@ -527,7 +529,7 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
     -- greater or equal
     equ result 0
@@ -535,42 +537,42 @@ proc testBasicIfElseElsif ()
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 0 >= 2
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 2 >= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero >= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero >= zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero >= one
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 >= 1
@@ -583,7 +585,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 0 >= 1
@@ -596,7 +598,7 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
     -- smaller
     equ result 0
@@ -604,42 +606,42 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if 0 < 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 2 < 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero < 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero < zero
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero < one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 0 < 0
@@ -652,7 +654,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 0 < 0
@@ -665,7 +667,7 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
     -- smaller or equal
     equ result 0
@@ -673,42 +675,42 @@ proc testBasicIfElseElsif ()
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 0 <= 2
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 2 <= 0
         log message 0 "no enter if"
         equ result 1
     end if
-    var verify result 0 MAX
+    var verify result 0 stm.MAX
 
     equ result 0
     if zero <= 0
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero <= zero
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if zero <= one
         log message 0 "enter if"
         equ result 1
     end if
-    var verify result 1 MAX
+    var verify result 1 stm.MAX
 
     equ result 0
     if 1 <= 0
@@ -721,7 +723,7 @@ proc testBasicIfElseElsif ()
         log message 0 "enter else"
         equ result 4
     end if
-    var verify result 4 MAX
+    var verify result 4 stm.MAX
 
     equ result 0
     if 1 <= 0
@@ -734,6 +736,8 @@ proc testBasicIfElseElsif ()
         log message 0 "no enter else"
         equ result 4
     end if
-    var verify result 3 MAX
+    var verify result 3 stm.MAX
 
 end proc
+
+end namespace

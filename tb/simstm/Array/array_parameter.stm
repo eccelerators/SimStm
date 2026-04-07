@@ -1,3 +1,4 @@
+namespace SimStmTest
 
 proc testArrayParameterIn ()
 
@@ -6,12 +7,12 @@ proc testArrayParameterIn ()
 	array set p_array 1 100
 	var size_var 100
 	array size p_array size_var
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	
 	call checkArrayParameterInput (
 		array pointer copy this_array p_array
 	)
-	call endStandardTestShell ()
+	call stm.endStandardTestShell ()
 end proc
 
 proc checkArrayParameterInput (
@@ -21,11 +22,11 @@ proc checkArrayParameterInput (
 	var pos_1 13
 	array get this_array 0 pos_0
 	array get this_array 1 pos_1
-	log message INFO_2 "index 0 of the array is: {:d}" pos_0
-	log message INFO_2 "index 1 of the array is: {:d}" pos_1
+	log message stm.INFO_2 "index 0 of the array is: {:d}" pos_0
+	log message stm.INFO_2 "index 1 of the array is: {:d}" pos_1
 
-	array verify this_array 0 99 MAX
-	array verify this_array 1 100 MAX
+	array verify this_array 0 99 stm.MAX
+	array verify this_array 1 100 stm.MAX
 	
 end proc
 
@@ -36,14 +37,14 @@ proc testArrayParameterOut ()
 	array set p_array 1 100
 	var size_var 100
 	array size p_array size_var
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
 	
 	call setArrayParameterOutput (
 		array pointer copy this_array p_array
 	)
 	
-	array verify p_array 0 19 MAX
-	array verify p_array 1 20 MAX
+	array verify p_array 0 19 stm.MAX
+	array verify p_array 1 20 stm.MAX
 end proc 
 
 proc setArrayParameterOutput (
@@ -53,3 +54,5 @@ proc setArrayParameterOutput (
 	array set this_array 0 19
 	array set this_array 1 20
 end proc
+
+end namespace

@@ -3,23 +3,24 @@ include "Common/Common.stm"
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteSampleCaseOnlyIndex.stm"
-
+namespace SimStmTest
 proc testMainSuiteSampleCaseOnlyIndex ()
 
-    call initBase ()
+    call stm.initBase ()
 
-    verbosity INFO_2
-    trace TRACE_OFF
-    resume RESUME_ON_ALL_ERRORS
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_ERRORS
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
-    signal read sigInTestSuiteIndex TestSuiteIndex
-    log message INFO "Main test main suite indexed SampleCaseOnlyIndex started"
+    signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
+    log message stm.INFO "Main test main suite indexed SampleCaseOnlyIndex started"
 
     call testSuiteSampleCaseOnlyIndex ()
 
-    log message INFO "Main test main suite indexed SampleCaseOnlyIndex ended"
+    log message stm.INFO "Main test main suite indexed SampleCaseOnlyIndex ended"
     wait 1000
     finish
 end proc
+end namespace

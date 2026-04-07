@@ -1,43 +1,46 @@
+namespace SimStmTest
 
 proc testSuiteOther ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherRandom
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherSeed
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherTrace
     )
     
-    call testCase (
-    	label set TestToCall testOtheMarker
+    call stm.testCase (
+    	label set TestToCall testOtherMarker
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherWait
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherLogSubstitutions
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherLogFormats
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherLog
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherHelloWorld
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testOtherCall
     )
 end proc
+
+end namespace

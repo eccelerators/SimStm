@@ -40,7 +40,7 @@ entity tbTop is
     generic(
         stimulus_path : string := "../tb/simstm/";
         stimulus_file : string := "testUnits.stm";
-        stimulus_main_entry_label : string := "testMain";
+        stimulus_main_entry_label : string := "SimStmTest.testMain";
         stimulus_test_suite_index : integer := 255;
         Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
         machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32;
@@ -98,8 +98,8 @@ begin
             verify_failures => signals_in.simstm_loopback_verify_failures,
             bus_timeout_passes => signals_in.simstm_loopback_bus_timeout_passes,
             bus_timeout_failures => signals_in.simstm_loopback_bus_timeout_failures,
-            expected_verify_failure  => signals_out.simstm_loopback_expected_verify_failure,
-            expected_bus_timeout_failure  => signals_out.simstm_loopback_expected_bus_timeout_failure,
+            expected_verify_failure => signals_out.simstm_loopback_expected_verify_failure,
+            expected_bus_timeout_failure => signals_out.simstm_loopback_expected_bus_timeout_failure,
 
             marker => marker,
 

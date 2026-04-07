@@ -1,6 +1,8 @@
 include "Base/Base.stm"
 include "TestCase/TestCase.stm"
 
+namespace SimStmTest
+
 const NO_BUS 0
 bus wishbone32 1
 bus wishbone64 2
@@ -17,25 +19,25 @@ proc logBusToTest (
     var valBusToTest 0
     bus pointer get busToTest valBusToTest
     if valBusToTest = 1
-        log message ALWAYS "Testing bus({:d}) NONE with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) NONE with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 1
-        log message ALWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 2
-        log message ALWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 3
-        log message ALWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 4
-        log message ALWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 5
-        log message ALWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 6
-        log message ALWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 7
-        log message ALWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     elsif valBusToTest = 8
-        log message ALWAYS "Testing bus({:d}) ram32 with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) ram32 with machine value width {:d}" valBusToTest stm.MachineValueWidth
     else
-        log message ALWAYS "Testing bus({:d}) unknown with machine value width {:d}" valBusToTest MachineValueWidth
+        log message stm.ALWAYS "Testing bus({:d}) unknown with machine value width {:d}" valBusToTest stm.MachineValueWidth
     end if
 end proc
 
@@ -57,3 +59,6 @@ signal out_signal_3000 3000
 signal out_signal_3001 3001
 signal out_signal_3002 3002
 signal out_signal_3003 3003
+
+end namespace
+

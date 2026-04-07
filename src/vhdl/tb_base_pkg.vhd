@@ -50,7 +50,12 @@ package tb_base_pkg is
     type token_text_field_array is array (1 to 7) of text_field;
     type parameter_text_field_array is array (1 to 6) of text_field;
     type parameter_index_array is array (1 to 6) of integer;
+
     type parameter_value_array is array (natural range <>) of unsigned;
+    type parameter_value_array_ptr is access parameter_value_array;
+
+    type parameter_type is (PAR_LIT, PAR_FQN, PAR_NM);
+    type parameter_type_array is array (1 to 6) of parameter_type;
 
     type stack_text_line_array is array (31 downto 0) of text_line;
     type stack_numbers_array is array (31 downto 0) of integer;
@@ -96,6 +101,8 @@ package tb_base_pkg is
 
     type inst_arguments is record
         par_text_fields : parameter_text_field_array;
+        par_types : parameter_type_array;
+        par_literal_values : parameter_value_array_ptr;
         txt : stm_text_ptr;
         txt_enclosing_quote : character;
     end record;
@@ -106,6 +113,7 @@ package tb_base_pkg is
         slc : src_locator;
         inst : text_field;
         inst_len : integer;
+        inst_namespace : text_field;
         inst_args : inst_arguments;
     end record;
     type inst_element_ptrs is array (0 to max_num_of_inst_elements - 1) of inst_element_ptr;
@@ -259,7 +267,7 @@ package tb_base_pkg is
 
     procedure append_inst(
         variable insts : inout inst_sequence;
-        variable ie : inst_element;
+        variable ie : inst_element_ptr;
         constant debug : boolean
     );
 
@@ -275,9 +283,18 @@ package tb_base_pkg is
         file_name : in string
     ) return text_line;
 
-    function extract_parameters(
-        ts : token_text_field_array
-    ) return parameter_text_field_array;
+    procedure extract_parameters(
+        variable slc : in src_locator;
+        variable ts : in token_text_field_array;
+        variable ptfs : out parameter_text_field_array;
+        variable ptps : out parameter_type_array;
+        variable plit_vals : out parameter_value_array_ptr;
+        constant machine_value_width : integer
+    );
+
+    function contains_dot(
+        s : text_field
+    ) return boolean;
 
     function bin2integer(
         slc : src_locator;
@@ -309,24 +326,27 @@ package tb_base_pkg is
         variable so : out stm_text
     );
 
-    function textfield_cat(
-        s1 : text_field;
-        s2 : text_field
+    function append_trailing_namespace(
+        s : text_field;
+        sa : text_field
     ) return text_field;
 
-    function cat_var_name_local_scope(
-        s1 : text_field;
-        s2 : text_field
-    ) return text_field;
-
-    function cat_namespace_var_name_local_scope(
-        s1 : text_field;
-        s2 : text_field;
-        s3 : text_field
-    ) return text_field;
-
-    function textfield_truncate_text_after_second_dot(
+    function cut_trailing_namespace(
         s : text_field
+    ) return text_field;
+
+    function prepend_namespace(
+        s : text_field;
+        sp : text_field
+    ) return text_field;
+
+    function append_local_scope(
+        s1 : text_field;
+        s2 : text_field
+    ) return text_field;
+
+    function append_dot(
+        s1 : text_field
     ) return text_field;
 
     function ew_str_cat(

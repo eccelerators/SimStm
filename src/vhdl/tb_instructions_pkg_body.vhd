@@ -77,7 +77,7 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_BUS, 2);
         append_inst_def(inst_defs, INSTR_BUS_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_BUS_READ, 4);
-        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 6);
+        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 5);
         append_inst_def(inst_defs, INSTR_BUS_WRITE, 4);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_SET, 2);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_GET, 2);
@@ -132,7 +132,6 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_ARRAY_POINTER_COPY_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_ARRAY_VERIFY, 4);
         -- others
-        append_inst_def(inst_defs, INSTR_PROC, 0);
         append_inst_def(inst_defs, INSTR_PROC_PAR_OPEN, 1);
         append_inst_def(inst_defs, INSTR_PROC_NOPAR, 1);
         append_inst_def(inst_defs, INSTR_CALL_PAR_OPEN, 1);
@@ -182,6 +181,9 @@ package body tb_instructions_pkg is
                     token2_len := 4;
                     token_merge := 12;
                 elsif itokens(2)(1 to 9) = "interrupt" then
+                    token2_len := 9;
+                    token_merge := 12;
+                elsif itokens(2)(1 to 9) = "namespace" then
                     token2_len := 9;
                     token_merge := 12;
                 end if;
@@ -701,13 +703,21 @@ package body tb_instructions_pkg is
         end loop;
         il := fld_len(inst);
         assert hn >= 0
-        report "found undefined instruction " & inst(1 to il) & ", file " & slc.file_name(1 to fld_len(slc.file_name)) & ", line " & integer'image(slc.file_line)
+        report "found undefined instruction " & inst(1 to il) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
+               " line " & integer'image(slc.file_line)
         severity failure;
         assert inst_defs.element_ptrs(hn).inst_len = il
-        report "found instruction found " & inst(1 to il) & " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & ", file " & slc.file_name(1 to fld_len(slc.file_name)) & ", line " & integer'image(slc.file_line)
+        report "found instruction " & inst(1 to il) &
+               " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
+               " line " & integer'image(slc.file_line)
         severity failure;
         assert inst_defs.element_ptrs(hn).num_of_params = num_of_params
-        report "found instruction " & inst(1 to il) & " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & ", file " & slc.file_name(1 to fld_len(slc.file_name)) & ", line " & integer'image(slc.file_line)
+        report "found instruction " & inst(1 to il) &
+               " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
+               " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 

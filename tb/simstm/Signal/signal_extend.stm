@@ -1,410 +1,413 @@
-
 -- This file tests
 -- |- signal verify with mixed value formats (dec, hex, bin) for expected and mask
 -- |- combinations: dec/dec, hex/hex, bin/bin, dec/hex, dec/bin, hex/dec, hex/bin, bin/dec, bin/hex
 -- |- combinations: var/dec, var/hex, var/bin, dec/var, hex/var, bin/var, var/var
 
--- include "interface.stm"
-
-
-proc testSignalExtend ()
-    call testSignalVerifyDecDec()
-    call testSignalVerifyHexHex()
-    call testSignalVerifyBinBin()
-    call testSignalVerifyDecHex()
-    call testSignalVerifyDecBin()
-    call testSignalVerifyHexDec()
-    call testSignalVerifyHexBin()
-    call testSignalVerifyBinDec()
-    call testSignalVerifyBinHex()
-    call testSignalVerifyVarDec()
-    call testSignalVerifyVarHex()
-    call testSignalVerifyVarBin()
-    call testSignalVerifyDecVar()
-    call testSignalVerifyHexVar()
-    call testSignalVerifyBinVar()
-    call testSignalVerifyVarVar()
-end proc
-
-
--- write 0 then verify expected=dec / mask=dec
-proc testSignalVerifyDecDec ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xdeadbeef
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      3735928559 4294967295
-    signal verify loopback_32bit 3735928559 4294967295
-
-    signal write  loopback_32bit 2271560481
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      2271560481 4294967295
-    signal verify loopback_32bit 2271560481 4294967295
-    signal verify loopback_32bit 2185232641 2863355221
-end proc
-
--- write 0 then verify expected=hex / mask=hex
-proc testSignalVerifyHexHex ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xdeadbeef
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0xdeadbeef 0xffffffff
-    signal verify loopback_32bit 0xdeadbeef 0xffffffff
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0x87654321 0xffffffff
-    signal verify loopback_32bit 0x87654321 0xffffffff
-    signal verify loopback_32bit 0x82204101 0xaaaa5555
-end proc
-
--- write 0 then verify expected=bin / mask=bin
-proc testSignalVerifyBinBin ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0b11011110101011011011111011101111
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b11011110101011011011111011101111 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0b11011110101011011011111011101111 0b11111111111111111111111111111111
-
-    signal write  loopback_32bit 0b10000111011001010100001100100001
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b10000111011001010100001100100001 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0b10000111011001010100001100100001 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0b10000010001000000100000100000001 0b10101010101010100101010101010101
-end proc
-
--- expected=dec / mask=hex
-proc testSignalVerifyDecHex ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xc0ffee00
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      3238002176 0xffffffff
-    signal verify loopback_32bit 3238002176 0xffffffff
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      2271560481 0xffffffff
-    signal verify loopback_32bit 2271560481 0xffffffff
-    signal verify loopback_32bit 2185232641 0xaaaa5555
-end proc
-
--- expected=dec / mask=bin
-proc testSignalVerifyDecBin ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xabcd1234
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      2882343476 0b11111111111111111111111111111111
-    signal verify loopback_32bit 2882343476 0b11111111111111111111111111111111
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      2271560481 0b11111111111111111111111111111111
-    signal verify loopback_32bit 2271560481 0b11111111111111111111111111111111
-    signal verify loopback_32bit 2185232641 0b10101010101010100101010101010101
-end proc
-
--- expected=hex / mask=dec
-proc testSignalVerifyHexDec ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xfeedface
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0xfeedface 4294967295
-    signal verify loopback_32bit 0xfeedface 4294967295
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0x87654321 4294967295
-    signal verify loopback_32bit 0x87654321 4294967295
-    signal verify loopback_32bit 0x82204101 2863355221
-end proc
-
--- expected=hex / mask=bin
-proc testSignalVerifyHexBin ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xbabe0000
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0xbabe0000 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0xbabe0000 0b11111111111111111111111111111111
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0x87654321 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0x87654321 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0x82204101 0b10101010101010100101010101010101
-end proc
-
--- expected=bin / mask=dec
-proc testSignalVerifyBinDec ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0b10111010101111100000000000000000
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b10111010101111100000000000000000 4294967295
-    signal verify loopback_32bit 0b10111010101111100000000000000000 4294967295
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b10000111011001010100001100100001 4294967295
-    signal verify loopback_32bit 0b10000111011001010100001100100001 4294967295
-    signal verify loopback_32bit 0b10000010001000000100000100000001 2863355221
-end proc
-
--- expected=bin / mask=hex
-proc testSignalVerifyBinHex ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xcafe1234
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b11001010111111100001001000110100 0xffffffff
-    signal verify loopback_32bit 0b11001010111111100001001000110100 0xffffffff
-
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b10000111011001010100001100100001 0xffffffff
-    signal verify loopback_32bit 0b10000111011001010100001100100001 0xffffffff
-    signal verify loopback_32bit 0b10000010001000000100000100000001 0xaaaa5555
-end proc
-
--- expected=var / mask=dec
-proc testSignalVerifyVarDec ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xdeadbeef
-    equ expected_val 0xdeadbeef
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      expected_val 4294967295
-    signal verify loopback_32bit expected_val 4294967295
-
-    equ expected_val 2185232641
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      expected_val 2863355221
-    signal verify loopback_32bit expected_val 2863355221
-end proc
-
--- expected=var / mask=hex
-proc testSignalVerifyVarHex ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xdeadbeef
-    equ expected_val 0xdeadbeef
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      expected_val 0xffffffff
-    signal verify loopback_32bit expected_val 0xffffffff
-
-    equ expected_val 0x82204101
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    signal verify loopback_32bit expected_val 0xaaaa5555
-end proc
-
--- expected=var / mask=bin
-proc testSignalVerifyVarBin ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xc0ffee00
-    equ expected_val 0xc0ffee00
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      expected_val 0b11111111111111111111111111111111
-    signal verify loopback_32bit expected_val 0b11111111111111111111111111111111
-
-    equ expected_val 0x82204101
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    signal verify loopback_32bit expected_val 0b10101010101010100101010101010101
-end proc
-
--- expected=dec / mask=var
-proc testSignalVerifyDecVar ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    3238002176
-    equ mask_val     4294967295
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      3238002176 mask_val
-    signal verify loopback_32bit 3238002176 mask_val
-
-    equ mask_val     2863355221
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      2271560481 mask_val
-    signal verify loopback_32bit 2185232641 mask_val
-end proc
-
--- expected=hex / mask=var
-proc testSignalVerifyHexVar ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val 0xc0ffee00
-    equ mask_val  0xffffffff
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0xc0ffee00 mask_val
-    signal verify loopback_32bit 0xc0ffee00 mask_val
-
-    equ mask_val  0xaaaa5555
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0x87654321 0xffffffff
-    signal verify loopback_32bit 0x82204101 mask_val
-end proc
-
--- expected=bin / mask=var
-proc testSignalVerifyBinVar ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val 0b11001010111111100001001000110100
-    equ mask_val  0b11111111111111111111111111111111
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b11001010111111100001001000110100 mask_val
-    signal verify loopback_32bit 0b11001010111111100001001000110100 mask_val
-
-    equ mask_val  0b10101010101010100101010101010101
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      0b10000111011001010100001100100001 0b11111111111111111111111111111111
-    signal verify loopback_32bit 0b10000010001000000100000100000001 mask_val
-end proc
-
--- expected=var / mask=var
-proc testSignalVerifyVarVar ()
-    var read_back    0x12345678
-    var expected_val 0
-    var mask_val     0
-    var write_val    0
-
-    equ write_val    0xdeadbeef
-    equ expected_val 0xdeadbeef
-    equ mask_val     0xffffffff
-
-    signal write  loopback_32bit write_val
-    wait 1000
-    signal read   loopback_32bit read_back
-    var    verify read_back      expected_val mask_val
-    signal verify loopback_32bit expected_val mask_val
-
-    equ expected_val 0x82204101
-    equ mask_val     0xaaaa5555
-    signal write  loopback_32bit 0x87654321
-    wait 1000
-    signal read   loopback_32bit read_back
-    signal verify loopback_32bit expected_val mask_val
-
-    equ expected_val 2185232641
-    equ mask_val     0b10101010101010100101010101010101
-    signal verify loopback_32bit expected_val mask_val
-
-    equ expected_val 0b10000010001000000100000100000001
-    equ mask_val     2863355221
-    signal verify loopback_32bit expected_val mask_val
-end proc
+
+include "interface.stm"
+
+namespace SimStmTest
+
+    proc testSignalExtend ()
+        call testSignalVerifyDecDec()
+        call testSignalVerifyHexHex()
+        call testSignalVerifyBinBin()
+        call testSignalVerifyDecHex()
+        call testSignalVerifyDecBin()
+        call testSignalVerifyHexDec()
+        call testSignalVerifyHexBin()
+        call testSignalVerifyBinDec()
+        call testSignalVerifyBinHex()
+        call testSignalVerifyVarDec()
+        call testSignalVerifyVarHex()
+        call testSignalVerifyVarBin()
+        call testSignalVerifyDecVar()
+        call testSignalVerifyHexVar()
+        call testSignalVerifyBinVar()
+        call testSignalVerifyVarVar()
+    end proc
+
+
+    -- write 0 then verify expected=dec / mask=dec
+    proc testSignalVerifyDecDec ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xdeadbeef
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      3735928559 4294967295
+        signal verify loopback_32bit 3735928559 4294967295
+
+        signal write  loopback_32bit 2271560481
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      2271560481 4294967295
+        signal verify loopback_32bit 2271560481 4294967295
+        signal verify loopback_32bit 2185232641 2863355221
+    end proc
+
+    -- write 0 then verify expected=hex / mask=hex
+    proc testSignalVerifyHexHex ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xdeadbeef
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0xdeadbeef 0xffffffff
+        signal verify loopback_32bit 0xdeadbeef 0xffffffff
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0x87654321 0xffffffff
+        signal verify loopback_32bit 0x87654321 0xffffffff
+        signal verify loopback_32bit 0x82204101 0xaaaa5555
+    end proc
+
+    -- write 0 then verify expected=bin / mask=bin
+    proc testSignalVerifyBinBin ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0b11011110101011011011111011101111
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b11011110101011011011111011101111 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0b11011110101011011011111011101111 0b11111111111111111111111111111111
+
+        signal write  loopback_32bit 0b10000111011001010100001100100001
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b10000111011001010100001100100001 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0b10000111011001010100001100100001 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0b10000010001000000100000100000001 0b10101010101010100101010101010101
+    end proc
+
+    -- expected=dec / mask=hex
+    proc testSignalVerifyDecHex ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xc0ffee00
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      3238002176 0xffffffff
+        signal verify loopback_32bit 3238002176 0xffffffff
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      2271560481 0xffffffff
+        signal verify loopback_32bit 2271560481 0xffffffff
+        signal verify loopback_32bit 2185232641 0xaaaa5555
+    end proc
+
+    -- expected=dec / mask=bin
+    proc testSignalVerifyDecBin ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xabcd1234
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      2882343476 0b11111111111111111111111111111111
+        signal verify loopback_32bit 2882343476 0b11111111111111111111111111111111
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      2271560481 0b11111111111111111111111111111111
+        signal verify loopback_32bit 2271560481 0b11111111111111111111111111111111
+        signal verify loopback_32bit 2185232641 0b10101010101010100101010101010101
+    end proc
+
+    -- expected=hex / mask=dec
+    proc testSignalVerifyHexDec ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xfeedface
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0xfeedface 4294967295
+        signal verify loopback_32bit 0xfeedface 4294967295
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0x87654321 4294967295
+        signal verify loopback_32bit 0x87654321 4294967295
+        signal verify loopback_32bit 0x82204101 2863355221
+    end proc
+
+    -- expected=hex / mask=bin
+    proc testSignalVerifyHexBin ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xbabe0000
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0xbabe0000 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0xbabe0000 0b11111111111111111111111111111111
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0x87654321 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0x87654321 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0x82204101 0b10101010101010100101010101010101
+    end proc
+
+    -- expected=bin / mask=dec
+    proc testSignalVerifyBinDec ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0b10111010101111100000000000000000
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b10111010101111100000000000000000 4294967295
+        signal verify loopback_32bit 0b10111010101111100000000000000000 4294967295
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b10000111011001010100001100100001 4294967295
+        signal verify loopback_32bit 0b10000111011001010100001100100001 4294967295
+        signal verify loopback_32bit 0b10000010001000000100000100000001 2863355221
+    end proc
+
+    -- expected=bin / mask=hex
+    proc testSignalVerifyBinHex ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xcafe1234
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b11001010111111100001001000110100 0xffffffff
+        signal verify loopback_32bit 0b11001010111111100001001000110100 0xffffffff
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b10000111011001010100001100100001 0xffffffff
+        signal verify loopback_32bit 0b10000111011001010100001100100001 0xffffffff
+        signal verify loopback_32bit 0b10000010001000000100000100000001 0xaaaa5555
+    end proc
+
+    -- expected=var / mask=dec
+    proc testSignalVerifyVarDec ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xdeadbeef
+        equ expected_val 0xdeadbeef
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      expected_val 4294967295
+        signal verify loopback_32bit expected_val 4294967295
+
+        equ expected_val 2185232641
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      expected_val 2863355221
+        signal verify loopback_32bit expected_val 2863355221
+    end proc
+
+    -- expected=var / mask=hex
+    proc testSignalVerifyVarHex ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xdeadbeef
+        equ expected_val 0xdeadbeef
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      expected_val 0xffffffff
+        signal verify loopback_32bit expected_val 0xffffffff
+
+        equ expected_val 0x82204101
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        signal verify loopback_32bit expected_val 0xaaaa5555
+    end proc
+
+    -- expected=var / mask=bin
+    proc testSignalVerifyVarBin ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xc0ffee00
+        equ expected_val 0xc0ffee00
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      expected_val 0b11111111111111111111111111111111
+        signal verify loopback_32bit expected_val 0b11111111111111111111111111111111
+
+        equ expected_val 0x82204101
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        signal verify loopback_32bit expected_val 0b10101010101010100101010101010101
+    end proc
+
+    -- expected=dec / mask=var
+    proc testSignalVerifyDecVar ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    3238002176
+        equ mask_val     4294967295
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      3238002176 mask_val
+        signal verify loopback_32bit 3238002176 mask_val
+
+        equ mask_val     2863355221
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      2271560481 mask_val
+        signal verify loopback_32bit 2185232641 mask_val
+    end proc
+
+    -- expected=hex / mask=var
+    proc testSignalVerifyHexVar ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val 0xc0ffee00
+        equ mask_val  0xffffffff
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0xc0ffee00 mask_val
+        signal verify loopback_32bit 0xc0ffee00 mask_val
+
+        equ mask_val  0xaaaa5555
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0x87654321 0xffffffff
+        signal verify loopback_32bit 0x82204101 mask_val
+    end proc
+
+    -- expected=bin / mask=var
+    proc testSignalVerifyBinVar ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val 0b11001010111111100001001000110100
+        equ mask_val  0b11111111111111111111111111111111
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b11001010111111100001001000110100 mask_val
+        signal verify loopback_32bit 0b11001010111111100001001000110100 mask_val
+
+        equ mask_val  0b10101010101010100101010101010101
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      0b10000111011001010100001100100001 0b11111111111111111111111111111111
+        signal verify loopback_32bit 0b10000010001000000100000100000001 mask_val
+    end proc
+
+    -- expected=var / mask=var
+    proc testSignalVerifyVarVar ()
+        var read_back    0x12345678
+        var expected_val 0
+        var mask_val     0
+        var write_val    0
+
+        equ write_val    0xdeadbeef
+        equ expected_val 0xdeadbeef
+        equ mask_val     0xffffffff
+
+        signal write  loopback_32bit write_val
+        wait 1000
+        signal read   loopback_32bit read_back
+        var    verify read_back      expected_val mask_val
+        signal verify loopback_32bit expected_val mask_val
+
+        equ expected_val 0x82204101
+        equ mask_val     0xaaaa5555
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+        signal verify loopback_32bit expected_val mask_val
+
+        equ expected_val 2185232641
+        equ mask_val     0b10101010101010100101010101010101
+        signal verify loopback_32bit expected_val mask_val
+
+        equ expected_val 0b10000010001000000100000100000001
+        equ mask_val     2863355221
+        signal verify loopback_32bit expected_val mask_val
+    end proc
+
+end namespace
