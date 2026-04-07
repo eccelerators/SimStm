@@ -9,6 +9,7 @@ proc testConstantAdd ()
     log message 0 "test_variable_1: {}" test_constant_1
     log message 0 "test_variable_2: {}" test_constant_2
 
+    -- this is intnetionally wrong
     add test_constant_1 10
     add test_constant_2 20
 
@@ -19,6 +20,7 @@ end proc
 const test_constant_3 1
 
 proc testConstantEqu ()
+    -- this is intnetionally wrong
     equ test_constant_3 10
 
     finish

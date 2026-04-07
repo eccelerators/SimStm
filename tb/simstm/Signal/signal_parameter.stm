@@ -19,7 +19,7 @@ proc checkSignalParameterInput (
 	var res 0
 	signal read this_signal res
 	log message stm.INFO_2 "signal: {:d}" res
-	signal verify this_signal res 1 stm.MAX
+	signal verify this_signal 1 stm.MAX
 end proc
 
 end namespace

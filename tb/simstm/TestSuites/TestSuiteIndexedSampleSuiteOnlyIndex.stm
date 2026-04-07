@@ -1,46 +1,18 @@
 namespace SimStmTest
 
 proc testSuiteIndexedSampleSuiteOnlyIndex ()
-    call testCaseSampleSuiteOnlyIndexA ()
-    call testCaseSampleSuiteOnlyIndexB ()
-end proc
-
-
-proc testCaseSampleSuiteOnlyIndexA (
-	var skipped 0
-)
-    var t 0
-
-    call beginTestCaseSuiteIndexed ()
-    equ t TestSuiteIndex
-    add t 1
-    seed t
-    call testOtherRandom ()
-
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    -- the suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel
+    -- the tests take respect to the suite index them self
+    -- the individual runs appear automatically as test suites in the generated test junits
+    call stm.testCaseWithSuiteIndex (
+        label set TestToCall testSampleWithSuiteIndexA
     )
 
-end proc
-
-
-proc testCaseSampleSuiteOnlyIndexB (
-	var skipped 0
-)
-    var t 0
-
-    call beginTestCaseSuiteIndexed ()
-    equ t TestSuiteIndex
-    add t 1
-    seed t
-    call testOtherRandom ()
-
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCaseWithSuiteIndex (
+        label set TestToCall testSampleWithSuiteIndexB
     )
-
+    
 end proc
 
 end namespace

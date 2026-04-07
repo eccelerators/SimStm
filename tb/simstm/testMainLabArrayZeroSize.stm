@@ -5,8 +5,6 @@ include "TestLabs/TestLabArrayZeroSize.stm"
 
 include "Array/array_labs_zero_size.stm"
 
-
-
 namespace SimStmTest
 
 file simulation_success "simulation.success"

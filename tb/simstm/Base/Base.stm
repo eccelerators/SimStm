@@ -221,13 +221,6 @@ proc incExpectedStandardTestBusTimeoutFailureCount ()
     signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
 end proc    
            
--- manual method to increment the StandardTestVerifyFailureCount based on if instruction decisions  
-proc incStandardTestVerifyFailureCount ()
-    signal verify stm.sigInZero stm.BasicZero 1 1 
-    -- fail intentionally thus incrementing standard error counter
-    -- shown when a test ends with a finish instruction
-end proc    
-
 proc rol (
 	var RolVal 0
 	var Count 1

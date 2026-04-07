@@ -2,44 +2,46 @@ namespace SimStmTest
 
 proc testSuiteFile ()
 	
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileAppendArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileReadAllArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileReadArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileStatus
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileWriteArray
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFilePointerCopy
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileLocalOverride
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileLocal
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileParameterIn
     )
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testFileParameterOut
     )
 end proc
+
+end namespace
 

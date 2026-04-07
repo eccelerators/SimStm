@@ -175,7 +175,7 @@ proc testLinesGetArray ()
         lines get array a_lines_ga index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
         
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         array verify another_array 0 index_of_line stm.MAX
@@ -227,7 +227,7 @@ proc testLinesInsertArray ()
     loop number_of_lines
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         array verify another_array 0 index_of_line stm.MAX
@@ -269,7 +269,7 @@ proc testLinesInsertArray ()
     loop 3
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         array verify another_array 0 index_of_line_offset stm.MAX
@@ -289,7 +289,7 @@ proc testLinesInsertArray ()
     loop 3
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         array verify another_array 0 index_of_line_offset stm.MAX
@@ -433,7 +433,7 @@ proc testLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         array verify another_array 0 index_of_line stm.MAX
@@ -462,7 +462,7 @@ proc testLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         add index_of_line 1
@@ -475,7 +475,7 @@ proc testLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
-        call arrayDump (
+        call stm.arrayDump (
         	array pointer copy Array another_array
         )
         if index_of_line = 1

@@ -2,7 +2,9 @@ namespace SimStmTest
 
 proc testSuiteConstant ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testConstantAdd
     )
 end proc
+
+end namespace

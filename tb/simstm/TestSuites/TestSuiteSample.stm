@@ -2,12 +2,14 @@ namespace SimStmTest
 
 proc testSuiteSample ()
 
-    call testCase (
+    call stm.testCase (
     	label set TestToCall testSampleA
     )
-
-    call testCase (
+    
+    -- this test is skipped to present an example to skip tests
+    call stm.testCase (
     	label set TestToCall testSampleB
+    	equ skipped 1
     )
 end proc
 

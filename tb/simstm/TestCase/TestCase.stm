@@ -14,7 +14,7 @@ var TestCaseSimulatedStartTime 0
 var TestCaseSimulatedEndTime 0
 var TestCaseSimulatedDurationTime 0
 
-proc beginTestCaseIndexedSuiteIndexed ()
+proc beginTestSuiteIndexedAndCaseIndexed ()
     log message stm.ALWAYS "**********START*TESTCASE*{@c3}_{:d}_{@c2}_{:d}**********" stm.TestSuiteIndex TestCaseIndex
     equ TestSuiteHasIndex 1
     equ TestCaseHasIndex 1
@@ -197,6 +197,42 @@ proc testCase (
     var skipped 0
 )
     call beginTestCase ()
+    call label TestToCall ()
+    call endTestCase ( 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithCaseIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCaseIndexed ()
+    call label TestToCall ()
+    call endTestCase ( 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithSuiteIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCaseSuiteIndexed ()
+    call label TestToCall ()
+    call endTestCase ( 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithSuiteAndCaseIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestSuiteIndexedAndCaseIndexed ()
     call label TestToCall ()
     call endTestCase ( 
         equ  skipped skipped

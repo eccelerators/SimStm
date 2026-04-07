@@ -11,9 +11,9 @@ proc testBus128 (
     bus write busToTest 128 0 0x55555555555555555555555555555555
     bus write busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus write busToTest 128 32 0xffffffffffffffffffffffffffffffff
-    bus verify busToTest 128 0 r 0x55555555555555555555555555555555 0x55555555555555555555555555555555
-    bus verify busToTest 128 16 r 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    bus verify busToTest 128 32 r 0xffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 0x55555555555555555555555555555555 0x55555555555555555555555555555555
+    bus verify busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 0xffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffff
 
     wait 1000
     bus write busToTest 128 0 0x0
@@ -34,24 +34,24 @@ proc testBus128 (
     bus write busToTest  8 14 0xff
     bus write busToTest  8 15 0x0e
 
-    bus verify busToTest 8 0 r 0x12 0xff
-    bus verify busToTest 8 1 r 0x34 0xff
-    bus verify busToTest 8 2 r 0x56 0xff
-    bus verify busToTest 8 3 r 0x78 0xff
-    bus verify busToTest 8 4 r 0xab 0xff
-    bus verify busToTest 8 5 r 0xcd 0xff
-    bus verify busToTest 8 6 r 0xef 0xff
-    bus verify busToTest 8 7 r 0xfe 0xff
-    bus verify busToTest 8 8 r 0x22 0xff
-    bus verify busToTest 8 9 r 0x44 0xff
-    bus verify busToTest 8 10 r 0x66 0xff
-    bus verify busToTest 8 11 r 0x88 0xff
-    bus verify busToTest 8 12 r 0xbb 0xff
-    bus verify busToTest 8 13 r 0xdd 0xff
-    bus verify busToTest 8 14 r 0xff 0xff
-    bus verify busToTest 8 15 r 0x0e 0xff
+    bus verify busToTest 8 0 0x12 0xff
+    bus verify busToTest 8 1 0x34 0xff
+    bus verify busToTest 8 2 0x56 0xff
+    bus verify busToTest 8 3 0x78 0xff
+    bus verify busToTest 8 4 0xab 0xff
+    bus verify busToTest 8 5 0xcd 0xff
+    bus verify busToTest 8 6 0xef 0xff
+    bus verify busToTest 8 7 0xfe 0xff
+    bus verify busToTest 8 8 0x22 0xff
+    bus verify busToTest 8 9 0x44 0xff
+    bus verify busToTest 8 10 0x66 0xff
+    bus verify busToTest 8 11 0x88 0xff
+    bus verify busToTest 8 12 0xbb 0xff
+    bus verify busToTest 8 13 0xdd 0xff
+    bus verify busToTest 8 14 0xff 0xff
+    bus verify busToTest 8 15 0x0e 0xff
 
-    bus verify busToTest 128 0 r 0x0effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 0x0effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffff
 
     wait 1000
     bus write busToTest  128 0 0x0
@@ -63,33 +63,33 @@ proc testBus128 (
     bus write busToTest  16 10 0x5567
     bus write busToTest  16 12 0x99ab
     bus write busToTest  16 14 0xddef
-    bus verify busToTest 16 0 r 0x1234 0xffff
-    bus verify busToTest 16 2 r 0x4567 0xffff
-    bus verify busToTest 16 4 r 0x89ab 0xffff
-    bus verify busToTest 16 6 r 0xcdef 0xffff
-    bus verify busToTest 16 8 r 0x2234 0xffff
-    bus verify busToTest 16 10 r 0x5567 0xffff
-    bus verify busToTest 16 12 r 0x99ab 0xffff
-    bus verify busToTest 16 14 r 0xddef 0xffff
-    bus verify busToTest 128 0 r 0xddef99ab55672234cdef89ab45671234 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 16 0 0x1234 0xffff
+    bus verify busToTest 16 2 0x4567 0xffff
+    bus verify busToTest 16 4 0x89ab 0xffff
+    bus verify busToTest 16 6 0xcdef 0xffff
+    bus verify busToTest 16 8 0x2234 0xffff
+    bus verify busToTest 16 10 0x5567 0xffff
+    bus verify busToTest 16 12 0x99ab 0xffff
+    bus verify busToTest 16 14 0xddef 0xffff
+    bus verify busToTest 128 0 0xddef99ab55672234cdef89ab45671234 0xffffffffffffffffffffffffffffffff
     bus write busToTest  128 4 0x0
     bus write busToTest  16 5 0x1234
-    bus verify busToTest 16 5 r 0x1234 0xffff
-    bus verify busToTest 128 4 r 0x00123400 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 16 5 0x1234 0xffff
+    bus verify busToTest 128 4 0x00123400 0xffffffffffffffffffffffffffffffff
 
     wait 1000
     bus write busToTest  128 0 0x80000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x80000000000000000000000000000000 0x00000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x80000000000000000000000000000000 0x80000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x80000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 0x80000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 0x80000000000000000000000000000000 0x80000000000000000000000000000000
+    bus verify busToTest 128 0 0x80000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
 
     wait 100
     bus write busToTest  128 0 0x00000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x80000000000000000000000000000000 0x00000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x00000000000000000000000000000000 0x00000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x00000000000000000000000000000000 0x80000000000000000000000000000000
-    bus verify busToTest 128 0 r 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 0x80000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 0x00000000000000000000000000000000 0x80000000000000000000000000000000
+    bus verify busToTest 128 0 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
 
     call stm.endStandardTestShell ()
 end proc
@@ -105,9 +105,9 @@ proc testBus128VerifySuccess (
     bus write busToTest  128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus write busToTest  128 32 0xffffffffffffffffffffffffffffffff
 
-    bus verify busToTest 128 0 r 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
-    bus verify busToTest 128 16 r 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    bus verify busToTest 128 32 r 0x0000000000000000 0x0000000000000000
+    bus verify busToTest 128 0 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 0x0000000000000000 0x0000000000000000
 
     call stm.endStandardTestShell ()
 end proc
@@ -122,11 +122,11 @@ proc testBus128VerifyFail (
     bus write busToTest 128 0 0x55555555555555555555555555555555
     bus write busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus write busToTest 128 32 0xffffffffffffffffffffffffffffffff
-    bus verify busToTest 128 0 r 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
-    bus verify busToTest 128 16 r 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    bus verify busToTest 128 32 r 0x00000000000000000000000000000000 0x00000000000000000000000000000000
+    bus verify busToTest 128 0 0x55555555555555555555555555555555 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    bus verify busToTest 128 32 0x00000000000000000000000000000000 0x00000000000000000000000000000000
     log message stm.ALWAYS "bus verify intended error on no match"
-    bus verify busToTest 128 0 r 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
+    bus verify busToTest 128 0 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
     call stm.incExpectedStandardTestVerifyFailureCount ()
 
     call stm.endStandardTestShell ()

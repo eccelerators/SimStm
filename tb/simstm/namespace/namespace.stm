@@ -1,25 +1,27 @@
 namespace nnn
  
- 	var abc 10
-    proc a_ppp (
-    	var x 0
-    	)
-    
-    add x 1
-    end proc
+var abc 10
+proc a_ppp (
+	var x 0
+	)
+
+add x 1
+end proc
  
 end namespace
  
 namespace mmm
-    var abc 20
-    proc a_ppp (
-    	var x 0
-    )
-    add x 2
-    
-    end proc
+var abc 20
+proc a_ppp (
+	var x 0
+)
+add x 2
+
+end proc
  
 end namespace
+
+namespace SimStmTest
  
 proc testNamespaceTwoDifferentOnes ()
  	
@@ -48,4 +50,6 @@ proc testNamespaceLocalAndGlobal ()
     var verify a 4 stm.MAX
     
 end proc
+
+end namespace
  

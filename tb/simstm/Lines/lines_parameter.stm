@@ -52,8 +52,6 @@ proc testLinesParameterOut ()
 	
 end proc
 
-end namespace
-
 proc checkLinesParameterOutput (
 	lines this_lines
 )
@@ -61,3 +59,5 @@ proc checkLinesParameterOutput (
 	array set more 0 2
 	lines append array this_lines more
 end proc
+
+end namespace

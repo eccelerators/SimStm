@@ -1,30 +1,25 @@
 namespace SimStmTest
 
-var sampleCaseOnlyIndexA 1
-
 proc testSuiteSampleCaseOnlyIndex ()
+    
+    -- use stm.TestCaseIndex to run testSampleWithCaseIndexA with different parameters
+    -- the individual runs appear automatically as test cases in the generated test suites
     loop 5
-        call testCaseSampleCaseOnlyIndexA ()
-        add sampleCaseOnlyIndexA 1
+        equ stm.TestCaseIndex 0
+        call stm.testCaseWithCaseIndex (
+            label set TestToCall testSampleWithCaseIndexA
+        )
+        add stm.TestCaseIndex 1
     end loop
-end proc
 
-
-proc testCaseSampleCaseOnlyIndexA (
-	var skipped 0
-)
-
-    equ TestCaseIndex sampleCaseOnlyIndexA
-    call beginTestCaseIndexed ()
-
-    seed sampleCaseOnlyIndexA
-    call testOtherRandom ()
-
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-
+    loop 3
+        equ stm.TestCaseIndex 10
+        call stm.testCaseWithCaseIndex (
+            label set TestToCall testSampleWithCaseIndexB
+        )
+        add stm.TestCaseIndex 10
+    end loop
+    
 end proc
 
 end namespace
