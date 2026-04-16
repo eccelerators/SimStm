@@ -44,13 +44,13 @@ Signal Verify
 
 .. code-block:: simstm
 
- signal verify a_signal t_var e_var m_var
- signal verify a_signal t_var 0x01 0x0F
+ signal verify a_signal e_var m_var
+ signal verify a_signal 0x01 0x0F
 
-The instruction ``signal verify`` reads the value of a signal into a variable and compares it to an expected
+The instruction ``signal verify`` reads the value of a signal and compares it to an expected
 value with a given mask.
 
-In the example, it is verified that the value of ``a_signal``, which is stored in ``t_var``, is the same as ``e_var``, with the mask
+In the example, it is verified that the value of ``a_signal``is the same as ``e_var``, with the mask
 ``m_var``.
 
 The expected value and mask can be variables,

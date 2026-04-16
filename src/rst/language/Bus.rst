@@ -44,15 +44,15 @@ Bus Verify
 
 .. code-block:: simstm
 
- bus verify a_bus a_width an_address a_var e_var m_var
- bus verify a_bus a_width an_address a_var 0x01 0x0F
+ bus verify a_bus a_width an_address e_var m_var
+ bus verify a_bus a_width an_address 0x01 0x0F
 
-The instruction ``bus verify`` reads the value of a bus with a given width and address into a variable 
+The instruction ``bus verify`` reads the value of a bus with a given width and address 
 and compares it to an expected value with a given mask. The expected values and masks can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
 severity Failure if the global resume is set to 0; otherwise, it continues and reports an error.
 
-In the example, it is verified that the value of ``a_bus``, which is stored in ``a_var``, is the same as the value of ``e_var``,
+In the example, it is verified that the value of ``a_bus`` is the same as the value of ``e_var``,
 with the mask ``m_var``.
 
 Bus Pointer Copy
