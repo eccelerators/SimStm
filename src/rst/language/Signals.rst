@@ -55,7 +55,11 @@ In the example, it is verified that the value of ``a_signal``is the same as ``e_
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity failure if the global resume is set to 0.
+severity failure if the global resume is set to 0; otherwise, it continues, reports an simulation error and 
+counts up the SimStm testbench internal verify_failure_count variable.
+
+The SimStm testbench internal verify_passes_count variable counts up the number of verify instructions happened at all regardless if a 
+simulation error occurs or not.
 
 Signal Pointer Copy
 ^^^^^^^^^^^^^^^^^^^

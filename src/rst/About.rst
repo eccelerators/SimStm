@@ -2,14 +2,6 @@
 SimStm
 ======
 
-**Description of new Release 2.0.0 features:**
- - removal of "$"-prefixes
- - variables can now be initialized with constants regardless of their definition sequence
- - local variables in procedures now possible
- - new procedures can now have parameters 
- 
-** The compagnion simstm eclipse plugin Release 2.0.0 validation is still minimal **
-
 SimStm is a VHDL testbench designed to facilitate testing driven by
 external stimulus files with a “.stm” extension. This testbench is
 provided by Eccelerators GmbH and aims to simplify test script creation
@@ -140,3 +132,24 @@ bug are highly appreciated. In the case of email, please send it to
 ``support@eccelerators.com``.
 
 Eccelerators may accept pull requests for small improvements.
+
+Change Log
+----------
+
+**Release 3.x.x SimStm testbench:**
+- New namespace, label, and call label instructions (procedures as call parameters)
+- Procedures can have parameters; old style procedures removed
+- Major VHDL refactor for readability, maintainability, and speed
+
+**Release 3.x.x IDE plug-in:**
+- Eclipse and VS Code plugins available (validation is minimal)
+
+**Release 2.x.x SimStm testbench:**
+- Removed "$" prefixes
+- Variables can be initialized with constants regardless of order
+- Local variables in procedures
+- Procedures can have parameters
+
+**Release 2.x.x IDE plug-in:**
+- Eclipse plugin validation is minimal
+- VS Code plugin not yet built

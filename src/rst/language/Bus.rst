@@ -50,10 +50,14 @@ Bus Verify
 The instruction ``bus verify`` reads the value of a bus with a given width and address 
 and compares it to an expected value with a given mask. The expected values and masks can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity Failure if the global resume is set to 0; otherwise, it continues and reports an error.
+severity Failure if the global resume is set to 0; otherwise, it continues, reports an simulation error and 
+counts up the SimStm testbench internal verify_failure_count variable.
 
-In the example, it is verified that the value of ``a_bus`` is the same as the value of ``e_var``,
-with the mask ``m_var``.
+The SimStm testbench internal verify_passes_count variable counts up the number of bus accesses happened at all regardless if a 
+simulation error occurs or not.
+
+In the example, it is verified that the value read from ``a_bus`` is the same as the value of ``e_var``,
+with the mask ``m_var``. 
 
 Bus Pointer Copy
 ^^^^^^^^^^^^^^^^
@@ -100,8 +104,11 @@ Bus Timeout Set
  bus timeout set a_bus s_var
  bus timeout set a_bus 1000
 
-The instruction ``bus timeout`` sets the timeout in nanoseconds to wait for a bus access to end. On
-violation, the simulation always stops with severity Failure.
+The instruction ``bus timeout`` sets the timeout in nanoseconds to wait for a bus access to end. On timeout, the simulation stops with
+severity Failure if the global resume is set to 0; otherwise, it continues, reports an simulation error and 
+counts up the simstm testbench internal bus_timeout_failure_count variable.
+
+The simstm testbench internal bus_timeout_passes_count variable counts up the number of bus accesses at all regardless if a timeout occurs or not.
 
 
 Bus Timeout Get

@@ -54,7 +54,11 @@ value with a given mask.
 
 The expected value and mask can be variables,
 constants, or numeric values. On mismatch, the simulation stops with
-severity Failure if the global resume is set to 0.
+severity Failure if the global resume is set to 0; otherwise, it continues, reports an simulation error and 
+counts up the SimStm testbench internal verify_failure_count variable.
+
+The SimStm testbench internal verify_passes_count variable counts up the number verify instructions happened at all regardless if a 
+simulation error occurs or not.
 
 For example, the instruction ``array verify b_array p_var e_var m_var`` verifies that the value of ``b_array`` at position ``p_var``
 is the same as the value of ``e_var``, with the mask ``m_var``.
