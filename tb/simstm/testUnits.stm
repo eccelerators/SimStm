@@ -1,8 +1,6 @@
 
 include "Signal/signal.stm"
 
-
-
 namespace SimStmTest
 
     proc testMain ()

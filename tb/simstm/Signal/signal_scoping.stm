@@ -1,0 +1,75 @@
+-- This file tests
+-- |- local signal name
+-- |- local namespace signal name
+-- |- other namespace signal name
+
+include "interface.stm"
+
+
+namespace SimStmTest
+    proc testSignalSimpleScope ()
+        var read_back 0x12345678
+
+        signal loopback_32bit 0
+        signal pointer copy loopback_32bit loopback_1bit
+
+        -- this part has to use the internal loopback_32bit signal wich is mapped to the loopback_1bit signal
+        signal write loopback_32bit 0
+        wait 1000
+        add read_back 0x1
+        signal read  loopback_32bit read_back
+
+        var    verify read_back      0          0xffffffff
+        signal verify loopback_32bit 0          0xffffffff
+        signal verify loopback_32bit 0          0x1
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+
+        var    verify read_back      0x1        0xffffffff
+        signal verify loopback_32bit 1          0xffffffff
+        signal verify loopback_32bit 1          0x1
+
+        -- this part has to use the namespace loopback_32bit signal
+        signal write SimStmTest.loopback_32bit  0
+        wait 1000
+        signal read  SimStmTest.loopback_32bit  read_back
+
+        var    verify read_back                 0          0xffffffff
+        signal verify SimStmTest.loopback_32bit 0          0xffffffff
+        signal verify SimStmTest.loopback_32bit 0xfffffffe 0x1
+
+        signal write  SimStmTest.loopback_32bit 0x87654321
+        wait 1000
+        signal read   SimStmTest.loopback_32bit read_back
+
+        var    verify read_back                 0x87654321 0xffffffff
+        signal verify SimStmTest.loopback_32bit 0x87654321 0xffffffff
+        signal verify SimStmTest.loopback_32bit 0x82204101 0xaaaa5555
+
+        -- this signal has the same name as the 32bit signal but it is mapped to the loopback_16bit_cross signal
+        signal write  SimStmTest_new.loopback_32bit 0xffffffff
+        wait 1000
+        signal read   SimStmTest_new.loopback_32bit read_back
+
+        var    verify read_back                     0xffff     0xffffffff
+        signal verify SimStmTest_new.loopback_32bit 0xffff     0xffffffff
+        signal verify SimStmTest_new.loopback_32bit 0x0000     0xffff0000
+
+        signal write  SimStmTest_new.loopback_32bit 0x87654321
+        wait 1000
+        signal read   SimStmTest_new.loopback_32bit read_back
+
+        var    verify read_back                     0x84C2     0xffffffff
+        signal verify SimStmTest_new.loopback_32bit 0x84C2     0xffffffff
+        signal verify SimStmTest_new.loopback_32bit 0x8040     0xaa55
+
+    end proc
+
+end namespace
+
+namespace SimStmTest_new
+    -- this signal has the same name as the 32bit signal but it is mapped to the loopback_16bit_cross signal
+    signal loopback_32bit 11002
+end namespace

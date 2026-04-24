@@ -6,6 +6,7 @@
 
 include "interface.stm"
 
+
 namespace SimStmTest
 
     proc testSignalPointer ()

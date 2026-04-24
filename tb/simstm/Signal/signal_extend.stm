@@ -48,7 +48,7 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         var    verify read_back      2271560481 4294967295
         signal verify loopback_32bit 2271560481 4294967295
-        signal verify loopback_32bit 2185232641 2863355221
+        signal verify loopback_32bit 2183151873 2863289685
     end proc
 
     -- write 0 then verify expected=hex / mask=hex
@@ -104,7 +104,7 @@ namespace SimStmTest
         var mask_val     0
         var write_val    0
 
-        equ write_val    0xc0ffee00
+        equ write_val    0xc0fffe00
 
         signal write  loopback_32bit write_val
         wait 1000
@@ -117,7 +117,7 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         var    verify read_back      2271560481 0xffffffff
         signal verify loopback_32bit 2271560481 0xffffffff
-        signal verify loopback_32bit 2185232641 0xaaaa5555
+        signal verify loopback_32bit 2183151873 0xaaaa5555
     end proc
 
     -- expected=dec / mask=bin
@@ -140,7 +140,7 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         var    verify read_back      2271560481 0b11111111111111111111111111111111
         signal verify loopback_32bit 2271560481 0b11111111111111111111111111111111
-        signal verify loopback_32bit 2185232641 0b10101010101010100101010101010101
+        signal verify loopback_32bit 2183151873 0b10101010101010100101010101010101
     end proc
 
     -- expected=hex / mask=dec
@@ -163,7 +163,7 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         var    verify read_back      0x87654321 4294967295
         signal verify loopback_32bit 0x87654321 4294967295
-        signal verify loopback_32bit 0x82204101 2863355221
+        signal verify loopback_32bit 0x82204101 2863289685
     end proc
 
     -- expected=hex / mask=bin
@@ -209,7 +209,7 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         var    verify read_back      0b10000111011001010100001100100001 4294967295
         signal verify loopback_32bit 0b10000111011001010100001100100001 4294967295
-        signal verify loopback_32bit 0b10000010001000000100000100000001 2863355221
+        signal verify loopback_32bit 0b10000010001000000100000100000001 2863289685
     end proc
 
     -- expected=bin / mask=hex
@@ -251,12 +251,12 @@ namespace SimStmTest
         var    verify read_back      expected_val 4294967295
         signal verify loopback_32bit expected_val 4294967295
 
-        equ expected_val 2185232641
+        equ expected_val 2183151873
         signal write  loopback_32bit 0x87654321
         wait 1000
         signal read   loopback_32bit read_back
-        var    verify read_back      expected_val 2863355221
-        signal verify loopback_32bit expected_val 2863355221
+        var    verify read_back      expected_val 2863289685
+        signal verify loopback_32bit expected_val 2863289685
     end proc
 
     -- expected=var / mask=hex
@@ -321,12 +321,12 @@ namespace SimStmTest
         var    verify read_back      3238002176 mask_val
         signal verify loopback_32bit 3238002176 mask_val
 
-        equ mask_val     2863355221
+        equ mask_val     2863289685
         signal write  loopback_32bit 0x87654321
         wait 1000
         signal read   loopback_32bit read_back
-        var    verify read_back      2271560481 mask_val
-        signal verify loopback_32bit 2185232641 mask_val
+        var    verify read_back      2183151873 mask_val
+        signal verify loopback_32bit 2183151873 mask_val
     end proc
 
     -- expected=hex / mask=var
@@ -401,12 +401,12 @@ namespace SimStmTest
         signal read   loopback_32bit read_back
         signal verify loopback_32bit expected_val mask_val
 
-        equ expected_val 2185232641
+        equ expected_val 2183151873
         equ mask_val     0b10101010101010100101010101010101
         signal verify loopback_32bit expected_val mask_val
 
         equ expected_val 0b10000010001000000100000100000001
-        equ mask_val     2863355221
+        equ mask_val     2863289685
         signal verify loopback_32bit expected_val mask_val
     end proc
 

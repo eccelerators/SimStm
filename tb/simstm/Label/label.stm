@@ -1,15 +1,13 @@
-<<<<<<< HEAD
-label lLabel iLabel
-=======
 namespace SimStmTest
 
-label lLabel iLabel 
->>>>>>> origin/to_call_label
+label lLabel iLabel
 
 proc iLabel (
 	var p 0
 	var r 0
 )
+	equ p 5
+	var pointer copy r v
 end proc
 
 proc testCallLabelIndirect ()
@@ -19,11 +17,7 @@ proc testCallLabelIndirect ()
 		equ p 5
 		var pointer copy r v
 	)
-<<<<<<< HEAD
-	var verify v 6 MAX
-=======
-	var verify v 6 stm.MAX	
->>>>>>> origin/to_call_label
+	var verify v 6 stm.MAX
 end proc
 
 proc pLabel (

@@ -74,7 +74,7 @@ var BasicZero 0
 signal sigMachineValueWidth 8
 var MachineValueWidth 0
 
-var MAX 0
+const MAX 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 proc initBase ()
     sub MAX 1
