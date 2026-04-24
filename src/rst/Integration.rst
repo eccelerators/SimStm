@@ -1,6 +1,5 @@
-
-Overview and Integration into User Testbench
---------------------------------------------
+Integration
+-----------
 
 The following picture illustrates how the ``tb_simstm`` module is
 integrated into the user testbench. The ``tb_simstm`` module should not

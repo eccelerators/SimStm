@@ -1,0 +1,10 @@
+include "Other/other.stm"
+
+namespace SimStmTest
+
+proc testLabSample ()
+
+    call testOtherRandom ()
+end proc
+
+end namespace

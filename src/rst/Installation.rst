@@ -1,10 +1,18 @@
 
+Installation
+------------
 
-Installation and Usage of the Plugins
--------------------------------------
+VHDL code
+~~~~~~~~~~
+
+Start based upon an Eccelerators sample project and modify it. 
+The SimStm testbench is available in the GitHub repository of Eccelerators accompanied by sample project repositories using it.
+
+IDE plug-ins
+~~~~~~~~~~~~
 
 Visual Studio Code
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 -  Open Visual Studio Code.
 -  Go to the Extensions Marketplace.
@@ -13,7 +21,7 @@ Visual Studio Code
 -  Leverage the plugin's IDE features to enhance your testing workflow.
 
 Eclipse
-~~~~~~~
+^^^^^^^
 
 -  Navigate to `Eccelerators <https://eccelerators.com>`__.
 -  Download the “SimStm” Eclipse plugin.

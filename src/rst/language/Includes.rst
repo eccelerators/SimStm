@@ -1,5 +1,8 @@
-Include
--------
+Includes
+~~~~~~~~
+
+include
+^^^^^^^
 
 .. code-block:: simstm
 

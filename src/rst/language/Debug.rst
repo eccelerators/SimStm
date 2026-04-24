@@ -1,7 +1,7 @@
-Debug Methods
-~~~~~~~~~~~~~
+Debug
+~~~~~
 
-Trace
+trace
 ^^^^^
 
 .. code-block:: simstm
@@ -14,12 +14,21 @@ information when it is set at some point during the SimStm code
 execution. Thus, e.g., the flow through complex if, elsif … trees can be
 shown.
 
--  Setting the bit 0 in the given value prints the lines of code with
-   some additional information.
--  Setting the bit 1 dumps all(!) objects before a line is executed.
--  Setting the bit 2 dumps all file names currently in use.
+Predifined constants can be used to set the trace variable. The following bits are defined:
 
-Marker
+.. code-block:: simstm
+
+ const TRACE_OFF 0
+ const TRACE_EXECUTED_LINES 0x1
+ const TRACE_INSTRUCTIONS 0x2
+ const TRACE_VARIABLES 0x4
+ const TRACE_FILES 0x8
+ const TRACE_IF_TREES 0x10
+ const TRACE_CALLS 0x20
+ const TRACE_ALL 0xFFFF
+
+
+marker
 ^^^^^^
 
 .. code-block:: simstm
@@ -37,3 +46,12 @@ during the execution of the SimStm code so they can be found easily in
 the waveform display. Beneath this, the intern variables ``Executing_Line`` and
 ``Executing_File`` in the ``tb_simstm.vhd`` module are always present and
 show the currently executed line of code.
+
+stop
+^^^^
+
+.. code-block:: simstm
+    
+    stop
+    
+The ``stop`` instruction stops the simulation with the severity error. The simulation can be continued by pressing continue in the simulator.

@@ -1,8 +1,8 @@
 
 Objects
--------
+~~~~~~~
 
-Const
+const
 ^^^^^
 
 .. code-block:: simstm
@@ -18,7 +18,7 @@ It **isn't possible** to initialize a constant by referencing another
 constant.
 
 
-Var
+var
 ^^^
 
 .. code-block:: simstm
@@ -35,7 +35,7 @@ variable or constant yet. The ``equ``
 instruction must be used within a procedure for this purpose.
 
 
-Array
+array
 ^^^^^
 
 .. code-block:: simstm
@@ -47,7 +47,7 @@ The ``array`` instruction declares an array with an ID and an unsigned 32-bit in
 Only arrays with one dimension are possible; the length is fixed.
 
 
-File
+file
 ^^^^
 
 .. code-block:: simstm
@@ -64,7 +64,7 @@ a reference to a file is used in another instruction accessing a
 file, e.g., ``file read all a_file a_lines``.
 
 
-Lines
+lines
 ^^^^^
 
 .. code-block:: simstm
@@ -79,7 +79,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 ``lines insert array a_lines 9 b_array``.
 
 
-Signal
+signal
 ^^^^^^
 
 .. code-block:: simstm
@@ -93,7 +93,7 @@ This signal number must be given in the tb_signal package by
 customization and attached to a signal.
 
 
-Bus
+bus
 ^^^
 
 .. code-block:: simstm
@@ -107,7 +107,7 @@ bus number must be given in the tb_bus package by customization and
 attached to a bus.
 
 
-Namespace
+namespace
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -119,3 +119,15 @@ Namespace
 The ``namespace`` instruction declares a container-like space, that can hold variables, subroutines etc.
 These are defined only inside the namespace and therefore help organizing code and avoiding naming conflicts.
 In the given example, the variable ``l_var`` is only defined inside the namespace ``a``.
+
+
+label
+^^^^^
+
+.. code-block:: simstm
+    
+ label lbl_var a_var
+ 
+The instruction ``label`` declares and defines a label with an ID and an initial value.
+
+A label can act as a placeholder for actual values which are modifiable through ``label equ``, ``label set`` or ``label pointer copy``.

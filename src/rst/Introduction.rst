@@ -1,6 +1,6 @@
 
-SimStm
-======
+Introduction
+============
 
 SimStm is a VHDL testbench designed to facilitate testing driven by
 external stimulus files with a “.stm” extension. This testbench is
@@ -114,7 +114,7 @@ Features and Advantages
 -  State-of-the-art SimStm language IDE support for rapid test case
    creation
 -  Test case code change and test without re-compilation
--  SimStm language transpiles to Python or C, thus simulation code can
+-  SimStm language will transpile to Python or C, thus simulation code can
    be reused for the test of real target HW
 -  Easily customizable to support user-defined buses, signals, and
    interrupts

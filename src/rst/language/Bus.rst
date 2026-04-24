@@ -1,4 +1,7 @@
-Bus
+Busses
+~~~~~~
+
+bus
 ^^^
 
 .. code-block:: simstm
@@ -13,10 +16,7 @@ The signal object associates a SimStm bus name with a bus number. This
 bus number must be given in the tb_bus package by customization and
 attached to a bus.
 
-Bus Access
-~~~~~~~~~~
-
-Bus Write
+bus write
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -28,7 +28,7 @@ The instruction ``bus write`` writes a variable, constant, or numeric value to a
 
 In the example, the value of ``a_var`` is being stored in ``a_bus``.
 
-Bus Read
+bus read
 ^^^^^^^^
 
 .. code-block:: simstm
@@ -39,7 +39,7 @@ The instruction ``bus read`` reads the value of a bus with a given width and add
 
 In the example, the value of ``a_bus`` is stored in ``a_var``.
 
-Bus Verify
+bus verify
 ^^^^^^^^^^
 
 .. code-block:: simstm
@@ -59,7 +59,7 @@ simulation error occurs or not.
 In the example, it is verified that the value read from ``a_bus`` is the same as the value of ``e_var``,
 with the mask ``m_var``. 
 
-Bus Pointer Copy
+bus pointer copy
 ^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -73,7 +73,7 @@ Used, for instance, to hand over a bus to a subroutine. Changes to the source
 bus are applied to the target bus as well.
 
 
-Bus Pointer Set
+bus pointer set
 ^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -85,7 +85,7 @@ The instruction ``bus pointer set`` sets a bus pointer to an absolute address.
 
 In the example, the pointer ``t_bus`` is set to 5.
 
-Bus Pointer Get
+bus pointer get
 ^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -96,7 +96,7 @@ The instruction ``bus pointer get`` gets the value of a bus pointer and stores i
 
 In the example, the pointer ``s_bus`` is stored in ``ptr_var``.
 
-Bus Timeout Set
+bus timeout set
 ^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -111,7 +111,7 @@ counts up the simstm testbench internal bus_timeout_failure_count variable.
 The simstm testbench internal bus_timeout_passes_count variable counts up the number of bus accesses at all regardless if a timeout occurs or not.
 
 
-Bus Timeout Get
+bus timeout get
 ^^^^^^^^^^^^^^^
 
 .. code-block:: simstm

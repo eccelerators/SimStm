@@ -1,5 +1,5 @@
-Unit Tests
-----------
+Automated Tests
+---------------
 
 The test folder contains unit tests for all commands. Thus all commands
 are verified for each release by regression tests.

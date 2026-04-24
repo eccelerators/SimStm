@@ -29,6 +29,7 @@
 -- ******************************************************************************
 namespace stm
 
+-- read modify write
 proc readModifyWrite (	
     bus Bus 0
     var Width 32
@@ -47,6 +48,51 @@ proc readModifyWrite (
     and WriteData Mask -- take only bits which are impacted
     or WriteData ReadData -- combine to new value
     bus write Bus Width Adr WriteData
+end proc
+
+-- rotate left
+proc rol (
+    var RolVal 0
+    var Count 1
+    var Width 32
+)
+    var tv 0
+    var uBit 0
+    var m 1
+    
+    shl m Width
+    sub m 1
+    
+    equ tv RolVal
+    shl RolVal Count
+    equ uBit Width
+    sub uBit 1
+    sub uBit Count
+    shr tv uBit
+    or RolVal tv
+    and RolVal m
+end proc
+
+-- rotate right
+proc ror (
+    var RorVal 0
+    var Count 1
+    var Width 32
+)
+    var tv 0
+    var uBit 0
+    var m 1
+  
+    shl m Width
+    sub m 1
+    equ tv RorVal
+    shr RorVal Count
+    equ uBit Width
+    sub uBit 1
+    sub uBit Count
+    shl tv uBit
+    or RorVal tv
+    and RorVal m
 end proc
 
 end namespace

@@ -1,5 +1,8 @@
 Files
------
+~~~~~
+
+file
+^^^^
 
 .. code-block:: simstm
 
@@ -14,11 +17,9 @@ be accessed in an indexed manner. The variables are evaluated every time
 a reference to a file is used in another instruction accessing a
 file, e.g., ``file read all a_file a_lines``.
 
-File Access
-~~~~~~~~~~~
 
-File Writable
-^^^^^^^^^^^^^^
+file writable
+^^^^^^^^^^^^^
 
 .. code-block:: simstm
 
@@ -31,7 +32,7 @@ on the operating system.
 
 In the example, the value of the test for ``a_file`` is stored in ``r_var``.
 
-File Readable
+file readable
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -44,7 +45,7 @@ on the operating system.
 
 In the example, the value of the test for ``a_file`` is stored in ``r_var``.
 
-File Appendable
+file appendable
 ^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -57,7 +58,7 @@ depend on the operating system.
 
 In the example, the value of the test for ``a_file`` is stored in ``r_var``.
 
-File Write
+file write
 ^^^^^^^^^^
 
 .. code-block:: simstm
@@ -69,7 +70,7 @@ overwritten if it exists.
 
 In the example, ``a_lines`` is written into ``a_file``.
 
-File Append
+file append
 ^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -82,7 +83,7 @@ if the file doesn't exist.
 In the example, ``a_lines`` is appended to ``a_file``.
 
 
-File Read All
+file read all
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -93,7 +94,7 @@ The ``file read all`` instruction reads all lines of a file into a lines object.
 
 In the example, the content of ``a_file`` is stored in ``a_lines``.
 
-File Read
+file read
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -112,7 +113,7 @@ The piecewise read process of the file must be terminated by a file read
 end instruction always. The number of concurrent file read processes is
 limited to 4.
 
-File Read End
+file read end
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -121,7 +122,7 @@ File Read End
 
 The ``file read end`` instruction ends the piecewise read process of a file.
 
-File Pointer Copy
+file pointer copy
 ^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm

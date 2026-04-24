@@ -1,6 +1,9 @@
 
-Wait
-----
+Waits
+~~~~~
+
+wait
+^^^^
 
 .. code-block:: simstm
 

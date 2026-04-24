@@ -1,6 +1,9 @@
 
 Labels
-------
+~~~~~~
+
+label
+^^^^^
 
 .. code-block:: simstm
 	
@@ -10,7 +13,7 @@ The instruction ``label`` declares and defines a label with an ID and an initial
 
 A label can act as a placeholder for actual values which are modifiable through ``label equ``, ``label set`` or ``label pointer copy``.
 
-Label Equ
+label equ
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -21,7 +24,7 @@ The instruction ``label equ`` sets the value of a label to a different label.
 
 In the example, ``lbl_var`` is set to the value of ``a_var``.
 
-Label Set
+label set
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -30,7 +33,7 @@ Label Set
  
 
 
-Label Pointer Copy
+label pointer copy
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm

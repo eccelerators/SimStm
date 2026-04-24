@@ -3,29 +3,18 @@ SimStm
 
 .. toctree::
    :numbered:
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
-   About
-   OverviewAndIntegrationIntoUserTestbench
-   InstallationAndUsageOfThePlugins
-   language/Arrays
-   language/Bus
-   language/DebugMethods
-   language/Files
-   language/FlowControl
-   language/General
-   language/Include
-   language/Lines
-   language/Log
-   language/Objects
-   language/Operations
-   language/RandomNumbers
-   language/Signals
-   language/Variables
-   language/Wait   
+   Introduction
+   Integration
+   Installation
+   Language
    Examples
-   UnitTests
+   StandardTests
+   JUnitTests
+   StandardLabs
+   AutomatedTests
    RepositoryGuide
    
 Indices and tables

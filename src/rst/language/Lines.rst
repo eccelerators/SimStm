@@ -1,5 +1,8 @@
 Lines
------
+~~~~~
+
+lines
+^^^^^
 
 .. code-block:: simstm
 
@@ -12,10 +15,7 @@ defined to have no content when it is declared by default. It can grow
 or shrink dynamically by lines instructions accessing it, e.g.,
 ``lines insert array a_lines 9 b_array``.
 
-Lines Access
-~~~~~~~~~~~~
-
-Lines Get
+lines get
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -38,7 +38,7 @@ the array can hold. The number of detected hex numbers is reported in a
 result variable. Then the user can decide what action should follow a
 mismatch.
 
-Lines Set
+lines set
 ^^^^^^^^^
 .. code-block:: simstm
 
@@ -55,7 +55,7 @@ The line currently at this position is overwritten. The line can be derived from
 message. The message string can contain {} placeholders which are filled
 by values of variables given after the message string.
 
-Lines Insert
+lines insert
 ^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -72,7 +72,7 @@ from an array or a message. The message string can contain {}
 placeholders which are filled by values of variables given after the
 message string.
 
-Lines Append
+lines append
 ^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -88,7 +88,7 @@ In the example, the content of ``s_array`` is appended to ``a_lines``.
 The line can be derived from an array or a message. The message string can contain {} placeholders
 which are filled by values of variables given after the message string.
 
-Lines Delete
+lines delete
 ^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -101,7 +101,7 @@ moved to the given position if it exists.
 
 In the example, the line at position ``p_var`` in ``a_lines`` is deleted.
 
-Lines Size
+lines size
 ^^^^^^^^^^
 
 .. code-block:: simstm
@@ -113,7 +113,7 @@ at that point.
 
 In the example, the size of ``a_lines`` is stored in ``r_var``.
 
-Lines Pointer Copy
+lines pointer copy
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -124,6 +124,6 @@ The ``lines pointer copy`` instruction copies a lines pointer.
 
 In the example, ``t_lines`` points to ``s_lines`` after the execution of the instruction.
 
-Used, forinstance, to hand over a file to a subroutine. Changes to the source
+Used, for instance, to hand over a file to a subroutine. Changes to the source
 object are applied to the target object as well.
 

@@ -1,5 +1,9 @@
+
 Arrays
-------
+~~~~~~
+
+array
+^^^^^
 
 .. code-block:: simstm
 
@@ -9,10 +13,8 @@ The instruction ``array`` declares an array with an ID and an unsigned 32-bit in
 
 Only arrays with one dimension are possible; the length is fixed.
 
-Array Access
-~~~~~~~~~~~~
 
-Array Set
+array set
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -28,7 +30,7 @@ a certain value.
 For example, the instruction ``array set a_array p_var a_var`` sets the value of ``a_array`` at position ``p_var`` to the 
 value of ``a_var``.
 
-Array Get
+array get
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -41,7 +43,7 @@ The ``array get`` instruction gets the value of an array at a position and store
 For example, the instruction ``array get b_array p_var t_var`` gets the value of ``b_array`` at position 
 ``p_var`` and stores it in ``t_var``.
 
-Array Verify
+array verify
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -63,7 +65,7 @@ simulation error occurs or not.
 For example, the instruction ``array verify b_array p_var e_var m_var`` verifies that the value of ``b_array`` at position ``p_var``
 is the same as the value of ``e_var``, with the mask ``m_var``.
 
-Array Size
+array size
 ^^^^^^^^^^
 
 .. code-block:: simstm
@@ -74,7 +76,7 @@ The ``array size`` instruction gets the size of an array and stores it in a vari
 
 For example, ``array size b_array t_var`` stores the size of ``b_array`` in ``t_var``.
 
-Array Pointer Copy
+array pointer copy
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm

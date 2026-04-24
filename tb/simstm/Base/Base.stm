@@ -171,8 +171,8 @@ proc endStandardTestShell ()
     signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountResult
     sub StandardTestBusTimeoutPassCountResult StandardTestBusTimeoutPassCountStartSnapShot 
     
-    log message 0 "Passed {:d} verify instructions" StandardTestVerifyPassCountResult
-    log message 0 "Passed {:d} timeout monitored bus access instructions" StandardTestBusTimeoutPassCountResult
+    log message 0 "Executed {:d} verify instructions" StandardTestVerifyPassCountResult
+    log message 0 "Executed {:d} timeout monitored bus access instructions" StandardTestBusTimeoutPassCountResult
 
     if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult
         if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult            
@@ -209,59 +209,36 @@ proc endStandardTestShell ()
     equ StandardTestFailure 0  
 end proc
 
--- method to increment the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
-proc incExpectedStandardTestVerifyFailureCount ()
+-- method tto add a value to the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
+proc addExpectedStandardTestVerifyFailureCount (
+    var Add 1
+)
     add stm.ExpectedStandardTestVerifyFailureCount 1
     signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
 end proc
 
--- method to increment the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
-proc incExpectedStandardTestBusTimeoutFailureCount ()
+-- method to add a value to the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
+proc addExpectedStandardTestBusTimeoutFailureCount (
+    var Add 1
+)
     add stm.ExpectedStandardTestBusTimeoutFailureCount 1
     signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
-end proc    
-           
-proc rol (
-	var RolVal 0
-	var Count 1
-	var Width 32
+end proc  
+
+-- method to set the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
+proc setExpectedStandardTestVerifyFailureCount (
+    var Set 1
 )
-    var tv 0
-    var uBit 0
-    var m 1
-    
-    shl m Width
-    sub m 1
-    
-    equ tv RolVal
-    shl RolVal Count
-    equ uBit Width
-    sub uBit 1
-    sub uBit Count
-    shr tv uBit
-    or RolVal tv
-    and RolVal m
+    equ stm.ExpectedStandardTestVerifyFailureCount Set
+    signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
 end proc
 
-proc ror (
-	var RorVal 0
-	var Count 1
-	var Width 32
+-- method to set the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
+proc setExpectedStandardTestBusTimeoutFailureCount (
+    var Set 1
 )
-    var tv 0
-    var uBit 0
-    var m 1
-  
-    shl m Width
-    sub m 1
-    equ tv RorVal
-    shr RorVal Count
-    equ uBit Width
-    sub uBit 1
-    sub uBit Count
-    shl tv uBit
-    or RorVal tv
-    and RorVal m
-end proc
+    equ stm.ExpectedStandardTestBusTimeoutFailureCount 1
+    signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
+end proc   
 
 end namespace

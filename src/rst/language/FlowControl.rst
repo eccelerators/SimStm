@@ -1,8 +1,8 @@
 Subroutines, Branches, and Loops
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-proc, end proc
-^^^^^^^^^^^^^^^^^
+proc
+^^^^
 
 .. code-block:: simstm
 
@@ -37,8 +37,8 @@ return
 
 The ``return`` instruction returns to calling code from a subroutine.
 
-interrupt, end interrupt
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+interrupt
+^^^^^^^^^
 
 .. code-block:: simstm
 
@@ -57,8 +57,8 @@ tbsignal package by customization and attached to a signal triggering
 the interrupt. If necessary, the handling of nested interrupts must be
 resolved there too.
 
-if, elsif, else, end if
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+if
+^^
 
 .. code-block:: simstm
 
@@ -135,7 +135,7 @@ stop
 	
 The ``stop`` instruction stops the simulation with the severity Failure. The simulation can be resumed.
 
-Resume
+resume
 ^^^^^^
 
 .. code-block:: simstm

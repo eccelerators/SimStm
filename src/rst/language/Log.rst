@@ -1,7 +1,7 @@
-Log
----
+Logs
+~~~~
 
-Log Message
+log message
 ^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -14,7 +14,7 @@ The ``log message`` instruction prints a message at a given verbosity level to t
 The message string can contain {} placeholders which are filled by values of
 variables given after the message string.
 
-Log Lines
+log lines
 ^^^^^^^^^
 
 .. code-block:: simstm
@@ -23,7 +23,7 @@ Log Lines
 
 The ``log lines`` instruction dumps a lines object at a given verbosity level to the console.
 
-Verbosity
+verbosity
 ^^^^^^^^^
 
 .. code-block:: simstm

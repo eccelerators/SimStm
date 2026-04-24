@@ -1,8 +1,8 @@
 
 Random Numbers
---------------
+~~~~~~~~~~~~~~
 
-Random
+random
 ^^^^^^
 
 .. code-block:: simstm
@@ -13,7 +13,7 @@ Random
 The ``random`` instruction generates a random number greater or equal to the min value given and
 less than the maximum number given.
 
-Seed
+seed
 ^^^^
 
 .. code-block:: simstm

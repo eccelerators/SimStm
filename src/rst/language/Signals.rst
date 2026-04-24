@@ -1,5 +1,8 @@
 Signals
--------
+~~~~~~~
+
+signal
+^^^^^^
 
 .. code-block:: simstm
 	
@@ -13,10 +16,8 @@ The signal object associates a SimStm signal name with a signal number.
 This signal number must be given in the tb_signal package by
 customization and be attached to a signal.
 
-Signal Access
-~~~~~~~~~~~~~
 
-Signal Write
+signal write
 ^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -28,7 +29,7 @@ The instruction ``signal write`` writes a variable, constant, or numeric value t
 
 In the example, ``s_var`` is stored in ``a_signal``.
 
-Signal Read
+signal read
 ^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -39,7 +40,7 @@ The instruction ``signal read`` reads the value of a signal into a variable.
 
 In the example, the value of ``a_signal`` is stored in ``t_var``.
 
-Signal Verify
+signal verify
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -61,7 +62,7 @@ counts up the SimStm testbench internal verify_failure_count variable.
 The SimStm testbench internal verify_passes_count variable counts up the number of verify instructions happened at all regardless if a 
 simulation error occurs or not.
 
-Signal Pointer Copy
+signal pointer copy
 ^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -75,7 +76,7 @@ In the example, ``t_signal`` points to ``s_signal`` after the instruction of the
 Used, for instance, to hand over a signal to a subroutine. Changes to the source
 object are applied to the target object as well.
 
-Signal Pointer Set
+signal pointer set
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -87,7 +88,7 @@ The instruction ``signal pointer set`` sets a signal pointer to an absolute addr
 
 In the example, the pointer ``t_signal`` is set to 5.
 
-Signal Pointer Get
+signal pointer get
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm

@@ -1,5 +1,9 @@
 Variables
----------
+~~~~~~~~~
+
+
+var
+^^^
 
 .. code-block:: simstm
 
@@ -14,10 +18,7 @@ It **isn't possible** to initialize a variable by referencing another
 variable or constant yet. The ``equ``
 instruction must be used within a procedure for this purpose.
 
-Var Access
-~~~~~~~~~~
-
-Equ
+equ
 ^^^
 
 .. code-block:: simstm
@@ -30,7 +31,7 @@ The ``equ`` instruction sets the value of a variable or constant to a different 
 In the example, the value of ``operand1`` is set to ``operand2``.
 
 
-Var Verify
+var verify
 ^^^^^^^^^^^^^
 
 .. code-block:: simstm
@@ -52,7 +53,7 @@ The SimStm testbench internal verify_passes_count variable counts up the number 
 simulation error occurs or not.
 
 
-Var Pointer Copy
+var pointer copy
 ^^^^^^^^^^^^^^^^
 
 .. code-block:: simstm
