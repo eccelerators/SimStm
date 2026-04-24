@@ -14,9 +14,9 @@ package tb_signals_pkg is
         test_suite_index : integer;
 
         -- general
-        simstm_loopback_verify_passes : std_logic_vector(31 downto 0);
+        simstm_loopback_verify_assertions : std_logic_vector(31 downto 0);
         simstm_loopback_verify_failures : std_logic_vector(31 downto 0);
-        simstm_loopback_bus_timeout_passes : std_logic_vector(31 downto 0);
+        simstm_loopback_bus_timeout_assertions : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_failures : std_logic_vector(31 downto 0);
 
         -- signals unittests
@@ -30,8 +30,8 @@ package tb_signals_pkg is
         bus_reset : std_logic;
 
         -- general
-        simstm_loopback_expected_verify_failure : std_logic_vector(31 downto 0);
-        simstm_loopback_expected_bus_timeout_failure : std_logic_vector(31 downto 0);
+        simstm_loopback_verify_failure_expected : std_logic_vector(31 downto 0);
+        simstm_loopback_bus_timeout_failure_expected : std_logic_vector(31 downto 0);
 
         -- signals unittests
         loopback_1bit : std_logic;
@@ -94,9 +94,9 @@ package body tb_signals_pkg is
         signals.test_suite_index := 0;
 
         -- general
-        signals.simstm_loopback_verify_passes := (others => '0');
+        signals.simstm_loopback_verify_assertions := (others => '0');
         signals.simstm_loopback_verify_failures := (others => '0');
-        signals.simstm_loopback_bus_timeout_passes := (others => '0');
+        signals.simstm_loopback_bus_timeout_assertions := (others => '0');
         signals.simstm_loopback_bus_timeout_failures := (others => '0');
 
         -- signals unittest
@@ -115,8 +115,8 @@ package body tb_signals_pkg is
         signals.bus_reset := '0';
 
         -- general
-        signals.simstm_loopback_expected_verify_failure := (others => '0');
-        signals.simstm_loopback_expected_bus_timeout_failure := (others => '0');
+        signals.simstm_loopback_verify_failure_expected := (others => '0');
+        signals.simstm_loopback_bus_timeout_failure_expected := (others => '0');
 
         -- signals unittests
         signals.loopback_1bit := '0';
@@ -165,11 +165,11 @@ package body tb_signals_pkg is
 
             -- general
             when 10000 =>
-                value_mapping(signals.simstm_loopback_verify_passes, value);
+                value_mapping(signals.simstm_loopback_verify_assertions, value);
             when 10001 =>
                 value_mapping(signals.simstm_loopback_verify_failures, value);
             when 10002 =>
-                value_mapping(signals.simstm_loopback_bus_timeout_passes, value);
+                value_mapping(signals.simstm_loopback_bus_timeout_assertions, value);
             when 10003 =>
                 value_mapping(signals.simstm_loopback_bus_timeout_failures, value);
 
@@ -219,9 +219,9 @@ package body tb_signals_pkg is
 
             -- general
             when 10000 =>
-                value_mapping(value, signals.simstm_loopback_expected_verify_failure);
+                value_mapping(value, signals.simstm_loopback_verify_failure_expected);
             when 10001 =>
-                value_mapping(value, signals.simstm_loopback_expected_bus_timeout_failure);
+                value_mapping(value, signals.simstm_loopback_bus_timeout_failure_expected);
 
             -- signals unittest mapping
             when 11000 =>

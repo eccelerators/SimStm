@@ -37,19 +37,17 @@ entity tb_simstm is
         stimulus_path : in string;
         stimulus_file : in string;
         stimulus_main_entry_label : in string := "testMain";
-        machine_value_width : integer := 64;
-        machine_address_width : integer := 32
+        machine_value_width : integer := 64
     );
     port(
         executing_line : out integer;
         executing_file : out text_line;
-        verify_passes : out std_logic_vector(31 downto 0);
+        verify_assertions : out std_logic_vector(31 downto 0);
         verify_failures : out std_logic_vector(31 downto 0);
-        bus_timeout_passes : out std_logic_vector(31 downto 0);
+        verify_failure_expected : in std_logic_vector(31 downto 0) := (others => '0');
+        bus_timeout_assertions : out std_logic_vector(31 downto 0);
         bus_timeout_failures : out std_logic_vector(31 downto 0);
-        expected_verify_failure : in std_logic_vector(31 downto 0) := (others => '0');
-        expected_bus_timeout_failure : in std_logic_vector(31 downto 0) := (others => '0');
-
+        bus_timeout_failure_expected : in std_logic_vector(31 downto 0) := (others => '0');
 
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
@@ -117,7 +115,7 @@ begin
     --! to integers and put through the elsif structure for exicution.
 
     read_files : process
-        constant DUMP_PARSE_FLOW : boolean := true;
+        constant DUMP_PARSE_FLOW : boolean := false;
         constant DUMP_PARSE_RESULTS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
@@ -125,7 +123,7 @@ begin
         variable vars : var_pool_ordered;
         variable procs : proc_pool_ordered;
         variable absolute_code_file_name : text_line;
-        variable il : integer;
+        variable il : integer := 0;
         variable slc : src_locator;
 
         variable nol : integer;
@@ -151,12 +149,12 @@ begin
         variable act_term_loop_count : integer := 0;
         variable loglevel : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
         variable resume : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
-        variable verify_passes_count : integer := 0;
+        variable verify_assertions_count : integer := 0;
         variable verify_failure_count : integer := 0;
-        variable bus_timeout_passes_count : integer := 0;
+        variable bus_timeout_assertions_count : integer := 0;
         variable bus_timeout_failure_count : integer := 0;
-        variable expected_verify_failure_count : integer := 0;
-        variable expected_bus_timeout_failure_count : integer := 0;
+        variable verify_failure_expected_count : integer := 0;
+        variable bus_timeout_failure_expected_count : integer := 0;
         variable if_level : integer := 0;
         variable if_state : boolean_array := (others => false);
         variable num_of_if_in_false_if_leave : int_array := (others => 0);
@@ -178,7 +176,7 @@ begin
         variable stm_values_ptr : stm_values_ptr;
 
         variable temp_marker : std_logic_vector(15 downto 0) := (others => '0');
-        variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(255, machine_value_width);
+        variable trc_on : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
 
         -- Bus
         type bus_timeout_array is array (0 to 127) of time;
@@ -263,7 +261,7 @@ begin
         begin
             called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
-                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
                 access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
             else
                 access_inst_par_index_global(ie, vars, pn, ven);
@@ -290,7 +288,7 @@ begin
         begin
             called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
-                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
                 access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);
             else
                 assert false
@@ -307,13 +305,13 @@ begin
             called_ien := rcs(sp).ien_of_called_proc;
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 if called_ien > -1 then
-                    called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                    called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
                     access_inst_par_index_local(ie, vars, pn, called_proc_name, ven);
                     return;
                 end if;
             end if;
             if called_ien > -1 then
-                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
                 access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
             else
                 access_inst_par_index_global(ie, vars, pn, ven);
@@ -331,14 +329,14 @@ begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 caller_ien := rcs(sp).ien_of_call;
                 if caller_ien > -1 then
-                    caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(par_num);
+                    caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(1);
                     access_inst_par_index_prefer_local(ie, vars, pn, caller_proc_name, ven);
                     return;
                 end if;
             end if;
             called_ien := rcs(sp).ien_of_called_proc;
             if called_ien > -1 then
-                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(par_num);
+                called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
                 access_inst_par_index_prefer_local(ie, vars, pn, called_proc_name, ven);
             else
                 assert false
@@ -407,9 +405,9 @@ begin
 
     begin
         marker <= (others => '0');
-        verify_passes <= (others => '0');
+        verify_assertions <= (others => '0');
         verify_failures <= (others => '0');
-        bus_timeout_passes <= (others => '0');
+        bus_timeout_assertions <= (others => '0');
         bus_timeout_failures <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
@@ -441,7 +439,9 @@ begin
         nol := vars.last_element_num;
         print(integer'image(nol) & " labels");
 
-        dump_var_pool_ordered(vars, machine_value_width);
+        if DUMP_PARSE_RESULTS then
+            dump_var_pool_ordered(vars, machine_value_width);
+        end if;
 
         parse_constants(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
         noc := vars.last_element_num - nol;
@@ -478,12 +478,12 @@ begin
 
         while ien <= insts.last_element_num loop
 
-            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));
+            verify_assertions <= std_logic_vector(to_unsigned(verify_assertions_count, 32));
             verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
-            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, 32));
+            bus_timeout_assertions <= std_logic_vector(to_unsigned(bus_timeout_assertions_count, 32));
             bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
 
-            get_interrupt_requests(signals_in, interrupt_requests);
+            -- get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
                 resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_name_std_txt_io_line);
             end if;
@@ -820,7 +820,7 @@ begin
                     assert var_stm_array'length > val2
                     report "array verify position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    verify_passes_count := verify_passes_count + 1;
+                    verify_assertions_count := verify_assertions_count + 1;
                     val := var_stm_array(to_integer(val2(30 downto 0)));
                     get_val_in_called_scope_call_params_source_sensitive(3, val3);
                     get_val_in_called_scope_call_params_source_sensitive(4, val4);
@@ -1404,21 +1404,21 @@ begin
 
                 -- finish
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FINISH then
-                    expected_verify_failure_count := to_integer(unsigned(expected_verify_failure));
-                    expected_bus_timeout_failure_count := to_integer(unsigned(expected_bus_timeout_failure));
+                    verify_failure_expected_count := to_integer(unsigned(verify_failure_expected));
+                    bus_timeout_failure_expected_count := to_integer(unsigned(bus_timeout_failure_expected));
 
-                    print("Verify passes " & (integer'image(verify_passes_count)));
-                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
+                    print("Verify passes " & (integer'image(verify_assertions_count)));
+                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_assertions_count)));
                     if verify_failure_count /= 0 and bus_timeout_failure_count /= 0 then
-                        print("Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
-                        print("Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
-                        if expected_verify_failure_count /= verify_failure_count then
+                        print("Expected " & (integer'image(verify_failure_expected_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
+                        print("Expected " & (integer'image(bus_timeout_failure_expected_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
+                        if verify_failure_expected_count /= verify_failure_count then
                             print("FAILURES");
                             print("Test finished");
                             wait for 1000 ns;
                             finish;
                         end if;
-                        if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
+                        if bus_timeout_failure_expected_count /= bus_timeout_failure_count then
                             print("FAILURES");
                             print("Test finished");
                             wait for 1000 ns;
@@ -1428,8 +1428,8 @@ begin
                         wait for 1000 ns;
                         finish;
                     elsif verify_failure_count /= 0 then
-                        report "Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count));
-                        if expected_verify_failure_count /= verify_failure_count then
+                        report "Expected " & (integer'image(verify_failure_expected_count)) & " verify failures, got " & (integer'image(verify_failure_count));
+                        if verify_failure_expected_count /= verify_failure_count then
                             print("FAILURES");
                             print("Test finished");
                             wait for 1000 ns;
@@ -1439,8 +1439,8 @@ begin
                         wait for 1000 ns;
                         finish;
                     elsif bus_timeout_failure_count /= 0 then
-                        report "Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
-                        if expected_bus_timeout_failure_count /= bus_timeout_failure_count then
+                        report "Expected " & (integer'image(bus_timeout_failure_expected_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count));
+                        if bus_timeout_failure_expected_count /= bus_timeout_failure_count then
                             print("FAILURES");
                             print("Test finished");
                             wait for 1000 ns;
@@ -1573,6 +1573,7 @@ begin
                         ien := rcs(sp).ien_of_call;
                     elsif rcs(sp).call_process_state = IN_CALL_PARAMS then
                         rcs(sp).call_process_state := IN_PROC_BODY;
+                        rcs(sp).ien_of_call := ien;
                         ien := rcs(sp).ien_of_proc_params_end;
                     end if;
 
@@ -1675,7 +1676,7 @@ begin
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_val_in_called_scope_prefer_local(3, val3);
-                    verify_passes_count := verify_passes_count + 1;
+                    verify_assertions_count := verify_assertions_count + 1;
                     if (val3 and val1) /= (val3 and val2) then
                         print_instr("exec ");
                         print(" read     = 0x" & to_hstring(val1));
@@ -1721,15 +1722,16 @@ begin
                 -- signal verify a_signal 0x0002 0x00FF
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY then
                     get_val_in_called_scope_prefer_local(1, val1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_val_in_called_scope_prefer_local(3, val3);
+
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
                     report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
 
-                    get_val_in_called_scope_prefer_local(2, val2);
-                    get_val_in_called_scope_prefer_local(3, val3);
-                    verify_passes_count := verify_passes_count + 1;
+                    verify_assertions_count := verify_assertions_count + 1;
                     if (val3 and val) /= (val3 and val2) then
                         print_instr("exec ");
                         print(" signal   = 0x" & to_hstring(val1));
@@ -1786,7 +1788,7 @@ begin
                     assert bus_valid /= 0
                     report "trying to write to invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
+                    bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
                         assert successfull
                         report "bus write timeout failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
@@ -1816,7 +1818,7 @@ begin
                     assert bus_valid /= 0
                     report "trying to read from invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
+                    bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
                         assert successfull
                         report "bus read timeout"
@@ -1833,7 +1835,7 @@ begin
                     if ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
                         get_val_in_called_scope_prefer_local(5, val5);
                         get_val_in_called_scope_prefer_local(6, val6);
-                        verify_passes_count := verify_passes_count + 1;
+                        verify_assertions_count := verify_assertions_count + 1;
                         if (val6 and val) /= (val6 and val5) then
                             print_instr("exec ");
                             print(" bus      = 0x" & to_hstring(val));

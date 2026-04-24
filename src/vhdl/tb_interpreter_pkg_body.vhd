@@ -51,7 +51,13 @@ package body tb_interpreter_pkg is
         assert fos = open_ok
         report "unable to open stimulus_file " & absolute_code_file_name
         severity failure;
-        append_code_file(slc, code_files, stimulus_path, stimulus_file);
+        append_code_file(slc, code_files, stimulus_path, stimulus_file, valid);
+        if valid = 0 then
+            report "stimulus file " & absolute_code_file_name & " already included, skipping to avoid circular includes"
+            severity warning;
+            file_close(stimulus);
+            return;
+        end if;
         print("loading codefile " & absolute_code_file_name);
         file_line := 0;
         while not endfile(stimulus) loop
@@ -217,7 +223,7 @@ package body tb_interpreter_pkg is
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
                         vars.element_ptrs(ven1).values_org(0) := val2;
-                        dump_var_pool_ordered(vars, machine_value_width);
+                        -- dump_var_pool_ordered(vars, machine_value_width);
                     end if;
                 end if;
             end loop;
@@ -428,7 +434,7 @@ package body tb_interpreter_pkg is
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
             ien := i;
-            print_inst_element(insts, ien);
+            -- print_inst_element(insts, ien);
             ie := insts.element_ptrs(i);
             slc := ie.slc;
             ts(1) := ie.inst;

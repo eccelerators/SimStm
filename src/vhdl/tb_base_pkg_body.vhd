@@ -137,10 +137,13 @@ package body tb_base_pkg is
         variable slc : src_locator;
         variable code_files : inout file_def_list;
         constant stimulus_path : in string;
-        variable stimulus_file : in string
+        variable stimulus_file : in string;
+        variable valid : out integer
     ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
+        variable ne_loop : file_def_element_ptr;
+        variable i : integer;
         variable acfn : text_line;
     begin
         nen := code_files.last_element_num + 1;
@@ -149,8 +152,16 @@ package body tb_base_pkg is
         ne_ptr.slc := slc;
         ne_ptr.absolute_file_name := acfn;
         ne_ptr.file_name := string_to_text_field(stimulus_file);
+        for i in 0 to code_files.last_element_num loop
+            ne_loop := code_files.element_ptrs(i);
+            if fld_equal(ne_loop.absolute_file_name, ne_ptr.absolute_file_name) then
+                valid := 0;
+                return;
+            end if;
+        end loop;
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
+        valid := 1;
     end procedure;
 
     function combine_to_absolute_file_name(
@@ -712,8 +723,8 @@ package body tb_base_pkg is
     end function;
 
     function fld_equal(
-        s1 : text_field;
-        s2 : text_field
+        s1 : string;
+        s2 : string
     ) return boolean is
         variable i : integer := 0;
         variable s1_length : integer := 0;
@@ -784,7 +795,7 @@ package body tb_base_pkg is
     end function;
 
     function fld_len(
-        s : text_field
+        s : string
     ) return integer is
         variable i : integer := 1;
     begin

@@ -67,7 +67,7 @@ package body tb_interpreter_util_pkg is
         variable valid : integer := 0;
         constant SINGLE_QUOTE : character := character'val(39);
         constant DOUBLE_QUOTE : character := character'val(34);
-        constant DEBUG : boolean := true;
+        constant DEBUG : boolean := false;
 
     begin
         tmp_text_line := (others => nul);

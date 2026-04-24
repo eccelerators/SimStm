@@ -43,8 +43,7 @@ entity tbTop is
         stimulus_main_entry_label : string := "SimStmTest.testMain";
         stimulus_test_suite_index : integer := 255;
         Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
-        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32;
-        machine_address_width : integer := 31
+        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32
     );
 end;
 
@@ -88,18 +87,17 @@ begin
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
             stimulus_main_entry_label => stimulus_main_entry_label,
-            machine_value_width => machine_value_width,
-            machine_address_width => machine_address_width
+            machine_value_width => machine_value_width
         )
         port map(
             executing_line => executing_line,
             executing_file => executing_file,
-            verify_passes => signals_in.simstm_loopback_verify_passes,
+            verify_assertions => signals_in.simstm_loopback_verify_assertions,
             verify_failures => signals_in.simstm_loopback_verify_failures,
-            bus_timeout_passes => signals_in.simstm_loopback_bus_timeout_passes,
+            bus_timeout_assertions => signals_in.simstm_loopback_bus_timeout_assertions,
             bus_timeout_failures => signals_in.simstm_loopback_bus_timeout_failures,
-            expected_verify_failure => signals_out.simstm_loopback_expected_verify_failure,
-            expected_bus_timeout_failure => signals_out.simstm_loopback_expected_bus_timeout_failure,
+            verify_failure_expected => signals_out.simstm_loopback_verify_failure_expected,
+            bus_timeout_failure_expected => signals_out.simstm_loopback_bus_timeout_failure_expected,
 
             marker => marker,
 

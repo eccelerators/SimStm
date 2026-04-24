@@ -193,7 +193,7 @@ package tb_base_pkg is
         loop_line : loop_nested_int_array;
     end record;
 
-    type stm_array_of_runtime_context is array (max_num_of_stack_elements downto 0) of stm_runtime_context;
+    type stm_array_of_runtime_context is array (0 to max_num_of_stack_elements ) of stm_runtime_context;
 
     type var_element;
     type var_element_ptr is access var_element;
@@ -275,7 +275,8 @@ package tb_base_pkg is
         variable slc : src_locator;
         variable code_files : inout file_def_list;
         constant stimulus_path : in string;
-        variable stimulus_file : in string
+        variable stimulus_file : in string;
+        variable valid : out integer
     );
 
     function combine_to_absolute_file_name(
@@ -377,8 +378,8 @@ package tb_base_pkg is
     ) return text_field;
 
     function fld_equal(
-        s1 : in text_field;
-        s2 : in text_field
+        s1 : in string;
+        s2 : in string
     ) return boolean;
 
     procedure fld_order(
@@ -395,7 +396,7 @@ package tb_base_pkg is
     ) return boolean;
 
     function fld_len(
-        s : text_field
+        s : string
     ) return integer;
 
     procedure get_line_from_str(
