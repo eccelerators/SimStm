@@ -1,0 +1,62 @@
+-------------------------------------------------------------------------------
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+-- Copyright: 
+--   Eccelerators
+-- 
+-- Description:
+--   Arithmetic procedures for SimStm.
+-- 
+-- SPDX-License-Identifier: Apache-2.0
+-------------------------------------------------------------------------------
+namespace stm
+
+-- rotate left
+proc rol (
+    var RolVal 0
+    var Count 1
+    var Width 32
+)
+    var tv 0
+    var uBit 0
+    var m 1
+    
+    shl m Width
+    sub m 1
+    
+    equ tv RolVal
+    shl RolVal Count
+    equ uBit Width
+    sub uBit 1
+    sub uBit Count
+    shr tv uBit
+    or RolVal tv
+    and RolVal m
+end proc
+
+-- rotate right
+proc ror (
+    var RorVal 0
+    var Count 1
+    var Width 32
+)
+    var tv 0
+    var uBit 0
+    var m 1
+  
+    shl m Width
+    sub m 1
+    equ tv RorVal
+    shr RorVal Count
+    equ uBit Width
+    sub uBit 1
+    sub uBit Count
+    shl tv uBit
+    or RorVal tv
+    and RorVal m
+end proc
+
+end namespace

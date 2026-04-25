@@ -1,0 +1,38 @@
+-------------------------------------------------------------------------------
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+-- Copyright: 
+--   Eccelerators
+-- 
+-- Description:
+--   Utility procedures for SimStm.
+-- 
+-- SPDX-License-Identifier: Apache-2.0
+-------------------------------------------------------------------------------
+namespace stm
+
+-- read modify write
+proc readModifyWrite (	
+    bus Bus 0
+    var Width 32
+    var Adr 0
+    var WriteData 0
+    var Mask 0
+)
+    var ReadData 0
+    var MaskInv 0
+    
+    equ ReadData 0
+    equ MaskInv Mask
+    inv MaskInv
+    bus read Bus Width Adr ReadData
+    and ReadData MaskInv -- keep bits which aren't not impacted
+    and WriteData Mask -- take only bits which are impacted
+    or WriteData ReadData -- combine to new value
+    bus write Bus Width Adr WriteData
+end proc
+
+end namespace

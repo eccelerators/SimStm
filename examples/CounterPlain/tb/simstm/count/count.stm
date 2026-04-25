@@ -1,0 +1,15 @@
+include "../../../../../lib/base.stm"
+
+namespace HelloWorld
+
+proc testHelloWorld ()
+
+    call stm.startStandardTestShell ()
+    loop 3
+        log message stm.ALWAYS "Hello World"
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

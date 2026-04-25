@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="local-overrides">
+	<!-- Will adapt properties for local purposes,  build-local-overrides.xml is ignored by git -->
+	
+	<!-- overide python executable -->
+	<property name="python-executable" value="/usr/bin/python3"/>
+	<property name="hxsc-executable-linux" value="/home/heinrich/.hxs/hxsc"/>
+	<property name="ghdl-executable" value="/home/heinrich/ghdl/bin/ghdl"/>
+	
+    <property name="vlib-executable" value="/home/heinrich/altera_lite/25.1std/questa_fse/bin/vlib"/>
+    <property name="vmap-executable" value="/home/heinrich/altera_lite/25.1std/questa_fse/bin/vmap"/>
+    <property name="vcom-executable" value="/home/heinrich/altera_lite/25.1std//questa_fse/bin/vcom"/>
+    <property name="vsim-executable" value="/home/heinrich/altera_lite/25.1std//questa_fse/bin/vsim"/>
+	
+	<!-- <property name="flavour.number" value="0" /> -->
+		
+</project>
+	
+
