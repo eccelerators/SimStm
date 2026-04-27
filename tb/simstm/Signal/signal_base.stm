@@ -1,0 +1,78 @@
+-- This file tests
+-- |- signal
+-- |- signal write
+-- |- signal read
+-- |- signal verify
+
+include "interface.stm"
+
+
+namespace SimStmTest
+
+    proc testSignalBase ()
+        call testSignalSimpleLoopbackBit ()
+        call testSignalSimpleLoopbackVector ()
+        call testSignalSimpleLoopbackCross ()
+    end proc
+
+    proc testSignalSimpleLoopbackBit ()
+        var read_back 0x12345678
+
+        signal write loopback_1bit 0
+        wait 1000
+        signal read  loopback_1bit read_back
+
+        var    verify read_back     0         0xffffffff
+        signal verify loopback_1bit 0         0xffffffff
+        signal verify loopback_1bit 0         0x1
+
+        signal write  loopback_1bit 0x87654321
+        wait 1000
+        signal read   loopback_1bit read_back
+
+        var    verify read_back     0x1       0xffffffff
+        signal verify loopback_1bit 1         0xffffffff
+        signal verify loopback_1bit 1         0x1
+    end proc
+
+    proc testSignalSimpleLoopbackVector ()
+        var read_back 0x12345678
+
+        signal write loopback_32bit 0
+        wait 1000
+        signal read  loopback_32bit read_back
+
+        var    verify read_back      0         0xffffffff
+        signal verify loopback_32bit 0         0xffffffff
+        signal verify loopback_32bit 0xfffffffe 0x1
+
+        signal write  loopback_32bit 0x87654321
+        wait 1000
+        signal read   loopback_32bit read_back
+
+        var    verify read_back      0x87654321 0xffffffff
+        signal verify loopback_32bit 0x87654321 0xffffffff
+        signal verify loopback_32bit 0x82204101 0xaaaa5555
+    end proc
+
+    proc testSignalSimpleLoopbackCross ()
+        var read_back 0x12345678
+
+        signal write  loopback_16bit_cross 0xffffffff
+        wait 1000
+        signal read   loopback_16bit_cross read_back
+
+        var    verify read_back            0xffff     0xffffffff
+        signal verify loopback_16bit_cross 0xffff     0xffffffff
+        signal verify loopback_16bit_cross 0x0000     0xffff0000
+
+        signal write  loopback_16bit_cross 0x87654321
+        wait 1000
+        signal read   loopback_16bit_cross read_back
+
+        var    verify read_back            0x84C2     0xffffffff
+        signal verify loopback_16bit_cross 0x84C2     0xffffffff
+        signal verify loopback_16bit_cross 0x8040     0xaa55
+    end proc
+
+end namespace

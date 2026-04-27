@@ -147,6 +147,11 @@ class GenerateProposalForSetupPy:
                     utilized_src_or_tb_files_hdl_order_dict[additional_utilized_file] = "{:0>5d}".format(
                         int(additional_utilized_file_hdl_order) + 1)
 
+        for e in UP.extra_vhdl_file_dicts:
+            extra_utilized_file = e["file"]
+            utilized_src_or_tb_files.append(extra_utilized_file)
+            utilized_src_or_tb_files_hdl_order_dict[extra_utilized_file]  = e["hdl_order"]
+        
         TestSuiteFileDictList = []
         if os.path.exists(project_folder_path + '/tb/simstm/TestSuites'):
             for f in os.listdir(project_folder_path + '/tb/simstm/TestSuites'):

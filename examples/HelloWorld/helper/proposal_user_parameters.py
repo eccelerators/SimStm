@@ -33,3 +33,13 @@ class UserParameters:
         self.search_phrase_in_vhdl_files_for_top_entity = "Dut"
         self.search_phrase_in_vhdl_files_for_tb_top_entity = "tbTop"
         self.search_phrase_in_simstm_test_main_files_for_entry_namespace = "testMain."
+
+        self.extra_src_data_files_entries = [
+        ]
+        
+        self.extra_vhdl_file_dicts = [
+            {"file":"../../src/tb_bus_wishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00012", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_axi4lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00013", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00014", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_avalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00015", "ghdl_options":["-frelaxed"]},
+        ]

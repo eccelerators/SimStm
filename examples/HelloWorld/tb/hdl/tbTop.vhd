@@ -14,8 +14,7 @@ entity tbTop is
         stimulus_file : string := "testMain.stm";
         stimulus_main_entry_label : string := "SimStmTest.testMain";
         stimulus_test_suite_index : integer := 255;
-        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32;
-        machine_address_width : integer := 31
+        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32
     );
 end;
 
@@ -75,8 +74,7 @@ begin
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
             stimulus_main_entry_label => stimulus_main_entry_label,
-            machine_value_width => machine_value_width,
-            machine_address_width => machine_address_width
+            machine_value_width => machine_value_width
         )
         port map(
             executing_line => executing_line,

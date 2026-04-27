@@ -6,12 +6,14 @@ proc iLabel (
 	var p 0
 	var r 0
 )
+	equ p 5
+	var pointer copy r v
 end proc 
 
 proc testCallLabelIndirect ()
 	var v 0
 	
-	call label lLabel (
+	call lLabel (
 		equ p 5
 		var pointer copy r v
 	)

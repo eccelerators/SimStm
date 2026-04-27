@@ -1,0 +1,14 @@
+
+include "Signal/signal.stm"
+
+namespace SimStmTest
+
+    proc testMain ()
+        call testSignal ()
+
+        log message 0 "Main test finished"
+        wait 1000
+        finish
+    end proc
+
+end namespace

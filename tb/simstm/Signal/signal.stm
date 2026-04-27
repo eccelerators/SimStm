@@ -1,64 +1,23 @@
+
+include "Signal/signal_base.stm"
+include "Signal/signal_extend.stm"
+include "Signal/signal_pointer.stm"
+include "Signal/signal_errors.stm"
+include "Signal/signal_parameter.stm"
+include "Signal/signal_scoping.stm"
+
+
 namespace SimStmTest
 
-var val_signal_read_back 0xffff
+    proc testSignal ()
+        -- call testSignalBase ()
+        -- call testSignalExtend ()
+        -- call testSignalPointer ()
+        -- call testSignalVerifyFail ()
+        call testSignalParameter ()
+        -- call testSignalSimpleScope ()
 
-proc testSignalWriteReadVerify ()
-
-    call stm.startStandardTestShell ()
-
-    signal write out_signal_3000 0
-    signal read in_signal_2000 val_signal_read_back
-
-    var verify val_signal_read_back 0 stm.MAX
-    signal verify in_signal_2000 0 1
-
-    signal write out_signal_3000 1
-    signal read in_signal_2000 val_signal_read_back
-
-    var verify val_signal_read_back 1 stm.MAX
-    signal verify in_signal_2000 1 1
-
-    signal write out_signal_3000 0xffff
-    signal read in_signal_2000 val_signal_read_back
-
-    var verify val_signal_read_back 1 stm.MAX
-    signal verify in_signal_2000 1 stm.MAX
-
-    signal write out_signal_3001 0
-    signal read in_signal_2001 val_signal_read_back
-
-    var verify val_signal_read_back 0 stm.MAX
-    signal verify in_signal_2001 0 1
-
-    signal write out_signal_3001 1
-    signal read in_signal_2001 val_signal_read_back
-
-    var verify val_signal_read_back 1 stm.MAX
-    signal verify in_signal_2001 1 1
-
-    signal write out_signal_3001 0xffff
-    signal read in_signal_2001 val_signal_read_back
-
-    var verify val_signal_read_back 0xff stm.MAX
-    signal verify in_signal_2001 0xff stm.MAX
-
-    call stm.endStandardTestShell ()
-
-end proc
-
-proc testSignalVerifyFail ()
-
-
-    call stm.startStandardTestShell ()
-
-    signal write out_signal_3000 0
-
-    log message stm.ALWAYS "signal verify intended error on no match"
-    signal verify in_signal_2000 1 1
-    call stm.incExpectedStandardTestVerifyFailureCount ()
-
-    call stm.endStandardTestShell ()
-
-end proc
+        finish
+    end proc
 
 end namespace

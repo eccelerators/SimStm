@@ -1,0 +1,24 @@
+
+include "interface.stm"
+include "error_verification.stm"
+
+
+namespace SimStmTest
+
+    proc testSignalVerifyFail ()
+        var val_signal_read_back 0x12345678
+
+        signal write  loopback_32bit 0
+        wait 1000
+        signal read   loopback_32bit val_signal_read_back
+
+        resume 1
+        -- this will end with an failure
+        signal verify loopback_32bit 0x12345678 0xffffffff
+        resume 0
+
+        call increase_verify_failure_counter ()
+        call check_verify_failures ()
+    end proc
+
+end namespace

@@ -38,84 +38,69 @@ use work.basic.all;
 
 entity tbTop is
     generic(
-        stimulus_path : string := "tb/simstm/";
-        stimulus_file : string := "testMain.stm";
+        stimulus_path : string := "../tb/simstm/";
+        stimulus_file : string := "testUnits.stm";
         stimulus_main_entry_label : string := "SimStmTest.testMain";
         stimulus_test_suite_index : integer := 255;
         Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
-        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32;
-        machine_address_width : integer := 31
+        machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32
     );
 end;
 
 architecture behavioural of tbTop is
 
-    signal Clk : std_logic := '0';
-    signal Rst : std_logic := '1';
+    signal clk : std_logic := '0';
+    signal rst : std_logic := '1';
 
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal verify_assertions : std_logic_vector(31 downto 0) := (others => '0');
-    signal verify_failures : std_logic_vector(31 downto 0) := (others => '0');
-    signal bus_timeout_assertions : std_logic_vector(31 downto 0) := (others => '0');
-    signal bus_timeout_failures : std_logic_vector(31 downto 0) := (others => '0');
 
     signal signals_in : t_signals_in := signals_in_init;
     signal signals_out : t_signals_out := signals_out_init;
     signal bus_down : t_bus_down := bus_down_init;
     signal bus_up : t_bus_up := bus_up_init;
 
-    signal InitDut : std_logic := '1';
-
 begin
 
-    Clk <= transport (not Clk) after 10 ns / 2; -- 100MHz
+    clk <= transport (not clk) after 10 ns / 2; -- 100MHz
 
-    -- standard inputs
-    -- signals_in.in_signal_0 constant 0 used to indicate yet unsassigned signal (None) e.g. in locally defined signals to be set by a parameter later
-    -- signals_in.in_signal_1 actual simulation time already supplied by package
-    signals_in.in_signal_2 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
-    -- signals_in.in_signal_3 constant 0 already supplied by package
-    signals_in.in_signal_4 <= verify_assertions;
-    signals_in.in_signal_5 <= verify_failures;
-    signals_in.in_signal_6 <= bus_timeout_assertions;
-    signals_in.in_signal_7 <= bus_timeout_failures;
-    -- signals_in.in_signal_8 Machine value width
+    -- base
+    signals_in.test_suite_index <= stimulus_test_suite_index;
+    signals_in.sim_time <= (now / 1 ns);
+    rst <= signals_out.bus_reset;
 
-    -- standard outputs
-    InitDut <= signals_out.out_signal_1;
-    -- signals_out.out_signal_5 <= expected_standard_test_verify_failure_count already connected in tb_simstm
-    -- signals_out.out_signal_7 <= expected_bus_timeout_test_failure_count already connected in tb_simstm
+    -- interrupt
 
-    -- interrupts
-    signals_in.in_signal_1000 <= signals_out.out_signal_3002;
-    signals_in.in_signal_1001 <= signals_out.out_signal_3003;
 
-    -- user inputs and outputs
-    signals_in.in_signal_2000 <= signals_out.out_signal_3000;
-    signals_in.in_signal_2001 <= signals_out.out_signal_3001;
-    signals_in.in_signal_2002 <= signals_out.out_signal_3002;
-    signals_in.in_signal_2003 <= signals_out.out_signal_3003;
+    -- signal command tests
+    signals_in.loopback_1bit <= signals_out.loopback_1bit;
+    signals_in.loopback_32bit <= signals_out.loopback_32bit;
 
-    Rst <= InitDut;
+    gen_cross : for i in signals_out.loopback_16bit_cross'range generate
+        signals_in.loopback_16bit_cross(signals_out.loopback_16bit_cross'left - i) <= signals_out.loopback_16bit_cross(i);
+    end generate;
+
 
     i_tb_simstm : entity work.tb_simstm
         generic map(
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
             stimulus_main_entry_label => stimulus_main_entry_label,
-            machine_value_width => machine_value_width,
-            machine_address_width => machine_address_width
+            machine_value_width => machine_value_width
         )
         port map(
             executing_line => executing_line,
             executing_file => executing_file,
-            verify_assertions => verify_assertions,
-            verify_failures => verify_failures,
-            bus_timeout_assertions => bus_timeout_assertions,
-            bus_timeout_failures => bus_timeout_failures,
+            verify_assertions => signals_in.simstm_loopback_verify_assertions,
+            verify_failures => signals_in.simstm_loopback_verify_failures,
+            bus_timeout_assertions => signals_in.simstm_loopback_bus_timeout_assertions,
+            bus_timeout_failures => signals_in.simstm_loopback_bus_timeout_failures,
+            verify_failure_expected => signals_out.simstm_loopback_verify_failure_expected,
+            bus_timeout_failure_expected => signals_out.simstm_loopback_bus_timeout_failure_expected,
+
             marker => marker,
+
             signals_in => signals_in,
             signals_out => signals_out,
             bus_down => bus_down,
@@ -130,7 +115,7 @@ begin
         )
         port map(
             -- wishbone slave signals.
-            i_rst => Rst,
+            i_rst => rst,
             i_clk => bus_up.wishbone32.clk,
             i_adr => bus_down.wishbone32.adr(9 downto 2),
             i_dat => bus_down.wishbone32.data,
@@ -145,7 +130,7 @@ begin
             o_err => open
         );
 
-    bus_up.wishbone32.clk <= Clk;
+    bus_up.wishbone32.clk <= clk;
 
     i_RamWishbone_64 : entity work.RamWishbone
         generic map(
@@ -155,7 +140,7 @@ begin
         )
         port map(
             -- wishbone slave signals.
-            i_rst => Rst,
+            i_rst => rst,
             i_clk => bus_up.wishbone64.clk,
             i_adr => bus_down.wishbone64.adr(9 downto 3),
             i_dat => bus_down.wishbone64.data,
@@ -170,7 +155,7 @@ begin
             o_err => open
         );
 
-    bus_up.wishbone64.clk <= Clk;
+    bus_up.wishbone64.clk <= clk;
 
     i_RamWishbone_128 : entity work.RamWishbone
         generic map(
@@ -180,7 +165,7 @@ begin
         )
         port map(
             -- wishbone slave signals.
-            i_rst => Rst,
+            i_rst => rst,
             i_clk => bus_up.wishbone128.clk,
             i_adr => bus_down.wishbone128.adr(9 downto 4),
             i_dat => bus_down.wishbone128.data,
@@ -195,7 +180,7 @@ begin
             o_err => open
         );
 
-    bus_up.wishbone128.clk <= Clk;
+    bus_up.wishbone128.clk <= clk;
 
     i_RamWishbone_256 : entity work.RamWishbone
         generic map(
@@ -205,7 +190,7 @@ begin
         )
         port map(
             -- wishbone slave signals.
-            i_rst => Rst,
+            i_rst => rst,
             i_clk => bus_up.wishbone256.clk,
             i_adr => bus_down.wishbone256.adr(9 downto 5),
             i_dat => bus_down.wishbone256.data,
@@ -220,7 +205,7 @@ begin
             o_err => open
         );
 
-    bus_up.wishbone256.clk <= Clk;
+    bus_up.wishbone256.clk <= clk;
 
     i_RamAvalon_32 : entity work.RamAvalon
         generic map(
@@ -230,7 +215,7 @@ begin
         port map(
             -- avalon slave signals.
             clk_i => bus_up.avalonmm32.clk,
-            rst_i => Rst,
+            rst_i => rst,
             avm_waitrequest_o => bus_up.avalonmm32.waitrequest,
             avm_write_i => bus_down.avalonmm32.write,
             avm_read_i => bus_down.avalonmm32.read,
@@ -242,7 +227,7 @@ begin
             avm_readdatavalid_o => open
         );
 
-    bus_up.avalonmm32.clk <= Clk;
+    bus_up.avalonmm32.clk <= clk;
 
     i_RamAvalon_64 : entity work.RamAvalon
         generic map(
@@ -252,7 +237,7 @@ begin
         port map(
             -- avalon slave signals.
             clk_i => bus_up.avalonmm64.clk,
-            rst_i => Rst,
+            rst_i => rst,
             avm_waitrequest_o => bus_up.avalonmm64.waitrequest,
             avm_write_i => bus_down.avalonmm64.write,
             avm_read_i => bus_down.avalonmm64.read,
@@ -264,15 +249,15 @@ begin
             avm_readdatavalid_o => open
         );
 
-    bus_up.avalonmm64.clk <= Clk;
+    bus_up.avalonmm64.clk <= clk;
 
     i_RamAxi4Lite_32 : entity work.RamAxi4Lite
         generic map(
             ADDRESS_WIDTH => 8
         )
         port map(
-            Clk => bus_up.axi4lite32.clk,
-            Rst => Rst,
+            clk => bus_up.axi4lite32.clk,
+            rst => rst,
             AWVALID => bus_down.axi4lite32.awvalid,
             AWADDR => bus_down.axi4lite32.awaddr(9 downto 2),
             AWPROT => bus_down.axi4lite32.awprot,
@@ -294,7 +279,7 @@ begin
             RRESP => bus_up.axi4lite32.rresp
         );
 
-    bus_up.axi4lite32.clk <= Clk;
+    bus_up.axi4lite32.clk <= clk;
 
     i_Ram32 : entity work.Ram
         generic map(
@@ -308,6 +293,6 @@ begin
             ReadData => bus_up.ram32.read_data
         );
 
-    bus_up.ram32.clk <= Clk;
+    bus_up.ram32.clk <= clk;
 
 end architecture;

@@ -1,44 +1,18 @@
 -------------------------------------------------------------------------------
---             Copyright 2023  Ken Campbell
---               All rights reserved.
+-- SimStm
+--
+-- SPDX-License-Identifier: Apache-2.0
+--
+-- Copyright:
+--   - Original work derived from VHDL-Test-Bench (Ken Campbell)
+--   - Subsequent modifications: Eccelerators
+--
+-- Description:
+--   Interpreter utility types and helper subprogram declarations.
+--
+-- Upstream reference:
+--   https://github.com/sckoarn/VHDL-Test-Bench
 -------------------------------------------------------------------------------
--- Author: sckoarn
---
--- Description :  The the testbench package header file.
---
-------------------------------------------------------------------------------
---  This file is part of The VHDL Test Bench Package.
---
---  Redistribution and use in source and binary forms, with or without
---  modification, are permitted provided that the following conditions are met:
---
---  1. Redistributions of source code must retain the above copyright notice,
---     this list of conditions and the following disclaimer.
---
---  2. Redistributions in binary form must reproduce the above copyright notice,
---     this list of conditions and the following disclaimer in the documentation
---     and/or other materials provided with the distribution.
---
--- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
--- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
--- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
--------------------------------------------------------------------------------
--- Changes:
---
--- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
---
--- Adapt to new fix SimStm language
---
--- ----------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -78,7 +52,7 @@ package tb_interpreter_util_pkg is
         variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
         variable rcs : in stm_array_of_runtime_context;
-        variable sp : in integer;    
+        variable sp : in integer;
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     );
@@ -89,7 +63,7 @@ package tb_interpreter_util_pkg is
         constant par_num : in integer;
         variable val : out unsigned
     );
-        
+
     procedure access_inst_par_value_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -97,7 +71,7 @@ package tb_interpreter_util_pkg is
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
-    
+
     procedure access_inst_par_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -105,48 +79,48 @@ package tb_interpreter_util_pkg is
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
-    
+
     procedure access_inst_wvar_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field; 
-        variable wvar_is_fqn : in boolean; 
+        variable wvar_name : in text_field;
+        variable wvar_is_fqn : in boolean;
         variable called_proc_name : in text_field;
         variable val : out unsigned
     );
-      
+
     procedure access_inst_par_index_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
-        variable ven : out integer        
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    );    
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_par_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    );  
-    
+        variable ven : out integer
+    );
+
     procedure access_inst_wvar_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field; 
-        variable wvar_is_fqn : in boolean; 
+        variable wvar_name : in text_field;
+        variable wvar_is_fqn : in boolean;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
-    ) ;
-            
+        variable ven : out integer
+    );
+
     procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
@@ -155,14 +129,14 @@ package tb_interpreter_util_pkg is
         variable proc_name_is_fqn : in boolean;
         variable proc_element_num : out integer
     );
-    
+
     procedure access_proc_fqn(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     );
-    
+
     procedure access_var(
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
@@ -214,7 +188,7 @@ package tb_interpreter_util_pkg is
         variable var_element_num : in integer;
         variable var_arr : out stm_array_ptr
     );
-                          
+
     procedure index_var(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
@@ -330,21 +304,21 @@ package tb_interpreter_util_pkg is
         variable var_element_num : in integer;
         constant machine_value_width : in integer
     );
-    
+
     procedure dump_proc_pool_ordered(
         variable procs : in proc_pool_ordered
     );
-    
+
     procedure dump_proc_element(
         variable procs : in proc_pool_ordered;
         variable proc_element_num : in integer
     );
-    
+
     procedure print_file_def_element(
         variable files : in file_def_list;
         variable file_element_num : in integer
     );
-    
+
     procedure dump_file_defs(
         variable files : in file_def_list
     );
@@ -352,35 +326,35 @@ package tb_interpreter_util_pkg is
     procedure print_initial_instruction_context(
         variable iic : in stm_inst_initial_context
     );
-    
+
     procedure print_runtime_context(
         variable rc : in stm_runtime_context
     );
-    
+
     procedure search_var_element_number(
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
         variable ien : out integer
     );
-    
-    procedure search_proc_element_number( 
+
+    procedure search_proc_element_number(
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable pen : out integer
     );
-    
+
     procedure set_var_type(
         variable inst : in text_field;
         variable inst_len : in integer;
         variable var_type : out stm_var_type
     );
-    
+
     procedure set_proc_type(
         variable inst : in text_field;
         variable inst_len : in integer;
         variable proc_type : out boolean
     );
-    
+
     procedure track_inst_initial_context(
         variable slc : in src_locator;
         variable ts : in token_text_field_array;
@@ -388,15 +362,15 @@ package tb_interpreter_util_pkg is
         variable iic : inout stm_inst_initial_context;
         constant others_but_namespace_too : boolean
     );
-      
+
     procedure insert_proc_element(
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
         constant debug : boolean;
-        variable pen  : out integer
+        variable pen : out integer
     );
-    
+
     procedure insert_var_element(
         variable slc : in src_locator;
         variable vars : inout var_pool_ordered;
@@ -405,7 +379,7 @@ package tb_interpreter_util_pkg is
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
         constant debug : in boolean;
-        variable ven  : out integer
+        variable ven : out integer
     );
-    
+
 end package;

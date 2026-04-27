@@ -1,51 +1,25 @@
 -------------------------------------------------------------------------------
---             Copyright 2023  Ken Campbell
---               All rights reserved.
+-- SimStm
+--
+-- SPDX-License-Identifier: Apache-2.0
+--
+-- Copyright:
+--   - Original work derived from VHDL-Test-Bench (Ken Campbell)
+--   - Subsequent modifications: Eccelerators
+--
+-- Description:
+--   Interpreter utility helper subprogram implementations.
+--
+-- Upstream reference:
+--   https://github.com/sckoarn/VHDL-Test-Bench
 -------------------------------------------------------------------------------
--- Author: sckoarn
---
--- Description :  The the testbench package header file.
---
-------------------------------------------------------------------------------
---  This file is part of The VHDL Test Bench Package.
---
---  Redistribution and use in source and binary forms, with or without
---  modification, are permitted provided that the following conditions are met:
---
---  1. Redistributions of source code must retain the above copyright notice,
---     this list of conditions and the following disclaimer.
---
---  2. Redistributions in binary form must reproduce the above copyright notice,
---     this list of conditions and the following disclaimer in the documentation
---     and/or other materials provided with the distribution.
---
--- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
--- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
--- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
--------------------------------------------------------------------------------
--- Changes:
---
--- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
---
--- Adapt to new fix SimStm language
---
--- ----------------------------------------------------------------------------
 
-library std;
 use std.textio.all;
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_textio.all;
 
 use work.tb_limits_pkg.all;
 use work.tb_base_pkg.all;
@@ -119,10 +93,11 @@ package body tb_interpreter_util_pkg is
                 exit;
             end if;
         end loop;
-        
-        if DEBUG then dump_text_line(itext_line, "itext_line:"); end if;
-        if DEBUG then dump_text_line(itext_line, "tmp_text_line:"); end if;
-        
+
+        if DEBUG then
+            dump_text_line(itext_line, "itext_line:");
+        end if;
+
         -- null outputs
         itokens := (others => (others => nul));
         txt_ptr := null;
@@ -151,7 +126,7 @@ package body tb_interpreter_util_pkg is
             if txt_found = 1 and tmp_text_line(i) /= nul then
                 -- if string too long, prevent tool hang, truncate and notify
                 assert j <= c_stm_text_len
-                report("tokenize_line: code line larger than c_stm_text_len")
+                report ("tokenize_line: code line larger than c_stm_text_len")
                 severity failure;
                 -- till the very end of tmp_text_line
                 if tmp_text_line(i) /= nul then
@@ -170,8 +145,10 @@ package body tb_interpreter_util_pkg is
                 for k in 0 to 8 loop
                     if k = 0 and token_number = 0 then
                         if token_index /= 0 then
-                            itokens(k + 1) := current_token; 
-                            if DEBUG then print("0k" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                            itokens(k + 1) := current_token;
+                            if DEBUG then
+                                print("0k" & integer'image(k) & " " & current_token(1 to fld_len(current_token)));
+                            end if;
                             current_token := (others => nul);
                             token_number := k + 1;
                             valid := 1;
@@ -180,7 +157,9 @@ package body tb_interpreter_util_pkg is
                         end if;
                     elsif k = token_number then
                         itokens(k + 1) := current_token;
-                        if DEBUG then print("ek" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                        if DEBUG then
+                            print("ek" & integer'image(k) & " " & current_token(1 to fld_len(current_token)));
+                        end if;
                         current_token := (others => nul);
                         token_number := k + 1;
                         valid := k + 1;
@@ -195,7 +174,9 @@ package body tb_interpreter_util_pkg is
                     for k in 0 to 8 loop
                         if k = token_number then
                             itokens(k + 1) := current_token;
-                            if DEBUG then print("nk" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                            if DEBUG then
+                                print("nk" & integer'image(k) & " " & current_token(1 to fld_len(current_token)));
+                            end if;
                             valid := k + 1;
                             exit;
                         end if;
@@ -210,25 +191,28 @@ package body tb_interpreter_util_pkg is
                 for k in 0 to 8 loop
                     if k = token_number then
                         itokens(k + 1) := current_token;
-                        if DEBUG then print("ck" & integer'image(k) & " " & current_token(1 to fld_len(current_token))); end if;
+                        if DEBUG then
+                            print("ck" & integer'image(k) & " " & current_token(1 to fld_len(current_token)));
+                        end if;
                         valid := k + 1;
                         exit;
                     end if;
                 end loop;
             end if;
         end if;
-        if DEBUG then 
+        if DEBUG then
             for y in 1 to valid loop
-                print("itokens(" & integer'image(y) &") " & itokens(y)(1 to fld_len(itokens(y))));     
+                print("itokens(" & integer'image(y) & ") " & itokens(y)(1 to fld_len(itokens(y))));
             end loop;
         end if;
         token_merge_words(itokens, valid, otokens, ovalid);
-        if DEBUG then 
+        if DEBUG then
             for y in 1 to ovalid loop
-                print("otokens(" & integer'image(y) &") " & otokens(y)(1 to fld_len(otokens(y))));   
+                print("otokens(" & integer'image(y) & ") " & otokens(y)(1 to fld_len(otokens(y))));
             end loop;
+
+            print("-----");
         end if;
-        if DEBUG then print("-----"); end if;
     end procedure;
 
     procedure txt_print_wvar(
@@ -250,7 +234,7 @@ package body tb_interpreter_util_pkg is
         variable insts : in inst_sequence;
         variable vars : in var_pool_ordered;
         variable rcs : in stm_array_of_runtime_context;
-        variable sp : in integer;    
+        variable sp : in integer;
         variable stm_text_substituded : out stm_text;
         constant machine_value_width : in integer
     ) is
@@ -402,7 +386,7 @@ package body tb_interpreter_util_pkg is
                                 insert_call_stack_file_line := true;
                             else
                                 assert (false)
-                                report  "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                                report "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
                                 severity failure;
                             end if;
                             src_i := src_i + 1;
@@ -416,7 +400,7 @@ package body tb_interpreter_util_pkg is
                             end if;
                         else
                             assert (false)
-                            report  "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
+                            report "wrong substitution format in {...} brackets " & stm_text_crop(input_txt)
                             severity failure;
                         end if;
                     end if;
@@ -426,7 +410,7 @@ package body tb_interpreter_util_pkg is
                 src_i := src_i + 1;
             else
                 assert (false)
-                report  "missing closing } bracket " & stm_text_crop(input_txt)
+                report "missing closing } bracket " & stm_text_crop(input_txt)
                 severity failure;
             end if;
 
@@ -439,7 +423,7 @@ package body tb_interpreter_util_pkg is
                     end if;
                 end loop;
                 assert is_txt_var_first_character(ie.inst_args.txt(src_tail_i))
-                report  "missing variable for substitution bracket " & stm_text_crop(input_txt)
+                report "missing variable for substitution bracket " & stm_text_crop(input_txt)
                 severity failure;
                 tmp_field := (others => nul);
                 tmp_i := 1;
@@ -447,19 +431,19 @@ package body tb_interpreter_util_pkg is
                 src_tail_i := src_tail_i + 1;
                 tmp_i := tmp_i + 1;
                 -- parse to the next space
-                while ie.inst_args.txt(src_tail_i) /= ' ' and ie.inst_args.txt(src_tail_i) /= nul and ie.inst_args.txt(src_tail_i) /=  ht loop
+                while ie.inst_args.txt(src_tail_i) /= ' ' and ie.inst_args.txt(src_tail_i) /= nul and ie.inst_args.txt(src_tail_i) /= ht loop
                     tmp_field(tmp_i) := ie.inst_args.txt(src_tail_i);
                     src_tail_i := src_tail_i + 1;
                     tmp_i := tmp_i + 1;
-                end loop;    
+                end loop;
                 cien := rcs(sp).ien_of_called_proc;
                 called_proc_name := insts.element_ptrs(cien).inst_args.par_text_fields(1);
                 if contains_dot(tmp_field) then
                     wvar_is_fqn := true;
                 else
                     wvar_is_fqn := false;
-                end if;               
-                access_inst_wvar_value_prefer_local(ie, vars, tmp_field, wvar_is_fqn, called_proc_name, v1);                              
+                end if;
+                access_inst_wvar_value_prefer_local(ie, vars, tmp_field, wvar_is_fqn, called_proc_name, v1);
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -497,10 +481,10 @@ package body tb_interpreter_util_pkg is
             end if;
         end loop;
         assert false
-        report  "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
+        report "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
         severity failure;
     end procedure;
-              
+
     procedure access_inst_par_value_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -513,12 +497,12 @@ package body tb_interpreter_util_pkg is
         ptf := ie.inst_args.par_text_fields(par_num);
         if ie.inst_args.par_types(par_num) = PAR_LIT then
             val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else 
-            access_inst_par_index_global(ie, vars, par_num, ven);       
+        else
+            access_inst_par_index_global(ie, vars, par_num, ven);
             val := vars.element_ptrs(ven).values(0);
-        end if;    
+        end if;
     end procedure;
-    
+
     procedure access_inst_par_value_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -532,12 +516,12 @@ package body tb_interpreter_util_pkg is
         ptf := ie.inst_args.par_text_fields(par_num);
         if ie.inst_args.par_types(par_num) = PAR_LIT then
             val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else 
-            access_inst_par_index_local(ie, vars, par_num, called_proc_name, ven);       
+        else
+            access_inst_par_index_local(ie, vars, par_num, called_proc_name, ven);
             val := vars.element_ptrs(ven).values(0);
-        end if;     
+        end if;
     end procedure;
-        
+
     procedure access_inst_par_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
@@ -552,31 +536,31 @@ package body tb_interpreter_util_pkg is
         ptf := ie.inst_args.par_text_fields(par_num);
         if ie.inst_args.par_types(par_num) = PAR_LIT then
             val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else 
-            access_inst_par_index_prefer_local(ie, vars, par_num, called_proc_name, ven);       
+        else
+            access_inst_par_index_prefer_local(ie, vars, par_num, called_proc_name, ven);
             val := vars.element_ptrs(ven).values(0);
-        end if;        
+        end if;
     end procedure;
-    
+
     procedure access_inst_wvar_value_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field; 
-        variable wvar_is_fqn : in boolean; 
+        variable wvar_name : in text_field;
+        variable wvar_is_fqn : in boolean;
         variable called_proc_name : in text_field;
         variable val : out unsigned
     ) is
         variable ven : integer;
     begin
-        access_inst_wvar_index_prefer_local(ie, vars, wvar_name, wvar_is_fqn, called_proc_name, ven);       
-        val := vars.element_ptrs(ven).values(0);       
+        access_inst_wvar_index_prefer_local(ie, vars, wvar_name, wvar_is_fqn, called_proc_name, ven);
+        val := vars.element_ptrs(ven).values(0);
     end procedure;
-        
+
     procedure access_inst_par_index_global(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
-        variable ven : out integer        
+        variable ven : out integer
     ) is
         variable ptf : text_field;
         variable vng : text_field;
@@ -588,15 +572,15 @@ package body tb_interpreter_util_pkg is
             ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
         end if;
         vng := append_dot(ptf);
-        access_var(ie.slc, vars, vng, ven, true); 
+        access_var(ie.slc, vars, vng, ven, true);
     end procedure;
-    
+
     procedure access_inst_par_index_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
+        variable ven : out integer
     ) is
         variable ptf : text_field;
         variable vn : text_field;
@@ -607,20 +591,20 @@ package body tb_interpreter_util_pkg is
         else
             ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
         end if;
-        vn := append_local_scope(ptf, called_proc_name);    
-        access_var(ie.slc, vars, vn, ven, true);  
+        vn := append_local_scope(ptf, called_proc_name);
+        access_var(ie.slc, vars, vn, ven, true);
     end procedure;
-    
+
     procedure access_inst_par_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
+        variable ven : out integer
     ) is
         variable ptf : text_field;
         variable vn : text_field;
-        variable vng : text_field; 
+        variable vng : text_field;
         variable venu : integer;
     begin
         ptf := ie.inst_args.par_text_fields(par_num);
@@ -629,42 +613,42 @@ package body tb_interpreter_util_pkg is
         else
             ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
         end if;
-        vn := append_local_scope(ptf, called_proc_name);                   
+        vn := append_local_scope(ptf, called_proc_name);
         access_var(ie.slc, vars, vn, venu, false);
         if venu < 0 then
             vng := append_dot(ptf);
-            access_var(ie.slc, vars, vng, venu, true);          
-        end if;  
-        ven := venu;  
+            access_var(ie.slc, vars, vng, venu, true);
+        end if;
+        ven := venu;
     end procedure;
-    
+
     procedure access_inst_wvar_index_prefer_local(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field; 
-        variable wvar_is_fqn : in boolean; 
+        variable wvar_name : in text_field;
+        variable wvar_is_fqn : in boolean;
         variable called_proc_name : in text_field;
-        variable ven : out integer 
+        variable ven : out integer
     ) is
         variable wtf : text_field;
         variable vn : text_field;
-        variable vng : text_field; 
+        variable vng : text_field;
         variable venu : integer;
     begin
         if wvar_is_fqn then
             wtf := wvar_name;
         else
             wtf := prepend_namespace(wvar_name, ie.inst_namespace);
-        end if;    
-        vn := append_local_scope(wtf, called_proc_name);                   
+        end if;
+        vn := append_local_scope(wtf, called_proc_name);
         access_var(ie.slc, vars, vn, venu, false);
         if venu < 0 then
             vng := append_dot(wtf);
-            access_var(ie.slc, vars, vng, venu, true);          
-        end if;  
-        ven := venu;  
+            access_var(ie.slc, vars, vng, venu, true);
+        end if;
+        ven := venu;
     end procedure;
-        
+
     procedure access_proc(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
@@ -683,13 +667,11 @@ package body tb_interpreter_util_pkg is
         end if;
         search_proc_element_number(procs, pn, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc " & proc_name & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
+        report "access proc, couldn't find proc " & proc_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
     end procedure;
-    
+
     procedure access_proc_fqn(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
@@ -702,13 +684,11 @@ package body tb_interpreter_util_pkg is
         pn := proc_name;
         search_proc_element_number(procs, pn, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc " & proc_name & 
-               "file " & slc.file_name & 
-               "line" & integer'image(slc.file_line)
+        report "access proc, couldn't find proc " & proc_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
     end procedure;
-    
+
     procedure access_var(
         variable slc : in src_locator;
         variable vars : in var_pool_ordered;
@@ -721,9 +701,7 @@ package body tb_interpreter_util_pkg is
         search_var_element_number(vars, var_name, ven);
         if fail_if_not_found then
             assert ven >= 0
-            report "access var, couldn't find var " & var_name & 
-                   "file " & slc.file_name & 
-                   "line" & integer'image(slc.file_line)
+            report "access var, couldn't find var " & var_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
             severity failure;
         end if;
         var_element_num := ven;
@@ -736,8 +714,8 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
+        report "index var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
         value := vars.element_ptrs(var_element_num).values(0);
     end procedure;
 
@@ -758,8 +736,8 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var values ptr var, element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
+        report "index var values ptr var, element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
         value_ptr := vars.element_ptrs(var_element_num).values;
     end procedure;
 
@@ -771,8 +749,8 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
+        report "index var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
         var_txt := vars.element_ptrs(var_element_num).txt;
         var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
     end procedure;
@@ -783,11 +761,11 @@ package body tb_interpreter_util_pkg is
         variable var_txt : out stm_text_ptr;
         variable var_txt_enclosing_quote : out character
     ) is
-    begin        
+    begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
+        report "index and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).txt := vars.element_ptrs(var_element_num).txt_org;
         vars.element_ptrs(var_element_num).txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
         var_txt := vars.element_ptrs(var_element_num).txt;
         var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
@@ -800,8 +778,8 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
+        report "index var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
         var_arr := vars.element_ptrs(var_element_num).arr;
     end procedure;
 
@@ -812,9 +790,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
+        report "index and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).arr := vars.element_ptrs(var_element_num).arr_org;
         var_arr := vars.element_ptrs(var_element_num).arr;
     end procedure;
 
@@ -825,8 +803,8 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var label , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
+        report "index var label , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
         var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
     end procedure;
 
@@ -837,9 +815,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
+        report "index and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref_org;
         var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
     end procedure;
 
@@ -850,7 +828,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index var lines , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "index var lines , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
@@ -862,9 +840,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "index and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
+        report "index and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).lines := vars.element_ptrs(var_element_num).lines_org;
         var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
 
@@ -875,7 +853,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).values(0) := value;
     end procedure;
@@ -887,9 +865,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).values:= vars.element_ptrs(var_element_num).values_org;
+        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).values := vars.element_ptrs(var_element_num).values_org;
         vars.element_ptrs(var_element_num).values(0) := var_value;
     end procedure;
 
@@ -900,7 +878,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var values ptr, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var values ptr, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).values := var_value_ptr;
     end procedure;
@@ -912,7 +890,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).txt := var_txt;
     end procedure;
@@ -924,10 +902,10 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).txt:= vars.element_ptrs(var_element_num).txt_org;
-        vars.element_ptrs(var_element_num).txt_enclosing_quote:= vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
+        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).txt := vars.element_ptrs(var_element_num).txt_org;
+        vars.element_ptrs(var_element_num).txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote_org;
         vars.element_ptrs(var_element_num).txt := var_txt;
     end procedure;
 
@@ -938,7 +916,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).arr := var_arr;
     end procedure;
@@ -950,10 +928,10 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
-        severity failure; 
-        vars.element_ptrs(var_element_num).arr:= vars.element_ptrs(var_element_num).arr_org;
-        vars.element_ptrs(var_element_num).arr := var_arr;        
+        report "reinit and reinit var array, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).arr := vars.element_ptrs(var_element_num).arr_org;
+        vars.element_ptrs(var_element_num).arr := var_arr;
     end procedure;
 
     procedure update_var(
@@ -963,7 +941,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
@@ -975,9 +953,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
-        vars.element_ptrs(var_element_num).label_proc_ref:= vars.element_ptrs(var_element_num).label_proc_ref_org;
+        vars.element_ptrs(var_element_num).label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref_org;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
 
@@ -988,7 +966,7 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).label_proc_ref_org := var_label_proc_ref;
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
@@ -998,10 +976,10 @@ package body tb_interpreter_util_pkg is
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : in stm_lines_ptr
-    ) is      
+    ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
@@ -1013,9 +991,9 @@ package body tb_interpreter_util_pkg is
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
-        vars.element_ptrs(var_element_num).lines:= vars.element_ptrs(var_element_num).lines_org;
+        vars.element_ptrs(var_element_num).lines := vars.element_ptrs(var_element_num).lines_org;
         vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
 
@@ -1028,14 +1006,14 @@ package body tb_interpreter_util_pkg is
         variable txt : stm_text;
     begin
         assert inst_element_num <= insts.last_element_num
-        report "print instruction element, inst element number, " & integer'image(inst_element_num) & "greater than insts last element number & integer'image(inst.last_element_num)" 
+        report "print instruction element, inst element number, " & integer'image(inst_element_num) & "greater than insts last element number & integer'image(inst.last_element_num)"
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
-        print(".... instruction element number: " & crop(to_text_field(inst_element_num))& "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
+        print(".... instruction element number: " & crop(to_text_field(inst_element_num)) & "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
         print(".... instruction namespace: " & crop(insts.element_ptrs(inst_element_num).inst_namespace));
         print(".... instruction file name: " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
-        print(".... instruction file linenumber: " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));              
+        print(".... instruction file linenumber: " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
@@ -1100,7 +1078,7 @@ package body tb_interpreter_util_pkg is
         variable eq : character;
     begin
         assert var_element_num <= vars.last_element_num
-        report "dump  var element, var element number, " & integer'image(var_element_num) & "greater than vars last element number " & integer'image(vars.last_element_num) 
+        report "dump  var element, var element number, " & integer'image(var_element_num) & "greater than vars last element number " & integer'image(vars.last_element_num)
         severity failure;
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
@@ -1221,7 +1199,7 @@ package body tb_interpreter_util_pkg is
             print("---- var_stm_type: T_NO_VAR");
         end if;
     end procedure;
-    
+
     procedure dump_proc_pool_ordered(
         variable procs : in proc_pool_ordered
     ) is
@@ -1234,7 +1212,7 @@ package body tb_interpreter_util_pkg is
             dump_proc_element(procs, pen);
         end loop;
     end procedure;
-    
+
     procedure dump_proc_element(
         variable procs : in proc_pool_ordered;
         variable proc_element_num : in integer
@@ -1248,16 +1226,16 @@ package body tb_interpreter_util_pkg is
         print("---- proc definition in line: " & integer'image(procs.element_ptrs(proc_element_num).slc.file_line));
         print("---- proc name: " & procs.element_ptrs(proc_element_num).name);
         print("---- proc element num: " & crop(to_text_field(proc_element_num)) & "(0x" & to_text_field_hex(proc_element_num) & ")");
-        print("---- proc_pointer_to_ien: " &  crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
+        print("---- proc_pointer_to_ien: " & crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
     end procedure;
-    
+
     procedure print_file_def_element(
         variable files : in file_def_list;
         variable file_element_num : in integer
     ) is
     begin
         assert file_element_num <= files.last_element_num
-        report "print file definition, var element number, " & integer'image(file_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)" 
+        report "print file definition, var element number, " & integer'image(file_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... file def is ");
@@ -1265,7 +1243,7 @@ package body tb_interpreter_util_pkg is
         print(".... absolute file name: " & text_line_crop(files.element_ptrs(file_element_num).absolute_file_name));
         print(".... file name: " & files.element_ptrs(file_element_num).file_name);
     end procedure;
-    
+
     procedure dump_file_defs(
         variable files : in file_def_list
     ) is
@@ -1278,47 +1256,47 @@ package body tb_interpreter_util_pkg is
             print_file_def_element(files, fen);
         end loop;
     end procedure;
-    
+
     procedure print_initial_instruction_context(
         variable iic : in stm_inst_initial_context
     ) is
-    begin       
+    begin
         case iic.code_section is
-            when NONE =>    
+            when NONE =>
                 print("code section NONE");
-            when PROC_BODY =>    
+            when PROC_BODY =>
                 print("code section PROC_PARAMS");
-            when PROC_PARAMS =>    
+            when PROC_PARAMS =>
                 print("code section IN_PROC_BODY");
-            when CALL_PARAMS =>    
-                print("code section IN_CALL_PARAMS");       
-        end case;            
+            when CALL_PARAMS =>
+                print("code section IN_CALL_PARAMS");
+        end case;
         print("namespace name " & crop(iic.namespace_name));
         print("proc name " & crop(iic.proc_name));
-        print("called proc name " & crop(iic.called_proc_name));  
-    end procedure;  
-    
+        print("called proc name " & crop(iic.called_proc_name));
+    end procedure;
+
     procedure print_runtime_context(
         variable rc : in stm_runtime_context
     ) is
-    begin       
+    begin
         case rc.call_process_state is
-            when IN_NONE =>    
+            when IN_NONE =>
                 print("call_process_state IN_NONE");
-            when IN_PROC_PARAMS =>    
+            when IN_PROC_PARAMS =>
                 print("call_process_state IN_PROC_PARAMS");
-            when IN_PROC_BODY =>    
+            when IN_PROC_BODY =>
                 print("call_process_state IN_PROC_BODY");
-            when IN_CALL_PARAMS =>    
-                print("call_process_state IN_CALL_PARAMS");       
-        end case;            
+            when IN_CALL_PARAMS =>
+                print("call_process_state IN_CALL_PARAMS");
+        end case;
         print("ien_of_call " & integer'image(rc.ien_of_call));
         print("ien_of_proc_params_end " & integer'image(rc.ien_of_proc_params_end));
-        print("ien_of_called_proc " & integer'image(rc.ien_of_called_proc));    
+        print("ien_of_called_proc " & integer'image(rc.ien_of_called_proc));
         print("loop_num " & integer'image(rc.loop_num));
-        print("loop_if_enter_level " & integer'image(rc.loop_if_enter_level));   
-    end procedure;    
-    
+        print("loop_if_enter_level " & integer'image(rc.loop_if_enter_level));
+    end procedure;
+
     procedure search_var_element_number(
         variable vars : in var_pool_ordered;
         variable var_name : in text_field;
@@ -1328,13 +1306,13 @@ package body tb_interpreter_util_pkg is
         variable su : slice;
         variable sl : slice;
         variable en : integer;
-        variable cmp_name : text_field;    
+        variable cmp_name : text_field;
         variable is_equ : boolean;
         variable is_less : boolean;
     begin
         en := -1;
         s.left := 0;
-        s.right := vars.last_element_num;           
+        s.right := vars.last_element_num;
         while s.right - s.left > 8 loop
             sl.left := s.left;
             sl.right := s.left + (s.right - s.left) / 2 - 1;
@@ -1348,19 +1326,19 @@ package body tb_interpreter_util_pkg is
             else
                 s.left := su.left;
                 s.right := su.right;
-            end if;    
-        end loop;    
+            end if;
+        end loop;
         for i in s.left to s.right loop
             cmp_name := vars.element_ptrs(i).name;
             if cmp_name = var_name then
                 en := i;
                 exit;
-            end if;              
+            end if;
         end loop;
-        ien :=  en;
+        ien := en;
     end procedure;
-    
-    procedure search_proc_element_number( 
+
+    procedure search_proc_element_number(
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable pen : out integer
@@ -1368,14 +1346,14 @@ package body tb_interpreter_util_pkg is
         variable s : slice;
         variable su : slice;
         variable sl : slice;
-        variable en : integer; 
+        variable en : integer;
         variable cmp_name : text_field;
         variable is_equ : boolean;
-        variable is_less : boolean; 
+        variable is_less : boolean;
     begin
         en := -1;
         s.left := 0;
-        s.right := procs.last_element_num;           
+        s.right := procs.last_element_num;
         while s.right - s.left > 8 loop
             sl.left := s.left;
             sl.right := s.left + (s.right - s.left) / 2 - 1;
@@ -1389,18 +1367,18 @@ package body tb_interpreter_util_pkg is
             else
                 s.left := su.left;
                 s.right := su.right;
-            end if;    
-        end loop;    
+            end if;
+        end loop;
         for i in s.left to s.right loop
             cmp_name := procs.element_ptrs(i).name;
             if cmp_name = proc_name then
                 en := i;
                 exit;
-            end if;              
+            end if;
         end loop;
-        pen :=  en;
+        pen := en;
     end procedure;
-    
+
     procedure set_var_type(
         variable inst : in text_field;
         variable inst_len : in integer;
@@ -1424,9 +1402,9 @@ package body tb_interpreter_util_pkg is
             var_type := T_SIGNAL;
         elsif inst(1 to inst_len) = INSTR_LABEL then
             var_type := T_LABEL;
-        end if; 
+        end if;
     end procedure;
-    
+
     procedure set_proc_type(
         variable inst : in text_field;
         variable inst_len : in integer;
@@ -1440,7 +1418,7 @@ package body tb_interpreter_util_pkg is
             proc_type := true;
         end if;
     end procedure;
-       
+
     procedure track_inst_initial_context(
         variable slc : in src_locator;
         variable ts : in token_text_field_array;
@@ -1475,10 +1453,10 @@ package body tb_interpreter_util_pkg is
             end if;
             if inst(1 to il) = INSTR_END_PROC then
                 iic.code_section := NONE;
-                iic.proc_name := (others => nul); 
+                iic.proc_name := (others => nul);
                 iic.called_proc_name := (others => nul);
             end if;
-    
+
             if inst(1 to il) = INSTR_CALL_PAR_OPEN then
                 iic.code_section := CALL_PARAMS;
                 iic.called_proc_name := ts(2);
@@ -1505,7 +1483,7 @@ package body tb_interpreter_util_pkg is
                 or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
                 or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
                 or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
+                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
                 if iic.code_section = PROC_PARAMS then
                     iic.code_section := PROC_BODY;
                 end if;
@@ -1529,35 +1507,35 @@ package body tb_interpreter_util_pkg is
                 or inst(1 to il) = INSTR_LINES_PAR_CLOSE
                 or inst(1 to il) = INSTR_ARRAY
                 or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
-                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then  
-                    iic.is_var_declaration := true;
+                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
+                iic.is_var_declaration := true;
             end if;
         end if;
     end procedure;
-               
+
     procedure insert_proc_element(
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
         variable proc_name : in text_field;
         constant debug : boolean;
-        variable pen  : out integer
+        variable pen : out integer
     ) is
         variable ne : proc_element_ptr;
         variable s : slice;
         variable su : slice;
         variable sl : slice;
         variable insert_before : integer;
-        variable ne_num: integer;
+        variable ne_num : integer;
         variable cmp_name : text_field;
     begin
-        ne := new proc_element;    
+        ne := new proc_element;
         ne.name := proc_name;
         ne.slc := slc;
-        
-        insert_before := -1;   
-        if procs.last_element_num >= 0 then          
+
+        insert_before := -1;
+        if procs.last_element_num >= 0 then
             s.left := 0;
-            s.right := procs.last_element_num;                       
+            s.right := procs.last_element_num;
             while s.right - s.left > 8 loop
                 sl.left := s.left;
                 sl.right := s.left + (s.right - s.left) / 2 - 1;
@@ -1570,31 +1548,31 @@ package body tb_interpreter_util_pkg is
                 else
                     s.left := su.left;
                     s.right := su.right;
-                end if;    
-            end loop;                       
+                end if;
+            end loop;
             for i in s.left to s.right loop
                 cmp_name := procs.element_ptrs(i).name;
                 if order_is_less_than_failure_on_equal(slc, proc_name, cmp_name) then
                     insert_before := i;
                     exit;
-                end if;              
+                end if;
             end loop;
         end if;
- 
+
         if insert_before >= 0 then
-           procs.element_ptrs(insert_before + 1 to procs.last_element_num + 1) := procs.element_ptrs(insert_before to procs.last_element_num);
-           ne_num := insert_before;
+            procs.element_ptrs(insert_before + 1 to procs.last_element_num + 1) := procs.element_ptrs(insert_before to procs.last_element_num);
+            ne_num := insert_before;
         else
-           ne_num := procs.last_element_num + 1;
-        end if;   
+            ne_num := procs.last_element_num + 1;
+        end if;
         procs.element_ptrs(ne_num) := ne;
-        procs.last_element_num := procs.last_element_num + 1;     
+        procs.last_element_num := procs.last_element_num + 1;
         if debug then
             print("add proc " & proc_name);
-        end if; 
-        pen := ne_num;          
+        end if;
+        pen := ne_num;
     end procedure;
-    
+
     procedure insert_var_element(
         variable slc : in src_locator;
         variable vars : inout var_pool_ordered;
@@ -1603,16 +1581,16 @@ package body tb_interpreter_util_pkg is
         constant var_type : in stm_var_type;
         constant machine_value_width : in integer;
         constant debug : in boolean;
-        variable ven  : out integer
+        variable ven : out integer
     ) is
         variable ne : var_element_ptr;
         variable s : slice;
         variable su : slice;
         variable sl : slice;
         variable insert_before : integer;
-        variable ne_num: integer;
+        variable ne_num : integer;
         variable cmp_name : text_field;
-        
+
         procedure init_lines_var is
         begin
             ne := new var_element;
@@ -1670,14 +1648,12 @@ package body tb_interpreter_util_pkg is
         procedure init_stm_text_var is
         begin
             assert inst_args.txt /= null
-            report "missing file name in file declaration " & 
-                   "file " & slc.file_name & 
-                   "line" & integer'image(slc.file_line)
+            report "missing file name in file declaration " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
             severity failure;
             ne := new var_element;
             ne.slc := slc;
             ne.name := var_name;
-            ne.values := new stm_value(0 to 0)(machine_value_width - 1 downto 0);    
+            ne.values := new stm_value(0 to 0)(machine_value_width - 1 downto 0);
             ne.values(0) := to_unsigned(0, machine_value_width);
             ne.values_org := new stm_value(0 to 0)(machine_value_width - 1 downto 0);
             ne.values_org(0) := to_unsigned(0, machine_value_width);
@@ -1693,7 +1669,7 @@ package body tb_interpreter_util_pkg is
             ne.lines_org := null;
             ne.typ := var_type;
         end procedure;
-        
+
         procedure init_label_var is
         begin
             ne := new var_element;
@@ -1754,12 +1730,12 @@ package body tb_interpreter_util_pkg is
                 init_value_var;
             when others =>
                 init_value_var;
-        end case;        
-   
-        insert_before := -1;   
-        if vars.last_element_num >= 0 then          
+        end case;
+
+        insert_before := -1;
+        if vars.last_element_num >= 0 then
             s.left := 0;
-            s.right := vars.last_element_num;                       
+            s.right := vars.last_element_num;
             while s.right - s.left > 8 loop
                 sl.left := s.left;
                 sl.right := s.left + (s.right - s.left) / 2 - 1;
@@ -1772,29 +1748,29 @@ package body tb_interpreter_util_pkg is
                 else
                     s.left := su.left;
                     s.right := su.right;
-                end if;    
-            end loop;                       
+                end if;
+            end loop;
             for i in s.left to s.right loop
                 cmp_name := vars.element_ptrs(i).name;
                 if order_is_less_than_failure_on_equal(slc, var_name, cmp_name) then
                     insert_before := i;
                     exit;
-                end if;              
+                end if;
             end loop;
         end if;
- 
+
         if insert_before >= 0 then
-           vars.element_ptrs(insert_before + 1 to vars.last_element_num + 1) := vars.element_ptrs(insert_before to vars.last_element_num);
-           ne_num := insert_before;
+            vars.element_ptrs(insert_before + 1 to vars.last_element_num + 1) := vars.element_ptrs(insert_before to vars.last_element_num);
+            ne_num := insert_before;
         else
-           ne_num := vars.last_element_num + 1;
-        end if;   
+            ne_num := vars.last_element_num + 1;
+        end if;
         vars.element_ptrs(ne_num) := ne;
         vars.last_element_num := vars.last_element_num + 1;
-        if debug then 
-            print("add var #" & integer'image(ne_num) & "(" & integer'image(vars.last_element_num) & ") " &  var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
-        end if;       
-        ven := ne_num;             
+        if debug then
+            print("add var #" & integer'image(ne_num) & "(" & integer'image(vars.last_element_num) & ") " & var_type_to_string(var_type) & " " & ne.name & " " & crop(slc.file_name) & " " & integer'image(slc.file_line));
+        end if;
+        ven := ne_num;
     end procedure;
 
 end package body;

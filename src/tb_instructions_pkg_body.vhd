@@ -1,46 +1,19 @@
 -------------------------------------------------------------------------------
---             Copyright 2023  Ken Campbell
---               All rights reserved.
+-- SimStm
+--
+-- SPDX-License-Identifier: Apache-2.0
+--
+-- Copyright:
+--   - Original work derived from VHDL-Test-Bench (Ken Campbell)
+--   - Subsequent modifications: Eccelerators
+--
+-- Description:
+--   Implementation of helper functions around instruction parsing and handling.
+--
+-- Upstream reference:
+--   https://github.com/sckoarn/VHDL-Test-Bench
 -------------------------------------------------------------------------------
--- Author: sckoarn
---
--- Description :  The the testbench package body file.
---
-------------------------------------------------------------------------------
---  This file is part of The VHDL Test Bench Package.
---
---  Redistribution and use in source and binary forms, with or without
---  modification, are permitted provided that the following conditions are met:
---
---  1. Redistributions of source code must retain the above copyright notice,
---     this list of conditions and the following disclaimer.
---
---  2. Redistributions in binary form must reproduce the above copyright notice,
---     this list of conditions and the following disclaimer in the documentation
---     and/or other materials provided with the distribution.
---
--- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
--- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
--- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
--------------------------------------------------------------------------------
--- Changes:
---
--- Materially changed 2023 by Eccelerators, please diff with original at
--- https://github.com/sckoarn/VHDL-Test-Bench/blob/main/source/tb_pkg_header.vhdl
---
--- Adapt to new fix SimStm language
---
--- ----------------------------------------------------------------------------
 
-library std;
 use std.textio.all;
 
 library ieee;
@@ -104,7 +77,7 @@ package body tb_instructions_pkg is
         append_inst_def(inst_defs, INSTR_BUS, 2);
         append_inst_def(inst_defs, INSTR_BUS_PAR_CLOSE, 2);
         append_inst_def(inst_defs, INSTR_BUS_READ, 4);
-        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 3);
+        append_inst_def(inst_defs, INSTR_BUS_VERIFY, 5);
         append_inst_def(inst_defs, INSTR_BUS_WRITE, 4);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_SET, 2);
         append_inst_def(inst_defs, INSTR_BUS_TIMEOUT_GET, 2);
@@ -682,9 +655,8 @@ package body tb_instructions_pkg is
             ovalid := valid;
         end if;
     end procedure;
-    
-    
-    procedure append_inst_def(        
+
+    procedure append_inst_def(
         variable inst_defs : inout inst_def_list;
         constant inst : in string;
         constant num_of_params : in integer
@@ -697,22 +669,22 @@ package body tb_instructions_pkg is
         report "creation of instruction with length greater than max_field_len attempted "
         severity failure;
         nen := inst_defs.last_element_num + 1;
-        ne_ptr := new inst_def_element;  
+        ne_ptr := new inst_def_element;
         for i in 1 to inst'high loop
             ne_ptr.inst(i) := inst(i);
-        end loop;   
+        end loop;
         ne_ptr.inst_len := inst'high;
         ne_ptr.num_of_params := num_of_params;
         for i in 0 to inst_defs.last_element_num loop
             e_ptr := inst_defs.element_ptrs(i);
             assert ne_ptr.inst /= e_ptr.inst
             report "creation of duplicate instruction attempted, inst " & ne_ptr.inst(1 to fld_len(ne_ptr.inst))
-            severity failure;            
+            severity failure;
         end loop;
         inst_defs.element_ptrs(nen) := ne_ptr;
         inst_defs.last_element_num := nen;
     end procedure;
-    
+
     procedure check_valid_inst(
         variable slc : in src_locator;
         variable inst_defs : in inst_def_list;
@@ -731,22 +703,22 @@ package body tb_instructions_pkg is
         end loop;
         il := fld_len(inst);
         assert hn >= 0
-        report "found undefined instruction " & inst(1 to il) & 
-               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+        report "found undefined instruction " & inst(1 to il) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
                " line " & integer'image(slc.file_line)
         severity failure;
         assert inst_defs.element_ptrs(hn).inst_len = il
-        report "found instruction " & inst(1 to il) & 
-               " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) & 
-               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+        report "found instruction " & inst(1 to il) &
+               " but length is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).inst_len) & " but is " & integer'image(il) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
                " line " & integer'image(slc.file_line)
-        severity failure;       
+        severity failure;
         assert inst_defs.element_ptrs(hn).num_of_params = num_of_params
-        report "found instruction " & inst(1 to il) & 
-               " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) & 
-               " file " & slc.file_name(1 to fld_len(slc.file_name)) & 
+        report "found instruction " & inst(1 to il) &
+               " but number of parameters is wrong, should be " & integer'image(inst_defs.element_ptrs(hn).num_of_params) & " but is " & integer'image(num_of_params) &
+               " file " & slc.file_name(1 to fld_len(slc.file_name)) &
                " line " & integer'image(slc.file_line)
-        severity failure;       
+        severity failure;
     end procedure;
-    
+
 end package body;
