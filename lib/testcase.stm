@@ -131,7 +131,7 @@ proc endTestCase (
     log message stm.ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
-    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' stm.StandardTestVerifyPassCountResult
+    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' stm.StandardTestVerifyAssertionsCountResult
     add TestCasePropertiesInsertionPoint 1
     lines append message TestCaseLines '</testcase>'
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'

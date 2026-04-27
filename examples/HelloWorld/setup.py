@@ -82,6 +82,7 @@ static_setup_data = {
         ]),(
         "HelloWorld/../../lib", [
             {"file":"../../lib/util.stm"},
+            {"file":"../../lib/testcase.stm"},
             {"file":"../../lib/arith.stm"},
             {"file":"../../lib/array.stm"},
             {"file":"../../lib/base.stm"}

@@ -74,9 +74,9 @@ entity tb_simstm is
     port(
         executing_line : out integer;
         executing_file : out text_line;
-        verify_passes : out std_logic_vector(31 downto 0);
+        verify_assertions : out std_logic_vector(31 downto 0);
         verify_failures : out std_logic_vector(31 downto 0);
-        bus_timeout_passes : out std_logic_vector(31 downto 0);
+        bus_timeout_assertions : out std_logic_vector(31 downto 0);
         bus_timeout_failures : out std_logic_vector(31 downto 0);
         marker : out std_logic_vector(15 downto 0);
         signals_out : out t_signals_out;
@@ -181,9 +181,9 @@ begin
         variable act_term_loop_count : integer := 0;
         variable loglevel : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
         variable resume : unsigned(machine_value_width - 1 downto 0) := to_unsigned(0, machine_value_width);
-        variable verify_passes_count : integer := 0;
+        variable verify_assertions_count : integer := 0;
         variable verify_failure_count : integer := 0;
-        variable bus_timeout_passes_count : integer := 0;
+        variable bus_timeout_assertions_count : integer := 0;
         variable bus_timeout_failure_count : integer := 0;
         variable expected_verify_failure_count : integer := 0;
         variable expected_bus_timeout_failure_count : integer := 0;
@@ -448,9 +448,9 @@ begin
              
     begin
         marker <= (others => '0');
-        verify_passes <= (others => '0');
+        verify_assertions <= (others => '0');
         verify_failures <= (others => '0');
-        bus_timeout_passes <= (others => '0');
+        bus_timeout_assertions <= (others => '0');
         bus_timeout_failures <= (others => '0');
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
@@ -513,9 +513,9 @@ begin
         
         while ien <= insts.last_element_num loop
 
-            verify_passes <= std_logic_vector(to_unsigned(verify_passes_count, 32));
+            verify_assertions <= std_logic_vector(to_unsigned(verify_assertions_count, 32));
             verify_failures <= std_logic_vector(to_unsigned(verify_failure_count, 32));
-            bus_timeout_passes <= std_logic_vector(to_unsigned(bus_timeout_passes_count, 32));
+            bus_timeout_assertions <= std_logic_vector(to_unsigned(bus_timeout_assertions_count, 32));
             bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
 
             get_interrupt_requests(signals_in, interrupt_requests);
@@ -865,7 +865,7 @@ begin
                            " file name: " & crop(ie.slc.file_name) & 
                            " file line: " & integer'image(ie.slc.file_line)
                     severity failure;
-                    verify_passes_count := verify_passes_count + 1;
+                    verify_assertions_count := verify_assertions_count + 1;
                     val := var_stm_array(to_integer(val2(30 downto 0)));    
                     get_val_in_called_scope_call_params_source_sensitive(3, val3);                  
                     get_val_in_called_scope_call_params_source_sensitive(4, val4);                
@@ -1483,8 +1483,8 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FINISH then
                     expected_verify_failure_count := to_integer(unsigned(signals_out.out_signal_5(30 downto 0)));
                     expected_bus_timeout_failure_count := to_integer(unsigned(signals_out.out_signal_7(30 downto 0)));
-                    print("Verify passes " & (integer'image(verify_passes_count)));
-                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_passes_count)));
+                    print("Verify passes " & (integer'image(verify_assertions_count)));
+                    print("Timeout monitored bus access passes " & (integer'image(bus_timeout_assertions_count)));
                     if expected_verify_failure_count /= 0 and expected_bus_timeout_failure_count /= 0 then
                         print("Expected " & (integer'image(expected_verify_failure_count)) & " verify failures, got " & (integer'image(verify_failure_count)));
                         print("Expected " & (integer'image(expected_bus_timeout_failure_count)) & " bus timeout failures, got " & (integer'image(bus_timeout_failure_count)));
@@ -1766,7 +1766,7 @@ begin
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_val_in_called_scope_prefer_local(3, val3);
-                    verify_passes_count := verify_passes_count + 1;
+                    verify_assertions_count := verify_assertions_count + 1;
                     if (val3 and val1) /= (val3 and val2) then
                         print_instr("exec ");
                         print(" read     = 0x" & to_hstring(val1));
@@ -1818,7 +1818,7 @@ begin
                     if (ie.inst(1 to ie.inst_len) = INSTR_SIGNAL_VERIFY) then
                         get_val_in_called_scope_prefer_local(2, val2);
                         get_val_in_called_scope_prefer_local(3, val3);
-                        verify_passes_count := verify_passes_count + 1;
+                        verify_assertions_count := verify_assertions_count + 1;
                         if (val4 and val) /= (val4 and val3) then
                             print_instr("exec ");
                             print(" signal   = 0x" & to_hstring(val1));
@@ -1881,7 +1881,7 @@ begin
                        " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;                  
-                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
+                    bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
                         assert successfull
                         report "bus write timeout failure assertion" &  
@@ -1916,7 +1916,7 @@ begin
                        " file name: " & crop(ie.slc.file_name) & 
                        " file line: " & integer'image(ie.slc.file_line)
                     severity failure;   
-                    bus_timeout_passes_count := bus_timeout_passes_count + 1;
+                    bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
                         assert successfull
                         report "bus read timeout"
@@ -1932,7 +1932,7 @@ begin
                     if ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
                         get_val_in_called_scope_prefer_local(4, val4);
                         get_val_in_called_scope_prefer_local(5, val5);
-                        verify_passes_count := verify_passes_count + 1;
+                        verify_assertions_count := verify_assertions_count + 1;
                         if (val5 and val) /= (val5 and val5) then
                             print_instr("exec ");
                             print(" bus      = 0x" & to_hstring(val));

@@ -8,7 +8,7 @@ lines success_lines
 
 proc testMainLabConstantAdd ()
 
-    call stm.initBase ()
+    
 
     verbosity stm.INFO_2
     trace 0

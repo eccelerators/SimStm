@@ -53,19 +53,15 @@ var SimulatedTimeNow 0
 signal sigInTestSuiteIndex 2
 var TestSuiteIndex 255
 
+var TestCaseIndex 0
+
 signal sigInZero 3
-var BasicZero 0
 
 signal sigMachineValueWidth 8
 var MachineValueWidth 0
 
-var MAX 0
-
-proc initBase ()
-    sub MAX 1
-    signal read sigMachineValueWidth MachineValueWidth
-end proc    
-
+const MAX 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  
 proc printFileStatus (
     var FileStatus 0
 )
@@ -82,11 +78,11 @@ proc printFileStatus (
     end if
 end proc
 
-signal sigInStandardTestVerifyPassCount 4
+signal sigInStandardTestVerifyAssertionsCount 4
 signal sigInStandardTestVerifyFailureCount 5
 signal sigOutExpectedStandardTestVerifyFailureCount 5
 
-signal sigInStandardTestBusTimeoutPassCount 6
+signal sigInStandardTestBusTimeoutAssertionsCount 6
 signal sigInStandardTestBusTimeoutFailureCount 7
 signal sigOutExpectedStandardTestBusTimeoutFailureCount 7
 
@@ -106,11 +102,11 @@ var ExpectedStandardTestBusTimeoutFailureCountResult 0
 
 var StandardTestFailure 0
 
-var StandardTestVerifyPassCountStartSnapShot 0
-var StandardTestVerifyPassCountResult 0
+var StandardTestVerifyAssertionsCountStartSnapShot 0
+var StandardTestVerifyAssertionsCountResult 0
 
-var StandardTestBusTimeoutPassCountStartSnapShot 0
-var StandardTestBusTimeoutPassCountResult 0
+var StandardTestBusTimeoutAssertionsCountStartSnapShot 0
+var StandardTestBusTimeoutAssertionsCountResult 0
 
 -- A standard test is usually wrapped by a 
 --
@@ -135,8 +131,8 @@ proc startStandardTestShell ()
     equ ExpectedStandardTestVerifyFailureCountStartSnapShot ExpectedStandardTestVerifyFailureCount
     equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot ExpectedStandardTestBusTimeoutFailureCount
 
-    signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountStartSnapShot
-    signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountStartSnapShot   
+    signal read sigInStandardTestVerifyAssertionsCount StandardTestVerifyAssertionsCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutAssertionsCount StandardTestBusTimeoutAssertionsCountStartSnapShot   
     
     log message 0 "{@c2} started" 
 end proc   
@@ -151,13 +147,13 @@ proc endStandardTestShell ()
     equ ExpectedStandardTestBusTimeoutFailureCountResult ExpectedStandardTestBusTimeoutFailureCount
     sub ExpectedStandardTestBusTimeoutFailureCountResult ExpectedStandardTestBusTimeoutFailureCountStartSnapShot   
     
-    signal read sigInStandardTestVerifyPassCount StandardTestVerifyPassCountResult
-    sub StandardTestVerifyPassCountResult StandardTestVerifyPassCountStartSnapShot
-    signal read sigInStandardTestBusTimeoutPassCount StandardTestBusTimeoutPassCountResult
-    sub StandardTestBusTimeoutPassCountResult StandardTestBusTimeoutPassCountStartSnapShot 
+    signal read sigInStandardTestVerifyAssertionsCount StandardTestVerifyAssertionsCountResult
+    sub StandardTestVerifyAssertionsCountResult StandardTestVerifyAssertionsCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutAssertionsCount StandardTestBusTimeoutAssertionsCountResult
+    sub StandardTestBusTimeoutAssertionsCountResult StandardTestBusTimeoutAssertionsCountStartSnapShot 
     
-    log message 0 "Executed {:d} verify instructions" StandardTestVerifyPassCountResult
-    log message 0 "Executed {:d} timeout monitored bus access instructions" StandardTestBusTimeoutPassCountResult
+    log message 0 "Executed {:d} verify assertions" StandardTestVerifyAssertionsCountResult
+    log message 0 "Executed {:d} timeout monitored bus access assertions" StandardTestBusTimeoutAssertionsCountResult
 
     if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult
         if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult            

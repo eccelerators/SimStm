@@ -13,11 +13,11 @@ __version__ = "{}".format(__tag__)
 # Only use " but '
 # start static_setup_data section
 static_setup_data = {
-    "name": "HelloWorld",
+    "name": "CounterPlain",
     "author": "Heinrich Diebel, Bernd Roeckert, Denis Vasilik",
     "author_email": "heinrich.diebel@eccelerators.com; bernd.roeckert@eccelerators.com; denis.vasilik@eccelerators.com;",
-    "url": "https://github.com/eccelerators/HelloWorld/",
-    "description": "HelloWorld",
+    "url": "https://github.com/eccelerators/CounterPlain/",
+    "description": "CounterPlain",
     "long_description_content_type": "text/markdown",
     "classifiers": [
         "Programming Language :: Python :: 3.7",
@@ -25,35 +25,36 @@ static_setup_data = {
     ],
     "dependency_links": [],
     "package_data": {},
-    "project_name": "HelloWorld",
+    "project_name": "CounterPlain",
     "top_entity": "Dut",
     "top_entity_file": "src/vhdl/Dut.vhd",
     "tb_top_entity": "tbTop",
     "tb_top_entity_file": "/tb/hdl/tbTop.vhd",
         "test_suites" : [
+            {"testsuite-name":"testSuiteCount", "file":"TestSuites/TestSuiteCount.stm", "entry-file":"testMainSuiteCount.stm", "entry-label":"testMainSuiteCount"}
     ],
     "test_labs" : [
     ],
     "other_data_files" : [(
-        "HelloWorld", [
+        "CounterPlain", [
         ])
     ],
     "src_data_files" : [(
-        "HelloWorld/src/vhdl", [
+        "CounterPlain/src/vhdl", [
             {"file":"src/vhdl/Dut.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
             {"file":"src/vhdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"}
         ])
     ],
     "tb_data_files" : [(
-        "HelloWorld/tb/hdl/src_to_customize", [
+        "CounterPlain/tb/hdl/src_to_customize", [
             {"file":"tb/hdl/src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/src_to_customize/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140", "ghdl_options":["-frelaxed"]}
         ]),(
-        "HelloWorld/tb/hdl", [
+        "CounterPlain/tb/hdl", [
             {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00180", "ghdl_options":["-frelaxed"]}
         ]),(
-        "HelloWorld/../../src", [
+        "CounterPlain/../../src", [
             {"file":"../../src/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_instructions_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00021", "ghdl_options":["-frelaxed"]},
@@ -74,13 +75,20 @@ static_setup_data = {
         ])
     ],
     "src_tb_simstm_data_files" : [(
-        "HelloWorld/tb/simstm/hello", [
-            {"file":"tb/simstm/hello/hello.stm"}
+        "CounterPlain/tb/simstm/count", [
+            {"file":"tb/simstm/count/count.stm"}
         ]),(
-        "HelloWorld/tb/simstm", [
-            {"file":"tb/simstm/testMain.stm"}
+        "CounterPlain/tb/simstm/common", [
+            {"file":"tb/simstm/common/common.stm"}
         ]),(
-        "HelloWorld/../../lib", [
+        "CounterPlain/tb/simstm/TestSuites", [
+            {"file":"tb/simstm/TestSuites/TestSuiteCount.stm"}
+        ]),(
+        "CounterPlain/tb/simstm", [
+            {"file":"tb/simstm/testMain.stm"},
+            {"file":"tb/simstm/testMainSuiteSample.stm"}
+        ]),(
+        "CounterPlain/../../lib", [
             {"file":"../../lib/util.stm"},
             {"file":"../../lib/arith.stm"},
             {"file":"../../lib/array.stm"},

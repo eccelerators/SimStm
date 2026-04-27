@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CounterSuiteCaseIndexed" xmlns:if="ant:if" xmlns:unless="ant:unless" >
+
+    <property environment="env" />
+
+    <condition property="is_windows">
+        <os family="windows" />
+    </condition>
+
+    <!-- To adapt properties for local purposes put a file build-local-overrides.xml beneath this file -->
+	<!-- It is ignored by git -->
+    <!-- e.g. to overide python executable, put following line into build-local-overrides.xml: -->
+    <!-- <property name="python-executable" value="/bin/python38"/> -->
+    <import file="build-local-overrides.xml" optional="true"/>
+
+	<import file="helper/build-helper.xml" optional="true"/>
+	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
+	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${basedir}/ant/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
+	
+</project>

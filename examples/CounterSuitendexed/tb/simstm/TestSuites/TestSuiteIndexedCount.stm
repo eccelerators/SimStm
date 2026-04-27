@@ -1,0 +1,18 @@
+namespace CounterSuiteIndexed
+
+proc testSuiteIndexedCount ()
+    
+    -- the suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel
+    -- the tests take respect to the suite index them self
+    -- the individual runs appear automatically as test suites in the generated test junits
+    call stm.testCaseWithSuiteIndex (
+        label set TestToCall testCountUp
+    )
+
+    call stm.testCaseWithSuiteIndex (
+        label set TestToCall testCountDown
+    )
+    
+end proc
+
+end namespace

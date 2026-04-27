@@ -1,0 +1,14 @@
+namespace CounterPlain
+
+proc testSuiteCount ()
+
+    call stm.testCase (
+        label set TestToCall testCountUp
+    )
+    
+    call stm.testCase (
+        label set TestToCall testCountDown
+    )
+end proc
+
+end namespace

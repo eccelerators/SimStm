@@ -1,0 +1,53 @@
+include "common/common.stm"
+
+namespace CounterSuiteCaseIndexed
+
+proc testCountUp (
+    var TestSuiteIndex stm.TestSuiteIndex
+)
+    var expextedCount 0
+    var loadValue TestSuiteIndex
+    mul loadValue 5
+    and loadValue 256
+    
+    equ expextedCount loadValue
+    
+    call stm.startStandardTestShell ()
+    call initDut ()    
+    signal write out_signal_LoadValue loadValue
+    call countLoad ()
+    signal verify in_signal_Count expextedCount stm.MAX
+    loop 4
+        call countUp ()    
+        add expextedCount 1  
+        signal verify in_signal_Count expextedCount stm.MAX
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+proc testCountDown (
+    var TestSuiteIndex stm.TestCaseIndex
+)
+    var expextedCount 0
+    var loadValue TestSuiteIndex
+    mul loadValue 5
+    and loadValue 256
+    
+    equ expextedCount loadValue
+    
+    call stm.startStandardTestShell ()
+    call initDut ()    
+    signal write out_signal_LoadValue loadValue
+    call countLoad ()
+    signal verify in_signal_Count expextedCount stm.MAX
+    loop 4
+        call countDown ()    
+        sub expextedCount 1  
+        signal verify in_signal_Count expextedCount stm.MAX
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

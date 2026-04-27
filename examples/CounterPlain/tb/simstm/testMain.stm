@@ -1,6 +1,7 @@
 include "../../../../lib/base.stm"
+include "count/count.stm"
 
-namespace HelloWorld
+namespace CounterPlain
 
     lines success_lines
     file simulation_success "simulation.success"
@@ -8,7 +9,7 @@ namespace HelloWorld
     proc testMain ()
         log message stm.INFO "Main test started"
 
-        call testHelloWorld ()
+        call testCountUp ()
         
         log message stm.INFO "Main test finished"
         wait 1000

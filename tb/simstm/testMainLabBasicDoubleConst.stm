@@ -9,7 +9,7 @@ lines success_lines
 
 
 proc testMainLabBasicDoubleConst ()
-    call stm.initBase ()
+    
 
     verbosity stm.INFO_2
     trace 0

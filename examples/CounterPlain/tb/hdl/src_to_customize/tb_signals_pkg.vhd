@@ -13,9 +13,9 @@ package tb_signals_pkg is
 
         in_signal_0 : std_logic; -- None
         in_signal_2 : std_logic_vector(31 downto 0); -- stimulus_test_suite_index
-        in_signal_4 : std_logic_vector(31 downto 0); -- standard_test_verify_passes_count
+        in_signal_4 : std_logic_vector(31 downto 0); -- standard_test_verify_assertions_count
         in_signal_5 : std_logic_vector(31 downto 0); -- standard_test_verify_failure_count
-        in_signal_6 : std_logic_vector(31 downto 0); -- bus_timeout_passes_count
+        in_signal_6 : std_logic_vector(31 downto 0); -- bus_timeout_assertions_count
         in_signal_7 : std_logic_vector(31 downto 0); -- bus_timeout_failure_count
 
         in_signal_1000 : std_logic;

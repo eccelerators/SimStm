@@ -38,7 +38,7 @@ begin
                 if shDown(1 downto 0) = "10" then
                     counter <= counter + 1;
                 elsif shUp(1 downto 0) = "10" then
-                    counter <= counter + 1;
+                    counter <= counter - 1;
                 end if;
             end if;
 

@@ -11,7 +11,7 @@ file simulation_success "simulation.success"
 lines success_lines
 
 proc testMainLabArrayZeroSize ()
-    call stm.initBase ()
+    
 
     verbosity stm.INFO_2
     trace 0

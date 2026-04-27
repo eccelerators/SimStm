@@ -1,4 +1,4 @@
-include "Base/Base.stm"
+include "../../lib/Base.stm"
 include "TestCase/TestCase.stm"
 
 namespace SimStmTest

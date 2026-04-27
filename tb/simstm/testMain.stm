@@ -60,12 +60,12 @@ namespace SimStmTest
         trace stm.TRACE_EXECUTED_LINES
         -- trace TRACE_INSTRUCTIONS
         -- trace TRACE_CALLS
-        resume stm.RESUME_ON_ALL_ERRORS
+        resume stm.RESUME_ON_ALL_FAILURES
         verbosity stm.INFO_2
         signal write out_signal_init_dut 1
         wait 1000
         signal write out_signal_init_dut 0
-        call stm.initBase ()
+
         log message stm.INFO "Main test started"
 
         --call testSignalWriteReadVerify ()

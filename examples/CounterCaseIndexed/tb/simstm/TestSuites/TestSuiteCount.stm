@@ -1,0 +1,25 @@
+namespace CounterCaseIndexed
+
+proc testSuiteCount ()
+
+    -- use stm.TestCaseIndex to run testSampleWithCaseIndexA with different parameters
+    -- the individual runs appear automatically as test cases in the generated test suites
+    loop 5
+        equ stm.TestCaseIndex 0
+        call stm.testCaseWithCaseIndex (
+            label set TestToCall testCountUp
+        )
+        add stm.TestCaseIndex 1
+    end loop
+
+    loop 3
+        equ stm.TestCaseIndex 10
+        call stm.testCaseWithCaseIndex (
+            label set TestToCall testCountDown
+        )
+        add stm.TestCaseIndex 10
+    end loop
+    
+end proc
+
+end namespace

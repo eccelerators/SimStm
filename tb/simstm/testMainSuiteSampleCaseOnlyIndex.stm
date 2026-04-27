@@ -6,11 +6,11 @@ include "TestSuites/TestSuiteSampleCaseOnlyIndex.stm"
 namespace SimStmTest
 proc testMainSuiteSampleCaseOnlyIndex ()
 
-    call stm.initBase ()
+    
 
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
-    resume stm.RESUME_ON_ALL_ERRORS
+    resume stm.RESUME_ON_ALL_FAILURES
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0

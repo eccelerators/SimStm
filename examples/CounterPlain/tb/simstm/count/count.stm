@@ -1,12 +1,32 @@
-include "../../../../../lib/base.stm"
+include "common/common.stm"
 
-namespace HelloWorld
+namespace CounterPlain
 
-proc testHelloWorld ()
-
+proc testCountUp ()
+    var expextedCount 0
+    
     call stm.startStandardTestShell ()
-    loop 3
-        log message stm.ALWAYS "Hello World"
+    call initDut ()    
+    signal verify in_signal_Count expextedCount stm.MAX
+    loop 4
+        call countUp ()    
+        add expextedCount 1  
+        signal verify in_signal_Count expextedCount stm.MAX
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+proc testCountDown ()
+    var expextedCount 0
+    
+    call stm.startStandardTestShell ()
+    call initDut ()    
+    signal verify in_signal_Count expextedCount stm.MAX
+    loop 4
+        call countDown ()    
+        sub expextedCount 1  
+        signal verify in_signal_Count expextedCount stm.MAX
         wait 1000
     end loop
     call stm.endStandardTestShell ()

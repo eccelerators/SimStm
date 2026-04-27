@@ -1,23 +1,21 @@
 include "Common/Common.stm"
 
-include "TestLabs/TestlabSample.stm"
+include "TestSuites/TestSuiteSample.stm"
 namespace SimStmTest
-proc testMainLabSample ()
-
-    call stm.initBase ()
-
+proc testMainSuiteSample ()
+ 
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
-    resume stm.RESUME_ON_ALL_ERRORS
+    resume stm.RESUME_ON_ALL_FAILURES
     signal write out_signal_init_dut 1
     wait 1000
     signal write out_signal_init_dut 0
     signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
-    log message stm.INFO "Main test main lab Sample started"
+    log message stm.INFO "Main test main suite Sample started"
 
-    call testLabSample ()
+    call testSuiteSample ()
 
-    log message stm.INFO "Main test main lab Sample ended"
+    log message stm.INFO "Main test main suite Sample ended"
     wait 1000
     finish
 end proc

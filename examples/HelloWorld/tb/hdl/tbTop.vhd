@@ -24,9 +24,9 @@ architecture behavioural of tbTop is
     signal executing_line : integer := 0;
     signal executing_file : text_line;
     signal marker : std_logic_vector(15 downto 0) := (others => '0');
-    signal verify_passes : std_logic_vector(31 downto 0) := (others => '0');
+    signal verify_assertions : std_logic_vector(31 downto 0) := (others => '0');
     signal verify_failures : std_logic_vector(31 downto 0) := (others => '0');
-    signal bus_timeout_passes : std_logic_vector(31 downto 0) := (others => '0');
+    signal bus_timeout_assertions : std_logic_vector(31 downto 0) := (others => '0');
     signal bus_timeout_failures : std_logic_vector(31 downto 0) := (others => '0');
 
     signal signals_in : t_signals_in := signals_in_init;
@@ -46,9 +46,9 @@ begin
     -- signals_in.in_signal_1 actual simulation time already supplied by package
     signals_in.in_signal_2 <= std_logic_vector(to_unsigned(stimulus_test_suite_index, 32));
     -- signals_in.in_signal_3 constant 0 already supplied by package
-    signals_in.in_signal_4 <= verify_passes;
+    signals_in.in_signal_4 <= verify_assertions;
     signals_in.in_signal_5 <= verify_failures;
-    signals_in.in_signal_6 <= bus_timeout_passes;
+    signals_in.in_signal_6 <= bus_timeout_assertions;
     signals_in.in_signal_7 <= bus_timeout_failures;
     -- signals_in.in_signal_8 Machine value width
 
@@ -81,9 +81,9 @@ begin
         port map(
             executing_line => executing_line,
             executing_file => executing_file,
-            verify_passes => verify_passes,
+            verify_assertions => verify_assertions,
             verify_failures => verify_failures,
-            bus_timeout_passes => bus_timeout_passes,
+            bus_timeout_assertions => bus_timeout_assertions,
             bus_timeout_failures => bus_timeout_failures,
             marker => marker,
             signals_in => signals_in,
