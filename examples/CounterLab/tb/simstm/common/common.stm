@@ -1,6 +1,6 @@
 include "../../../../../lib/base.stm"
 
-namespace CounterPlain
+namespace CounterLab
 
 var WaitTimeOut 100000 -- ms
 

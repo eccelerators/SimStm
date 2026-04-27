@@ -1,0 +1,22 @@
+include "Common/Common.stm"
+include "TestLabs/TestLabCount.stm"
+
+namespace CounterLab
+proc testMainLabCount ()
+ 
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_FAILURES
+    signal write out_signal_init_dut 1
+    wait 1000
+    signal write out_signal_init_dut 0
+    signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
+    log message stm.INFO "Main test main lab Count started"
+
+    call testLabCount ()
+
+    log message stm.INFO "Main test main lab Count ended"
+    wait 1000
+    finish
+end proc
+end namespace

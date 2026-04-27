@@ -3,7 +3,7 @@ include "Other/other.stm"
 namespace SimStmTest
 
 proc testLabSample ()
-
+    -- the test lab simply calls the test directly
     call testOtherRandom ()
 end proc
 

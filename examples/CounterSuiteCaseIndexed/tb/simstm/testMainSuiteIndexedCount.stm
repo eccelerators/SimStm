@@ -3,7 +3,7 @@ include "TestSuites/TestSuiteCount.stm"
 
 namespace CounterSuiteCaseIndexed
 
-const testMainSuiteIndexedRangeLengthCount 3
+const testMainSuiteIndexedRangeLengthCount 4
 
 proc testMainSuiteIndexedCount ()
  

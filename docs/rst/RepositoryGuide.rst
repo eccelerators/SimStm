@@ -1,4 +1,3 @@
-
 Repository Guide
 ----------------
 The repository content needed by the user:
@@ -20,7 +19,9 @@ SimStm tests itself by its own means.
   
 All Eccelerators IP repositories are build by **ant**. The ant build scripts are organized hierarchically. 
 The top build script is build.xml in the repository root. It imports ``helper/build-helper.xml``. 
-This presents the initial workflow target **_helper-gnerate-proposal-for-setup-py** to generate ``setup.py``.
+This presents the initial workflow target **_helper-generate-proposal-for-setup-py** to generate ``setup.py``.
+User adaptions have to be done in **proposal_user_parameters.py** beforehand.
+
 As a next step the target **_helper-generate-ghdl-ant-build-xml** is called to generate the ghdl build script.
 Once you refresh the list of shown ant targets in your IDE, you will see the new ghdl targets.
 The target **ghdl-all** is the one to be called to run the simulation. It would be similar if you decide for modelsim.

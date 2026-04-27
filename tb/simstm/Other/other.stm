@@ -216,16 +216,11 @@ proc testOtherLog ()
     call stm.endStandardTestShell ()
 end proc
 
-const year 0x2023
-var month 0x11
-var day 0x22
-
 proc testOtherHelloWorld ()
 
     call stm.startStandardTestShell ()
     loop 3
-        -- currently values are only printed in hex format
-        log message 0 "Hello World {}-{}-{}" year month day
+        log message 0 "Hello World"
         wait 1000
     end loop
     call stm.endStandardTestShell ()
