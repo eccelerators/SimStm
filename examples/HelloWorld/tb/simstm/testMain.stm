@@ -1,4 +1,5 @@
 include "../../../../lib/base.stm"
+include "hello/hello.stm"
 
 namespace HelloWorld
 
