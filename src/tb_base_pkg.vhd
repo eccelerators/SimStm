@@ -39,12 +39,14 @@ package tb_base_pkg is
     type loop_nested_int_array is array (0 to 127) of integer;
     type boolean_array is array (0 to 127) of boolean;
     type interrupt_array is array (0 to 127) of integer;
-
+    
     subtype text_field is string(1 to max_field_len);
     type text_field_ptr is access text_field;
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
+    
+    type text_line_array is array (0 to 127) of text_line;
 
     type unmerged_token_text_field_array is array (1 to 9) of text_field;
     type token_text_field_array is array (1 to 7) of text_field;
@@ -270,13 +272,24 @@ package tb_base_pkg is
         variable ie : inst_element_ptr;
         constant debug : boolean
     );
+    
+    procedure reduce_next_relative_folder_path_segment(
+        variable path_segments : in text_line_array;
+        variable reduced_path_segments : out text_line_array ;
+        variable reduced : out boolean
+    );
+    
+    procedure normalize_relative_file_path(
+        variable relative_file_path : in text_line;
+        variable root_to_to_current_dir_path : in text_line; 
+        variable normalized_file_path : out text_line 
+    );
 
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        constant stimulus_path : in string;
-        variable stimulus_file : in string;
-        variable valid : out integer
+        variable stimulus_path : in string;
+        variable stimulus_file : in string
     );
 
     function combine_to_absolute_file_name(

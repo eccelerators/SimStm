@@ -30,7 +30,7 @@ package body tb_interpreter_pkg is
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        constant stimulus_path : string;
+        variable stimulus_path : string;
         variable stimulus_file : string
     ) is
         variable fos : file_open_status;
@@ -45,19 +45,18 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         file stimulus : text;
         variable absolute_code_file_name : text_line;
+        variable lastPosOfSlash : integer;
+        variable sp : text_line;
+        variable spl : integer;
+        variable ifn : text_line;
+        variable ifnl : integer;
     begin
         absolute_code_file_name := combine_to_absolute_file_name(stimulus_path, stimulus_file);
         file_open(fos, stimulus, absolute_code_file_name, read_mode);
         assert fos = open_ok
         report "unable to open stimulus_file " & absolute_code_file_name
         severity failure;
-        append_code_file(slc, code_files, stimulus_path, stimulus_file, valid);
-        if valid = 0 then
-            report "stimulus file " & absolute_code_file_name & " already included, skipping to avoid circular includes"
-            severity warning;
-            file_close(stimulus);
-            return;
-        end if;
+        append_code_file(slc, code_files, stimulus_path, stimulus_file);
         print("loading codefile " & absolute_code_file_name);
         file_line := 0;
         while not endfile(stimulus) loop
@@ -78,7 +77,29 @@ package body tb_interpreter_pkg is
                     end if;
                 end loop;
                 tll := text_line_len(include_file_name);
-                collect_code_files(slc, code_files, stimulus_path, include_file_name(1 to tll));
+                lastPosOfSlash := -1;
+                if include_file_name( 1 to 2) /= "./" then
+                    for i in 1 to tll loop
+                        if include_file_name(i) = '/' then
+                            lastPosOfSlash := i;
+                        end if;
+                    end loop;
+                end if;
+                for i in 1 to stimulus_path'length loop
+                    sp(i) := stimulus_path(i);
+                end loop;             
+                if lastPosOfSlash >= 0 then
+                    for i in 1 to tll loop
+                        if i <= lastPosOfSlash then
+                            sp(i + stimulus_path'length) := include_file_name(i);
+                            spl := i + stimulus_path'length;
+                        else
+                            ifn(i - lastPosOfSlash) := include_file_name(i);
+                            ifnl := i - lastPosOfSlash;
+                        end if;
+                    end loop;                
+                end if;
+                collect_code_files(slc, code_files, sp(1 to spl), ifn(1 to ifnl));
             end if;
         end loop;
         file_close(stimulus);

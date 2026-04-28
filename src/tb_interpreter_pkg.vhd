@@ -29,7 +29,7 @@ package tb_interpreter_pkg is
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        constant stimulus_path : string;
+        variable stimulus_path : string;
         variable stimulus_file : string
     );
 

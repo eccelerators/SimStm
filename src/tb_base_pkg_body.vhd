@@ -132,36 +132,119 @@ package body tb_base_pkg is
             print("append instruction " & ie.inst & ", element number " & integer'image(insts.last_element_num));
         end if;
     end procedure;
+    
+    
+    procedure reduce_next_relative_folder_path_segment(
+        variable path_segments : in text_line_array;
+        variable reduced_path_segments : out text_line_array ;
+        variable reduced : out boolean
+    ) is
+        variable tmp_path_segments : text_line_array;
+        variable i : integer;
+        variable j : integer;
+        variable f : boolean;
+    begin
+        i := 1;
+        j := 1;
+        f := false;
+        while path_segments(i)(1) /= nul loop
+            if path_segments(i + 1)(1 to 2) = ".." then
+                i := i + 2;
+                f := true;
+            elsif path_segments(i)(1 to 1) = "." then
+                i := i + 1;
+                f := true;
+            else
+                tmp_path_segments(j) := path_segments(i);
+            end if;     
+        end loop;
+        if f then
+            reduce_next_relative_folder_path_segment(tmp_path_segments, reduced_path_segments, reduced);
+        else
+            reduced_path_segments := tmp_path_segments;
+            reduced := false;
+        end if;
+    end procedure;    
+    
+    procedure normalize_relative_file_path(
+        variable relative_file_path : in text_line;
+        variable root_to_to_current_dir_path : in text_line; 
+        variable normalized_file_path : out text_line 
+    ) is
+        variable l : integer;
+        variable n : integer;
+        variable j : integer;
+        variable path_segments : text_line_array;
+        variable reduced_path_segments : text_line_array;
+        variable reduced : boolean;
+        variable resolved_file_path : text_line; 
+    begin
+        assert relative_file_path(1) /= '/'
+        report "normalize_code_file_path: relative file pathes mustn't start with /"
+        severity failure;
+
+        l := text_line_len(root_to_to_current_dir_path);
+        n := 0;
+        for i in 1 to l loop
+            if root_to_to_current_dir_path(i) /= '/' then
+                path_segments(n)(i) := root_to_to_current_dir_path(i);
+            else
+                n := n + 1;   
+            end if;     
+        end loop;
+        
+        l := text_line_len(relative_file_path);
+        for i in 1 to l loop
+            if relative_file_path(i) /= '/' then
+                path_segments(n)(i) := relative_file_path(i);
+            else
+                n := n + 1;   
+            end if;     
+        end loop;
+        
+        reduce_next_relative_folder_path_segment(path_segments, reduced_path_segments, reduced);
+        
+        n := 0;
+        j := 1;
+        while reduced_path_segments(n)(1) /= nul loop
+            resolved_file_path(j) := '/';
+            l := text_line_len(reduced_path_segments(n));
+            for i in 1 to l loop
+                resolved_file_path(j) := reduced_path_segments(n)(i); 
+                j := j + 1;    
+            end loop;
+        end loop;
+        normalized_file_path := resolved_file_path;
+    end procedure;
 
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        constant stimulus_path : in string;
-        variable stimulus_file : in string;
-        variable valid : out integer
+        variable stimulus_path : in string;
+        variable stimulus_file : in string
     ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
-        variable ne_loop : file_def_element_ptr;
+        variable cf_ptr : file_def_element_ptr;
         variable i : integer;
         variable acfn : text_line;
     begin
-        nen := code_files.last_element_num + 1;
-        ne_ptr := new file_def_element;
-        acfn := combine_to_absolute_file_name(stimulus_path, stimulus_file);
-        ne_ptr.slc := slc;
-        ne_ptr.absolute_file_name := acfn;
-        ne_ptr.file_name := string_to_text_field(stimulus_file);
+        normalize_relative_file_path(stimulus_path, stimulus_file, acfn);
         for i in 0 to code_files.last_element_num loop
-            ne_loop := code_files.element_ptrs(i);
-            if fld_equal(ne_loop.absolute_file_name, ne_ptr.absolute_file_name) then
-                valid := 0;
+            cf_ptr := code_files.element_ptrs(i);
+            if fld_equal(cf_ptr.absolute_file_name, acfn) then
+                report "stimulus_path " & stimulus_path & "stimulus file " & stimulus_file & "absolute file path " & acfn & " already included"
+                severity warning;
                 return;
             end if;
         end loop;
+        nen := code_files.last_element_num + 1;
+        ne_ptr := new file_def_element;
+        ne_ptr.slc := slc;
+        ne_ptr.absolute_file_name := acfn;
+        ne_ptr.file_name := string_to_text_field(stimulus_file);
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
-        valid := 1;
     end procedure;
 
     function combine_to_absolute_file_name(

@@ -36,7 +36,7 @@ entity tb_simstm is
     generic(
         stimulus_path : in string;
         stimulus_file : in string;
-        stimulus_main_entry_label : in string := "testMain";
+        stimulus_main_entry_label : in string;
         machine_value_width : integer := 64
     );
     port(
@@ -122,17 +122,14 @@ begin
         variable insts : inst_sequence;
         variable vars : var_pool_ordered;
         variable procs : proc_pool_ordered;
-        variable absolute_code_file_name : text_line;
-        variable il : integer := 0;
         variable slc : src_locator;
 
         variable nol : integer;
         variable noc : integer;
 
+        variable stimulus_path_var : string(1 to stimulus_path'length) := stimulus_path;
         variable stimulus_file_var : string(1 to stimulus_file'length) := stimulus_file;
 
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
         variable file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
         variable ien : integer := 0; -- instruction element number
@@ -429,7 +426,7 @@ begin
         print("collect stimulus code files");
         slc.file_name := string_to_text_field(stimulus_file);
         slc.file_line := -1;
-        collect_code_files(slc, code_files, stimulus_path, stimulus_file_var);
+        collect_code_files(slc, code_files, stimulus_path_var, stimulus_file_var);
         print(integer'image(code_files.last_element_num) & " stimulus code files");
 
         init_var_pool_ordered(vars);
