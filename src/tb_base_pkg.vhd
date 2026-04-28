@@ -280,8 +280,8 @@ package tb_base_pkg is
     );
     
     procedure normalize_relative_file_path(
-        variable relative_file_path : in text_line;
         variable root_to_to_current_dir_path : in text_line; 
+        variable relative_file_path : in text_line;
         variable normalized_file_path : out text_line 
     );
 
