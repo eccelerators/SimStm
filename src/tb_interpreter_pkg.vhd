@@ -29,8 +29,8 @@ package tb_interpreter_pkg is
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : string;
-        variable stimulus_file : string
+        variable stimulus_path : text_line;
+        variable stimulus_file : text_line
     );
 
     procedure parse_labels(

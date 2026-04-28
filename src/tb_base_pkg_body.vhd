@@ -220,8 +220,8 @@ package body tb_base_pkg is
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : in string;
-        variable stimulus_file : in string
+        variable stimulus_path : in text_line;
+        variable stimulus_file : in text_line
     ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
@@ -246,22 +246,6 @@ package body tb_base_pkg is
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
     end procedure;
-
-    function combine_to_absolute_file_name(
-        path_name : in string;
-        file_name : in string
-    ) return text_line is
-        variable afn : text_line;
-    begin
-        afn := (others => nul);
-        for i in 1 to path_name'high loop
-            afn(i) := path_name(i);
-        end loop;
-        for i in 1 to file_name'high loop
-            afn(i + path_name'high) := file_name(i);
-        end loop;
-        return afn;
-    end function;
 
     procedure extract_parameters(
         variable slc : in src_locator;
@@ -2084,6 +2068,17 @@ package body tb_base_pkg is
             otf(i) := s(i);
         end loop;
         return otf;
+    end function;
+    
+    function string_to_text_line(
+        s : string
+    ) return text_line is
+        variable otl : text_line;
+    begin
+        for i in 1 to s'length loop
+            otl(i) := s(i);
+        end loop;
+        return otl;
     end function;
 
     procedure stm_text_copy_to_ptr(

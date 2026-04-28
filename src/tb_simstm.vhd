@@ -127,9 +127,9 @@ begin
         variable nol : integer;
         variable noc : integer;
 
-        variable stimulus_path_var : string(1 to stimulus_path'length) := stimulus_path;
-        variable stimulus_file_var : string(1 to stimulus_file'length) := stimulus_file;
-
+        variable stimulus_path_var : text_line;
+        variable stimulus_file_var : text_line;
+        
         variable file_line : integer; -- line number in the stimulus file
         variable file_name : text_line; -- the file name the line came from
         variable ien : integer := 0; -- instruction element number
@@ -426,6 +426,9 @@ begin
         print("collect stimulus code files");
         slc.file_name := string_to_text_field(stimulus_file);
         slc.file_line := -1;
+        stimulus_path_var := string_to_text_line(stimulus_path);
+        stimulus_file_var := string_to_text_line(stimulus_file);
+        
         collect_code_files(slc, code_files, stimulus_path_var, stimulus_file_var);
         print(integer'image(code_files.last_element_num) & " stimulus code files");
 

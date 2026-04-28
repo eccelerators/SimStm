@@ -288,14 +288,9 @@ package tb_base_pkg is
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : in string;
-        variable stimulus_file : in string
+        variable stimulus_path : in text_line;
+        variable stimulus_file : in text_line
     );
-
-    function combine_to_absolute_file_name(
-        path_name : in string;
-        file_name : in string
-    ) return text_line;
 
     procedure extract_parameters(
         variable slc : in src_locator;
@@ -691,6 +686,10 @@ package tb_base_pkg is
     function string_to_text_field(
         s : string
     ) return text_field;
+    
+    function string_to_text_line(
+        s : string
+    ) return text_line;
 
     procedure stm_text_copy_to_ptr(
         variable ptr : inout stm_text_ptr;

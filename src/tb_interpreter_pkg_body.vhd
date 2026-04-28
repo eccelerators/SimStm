@@ -30,8 +30,8 @@ package body tb_interpreter_pkg is
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : string;
-        variable stimulus_file : string
+        variable stimulus_path : text_line;
+        variable stimulus_file : text_line
     ) is
         variable fos : file_open_status;
         variable tl : text_line;
@@ -51,7 +51,7 @@ package body tb_interpreter_pkg is
         variable ifn : text_line;
         variable ifnl : integer;
     begin
-        absolute_code_file_name := combine_to_absolute_file_name(stimulus_path, stimulus_file);
+        normalize_relative_file_path(stimulus_path, stimulus_file, absolute_code_file_name);
         file_open(fos, stimulus, absolute_code_file_name, read_mode);
         assert fos = open_ok
         report "unable to open stimulus_file " & absolute_code_file_name
