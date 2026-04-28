@@ -436,7 +436,7 @@ begin
         print("parsing stimulus code files");
 
         parse_labels(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
-        nol := vars.last_element_num;
+        nol := vars.last_element_num + 1;
         print(integer'image(nol) & " labels");
 
         if DUMP_PARSE_RESULTS then

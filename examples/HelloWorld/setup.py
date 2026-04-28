@@ -16,7 +16,7 @@ static_setup_data = {
     "name": "HelloWorld",
     "author": "Heinrich Diebel, Bernd Roeckert, Denis Vasilik",
     "author_email": "heinrich.diebel@eccelerators.com; bernd.roeckert@eccelerators.com; denis.vasilik@eccelerators.com;",
-    "url": "https://github.com/eccelerators/HelloWorld/",
+    "url": "https://github.com/eccelerators//simstm/examples/HelloWorld/",
     "description": "HelloWorld",
     "long_description_content_type": "text/markdown",
     "classifiers": [
@@ -30,6 +30,8 @@ static_setup_data = {
     "top_entity_file": "src/vhdl/Dut.vhd",
     "tb_top_entity": "tbTop",
     "tb_top_entity_file": "/tb/hdl/tbTop.vhd",
+    "tb_simstm_entry_namespace": "HelloWorld",
+    "tb_simstm_entry_file": "testMain.stm",
         "test_suites" : [
     ],
     "test_labs" : [

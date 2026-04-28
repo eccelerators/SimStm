@@ -42,6 +42,8 @@ class GenAntBuildXml:
             "src_data_file_list": src_data_file_list,
             "tb_top_entity": static_setup_data["tb_top_entity"],
             "tb_top_entity_file": static_setup_data["tb_top_entity_file"],
+            "tb_simstm_entry_namespace": static_setup_data["tb_simstm_entry_namespace"],
+            "tb_simstm_entry_file": static_setup_data["tb_simstm_entry_file"],
             "tb_data_file_list": tb_data_file_list,
         }
 
@@ -126,6 +128,8 @@ class GenAntBuildXml:
             "work")
         ET.SubElement(ex, "arg", value="--stop-time=100ms")
         ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
+        ET.SubElement(ex, "arg", value="-gstimulus_file=" + context["tb_simstm_entry_file"])
+        ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + "." + "testMain")
         echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
         echo.text = "ENDED"
 
@@ -146,6 +150,8 @@ class GenAntBuildXml:
             "work")
         ET.SubElement(ex, "arg", value="--stop-time=100ms")
         ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
+        ET.SubElement(ex, "arg", value="-gstimulus_file=" + context["tb_simstm_entry_file"])
+        ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + "." + "testMain")
         ET.SubElement(ex, "arg", value="--vcd=trace.vcd")
         ex = ET.SubElement(t, "exec", executable="${gtkwave-executable}", dir=simulation_dir_prefix + "work")
         ET.SubElement(ex, "arg", value="trace.vcd")
@@ -181,7 +187,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="--stop-time=100ms")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_suite_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_suite_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + test_suite_data["entry-label"])
                 if "index" in test_suite_data:
                     ET.SubElement(ex, "arg", value="-gstimulus_test_suite_index=" + test_suite_data["index"])
                     ET.SubElement(ex, "arg", value="-gmachine_value_width=" +
@@ -252,7 +258,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="--stop-time=100ms")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_lab_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_lab_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + test_lab_data["entry-label"])
                 echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
                 echo.text = "ENDED"
 
@@ -273,7 +279,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="--stop-time=100ms")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_lab_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_lab_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + test_lab_data["entry-label"])
                 ET.SubElement(ex, "arg", value="--vcd=trace.vcd")
                 ex = ET.SubElement(t, "exec", executable="${gtkwave-executable}", dir=simulation_dir_prefix + "work")
                 ET.SubElement(ex, "arg", value="trace.vcd")

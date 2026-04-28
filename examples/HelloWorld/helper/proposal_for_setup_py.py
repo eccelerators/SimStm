@@ -351,6 +351,8 @@ class GenerateProposalForSetupPy:
             "top_entity_file": "src/vhdl/" + top_entity_file,
             "tb_top_entity": tb_top_entity,
             "tb_top_entity_file": "/tb/hdl/" + tb_top_entity_file,
+            "tb_simstm_entry_namespace": tb_simstm_entry_namespace,
+            "tb_simstm_entry_file": tb_simstm_entry_file,
         }
 
         print(data_file_lists_str)
