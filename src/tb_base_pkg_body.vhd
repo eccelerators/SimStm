@@ -144,8 +144,8 @@ package body tb_base_pkg is
         variable j : integer;
         variable f : boolean;
     begin
-        i := 1;
-        j := 1;
+        i := 0;
+        j := 0;
         f := false;
         while path_segments(i)(1) /= nul loop
             if path_segments(i + 1)(1 to 2) = ".." then
@@ -156,6 +156,9 @@ package body tb_base_pkg is
                 f := true;
             else
                 tmp_path_segments(j) := path_segments(i);
+                print("tps:" & tmp_path_segments(j));
+                i := i + 1;
+                j := j + 1;
             end if;     
         end loop;
         if f then
@@ -166,6 +169,21 @@ package body tb_base_pkg is
         end if;
     end procedure;    
     
+    function to_forward_slash_separator (
+        s : string
+    ) return string is
+        variable so : string(1 to s'length);
+    begin
+      for i in 1 to s'length loop
+        if s(i) = '\' then
+            so(i) := '/';
+        else
+            so(i) := s(i);
+        end if;
+      end loop;
+      return so;
+    end function;
+  
     procedure normalize_relative_file_path(
         variable root_to_to_current_dir_path : in text_line; 
         variable relative_file_path : in text_line;
@@ -182,25 +200,34 @@ package body tb_base_pkg is
         assert relative_file_path(1) /= '/'
         report "normalize_code_file_path: relative file pathes mustn't start with /"
         severity failure;
-
+        print("root_to_to_current_dir_path:" & root_to_to_current_dir_path);
         l := text_line_len(root_to_to_current_dir_path);
         n := 0;
+        j := 1;
         for i in 1 to l loop
-            if root_to_to_current_dir_path(i) /= '/' then
-                path_segments(n)(i) := root_to_to_current_dir_path(i);
+            if root_to_to_current_dir_path(i) = '/' then
+                print("rps:" & path_segments(n));
+                n := n + 1;
+                j := 1;
             else
-                n := n + 1;   
+                path_segments(n)(j) := root_to_to_current_dir_path(i); 
+                j := j + 1; 
             end if;     
         end loop;
-        
+        print("relative_file_path:" & relative_file_path);
         l := text_line_len(relative_file_path);
+        j := 1;
         for i in 1 to l loop
-            if relative_file_path(i) /= '/' then
-                path_segments(n)(i) := relative_file_path(i);
-            else
-                n := n + 1;   
+            if relative_file_path(i) = '/' then
+                print("fps:" & path_segments(n));
+                n := n + 1;
+                j := 1;                              
+            else  
+                path_segments(n)(j) := relative_file_path(i);
+                j := j + 1;
             end if;     
         end loop;
+        print("fps:" & path_segments(n));
         
         reduce_next_relative_folder_path_segment(path_segments, reduced_path_segments, reduced);
         
@@ -215,6 +242,7 @@ package body tb_base_pkg is
             end loop;
         end loop;
         normalized_file_path := resolved_file_path;
+        print("normalized_file_path:" & normalized_file_path);
     end procedure;
 
     procedure append_code_file(

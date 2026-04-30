@@ -426,8 +426,8 @@ begin
         print("collect stimulus code files");
         slc.file_name := string_to_text_field(stimulus_file);
         slc.file_line := -1;
-        stimulus_path_var := string_to_text_line(stimulus_path);
-        stimulus_file_var := string_to_text_line(stimulus_file);
+        stimulus_path_var := string_to_text_line(to_forward_slash_separator(stimulus_path));
+        stimulus_file_var := string_to_text_line(to_forward_slash_separator(stimulus_file));
         
         collect_code_files(slc, code_files, stimulus_path_var, stimulus_file_var);
         print(integer'image(code_files.last_element_num) & " stimulus code files");

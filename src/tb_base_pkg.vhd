@@ -279,6 +279,10 @@ package tb_base_pkg is
         variable reduced : out boolean
     );
     
+    function to_forward_slash_separator (
+        s : string
+    ) return string;
+    
     procedure normalize_relative_file_path(
         variable root_to_to_current_dir_path : in text_line; 
         variable relative_file_path : in text_line;
