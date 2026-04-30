@@ -71,7 +71,7 @@ package tb_base_pkg is
     end record;
 
     type src_locator is record
-        file_name : text_field;
+        file_name : text_line;
         file_line : integer;
     end record;
 
@@ -80,7 +80,7 @@ package tb_base_pkg is
     type file_def_element is record
         slc : src_locator;
         absolute_file_name : text_line;
-        file_name : text_field;
+        file_name : text_line;
     end record;
     type file_def_element_ptrs is array (0 to max_num_of_file_def_elements - 1) of file_def_element_ptr;
     type file_def_list is record
@@ -273,10 +273,21 @@ package tb_base_pkg is
         constant debug : boolean
     );
     
+    function get_path_stem( 
+        p : text_line
+    ) return text_line;
+    
+    procedure print_path_segments_as_path(
+        constant prefix : in string;
+        variable path_segments : in text_line_array;
+        constant postfix : in string
+    );
+    
     procedure reduce_next_relative_folder_path_segment(
         variable path_segments : in text_line_array;
         variable reduced_path_segments : out text_line_array ;
-        variable reduced : out boolean
+        variable reduced : out boolean;
+        constant debug : boolean
     );
     
     function to_forward_slash_separator (
@@ -286,14 +297,14 @@ package tb_base_pkg is
     procedure normalize_relative_file_path(
         variable root_to_to_current_dir_path : in text_line; 
         variable relative_file_path : in text_line;
-        variable normalized_file_path : out text_line 
+        variable normalized_file_path : out text_line;
+        constant debug : boolean 
     );
 
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : in text_line;
-        variable stimulus_file : in text_line
+        variable acfn : text_line
     );
 
     procedure extract_parameters(
@@ -481,6 +492,16 @@ package tb_base_pkg is
         constant sourcestr : in string;
         variable destfield : out text_field
     );
+    
+    procedure init_text_line(
+        variable sourcestr : in string;
+        variable destfield : out text_line
+    );
+
+    procedure init_const_text_line(
+        constant sourcestr : in string;
+        variable destfield : out text_line
+    ); 
 
     procedure print(
         s : in string

@@ -30,9 +30,10 @@ package body tb_interpreter_pkg is
     procedure collect_code_files(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : text_line;
-        variable stimulus_file : text_line
+        variable root_to_to_current_dir_path : text_line;
+        variable stimulus_file : text_line       
     ) is
+        constant debug : boolean := false;
         variable fos : file_open_status;
         variable tl : text_line;
         variable ts : token_text_field_array;
@@ -41,23 +42,19 @@ package body tb_interpreter_pkg is
         variable valid : integer;
         variable il : integer;
         variable tll : integer;
-        variable include_file_name : text_line;
+        variable include_file_path : text_line;
         variable file_line : integer;
         file stimulus : text;
-        variable absolute_code_file_name : text_line;
-        variable lastPosOfSlash : integer;
-        variable sp : text_line;
-        variable spl : integer;
-        variable ifn : text_line;
-        variable ifnl : integer;
+        variable acfn : text_line;
+        variable next_root_to_to_current_dir_path : text_line;
     begin
-        normalize_relative_file_path(stimulus_path, stimulus_file, absolute_code_file_name);
-        file_open(fos, stimulus, absolute_code_file_name, read_mode);
+        normalize_relative_file_path(root_to_to_current_dir_path, stimulus_file, acfn, debug);
+        file_open(fos, stimulus, acfn, read_mode);
         assert fos = open_ok
-        report "unable to open stimulus_file " & absolute_code_file_name
+        report "unable to open stimulus_file " & acfn
         severity failure;
-        append_code_file(slc, code_files, stimulus_path, stimulus_file);
-        print("loading codefile " & absolute_code_file_name);
+        append_code_file(slc, code_files, acfn);
+        print("loading codefile " & acfn);
         file_line := 0;
         while not endfile(stimulus) loop
             file_line := file_line + 1;
@@ -66,40 +63,22 @@ package body tb_interpreter_pkg is
             il := fld_len(ts(1));
             if ts(1)(1 to il) = "include" then
                 assert txt /= null
-                report "include instruction defines no file name as text parameter: " & "file " & stimulus_path & stimulus_file & "line " & integer'image(file_line)
+                report "include instruction is missing file name: " & "file " & acfn & "line " & integer'image(file_line)
                 severity failure;
-                include_file_name := (others => nul);
+                include_file_path := (others => nul);
                 for i in 1 to c_stm_text_len loop
-                    include_file_name(i) := txt(i);
+                    include_file_path(i) := txt(i);
                     if txt(i) = txt_enclosing_quote then
-                        include_file_name(i) := nul;
+                        include_file_path(i) := nul;
                         exit;
                     end if;
-                end loop;
-                tll := text_line_len(include_file_name);
-                lastPosOfSlash := -1;
-                if include_file_name( 1 to 2) /= "./" then
-                    for i in 1 to tll loop
-                        if include_file_name(i) = '/' then
-                            lastPosOfSlash := i;
-                        end if;
-                    end loop;
-                end if;
-                for i in 1 to stimulus_path'length loop
-                    sp(i) := stimulus_path(i);
-                end loop;             
-                if lastPosOfSlash >= 0 then
-                    for i in 1 to tll loop
-                        if i <= lastPosOfSlash then
-                            sp(i + stimulus_path'length) := include_file_name(i);
-                            spl := i + stimulus_path'length;
-                        else
-                            ifn(i - lastPosOfSlash) := include_file_name(i);
-                            ifnl := i - lastPosOfSlash;
-                        end if;
-                    end loop;                
-                end if;
-                collect_code_files(slc, code_files, sp(1 to spl), ifn(1 to ifnl));
+                end loop;    
+                next_root_to_to_current_dir_path := get_path_stem(acfn);
+                if debug then                          
+                    print("next_root_to_to_current_dir_path " & next_root_to_to_current_dir_path); 
+                    print("include_file_path " & include_file_path);    
+                end if;    
+                collect_code_files(slc, code_files, next_root_to_to_current_dir_path, include_file_path);
             end if;
         end loop;
         file_close(stimulus);
@@ -130,7 +109,7 @@ package body tb_interpreter_pkg is
         variable vn : text_field;
         variable ven1 : integer;
         variable val2 : unsigned(machine_value_width - 1 downto 0);
-        variable fn : text_field;
+        variable fn : text_line;
         variable slc : src_locator;
     begin
         for i in 0 to code_files.last_element_num loop
@@ -203,7 +182,7 @@ package body tb_interpreter_pkg is
         variable vn : text_field;
         variable ven1 : integer;
         variable val2 : unsigned(machine_value_width - 1 downto 0);
-        variable fn : text_field;
+        variable fn : text_line;
         variable slc : src_locator;
     begin
         for i in 0 to code_files.last_element_num loop
@@ -278,7 +257,7 @@ package body tb_interpreter_pkg is
         file stimulus : text;
         variable ts : token_text_field_array;
         variable ie : inst_element_ptr;
-        variable fn : text_field;
+        variable fn : text_line;
         variable slc : src_locator;
     begin
 
@@ -362,7 +341,7 @@ package body tb_interpreter_pkg is
         variable ie : inst_element_ptr;
         variable pen : integer;
         variable pn : text_field;
-        variable fn : text_field;
+        variable fn : text_line;
         variable slc : src_locator;
     begin
 

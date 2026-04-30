@@ -228,8 +228,8 @@ begin
         variable no_scope : text_field;
         variable no_proc : text_field;
         variable no_file : text_field;
-        variable no_file_on_main_entry : text_field;
-        variable no_file_on_interrupt : text_field;
+        variable no_file_on_main_entry : text_line;
+        variable no_file_on_interrupt : text_line;
         variable empty_text_field : text_field;
         variable proc_name : text_field;
         variable proc_name_is_fqn : boolean;
@@ -424,7 +424,7 @@ begin
 
         init_file_def_list(code_files);
         print("collect stimulus code files");
-        slc.file_name := string_to_text_field(stimulus_file);
+        slc.file_name := string_to_text_line(stimulus_file);
         slc.file_line := -1;
         stimulus_path_var := string_to_text_line(to_forward_slash_separator(stimulus_path));
         stimulus_file_var := string_to_text_line(to_forward_slash_separator(stimulus_file));

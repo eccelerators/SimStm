@@ -133,39 +133,91 @@ package body tb_base_pkg is
         end if;
     end procedure;
     
+    function get_path_stem( 
+        p : text_line
+    ) return text_line is
+        variable po : text_line;
+        variable lastPosOfSlash : integer;
+        variable pl : integer;
+    begin
+        lastPosOfSlash := 0;
+        pl := text_line_len(p);
+        for i in 1 to pl loop
+            if p(i) = '/' then
+                lastPosOfSlash := i;
+            end if;
+        end loop;
+        for i in 1 to lastPosOfSlash loop        
+            po(i) := p(i);
+        end loop; 
+        return po;
+    end function;
+    
+    procedure print_path_segments_as_path(
+        constant prefix : in string;
+        variable path_segments : in text_line_array;
+        constant postfix : in string
+    ) is
+        variable path : text_line;
+        variable j : integer;
+        variable n : integer;
+        variable l : integer;
+    begin
+        n := 0;
+        j := 1;
+        while path_segments(n)(1) /= nul loop
+            l := text_line_len(path_segments(n));
+            for i in 1 to l loop
+                path(j) := path_segments(n)(i); 
+                j := j + 1;    
+            end loop;
+            path(j) := '/';
+            j := j + 1;
+            n := n + 1;
+        end loop;
+        path(j - 1) := nul;
+        print(prefix & path & postfix);
+    end procedure;
     
     procedure reduce_next_relative_folder_path_segment(
         variable path_segments : in text_line_array;
         variable reduced_path_segments : out text_line_array ;
-        variable reduced : out boolean
+        variable reduced : out boolean;
+        constant debug : boolean
     ) is
         variable tmp_path_segments : text_line_array;
         variable i : integer;
         variable j : integer;
         variable f : boolean;
     begin
+        if debug then
+            print("reduce_next_relative_folder_path_segment");
+            print_path_segments_as_path("path ", path_segments, "");
+        end if;
         i := 0;
         j := 0;
         f := false;
         while path_segments(i)(1) /= nul loop
-            if path_segments(i + 1)(1 to 2) = ".." then
+            if path_segments(i + 1)(1 to 2) = ".." and f = false then
                 i := i + 2;
                 f := true;
-            elsif path_segments(i)(1 to 1) = "." then
+            elsif path_segments(i)(1 to 1) = "."  and f = false then
                 i := i + 1;
                 f := true;
             else
                 tmp_path_segments(j) := path_segments(i);
-                print("tps:" & tmp_path_segments(j));
                 i := i + 1;
                 j := j + 1;
             end if;     
         end loop;
         if f then
-            reduce_next_relative_folder_path_segment(tmp_path_segments, reduced_path_segments, reduced);
+            reduce_next_relative_folder_path_segment(tmp_path_segments, reduced_path_segments, reduced, debug);
         else
             reduced_path_segments := tmp_path_segments;
             reduced := false;
+        end if;
+        if debug then
+            print_path_segments_as_path("reduced_path ", reduced_path_segments, "");
         end if;
     end procedure;    
     
@@ -187,12 +239,14 @@ package body tb_base_pkg is
     procedure normalize_relative_file_path(
         variable root_to_to_current_dir_path : in text_line; 
         variable relative_file_path : in text_line;
-        variable normalized_file_path : out text_line 
+        variable normalized_file_path : out text_line;
+        constant debug : boolean 
     ) is
         variable l : integer;
         variable n : integer;
         variable j : integer;
-        variable path_segments : text_line_array;
+        variable si : integer;
+        variable path_segments : text_line_array := (others => (others => nul));
         variable reduced_path_segments : text_line_array;
         variable reduced : boolean;
         variable resolved_file_path : text_line; 
@@ -200,26 +254,32 @@ package body tb_base_pkg is
         assert relative_file_path(1) /= '/'
         report "normalize_code_file_path: relative file pathes mustn't start with /"
         severity failure;
-        print("root_to_to_current_dir_path:" & root_to_to_current_dir_path);
+        if debug then 
+            print("root_to_to_current_dir_path:" & root_to_to_current_dir_path);
+        end if; 
         l := text_line_len(root_to_to_current_dir_path);
         n := 0;
         j := 1;
-        for i in 1 to l loop
+        si := 1;
+        if root_to_to_current_dir_path(1) = '/' then
+            si := 2;
+        end if;
+        for i in si to l loop
             if root_to_to_current_dir_path(i) = '/' then
-                print("rps:" & path_segments(n));
                 n := n + 1;
                 j := 1;
             else
                 path_segments(n)(j) := root_to_to_current_dir_path(i); 
                 j := j + 1; 
             end if;     
-        end loop;
-        print("relative_file_path:" & relative_file_path);
+        end loop; 
+        if debug then 
+            print("relative_file_path:" & relative_file_path);
+        end if;              
         l := text_line_len(relative_file_path);
         j := 1;
         for i in 1 to l loop
             if relative_file_path(i) = '/' then
-                print("fps:" & path_segments(n));
                 n := n + 1;
                 j := 1;                              
             else  
@@ -227,42 +287,44 @@ package body tb_base_pkg is
                 j := j + 1;
             end if;     
         end loop;
-        print("fps:" & path_segments(n));
+        n := n + 1;
         
-        reduce_next_relative_folder_path_segment(path_segments, reduced_path_segments, reduced);
+        reduce_next_relative_folder_path_segment(path_segments, reduced_path_segments, reduced, debug);
         
         n := 0;
         j := 1;
         while reduced_path_segments(n)(1) /= nul loop
             resolved_file_path(j) := '/';
+            j := j + 1;
             l := text_line_len(reduced_path_segments(n));
             for i in 1 to l loop
                 resolved_file_path(j) := reduced_path_segments(n)(i); 
                 j := j + 1;    
             end loop;
+            n := n + 1;
         end loop;
         normalized_file_path := resolved_file_path;
-        print("normalized_file_path:" & normalized_file_path);
+        if debug then 
+            print("normalized_file_path:" & normalized_file_path);
+        end if;   
     end procedure;
 
     procedure append_code_file(
         variable slc : src_locator;
         variable code_files : inout file_def_list;
-        variable stimulus_path : in text_line;
-        variable stimulus_file : in text_line
+        variable acfn : text_line
     ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
         variable cf_ptr : file_def_element_ptr;
         variable i : integer;
-        variable acfn : text_line;
+
     begin
-        normalize_relative_file_path(stimulus_path, stimulus_file, acfn);
         for i in 0 to code_files.last_element_num loop
             cf_ptr := code_files.element_ptrs(i);
             if fld_equal(cf_ptr.absolute_file_name, acfn) then
-                report "stimulus_path " & stimulus_path & "stimulus file " & stimulus_file & "absolute file path " & acfn & " already included"
-                severity warning;
+                -- report "stimulus file " & acfn & " already included"
+                -- severity warning;
                 return;
             end if;
         end loop;
@@ -270,7 +332,7 @@ package body tb_base_pkg is
         ne_ptr := new file_def_element;
         ne_ptr.slc := slc;
         ne_ptr.absolute_file_name := acfn;
-        ne_ptr.file_name := string_to_text_field(stimulus_file);
+        ne_ptr.file_name := get_path_stem(acfn);
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
     end procedure;
@@ -1191,6 +1253,34 @@ package body tb_base_pkg is
             tempfield(i) := sourcestr(i);
         end loop;
         for i in 1 to text_field'length loop
+            destfield(i) := tempfield(i);
+        end loop;
+    end procedure;
+    
+    procedure init_text_line(
+        variable sourcestr : in string;
+        variable destfield : out text_line
+    ) is
+        variable tempfield : text_line;
+    begin
+        for i in 1 to sourcestr'length loop
+            tempfield(i) := sourcestr(i);
+        end loop;
+        for i in 1 to text_line'length loop
+            destfield(i) := tempfield(i);
+        end loop;
+    end procedure;
+
+    procedure init_const_text_line(
+        constant sourcestr : in string;
+        variable destfield : out text_line
+    ) is
+        variable tempfield : text_line;
+    begin
+        for i in 1 to sourcestr'length loop
+            tempfield(i) := sourcestr(i);
+        end loop;
+        for i in 1 to text_line'length loop
             destfield(i) := tempfield(i);
         end loop;
     end procedure;
