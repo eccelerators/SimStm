@@ -34,7 +34,7 @@ package body tb_interpreter_pkg is
         variable root_to_to_current_dir_path : text_line;
         variable stimulus_file : text_line       
     ) is
-        constant debug : boolean := false;
+        constant debug : boolean := true;
         variable fos : file_open_status;
         variable tl : text_line;
         variable ts : token_text_field_array;
@@ -42,7 +42,6 @@ package body tb_interpreter_pkg is
         variable txt_enclosing_quote : character;
         variable valid : integer;
         variable il : integer;
-        variable tll : integer;
         variable include_file_path : text_line;
         variable file_line : integer;
         file stimulus : text;
@@ -436,13 +435,10 @@ package body tb_interpreter_pkg is
         variable ie : inst_element_ptr;
         variable ien : integer;
         variable pn : text_field;
-        variable pn_is_fqn : boolean;
         variable pen : integer;
         constant debug : boolean := true;
         variable empty_text_field : text_field := (others => nul);
         variable found : boolean;
-        variable is_FQN : boolean := true;
-        variable is_not_FQN : boolean := false;
         
     begin
         init_inst_initial_context(iic);
@@ -472,7 +468,7 @@ package body tb_interpreter_pkg is
             end if;
             if debug then 
                 for k in 1 to 6 loop
-                    print("par_scopes(" & integer'image(k) &")" & par_scopes(k));
+                    print("par_scopes(" & integer'image(k) &") " & par_scopes(k));
                 end loop;
             end if;
             if ie.inst(1 to ie.inst_len) /= INSTR_NAMESPACE

@@ -533,7 +533,7 @@ package body tb_interpreter_util_pkg is
             val := stim_to_stm_value(ie.slc, ptf, val'length);
         else
             access_inst_par_index(ie, vars, par_num, namespace, scope, ven);
-            if ven < 0 then
+            if ven > -1 then
                 val := vars.element_ptrs(ven).values(0);
                 found := true;
             end if;
@@ -573,7 +573,7 @@ package body tb_interpreter_util_pkg is
     begin
         found := false;
         access_var_index(vars, wvar_name, wvar_is_fqn, namespace, scope, ven);
-        if ven < 0 then
+        if ven > -1 then
             val := vars.element_ptrs(ven).values(0);
             found := true;
         end if;

@@ -32,7 +32,7 @@ static_setup_data = {
     "tb_top_entity_file": "/tb/hdl/tbTop.vhd",
     "tb_simstm_entry_namespace": "HelloWorld",
     "tb_simstm_entry_file": "testMain.stm",
-        "test_suites" : [
+    "test_suites" : [
     ],
     "test_labs" : [
     ],

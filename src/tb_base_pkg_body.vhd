@@ -265,6 +265,7 @@ package body tb_base_pkg is
         variable l : integer;
         variable n : integer;
         variable j : integer;
+        variable f : boolean;
         variable si : integer;
         variable path_segments : text_line_array := (others => (others => nul));
         variable reduced_path_segments : text_line_array;
@@ -313,9 +314,18 @@ package body tb_base_pkg is
         
         n := 0;
         j := 1;
+        f := true;
         while reduced_path_segments(n)(1) /= nul loop
-            resolved_file_path(j) := '/';
-            j := j + 1;
+            if f = true then     
+                if root_to_to_current_dir_path(1) = '/' then
+                    resolved_file_path(j) := '/';
+                    j := j + 1;              
+                end if;
+            else
+                resolved_file_path(j) := '/';
+                j := j + 1;
+            end if;
+            f := false;
             l := text_line_len(reduced_path_segments(n));
             for i in 1 to l loop
                 resolved_file_path(j) := reduced_path_segments(n)(i); 
@@ -337,8 +347,6 @@ package body tb_base_pkg is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
         variable cf_ptr : file_def_element_ptr;
-        variable i : integer;
-
     begin
         for i in 0 to code_files.last_element_num loop
             cf_ptr := code_files.element_ptrs(i);
@@ -1469,7 +1477,6 @@ package body tb_base_pkg is
         variable v_stat : file_open_status;
         file user_file : text;
         variable std_line : line;
-        variable stm_lines_get_valid : integer := 0;
         variable position : integer;
         variable file_path_string : stm_text;
     begin
@@ -1511,7 +1518,6 @@ package body tb_base_pkg is
         file user_file : text;
         variable std_line : line;
         variable tmp_std_line : line;
-        variable stm_lines_append_valid : integer := 0;
         variable file_path_string : stm_text;
     begin
         txt_to_string(file_path, file_path_string);
@@ -1607,7 +1613,11 @@ package body tb_base_pkg is
     ) is
         variable lp : stm_line_ptr;
         variable nlp : stm_line_ptr;
+        variable debug : boolean := false;
     begin
+        if debug then
+            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+        end if;
         if stm_lines.size = 0 then
             lp := new stm_line;
             lp.line_number := 0;
@@ -1643,7 +1653,11 @@ package body tb_base_pkg is
         variable std_line : line;
         variable nlp : stm_line_ptr;
         variable value_std_logic_vector : std_logic_vector(machine_value_width - 1 downto 0);
+        variable debug : boolean := false;
     begin
+        if debug then
+            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+        end if;
         for j in 0 to stm_array'length - 1 loop
             value_std_logic_vector := std_logic_vector(stm_array(j));
             hwrite(std_line, value_std_logic_vector, left, machine_value_width / 4 + 1);
@@ -1681,8 +1695,11 @@ package body tb_base_pkg is
         variable lp : stm_line_ptr;
         variable nlp : stm_line_ptr;
         variable std_line : line;
-        variable valid : integer;
+        variable debug : boolean := false;
     begin
+        if debug then
+            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+        end if;
         stm_text_ptr_to_line(var_stm_text, std_line);
         if stm_lines.size = 0 then
             lp := new stm_line;
