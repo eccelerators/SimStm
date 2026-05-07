@@ -9,7 +9,7 @@ entity Dut is
         Active : out std_logic;
         StepDown : in std_logic;
         StepUp : in std_logic;
-        StepValue : out std_logic_vector(7 downto 0);
+        StepValue : in std_logic_vector(7 downto 0);
         Count : out std_logic_vector(7 downto 0)
     );
 end entity;
@@ -35,11 +35,11 @@ begin
             else
                 Active <= '1';
                 shDown <= StepDown & shDown(2 downto 1);
-                shUp <= StepUp & shDown(2 downto 1);
+                shUp <= StepUp & shUp(2 downto 1);
                 if shDown(1 downto 0) = "10" then
-                    counter <= counter + to_unsigned(StepValue, 8);
+                    counter <= counter + unsigned(StepValue);
                 elsif shUp(1 downto 0) = "10" then
-                    counter <= counter - to_unsigned(StepValue, 8);
+                    counter <= counter - unsigned(StepValue);
                 end if;
             end if;
 

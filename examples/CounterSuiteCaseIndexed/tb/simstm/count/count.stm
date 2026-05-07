@@ -1,9 +1,10 @@
-include "common/common.stm"
+include "../common/common.stm"
 
 namespace CounterSuiteCaseIndexed
 
 proc testCountUp (
     var TestSuiteIndex stm.TestSuiteIndex
+    var StepValue stm.TestCaseIndex
 )
     var expextedCount 0
     var loadValue TestSuiteIndex
@@ -27,7 +28,8 @@ proc testCountUp (
 end proc
 
 proc testCountDown (
-    var TestSuiteIndex stm.TestCaseIndex
+    var TestSuiteIndex stm.TestSuiteIndex
+    var StepValue stm.TestCaseIndex
 )
     var expextedCount 0
     var loadValue TestSuiteIndex

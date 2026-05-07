@@ -84,8 +84,7 @@ begin
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
             stimulus_main_entry_label => stimulus_main_entry_label,
-            machine_value_width => machine_value_width,
-            machine_address_width => machine_address_width
+            machine_value_width => machine_value_width
         )
         port map(
             executing_line => executing_line,

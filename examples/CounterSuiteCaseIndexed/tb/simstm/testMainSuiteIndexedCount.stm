@@ -1,5 +1,4 @@
-include "Common/Common.stm"
-include "TestSuites/TestSuiteCount.stm"
+include "common/common.stm"
 
 namespace CounterSuiteCaseIndexed
 

@@ -1,5 +1,4 @@
-include "../../../../lib/base.stm"
-include "count/count.stm"
+include "common/common.stm"
 
 namespace CounterSuiteCaseIndexed
 
@@ -8,7 +7,10 @@ namespace CounterSuiteCaseIndexed
 
     proc testMain ()
         log message stm.INFO "Main test started"
-
+       
+       
+        equ stm.TestSuiteIndex 5
+        equ stm.TestCaseIndex 1
         call testCountUp ()
         
         log message stm.INFO "Main test finished"

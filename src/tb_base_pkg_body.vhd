@@ -153,6 +153,26 @@ package body tb_base_pkg is
         return po;
     end function;
     
+    function get_path_file_name( 
+        p : text_line
+    ) return text_line is
+        variable po : text_line;
+        variable lastPosOfSlash : integer;
+        variable pl : integer;
+    begin
+        lastPosOfSlash := 0;
+        pl := text_line_len(p);
+        for i in 1 to pl loop
+            if p(i) = '/' then
+                lastPosOfSlash := i;
+            end if;
+        end loop;
+        for i in lastPosOfSlash + 1 to pl loop        
+            po(i - lastPosOfSlash) := p(i);
+        end loop; 
+        return po;
+    end function;
+    
     procedure print_path_segments_as_path(
         constant prefix : in string;
         variable path_segments : in text_line_array;
@@ -332,7 +352,7 @@ package body tb_base_pkg is
         ne_ptr := new file_def_element;
         ne_ptr.slc := slc;
         ne_ptr.absolute_file_name := acfn;
-        ne_ptr.file_name := get_path_stem(acfn);
+        ne_ptr.file_name := get_path_file_name(acfn);
         code_files.element_ptrs(nen) := ne_ptr;
         code_files.last_element_num := nen;
     end procedure;
@@ -401,7 +421,7 @@ package body tb_base_pkg is
                     int_number := 1;
                 when others =>
                     assert false
-                    report "bin2integer found non binary digit on line " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "bin2integer found non binary digit on line " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (2 ** power));
@@ -429,7 +449,7 @@ package body tb_base_pkg is
                     vec_number := '1';
                 when others =>
                     assert false
-                    report "bin2stm_value found non binary digit on line " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "bin2stm_value found non binary digit on line " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(machine_value_width - 2 downto 0) & vec_number;
@@ -506,6 +526,28 @@ package body tb_base_pkg is
         end loop;
         j := 1;
         while s2(j) /= nul loop
+            sr(i) := s2(j);
+            i := i + 1;
+            j := j + 1;
+        end loop;
+        return sr;
+    end function;
+    
+    function ew_str_cat_text_line(
+        s1 : stm_text;
+        s2 : text_line
+    ) return stm_text is
+        variable i : integer;
+        variable j : integer;
+        variable sr : stm_text;
+    begin
+        sr := s1;
+        i := 1;
+        while sr(i) /= nul loop
+            i := i + 1;
+        end loop;
+        j := 1;
+        while s2(j) /= nul and j < stm_text'length loop
             sr(i) := s2(j);
             i := i + 1;
             j := j + 1;
@@ -638,7 +680,7 @@ package body tb_base_pkg is
         return sr;
     end function;
 
-    function append_local_scope(
+    function append_scope(
         s1 : text_field;
         s2 : text_field
     ) return text_field is
@@ -1121,7 +1163,7 @@ package body tb_base_pkg is
                     int_number := 15;
                 when others =>
                     assert false
-                    report "hex2integer found non hex digit " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "hex2integer found non hex digit " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
             temp_int := temp_int + (int_number * (16 ** power));
@@ -1177,7 +1219,7 @@ package body tb_base_pkg is
                     vec_number := x"F";
                 when others =>
                     assert false
-                    report "hex2stm_value found non hex digit " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "hex2stm_value found non hex digit " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
             temp_stm_value := temp_stm_value(machine_value_width - 5 downto 0) & vec_number;
@@ -1355,7 +1397,7 @@ package body tb_base_pkg is
                     value := bin2integer(slc, temp_str);
                 when others =>
                     assert false
-                    report "stim_to_integer strange number found, non hex digit " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "stim_to_integer strange number found, non hex digit " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
         else
@@ -1394,7 +1436,7 @@ package body tb_base_pkg is
                     stmvalue := bin2stm_value(slc, temp_str, machine_value_width);
                 when others =>
                     assert false
-                    report "stim_to_stm_value strange number found, non hex digit " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+                    report "stim_to_stm_value strange number found, non hex digit " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
                     severity failure;
             end case;
         else
@@ -1700,7 +1742,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1;
-        report "stm_lines_delete at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_delete at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1726,7 +1768,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get line at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_get line at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1761,7 +1803,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get array at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_get array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1804,7 +1846,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert text at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_insert text at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1851,7 +1893,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert array at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_insert array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1912,7 +1954,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set text at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_set text at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1940,7 +1982,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set array at position not possible " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "stm_lines_set array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 

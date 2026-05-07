@@ -277,6 +277,10 @@ package tb_base_pkg is
         p : text_line
     ) return text_line;
     
+    function get_path_file_name( 
+        p : text_line
+    ) return text_line;
+    
     procedure print_path_segments_as_path(
         constant prefix : in string;
         variable path_segments : in text_line_array;
@@ -343,6 +347,11 @@ package tb_base_pkg is
         s1 : stm_text;
         s2 : text_field
     ) return stm_text;
+    
+    function ew_str_cat_text_line(
+        s1 : stm_text;
+        s2 : text_line
+    ) return stm_text;
 
     procedure ew_str_cat_ptr(
         variable s1 : in stm_text;
@@ -364,7 +373,7 @@ package tb_base_pkg is
         sp : text_field
     ) return text_field;
 
-    function append_local_scope(
+    function append_scope(
         s1 : text_field;
         s2 : text_field
     ) return text_field;

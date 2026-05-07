@@ -40,8 +40,9 @@ architecture behavioural of tbTop is
     signal Active : std_logic := '0';
     signal StepDown : std_logic:= '0';
     signal StepUp : std_logic:= '0';
+    signal Load : std_logic:= '0';
     signal Count : std_logic_vector(7 downto 0) := (others => '0');
-    signal StepValue : std_logic_vector(7 downto 0) := (others => '0');
+    signal LoadOrStepValue : std_logic_vector(7 downto 0) := (others => '0');
 
 begin
 
@@ -71,7 +72,7 @@ begin
     signals_in.in_signal_2002 <= '0';
     signals_in.in_signal_2003 <= '0';
     
-    LoadValue <= signals_out.out_signal_3001;
+    LoadOrStepValue <= signals_out.out_signal_3001;
     StepDown <= signals_out.out_signal_3002;
     StepUp <= signals_out.out_signal_3003;
     
@@ -83,8 +84,7 @@ begin
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file,
             stimulus_main_entry_label => stimulus_main_entry_label,
-            machine_value_width => machine_value_width,
-            machine_address_width => machine_address_width
+            machine_value_width => machine_value_width
         )
         port map(
             executing_line => executing_line,
@@ -107,8 +107,8 @@ begin
             Active  => Active,
             StepDown => StepDown,
             StepUp => StepUp,
-            Load = Load, 
-            LoadValue => LoadValue,
+            Load => Load, 
+            LoadOrStepValue => LoadOrStepValue,
             Count => Count
         );
 

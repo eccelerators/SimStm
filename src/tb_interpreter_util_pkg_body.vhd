@@ -259,11 +259,14 @@ package body tb_interpreter_util_pkg is
         variable previous_level : integer;
         variable insert_call_stack_file_name : boolean;
         variable insert_call_stack_file_line : boolean;
-        variable stack_called_file_name : text_field;
+        variable stack_called_file_name : text_line;
         variable stack_called_file_line : integer;
         variable stack_called_proc : text_field;
         variable called_proc_name : text_field;
-        variable wvar_is_fqn : boolean;
+        variable empty_text_field : text_field := (others => nul);
+        variable is_FQN : boolean := true;
+        variable is_not_FQN : boolean := false;
+        variable found : boolean;
 
     begin
         if ie.inst_args.txt = null then
@@ -439,11 +442,16 @@ package body tb_interpreter_util_pkg is
                 cien := rcs(sp).ien_of_called_proc;
                 called_proc_name := insts.element_ptrs(cien).inst_args.par_text_fields(1);
                 if contains_dot(tmp_field) then
-                    wvar_is_fqn := true;
+                    access_var_value(vars, tmp_field, is_FQN, empty_text_field, empty_text_field, found, v1);
                 else
-                    wvar_is_fqn := false;
+                    access_var_value(vars, tmp_field, is_not_FQN, insts.element_ptrs(cien).inst_namespace, called_proc_name, found, v1);
+                    if not found then
+                        access_var_value(vars, tmp_field, is_not_FQN, insts.element_ptrs(cien).inst_namespace, empty_text_field, found, v1);
+                    end if;
+                    assert found
+                    report "wvar not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    severity failure;
                 end if;
-                access_inst_wvar_value_prefer_local(ie, vars, tmp_field, wvar_is_fqn, called_proc_name, v1);
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -454,7 +462,7 @@ package body tb_interpreter_util_pkg is
             elsif insert_call_stack_file_name then
                 cien := rcs(sp - previous_level).ien_of_called_proc;
                 stack_called_file_name := insts.element_ptrs(cien).slc.file_name;
-                dest_txt_str := ew_str_cat(dest_txt_str, stack_called_file_name);
+                dest_txt_str := ew_str_cat_text_line(dest_txt_str, stack_called_file_name);
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;
@@ -485,101 +493,12 @@ package body tb_interpreter_util_pkg is
         severity failure;
     end procedure;
 
-    procedure access_inst_par_value_global(
+    procedure access_inst_par_index(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
-        variable val : out unsigned
-    ) is
-        variable ptf : text_field;
-        variable ven : integer;
-    begin
-        ptf := ie.inst_args.par_text_fields(par_num);
-        if ie.inst_args.par_types(par_num) = PAR_LIT then
-            val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else
-            access_inst_par_index_global(ie, vars, par_num, ven);
-            val := vars.element_ptrs(ven).values(0);
-        end if;
-    end procedure;
-
-    procedure access_inst_par_value_local(
-        variable ie : in inst_element_ptr;
-        variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        variable called_proc_name : in text_field;
-        variable val : out unsigned
-    ) is
-        variable ptf : text_field;
-        variable ven : integer;
-    begin
-        ptf := ie.inst_args.par_text_fields(par_num);
-        if ie.inst_args.par_types(par_num) = PAR_LIT then
-            val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else
-            access_inst_par_index_local(ie, vars, par_num, called_proc_name, ven);
-            val := vars.element_ptrs(ven).values(0);
-        end if;
-    end procedure;
-
-    procedure access_inst_par_value_prefer_local(
-        variable ie : in inst_element_ptr;
-        variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        variable called_proc_name : in text_field;
-        variable val : out unsigned
-    ) is
-        variable ptf : text_field;
-
-        variable ven : integer;
-    begin
-        ptf := ie.inst_args.par_text_fields(par_num);
-        if ie.inst_args.par_types(par_num) = PAR_LIT then
-            val := stim_to_stm_value(ie.slc, ptf, val'length);
-        else
-            access_inst_par_index_prefer_local(ie, vars, par_num, called_proc_name, ven);
-            val := vars.element_ptrs(ven).values(0);
-        end if;
-    end procedure;
-
-    procedure access_inst_wvar_value_prefer_local(
-        variable ie : in inst_element_ptr;
-        variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field;
-        variable wvar_is_fqn : in boolean;
-        variable called_proc_name : in text_field;
-        variable val : out unsigned
-    ) is
-        variable ven : integer;
-    begin
-        access_inst_wvar_index_prefer_local(ie, vars, wvar_name, wvar_is_fqn, called_proc_name, ven);
-        val := vars.element_ptrs(ven).values(0);
-    end procedure;
-
-    procedure access_inst_par_index_global(
-        variable ie : in inst_element_ptr;
-        variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        variable ven : out integer
-    ) is
-        variable ptf : text_field;
-        variable vng : text_field;
-    begin
-        ptf := ie.inst_args.par_text_fields(par_num);
-        if ie.inst_args.par_types(par_num) = PAR_FQN then
-            ptf := ie.inst_args.par_text_fields(par_num);
-        else
-            ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
-        end if;
-        vng := append_dot(ptf);
-        access_var(ie.slc, vars, vng, ven, true);
-    end procedure;
-
-    procedure access_inst_par_index_local(
-        variable ie : in inst_element_ptr;
-        variable vars : in var_pool_ordered;
-        constant par_num : in integer;
-        variable called_proc_name : in text_field;
+        variable namespace : in text_field;
+        variable scope : in text_field;
         variable ven : out integer
     ) is
         variable ptf : text_field;
@@ -589,122 +508,108 @@ package body tb_interpreter_util_pkg is
         if ie.inst_args.par_types(par_num) = PAR_FQN then
             ptf := ie.inst_args.par_text_fields(par_num);
         else
-            ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
+            ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), namespace);
         end if;
-        vn := append_local_scope(ptf, called_proc_name);
-        access_var(ie.slc, vars, vn, ven, true);
+        vn := append_scope(ptf, scope);
+        search_var_element_number(vars, vn, ven);
     end procedure;
-
-    procedure access_inst_par_index_prefer_local(
+    
+    procedure access_inst_par_value(
         variable ie : in inst_element_ptr;
         variable vars : in var_pool_ordered;
         constant par_num : in integer;
-        variable called_proc_name : in text_field;
-        variable ven : out integer
+        variable namespace : in text_field;
+        variable scope : in text_field;
+        variable found : out boolean;
+        variable val : out unsigned
     ) is
         variable ptf : text_field;
-        variable vn : text_field;
-        variable vng : text_field;
-        variable venu : integer;
-    begin
-        ptf := ie.inst_args.par_text_fields(par_num);
-        if ie.inst_args.par_types(par_num) = PAR_FQN then
-            ptf := ie.inst_args.par_text_fields(par_num);
-        else
-            ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), ie.inst_namespace);
-        end if;
-        vn := append_local_scope(ptf, called_proc_name);
-        access_var(ie.slc, vars, vn, venu, false);
-        if venu < 0 then
-            vng := append_dot(ptf);
-            access_var(ie.slc, vars, vng, venu, true);
-        end if;
-        ven := venu;
-    end procedure;
 
-    procedure access_inst_wvar_index_prefer_local(
-        variable ie : in inst_element_ptr;
+        variable ven : integer;
+    begin
+        found := false;
+        ptf := ie.inst_args.par_text_fields(par_num);
+        if ie.inst_args.par_types(par_num) = PAR_LIT then
+            val := stim_to_stm_value(ie.slc, ptf, val'length);
+        else
+            access_inst_par_index(ie, vars, par_num, namespace, scope, ven);
+            if ven < 0 then
+                val := vars.element_ptrs(ven).values(0);
+                found := true;
+            end if;
+        end if;
+    end procedure;
+    
+    procedure access_var_index(
         variable vars : in var_pool_ordered;
         variable wvar_name : in text_field;
         variable wvar_is_fqn : in boolean;
-        variable called_proc_name : in text_field;
+        variable namespace : in text_field;
+        variable scope : in text_field;
         variable ven : out integer
     ) is
         variable wtf : text_field;
         variable vn : text_field;
-        variable vng : text_field;
-        variable venu : integer;
     begin
         if wvar_is_fqn then
             wtf := wvar_name;
         else
-            wtf := prepend_namespace(wvar_name, ie.inst_namespace);
+            wtf := prepend_namespace(wvar_name, namespace);
         end if;
-        vn := append_local_scope(wtf, called_proc_name);
-        access_var(ie.slc, vars, vn, venu, false);
-        if venu < 0 then
-            vng := append_dot(wtf);
-            access_var(ie.slc, vars, vng, venu, true);
-        end if;
-        ven := venu;
+        vn := append_scope(wtf, scope);
+        search_var_element_number(vars, vn, ven);
     end procedure;
-
-    procedure access_proc(
+    
+    procedure access_var_value(
+        variable vars : in var_pool_ordered;
+        variable wvar_name : in text_field;
+        variable wvar_is_fqn : in boolean;
+        variable namespace : in text_field;
+        variable scope : in text_field;
+        variable found : out boolean;
+        variable val : out unsigned
+    ) is
+        variable ven : integer;
+    begin
+        found := false;
+        access_var_index(vars, wvar_name, wvar_is_fqn, namespace, scope, ven);
+        if ven < 0 then
+            val := vars.element_ptrs(ven).values(0);
+            found := true;
+        end if;
+    end procedure;
+    
+    procedure access_proc_prepend_namespace(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
-        variable proc_namespace : in text_field;
         variable proc_name : in text_field;
-        variable proc_name_is_fqn : in boolean;
+        variable namespace : in text_field;
         variable proc_element_num : out integer
     ) is
         variable pn : text_field;
         variable pen : integer;
     begin
-        if proc_name_is_fqn then
-            pn := proc_name;
-        else
-            pn := prepend_namespace(proc_name, proc_namespace);
-        end if;
+        pn := prepend_namespace(proc_name, namespace);
         search_proc_element_number(procs, pn, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc " & proc_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "access proc, couldn't find proc " & proc_name & " file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
     end procedure;
-
+    
     procedure access_proc_fqn(
         variable slc : in src_locator;
         variable procs : in proc_pool_ordered;
         variable proc_name : in text_field;
         variable proc_element_num : out integer
     ) is
-        variable pn : text_field;
         variable pen : integer;
     begin
-        pn := proc_name;
-        search_proc_element_number(procs, pn, pen);
+        search_proc_element_number(procs, proc_name, pen);
         assert pen >= 0
-        report "access proc, couldn't find proc " & proc_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+        report "access proc, couldn't find proc " & proc_name & " file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         proc_element_num := pen;
-    end procedure;
-
-    procedure access_var(
-        variable slc : in src_locator;
-        variable vars : in var_pool_ordered;
-        variable var_name : in text_field;
-        variable var_element_num : out integer;
-        constant fail_if_not_found : boolean
-    ) is
-        variable ven : integer;
-    begin
-        search_var_element_number(vars, var_name, ven);
-        if fail_if_not_found then
-            assert ven >= 0
-            report "access var, couldn't find var " & var_name & "file " & slc.file_name & "line" & integer'image(slc.file_line)
-            severity failure;
-        end if;
-        var_element_num := ven;
     end procedure;
 
     procedure index_var(
@@ -1423,16 +1328,15 @@ package body tb_interpreter_util_pkg is
         variable slc : in src_locator;
         variable ts : in token_text_field_array;
         variable vars : in var_pool_ordered;
-        variable iic : inout stm_inst_initial_context;
-        constant others_but_namespace_too : boolean
+        variable iic : inout stm_inst_initial_context
     ) is
         variable inst : text_field;
         variable il : integer;
-        variable vn : text_field;
         variable ven : integer;
         variable pn : text_field;
         variable pn_ptr : text_field_ptr;
         variable ie : inst_element_ptr;
+        variable empty_text_field : text_field := (others => nul);
     begin
         inst := ts(1);
         il := fld_len(inst);
@@ -1442,74 +1346,79 @@ package body tb_interpreter_util_pkg is
         if inst(1 to il) = INSTR_END_NAMESPACE then
             iic.namespace_name := cut_trailing_namespace(iic.namespace_name);
         end if;
-        if others_but_namespace_too then
-            if inst(1 to il) = INSTR_PROC_PAR_OPEN then
-                iic.code_section := PROC_PARAMS;
-                iic.proc_name := ts(2);
-            end if;
-            if inst(1 to il) = INSTR_PROC_NOPAR then
-                iic.code_section := PROC_BODY;
-                iic.proc_name := ts(2);
-            end if;
-            if inst(1 to il) = INSTR_END_PROC then
-                iic.code_section := NONE;
-                iic.proc_name := (others => nul);
-                iic.called_proc_name := (others => nul);
-            end if;
 
-            if inst(1 to il) = INSTR_CALL_PAR_OPEN then
-                iic.code_section := CALL_PARAMS;
-                iic.called_proc_name := ts(2);
+        if inst(1 to il) = INSTR_PROC_PAR_OPEN then
+            iic.code_section := PROC_PARAMS;
+            iic.proc_name := ts(2);
+        end if;
+        if inst(1 to il) = INSTR_PROC_NOPAR then
+            iic.code_section := PROC_BODY;
+            iic.proc_name := ts(2);
+        end if;
+        if inst(1 to il) = INSTR_END_PROC then
+            iic.code_section := NONE;
+            iic.proc_name := (others => nul);
+            iic.called_proc_name := (others => nul);
+        end if;
+
+        if inst(1 to il) = INSTR_CALL_PAR_OPEN then
+            iic.code_section := CALL_PARAMS;
+            iic.called_proc_name := ts(2);
+        end if;
+        if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
+            iic.code_section := CALL_PARAMS;
+            ie := new inst_element;
+            ie.slc := slc;
+            ie.inst := inst;
+            ie.inst_len := il;
+            ie.inst_namespace := iic.namespace_name;
+            ie.inst_args.par_text_fields(1) := ts(2);
+            access_inst_par_index(ie, vars, 1, ie.inst_namespace, iic.proc_name, ven);
+            if ven < 0 then
+                access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
+            end if;            
+            assert ven > -1
+            report "var label not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            severity failure;                                     
+            pn_ptr := vars.element_ptrs(ven).label_proc_ref;
+            text_field_ptr_to_text_field(pn_ptr, pn);
+            iic.called_proc_name := pn;
+        end if;
+        if inst(1 to il) = INSTR_PAR_CLOSE
+            or inst(1 to il) = INSTR_EQU_PAR_CLOSE
+            or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
+            or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
+            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
+            if iic.code_section = PROC_PARAMS then
+                iic.code_section := PROC_BODY;
             end if;
-            if inst(1 to il) = INSTR_CALL_LABEL_PAR_OPEN then
-                iic.code_section := CALL_PARAMS;
-                ie := new inst_element;
-                ie.slc := slc;
-                ie.inst := inst;
-                ie.inst_len := il;
-                ie.inst_namespace := iic.namespace_name;
-                ie.inst_args.par_text_fields(1) := ts(2);
-                access_inst_par_index_prefer_local(ie, vars, 1, iic.proc_name, ven);
-                pn_ptr := vars.element_ptrs(ven).label_proc_ref;
-                text_field_ptr_to_text_field(pn_ptr, pn);
-                iic.called_proc_name := pn;
+            if iic.code_section = CALL_PARAMS then
+                iic.code_section := PROC_BODY;
             end if;
-            if inst(1 to il) = INSTR_PAR_CLOSE
-                or inst(1 to il) = INSTR_EQU_PAR_CLOSE
-                or inst(1 to il) = INSTR_VAR_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_ARRAY_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_LABEL_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_LABEL_EQU_PAR_CLOSE
-                or inst(1 to il) = INSTR_FILE_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_LINES_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_SIGNAL_POINTER_COPY_PAR_CLOSE
-                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
-                if iic.code_section = PROC_PARAMS then
-                    iic.code_section := PROC_BODY;
-                end if;
-                if iic.code_section = CALL_PARAMS then
-                    iic.code_section := PROC_BODY;
-                end if;
-            end if;
-            iic.is_var_declaration := false;
-            if inst(1 to il) = INSTR_CONST
-                or inst(1 to il) = INSTR_VAR
-                or inst(1 to il) = INSTR_VAR_PAR_CLOSE
-                or inst(1 to il) = INSTR_SIGNAL
-                or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
-                or inst(1 to il) = INSTR_BUS
-                or inst(1 to il) = INSTR_BUS_PAR_CLOSE
-                or inst(1 to il) = INSTR_FILE
-                or inst(1 to il) = INSTR_FILE_PAR_CLOSE
-                or inst(1 to il) = INSTR_LABEL
-                or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
-                or inst(1 to il) = INSTR_LINES
-                or inst(1 to il) = INSTR_LINES_PAR_CLOSE
-                or inst(1 to il) = INSTR_ARRAY
-                or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
-                or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
-                iic.is_var_declaration := true;
-            end if;
+        end if;
+        iic.is_var_declaration := false;
+        if inst(1 to il) = INSTR_CONST
+            or inst(1 to il) = INSTR_VAR
+            or inst(1 to il) = INSTR_VAR_PAR_CLOSE
+            or inst(1 to il) = INSTR_SIGNAL
+            or inst(1 to il) = INSTR_SIGNAL_PAR_CLOSE
+            or inst(1 to il) = INSTR_BUS
+            or inst(1 to il) = INSTR_BUS_PAR_CLOSE
+            or inst(1 to il) = INSTR_FILE
+            or inst(1 to il) = INSTR_FILE_PAR_CLOSE
+            or inst(1 to il) = INSTR_LABEL
+            or inst(1 to il) = INSTR_LABEL_PAR_CLOSE
+            or inst(1 to il) = INSTR_LINES
+            or inst(1 to il) = INSTR_LINES_PAR_CLOSE
+            or inst(1 to il) = INSTR_ARRAY
+            or inst(1 to il) = INSTR_ARRAY_PAR_CLOSE
+            or inst(1 to il) = INSTR_BUS_POINTER_COPY_PAR_CLOSE then
+            iic.is_var_declaration := true;
         end if;
     end procedure;
 
@@ -1648,7 +1557,7 @@ package body tb_interpreter_util_pkg is
         procedure init_stm_text_var is
         begin
             assert inst_args.txt /= null
-            report "missing file name in file declaration " & "file " & slc.file_name & "line" & integer'image(slc.file_line)
+            report "missing file name in file declaration " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
             severity failure;
             ne := new var_element;
             ne.slc := slc;

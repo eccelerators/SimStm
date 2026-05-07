@@ -16,7 +16,7 @@ static_setup_data = {
     "name": "{{project_folder_name}}",
     "author": "Heinrich Diebel, Bernd Roeckert, Denis Vasilik",
     "author_email": "heinrich.diebel@eccelerators.com; bernd.roeckert@eccelerators.com; denis.vasilik@eccelerators.com;",
-    "url": "https://github.com/eccelerators/{{project_folder_name}}/",
+    "url": "https://github.com/eccelerators//simstm/examples/{{project_folder_name}}/",
     "description": "{{project_name}}",
     "long_description_content_type": "text/markdown",
     "classifiers": [
@@ -30,6 +30,8 @@ static_setup_data = {
     "top_entity_file": "{{top_entity_file}}",
     "tb_top_entity": "{{tb_top_entity}}",
     "tb_top_entity_file": "{{tb_top_entity_file}}",
+    "tb_simstm_entry_namespace": "{{tb_simstm_entry_namespace}}",
+    "tb_simstm_entry_file": "{{tb_simstm_entry_file}}",
     {{data_file_lists}}
     "setup_requires": []
 }

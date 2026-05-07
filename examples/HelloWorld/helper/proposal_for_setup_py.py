@@ -19,7 +19,9 @@ class GenerateProposalForSetupPy:
 
         project_folder_path = os.path.abspath(indir_project)
         project_folder_name = PurePath(project_folder_path).name
+        print("found project_folder_name {}".format(project_folder_name))
         project_name = self.project_folder_name_to_project_name(project_folder_name)
+        print("found project_name {}".format(project_name))
         
         UP = UserParameters(project_folder_name)
 
@@ -28,18 +30,21 @@ class GenerateProposalForSetupPy:
                 if Path(project_folder_path + '/src/vhdl' + '/' + f).suffix in ['.vhd', '.vhdl']:
                     if UP.search_phrase_in_vhdl_files_for_top_entity in f:
                         top_entity_file = f
+        print("found top_entity_file {}".format(top_entity_file))
 
         for f in os.listdir(project_folder_path + '/tb/hdl'):
             if os.path.isfile(project_folder_path + '/tb/hdl' + '/' + f):
                 if Path(project_folder_path + '/tb/hdl' + '/' + f).suffix in ['.vhd', '.vhdl']:
                     if UP.search_phrase_in_vhdl_files_for_tb_top_entity in f:
                         tb_top_entity_file = f
+        print("found tb_top_entity_file {}".format(tb_top_entity_file))
 
         for f in os.listdir(project_folder_path + '/tb/simstm'):
             if os.path.isfile(project_folder_path + '/tb/simstm' + '/' + f):
                 if Path(project_folder_path + '/tb/simstm' + '/' + f).suffix in ['.stm']:
                     if UP.search_phrase_in_simstm_test_main_files_for_entry_namespace in f:
                         tb_simstm_entry_file = f
+        print("found tb_simstm_entry_file {}".format(tb_simstm_entry_file))
 
         f = open(project_folder_path + '/tb/simstm' + '/' + tb_simstm_entry_file, 'r')
         f_lines = f.readlines()
@@ -47,7 +52,7 @@ class GenerateProposalForSetupPy:
             if "namespace" in l:
                 tb_simstm_entry_namespace = l.split()[1]
                 break
-
+        print("found tb_simstm_entry_namespace {}".format(tb_simstm_entry_namespace))
 
         f = open(project_folder_path + '/src/vhdl' + '/' + top_entity_file, 'r')
         f_lines = f.readlines()
@@ -55,6 +60,7 @@ class GenerateProposalForSetupPy:
             if "entity" in l:
                 top_entity = l.split()[1]
                 break
+        print("found top_entity {}".format(top_entity))
 
         f = open(project_folder_path + '/tb/hdl' + '/' + tb_top_entity_file, 'r')
         f_lines = f.readlines()
@@ -62,6 +68,7 @@ class GenerateProposalForSetupPy:
             if "entity" in l:
                 tb_top_entity = l.split()[1]
                 break
+        print("found tb_top_entity {}".format(tb_top_entity))
             
         hdl_file_list = []
         for src_vhdl_folder in UP.src_vhdl_folders:
@@ -222,13 +229,13 @@ class GenerateProposalForSetupPy:
                                                     "entry-label": entry_label})
 
         data_file_lists_str = ""
-        data_file_lists_str += '    "test_suites" : [\n'
+        data_file_lists_str += '"test_suites" : [\n'
         for i, d in enumerate(TestSuiteFileDictList):
             if "testsuite-indexes" in d:
-                data_file_lists_str += '            {{"testsuite-name":"{}", "file":"{}", "testsuite-indexes":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
+                data_file_lists_str += '        {{"testsuite-name":"{}", "file":"{}", "testsuite-indexes":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
                     d["testsuite-name"], d["file"], d["testsuite-indexes"], d["entry-file"], d["entry-label"])
             else:
-                data_file_lists_str += '            {{"testsuite-name":"{}", "file":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
+                data_file_lists_str += '        {{"testsuite-name":"{}", "file":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
                     d["testsuite-name"], d["file"], d["entry-file"], d["entry-label"])
             if i < len(TestSuiteFileDictList) - 1:
                 data_file_lists_str += ',\n'
@@ -358,8 +365,8 @@ class GenerateProposalForSetupPy:
         print(data_file_lists_str)
 
         template_file = open(infile_setup_template_py, 'r')
-        print("reading {}".format(infile_setup_template_py))
-        print("writing {}".format(outfile_setup_proposal))
+        print("reading {}".format(os.path.abspath(infile_setup_template_py)))
+        print("writing {}".format(os.path.abspath(outfile_setup_proposal)))
         template = Template(template_file.read())
         r = template.render(context)
         f = open(outfile_setup_proposal, 'w')

@@ -1,4 +1,4 @@
-include "Common/Common.stm"
+include "common/common.stm"
 include "TestLabs/TestLabCount.stm"
 
 namespace CounterLab

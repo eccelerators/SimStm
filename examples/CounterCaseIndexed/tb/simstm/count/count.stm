@@ -1,4 +1,4 @@
-include "common/common.stm"
+include "../common/common.stm"
 
 namespace CounterCaseIndexed
 
@@ -13,7 +13,7 @@ proc testCountUp (
     signal verify in_signal_Count expextedCount stm.MAX
     loop 4
         call countUp ()    
-        add expextedCount 1  
+        add expextedCount StepValue  
         signal verify in_signal_Count expextedCount stm.MAX
         wait 1000
     end loop
@@ -31,7 +31,7 @@ proc testCountDown (
     signal verify in_signal_Count expextedCount stm.MAX
     loop 4
         call countDown ()    
-        sub expextedCount 1  
+        sub expextedCount StepValue 
         signal verify in_signal_Count expextedCount stm.MAX
         wait 1000
     end loop

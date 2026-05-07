@@ -1,4 +1,4 @@
-include "common/common.stm"
+include "../common/common.stm"
 
 namespace CounterPlain
 

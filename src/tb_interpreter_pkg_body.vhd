@@ -15,6 +15,7 @@
 -------------------------------------------------------------------------------
 
 use std.textio.all;
+use std.env.all;
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -131,7 +132,7 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic, false);
+                    track_inst_initial_context(slc, ts, vars, iic);
                     il := fld_len(ts(1));
                     if ts(1)(1 to il) = INSTR_LABEL then
                         ie := new inst_element;
@@ -145,7 +146,7 @@ package body tb_interpreter_pkg is
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
-                        vn := append_dot(vn);
+                        vn := append_scope(vn, iic.proc_name);
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_LABEL, machine_value_width, debug, ven1);
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
@@ -204,7 +205,7 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic, true);
+                    track_inst_initial_context(slc, ts, vars, iic);
                     il := fld_len(ts(1));
                     if ts(1)(1 to il) = INSTR_CONST then
                         ie := new inst_element;
@@ -218,7 +219,7 @@ package body tb_interpreter_pkg is
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
-                        vn := append_local_scope(vn, iic.proc_name);
+                        vn := append_scope(vn, iic.proc_name);
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
@@ -259,6 +260,7 @@ package body tb_interpreter_pkg is
         variable ie : inst_element_ptr;
         variable fn : text_line;
         variable slc : src_locator;
+        variable empty_text_field : text_field := (others => nul);
     begin
 
         for i in 0 to code_files.last_element_num loop
@@ -280,7 +282,7 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic, true);
+                    track_inst_initial_context(slc, ts, vars, iic);
                     il := fld_len(ts(1));
                     if ts(1)(1 to il) /= INSTR_CONST
                        and ts(1)(1 to il) /= INSTR_LABEL
@@ -298,11 +300,17 @@ package body tb_interpreter_pkg is
                         set_var_type(ie.inst, il, var_type);
                         if var_type /= T_NO_VAR then
                             vn1 := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
-                            vn1 := append_local_scope(vn1, iic.proc_name);
+                            vn1 := append_scope(vn1, iic.proc_name);
                             if ie.inst_args.par_types(2) = PAR_LIT or var_type = T_TEXT or var_type = T_LINES or var_type = T_LABEL then
                                 insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
                             else
-                                access_inst_par_index_prefer_local(ie, vars, 2, iic.called_proc_name, ven2);
+                                access_inst_par_index(ie, vars, 2, ie.inst_namespace, iic.called_proc_name, ven2);
+                                if ven2 > -1 then
+                                    access_inst_par_index(ie, vars, 2, ie.inst_namespace, empty_text_field, ven2);
+                                end if;            
+                                assert ven2 > -1
+                                report "var label not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                severity failure;                                 
                                 val2 := vars.element_ptrs(ven2).values(0);
                                 ie.inst_args.par_literal_values(2) := val2;
                                 insert_var_element(ie.slc, vars, vn1, ie.inst_args, var_type, machine_value_width, debug, ven1);
@@ -364,7 +372,7 @@ package body tb_interpreter_pkg is
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
-                    track_inst_initial_context(slc, ts, vars, iic, true);
+                    track_inst_initial_context(slc, ts, vars, iic);
                     il := fld_len(ts(1));
                     ie := new inst_element;
                     ie.slc := slc;
@@ -418,7 +426,7 @@ package body tb_interpreter_pkg is
         variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered;
-        constant machine_value_width : integer
+        constant machine_value_width : integer       
     ) is
         variable iic : stm_inst_initial_context;
         variable par_scopes : parameter_text_field_array;
@@ -430,23 +438,42 @@ package body tb_interpreter_pkg is
         variable pn : text_field;
         variable pn_is_fqn : boolean;
         variable pen : integer;
+        constant debug : boolean := true;
+        variable empty_text_field : text_field := (others => nul);
+        variable found : boolean;
+        variable is_FQN : boolean := true;
+        variable is_not_FQN : boolean := false;
+        
     begin
         init_inst_initial_context(iic);
         for i in 0 to insts.last_element_num loop
             ien := i;
-            -- print_inst_element(insts, ien);
+            if debug then  
+--                if ien = 340 then 
+--                    stop;
+--                end if;
+                print_inst_element(insts, ien);
+            end if;
             ie := insts.element_ptrs(i);
             slc := ie.slc;
             ts(1) := ie.inst;
             for k in 1 to 6 loop
                 ts(k + 1) := ie.inst_args.par_text_fields(k);
             end loop;
-            track_inst_initial_context(slc, ts, vars, iic, true);
+            track_inst_initial_context(slc, ts, vars, iic);
+            if debug then 
+                print_initial_instruction_context(iic);
+            end if;
             if iic.code_section = PROC_BODY or iic.code_section = PROC_PARAMS then
                 par_scopes := (others => iic.proc_name);
             end if;
             if iic.code_section = CALL_PARAMS then
                 par_scopes := (1 => iic.called_proc_name, others => iic.proc_name);
+            end if;
+            if debug then 
+                for k in 1 to 6 loop
+                    print("par_scopes(" & integer'image(k) &")" & par_scopes(k));
+                end loop;
             end if;
             if ie.inst(1 to ie.inst_len) /= INSTR_NAMESPACE
                and ie.inst(1 to ie.inst_len) /= INSTR_PROC_PAR_OPEN
@@ -457,32 +484,43 @@ package body tb_interpreter_pkg is
                 for i in 1 to 6 loop
                     if ie.inst_args.par_text_fields(i)(1) /= nul then
                         case i is
-                            when 1 =>
-                                access_inst_par_value_prefer_local(ie, vars, 1, par_scopes(1), par_value);
+                            when 1 =>                               
+                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                                if not found then
+                                    access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
+                                end if;            
+                                assert found 
+                                report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                severity failure;                                   
                             when 2 =>
                                 if ie.inst(1 to ie.inst_len) = INSTR_LABEL then
                                     pn := ie.inst_args.par_text_fields(2);
                                     if contains_dot(pn) then
-                                        pn_is_fqn := true;
+                                        access_proc_fqn(slc, procs, pn, pen);
                                     else
-                                        pn_is_fqn := false;
-                                    end if;
-                                    access_proc(slc, procs, ie.inst_namespace, pn, pn_is_fqn, pen);
+                                        access_proc_prepend_namespace(slc, procs, pn, ie.inst_namespace, pen);
+                                    end if;                             
                                 else
                                     if ie.inst(1 to ie.inst_len) /= INSTR_IF
                                         and ie.inst(1 to ie.inst_len) /= INSTR_ELSIF
                                     then
-                                        access_inst_par_value_prefer_local(ie, vars, 2, par_scopes(2), par_value);
-                                    end if;
+                                        access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                                        if not found then
+                                            access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
+                                        end if;            
+                                        assert found 
+                                        report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                        severity failure; 
+                                   end if;
                                 end if;
-                            when 3 =>
-                                access_inst_par_value_prefer_local(ie, vars, 3, par_scopes(3), par_value);
-                            when 4 =>
-                                access_inst_par_value_prefer_local(ie, vars, 4, par_scopes(4), par_value);
-                            when 5 =>
-                                access_inst_par_value_prefer_local(ie, vars, 5, par_scopes(5), par_value);
-                            when 6 =>
-                                access_inst_par_value_prefer_local(ie, vars, 6, par_scopes(6), par_value);
+                            when 3 to 6 =>
+                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                                if not found then
+                                    access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
+                                end if;            
+                                assert found 
+                                report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                severity failure; 
                         end case;
                     end if;
                 end loop;

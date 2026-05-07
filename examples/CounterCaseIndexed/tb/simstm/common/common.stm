@@ -1,4 +1,6 @@
 include "../../../../../lib/base.stm"
+include "../../../../../lib/testcase.stm"
+include "../TestSuites/TestSuiteCount.stm"
 
 namespace CounterCaseIndexed
 
@@ -15,7 +17,7 @@ signal in_signal_2000 2000
 signal in_signal_Active 2000
 
 signal in_signal_2001 2001
-signal in_signal_Count 2000
+signal in_signal_Count 2001
 
 signal in_signal_2002 2002
 signal in_signal_2003 2003
@@ -32,22 +34,23 @@ signal out_signal_StepUp 3003
 
 proc countUp ()
     signal write out_signal_StepUp 1
-    wait 20
+    wait 100
     signal write out_signal_StepUp 0
-    wait 20 
+    wait 100 
 end proc
 
 proc countDown ()
     signal write out_signal_StepDown 1
-    wait 20
+    wait 100
     signal write out_signal_StepDown 0
-    wait 20 
+    wait 100 
 end proc
 
 proc initDut ()
     signal write out_signal_init_dut 1
-    wait 20
+    wait 100
     signal write out_signal_init_dut 0
+    wait 100
 end proc
 
 end namespace

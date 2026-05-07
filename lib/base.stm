@@ -50,11 +50,6 @@ const TIME_OUT_100MS 100000000
 signal sigInSimulatedTimeNow 1
 var SimulatedTimeNow 0
 
-signal sigInTestSuiteIndex 2
-var TestSuiteIndex 255
-
-var TestCaseIndex 0
-
 signal sigInZero 3
 
 signal sigMachineValueWidth 8
