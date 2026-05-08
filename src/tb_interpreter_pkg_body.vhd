@@ -34,7 +34,7 @@ package body tb_interpreter_pkg is
         variable root_to_to_current_dir_path : text_line;
         variable stimulus_file : text_line       
     ) is
-        constant debug : boolean := true;
+        constant debug : boolean := false;
         variable fos : file_open_status;
         variable tl : text_line;
         variable ts : token_text_field_array;
@@ -47,40 +47,53 @@ package body tb_interpreter_pkg is
         file stimulus : text;
         variable acfn : text_line;
         variable next_root_to_to_current_dir_path : text_line;
+        variable cf_ptr : file_def_element_ptr;
+        variable already_included : boolean;
     begin
         normalize_relative_file_path(root_to_to_current_dir_path, stimulus_file, acfn, debug);
         file_open(fos, stimulus, acfn, read_mode);
         assert fos = open_ok
         report "unable to open stimulus_file " & acfn
         severity failure;
-        append_code_file(slc, code_files, acfn);
-        print("loading codefile " & acfn);
-        file_line := 0;
-        while not endfile(stimulus) loop
-            file_line := file_line + 1;
-            file_read_line(stimulus, tl);
-            tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid);
-            il := fld_len(ts(1));
-            if ts(1)(1 to il) = "include" then
-                assert txt /= null
-                report "include instruction is missing file name: " & "file " & acfn & "line " & integer'image(file_line)
-                severity failure;
-                include_file_path := (others => nul);
-                for i in 1 to c_stm_text_len loop
-                    include_file_path(i) := txt(i);
-                    if txt(i) = txt_enclosing_quote then
-                        include_file_path(i) := nul;
-                        exit;
-                    end if;
-                end loop;    
-                next_root_to_to_current_dir_path := get_path_stem(acfn);
-                if debug then                          
-                    print("next_root_to_to_current_dir_path " & next_root_to_to_current_dir_path); 
-                    print("include_file_path " & include_file_path);    
-                end if;    
-                collect_code_files(slc, code_files, next_root_to_to_current_dir_path, include_file_path);
+        already_included := false;
+        for i in 0 to code_files.last_element_num loop
+            cf_ptr := code_files.element_ptrs(i);
+            if fld_equal(cf_ptr.absolute_file_name, acfn) then
+                -- report "stimulus file " & acfn & " already included"
+                -- severity warning;
+                already_included := true;
             end if;
         end loop;
+        if not already_included then
+            append_code_file(slc, code_files, acfn);
+            print("loading codefile " & acfn);
+            file_line := 0;
+            while not endfile(stimulus) loop
+                file_line := file_line + 1;
+                file_read_line(stimulus, tl);
+                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid);
+                il := fld_len(ts(1));
+                if ts(1)(1 to il) = "include" then
+                    assert txt /= null
+                    report "include instruction is missing file name: " & "file " & acfn & "line " & integer'image(file_line)
+                    severity failure;
+                    include_file_path := (others => nul);
+                    for i in 1 to c_stm_text_len loop
+                        include_file_path(i) := txt(i);
+                        if txt(i) = txt_enclosing_quote then
+                            include_file_path(i) := nul;
+                            exit;
+                        end if;
+                    end loop;    
+                    next_root_to_to_current_dir_path := get_path_stem(acfn);
+                    if debug then                          
+                        print("next_root_to_to_current_dir_path " & next_root_to_to_current_dir_path); 
+                        print("include_file_path " & include_file_path);    
+                    end if;    
+                    collect_code_files(slc, code_files, next_root_to_to_current_dir_path, include_file_path);
+                end if;
+            end loop;
+        end if;
         file_close(stimulus);
     end procedure;
 
@@ -436,9 +449,9 @@ package body tb_interpreter_pkg is
         variable ien : integer;
         variable pn : text_field;
         variable pen : integer;
-        constant debug : boolean := true;
         variable empty_text_field : text_field := (others => nul);
         variable found : boolean;
+        constant debug : boolean := false;
         
     begin
         init_inst_initial_context(iic);
@@ -480,8 +493,8 @@ package body tb_interpreter_pkg is
                 for i in 1 to 6 loop
                     if ie.inst_args.par_text_fields(i)(1) /= nul then
                         case i is
-                            when 1 =>                               
-                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                            when 1 =>                     
+                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(i), found, par_value);
                                 if not found then
                                     access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                 end if;            
@@ -489,7 +502,9 @@ package body tb_interpreter_pkg is
                                 report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
                                 severity failure;                                   
                             when 2 =>
-                                if ie.inst(1 to ie.inst_len) = INSTR_LABEL then
+                                if ie.inst(1 to ie.inst_len) = INSTR_LABEL 
+                                    or ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET 
+                                then
                                     pn := ie.inst_args.par_text_fields(2);
                                     if contains_dot(pn) then
                                         access_proc_fqn(slc, procs, pn, pen);
@@ -500,7 +515,7 @@ package body tb_interpreter_pkg is
                                     if ie.inst(1 to ie.inst_len) /= INSTR_IF
                                         and ie.inst(1 to ie.inst_len) /= INSTR_ELSIF
                                     then
-                                        access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                                        access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(i), found, par_value);
                                         if not found then
                                             access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                         end if;            
@@ -510,7 +525,7 @@ package body tb_interpreter_pkg is
                                    end if;
                                 end if;
                             when 3 to 6 =>
-                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(1), found, par_value);
+                                access_inst_par_value(ie, vars, i, ie.inst_namespace, par_scopes(i), found, par_value);
                                 if not found then
                                     access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                 end if;            

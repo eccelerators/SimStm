@@ -359,15 +359,12 @@ package tb_base_pkg is
         variable so : out stm_text
     );
 
-    function append_trailing_namespace(
-        s : text_field;
-        sa : text_field
-    ) return text_field;
-
-    function cut_trailing_namespace(
-        s : text_field
-    ) return text_field;
-
+    procedure split_namespace_proc(
+        s : in text_field;
+        srn : out text_field;
+        srp : out text_field    
+    );
+    
     function prepend_namespace(
         s : text_field;
         sp : text_field

@@ -37,9 +37,9 @@ begin
                 shDown <= StepDown & shDown(2 downto 1);
                 shUp <= StepUp & shUp(2 downto 1);
                 if shDown(1 downto 0) = "10" then
-                    counter <= counter + unsigned(StepValue);
-                elsif shUp(1 downto 0) = "10" then
                     counter <= counter - unsigned(StepValue);
+                elsif shUp(1 downto 0) = "10" then
+                    counter <= counter + unsigned(StepValue);
                 end if;
             end if;
 

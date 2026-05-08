@@ -501,16 +501,23 @@ package body tb_interpreter_util_pkg is
         variable scope : in text_field;
         variable ven : out integer
     ) is
-        variable ptf : text_field;
         variable vn : text_field;
+        variable scope_namespace : text_field;
+        variable scope_proc_name : text_field;
     begin
-        ptf := ie.inst_args.par_text_fields(par_num);
+        vn := ie.inst_args.par_text_fields(par_num);
         if ie.inst_args.par_types(par_num) = PAR_FQN then
-            ptf := ie.inst_args.par_text_fields(par_num);
+            vn := append_dot(vn);
         else
-            ptf := prepend_namespace(ie.inst_args.par_text_fields(par_num), namespace);
-        end if;
-        vn := append_scope(ptf, scope);
+           if contains_dot(scope) then
+                split_namespace_proc(scope, scope_namespace, scope_proc_name);
+                vn := prepend_namespace(vn, scope_namespace);
+                vn := append_scope(vn, scope_proc_name);
+           else
+                vn := prepend_namespace(ie.inst_args.par_text_fields(par_num), namespace);
+                vn := append_scope(vn, scope);
+            end if;  
+        end if;  
         search_var_element_number(vars, vn, ven);
     end procedure;
     
@@ -524,19 +531,19 @@ package body tb_interpreter_util_pkg is
         variable val : out unsigned
     ) is
         variable ptf : text_field;
-
         variable ven : integer;
     begin
         found := false;
         ptf := ie.inst_args.par_text_fields(par_num);
         if ie.inst_args.par_types(par_num) = PAR_LIT then
             val := stim_to_stm_value(ie.slc, ptf, val'length);
+            found := true;
         else
             access_inst_par_index(ie, vars, par_num, namespace, scope, ven);
             if ven > -1 then
                 val := vars.element_ptrs(ven).values(0);
                 found := true;
-            end if;
+            end if;       
         end if;
     end procedure;
     
@@ -553,10 +560,11 @@ package body tb_interpreter_util_pkg is
     begin
         if wvar_is_fqn then
             wtf := wvar_name;
+            wtf := append_dot(wtf);
         else
             wtf := prepend_namespace(wvar_name, namespace);
-        end if;
-        vn := append_scope(wtf, scope);
+            vn := append_scope(wtf, scope);
+        end if;       
         search_var_element_number(vars, vn, ven);
     end procedure;
     
@@ -1341,12 +1349,8 @@ package body tb_interpreter_util_pkg is
         inst := ts(1);
         il := fld_len(inst);
         if inst(1 to il) = INSTR_NAMESPACE then
-            iic.namespace_name := append_trailing_namespace(iic.namespace_name, ts(2));
+            iic.namespace_name := ts(2);
         end if;
-        if inst(1 to il) = INSTR_END_NAMESPACE then
-            iic.namespace_name := cut_trailing_namespace(iic.namespace_name);
-        end if;
-
         if inst(1 to il) = INSTR_PROC_PAR_OPEN then
             iic.code_section := PROC_PARAMS;
             iic.proc_name := ts(2);

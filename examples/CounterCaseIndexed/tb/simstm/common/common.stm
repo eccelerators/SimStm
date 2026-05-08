@@ -1,6 +1,7 @@
 include "../../../../../lib/base.stm"
 include "../../../../../lib/testcase.stm"
 include "../TestSuites/TestSuiteCount.stm"
+include "../count/count.stm"
 
 namespace CounterCaseIndexed
 

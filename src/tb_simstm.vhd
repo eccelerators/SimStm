@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := false;
+        constant DUMP_PARSE_RESULTS : boolean := true;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -126,13 +126,10 @@ begin
 
         variable nol : integer;
         variable noc : integer;
-        variable is_FQN : boolean := true;
 
         variable stimulus_path_var : text_line;
         variable stimulus_file_var : text_line;
         
-        variable file_line : integer; -- line number in the stimulus file
-        variable file_name : text_line; -- the file name the line came from
         variable ien : integer := 0; -- instruction element number
         variable bien : integer := 0; -- branch instruction element number
         variable ie : inst_element_ptr; -- instruction element
@@ -231,9 +228,8 @@ begin
         variable no_file : text_field;
         variable no_file_on_main_entry : text_line;
         variable no_file_on_interrupt : text_line;
-        variable empty_text_field : text_field := (others => nul);
+        variable empty_text_field : text_field;
         variable proc_name : text_field;
-        variable proc_name_is_FQN : boolean;
 
         variable ven1 : integer;
         variable ven2 : integer;
@@ -251,6 +247,28 @@ begin
         variable val2_int : integer;
         variable signal_valid : integer;
         variable bus_valid : integer;
+        
+        procedure get_ven_global(constant par_num : in integer; variable ven : out integer) is
+            variable pn : integer := par_num;
+        begin
+            access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);        
+            assert ven > -1
+            report "var in_called scope global not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            severity failure;  
+        end procedure;
+
+        procedure get_val_global(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
+            variable ven : integer;
+            variable ptxt : text_field;
+        begin
+            ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
+            if is_digit(ptxt(1)) then
+                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+            else
+                get_ven_global(par_num, ven);
+                val := vars.element_ptrs(ven).values(0);
+            end if;
+        end procedure;
 
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
@@ -261,7 +279,7 @@ begin
             called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
-                access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
+                access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
             report "var in_called scope prefer local not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
@@ -310,7 +328,7 @@ begin
             end if;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
-                access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
+                access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
             report "var in called scope call params target sensitive, when not in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
@@ -330,7 +348,7 @@ begin
                     caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(1);
                     access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
                     if ven < 0 then
-                        access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
+                        access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
                     end if;            
                     assert ven > -1
                     report "var in called scope call params source sensitive, when in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
@@ -342,7 +360,7 @@ begin
             called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
-                access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
+                access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
             report "vvar in called scope call params source sensitive, when not in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
@@ -417,6 +435,10 @@ begin
         bus_down <= bus_down_init;
 
         wait for 0 ns;
+        
+        no_file_on_main_entry := (others => nul);
+        no_file_on_interrupt := (others => nul);
+        empty_text_field := (others => nul);
 
         init_const_text_field(stimulus_main_entry_label, main_proc_name);
         init_const_text_field("", empty_text_field);
@@ -447,6 +469,7 @@ begin
         print(integer'image(nol) & " labels");
 
         if DUMP_PARSE_RESULTS then
+            print("dump_var_pool_ordered after parse_labels");
             dump_var_pool_ordered(vars, machine_value_width);
         end if;
 
@@ -454,10 +477,16 @@ begin
         noc := vars.last_element_num - nol;
         print(integer'image(noc) & " constants");
 
+        if DUMP_PARSE_RESULTS then
+            print("dump_var_pool_ordered after parse_constants");
+            dump_var_pool_ordered(vars, machine_value_width);
+        end if;
+
         parse_variables(code_files, inst_defs, vars, procs, machine_value_width, DUMP_PARSE_FLOW);
         print(integer'image(vars.last_element_num - noc - nol) & " variables");
 
         if DUMP_PARSE_RESULTS then
+            print("dump_var_pool_ordered after parse_variables");
             dump_var_pool_ordered(vars, machine_value_width);
         end if;
 
@@ -468,9 +497,11 @@ begin
         print(integer'image(insts.last_element_num) & " instructions");
 
         if DUMP_PARSE_RESULTS then
+            print("dump_inst_sequence");
             dump_inst_sequence(insts);
         end if;
         if DUMP_PARSE_RESULTS then
+            print("dump_proc_pool_ordered");
             dump_proc_pool_ordered(procs);
         end if;
 
@@ -544,8 +575,8 @@ begin
                     print_inst_element(insts, ien);
                 end if;
 
-                executing_line <= file_line;
-                executing_file <= file_name;
+                executing_line <= ie.slc.file_line;
+                executing_file <= ie.slc.file_name;
                 wait for 100 ps;
 
                 if trc_on(TRACE_EXECUTED_LINES) = '1' then
@@ -576,7 +607,8 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_VAR then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
-                    index_and_reinit_var(vars, ven1, val1);
+                    get_val_global(2, val2);
+                    reinit_and_update_var(vars, ven1, val2);
 
                 -- array an_array 16
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY then

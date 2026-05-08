@@ -346,16 +346,7 @@ package body tb_base_pkg is
     ) is
         variable nen : integer;
         variable ne_ptr : file_def_element_ptr;
-        variable cf_ptr : file_def_element_ptr;
     begin
-        for i in 0 to code_files.last_element_num loop
-            cf_ptr := code_files.element_ptrs(i);
-            if fld_equal(cf_ptr.absolute_file_name, acfn) then
-                -- report "stimulus file " & acfn & " already included"
-                -- severity warning;
-                return;
-            end if;
-        end loop;
         nen := code_files.last_element_num + 1;
         ne_ptr := new file_def_element;
         ne_ptr.slc := slc;
@@ -609,58 +600,35 @@ package body tb_base_pkg is
         return sr;
     end function;
 
-    -- s  naaa.
-    -- sr naaa.nbbb.
-    function append_trailing_namespace(
-        s : text_field;
-        sa : text_field
-    ) return text_field is
+    -- s  naaa.pbbb
+    -- srn naaa
+    -- srp pbbb
+    procedure split_namespace_proc(
+        s : in text_field;
+        srn : out text_field;
+        srp : out text_field    
+    )  is
         variable i : integer;
-        variable j : integer;
-        variable sr : text_field;
+        variable p : integer;
+        variable in_namespace : boolean;
     begin
-        sr := s;
         i := 1;
-        while sr(i) /= nul loop
-            i := i + 1;
-        end loop;
-        sr(i) := '.';
-        j := 1;
-        while sa(j) /= nul loop
-            sr(i) := sa(j);
-            i := i + 1;
-            j := j + 1;
-        end loop;
-
-        return sr;
-    end function;
-
-    -- s  naaa.nbbb.
-    -- sr naaa.
-    function cut_trailing_namespace(
-        s : text_field
-    ) return text_field is
-        variable e : integer;
-        variable ld : integer;
-        variable pd : integer;
-        variable sr : text_field;
-    begin
-        e := 1;
-        ld := 0;
-        pd := 0;
-        while s(e) /= nul loop
-            e := e + 1;
-            if s(e) = '.' then
-                pd := ld;
-                ld := e;
+        p := 1;
+        in_namespace := true;
+        while s(i) /= nul loop
+            if in_namespace then
+                if s(i) /= '.' then
+                    srn(i) := s(i);
+                else
+                    in_namespace := false;
+                end if;
+            else
+                srp(p) := s(i);
+                p := p + 1;
             end if;
+            i := i + 1;
         end loop;
-        sr := (others => nul);
-        for i in 1 to pd loop
-            sr(i) := s(i);
-        end loop;
-        return sr;
-    end function;
+    end procedure;
 
     function prepend_namespace(
         s : text_field;
