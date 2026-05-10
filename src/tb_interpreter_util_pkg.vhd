@@ -116,12 +116,6 @@ package tb_interpreter_util_pkg is
         variable value : out unsigned
     );
 
-    procedure index_and_reinit_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable value : out unsigned
-    );
-
     procedure index_var_values_ptr(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
@@ -135,12 +129,6 @@ package tb_interpreter_util_pkg is
         variable var_txt_enclosing_quote : out character
     );
 
-    procedure index_and_reinit_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_txt : out stm_text_ptr;
-        variable var_txt_enclosing_quote : out character
-    );
 
     procedure index_var(
         variable vars : in var_pool_ordered;
@@ -148,11 +136,6 @@ package tb_interpreter_util_pkg is
         variable var_arr : out stm_array_ptr
     );
 
-    procedure index_and_reinit_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_arr : out stm_array_ptr
-    );
 
     procedure index_var(
         variable vars : in var_pool_ordered;
@@ -160,20 +143,9 @@ package tb_interpreter_util_pkg is
         variable var_label_proc_ref : out text_field_ptr
     );
 
-    procedure index_and_reinit_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_label_proc_ref : out text_field_ptr
-    );
 
     procedure index_var(
         variable vars : in var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_lines : out stm_lines_ptr
-    );
-
-    procedure index_and_reinit_var(
-        variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : out stm_lines_ptr
     );
@@ -184,7 +156,7 @@ package tb_interpreter_util_pkg is
         variable value : in unsigned
     );
 
-    procedure reinit_and_update_var(
+    procedure init_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_value : in unsigned
@@ -202,7 +174,7 @@ package tb_interpreter_util_pkg is
         variable var_txt : in stm_text_ptr
     );
 
-    procedure reinit_and_update_var(
+    procedure init_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_txt : in stm_text_ptr
@@ -214,7 +186,7 @@ package tb_interpreter_util_pkg is
         variable var_arr : in stm_array_ptr
     );
 
-    procedure reinit_and_update_var(
+    procedure init_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_arr : in stm_array_ptr
@@ -226,7 +198,7 @@ package tb_interpreter_util_pkg is
         variable var_label_proc_ref : in text_field_ptr
     );
 
-    procedure reinit_and_update_var(
+    procedure init_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : in text_field_ptr
@@ -244,7 +216,7 @@ package tb_interpreter_util_pkg is
         variable var_lines : in stm_lines_ptr
     );
 
-    procedure reinit_and_update_var(
+    procedure init_var(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : in stm_lines_ptr

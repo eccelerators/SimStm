@@ -162,7 +162,6 @@ package body tb_interpreter_pkg is
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_LABEL, machine_value_width, debug, ven1);
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
-                        vars.element_ptrs(ven1).values_org(0) := val2;
                     end if;
                 end if;
             end loop;
@@ -235,7 +234,6 @@ package body tb_interpreter_pkg is
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_CONST, machine_value_width, debug, ven1);
                         val2 := ie.inst_args.par_literal_values(2);
                         vars.element_ptrs(ven1).values(0) := val2;
-                        vars.element_ptrs(ven1).values_org(0) := val2;
                         -- dump_var_pool_ordered(vars, machine_value_width);
                     end if;
                 end if;

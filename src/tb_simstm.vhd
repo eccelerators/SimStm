@@ -608,16 +608,14 @@ begin
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
                     get_val_global(2, val2);
-                    reinit_and_update_var(vars, ven1, val2);
+                    init_var(vars, ven1, val2);
 
                 -- array an_array 16
                 elsif ie.inst(1 to ie.inst_len) = INSTR_ARRAY then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
-                    index_and_reinit_var(vars, ven1, var_stm_array);
-                    for i in 0 to var_stm_array'length - 1 loop
-                        var_stm_array(i) := to_unsigned(0, machine_value_width);
-                    end loop;
+                    get_val_global(2, val2);
+                    init_var(vars, ven1, to_integer(val2, 31));
 
                 -- label a_label a_proc_label
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL then

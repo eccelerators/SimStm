@@ -203,18 +203,12 @@ package tb_base_pkg is
         slc : src_locator;
         name : text_field;
         values : stm_values_ptr;
-        values_org : stm_values_ptr;
         label_proc_ref : text_field_ptr;
-        label_proc_ref_org : text_field_ptr;
         typ : stm_var_type;
         txt : stm_text_ptr;
         txt_enclosing_quote : character;
-        txt_org : stm_text_ptr;
-        txt_enclosing_quote_org : character;
         arr : stm_array_ptr;
-        arr_org : stm_array_ptr;
         lines : stm_lines_ptr;
-        lines_org : stm_lines_ptr;
     end record;
     type var_element_ptrs is array (0 to max_num_of_var_elements - 1) of var_element_ptr;
     type var_pool_ordered is record
