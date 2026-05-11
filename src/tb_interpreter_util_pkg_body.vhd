@@ -620,7 +620,7 @@ package body tb_interpreter_util_pkg is
         proc_element_num := pen;
     end procedure;
 
-    procedure index_var(
+    procedure index_var_value(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable value : out unsigned
@@ -631,8 +631,6 @@ package body tb_interpreter_util_pkg is
         severity failure;
         value := vars.element_ptrs(var_element_num).values(0);
     end procedure;
-
-
 
     procedure index_var_values_ptr(
         variable vars : in var_pool_ordered;
@@ -646,7 +644,7 @@ package body tb_interpreter_util_pkg is
         value_ptr := vars.element_ptrs(var_element_num).values;
     end procedure;
 
-    procedure index_var(
+    procedure index_var_txt(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_txt : out stm_text_ptr;
@@ -660,9 +658,7 @@ package body tb_interpreter_util_pkg is
         var_txt_enclosing_quote := vars.element_ptrs(var_element_num).txt_enclosing_quote;
     end procedure;
 
-
-
-    procedure index_var(
+    procedure index_var_arr(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_arr : out stm_array_ptr
@@ -674,9 +670,7 @@ package body tb_interpreter_util_pkg is
         var_arr := vars.element_ptrs(var_element_num).arr;
     end procedure;
 
-
-
-    procedure index_var(
+    procedure index_var_label(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : out text_field_ptr
@@ -688,9 +682,7 @@ package body tb_interpreter_util_pkg is
         var_label_proc_ref := vars.element_ptrs(var_element_num).label_proc_ref;
     end procedure;
 
-
-
-    procedure index_var(
+    procedure index_var_lines(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : out stm_lines_ptr
@@ -701,9 +693,23 @@ package body tb_interpreter_util_pkg is
         severity failure;
         var_lines := vars.element_ptrs(var_element_num).lines;
     end procedure;
+    
+    procedure init_var_value(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value : in unsigned;
+        constant machine_value_width : integer
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "init var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).values := null;
+        vars.element_ptrs(var_element_num).values := new stm_value(0 to 0)(machine_value_width - 1 downto 0);
+        vars.element_ptrs(var_element_num).values(0) := var_value;
+    end procedure;
 
-
-    procedure update_var(
+    procedure update_var_value(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable value : in unsigned
@@ -713,18 +719,6 @@ package body tb_interpreter_util_pkg is
         report "update var values , var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).values(0) := value;
-    end procedure;
-
-    procedure init_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_value : in unsigned
-    ) is
-    begin
-        assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var values, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
-        severity failure;
-        vars.element_ptrs(var_element_num).values(0) := var_value;
     end procedure;
 
     procedure update_var_values_ptr(
@@ -738,32 +732,50 @@ package body tb_interpreter_util_pkg is
         severity failure;
         vars.element_ptrs(var_element_num).values := var_value_ptr;
     end procedure;
-
-    procedure update_var(
+    
+    procedure init_var_txt(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr
+        variable var_txt : in stm_text_ptr;
+        variable var_txt_enclosing_quote : in character
+    ) is
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "init var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).txt := var_txt;
+        vars.element_ptrs(var_element_num).txt_enclosing_quote := var_txt_enclosing_quote;
+    end procedure;
+
+    procedure update_var_txt(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_txt : in stm_text_ptr;
+        variable var_txt_enclosing_quote : in character
     ) is
     begin
         assert var_element_num <= vars.last_element_num
         report "update var text, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).txt := var_txt;
+        vars.element_ptrs(var_element_num).txt_enclosing_quote := var_txt_enclosing_quote;
     end procedure;
 
-    procedure init_var(
+    procedure init_var_arr(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr
+        variable var_arr_len : in unsigned;
+        constant machine_value_width : integer
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var text, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
-        severity failure;        
-        vars.element_ptrs(var_element_num).txt := var_txt;
+        report "init var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        vars.element_ptrs(var_element_num).arr := null;
+        vars.element_ptrs(var_element_num).arr := new stm_array(0 to to_integer(var_arr_len(30 downto 0) - 1))(machine_value_width - 1 downto 0);
     end procedure;
 
-    procedure update_var(
+    procedure update_var_arr(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_arr : in stm_array_ptr
@@ -775,23 +787,39 @@ package body tb_interpreter_util_pkg is
         vars.element_ptrs(var_element_num).arr := var_arr;
     end procedure;
 
-    procedure init_var(
+    procedure init_var_label(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_arr_len : in integer
+        variable par_text_field : in text_field
     ) is
+        variable label_proc_ref : text_field_ptr;
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and update var array length, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        report "init var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
-        vars.element_ptrs(var_element_num).arr := null;
-        vars.element_ptrs(var_element_num).arr := new stm_array(0 to var_arr_len - 1)(machine_value_width - 1 downto 0);
-        for i in 0 to var_arr_len - 1 loop
-            vars.element_ptrs(var_element_num).arr := to_unsigned(0, machine_value_width);
-        end loop;
+        label_proc_ref := new text_field;
+        text_field_to_text_field_ptr(par_text_field, label_proc_ref);
+        vars.element_ptrs(var_element_num).label_proc_ref := label_proc_ref;
+    end procedure;
+    
+    procedure init_var_label_ptr(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_label_proc_ref : in text_field_ptr
+    ) is
+        variable label_proc_ref : text_field_ptr;
+        variable tf : text_field;
+    begin
+        assert var_element_num <= vars.last_element_num
+        report "update var label, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        severity failure;
+        text_field_ptr_to_text_field(var_label_proc_ref, tf);
+        label_proc_ref := new text_field;
+        text_field_to_text_field_ptr(tf, label_proc_ref);
+        vars.element_ptrs(var_element_num).label_proc_ref := label_proc_ref;
     end procedure;
 
-    procedure update_var(
+    procedure update_var_label(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : in text_field_ptr
@@ -803,31 +831,19 @@ package body tb_interpreter_util_pkg is
         vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
     end procedure;
 
-    procedure init_var(
+    procedure init_var_lines(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_label_proc_ref : in text_field_ptr
+        variable var_lines : in stm_lines_ptr
     ) is
     begin
         assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
+        report "init var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
-        vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
+        vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;
 
-    procedure init_and_update_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_label_proc_ref : in text_field_ptr
-    ) is
-    begin
-        assert var_element_num <= vars.last_element_num
-        report "init and reinit var label, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
-        severity failure;
-        vars.element_ptrs(var_element_num).label_proc_ref := var_label_proc_ref;
-    end procedure;
-
-    procedure update_var(
+    procedure update_var_lines(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : in stm_lines_ptr
@@ -835,18 +851,6 @@ package body tb_interpreter_util_pkg is
     begin
         assert var_element_num <= vars.last_element_num
         report "update var lines, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
-        severity failure;
-        vars.element_ptrs(var_element_num).lines := var_lines;
-    end procedure;
-
-    procedure init_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_lines : in stm_lines_ptr
-    ) is
-    begin
-        assert var_element_num <= vars.last_element_num
-        report "reinit and reinit var lines, var element number " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
         vars.element_ptrs(var_element_num).lines := var_lines;
     end procedure;

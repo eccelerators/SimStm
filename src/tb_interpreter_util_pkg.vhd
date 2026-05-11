@@ -110,7 +110,7 @@ package tb_interpreter_util_pkg is
         variable proc_element_num : out integer
     );
 
-    procedure index_var(
+    procedure index_var_value(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable value : out unsigned
@@ -122,44 +122,42 @@ package tb_interpreter_util_pkg is
         variable value_ptr : out stm_values_ptr
     );
 
-    procedure index_var(
+    procedure index_var_txt(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_txt : out stm_text_ptr;
         variable var_txt_enclosing_quote : out character
     );
 
-
-    procedure index_var(
+    procedure index_var_arr(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_arr : out stm_array_ptr
     );
 
-
-    procedure index_var(
+    procedure index_var_label(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : out text_field_ptr
     );
 
-
-    procedure index_var(
+    procedure index_var_lines(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : out stm_lines_ptr
     );
-
-    procedure update_var(
+    
+    procedure init_var_value(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_value : in unsigned;
+        constant machine_value_width : integer
+    );    
+    
+    procedure update_var_value(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable value : in unsigned
-    );
-
-    procedure init_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_value : in unsigned
     );
 
     procedure update_var_values_ptr(
@@ -168,55 +166,58 @@ package tb_interpreter_util_pkg is
         variable var_value_ptr : in stm_values_ptr
     );
 
-    procedure update_var(
+    procedure init_var_txt(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr
-    );
+        variable var_txt : in stm_text_ptr;
+        variable var_txt_enclosing_quote : in character
+    ) ;
 
-    procedure init_var(
+    procedure update_var_txt(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr
+        variable var_txt : in stm_text_ptr;
+        variable var_txt_enclosing_quote : in character
     );
 
-    procedure update_var(
+    procedure init_var_arr(
+        variable vars : inout var_pool_ordered;
+        variable var_element_num : in integer;
+        variable var_arr_len : in unsigned;
+        constant machine_value_width : integer
+    );
+
+    procedure update_var_arr(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_arr : in stm_array_ptr
     );
 
-    procedure init_var(
+    procedure init_var_label(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_arr : in stm_array_ptr
+        variable par_text_field : in text_field
     );
 
-    procedure update_var(
-        variable vars : inout var_pool_ordered;
-        variable var_element_num : in integer;
-        variable var_label_proc_ref : in text_field_ptr
-    );
-
-    procedure init_var(
+    procedure update_var_label(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : in text_field_ptr
     );
 
-    procedure init_and_update_var(
+    procedure init_var_label_ptr(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_label_proc_ref : in text_field_ptr
     );
-
-    procedure update_var(
+    
+    procedure init_var_lines(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : in stm_lines_ptr
     );
 
-    procedure init_var(
+    procedure update_var_lines(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
         variable var_lines : in stm_lines_ptr

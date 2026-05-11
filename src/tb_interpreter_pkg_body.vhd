@@ -160,8 +160,6 @@ package body tb_interpreter_pkg is
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
                         vn := append_scope(vn, iic.proc_name);
                         insert_var_element(ie.slc, vars, vn, ie.inst_args, T_LABEL, machine_value_width, debug, ven1);
-                        val2 := ie.inst_args.par_literal_values(2);
-                        vars.element_ptrs(ven1).values(0) := val2;
                     end if;
                 end if;
             end loop;
