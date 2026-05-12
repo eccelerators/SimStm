@@ -8,11 +8,14 @@ namespace CounterCaseIndexed
     proc testMain ()
         log message stm.INFO "Main test started"
 
-        equ stm.TestCaseIndex 1
-        call testCountUp ()
-        
-        equ stm.TestCaseIndex 3
-        call testCountUp ()
+--        equ stm.TestCaseIndex 1
+--        call testCountUp ()
+--        
+--        equ stm.TestCaseIndex 3
+--        call testCountUp ()
+
+        trace stm.TRACE_STACK      
+        call emuTestSuite ()
         
         log message stm.INFO "Main test finished"
         wait 1000
@@ -21,6 +24,16 @@ namespace CounterCaseIndexed
         file write simulation_success success_lines
         wait 1000
         finish
+    end proc
+    
+    proc emuTestSuite ()
+        loop 5
+            equ stm.TestCaseIndex 0
+            call stm.testCaseWithCaseIndex (
+                label set TestToCall testCountUp
+            )
+            add stm.TestCaseIndex 1
+        end loop    
     end proc
 
 end namespace

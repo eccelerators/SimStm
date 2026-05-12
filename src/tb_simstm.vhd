@@ -212,7 +212,7 @@ begin
         -- Lines
         variable var_stm_lines : stm_lines_ptr;
 
-        variable main_proc_name : text_field;
+        variable main_called_proc_name : text_field;
         variable main_entered : integer := 0;
 
         variable interrupt_requests : unsigned(number_of_interrupts - 1 downto 0) := (others => '0');
@@ -220,8 +220,8 @@ begin
 
         variable interrupt_number : integer := 0;
         variable branch_to_interrupt : boolean := false;
-        variable branch_to_interrupt_proc_name : text_field;
-        variable branch_to_interrupt_proc_name_std_txt_io_line : line;
+        variable branch_to_interrupt_called_proc_name : text_field;
+        variable branch_to_interrupt_called_proc_name_std_txt_io_line : line;
 
         variable no_scope : text_field;
         variable no_proc : text_field;
@@ -229,7 +229,8 @@ begin
         variable no_file_on_main_entry : text_line;
         variable no_file_on_interrupt : text_line;
         variable empty_text_field : text_field;
-        variable proc_name : text_field;
+        variable called_proc_name : text_field;
+        variable referenced_proc_name : text_field;
 
         variable ven1 : integer;
         variable ven2 : integer;
@@ -253,7 +254,7 @@ begin
         begin
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);        
             assert ven > -1
-            report "var in_called scope global not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_called scope global not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;  
         end procedure;
 
@@ -272,17 +273,17 @@ begin
 
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
-            variable called_ien : integer;
+            variable called_pen : integer;
             variable called_proc_name : text_field;
-        begin
-            called_ien := rcs(sp).ien_of_called_proc;         
-            called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
+        begin            
+            called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_name := procs.element_ptrs(called_pen).name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var in_called scope prefer local not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_called scope prefer local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;  
         end procedure;
 
@@ -301,28 +302,28 @@ begin
 
         procedure get_ven_in_called_scope_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
-            variable called_ien : integer;
+            variable called_pen : integer;
             variable called_proc_name : text_field;
         begin
-            called_ien := rcs(sp).ien_of_called_proc;
-            called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
+            called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_name := procs.element_ptrs(called_pen).name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             assert ven > -1
-            report "var in called scope local not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;
         end procedure;
 
         procedure get_ven_in_called_scope_call_params_target_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
-            variable called_ien : integer;
+            variable called_pen : integer;
             variable called_proc_name : text_field;
         begin
-            called_ien := rcs(sp).ien_of_called_proc;
-            called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
+            called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_name := procs.element_ptrs(called_pen).name;
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
                 assert ven > -1
-                report "var in called scope call params target sensitive, when in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope call params target sensitive, when in params, not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                 severity failure;
                 return;
             end if;
@@ -331,40 +332,59 @@ begin
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var in called scope call params target sensitive, when not in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope call params target sensitive, when not in params, not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;  
         end procedure;
 
         procedure get_ven_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
-            variable caller_ien : integer;
+            variable caller_pen : integer;
             variable caller_proc_name : text_field;
-            variable called_ien : integer;
+            variable called_pen : integer;
             variable called_proc_name : text_field;
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                caller_ien := rcs(sp).ien_of_call;
-                if caller_ien > -1 then
-                    caller_proc_name := insts.element_ptrs(caller_ien).inst_args.par_text_fields(1);
+                caller_pen := rcs(sp - 1).pen_of_called_proc;
+                if caller_pen > -1 then      
+                    caller_proc_name := procs.element_ptrs(caller_pen).name;
                     access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
                     if ven < 0 then
                         access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
                     end if;            
                     assert ven > -1
-                    report "var in called scope call params source sensitive, when in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "var " & crop(ie.slc.file_name) & " in called scope call params source sensitive, when in params, not found file name file line " & integer'image(ie.slc.file_line)
                     severity failure; 
                     return;
                 end if;
             end if;
-            called_ien := rcs(sp).ien_of_called_proc;
-            called_proc_name := insts.element_ptrs(called_ien).inst_args.par_text_fields(1);
+            called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_name := procs.element_ptrs(called_pen).name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "vvar in called scope call params source sensitive, when not in params, not found " & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var " & crop(ie.slc.file_name) & " in called scope call params source sensitive, when not in params, not found file name file line " & integer'image(ie.slc.file_line)
             severity failure; 
+        end procedure;
+        
+        procedure get_ven_in_caller_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
+            variable pn : integer := par_num;
+            variable caller_pen : integer;
+            variable caller_proc_name : text_field;
+        begin
+            caller_pen := rcs(sp - 1).pen_of_called_proc;
+            if caller_pen > -1 then      
+                caller_proc_name := procs.element_ptrs(caller_pen).name;
+                access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
+                if ven < 0 then
+                    access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
+                end if;            
+                assert ven > -1
+            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_caller scope prefer local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure; 
+                return;
+            end if; 
         end procedure;
 
         procedure get_val_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
@@ -382,7 +402,7 @@ begin
 
         procedure print_instr(constant pre : in string; constant post : in string) is
         begin
-            print(pre & ie.inst(1 to ie.inst_len) & " " & crop(ie.inst_args.par_text_fields(1)) & " " & crop(ie.inst_args.par_text_fields(2)) & " " & crop(ie.inst_args.par_text_fields(3)) & " " & crop(ie.inst_args.par_text_fields(4)) & " " & crop(ie.inst_args.par_text_fields(5)) & " " & crop(ie.inst_args.par_text_fields(6)) & " #" & integer'image(ien) & " sp " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line) & post);
+            print(pre & ie.inst(1 to ie.inst_len) & " " & crop(ie.inst_args.par_text_fields(1)) & " " & crop(ie.inst_args.par_text_fields(2)) & " " & crop(ie.inst_args.par_text_fields(3)) & " " & crop(ie.inst_args.par_text_fields(4)) & " " & crop(ie.inst_args.par_text_fields(5)) & " " & crop(ie.inst_args.par_text_fields(6)) & " #" & integer'image(ien) & " sp " & integer'image(sp) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line) & post);
         end procedure;
 
         procedure print_instr(constant pre : in string) is
@@ -410,7 +430,7 @@ begin
                 end case;
             else
                 case comparator_text_field(1 to 2) is
-                    when "/=" => if (val1 /= val3) then
+                    when "!=" => if (val1 /= val3) then
                             if_state(if_level) := true;
                         end if;
                     when ">=" => if (val1 >= val3) then
@@ -440,7 +460,7 @@ begin
         no_file_on_interrupt := (others => nul);
         empty_text_field := (others => nul);
 
-        init_const_text_field(stimulus_main_entry_label, main_proc_name);
+        init_const_text_field(stimulus_main_entry_label, main_called_proc_name);
         init_const_text_field("", empty_text_field);
         init_const_text_field(".", no_scope);
         init_const_text_field("no_proc", no_proc);
@@ -523,26 +543,38 @@ begin
 
             -- get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
-                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_proc_name_std_txt_io_line);
+                resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_called_proc_name_std_txt_io_line);
             end if;
 
             if main_entered = 0 then
+                if trc_on(TRACE_STACK) = '1' then
+                    print_instr("entering main call pushing runtime_context ");
+                    print_runtime_context(rcs(sp), "  ");
+                end if;
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
                 -- main tests shall not reach their end proc but must be terminated by a reasonable finish instruction inside itself
                 slc.file_name := no_file_on_main_entry;
                 slc.file_line := -1;
-                access_proc_fqn(slc, procs, main_proc_name, pen);
+                access_proc_fqn(slc, procs, main_called_proc_name, pen);
+                assert pen > -1
+                report "main procedure not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure;
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
                 print_instr("exec main entry ");
                 main_entered := 1;
+                rcs(sp).pen_of_called_proc := pen;
                 rcs(sp).ien_of_called_proc := ien;
 
             elsif branch_to_interrupt then
                 assert sp < max_num_of_stack_elements
                 report "branch to interrupt, stack over run"
                 severity failure;
+                if trc_on(TRACE_STACK) = '1' then
+                    print_instr("entering interrupt pushing runtime_context ");
+                    print_runtime_context(rcs(sp), "  ");    
+                end if;
                 sp := sp + 1;
                 init_runtime_context(rcs(sp));
                 interrupt_number_entered_stack_pointer := interrupt_number_entered_stack_pointer + 1;
@@ -550,15 +582,19 @@ begin
                 interrupt_entry_call_stack_ptr_stack(interrupt_number_entered_stack_pointer) := sp;
                 v_set_interrupt_in_service := '1';
                 set_interrupt_in_service(interrupt_in_service, interrupt_number, v_set_interrupt_in_service, signals_out);
-                line_to_text_field(branch_to_interrupt_proc_name_std_txt_io_line, branch_to_interrupt_proc_name);
+                line_to_text_field(branch_to_interrupt_called_proc_name_std_txt_io_line, branch_to_interrupt_called_proc_name);
                 slc.file_name := no_file_on_interrupt;
                 slc.file_line := -1;
-                access_proc_fqn(slc, procs, branch_to_interrupt_proc_name, pen);
+                access_proc_fqn(slc, procs, branch_to_interrupt_called_proc_name, pen);
+                assert pen > -1
+                report "interrupt procedure not found " & branch_to_interrupt_called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure;
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_INTERRUPTS) then
                     print_instr("exec interrupt entry ");
                 end if;
+                rcs(sp).pen_of_called_proc := pen;
                 rcs(sp).ien_of_called_proc := ien;
                 wait for 0 ns;
 
@@ -632,23 +668,6 @@ begin
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
-                        file_close(user_file_0);
-                        user_file_in_use_0 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
-                        file_close(user_file_1);
-                        user_file_in_use_1 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
-                        file_close(user_file_2);
-                        user_file_in_use_2 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
-                        file_close(user_file_3);
-                        user_file_in_use_3 := false;
-                    else
-                        assert false
-                        report "trying to end file not started or already ended for read:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
-                        severity failure;
-                    end if;
 
                 -- signal a_signal
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL then
@@ -671,7 +690,7 @@ begin
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "lines delete all not successful " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
 
@@ -810,7 +829,7 @@ begin
                     index_var_arr(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array set position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "array set position is out of array size " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     get_val_in_called_scope_prefer_local(3, val3);
                     var_stm_array(to_integer(val2(30 downto 0))) := val3;
@@ -821,7 +840,7 @@ begin
                     index_var_arr(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array get position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "array get position is out of array size " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     val := var_stm_array(to_integer(val2(30 downto 0)));
                     get_ven_in_called_scope_prefer_local(3, ven3);
@@ -855,7 +874,7 @@ begin
                     index_var_arr(vars, ven1, var_stm_array);
                     get_val_in_called_scope_prefer_local(2, val2);
                     assert var_stm_array'length > val2
-                    report "array verify position is out of array size:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "array verify position is out of array size " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     verify_assertions_count := verify_assertions_count + 1;
                     val := var_stm_array(to_integer(val2(30 downto 0)));
@@ -868,10 +887,10 @@ begin
                         print(" expected = 0x" & to_hstring(val3));
                         print(" mask     = 0x" & to_hstring(val4));
                         assert resume(0) /= '0'
-                        report "array verify has difference:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "array verify has difference " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                         assert false
-                        report "array verify has difference:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "array verify has difference " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity error;
                         verify_failure_count := verify_failure_count + 1;
                     end if;
@@ -900,8 +919,13 @@ begin
                 -- label set label1_target label2
                 -- label set label1_target label2 )
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET or ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET_PAR_CLOSE then                  
-                    get_ven_in_called_scope_local(1, ven1);                   
-                    init_var_label(vars, ven1, ie.inst_args.par_text_fields(2));
+                    get_ven_in_called_scope_local(1, ven1);                                    
+                    if contains_dot(ie.inst_args.par_text_fields(2)) then
+                        referenced_proc_name := ie.inst_args.par_text_fields(2);
+                    else
+                        referenced_proc_name := prepend_namespace(ie.inst_args.par_text_fields(2), ie.inst_namespace);
+                    end if;
+                    init_var_label(vars, ven1, referenced_proc_name);
                     if ie.inst(1 to ie.inst_len) = INSTR_LABEL_SET_PAR_CLOSE then
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
@@ -1057,7 +1081,7 @@ begin
                             end loop;
                         else
                             assert false
-                            report "only 4 files are allowed for file read concurrently:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "only 4 files are allowed for file read concurrently " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                         end if;
                     end if;
@@ -1083,7 +1107,7 @@ begin
                         user_file_in_use_3 := false;
                     else
                         assert false
-                        report "trying to end file not started or already ended for read:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "trying to end file not started or already ended for read " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
 
@@ -1160,16 +1184,14 @@ begin
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_insert(slc, var_stm_lines, val_int, var_stm_array, machine_value_width);
 
-                -- lines insert a_lines position "abc"
-                -- lines insert a_lines 7 "abc"
-                -- lines insert a_lines position "abc{}" a_varB
-                -- lines insert a_lines 7 "abc{}" a_varB
+                -- lines insert message a_lines position "abc"
+                -- lines insert message a_lines 7 "abc"
+                -- lines insert message a_lines position "abc{}" a_varB
+                -- lines insert message a_lines 7 "abc{}" a_varB
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_INSERT_MESSAGE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
-                    get_ven_in_called_scope_prefer_local(3, ven3);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    index_var_arr(vars, ven3, var_stm_array);
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
@@ -1206,13 +1228,12 @@ begin
                 -- lines delete all a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_DELETE_ALL then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         val_int := 0;
                         stm_lines_delete(slc, var_stm_lines, val_int);
                         assert false
-                        report "lines delete all not successful:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "lines delete all not successful " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     end loop;
 
@@ -1251,7 +1272,7 @@ begin
                     decide;
 
                     assert comparator_valid
-                    report "if instruction got an unknown compare operation as parameter 2" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "if instruction got an unknown compare operation as parameter 2" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
 
                     if trc_on(TRACE_IF_TREES) = '1' then
@@ -1267,7 +1288,7 @@ begin
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                             if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
@@ -1280,7 +1301,7 @@ begin
                         end loop;
                         if trc_on(TRACE_IF_TREES) = '1' then
                             print_instr("exec ");
-                            print(ie.inst(1 to ie.inst_len) & " num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level)) & ie.slc.file_name & " file line: " & integer'image(ie.slc.file_line));
+                            print(ie.inst(1 to ie.inst_len) & " num_of_if_in_false_if_leave " & integer'image(num_of_if_in_false_if_leave(if_level)) & ie.slc.file_name & " file line " & integer'image(ie.slc.file_line));
                         end if;
                         ien := bien - 1; -- re-align so it will be operated on.
                     end if;
@@ -1301,7 +1322,7 @@ begin
                         bie := insts.element_ptrs(bien);
                         while bie.inst(1 to bie.inst_len) /= INSTR_IF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                             bien := bien + 1;
                             bie := insts.element_ptrs(bien);
@@ -1322,7 +1343,7 @@ begin
                             num_of_if_in_false_if_leave(if_level) := 0;
                             while num_of_if_in_false_if_leave(if_level) /= 0 or (bie.inst(1 to bie.inst_len) /= INSTR_ELSE and bie.inst(1 to bie.inst_len) /= INSTR_ELSIF and bie.inst(1 to bie.inst_len) /= INSTR_END_IF) loop
                                 assert bien <= insts.last_element_num
-                                report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "if instruction unable to find terminating else, elsif or end_if statement." & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure;
                                 if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                     num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
@@ -1357,7 +1378,7 @@ begin
                         num_of_if_in_false_if_leave(if_level) := 0;
                         while num_of_if_in_false_if_leave(if_level) /= 0 or bie.inst(1 to bie.inst_len) /= INSTR_END_IF loop
                             assert bien <= insts.last_element_num
-                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "if instruction unable to find terminating else, elsif or end_if statement." & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                             if bie.inst(1 to bie.inst_len) = INSTR_IF then
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) + 1;
@@ -1386,7 +1407,7 @@ begin
                     act_loop_num := rcs(sp).loop_num;
                     if trc_on(TRACE_CALLS) = '1' then
                         print_instr("exec ");
-                        print(" sp:" & integer'image(sp));
+                        print(" sp " & integer'image(sp));
                         print(" stack_loop_if_enter_level(" & integer'image(sp) & ")=" & integer'image(if_level));
                         print(" act_loop_num: stack_loop_num(" & integer'image(sp) & ")=" & integer'image(act_loop_num));
                     end if;
@@ -1411,7 +1432,7 @@ begin
                     act_term_loop_count := rcs(sp).term_loop_count(act_loop_num);
                     if trc_on(TRACE_CALLS) = '1' then
                         print_instr("exec ");
-                        print(" sp:" & integer'image(sp));
+                        print(" sp " & integer'image(sp));
                         print(" act_loop_num: stack_loop_num(" & integer'image(sp) & ")=" & integer'image(act_loop_num));
                         print(" set incremented stack_curr_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_curr_loop_count));
                         print(" stack_term_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_term_loop_count));
@@ -1514,7 +1535,7 @@ begin
                         finish;
                     end if;
                     assert sp >= 0
-                    report "stack underrun:" & " stack pointer " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "stack underrun " & " stack pointer " & integer'image(sp) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
 
                     if interrupt_in_service > 0 then
@@ -1528,8 +1549,8 @@ begin
                     ien := rcs(sp).ien_of_call;
                     sp := sp - 1;
                     if trc_on(TRACE_STACK) = '1' then
-                        print_instr("entering previous runtime_context ");
-                        print_runtime_context(rcs(sp));
+                        print_instr("leaving call popping runtime_context ");
+                        print_runtime_context(rcs(sp), "  ");
                     end if;
                     wait for 0 ns;
 
@@ -1539,11 +1560,11 @@ begin
                 -- call label some_label (
                 elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR or ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR or ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
                     assert sp < max_num_of_stack_elements
-                    report "stack overrun:" & " stack pointer " & integer'image(sp) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "stack overrun " & " stack pointer " & integer'image(sp) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     if trc_on(TRACE_STACK) = '1' then
-                        print_instr("leaving runtime_context ");
-                        print_runtime_context(rcs(sp));
+                        print_instr("entering call pushing runtime_context ");
+                        print_runtime_context(rcs(sp), "  ");    
                     end if;
                     sp := sp + 1;
                     init_runtime_context(rcs(sp));
@@ -1552,49 +1573,81 @@ begin
                     end if;
                     rcs(sp).ien_of_call := ien;
                     if ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR then
-                        proc_name := ie.inst_args.par_text_fields(1);
-                        if contains_dot(proc_name) then
-                            access_proc_fqn(slc, procs, proc_name, pen);
+                        called_proc_name := ie.inst_args.par_text_fields(1);
+                        if contains_dot(called_proc_name) then
+                            access_proc_fqn(slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
+                        assert pen > -1
+                        report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure;                        
+                        rcs(sp).pen_of_called_proc := pen;
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_BODY;
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("entered CALL_NOPAR with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");  
+                        end if;
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN then
-                        proc_name := ie.inst_args.par_text_fields(1);
-                        if contains_dot(proc_name) then
-                            access_proc_fqn(slc, procs, proc_name, pen);
+                        called_proc_name := ie.inst_args.par_text_fields(1);
+                        if contains_dot(called_proc_name) then
+                            access_proc_fqn(slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
+                        assert pen > -1
+                        report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure; 
+                        rcs(sp).pen_of_called_proc := pen;
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_PARAMS;
-                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR then
-                        get_ven_in_called_scope_prefer_local(1, ven1);
-                        index_var_label(vars, ven1, var_stm_label);
-                        text_field_ptr_to_text_field(var_stm_label, proc_name);
-                        if contains_dot(proc_name) then
-                            access_proc_fqn(slc, procs, proc_name, pen);
-                        else
-                            access_proc_prepend_namespace(slc, procs, proc_name, ie.inst_namespace, pen);
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("entered CALL_PAR_OPEN with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");    
                         end if;
+                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_NOPAR then
+                        get_ven_in_caller_scope_prefer_local(1, ven1);
+                        index_var_label(vars, ven1, var_stm_label);
+                        text_field_ptr_to_text_field(var_stm_label, called_proc_name);
+                        if contains_dot(called_proc_name) then
+                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                        else
+                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                        end if;
+                        assert pen > -1
+                        report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure; 
+                        rcs(sp).pen_of_called_proc := pen;
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_BODY;
-                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
-                        get_ven_in_called_scope_prefer_local(1, ven1);
-                        index_var_label(vars, ven1, var_stm_label);
-                        text_field_ptr_to_text_field(var_stm_label, proc_name);
-                        if contains_dot(proc_name) then
-                            access_proc_fqn(slc, procs, proc_name, pen);
-                        else
-                            access_proc_prepend_namespace(slc, procs, proc_name, ie.inst_namespace, pen);
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("entered CALL_LABEL_NOPAR with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");    
                         end if;
+                    elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_LABEL_PAR_OPEN then
+                        get_ven_in_caller_scope_prefer_local(1, ven1);
+                        index_var_label(vars, ven1, var_stm_label);
+                        text_field_ptr_to_text_field(var_stm_label, called_proc_name);
+                        if contains_dot(called_proc_name) then
+                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                        else
+                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                        end if;
+                        assert pen > -1
+                        report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure; 
+                        rcs(sp).pen_of_called_proc := pen;
                         ien := procs.element_ptrs(pen).pointer_to_ien;
                         rcs(sp).ien_of_called_proc := ien;
                         rcs(sp).call_process_state := IN_PROC_PARAMS;
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("entered CALL_LABEL_PAR_OPEN with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");   
+                        end if;
                     end if;
 
                 -- )
@@ -1603,10 +1656,20 @@ begin
                         rcs(sp).call_process_state := IN_CALL_PARAMS;
                         rcs(sp).ien_of_proc_params_end := ien;
                         ien := rcs(sp).ien_of_call;
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("leaving IN_PROC_PARAMS ");
+                            print_instr("with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");
+                        end if;
                     elsif rcs(sp).call_process_state = IN_CALL_PARAMS then
                         rcs(sp).call_process_state := IN_PROC_BODY;
                         rcs(sp).ien_of_call := ien;
                         ien := rcs(sp).ien_of_proc_params_end;
+                        if trc_on(TRACE_STACK) = '1' then
+                            print_instr("leaving IN_CALL_PARAMS ");
+                            print_instr("with runtime_context ");
+                            print_runtime_context(rcs(sp), "  ");
+                        end if;
                     end if;
 
                 -- log message INFO "some message"
@@ -1625,7 +1688,7 @@ begin
                     if val1 <= loglevel then
                         stm_lines_print(var_stm_lines);
                         assert valid_bus /= 0
-                        report "lines object access failed:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "lines object access failed " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
 
@@ -1651,7 +1714,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SEED then
                     get_val_in_called_scope_prefer_local(1, val1);
                     assert val1 > 0
-                    report "seed expects a value > 0" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "seed expects a value > 0" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     seed1 := to_integer(val1(30 downto 0));
                     if seed1 > 1 then
@@ -1696,7 +1759,7 @@ begin
 
                     else
                         assert false
-                        report "16 markers are provided only:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "16 markers are provided only " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     end if;
                     marker <= temp_marker;
@@ -1716,11 +1779,11 @@ begin
                         print(" mask     = 0x" & to_hstring(val3));
                         if resume(0) = '0' then
                             assert false
-                            report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                         else
                             assert false
-                            report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "verify error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity error;
                             verify_failure_count := verify_failure_count + 1;
                         end if;
@@ -1734,7 +1797,7 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_write(signals_out, val_int, val2, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to write invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "trying to write invalid signal" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     wait for 0 ns;
 
@@ -1745,7 +1808,7 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "trying to read invalid signal" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     update_var_value(vars, ven2, val);
                     wait for 0 ns;
@@ -1760,7 +1823,7 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     signal_read(signals_in, val_int, val, signal_valid);
                     assert signal_valid /= 0
-                    report "trying to read invalid signal" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "trying to read invalid signal" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
 
                     verify_assertions_count := verify_assertions_count + 1;
@@ -1772,11 +1835,11 @@ begin
                         print(" mask     = 0x" & to_hstring(val3));
                         if resume(0) = '0' then
                             assert false
-                            report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity failure;
                         else
                             assert false
-                            report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                            report "verify error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                             severity error;
                             verify_failure_count := verify_failure_count + 1;
                         end if;
@@ -1818,19 +1881,19 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_write(bus_down, bus_up, val3, val4, val2_int, val_int, bus_valid, successfull, bus_timeouts(to_integer(val1(30 downto 0))));
                     assert bus_valid /= 0
-                    report "trying to write to invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "trying to write to invalid bus" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
                         assert successfull
-                        report "bus write timeout failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "bus write timeout failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
                     else
                         if not successfull then
                             bus_timeout_failure_count := bus_timeout_failure_count + 1;
                         end if;
                         assert successfull
-                        report "bus write timeout error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                        report "bus write timeout error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity error;
                     end if;
                     wait for 0 ns;
@@ -1848,7 +1911,7 @@ begin
                     val_int := to_integer(val1(30 downto 0));
                     bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
                     assert bus_valid /= 0
-                    report "trying to read from invalid bus" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "trying to read from invalid bus" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                     bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
                     if resume(1) = '0' then
@@ -1877,11 +1940,11 @@ begin
                             print(" mask     = 0x" & to_hstring(val6));
                             if resume(0) = '0' then
                                 assert false
-                                report "verify failure assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure;
                             else
                                 assert false
-                                report "verify error assertion" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "verify error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity error;
                                 verify_failure_count := verify_failure_count + 1;
                             end if;
@@ -1931,7 +1994,7 @@ begin
                 -- undefined instructions
                 else
                     assert false
-                    report "seems the command  " & ", " & ie.inst(1 to ie.inst_len) & " was defined but" & "was not found in the elsif chain, please check spelling" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "seems the command  " & ", " & ie.inst(1 to ie.inst_len) & " was defined but" & "was not found in the elsif chain, please check spelling" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                 end if;
 

@@ -185,6 +185,7 @@ package tb_base_pkg is
 
     type stm_runtime_context is record
         call_process_state : stm_call_process_state;
+        pen_of_called_proc : integer;
         ien_of_call : integer;
         ien_of_proc_params_end : integer;
         ien_of_called_proc : integer;

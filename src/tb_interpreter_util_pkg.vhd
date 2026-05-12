@@ -266,7 +266,8 @@ package tb_interpreter_util_pkg is
     );
 
     procedure print_runtime_context(
-        variable rc : in stm_runtime_context
+        variable rc : in stm_runtime_context;
+        constant prefix_lines : string
     );
 
     procedure search_var_element_number(

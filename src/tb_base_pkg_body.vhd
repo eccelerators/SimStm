@@ -276,7 +276,7 @@ package body tb_base_pkg is
         report "normalize_code_file_path: relative file pathes mustn't start with /"
         severity failure;
         if debug then 
-            print("root_to_to_current_dir_path:" & root_to_to_current_dir_path);
+            print("root_to_to_current_dir_path " & root_to_to_current_dir_path);
         end if; 
         l := text_line_len(root_to_to_current_dir_path);
         n := 0;
@@ -295,7 +295,7 @@ package body tb_base_pkg is
             end if;     
         end loop; 
         if debug then 
-            print("relative_file_path:" & relative_file_path);
+            print("relative_file_path " & relative_file_path);
         end if;              
         l := text_line_len(relative_file_path);
         j := 1;
@@ -335,7 +335,7 @@ package body tb_base_pkg is
         end loop;
         normalized_file_path := resolved_file_path;
         if debug then 
-            print("normalized_file_path:" & normalized_file_path);
+            print("normalized_file_path " & normalized_file_path);
         end if;   
     end procedure;
 
@@ -964,7 +964,7 @@ package body tb_base_pkg is
     begin
         fld_order(s1, s2, is_equ, is_less);
         assert not is_equ
-        report "attemping to add a duplicate var or proc definition: " & " object name: " & s1 & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line)
+        report "attemping to add a duplicate var or proc definition " & " object name " & s1 & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line)
         severity failure;
         return is_less;
     end function;
@@ -1361,7 +1361,7 @@ package body tb_base_pkg is
                         value := value + 1;
                     end loop;
                     -- assert(false)
-                    -- report  "hex2integer: " & temp_str
+                    -- report  "hex2integer " & temp_str
                     -- severity warning;
                     value := hex2integer(slc, temp_str);
                 when 'b' =>
@@ -1400,7 +1400,7 @@ package body tb_base_pkg is
                         ci := ci + 1;
                     end loop;
                     -- assert(false)
-                    -- report  "hex2integer: " & temp_str
+                    -- report  "hex2integer " & temp_str
                     -- severity warning;
                     stmvalue := hex2stm_value(slc, temp_str, machine_value_width);
                 when 'b' =>
@@ -1433,7 +1433,7 @@ package body tb_base_pkg is
         file_path_string := stm_text_crop(user_file_path_string);
         file_open(v_stat, file_handle, file_path_string, open_kind);
         assert v_stat = open_ok
-        report " file object not found " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line)
+        report " file object not found " & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1584,7 +1584,7 @@ package body tb_base_pkg is
         variable debug : boolean := false;
     begin
         if debug then
-            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+            print("stm_lines_append " & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line));
         end if;
         if stm_lines.size = 0 then
             lp := new stm_line;
@@ -1624,7 +1624,7 @@ package body tb_base_pkg is
         variable debug : boolean := false;
     begin
         if debug then
-            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+            print("stm_lines_append " & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line));
         end if;
         for j in 0 to stm_array'length - 1 loop
             value_std_logic_vector := std_logic_vector(stm_array(j));
@@ -1666,7 +1666,7 @@ package body tb_base_pkg is
         variable debug : boolean := false;
     begin
         if debug then
-            print("stm_lines_append " & " file name: " & crop(slc.file_name) & " file line: " & integer'image(slc.file_line));
+            print("stm_lines_append " & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line));
         end if;
         stm_text_ptr_to_line(var_stm_text, std_line);
         if stm_lines.size = 0 then

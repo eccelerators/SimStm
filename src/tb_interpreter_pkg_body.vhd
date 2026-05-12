@@ -75,7 +75,7 @@ package body tb_interpreter_pkg is
                 il := fld_len(ts(1));
                 if ts(1)(1 to il) = "include" then
                     assert txt /= null
-                    report "include instruction is missing file name: " & "file " & acfn & "line " & integer'image(file_line)
+                    report "include instruction is missing file name " & "file " & acfn & "line " & integer'image(file_line)
                     severity failure;
                     include_file_path := (others => nul);
                     for i in 1 to c_stm_text_len loop
@@ -317,7 +317,7 @@ package body tb_interpreter_pkg is
                                     access_inst_par_index(ie, vars, 2, ie.inst_namespace, empty_text_field, ven2);
                                 end if;            
                                 assert ven2 > -1
-                                report "var label not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "var label not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure;                                 
                                 val2 := vars.element_ptrs(ven2).values(0);
                                 ie.inst_args.par_literal_values(2) := val2;
@@ -495,7 +495,7 @@ package body tb_interpreter_pkg is
                                     access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                 end if;            
                                 assert found 
-                                report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "variable not found " & crop(ie.inst_args.par_text_fields(i)) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure;                                   
                             when 2 =>
                                 if ie.inst(1 to ie.inst_len) = INSTR_LABEL 
@@ -516,7 +516,7 @@ package body tb_interpreter_pkg is
                                             access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                         end if;            
                                         assert found 
-                                        report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                        report "variable not found " & crop(ie.inst_args.par_text_fields(i)) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                         severity failure; 
                                    end if;
                                 end if;
@@ -526,7 +526,7 @@ package body tb_interpreter_pkg is
                                     access_inst_par_value(ie, vars, i, ie.inst_namespace, empty_text_field, found, par_value);
                                 end if;            
                                 assert found 
-                                report "variable not found: " & crop(ie.inst_args.par_text_fields(i)) & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                                report "variable not found " & crop(ie.inst_args.par_text_fields(i)) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure; 
                         end case;
                     end if;

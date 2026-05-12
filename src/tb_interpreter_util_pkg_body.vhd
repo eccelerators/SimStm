@@ -95,7 +95,7 @@ package body tb_interpreter_util_pkg is
         end loop;
 
         if DEBUG then
-            dump_text_line(itext_line, "itext_line:");
+            dump_text_line(itext_line, "itext_line ");
         end if;
 
         -- null outputs
@@ -426,8 +426,8 @@ package body tb_interpreter_util_pkg is
                     end if;
                 end loop;
                 assert is_txt_var_first_character(ie.inst_args.txt(src_tail_i))
-                report "missing variable for substitution bracket " & stm_text_crop(input_txt)
-                severity failure;
+                report "missing variable for substitution bracket " & stm_text_crop(input_txt) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure; 
                 tmp_field := (others => nul);
                 tmp_i := 1;
                 tmp_field(tmp_i) := ie.inst_args.txt(src_tail_i);
@@ -449,7 +449,7 @@ package body tb_interpreter_util_pkg is
                         access_var_value(vars, tmp_field, is_not_FQN, insts.element_ptrs(cien).inst_namespace, empty_text_field, found, v1);
                     end if;
                     assert found
-                    report "wvar not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+                    report "wvar not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                     severity failure;
                 end if;
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
@@ -461,6 +461,9 @@ package body tb_interpreter_util_pkg is
 
             elsif insert_call_stack_file_name then
                 cien := rcs(sp - previous_level).ien_of_called_proc;
+                assert cien > -1
+                report "substitude insert_call_stack_file_name failed " & stm_text_crop(input_txt)  & " current sp " & integer'image(sp) & " level to go up " & integer'image(previous_level) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure;
                 stack_called_file_name := insts.element_ptrs(cien).slc.file_name;
                 dest_txt_str := ew_str_cat_text_line(dest_txt_str, stack_called_file_name);
                 k := 1;
@@ -470,6 +473,9 @@ package body tb_interpreter_util_pkg is
                 dest_i := k;
             elsif insert_call_stack_file_line then
                 cien := rcs(sp - previous_level).ien_of_called_proc;
+                assert cien > -1
+                report "substitude insert_call_stack_file_line failed " & stm_text_crop(input_txt)  & " current sp " & integer'image(sp) & " level to go up " & integer'image(previous_level) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure;
                 stack_called_file_line := insts.element_ptrs(cien).slc.file_line;
                 dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(stack_called_file_line, dec));
                 k := 1;
@@ -479,6 +485,9 @@ package body tb_interpreter_util_pkg is
                 dest_i := k;
             elsif insert_call_stack_label then
                 cien := rcs(sp - previous_level).ien_of_called_proc;
+                assert cien > -1
+                report "substitude insert_call_stack_label failed " & stm_text_crop(input_txt)  & " current sp " & integer'image(sp)  & " level to go up " & integer'image(previous_level) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                severity failure;
                 stack_called_proc := insts.element_ptrs(cien).inst_args.par_text_fields(1);
                 dest_txt_str := ew_str_cat(dest_txt_str, stack_called_proc);
                 k := 1;
@@ -489,7 +498,7 @@ package body tb_interpreter_util_pkg is
             end if;
         end loop;
         assert false
-        report "txt_print_wvar ended abnormally " & stm_text_crop(input_txt)
+        report "stm_text_substitude_wvar ended abnormally " & stm_text_crop(input_txt)  & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
         severity failure;
     end procedure;
 
@@ -868,10 +877,10 @@ package body tb_interpreter_util_pkg is
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
-        print(".... instruction element number: " & crop(to_text_field(inst_element_num)) & "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
-        print(".... instruction namespace: " & crop(insts.element_ptrs(inst_element_num).inst_namespace));
-        print(".... instruction file name: " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
-        print(".... instruction file linenumber: " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));
+        print(".... instruction element number " & crop(to_text_field(inst_element_num)) & "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
+        print(".... instruction namespace " & crop(insts.element_ptrs(inst_element_num).inst_namespace));
+        print(".... instruction file name " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
+        print(".... instruction file linenumber " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));
         for i in 1 to 6 loop
             pl := fld_len(insts.element_ptrs(inst_element_num).inst_args.par_text_fields(i));
             if pl > 0 then
@@ -888,7 +897,7 @@ package body tb_interpreter_util_pkg is
         end loop;
         txt_to_string(insts.element_ptrs(inst_element_num).inst_args.txt, txt);
         eq := insts.element_ptrs(inst_element_num).inst_args.txt_enclosing_quote;
-        print(".... text: " & eq & txt & eq);
+        print(".... text " & eq & txt & eq);
     end procedure;
 
     procedure dump_inst_sequence(
@@ -940,11 +949,11 @@ package body tb_interpreter_util_pkg is
         severity failure;
         write(std_line, string'("Hello, world!"));
         print("-----------------------------------------------------------------");
-        print("---- var definition in file: " & crop(vars.element_ptrs(var_element_num).slc.file_name));
-        print("---- var definition in line: " & integer'image(vars.element_ptrs(var_element_num).slc.file_line));
-        print("---- var name: " & crop(vars.element_ptrs(var_element_num).name));
-        print("---- var element num: " & crop(to_text_field(var_element_num)) & "(0x" & crop(to_text_field_hex(var_element_num)) & ")");
-        print("---- var_value: 0x" & crop(to_text_field_hex(vars.element_ptrs(var_element_num).values(0))));
+        print("---- var definition in file " & crop(vars.element_ptrs(var_element_num).slc.file_name));
+        print("---- var definition in line " & integer'image(vars.element_ptrs(var_element_num).slc.file_line));
+        print("---- var name " & crop(vars.element_ptrs(var_element_num).name));
+        print("---- var element num " & crop(to_text_field(var_element_num)) & "(0x" & crop(to_text_field_hex(var_element_num)) & ")");
+        print("---- var_value: " & crop(to_text_field_hex(vars.element_ptrs(var_element_num).values(0))));
         if vars.element_ptrs(var_element_num).typ = T_VALUE then
             print("---- var type: T_VALUE");
         elsif vars.element_ptrs(var_element_num).typ = T_CONST then
@@ -955,24 +964,24 @@ package body tb_interpreter_util_pkg is
             print("---- var type: T_TEXT");
             txt_to_string(vars.element_ptrs(var_element_num).txt, tmp_str);
             eq := vars.element_ptrs(var_element_num).txt_enclosing_quote;
-            print("---- var_txt: " & eq & crop(tmp_str) & eq);
+            print("---- var_txt " & eq & crop(tmp_str) & eq);
         elsif vars.element_ptrs(var_element_num).typ = T_ARRAY then
             print("---- var_stm_type: T_ARRAY");
             stm_array := vars.element_ptrs(var_element_num).arr;
             for i in 0 to stm_array'high loop
                 array_index := i;
                 array_value := stm_array(array_index);
-                print("-------- index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
+                print("-------- index " & crop(to_text_field(array_index)) & ", value " & crop(to_text_field_hex(array_value)));
             end loop;
         elsif vars.element_ptrs(var_element_num).typ = T_LINES then
             print("---- var_stm_type: T_LINES");
             assert vars.element_ptrs(var_element_num).lines /= null
             report " dump  var element, stm_lines_ptr pointer is null "
             severity failure;
-            print("-------- stm_lines.size: " & crop(to_text_field(vars.element_ptrs(var_element_num).lines.size)));
+            print("-------- stm_lines.size " & crop(to_text_field(vars.element_ptrs(var_element_num).lines.size)));
             stm_line_ptr := vars.element_ptrs(var_element_num).lines.line_list;
             while stm_line_ptr /= null loop
-                print("-------- stm_line_ptr.line_number: " & crop(to_text_field(stm_line_ptr.line_number)));
+                print("-------- stm_line_ptr.line_number " & crop(to_text_field(stm_line_ptr.line_number)));
                 if stm_line_ptr.line_type = T_LINE_TEXT then
                     print("-------- stm_line_ptr.line_type: T_LINE_TEXT");
                     std_line := stm_line_ptr.line_content;
@@ -984,18 +993,18 @@ package body tb_interpreter_util_pkg is
                 elsif stm_line_ptr.line_type = T_LINE_ARRAY then
                     print("-------- stm_line_ptr.line_type: T_LINE_ARRAY");
                     success := true;
-                    print("-------- stm_line_ptr.line_content'length before reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
+                    print("-------- stm_line_ptr.line_content'length before reading " & crop(to_text_field(stm_line_ptr.line_content'length)));
                     array_index := 0;
                     tmp_std_line_print := new string'(stm_line_ptr.line_content.all);
                     while success loop
                         hread(tmp_std_line_print, value_std_logic_vector, success);
                         if success then
                             array_value := unsigned(value_std_logic_vector);
-                            print("-------- index: " & crop(to_text_field(array_index)) & ", value: " & crop(to_text_field_hex(array_value)));
+                            print("-------- index " & crop(to_text_field(array_index)) & ", value " & crop(to_text_field_hex(array_value)));
                         end if;
                         array_index := array_index + 1;
                     end loop;
-                    print("-------- stm_line_ptr.line_content'length after reading: " & crop(to_text_field(stm_line_ptr.line_content'length)));
+                    print("-------- stm_line_ptr.line_content'length after reading " & crop(to_text_field(stm_line_ptr.line_content'length)));
                 end if;
                 stm_line_ptr := stm_line_ptr.next_line_ptr;
             end loop;
@@ -1006,7 +1015,7 @@ package body tb_interpreter_util_pkg is
         elsif vars.element_ptrs(var_element_num).typ = T_LABEL then
             if vars.element_ptrs(var_element_num).label_proc_ref /= null then
                 text_field_ptr_to_text_field(vars.element_ptrs(var_element_num).label_proc_ref, tmp_label);
-                print("---- var_label_proc_ref: " & tmp_label);
+                print("---- var_label_proc_ref " & tmp_label);
             else
                 print("---- var_label_proc_ref: missing");
             end if;
@@ -1038,11 +1047,11 @@ package body tb_interpreter_util_pkg is
         report "dump  proc element, proc element number, " & integer'image(proc_element_num) & "greater than vars last element number " & integer'image(procs.last_element_num)
         severity failure;
         print("-----------------------------------------------------------------");
-        print("---- proc definition in file: " & crop(procs.element_ptrs(proc_element_num).slc.file_name));
-        print("---- proc definition in line: " & integer'image(procs.element_ptrs(proc_element_num).slc.file_line));
-        print("---- proc name: " & procs.element_ptrs(proc_element_num).name);
-        print("---- proc element num: " & crop(to_text_field(proc_element_num)) & "(0x" & to_text_field_hex(proc_element_num) & ")");
-        print("---- proc_pointer_to_ien: " & crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
+        print("---- proc definition in file " & crop(procs.element_ptrs(proc_element_num).slc.file_name));
+        print("---- proc definition in line " & integer'image(procs.element_ptrs(proc_element_num).slc.file_line));
+        print("---- proc name " & procs.element_ptrs(proc_element_num).name);
+        print("---- proc element num " & crop(to_text_field(proc_element_num)) & "(0x" & to_text_field_hex(proc_element_num) & ")");
+        print("---- proc_pointer_to_ien " & crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
     end procedure;
 
     procedure print_file_def_element(
@@ -1055,9 +1064,9 @@ package body tb_interpreter_util_pkg is
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... file def is ");
-        print(".... file element num: " & integer'image(file_element_num));
-        print(".... absolute file name: " & text_line_crop(files.element_ptrs(file_element_num).absolute_file_name));
-        print(".... file name: " & files.element_ptrs(file_element_num).file_name);
+        print(".... file element num " & integer'image(file_element_num));
+        print(".... absolute file name " & text_line_crop(files.element_ptrs(file_element_num).absolute_file_name));
+        print(".... file name " & files.element_ptrs(file_element_num).file_name);
     end procedure;
 
     procedure dump_file_defs(
@@ -1093,24 +1102,26 @@ package body tb_interpreter_util_pkg is
     end procedure;
 
     procedure print_runtime_context(
-        variable rc : in stm_runtime_context
+        variable rc : in stm_runtime_context;
+        constant prefix_lines : string
     ) is
     begin
         case rc.call_process_state is
             when IN_NONE =>
-                print("call_process_state IN_NONE");
+                print(prefix_lines & "call_process_state IN_NONE");
             when IN_PROC_PARAMS =>
-                print("call_process_state IN_PROC_PARAMS");
+                print(prefix_lines & "call_process_state IN_PROC_PARAMS");
             when IN_PROC_BODY =>
-                print("call_process_state IN_PROC_BODY");
+                print(prefix_lines & "call_process_state IN_PROC_BODY");
             when IN_CALL_PARAMS =>
-                print("call_process_state IN_CALL_PARAMS");
+                print(prefix_lines & "call_process_state IN_CALL_PARAMS");
         end case;
-        print("ien_of_call " & integer'image(rc.ien_of_call));
-        print("ien_of_proc_params_end " & integer'image(rc.ien_of_proc_params_end));
-        print("ien_of_called_proc " & integer'image(rc.ien_of_called_proc));
-        print("loop_num " & integer'image(rc.loop_num));
-        print("loop_if_enter_level " & integer'image(rc.loop_if_enter_level));
+        print(prefix_lines & "pen_of_called_proc " & integer'image(rc.pen_of_called_proc));
+        print(prefix_lines & "ien_of_call " & integer'image(rc.ien_of_call));
+        print(prefix_lines & "ien_of_proc_params_end " & integer'image(rc.ien_of_proc_params_end));
+        print(prefix_lines & "ien_of_called_proc " & integer'image(rc.ien_of_called_proc));
+        print(prefix_lines & "loop_num " & integer'image(rc.loop_num));
+        print(prefix_lines & "loop_if_enter_level " & integer'image(rc.loop_if_enter_level));
     end procedure;
 
     procedure search_var_element_number(
@@ -1285,7 +1296,7 @@ package body tb_interpreter_util_pkg is
                 access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var label not found:" & " file name: " & crop(ie.slc.file_name) & " file line: " & integer'image(ie.slc.file_line)
+            report "var label not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;                                     
             pn_ptr := vars.element_ptrs(ven).label_proc_ref;
             text_field_ptr_to_text_field(pn_ptr, pn);
