@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := true;
+        constant DUMP_PARSE_RESULTS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -264,7 +264,7 @@ begin
         begin
             ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
             if is_digit(ptxt(1)) then
-                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+                val := stim_to_stm_value(ie.slc, ptxt, machine_value_width);
             else
                 get_ven_global(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
@@ -293,7 +293,7 @@ begin
         begin
             ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
             if is_digit(ptxt(1)) then
-                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+                val := stim_to_stm_value(ie.slc, ptxt, machine_value_width);
             else
                 get_ven_in_called_scope_prefer_local(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
@@ -393,7 +393,7 @@ begin
         begin
             ptxt := insts.element_ptrs(ien).inst_args.par_text_fields(par_num);
             if is_digit(ptxt(1)) then
-                val := stim_to_stm_value(slc, ptxt, machine_value_width);
+                val := stim_to_stm_value(ie.slc, ptxt, machine_value_width);
             else
                 get_ven_in_called_scope_call_params_source_sensitive(par_num, ven);
                 val := vars.element_ptrs(ven).values(0);
@@ -558,7 +558,7 @@ begin
                 slc.file_line := -1;
                 access_proc_fqn(slc, procs, main_called_proc_name, pen);
                 assert pen > -1
-                report "main procedure not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                report "main procedure not found " & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line)
                 severity failure;
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
@@ -587,7 +587,7 @@ begin
                 slc.file_line := -1;
                 access_proc_fqn(slc, procs, branch_to_interrupt_called_proc_name, pen);
                 assert pen > -1
-                report "interrupt procedure not found " & branch_to_interrupt_called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                report "interrupt procedure not found " & branch_to_interrupt_called_proc_name & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line)
                 severity failure;
                 ien := procs.element_ptrs(pen).pointer_to_ien;
                 ie := insts.element_ptrs(ien);
@@ -688,7 +688,7 @@ begin
                     index_var_lines(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         val_int := 0;
-                        stm_lines_delete(slc, var_stm_lines, val_int);
+                        stm_lines_delete(ie.slc, var_stm_lines, val_int);
                         assert false
                         report "lines delete all not successful " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                         severity failure;
@@ -973,7 +973,7 @@ begin
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_write(slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    stm_file_write(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
 
                 -- file append a_fileB  a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPEND then
@@ -984,7 +984,7 @@ begin
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_append(slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    stm_file_append(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
 
                 -- file read a_fileA a_lines number_of_lines
                 -- file read a_fileA a_lines 256
@@ -1001,7 +1001,7 @@ begin
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                             user_file_append_done := true;
                         end if;
@@ -1011,7 +1011,7 @@ begin
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                             user_file_append_done := true;
                         end if;
@@ -1021,7 +1021,7 @@ begin
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                             user_file_append_done := true;
                         end if;
@@ -1031,7 +1031,7 @@ begin
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                             user_file_append_done := true;
                         end if;
@@ -1044,40 +1044,40 @@ begin
                         txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
                         user_file_open_done := false;
                         if not user_file_in_use_0 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_0, user_file_path_string, read_mode);
+                            stm_user_file_open(ie.slc, user_file_0, user_file_path_string, read_mode);
                             user_file_name_0 := var_stm_text;
                             user_file_in_use_0 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_1 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_1, user_file_path_string, read_mode);
+                            stm_user_file_open(ie.slc, user_file_1, user_file_path_string, read_mode);
                             user_file_name_1 := var_stm_text;
                             user_file_in_use_1 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_2 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_2, user_file_path_string, read_mode);
+                            stm_user_file_open(ie.slc, user_file_2, user_file_path_string, read_mode);
                             user_file_name_2 := var_stm_text;
                             user_file_in_use_2 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                         elsif not user_file_in_use_3 and not user_file_open_done then
-                            stm_user_file_open(slc, user_file_3, user_file_path_string, read_mode);
+                            stm_user_file_open(ie.slc, user_file_3, user_file_path_string, read_mode);
                             user_file_name_3 := var_stm_text;
                             user_file_in_use_3 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
-                                stm_lines_append(slc, var_stm_lines, tmp_std_line);
+                                stm_lines_append(ie.slc, var_stm_lines, tmp_std_line);
                             end loop;
                         else
                             assert false
@@ -1120,7 +1120,7 @@ begin
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_substituded_ptr := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_read_all(slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    stm_file_read_all(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
 
                 --  file pointer copy a_file_target a_file_source
                 --  file pointer copy a_file_target a_file_source )
@@ -1143,7 +1143,7 @@ begin
                     index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
                     index_var_lines(vars, ven3, var_stm_lines);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_get(slc, var_stm_lines, val_int, var_stm_array, number_found, machine_value_width);
+                    stm_lines_get(ie.slc, var_stm_lines, val_int, var_stm_array, number_found, machine_value_width);
                     update_var_arr(vars, ven3, var_stm_array);
                     val := to_unsigned(number_found, machine_value_width);
                     update_var_value(vars, ven4, val);
@@ -1157,7 +1157,7 @@ begin
                     index_var_lines(vars, ven1, var_stm_lines);
                     index_var_arr(vars, ven3, var_stm_array);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_set(slc, var_stm_lines, val_int, var_stm_array, machine_value_width);
+                    stm_lines_set(ie.slc, var_stm_lines, val_int, var_stm_array, machine_value_width);
 
                 -- lines set a_lines position "abc" txt
                 -- lines set a_lines 7 "abc"
@@ -1171,7 +1171,7 @@ begin
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_set(slc, var_stm_lines, val_int, var_stm_text_out);
+                    stm_lines_set(ie.slc, var_stm_lines, val_int, var_stm_text_out);
 
                 -- lines insert a_lines position an_array
                 -- lines insert a_lines 9 an_array
@@ -1182,7 +1182,7 @@ begin
                     index_var_lines(vars, ven1, var_stm_lines);
                     index_var_arr(vars, ven3, var_stm_array);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_insert(slc, var_stm_lines, val_int, var_stm_array, machine_value_width);
+                    stm_lines_insert(ie.slc, var_stm_lines, val_int, var_stm_array, machine_value_width);
 
                 -- lines insert message a_lines position "abc"
                 -- lines insert message a_lines 7 "abc"
@@ -1196,7 +1196,7 @@ begin
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_insert(slc, var_stm_lines, val_int, var_stm_text_out);
+                    stm_lines_insert(ie.slc, var_stm_lines, val_int, var_stm_text_out);
 
                 -- lines append array a_lines an_array
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_ARRAY then
@@ -1204,7 +1204,7 @@ begin
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     index_var_lines(vars, ven1, var_stm_lines);
                     index_var_arr(vars, ven2, var_stm_array);
-                    stm_lines_append(slc, var_stm_lines, var_stm_array, machine_value_width);
+                    stm_lines_append(ie.slc, var_stm_lines, var_stm_array, machine_value_width);
 
                 -- lines append message a_lines "abc"
                 -- lines append message a_lines "abc{}" a_varB
@@ -1214,7 +1214,7 @@ begin
                     stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
                     var_stm_text_out := new stm_text;
                     stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
-                    stm_lines_append(slc, var_stm_lines, var_stm_text_out);
+                    stm_lines_append(ie.slc, var_stm_lines, var_stm_text_out);
 
                 -- lines delete a_lines position
                 -- lines delete a_lines 13
@@ -1223,7 +1223,7 @@ begin
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_delete(slc, var_stm_lines, val_int);
+                    stm_lines_delete(ie.slc, var_stm_lines, val_int);
 
                 -- lines delete all a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_DELETE_ALL then
@@ -1231,10 +1231,7 @@ begin
                     index_var_lines(vars, ven1, var_stm_lines);
                     while var_stm_lines.size > 0 loop
                         val_int := 0;
-                        stm_lines_delete(slc, var_stm_lines, val_int);
-                        assert false
-                        report "lines delete all not successful " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                        severity failure;
+                        stm_lines_delete(ie.slc, var_stm_lines, val_int);
                     end loop;
 
                 -- lines size a_lines read_size
@@ -1386,7 +1383,7 @@ begin
                             if bie.inst(1 to bie.inst_len) = INSTR_END_IF then
                                 num_of_if_in_false_if_leave(if_level) := num_of_if_in_false_if_leave(if_level) - 1;
                             end if;
-                            bien := ien + 1;
+                            bien := bien + 1;
                             bie := insts.element_ptrs(bien);
                         end loop;
                         ien := bien - 1; -- re-align so it will be operated on.
@@ -1575,9 +1572,9 @@ begin
                     if ie.inst(1 to ie.inst_len) = INSTR_CALL_NOPAR then
                         called_proc_name := ie.inst_args.par_text_fields(1);
                         if contains_dot(called_proc_name) then
-                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                            access_proc_fqn(ie.slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(ie.slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
                         assert pen > -1
                         report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
@@ -1593,9 +1590,9 @@ begin
                     elsif ie.inst(1 to ie.inst_len) = INSTR_CALL_PAR_OPEN then
                         called_proc_name := ie.inst_args.par_text_fields(1);
                         if contains_dot(called_proc_name) then
-                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                            access_proc_fqn(ie.slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(ie.slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
                         assert pen > -1
                         report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
@@ -1613,9 +1610,9 @@ begin
                         index_var_label(vars, ven1, var_stm_label);
                         text_field_ptr_to_text_field(var_stm_label, called_proc_name);
                         if contains_dot(called_proc_name) then
-                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                            access_proc_fqn(ie.slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(ie.slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
                         assert pen > -1
                         report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
@@ -1633,9 +1630,9 @@ begin
                         index_var_label(vars, ven1, var_stm_label);
                         text_field_ptr_to_text_field(var_stm_label, called_proc_name);
                         if contains_dot(called_proc_name) then
-                            access_proc_fqn(slc, procs, called_proc_name, pen);
+                            access_proc_fqn(ie.slc, procs, called_proc_name, pen);
                         else
-                            access_proc_prepend_namespace(slc, procs, called_proc_name, ie.inst_namespace, pen);
+                            access_proc_prepend_namespace(ie.slc, procs, called_proc_name, ie.inst_namespace, pen);
                         end if;
                         assert pen > -1
                         report "call procedure not found " & called_proc_name & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)

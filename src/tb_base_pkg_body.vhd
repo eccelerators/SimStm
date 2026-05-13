@@ -474,7 +474,7 @@ package body tb_base_pkg is
             when '8' => i := 8;
             when '9' => i := 9;
             when others =>
-                assert (false)
+                assert false
                 report "c2int was given a non number digit"
                 severity failure;
         end case;
@@ -1338,7 +1338,7 @@ package body tb_base_pkg is
             when "1110" => return 'E';
             when "1111" => return 'F';
             when others =>
-                assert (false)
+                assert false
                 report "std_vec2c found non-binary digit in vec "
                 severity failure;
                 return 'X';
@@ -1726,8 +1726,8 @@ package body tb_base_pkg is
             lpb := lp;
             lp := lp.next_line_ptr;
         end loop;
-        assert valid = 1;
-        report "stm_lines_delete at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        assert valid = 1
+        report "stm_lines_delete at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1753,7 +1753,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get line at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_get line at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1788,7 +1788,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_get array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_get array at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1831,7 +1831,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert text at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_insert text at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1878,7 +1878,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert valid = 1
-        report "stm_lines_insert array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_insert array at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
         lp := stm_lines.line_list;
         for i in 0 to stm_lines.size - 1 loop
@@ -1939,7 +1939,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set text at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_set text at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 
@@ -1967,7 +1967,7 @@ package body tb_base_pkg is
             lp := lp.next_line_ptr;
         end loop;
         assert false
-        report "stm_lines_set array at position not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
+        report "stm_lines_set array at position " & integer'image(position) & " not possible " & "file " & crop(slc.file_name) & " line " & integer'image(slc.file_line)
         severity failure;
     end procedure;
 

@@ -14,7 +14,7 @@ namespace CounterCaseIndexed
 --        equ stm.TestCaseIndex 3
 --        call testCountUp ()
 
-        trace stm.TRACE_STACK      
+        -- trace stm.TRACE_EXECUTED_LINES     
         call emuTestSuite ()
         
         log message stm.INFO "Main test finished"
@@ -27,8 +27,8 @@ namespace CounterCaseIndexed
     end proc
     
     proc emuTestSuite ()
+        equ stm.TestCaseIndex 0
         loop 5
-            equ stm.TestCaseIndex 0
             call stm.testCaseWithCaseIndex (
                 label set TestToCall testCountUp
             )

@@ -877,7 +877,7 @@ package body tb_interpreter_util_pkg is
         severity failure;
         print(".... -----------------------------------------------------------------");
         print(".... instruction " & insts.element_ptrs(inst_element_num).inst);
-        print(".... instruction element number " & crop(to_text_field(inst_element_num)) & "(0x" & crop(to_text_field_hex(inst_element_num)) & ")");
+        print(".... instruction element number " & crop(to_text_field(inst_element_num)) & crop(to_text_field_hex(inst_element_num)) & ")");
         print(".... instruction namespace " & crop(insts.element_ptrs(inst_element_num).inst_namespace));
         print(".... instruction file name " & crop(insts.element_ptrs(inst_element_num).slc.file_name));
         print(".... instruction file linenumber " & crop(to_text_field(insts.element_ptrs(inst_element_num).slc.file_line)));
@@ -905,7 +905,7 @@ package body tb_interpreter_util_pkg is
     ) is
         variable ien : integer;
     begin
-        print("++++ --dump_var_pool_ordered-----------------------------------------------------");
+        print("++++ --dump_inst_sequence-----------------------------------------------------");
         for i in 0 to insts.last_element_num loop
             ien := i;
             print_inst_element(insts, ien);
@@ -952,7 +952,7 @@ package body tb_interpreter_util_pkg is
         print("---- var definition in file " & crop(vars.element_ptrs(var_element_num).slc.file_name));
         print("---- var definition in line " & integer'image(vars.element_ptrs(var_element_num).slc.file_line));
         print("---- var name " & crop(vars.element_ptrs(var_element_num).name));
-        print("---- var element num " & crop(to_text_field(var_element_num)) & "(0x" & crop(to_text_field_hex(var_element_num)) & ")");
+        print("---- var element num " & crop(to_text_field(var_element_num)) & crop(to_text_field_hex(var_element_num)) & ")");
         print("---- var_value: " & crop(to_text_field_hex(vars.element_ptrs(var_element_num).values(0))));
         if vars.element_ptrs(var_element_num).typ = T_VALUE then
             print("---- var type: T_VALUE");
@@ -1050,8 +1050,8 @@ package body tb_interpreter_util_pkg is
         print("---- proc definition in file " & crop(procs.element_ptrs(proc_element_num).slc.file_name));
         print("---- proc definition in line " & integer'image(procs.element_ptrs(proc_element_num).slc.file_line));
         print("---- proc name " & procs.element_ptrs(proc_element_num).name);
-        print("---- proc element num " & crop(to_text_field(proc_element_num)) & "(0x" & to_text_field_hex(proc_element_num) & ")");
-        print("---- proc_pointer_to_ien " & crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & "(0x" & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
+        print("---- proc element num " & crop(to_text_field(proc_element_num)) & to_text_field_hex(proc_element_num) & ")");
+        print("---- proc_pointer_to_ien " & crop(to_text_field(procs.element_ptrs(proc_element_num).pointer_to_ien)) & crop(to_text_field_hex(procs.element_ptrs(proc_element_num).pointer_to_ien)) & ")");
     end procedure;
 
     procedure print_file_def_element(
