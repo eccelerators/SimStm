@@ -184,11 +184,9 @@ begin
         variable var_stm_label : text_field_ptr;
 
         -- Text
-        variable var_stm_text : stm_text_ptr;
-        variable var_stm_text_enclosing_quote : character;
-        variable var_stm_text_out : stm_text_ptr;
-        variable var_stm_text_substituded : stm_text;
-        variable var_stm_text_substituded_ptr : stm_text_ptr;
+        variable txt_unformatted : text_object_ptr;
+        variable txt_formatted : stm_text;
+        variable txt_formatted_ptr : stm_text_ptr;
 
         -- File
         file user_file_0 : text;
@@ -277,7 +275,7 @@ begin
             variable called_proc_name : text_field;
         begin            
             called_pen := rcs(sp).pen_of_called_proc;         
-            called_proc_name := procs.element_ptrs(called_pen).name;
+            called_proc_name := procs.element_ptrs(called_pen).proc_name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
@@ -306,7 +304,7 @@ begin
             variable called_proc_name : text_field;
         begin
             called_pen := rcs(sp).pen_of_called_proc;         
-            called_proc_name := procs.element_ptrs(called_pen).name;
+            called_proc_name := procs.element_ptrs(called_pen).proc_name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             assert ven > -1
             report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
@@ -319,7 +317,7 @@ begin
             variable called_proc_name : text_field;
         begin
             called_pen := rcs(sp).pen_of_called_proc;         
-            called_proc_name := procs.element_ptrs(called_pen).name;
+            called_proc_name := procs.element_ptrs(called_pen).proc_name;
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
                 assert ven > -1
@@ -346,7 +344,7 @@ begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 caller_pen := rcs(sp - 1).pen_of_called_proc;
                 if caller_pen > -1 then      
-                    caller_proc_name := procs.element_ptrs(caller_pen).name;
+                    caller_proc_name := procs.element_ptrs(caller_pen).proc_name;
                     access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
                     if ven < 0 then
                         access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
@@ -358,7 +356,7 @@ begin
                 end if;
             end if;
             called_pen := rcs(sp).pen_of_called_proc;         
-            called_proc_name := procs.element_ptrs(called_pen).name;
+            called_proc_name := procs.element_ptrs(called_pen).proc_name;
             access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
             if ven < 0 then
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
@@ -375,7 +373,7 @@ begin
         begin
             caller_pen := rcs(sp - 1).pen_of_called_proc;
             if caller_pen > -1 then      
-                caller_proc_name := procs.element_ptrs(caller_pen).name;
+                caller_proc_name := procs.element_ptrs(caller_pen).proc_name;
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
                 if ven < 0 then
                     access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
@@ -663,11 +661,8 @@ begin
                 -- file a_fileB "file_name{}{}" file_user_index1 file_user_index2
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
-                    get_ven_in_called_scope_local(1, ven1);
-                    init_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
+                    get_ven_in_called_scope_local(1, ven1);                                  
+                    init_var_txt(vars, ven1, ie.inst_args.txt_obj);
 
                 -- signal a_signal
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL then
@@ -934,33 +929,33 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_readable(var_stm_text_substituded_ptr, val_int);
+                    index_var_txt(vars, ven1, txt_unformatted);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_readable(txt_formatted_ptr, val_int);
                     val := to_unsigned(val_int, machine_value_width);
                     update_var_value(vars, ven2, val);
 
                 -- file writeable a_fileA target rslt
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_WRITABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_writeable(var_stm_text_substituded_ptr, val_int);
+                    index_var_txt(vars, ven1, txt_unformatted);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_writeable(txt_formatted_ptr, val_int);
                     val := to_unsigned(val_int, machine_value_width);
                     update_var_value(vars, ven2, val);
 
                 -- file appendable a_fileA target rslt
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPENDABLE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_appendable(var_stm_text_substituded_ptr, val_int);
+                    index_var_txt(vars, ven1, txt_unformatted);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_appendable(txt_formatted_ptr, val_int);
                     val := to_unsigned(val_int, machine_value_width);
                     update_var_value(vars, ven2, val);
 
@@ -968,23 +963,23 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_WRITE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven1, txt_unformatted);
                     index_var_lines(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_write(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_write(ie.slc, var_stm_lines, txt_formatted_ptr);
 
                 -- file append a_fileB  a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_APPEND then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven1, txt_unformatted);
                     index_var_lines(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_append(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_append(ie.slc, var_stm_lines, txt_formatted_ptr);
 
                 -- file read a_fileA a_lines number_of_lines
                 -- file read a_fileA a_lines 256
@@ -992,12 +987,12 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
                     get_val_in_called_scope_prefer_local(3, val3);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven1, txt_unformatted);
                     index_var_lines(vars, ven2, var_stm_lines);
                     user_file_append_done := false;
                     -- if file is already in use, us it
                     if user_file_in_use_0 then
-                        if var_stm_text = user_file_name_0 then
+                        if txt_unformatted.txt = user_file_name_0 then
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
@@ -1007,7 +1002,7 @@ begin
                         end if;
                     end if;
                     if user_file_in_use_1 then
-                        if var_stm_text = user_file_name_1 then
+                        if txt_unformatted.txt = user_file_name_1 then
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
@@ -1017,7 +1012,7 @@ begin
                         end if;
                     end if;
                     if user_file_in_use_2 then
-                        if var_stm_text = user_file_name_2 then
+                        if txt_unformatted.txt = user_file_name_2 then
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
@@ -1027,7 +1022,7 @@ begin
                         end if;
                     end if;
                     if user_file_in_use_3 then
-                        if var_stm_text = user_file_name_3 then
+                        if txt_unformatted.txt = user_file_name_3 then
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
                                 tmp_std_line := new string'(user_std_line.all);
@@ -1038,14 +1033,14 @@ begin
                     end if;
                     -- if file is not in use, try to open and use it
                     if not user_file_append_done then
-                        stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                        var_stm_text_substituded_ptr := new stm_text;
-                        stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                        txt_to_string(var_stm_text_substituded_ptr, user_file_path_string);
+                        format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                        txt_formatted_ptr := new stm_text;
+                        stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                        txt_to_string(txt_formatted_ptr, user_file_path_string);
                         user_file_open_done := false;
                         if not user_file_in_use_0 and not user_file_open_done then
                             stm_user_file_open(ie.slc, user_file_0, user_file_path_string, read_mode);
-                            user_file_name_0 := var_stm_text;
+                            user_file_name_0 := txt_unformatted.txt;
                             user_file_in_use_0 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_0, user_std_line);
@@ -1054,7 +1049,7 @@ begin
                             end loop;
                         elsif not user_file_in_use_1 and not user_file_open_done then
                             stm_user_file_open(ie.slc, user_file_1, user_file_path_string, read_mode);
-                            user_file_name_1 := var_stm_text;
+                            user_file_name_1 := txt_unformatted.txt;
                             user_file_in_use_1 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_1, user_std_line);
@@ -1063,7 +1058,7 @@ begin
                             end loop;
                         elsif not user_file_in_use_2 and not user_file_open_done then
                             stm_user_file_open(ie.slc, user_file_2, user_file_path_string, read_mode);
-                            user_file_name_2 := var_stm_text;
+                            user_file_name_2 := txt_unformatted.txt;
                             user_file_in_use_2 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_2, user_std_line);
@@ -1072,7 +1067,7 @@ begin
                             end loop;
                         elsif not user_file_in_use_3 and not user_file_open_done then
                             stm_user_file_open(ie.slc, user_file_3, user_file_path_string, read_mode);
-                            user_file_name_3 := var_stm_text;
+                            user_file_name_3 := txt_unformatted.txt;
                             user_file_in_use_3 := true;
                             for i in 1 to to_integer(val3(30 downto 0)) loop
                                 readline(user_file_3, user_std_line);
@@ -1089,20 +1084,20 @@ begin
                 -- file read end a_fileA a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ_END then
                     get_ven_in_called_scope_prefer_local(1, ven1);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    if var_stm_text_substituded_ptr = user_file_name_0 and user_file_in_use_0 then
+                    index_var_txt(vars, ven1, txt_unformatted);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    if txt_formatted_ptr = user_file_name_0 and user_file_in_use_0 then
                         file_close(user_file_0);
                         user_file_in_use_0 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_1 and user_file_in_use_1 then
+                    elsif txt_formatted_ptr = user_file_name_1 and user_file_in_use_1 then
                         file_close(user_file_1);
                         user_file_in_use_1 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_2 and user_file_in_use_2 then
+                    elsif txt_formatted_ptr = user_file_name_2 and user_file_in_use_2 then
                         file_close(user_file_2);
                         user_file_in_use_2 := false;
-                    elsif var_stm_text_substituded_ptr = user_file_name_3 and user_file_in_use_3 then
+                    elsif txt_formatted_ptr = user_file_name_3 and user_file_in_use_3 then
                         file_close(user_file_3);
                         user_file_in_use_3 := false;
                     else
@@ -1115,20 +1110,20 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_READ_ALL then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_ven_in_called_scope_prefer_local(2, ven2);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven1, txt_unformatted);
                     index_var_lines(vars, ven2, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_substituded_ptr := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_substituded_ptr, var_stm_text_substituded);
-                    stm_file_read_all(ie.slc, var_stm_lines, var_stm_text_substituded_ptr);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_file_read_all(ie.slc, var_stm_lines, txt_formatted_ptr);
 
                 --  file pointer copy a_file_target a_file_source
                 --  file pointer copy a_file_target a_file_source )
                 elsif ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY or ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
                     get_ven_in_called_scope_call_params_target_sensitive(1, ven1);
                     get_ven_in_called_scope_call_params_source_sensitive(2, ven2);
-                    index_var_txt(vars, ven2, var_stm_text, var_stm_text_enclosing_quote);
-                    update_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven2, txt_unformatted);
+                    update_var_txt(vars, ven1, txt_unformatted);
                     if ie.inst(1 to ie.inst_len) = INSTR_FILE_POINTER_COPY_PAR_CLOSE then
                         rcs(sp).call_process_state := IN_PROC_BODY;
                     end if;
@@ -1140,7 +1135,7 @@ begin
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_ven_in_called_scope_prefer_local(3, ven3);
                     get_ven_in_called_scope_prefer_local(4, ven4);
-                    index_var_txt(vars, ven1, var_stm_text, var_stm_text_enclosing_quote);
+                    index_var_txt(vars, ven1, txt_unformatted);
                     index_var_lines(vars, ven3, var_stm_lines);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_get(ie.slc, var_stm_lines, val_int, var_stm_array, number_found, machine_value_width);
@@ -1167,11 +1162,11 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_out := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_set(ie.slc, var_stm_lines, val_int, var_stm_text_out);
+                    stm_lines_set(ie.slc, var_stm_lines, val_int, txt_formatted_ptr);
 
                 -- lines insert a_lines position an_array
                 -- lines insert a_lines 9 an_array
@@ -1192,11 +1187,11 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_out := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
                     val_int := to_integer(val2(30 downto 0));
-                    stm_lines_insert(ie.slc, var_stm_lines, val_int, var_stm_text_out);
+                    stm_lines_insert(ie.slc, var_stm_lines, val_int, txt_formatted_ptr);
 
                 -- lines append array a_lines an_array
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_ARRAY then
@@ -1211,10 +1206,10 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_MESSAGE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    stm_text_substitude_wvar(ie, insts, vars, rcs, sp, var_stm_text_substituded, machine_value_width);
-                    var_stm_text_out := new stm_text;
-                    stm_text_copy_to_ptr(var_stm_text_out, var_stm_text_substituded);
-                    stm_lines_append(ie.slc, var_stm_lines, var_stm_text_out);
+                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    txt_formatted_ptr := new stm_text;
+                    stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
+                    stm_lines_append(ie.slc, var_stm_lines, txt_formatted_ptr);
 
                 -- lines delete a_lines position
                 -- lines delete a_lines 13
@@ -1674,7 +1669,8 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LOG_MESSAGE then
                     get_val_in_called_scope_prefer_local(1, val1);
                     if val1 <= loglevel then
-                        txt_print_wvar(ie, insts, vars, rcs, sp, machine_value_width);
+                        format(ie, procs, vars, rcs, sp, ie.inst_args.txt_obj, txt_formatted, machine_value_width);
+                        print(txt_formatted);
                     end if;
 
                 -- log lines INFO a_lines

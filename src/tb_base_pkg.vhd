@@ -32,6 +32,9 @@ package tb_base_pkg is
     constant TRACE_CALLS : integer := 5;
     constant TRACE_INTERRUPTS : integer := 6;
     constant TRACE_STACK : integer := 7;
+    
+    constant IS_FQN : boolean := true;
+    constant IS_NOT_FQN : boolean := false;
 
     type base is (bin, oct, hex, dec);
     type state_register is array (7 downto 0) of boolean;
@@ -45,6 +48,12 @@ package tb_base_pkg is
     subtype text_line is string(1 to max_str_len);
     subtype stm_text is string(1 to c_stm_text_len);
     type stm_text_ptr is access stm_text;
+    
+    type text_object is record
+        txt : stm_text_ptr;
+        txt_enclosing_quote : character;
+    end record;
+    type text_object_ptr is access text_object;
     
     type text_line_array is array (0 to 127) of text_line;
 
@@ -105,8 +114,7 @@ package tb_base_pkg is
         par_text_fields : parameter_text_field_array;
         par_types : parameter_type_array;
         par_literal_values : parameter_value_array_ptr;
-        txt : stm_text_ptr;
-        txt_enclosing_quote : character;
+        txt_obj : text_object_ptr;
     end record;
 
     type inst_element;
@@ -206,8 +214,7 @@ package tb_base_pkg is
         values : stm_values_ptr;
         label_proc_ref : text_field_ptr;
         typ : stm_var_type;
-        txt : stm_text_ptr;
-        txt_enclosing_quote : character;
+        txt_obj : text_object_ptr;
         arr : stm_array_ptr;
         lines : stm_lines_ptr;
     end record;
@@ -221,8 +228,10 @@ package tb_base_pkg is
     type proc_element_ptr is access proc_element;
     type proc_element is record
         slc : src_locator;
-        name : text_field;
-        pointer_to_ien : integer;
+        proc_namespace : text_field; 
+        proc_name : text_field;
+        proc_fqn : text_field;
+        pointer_to_ien : integer;      
     end record;
     type proc_element_ptrs is array (0 to max_num_of_proc_elements - 1) of proc_element_ptr;
     type proc_pool_ordered is record

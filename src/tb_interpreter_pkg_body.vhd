@@ -38,8 +38,7 @@ package body tb_interpreter_pkg is
         variable fos : file_open_status;
         variable tl : text_line;
         variable ts : token_text_field_array;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
+        variable txt_obj : text_object;
         variable valid : integer;
         variable il : integer;
         variable include_file_path : text_line;
@@ -71,16 +70,16 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid);
+                tokenize_inst_line(tl, ts, txt_obj, valid);
                 il := fld_len(ts(1));
                 if ts(1)(1 to il) = "include" then
-                    assert txt /= null
+                    assert txt_obj.txt /= null
                     report "include instruction is missing file name " & "file " & acfn & "line " & integer'image(file_line)
                     severity failure;
                     include_file_path := (others => nul);
                     for i in 1 to c_stm_text_len loop
-                        include_file_path(i) := txt(i);
-                        if txt(i) = txt_enclosing_quote then
+                        include_file_path(i) := txt_obj.txt(i);
+                        if txt_obj.txt(i) = txt_obj.txt_enclosing_quote then
                             include_file_path(i) := nul;
                             exit;
                         end if;
@@ -111,8 +110,8 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
+        variable txt_obj : text_object;
+        variable txt_obj_ptr : text_object_ptr;
         variable valid_tokens : integer;
         variable valid_params : integer;
         variable iic : stm_inst_initial_context;
@@ -140,7 +139,7 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
+                tokenize_inst_line(tl, ts, txt_obj, valid_tokens);
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
@@ -153,8 +152,10 @@ package body tb_interpreter_pkg is
                         ie.inst_len := il;
                         ie.inst_namespace := iic.namespace_name;
                         extract_parameters(slc, ts, ie.inst_args.par_text_fields, ie.inst_args.par_types, ie.inst_args.par_literal_values, machine_value_width);
-                        ie.inst_args.txt := txt;
-                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+                        txt_obj_ptr := new text_object;
+                        txt_obj_ptr.txt := txt_obj.txt;
+                        txt_obj_ptr.txt_enclosing_quote := txt_obj.txt_enclosing_quote;
+                        ie.inst_args.txt_obj := txt_obj_ptr;
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
@@ -181,8 +182,8 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
+        variable txt_obj : text_object;
+        variable txt_obj_ptr : text_object_ptr;
         variable valid_tokens : integer;
         variable valid_params : integer;
         variable iic : stm_inst_initial_context;
@@ -210,7 +211,7 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
+                tokenize_inst_line(tl, ts, txt_obj, valid_tokens);
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
@@ -223,8 +224,10 @@ package body tb_interpreter_pkg is
                         ie.inst_len := il;
                         ie.inst_namespace := iic.namespace_name;
                         extract_parameters(slc, ts, ie.inst_args.par_text_fields, ie.inst_args.par_types, ie.inst_args.par_literal_values, machine_value_width);
-                        ie.inst_args.txt := txt;
-                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+                        txt_obj_ptr := new text_object;
+                        txt_obj_ptr.txt := txt_obj.txt;
+                        txt_obj_ptr.txt_enclosing_quote := txt_obj.txt_enclosing_quote;
+                        ie.inst_args.txt_obj := txt_obj_ptr;
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                         vn := prepend_namespace(ie.inst_args.par_text_fields(1), iic.namespace_name);
@@ -253,8 +256,8 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
+        variable txt_obj : text_object;
+        variable txt_obj_ptr : text_object_ptr;
         variable valid_tokens : integer;
         variable valid_params : integer;
         variable iic : stm_inst_initial_context;
@@ -286,7 +289,7 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
+                tokenize_inst_line(tl, ts, txt_obj, valid_tokens);
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
@@ -301,8 +304,10 @@ package body tb_interpreter_pkg is
                         ie.inst_len := il;
                         ie.inst_namespace := iic.namespace_name;
                         extract_parameters(slc, ts, ie.inst_args.par_text_fields, ie.inst_args.par_types, ie.inst_args.par_literal_values, machine_value_width);
-                        ie.inst_args.txt := txt;
-                        ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+                        txt_obj_ptr := new text_object;
+                        txt_obj_ptr.txt := txt_obj.txt;
+                        txt_obj_ptr.txt_enclosing_quote := txt_obj.txt_enclosing_quote;
+                        ie.inst_args.txt_obj := txt_obj_ptr;
                         valid_params := valid_tokens - 1;
                         check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                         set_var_type(ie.inst, il, var_type);
@@ -345,8 +350,8 @@ package body tb_interpreter_pkg is
         variable file_line : integer;
         variable tl : text_line;
         variable il : integer;
-        variable txt : stm_text_ptr;
-        variable txt_enclosing_quote : character;
+        variable txt_obj : text_object;
+        variable txt_obj_ptr : text_object_ptr;
         variable valid_tokens : integer;
         variable valid_params : integer;
         variable iic : stm_inst_initial_context;
@@ -356,6 +361,7 @@ package body tb_interpreter_pkg is
         variable ts : token_text_field_array;
         variable ie : inst_element_ptr;
         variable pen : integer;
+        variable nn : text_field;
         variable pn : text_field;
         variable fn : text_line;
         variable slc : src_locator;
@@ -376,7 +382,7 @@ package body tb_interpreter_pkg is
             while not endfile(stimulus) loop
                 file_line := file_line + 1;
                 file_read_line(stimulus, tl);
-                tokenize_inst_line(tl, ts, txt, txt_enclosing_quote, valid_tokens);
+                tokenize_inst_line(tl, ts, txt_obj, valid_tokens);
                 if valid_tokens /= 0 then
                     slc.file_name := fn;
                     slc.file_line := file_line;
@@ -388,8 +394,10 @@ package body tb_interpreter_pkg is
                     ie.inst_len := il;
                     ie.inst_namespace := iic.namespace_name;
                     extract_parameters(slc, ts, ie.inst_args.par_text_fields, ie.inst_args.par_types, ie.inst_args.par_literal_values, machine_value_width);
-                    ie.inst_args.txt := txt;
-                    ie.inst_args.txt_enclosing_quote := txt_enclosing_quote;
+                    txt_obj_ptr := new text_object;
+                    txt_obj_ptr.txt := txt_obj.txt;
+                    txt_obj_ptr.txt_enclosing_quote := txt_obj.txt_enclosing_quote;
+                    ie.inst_args.txt_obj := txt_obj_ptr;
                     valid_params := valid_tokens - 1;
                     check_valid_inst(ie.slc, inst_defs, ie.inst, valid_params);
                     set_var_type(ie.inst, il, var_type);
@@ -404,11 +412,12 @@ package body tb_interpreter_pkg is
                             -- procs refer to an inst element thus can only be done when instructions are parsed and have an element number assigned
                             if proc_type then
                                 -- a new proc e.g., PROC A_PROCNAME, to be added as instruction
+                                nn := ie.inst_namespace;
                                 pn := ie.inst_args.par_text_fields(1);
-                                if not contains_dot(pn) then
-                                    pn := prepend_namespace(pn, ie.inst_namespace);
-                                end if;
-                                insert_proc_element(ie.slc, procs, pn, debug, pen);
+                                assert not contains_dot(pn)
+                                report "procedure names must'nt contain a dot "& " proc name " & crop(pn) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                                severity failure;
+                                insert_proc_element(ie.slc, procs, nn, pn, debug, pen);
                                 procs.element_ptrs(pen).pointer_to_ien := insts.last_element_num + 1;
                                 append_inst(insts, ie, debug);
                             else

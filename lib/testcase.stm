@@ -24,7 +24,7 @@ proc beginTestSuiteIndexedAndCaseIndexed ()
     lines delete all TestCaseLines
     signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime 
     lines append message TestCaseStartLines "test case started"
-    
+
     file TestCaseStartFile "../../SimulationResults/{@c3}_{:d}_{@c2}_{:d}.start" stm.TestSuiteIndex TestCaseIndex   
     file write TestCaseStartFile TestCaseStartLines
 
@@ -74,6 +74,7 @@ proc beginTestCaseIndexed ()
     lines delete all TestCaseLines
     signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
     lines append message TestCaseStartLines "test case started"
+
     file TestCaseStartFile "../../SimulationResults/{@c3}_{@c2}_{:d}.start" TestCaseIndex
     file write TestCaseStartFile TestCaseStartLines
 

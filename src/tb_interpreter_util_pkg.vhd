@@ -33,27 +33,18 @@ package tb_interpreter_util_pkg is
     procedure tokenize_inst_line(
         variable itext_line : in text_line;
         variable otokens : out token_text_field_array;
-        variable txt_ptr : out stm_text_ptr;
-        variable txt_enclosing_quote : out character;
+        variable txt_obj : out text_object;
         variable ovalid : out integer
     );
 
-    procedure txt_print_wvar(
+    procedure format(
         variable ie : in inst_element_ptr;
-        variable insts : in inst_sequence;
+        variable procs : in proc_pool_ordered;
         variable vars : in var_pool_ordered;
         variable rcs : in stm_array_of_runtime_context;
         variable sp : in integer;
-        constant machine_value_width : in integer
-    );
-
-    procedure stm_text_substitude_wvar(
-        variable ie : in inst_element_ptr;
-        variable insts : in inst_sequence;
-        variable vars : in var_pool_ordered;
-        variable rcs : in stm_array_of_runtime_context;
-        variable sp : in integer;
-        variable stm_text_substituded : out stm_text;
+        variable txt_obj_ptr : in text_object_ptr;
+        variable txt_formatted : out stm_text;
         constant machine_value_width : in integer
     );
 
@@ -78,8 +69,8 @@ package tb_interpreter_util_pkg is
 
     procedure access_var_index(
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field;
-        variable wvar_is_fqn : in boolean;
+        variable var_name : in text_field;
+        constant is_fqn : in boolean;
         variable namespace : in text_field;
         variable scope : in text_field;
         variable ven : out integer
@@ -87,8 +78,8 @@ package tb_interpreter_util_pkg is
 
     procedure access_var_value(
         variable vars : in var_pool_ordered;
-        variable wvar_name : in text_field;
-        variable wvar_is_fqn : in boolean;
+        variable var_name : in text_field;
+        constant is_fqn : in boolean;
         variable namespace : in text_field;
         variable scope : in text_field;
         variable found : out boolean;
@@ -125,8 +116,7 @@ package tb_interpreter_util_pkg is
     procedure index_var_txt(
         variable vars : in var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : out stm_text_ptr;
-        variable var_txt_enclosing_quote : out character
+        variable var_txt_obj : out text_object_ptr
     );
 
     procedure index_var_arr(
@@ -169,15 +159,13 @@ package tb_interpreter_util_pkg is
     procedure init_var_txt(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr;
-        variable var_txt_enclosing_quote : in character
-    ) ;
+        variable var_txt_obj : in text_object_ptr
+    );
 
     procedure update_var_txt(
         variable vars : inout var_pool_ordered;
         variable var_element_num : in integer;
-        variable var_txt : in stm_text_ptr;
-        variable var_txt_enclosing_quote : in character
+        variable var_txt_obj : in text_object_ptr
     );
 
     procedure init_var_arr(
@@ -278,7 +266,7 @@ package tb_interpreter_util_pkg is
 
     procedure search_proc_element_number(
         variable procs : in proc_pool_ordered;
-        variable proc_name : in text_field;
+        variable proc_fqn : in text_field;
         variable pen : out integer
     );
 
@@ -304,6 +292,7 @@ package tb_interpreter_util_pkg is
     procedure insert_proc_element(
         variable slc : in src_locator;
         variable procs : inout proc_pool_ordered;
+        variable proc_namespace : in text_field;
         variable proc_name : in text_field;
         constant debug : boolean;
         variable pen : out integer
