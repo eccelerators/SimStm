@@ -249,11 +249,19 @@ begin
         
         procedure get_ven_global(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
+            variable called_pen : integer;
+            variable called_proc_namespace : text_field;
         begin
-            access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);        
+            called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_namespace := procs.element_ptrs(called_pen).proc_namespace;
+            access_inst_par_index(ie, vars, pn, called_proc_namespace, empty_text_field, ven);        
             assert ven > -1
-            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_called scope global not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-            severity failure;  
+            report "get_ven_global " &
+                "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                " in_called namespace " & crop(called_proc_namespace) & 
+                " not found file name " & crop(ie.slc.file_name) & 
+                " file line " & integer'image(ie.slc.file_line)                
+            severity failure;
         end procedure;
 
         procedure get_val_global(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
@@ -272,17 +280,24 @@ begin
         procedure get_ven_in_called_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_pen : integer;
+            variable called_proc_namespace : text_field;
             variable called_proc_name : text_field;
         begin            
             called_pen := rcs(sp).pen_of_called_proc;         
+            called_proc_namespace := procs.element_ptrs(called_pen).proc_namespace;
             called_proc_name := procs.element_ptrs(called_pen).proc_name;
-            access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
+            access_inst_par_index(ie, vars, pn, called_proc_namespace, called_proc_name, ven);
             if ven < 0 then
-                access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
+                access_inst_par_index(ie, vars, pn, called_proc_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_called scope prefer local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-            severity failure;  
+            report "get_ven_in_called_scope_prefer_local " &
+                "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                " in_called namespace " & crop(called_proc_namespace) & 
+                " in_prefered called local scope " & crop(called_proc_name) & 
+                " not found file name " & crop(ie.slc.file_name) & 
+                " file line " & integer'image(ie.slc.file_line)                
+            severity failure;
         end procedure;
 
         procedure get_val_in_called_scope_prefer_local(constant par_num : in integer; variable val : out unsigned(machine_value_width - 1 downto 0)) is
@@ -301,27 +316,41 @@ begin
         procedure get_ven_in_called_scope_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_pen : integer;
+            variable called_proc_namespace : text_field;
             variable called_proc_name : text_field;
         begin
-            called_pen := rcs(sp).pen_of_called_proc;         
+            called_pen := rcs(sp).pen_of_called_proc;   
+            called_proc_namespace := procs.element_ptrs(called_pen).proc_namespace;      
             called_proc_name := procs.element_ptrs(called_pen).proc_name;
-            access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
+            access_inst_par_index(ie, vars, pn, called_proc_namespace, called_proc_name, ven);
             assert ven > -1
-            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+            report "get_ven_in_called_scope_call_params_target_sensitive " &
+                "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                " in_called namespace " & crop(called_proc_namespace) & 
+                " in_called local scope " & crop(called_proc_name) & 
+                " not found file name " & crop(ie.slc.file_name) & 
+                " file line " & integer'image(ie.slc.file_line)                
             severity failure;
         end procedure;
 
         procedure get_ven_in_called_scope_call_params_target_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable called_pen : integer;
+            variable called_proc_namespace : text_field;
             variable called_proc_name : text_field;
         begin
-            called_pen := rcs(sp).pen_of_called_proc;         
+            called_pen := rcs(sp).pen_of_called_proc;
+            called_proc_namespace := procs.element_ptrs(called_pen).proc_namespace;         
             called_proc_name := procs.element_ptrs(called_pen).proc_name;
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
-                access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
+                access_inst_par_index(ie, vars, pn, called_proc_namespace, called_proc_name, ven);
                 assert ven > -1
-                report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope call params target sensitive, when in params, not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                report "get_ven_in_called_scope_call_params_target_sensitive " &
+                    "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                    " in_called namespace " & crop(called_proc_namespace) & 
+                    " in_called params local scope " & crop(called_proc_name) & 
+                    " not found file name " & crop(ie.slc.file_name) & 
+                    " file line " & integer'image(ie.slc.file_line)                          
                 severity failure;
                 return;
             end if;
@@ -330,56 +359,82 @@ begin
                 access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in called scope call params target sensitive, when not in params, not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+            report "get_ven_in_called_scope_call_params_target_sensitive " &
+                "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                " in_called namespace " & crop(called_proc_namespace) & 
+                " in_prefered called local scope " & crop(called_proc_name) & 
+                " not found file name " & crop(ie.slc.file_name) & 
+                " file line " & integer'image(ie.slc.file_line)                
             severity failure;  
         end procedure;
 
         procedure get_ven_in_called_scope_call_params_source_sensitive(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable caller_pen : integer;
+            variable caller_proc_namespace : text_field;
             variable caller_proc_name : text_field;
             variable called_pen : integer;
+            variable called_proc_namespace : text_field;
             variable called_proc_name : text_field;
         begin
             if rcs(sp).call_process_state = IN_CALL_PARAMS then
                 caller_pen := rcs(sp - 1).pen_of_called_proc;
                 if caller_pen > -1 then      
+                    caller_proc_namespace := procs.element_ptrs(caller_pen).proc_namespace;
                     caller_proc_name := procs.element_ptrs(caller_pen).proc_name;
-                    access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
+                    access_inst_par_index(ie, vars, pn, caller_proc_namespace, caller_proc_name, ven);
                     if ven < 0 then
-                        access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
+                        access_inst_par_index(ie, vars, pn, caller_proc_namespace, empty_text_field, ven);
                     end if;            
                     assert ven > -1
-                    report "var " & crop(ie.slc.file_name) & " in called scope call params source sensitive, when in params, not found file name file line " & integer'image(ie.slc.file_line)
+                    report "get_ven_in_called_scope_call_params_source_sensitive " &
+                        "var params source sensitive " & crop(ie.inst_args.par_text_fields(pn)) & 
+                        " in_caller namespace " & crop(caller_proc_namespace) & 
+                        " in_caller local scope " & crop(caller_proc_name) & 
+                        " not found file name " & crop(ie.slc.file_name) & 
+                        " file line " & integer'image(ie.slc.file_line)
                     severity failure; 
                     return;
                 end if;
             end if;
-            called_pen := rcs(sp).pen_of_called_proc;         
+            called_pen := rcs(sp).pen_of_called_proc;     
+            called_proc_namespace := procs.element_ptrs(called_pen).proc_namespace;    
             called_proc_name := procs.element_ptrs(called_pen).proc_name;
-            access_inst_par_index(ie, vars, pn, ie.inst_namespace, called_proc_name, ven);
+            access_inst_par_index(ie, vars, pn, called_proc_namespace, called_proc_name, ven);
             if ven < 0 then
-                access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
+                access_inst_par_index(ie, vars, pn, called_proc_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var " & crop(ie.slc.file_name) & " in called scope call params source sensitive, when not in params, not found file name file line " & integer'image(ie.slc.file_line)
+            report "get_ven_in_called_scope_call_params_source_sensitive " &
+                "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                " in_called namespace " & crop(called_proc_namespace) & 
+                " in_prefered called local scope " & crop(called_proc_name) & 
+                " not found file name " & crop(ie.slc.file_name) & 
+                " file line " & integer'image(ie.slc.file_line)
             severity failure; 
         end procedure;
         
         procedure get_ven_in_caller_scope_prefer_local(constant par_num : in integer; variable ven : out integer) is
             variable pn : integer := par_num;
             variable caller_pen : integer;
+            variable caller_proc_namespace : text_field;
             variable caller_proc_name : text_field;
         begin
             caller_pen := rcs(sp - 1).pen_of_called_proc;
             if caller_pen > -1 then      
+                caller_proc_namespace := procs.element_ptrs(caller_pen).proc_namespace;      
                 caller_proc_name := procs.element_ptrs(caller_pen).proc_name;
-                access_inst_par_index(ie, vars, pn, ie.inst_namespace, caller_proc_name, ven);
+                access_inst_par_index(ie, vars, pn, caller_proc_namespace, caller_proc_name, ven);
                 if ven < 0 then
-                    access_inst_par_index(ie, vars, pn, ie.inst_namespace, empty_text_field, ven);
+                    access_inst_par_index(ie, vars, pn, caller_proc_namespace, empty_text_field, ven);
                 end if;            
                 assert ven > -1
-            report "var " & crop(ie.inst_args.par_text_fields(pn)) & " in_caller scope prefer local not found file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                report "get_ven_in_caller_scope_prefer_local " &
+                    "var " & crop(ie.inst_args.par_text_fields(pn)) & 
+                    " in_caller namespace " & crop(caller_proc_namespace) & 
+                    " in_caller prefer local scope " & crop(caller_proc_name) & 
+                    " not found file name " & crop(ie.slc.file_name) & 
+                    " file line " & integer'image(ie.slc.file_line)
                 severity failure; 
                 return;
             end if; 
@@ -400,7 +455,18 @@ begin
 
         procedure print_instr(constant pre : in string; constant post : in string) is
         begin
-            print(pre & ie.inst(1 to ie.inst_len) & " " & crop(ie.inst_args.par_text_fields(1)) & " " & crop(ie.inst_args.par_text_fields(2)) & " " & crop(ie.inst_args.par_text_fields(3)) & " " & crop(ie.inst_args.par_text_fields(4)) & " " & crop(ie.inst_args.par_text_fields(5)) & " " & crop(ie.inst_args.par_text_fields(6)) & " #" & integer'image(ien) & " sp " & integer'image(sp) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line) & post);
+            print(pre & ie.inst(1 to ie.inst_len) 
+                & " " & crop(ie.inst_args.par_text_fields(1)) 
+                & " " & crop(ie.inst_args.par_text_fields(2)) 
+                & " " & crop(ie.inst_args.par_text_fields(3)) 
+                & " " & crop(ie.inst_args.par_text_fields(4)) 
+                & " " & crop(ie.inst_args.par_text_fields(5)) 
+                & " " & crop(ie.inst_args.par_text_fields(6)) 
+                & " #" & integer'image(ien) 
+                & " sp " & integer'image(sp) 
+                & " file name " 
+                & crop(ie.slc.file_name) 
+                & " file line " & integer'image(ie.slc.file_line) & post);
         end procedure;
 
         procedure print_instr(constant pre : in string) is
