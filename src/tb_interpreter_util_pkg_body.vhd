@@ -444,8 +444,7 @@ package body tb_interpreter_util_pkg is
                     while tmp_field(k) /= nul loop
                         cut_field(k - 3) := tmp_field(k);
                         k := k + 1;
-                    end loop;            
-                    print("cut_field" & cut_field);         
+                    end loop;                  
                     if contains_dot(cut_field) then
                         access_var_index(vars, cut_field, IS_FQN, empty_text_field, empty_text_field, ven);
                     else

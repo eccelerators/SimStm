@@ -6,9 +6,6 @@ var TestCaseLinesPosition 0
 var TestCaseAssertionsInsertionPoint 0
 var TestCasePropertiesInsertionPoint 0
 
-signal sigInTestSuiteIndex 2
-var TestSuiteIndex 255
-
 var TestCaseIndex 0xFFFFFFFF
 var TestCaseHasIndex 0
 var TestSuiteHasIndex 0
@@ -144,7 +141,7 @@ proc endTestCase (
     log message stm.ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime lb>TestToCall
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
-    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint' assertions="{:d}"' stm.StandardTestVerifyAssertionsCountResult
+    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint ' assertions="{:d}"' stm.StandardTestVerifyAssertionsCountResult
     add TestCasePropertiesInsertionPoint 1
     lines append message TestCaseLines '</testcase>'
     lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'

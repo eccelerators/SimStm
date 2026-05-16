@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := true;
+        constant DUMP_PARSE_RESULTS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -1522,7 +1522,7 @@ begin
                     verify_failure_expected_count := to_integer(unsigned(verify_failure_expected));
                     bus_timeout_failure_expected_count := to_integer(unsigned(bus_timeout_failure_expected));
 
-                    print("Verify passes " & (integer'image(verify_assertions_count)));
+                    print("Verify assertions " & (integer'image(verify_assertions_count)));
                     print("Timeout monitored bus access passes " & (integer'image(bus_timeout_assertions_count)));
                     if verify_failure_count /= 0 and bus_timeout_failure_count /= 0 then
                         print("Expected " & (integer'image(verify_failure_expected_count)) & " verify failures, got " & (integer'image(verify_failure_count)));

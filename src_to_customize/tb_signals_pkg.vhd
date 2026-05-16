@@ -12,31 +12,31 @@ package tb_signals_pkg is
         --base
         sim_time : integer;
         test_suite_index : integer;
-
+        machine_value_width : integer;
+        
         -- general
         simstm_loopback_verify_assertions : std_logic_vector(31 downto 0);
         simstm_loopback_verify_failures : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_assertions : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_failures : std_logic_vector(31 downto 0);
 
-        -- signals unittests
-        loopback_1bit : std_logic;
-        loopback_32bit : std_logic_vector(31 downto 0);
-        loopback_16bit_cross : std_logic_vector(15 downto 0);
+        -- signals for tests
+        active : std_logic;
+        count : std_logic_vector(31 downto 0);
     end record;
 
     type t_signals_out is record
         --base
-        bus_reset : std_logic;
+        dut_reset : std_logic;
 
         -- general
         simstm_loopback_verify_failure_expected : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_failure_expected : std_logic_vector(31 downto 0);
 
-        -- signals unittests
-        loopback_1bit : std_logic;
-        loopback_32bit : std_logic_vector(31 downto 0);
-        loopback_16bit_cross : std_logic_vector(15 downto 0);
+        -- signals for tests
+        step_down : std_logic;
+        step_up : std_logic;
+        step_value : std_logic_vector(31 downto 0);
     end record;
 
     -- TODO: Define here the number of interrupts you want to have
@@ -99,10 +99,9 @@ package body tb_signals_pkg is
         signals.simstm_loopback_bus_timeout_assertions := (others => '0');
         signals.simstm_loopback_bus_timeout_failures := (others => '0');
 
-        -- signals unittest
-        signals.loopback_1bit := '0';
-        signals.loopback_32bit := (others => '0');
-        signals.loopback_16bit_cross := (others => '0');
+        -- signals for tests
+        signals.active := '0';
+        signals.count := (others => '0');
 
         return signals;
     end function;
@@ -118,10 +117,10 @@ package body tb_signals_pkg is
         signals.simstm_loopback_verify_failure_expected := (others => '0');
         signals.simstm_loopback_bus_timeout_failure_expected := (others => '0');
 
-        -- signals unittests
-        signals.loopback_1bit := '0';
-        signals.loopback_32bit := (others => '0');
-        signals.loopback_16bit_cross := (others => '0');
+        -- signals for tests
+        signals.step_down := '0';
+        signals.step_up := '0';
+        signals.step_value := (others => '0');
         return signals;
     end function;
 
@@ -162,6 +161,8 @@ package body tb_signals_pkg is
                 value_mapping(signals.sim_time, value);
             when 2 =>
                 value_mapping(signals.test_suite_index, value);
+            when 3 =>
+                value_mapping(signals.machine_value_width, value);
 
             -- general
             when 10000 =>
@@ -175,11 +176,9 @@ package body tb_signals_pkg is
 
             -- signals unittest mapping
             when 11000 =>
-                value_mapping(signals.loopback_1bit, value);
+                value_mapping(signals.active, value);
             when 11001 =>
-                value_mapping(signals.loopback_32bit, value);
-            when 11002 =>
-                value_mapping(signals.loopback_16bit_cross, value);
+                value_mapping(signals.count, value);
 
             when others =>
                 valid := 0;
@@ -215,7 +214,7 @@ package body tb_signals_pkg is
 
             -- base
             when 1 =>
-                value_mapping(value, signals.bus_reset);
+                value_mapping(value, signals.dut_reset);
 
             -- general
             when 10000 =>
@@ -225,11 +224,11 @@ package body tb_signals_pkg is
 
             -- signals unittest mapping
             when 11000 =>
-                value_mapping(value, signals.loopback_1bit);
+                value_mapping(value, signals.step_down);
             when 11001 =>
-                value_mapping(value, signals.loopback_32bit);
+                value_mapping(value, signals.step_up);
             when 11002 =>
-                value_mapping(value, signals.loopback_16bit_cross);
+                value_mapping(value, signals.step_value);
 
             when others =>
                 assert false

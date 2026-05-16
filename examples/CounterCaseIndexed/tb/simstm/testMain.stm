@@ -7,6 +7,10 @@ namespace CounterCaseIndexed
 
     proc testMain ()
         var trc stm.TRACE_OFF  
+        
+        -- or trc stm.TRACE_EXECUTED_LINES 
+        -- or trc stm.TRACE_STACK  
+        trace trc  
                 
         log message stm.INFO "Main test started"
 
@@ -16,10 +20,6 @@ namespace CounterCaseIndexed
 --        equ stm.TestCaseIndex 3
 --        call testCountUp ()
         
-        or trc stm.TRACE_EXECUTED_LINES 
-        or trc stm.TRACE_STACK  
-        trace trc    
- 
         call emuTestSuite ()
         
         log message stm.INFO "Main test finished"

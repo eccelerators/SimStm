@@ -9,12 +9,12 @@ proc testCountUp (
     
     call stm.startStandardTestShell ()
     call initDut ()    
-    signal write out_signal_StepValue StepValue
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal write sigOutStepValue StepValue
+    signal verify sigInCount expextedCount stm.MAX
     loop 4
         call countUp ()    
         add expextedCount StepValue  
-        signal verify in_signal_Count expextedCount stm.MAX
+        signal verify sigInCount expextedCount stm.MAX
         wait 1000
     end loop
     call stm.endStandardTestShell ()
@@ -27,12 +27,12 @@ proc testCountDown (
     
     call stm.startStandardTestShell ()
     call initDut () 
-    signal write out_signal_StepValue StepValue
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal write sigOutStepValue StepValue
+    signal verify sigInCount expextedCount stm.MAX
     loop 4
         call countDown ()    
         sub expextedCount StepValue 
-        signal verify in_signal_Count expextedCount stm.MAX
+        signal verify sigInCount expextedCount stm.MAX
         wait 1000
     end loop
     call stm.endStandardTestShell ()

@@ -1,4 +1,3 @@
-library std;
 use std.textio.all;
 
 library ieee;
@@ -10,36 +9,34 @@ use work.tb_base_pkg.all;
 package tb_signals_pkg is
 
     type t_signals_in is record
+        --base
+        sim_time : integer;
+        test_suite_index : integer;
+        machine_value_width : integer;
+        
+        -- general
+        simstm_loopback_verify_assertions : std_logic_vector(31 downto 0);
+        simstm_loopback_verify_failures : std_logic_vector(31 downto 0);
+        simstm_loopback_bus_timeout_assertions : std_logic_vector(31 downto 0);
+        simstm_loopback_bus_timeout_failures : std_logic_vector(31 downto 0);
 
-        in_signal_0 : std_logic; -- None
-        in_signal_2 : std_logic_vector(31 downto 0); -- stimulus_test_suite_index
-        in_signal_4 : std_logic_vector(31 downto 0); -- standard_test_verify_assertions_count
-        in_signal_5 : std_logic_vector(31 downto 0); -- standard_test_verify_failure_count
-        in_signal_6 : std_logic_vector(31 downto 0); -- bus_timeout_assertions_count
-        in_signal_7 : std_logic_vector(31 downto 0); -- bus_timeout_failure_count
-
-        in_signal_1000 : std_logic;
-        in_signal_1001 : std_logic;
-
-        -- TODO: Add here all your inputs
-        in_signal_2000 : std_logic;
-        in_signal_2001 : std_logic_vector(7 downto 0);
-        in_signal_2002 : std_logic;
-        in_signal_2003 : std_logic;
-
+        -- signals for tests
+        active : std_logic;
+        count : std_logic_vector(7 downto 0);
     end record;
 
     type t_signals_out is record
+        --base
+        dut_reset : std_logic;
 
-        -- TODO: Add here all your outputs
-        out_signal_1 : std_logic; -- init dut
-        out_signal_5 : std_logic_vector(31 downto 0); -- expected standard_test_error_count
-        out_signal_7 : std_logic_vector(31 downto 0); -- expected bus_timeout_test_error_count
-        out_signal_3000 : std_logic;
-        out_signal_3001 : std_logic_vector(7 downto 0);
-        out_signal_3002 : std_logic;
-        out_signal_3003 : std_logic;
+        -- general
+        simstm_loopback_verify_failure_expected : std_logic_vector(31 downto 0);
+        simstm_loopback_bus_timeout_failure_expected : std_logic_vector(31 downto 0);
 
+        -- signals for tests
+        step_down : std_logic;
+        step_up : std_logic;
+        step_value : std_logic_vector(7 downto 0);
     end record;
 
     -- TODO: Define here the number of interrupts you want to have
@@ -92,20 +89,19 @@ package body tb_signals_pkg is
     function signals_in_init return t_signals_in is
         variable signals : t_signals_in;
     begin
+        -- base
+        signals.sim_time := 0;
+        signals.test_suite_index := 0;
 
-        -- TODO: Set here your init values
-        signals.in_signal_0 := '0'; -- None
-        signals.in_signal_2 := (others => '0'); -- stimulus_test_suite_index
-        signals.in_signal_5 := (others => '0'); -- expected_standard_test_verify_failure_count
-        signals.in_signal_7 := (others => '0'); -- expected_bus_timeout_failure_count
+        -- general
+        signals.simstm_loopback_verify_assertions := (others => '0');
+        signals.simstm_loopback_verify_failures := (others => '0');
+        signals.simstm_loopback_bus_timeout_assertions := (others => '0');
+        signals.simstm_loopback_bus_timeout_failures := (others => '0');
 
-        signals.in_signal_1000 := '0';
-        signals.in_signal_1001 := '0';
-
-        signals.in_signal_2000 := '0';
-        signals.in_signal_2001 := (others => '0');
-        signals.in_signal_2002 := '0';
-        signals.in_signal_2003 := '0';
+        -- signals for tests
+        signals.active := '0';
+        signals.count := (others => '0');
 
         return signals;
     end function;
@@ -114,16 +110,17 @@ package body tb_signals_pkg is
     function signals_out_init return t_signals_out is
         variable signals : t_signals_out;
     begin
+        -- base
+        signals.dut_reset := '0';
 
-        -- TODO: Set here your init values
-        signals.out_signal_1 := '0';
-        signals.out_signal_5 := (others => '0');
-        signals.out_signal_7 := (others => '0');
-        signals.out_signal_3000 := '0';
-        signals.out_signal_3001 := (others => '0');
-        signals.out_signal_3002 := '0';
-        signals.out_signal_3003 := '0';
+        -- general
+        signals.simstm_loopback_verify_failure_expected := (others => '0');
+        signals.simstm_loopback_bus_timeout_failure_expected := (others => '0');
 
+        -- signals for tests
+        signals.step_down := '0';
+        signals.step_up := '0';
+        signals.step_value := (others => '0');
         return signals;
     end function;
 
@@ -134,6 +131,21 @@ package body tb_signals_pkg is
         variable value : out unsigned;
         variable valid : out integer
     ) is
+        procedure value_mapping(constant int : in integer; variable val : out unsigned) is
+        begin
+            val := to_unsigned(int, val'length);
+        end procedure;
+
+        procedure value_mapping(signal slv : in std_logic; variable val : out unsigned) is
+        begin
+            val := to_unsigned(0, val'length);
+            val(0) := slv;
+        end procedure;
+
+        procedure value_mapping(signal slv : in std_logic_vector; variable val : out unsigned) is
+        begin
+            val := resize(unsigned(slv), val'length);
+        end procedure;
     begin
         valid := 1;
         value := to_unsigned(0, value'length);
@@ -141,39 +153,32 @@ package body tb_signals_pkg is
         case signal_number is
             when 0 =>
                 assert false
-                report  "read of unassigned signal e.g., local signal in procedure"
-                severity failure;    
-            -- TODO: add here your SimStm mapping
+                report "read of unassigned signal e.g., local signal in procedure"
+                severity failure;
+
+            -- base
             when 1 =>
-                value := to_unsigned((now / 1 ns), value'length);
+                value_mapping(signals.sim_time, value);
             when 2 =>
-                value(signals.in_signal_2'left downto 0) := unsigned(signals.in_signal_2);
+                value_mapping(signals.test_suite_index, value);
             when 3 =>
-                value := to_unsigned(0, value'length);
-            when 4 =>
-                value(signals.in_signal_4'left downto 0) := unsigned(signals.in_signal_4);
-            when 5 =>
-                value(signals.in_signal_5'left downto 0) := unsigned(signals.in_signal_5);
-            when 6 =>
-                value(signals.in_signal_6'left downto 0) := unsigned(signals.in_signal_6);
-            when 7 =>
-                value(signals.in_signal_7'left downto 0) := unsigned(signals.in_signal_7);
-            when 8 =>
-                value := to_unsigned(value'length, value'length);
+                value_mapping(signals.machine_value_width, value);
 
-            when 1000 =>
-                value(0) := signals.in_signal_1000;
-            when 1001 =>
-                value(0) := signals.in_signal_1001;
+            -- general
+            when 10000 =>
+                value_mapping(signals.simstm_loopback_verify_assertions, value);
+            when 10001 =>
+                value_mapping(signals.simstm_loopback_verify_failures, value);
+            when 10002 =>
+                value_mapping(signals.simstm_loopback_bus_timeout_assertions, value);
+            when 10003 =>
+                value_mapping(signals.simstm_loopback_bus_timeout_failures, value);
 
-            when 2000 =>
-                value(0) := signals.in_signal_2000;
-            when 2001 =>
-                value(signals.in_signal_2001'left downto 0) := unsigned(signals.in_signal_2001);
-            when 2002 =>
-                value(0) := signals.in_signal_2002;
-            when 2003 =>
-                value(0) := signals.in_signal_2003;
+            -- signals unittest mapping
+            when 11000 =>
+                value_mapping(signals.active, value);
+            when 11001 =>
+                value_mapping(signals.count, value);
 
             when others =>
                 valid := 0;
@@ -189,32 +194,46 @@ package body tb_signals_pkg is
         variable value : in unsigned;
         variable valid : out integer
     ) is
+        procedure value_mapping(variable val : in unsigned; signal slv : out std_logic) is
+        begin
+            slv <= val(0);
+        end procedure;
+
+        procedure value_mapping(variable val : in unsigned; signal slv : out std_logic_vector) is
+        begin
+            slv <= std_logic_vector(resize(val, slv'length));
+        end procedure;
     begin
         valid := 1;
 
         case signal_number is
             when 0 =>
                 assert false
-                report  "write to unassigned signal e.g., local signal in procedure"
-                severity failure;    
-            when 1 =>
-                signals.out_signal_1 <= value(0);
-            when 5 =>
-                signals.out_signal_5 <= std_logic_vector(value(signals.out_signal_5'left downto 0));
-            when 7 =>
-                signals.out_signal_7 <= std_logic_vector(value(signals.out_signal_7'left downto 0));
+                report "write to unassigned signal e.g., local signal in procedure"
+                severity failure;
 
-            -- TODO: add here your SimStm mapping
-            when 3000 =>
-                signals.out_signal_3000 <= value(0);
-            when 3001 =>
-                signals.out_signal_3001 <= std_logic_vector(value(signals.out_signal_3001'left downto 0));
-            when 3002 =>
-                signals.out_signal_3002 <= value(0);
-            when 3003 =>
-                signals.out_signal_3003 <= value(0);
+            -- base
+            when 1 =>
+                value_mapping(value, signals.dut_reset);
+
+            -- general
+            when 10000 =>
+                value_mapping(value, signals.simstm_loopback_verify_failure_expected);
+            when 10001 =>
+                value_mapping(value, signals.simstm_loopback_bus_timeout_failure_expected);
+
+            -- signals unittest mapping
+            when 11000 =>
+                value_mapping(value, signals.step_down);
+            when 11001 =>
+                value_mapping(value, signals.step_up);
+            when 11002 =>
+                value_mapping(value, signals.step_value);
 
             when others =>
+                assert false
+                report "write to unassigned signal e.g., local signal in procedure"
+                severity failure;
                 valid := 0;
 
         end case;
@@ -227,9 +246,8 @@ package body tb_signals_pkg is
         variable interrupt_requests : out unsigned
     ) is
     begin
-        -- TODO: Connect in_signals used as interrupt to interrupt requests
-        interrupt_requests(0) := signals.in_signal_1000;
-        interrupt_requests(1) := signals.in_signal_1001;
+        interrupt_requests(0) := '0';
+        interrupt_requests(1) := '0';
         wait for 0 ps;
     end procedure;
 
@@ -281,15 +299,15 @@ package body tb_signals_pkg is
         interrupt_in_service(interrupt_number) := value_to_be_set;
         -- TODO: Connect to out_signals used to interrupt busy e.g., to a interrupt dispatcher for
         -- multicore systems
-        -- case interrupt_number is
-        --     -- TODO: add here your SimStm mapping
-        --     when 0 =>
-        --         signals.out_signal_1000 <= value_to_be_set;
-        --     when 1 =>
-        --         signals.out_signal_1001 <= value_to_be_set;
-        --     when others =>
-        --         null;
-        -- end case;
+        case interrupt_number is
+            -- TODO: add here your SimStm mapping
+            when 0 =>
+                -- signals.out_signal_3000 <= value_to_be_set;
+            when 1 =>
+                -- signals.out_signal_3002 <= value_to_be_set;
+            when others =>
+                null;
+        end case;
     end procedure;
 
 end package body;
