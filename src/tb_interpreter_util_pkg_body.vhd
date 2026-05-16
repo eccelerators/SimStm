@@ -225,6 +225,7 @@ package body tb_interpreter_util_pkg is
         constant machine_value_width : in integer
     ) is
         variable pen : integer;
+        variable ven : integer;
         variable src_i : integer;
         variable src_tail_i : integer;
         variable dest_i : integer;
@@ -236,11 +237,15 @@ package body tb_interpreter_util_pkg is
         variable dest_txt_str : stm_text;
         variable v1 : unsigned(machine_value_width - 1 downto 0);
         variable tmp_field : text_field;
+        variable cut_field : text_field;
+        variable var_label_proc_ref_ptr : text_field_ptr;
+        variable var_label_proc_ref : text_field;
         variable tmp_i : integer;
         variable input_txt : stm_text;
 
         variable insert_var : boolean;
-        variable format : base;
+        variable format_number : base;
+        variable format_string : boolean;
         variable insert_call_stack_label : boolean;
         variable previous_level : integer;
         variable insert_call_stack_file_name : boolean;
@@ -335,7 +340,8 @@ package body tb_interpreter_util_pkg is
             insert_call_stack_file_line := false;
             if txt_obj_ptr.txt(src_i) = '{' then
                 src_i := src_i + 1;
-                format := hex;
+                format_string := false;
+                format_number := hex;
                 insert_var := true;
                 while src_i < src_tail_begin and dest_i <= c_stm_text_len loop
                     if txt_obj_ptr.txt(src_i) = '}' then
@@ -350,11 +356,13 @@ package body tb_interpreter_util_pkg is
                                 exit;
                             end if;
                             if txt_obj_ptr.txt(src_i) = 'd' then
-                                format := dec;
+                                format_number := dec;
                             elsif txt_obj_ptr.txt(src_i) = 'b' then
-                                format := bin;
+                                format_number := bin;
                             elsif txt_obj_ptr.txt(src_i) = 'o' then
-                                format := oct;
+                                format_number := oct;
+                            elsif txt_obj_ptr.txt(src_i) = 's' then
+                                format_string := true;
                             end if;
                             src_i := src_i + 1;
                             if src_i = src_tail_begin then
@@ -430,19 +438,42 @@ package body tb_interpreter_util_pkg is
                 called_proc_name := procs.element_ptrs(pen).proc_name;
                 assert pen > -1
                 report "format find proc name failed " & stm_text_crop(input_txt)  & " current sp " & integer'image(sp) & " level to go up " & integer'image(previous_level) & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                severity failure;                
-                if contains_dot(tmp_field) then
-                    access_var_value(vars, tmp_field, IS_FQN, empty_text_field, empty_text_field, found, v1);
+                severity failure;   
+                if format_string then
+                    k := 4;
+                    while tmp_field(k) /= nul loop
+                        cut_field(k - 3) := tmp_field(k);
+                        k := k + 1;
+                    end loop;            
+                    print("cut_field" & cut_field);         
+                    if contains_dot(cut_field) then
+                        access_var_index(vars, cut_field, IS_FQN, empty_text_field, empty_text_field, ven);
+                    else
+                        access_var_index(vars, cut_field, IS_NOT_FQN, called_proc_namespace, called_proc_name, ven);
+                        if ven < 0 then
+                            access_var_index(vars, cut_field, IS_NOT_FQN, called_proc_namespace, empty_text_field, ven);
+                        end if;
+                        assert ven > -1
+                        report "format find var label " & crop(cut_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure;                                              
+                    end if;                  
+                    index_var_label(vars, ven, var_label_proc_ref_ptr);  
+                    text_field_ptr_to_text_field(var_label_proc_ref_ptr, var_label_proc_ref);           
+                    dest_txt_str := ew_str_cat(dest_txt_str, var_label_proc_ref);                    
                 else
-                    access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, called_proc_name, found, v1);
-                    if not found then
-                        access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, empty_text_field, found, v1);
-                    end if;
-                    assert found
-                    report "format find var " & crop(tmp_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                    severity failure;
-                end if;
-                dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format));
+                    if contains_dot(tmp_field) then
+                        access_var_value(vars, tmp_field, IS_FQN, empty_text_field, empty_text_field, found, v1);
+                    else
+                        access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, called_proc_name, found, v1);
+                        if not found then
+                            access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, empty_text_field, found, v1);
+                        end if;
+                        assert found
+                        report "format find var value " & crop(tmp_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                        severity failure;
+                        dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format_number));
+                    end if;                
+                end if;             
                 k := 1;
                 while dest_txt_str(k) /= nul loop
                     k := k + 1;

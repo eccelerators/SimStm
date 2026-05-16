@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := false;
+        constant DUMP_PARSE_RESULTS : boolean := true;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -1228,7 +1228,7 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    format(ie, procs, vars, rcs, sp, ie.inst_args.txt_obj, txt_formatted, machine_value_width);
                     txt_formatted_ptr := new stm_text;
                     stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
                     val_int := to_integer(val2(30 downto 0));
@@ -1253,7 +1253,7 @@ begin
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    format(ie, procs, vars, rcs, sp, ie.inst_args.txt_obj, txt_formatted, machine_value_width);
                     txt_formatted_ptr := new stm_text;
                     stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
                     val_int := to_integer(val2(30 downto 0));
@@ -1272,7 +1272,7 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES_APPEND_MESSAGE then
                     get_ven_in_called_scope_prefer_local(1, ven1);
                     index_var_lines(vars, ven1, var_stm_lines);
-                    format(ie, procs, vars, rcs, sp, txt_unformatted, txt_formatted, machine_value_width);
+                    format(ie, procs, vars, rcs, sp, ie.inst_args.txt_obj, txt_formatted, machine_value_width);
                     txt_formatted_ptr := new stm_text;
                     stm_text_copy_to_ptr(txt_formatted_ptr, txt_formatted);
                     stm_lines_append(ie.slc, var_stm_lines, txt_formatted_ptr);
