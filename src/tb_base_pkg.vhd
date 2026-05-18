@@ -65,7 +65,11 @@ package tb_base_pkg is
     type parameter_value_array is array (natural range <>) of unsigned;
     type parameter_value_array_ptr is access parameter_value_array;
 
-    type parameter_type is (PAR_LIT, PAR_FQN, PAR_NM);
+    subtype parameter_type is integer range 0 to 2;
+    constant PAR_LIT : parameter_type := 0;
+    constant PAR_FQN : parameter_type := 1;
+    constant PAR_NM : parameter_type := 2;
+
     type parameter_type_array is array (1 to 6) of parameter_type;
 
     type stack_text_line_array is array (31 downto 0) of text_line;

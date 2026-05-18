@@ -451,11 +451,11 @@ package body tb_interpreter_util_pkg is
                         access_var_index(vars, cut_field, IS_NOT_FQN, called_proc_namespace, called_proc_name, ven);
                         if ven < 0 then
                             access_var_index(vars, cut_field, IS_NOT_FQN, called_proc_namespace, empty_text_field, ven);
-                        end if;
-                        assert ven > -1
-                        report "format find var label " & crop(cut_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                        severity failure;                                              
-                    end if;                  
+                        end if;                                        
+                    end if; 
+                    assert ven > -1
+                    report "format find var label " & crop(cut_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                    severity failure;                     
                     index_var_label(vars, ven, var_label_proc_ref_ptr);  
                     text_field_ptr_to_text_field(var_label_proc_ref_ptr, var_label_proc_ref);           
                     dest_txt_str := ew_str_cat(dest_txt_str, var_label_proc_ref);                    
@@ -466,12 +466,12 @@ package body tb_interpreter_util_pkg is
                         access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, called_proc_name, found, v1);
                         if not found then
                             access_var_value(vars, tmp_field, IS_NOT_FQN, called_proc_namespace, empty_text_field, found, v1);
-                        end if;
-                        assert found
-                        report "format find var value " & crop(tmp_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                        severity failure;
-                        dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format_number));
-                    end if;                
+                        end if;          
+                    end if; 
+                    assert found
+                    report "format find var value " & crop(tmp_field) & " to insert by format failed" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                    severity failure;  
+                    dest_txt_str := ew_str_cat(dest_txt_str, ew_to_text_field(v1, format_number));              
                 end if;             
                 k := 1;
                 while dest_txt_str(k) /= nul loop
@@ -584,15 +584,14 @@ package body tb_interpreter_util_pkg is
         variable scope : in text_field;
         variable ven : out integer
     ) is
-        variable wtf : text_field;
         variable vn : text_field;
     begin
         if is_fqn then
-            wtf := var_name;
-            wtf := append_dot(wtf);
+            vn := var_name;
+            vn := append_dot(vn);
         else
-            wtf := prepend_namespace(var_name, namespace);
-            vn := append_scope(wtf, scope);
+            vn := prepend_namespace(var_name, namespace);
+            vn := append_scope(vn, scope);
         end if;       
         search_var_element_number(vars, vn, ven);
     end procedure;

@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := false;
+        constant DUMP_PARSE_RESULTS : boolean := true;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -510,11 +510,14 @@ begin
         end procedure;
 
     begin
+            
         marker <= (others => '0');
         verify_assertions <= (others => '0');
         verify_failures <= (others => '0');
         bus_timeout_assertions <= (others => '0');
         bus_timeout_failures <= (others => '0');
+        executing_line <= -1;
+        executing_file <= (others => nul);
         signals_out <= signals_out_init;
         bus_down <= bus_down_init;
 

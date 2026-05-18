@@ -141,6 +141,7 @@ proc endTestCase (
     log message stm.ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime lb>TestToCall
     equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
     sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
+    
     lines insert message TestCaseLines TestCaseAssertionsInsertionPoint ' assertions="{:d}"' stm.StandardTestVerifyAssertionsCountResult
     add TestCasePropertiesInsertionPoint 1
     lines append message TestCaseLines '</testcase>'
@@ -175,25 +176,25 @@ proc endTestCase (
 end proc
 
 proc skipTestCase ()
+    lines append message TestCaseLines "<skipped message=\""
+    lines append message TestCaseLines "\"/>"
     lines size TestCaseLines TestCaseLinesPosition
-    sub TestCaseLinesPosition 1
-    lines insert message TestCaseLines TestCaseLinesPosition "<skipped message=\""
-     lines append message TestCaseLines "\"/>"
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
 
 proc errorTestCase ()
+    lines append message TestCaseLines "<error message=\""
+    lines append message TestCaseLines "\"/>"
     lines size TestCaseLines TestCaseLinesPosition
-    sub TestCaseLinesPosition 1
-    lines insert message TestCaseLines TestCaseLinesPosition "<error message=\""
-     lines append message TestCaseLines "\"/>"
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
 proc failureTestCase ()
+    lines append message TestCaseLines "<failure message=\""
+    lines append message TestCaseLines "\"/>"
     lines size TestCaseLines TestCaseLinesPosition
-    sub TestCaseLinesPosition 1
-    lines insert message TestCaseLines TestCaseLinesPosition "<failure message=\""
-     lines append message TestCaseLines "\"/>"
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
 end proc
 
 proc testTemplate ()
