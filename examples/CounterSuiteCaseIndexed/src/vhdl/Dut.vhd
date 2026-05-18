@@ -10,7 +10,7 @@ entity Dut is
         StepDown : in std_logic;
         StepUp : in std_logic;
         Load : in std_logic;
-        LoadOrStepValue : in std_logic_vector(7 downto 0);
+        LoadStepValue : in std_logic_vector(7 downto 0);
         Count : out std_logic_vector(7 downto 0)
     );
 end entity;
@@ -41,11 +41,11 @@ begin
                 shUp <= StepUp & shUp(2 downto 1);
                 shLoad <= Load & shLoad(2 downto 1);               
                 if shLoad(1 downto 0) = "10" then
-                    counter <= counter + unsigned(LoadOrStepValue);
+                    counter <= counter + unsigned(LoadStepValue);
                 elsif shDown(1 downto 0) = "10" then
-                    counter <= counter - unsigned(LoadOrStepValue);
+                    counter <= counter - unsigned(LoadStepValue);
                 elsif shUp(1 downto 0) = "10" then
-                    counter <= counter + unsigned(LoadOrStepValue);
+                    counter <= counter + unsigned(LoadStepValue);
                 end if;
             end if;
 

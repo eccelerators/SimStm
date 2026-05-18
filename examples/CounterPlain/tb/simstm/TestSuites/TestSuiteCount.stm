@@ -1,3 +1,5 @@
+include "../common/common.stm"
+
 namespace CounterPlain
 
 proc testSuiteCount ()

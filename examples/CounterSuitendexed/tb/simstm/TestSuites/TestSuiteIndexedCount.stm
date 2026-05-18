@@ -1,3 +1,5 @@
+include "../common/common.stm"
+
 namespace CounterSuiteIndexed
 
 proc testSuiteIndexedCount ()

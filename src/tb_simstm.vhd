@@ -116,7 +116,7 @@ begin
 
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
-        constant DUMP_PARSE_RESULTS : boolean := true;
+        constant DUMP_PARSE_RESULTS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;

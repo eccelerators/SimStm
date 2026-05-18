@@ -7,21 +7,21 @@ proc testCountUp (
     var StepValue stm.TestCaseIndex
 )
     var expextedCount 0
-    var loadValue TestSuiteIndex
-    mul loadValue 5
-    and loadValue 256
+    var loadStepValue stm.TestSuiteIndex
+    mul loadStepValue 5
+    and loadStepValue 256
     
-    equ expextedCount loadValue
+    equ expextedCount loadStepValue
     
     call stm.startStandardTestShell ()
     call initDut ()    
-    signal write out_signal_LoadValue loadValue
+    signal write sigOutLoadStepValue loadStepValue
     call countLoad ()
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal verify sigInCount expextedCount 0xFF
     loop 4
         call countUp ()    
-        add expextedCount 1  
-        signal verify in_signal_Count expextedCount stm.MAX
+        add expextedCount loadStepValue 
+        signal verify sigInCount expextedCount 0xFF
         wait 1000
     end loop
     call stm.endStandardTestShell ()
@@ -32,21 +32,21 @@ proc testCountDown (
     var StepValue stm.TestCaseIndex
 )
     var expextedCount 0
-    var loadValue TestSuiteIndex
-    mul loadValue 5
-    and loadValue 256
+    var loadStepValue stm.TestSuiteIndex
+    mul loadStepValue 5
+    and loadStepValue 256
     
-    equ expextedCount loadValue
+    equ expextedCount loadStepValue
     
     call stm.startStandardTestShell ()
     call initDut ()    
-    signal write out_signal_LoadValue loadValue
+    signal write sigOutLoadStepValue loadStepValue
     call countLoad ()
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal verify sigInCount expextedCount 0xFF
     loop 4
         call countDown ()    
-        sub expextedCount 1  
-        signal verify in_signal_Count expextedCount stm.MAX
+        sub expextedCount loadStepValue
+        signal verify sigInCount expextedCount 0xFF
         wait 1000
     end loop
     call stm.endStandardTestShell ()

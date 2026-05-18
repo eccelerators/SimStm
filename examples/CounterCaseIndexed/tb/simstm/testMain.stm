@@ -6,8 +6,7 @@ namespace CounterCaseIndexed
     file simulation_success "simulation.success"
 
     proc testMain ()
-        var trc stm.TRACE_OFF  
-        
+        var trc stm.TRACE_OFF          
         -- or trc stm.TRACE_EXECUTED_LINES 
         -- or trc stm.TRACE_STACK  
         trace trc  

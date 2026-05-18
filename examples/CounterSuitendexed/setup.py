@@ -16,7 +16,7 @@ static_setup_data = {
     "name": "CounterSuitendexed",
     "author": "Heinrich Diebel, Bernd Roeckert, Denis Vasilik",
     "author_email": "heinrich.diebel@eccelerators.com; bernd.roeckert@eccelerators.com; denis.vasilik@eccelerators.com;",
-    "url": "https://github.com/eccelerators/CounterSuitendexed/",
+    "url": "https://github.com/eccelerators//simstm/examples/CounterSuitendexed/",
     "description": "CounterSuitendexed",
     "long_description_content_type": "text/markdown",
     "classifiers": [
@@ -30,8 +30,10 @@ static_setup_data = {
     "top_entity_file": "src/vhdl/Dut.vhd",
     "tb_top_entity": "tbTop",
     "tb_top_entity_file": "/tb/hdl/tbTop.vhd",
-        "test_suites" : [
-            {"testsuite-name":"testSuiteIndexedCount", "file":"TestSuites/TestSuiteIndexedCount.stm", "testsuite-indexes":"4", "entry-file":"testMainSuiteIndexedCount.stm", "entry-label":"CounterSuiteIndexed.testMainSuiteIndexedCount"}
+    "tb_simstm_entry_namespace": "CounterSuiteIndexed",
+    "tb_simstm_entry_file": "testMain.stm",
+    "test_suites" : [
+        {"testsuite-name":"testSuiteIndexedCount", "file":"TestSuites/TestSuiteIndexedCount.stm", "testsuite-indexes":"4", "entry-file":"testMainSuiteIndexedCount.stm", "entry-label":"CounterSuiteIndexed.testMainSuiteIndexedCount"}
     ],
     "test_labs" : [
     ],
@@ -41,36 +43,32 @@ static_setup_data = {
     ],
     "src_data_files" : [(
         "CounterSuitendexed/src/vhdl", [
-            {"file":"src/vhdl/Dut.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
-            {"file":"src/vhdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"}
+            {"file":"src/vhdl/Dut.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
+            {"file":"src/vhdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"}
         ])
     ],
     "tb_data_files" : [(
         "CounterSuitendexed/tb/hdl/src_to_customize", [
             {"file":"tb/hdl/src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/src_to_customize/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140", "ghdl_options":["-frelaxed"]}
+            {"file":"tb/hdl/src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060", "ghdl_options":["-frelaxed"]}
         ]),(
         "CounterSuitendexed/tb/hdl", [
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00180", "ghdl_options":["-frelaxed"]}
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00100", "ghdl_options":["-frelaxed"]}
         ]),(
         "CounterSuitendexed/../../src", [
-            {"file":"../../src/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_wishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00012", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_axi4lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00013", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00014", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_instructions_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00021", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00150", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00070", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00010", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00041", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00120", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00020", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_bus_avalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00015", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
+            {"file":"../../src/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_util_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00031", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_axi4lite_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_bus_ram_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00011", "ghdl_options":["-frelaxed"]}
         ])
     ],

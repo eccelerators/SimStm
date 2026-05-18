@@ -1,4 +1,4 @@
-include "common/common.stm"
+include "../common/common.stm"
 
 namespace CounterSuiteIndexed
 
@@ -6,7 +6,7 @@ proc testCountUp (
     var TestSuiteIndex stm.TestSuiteIndex
 )
     var expextedCount 0
-    var loadValue TestSuiteIndex
+    var loadValue stm.TestSuiteIndex
     mul loadValue 5
     and loadValue 256
     
@@ -14,13 +14,13 @@ proc testCountUp (
     
     call stm.startStandardTestShell ()
     call initDut ()    
-    signal write out_signal_LoadValue loadValue
+    signal write sigOutLoadStepValue loadValue
     call countLoad ()
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal verify sigInCount expextedCount 0xFF
     loop 4
         call countUp ()    
         add expextedCount 1  
-        signal verify in_signal_Count expextedCount stm.MAX
+        signal verify sigInCount expextedCount 0xFF
         wait 1000
     end loop
     call stm.endStandardTestShell ()
@@ -30,7 +30,7 @@ proc testCountDown (
     var TestSuiteIndex stm.TestSuiteIndex
 )
     var expextedCount 0
-    var loadValue TestSuiteIndex
+    var loadValue stm.TestSuiteIndex
     mul loadValue 5
     and loadValue 256
     
@@ -38,13 +38,13 @@ proc testCountDown (
     
     call stm.startStandardTestShell ()
     call initDut ()    
-    signal write out_signal_LoadValue loadValue
+    signal write sigOutLoadStepValue loadValue
     call countLoad ()
-    signal verify in_signal_Count expextedCount stm.MAX
+    signal verify sigInCount expextedCount 0xFF
     loop 4
         call countDown ()    
         sub expextedCount 1  
-        signal verify in_signal_Count expextedCount stm.MAX
+        signal verify sigInCount expextedCount 0xFF
         wait 1000
     end loop
     call stm.endStandardTestShell ()

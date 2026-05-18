@@ -1,5 +1,4 @@
-include "../../../../lib/base.stm"
-include "count/count.stm"
+include "common/common.stm"
 
 namespace CounterPlain
 
@@ -7,7 +6,14 @@ namespace CounterPlain
     file simulation_success "simulation.success"
 
     proc testMain ()
+        var trc stm.TRACE_OFF          
+        -- or trc stm.TRACE_EXECUTED_LINES 
+        -- or trc stm.TRACE_STACK  
+        trace trc  
+        
         log message stm.INFO "Main test started"
+
+        call testCountDown ()
 
         call testCountUp ()
         

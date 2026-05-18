@@ -38,14 +38,14 @@ begin
             else
                 Active <= '1';
                 shDown <= StepDown & shDown(2 downto 1);
-                shUp <= StepUp & shDown(2 downto 1);
+                shUp <= StepUp & shUp(2 downto 1);
                 shLoad <= Load & shLoad(2 downto 1);               
                 if shLoad(1 downto 0) = "10" then
-                    counter <= counter + unsigned(LoadStepValue);
+                    counter <= unsigned(LoadStepValue);
                 elsif shDown(1 downto 0) = "10" then
-                    counter <= counter + unsigned(LoadStepValue);
+                    counter <= counter - 1;
                 elsif shUp(1 downto 0) = "10" then
-                    counter <= counter - unsigned(LoadStepValue);
+                    counter <= counter + 1;
                 end if;
             end if;
 

@@ -203,7 +203,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="-batch")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_suite_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label="+ context["tb_simstm_entry_namespace"] + test_suite_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label="+ test_suite_data["entry-label"])
                 if "index" in test_suite_data:
                     ET.SubElement(ex, "arg", value="-gstimulus_test_suite_index=" + test_suite_data["index"])
                 ET.SubElement(ex, "arg", value="-do")

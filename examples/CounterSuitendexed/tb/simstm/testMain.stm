@@ -1,5 +1,4 @@
-include "../../../../lib/base.stm"
-include "count/count.stm"
+include "common/common.stm"
 
 namespace CounterSuiteIndexed
 
