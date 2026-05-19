@@ -2,9 +2,8 @@ include "../../../../../lib/base.stm"
 
 namespace HelloWorld
 
-signal out_signal_init_dut 1
-
-signal in_signal_Active 2000
+signal sigInActive 11000
+signal sigInCount 11001
 
 proc testHelloWorld ()
     call stm.startStandardTestShell ()
@@ -17,9 +16,9 @@ end proc
 
 proc testActivation ()
     call stm.startStandardTestShell ()
-    signal write out_signal_init_dut 0
+    signal write stm.sigOutDutReset 0
     wait 20
-    signal verify in_signal_Active 1 1
+    signal verify sigInActive 1 1
     call stm.endStandardTestShell ()
 end proc
 

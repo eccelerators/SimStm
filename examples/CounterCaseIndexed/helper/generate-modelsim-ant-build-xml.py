@@ -266,7 +266,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="-batch")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_lab_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label="+ context["tb_simstm_entry_namespace"] + test_lab_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_lab_data["entry-label"])
                 ET.SubElement(ex, "arg", value="-do")
                 ET.SubElement(ex, "arg", value="run_all.do")
                 echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")

@@ -8,17 +8,16 @@ proc testSuiteIndexedCount ()
     -- the tests take respect to the suite index them self
     -- the individual suite runs appear automatically as test suites in the generated test junits
     -- the individual case runs appear automatically as test cases in the generated test suites
-    
+    equ stm.TestCaseIndex 0         
     loop 5
-        equ stm.TestCaseIndex 0
         call stm.testCaseWithSuiteAndCaseIndex (
             label set TestToCall testCountUp
         )
         add stm.TestCaseIndex 1
     end loop
 
+    equ stm.TestCaseIndex 10
     loop 3
-        equ stm.TestCaseIndex 10
         call stm.testCaseWithSuiteAndCaseIndex (
             label set TestToCall testCountDown
         )
