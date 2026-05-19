@@ -1,35 +1,15 @@
--- This file tests
--- |- signal verify with mixed value formats (dec, hex, bin) for expected and mask
--- |- combinations: dec/dec, hex/hex, bin/bin, dec/hex, dec/bin, hex/dec, hex/bin, bin/dec, bin/hex
--- |- combinations: var/dec, var/hex, var/bin, dec/var, hex/var, bin/var, var/var
-
-
 include "interface.stm"
 
 namespace SimStmTest
 
-    proc testSignalExtend ()
-        call testSignalVerifyDecDec()
-        call testSignalVerifyHexHex()
-        call testSignalVerifyBinBin()
-        call testSignalVerifyDecHex()
-        call testSignalVerifyDecBin()
-        call testSignalVerifyHexDec()
-        call testSignalVerifyHexBin()
-        call testSignalVerifyBinDec()
-        call testSignalVerifyBinHex()
-        call testSignalVerifyVarDec()
-        call testSignalVerifyVarHex()
-        call testSignalVerifyVarBin()
-        call testSignalVerifyDecVar()
-        call testSignalVerifyHexVar()
-        call testSignalVerifyBinVar()
-        call testSignalVerifyVarVar()
-    end proc
-
-
-    -- write 0 then verify expected=dec / mask=dec
     proc testSignalVerifyDecDec ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyDecDec ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- write 0 then verify expected=dec / mask=dec
+    proc unitSignalVerifyDecDec ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -51,8 +31,14 @@ namespace SimStmTest
         signal verify loopback_32bit 2183151873 2863289685
     end proc
 
-    -- write 0 then verify expected=hex / mask=hex
     proc testSignalVerifyHexHex ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyHexHex ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- write 0 then verify expected=hex / mask=hex
+    proc unitSignalVerifyHexHex ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -74,8 +60,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0x82204101 0xaaaa5555
     end proc
 
-    -- write 0 then verify expected=bin / mask=bin
     proc testSignalVerifyBinBin ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyBinBin ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- write 0 then verify expected=bin / mask=bin
+    proc unitSignalVerifyBinBin ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -97,8 +89,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0b10000010001000000100000100000001 0b10101010101010100101010101010101
     end proc
 
-    -- expected=dec / mask=hex
     proc testSignalVerifyDecHex ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyDecHex ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=dec / mask=hex
+    proc unitSignalVerifyDecHex ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -120,8 +118,14 @@ namespace SimStmTest
         signal verify loopback_32bit 2183151873 0xaaaa5555
     end proc
 
-    -- expected=dec / mask=bin
     proc testSignalVerifyDecBin ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyDecBin ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=dec / mask=bin
+    proc unitSignalVerifyDecBin ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -143,8 +147,14 @@ namespace SimStmTest
         signal verify loopback_32bit 2183151873 0b10101010101010100101010101010101
     end proc
 
-    -- expected=hex / mask=dec
     proc testSignalVerifyHexDec ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyHexDec ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=hex / mask=dec
+    proc unitSignalVerifyHexDec ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -166,8 +176,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0x82204101 2863289685
     end proc
 
-    -- expected=hex / mask=bin
     proc testSignalVerifyHexBin ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyHexBin ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=hex / mask=bin
+    proc unitSignalVerifyHexBin ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -189,8 +205,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0x82204101 0b10101010101010100101010101010101
     end proc
 
-    -- expected=bin / mask=dec
     proc testSignalVerifyBinDec ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyBinDec ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=bin / mask=dec
+    proc unitSignalVerifyBinDec ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -211,9 +233,15 @@ namespace SimStmTest
         signal verify loopback_32bit 0b10000111011001010100001100100001 4294967295
         signal verify loopback_32bit 0b10000010001000000100000100000001 2863289685
     end proc
-
-    -- expected=bin / mask=hex
+    
     proc testSignalVerifyBinHex ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyBinHex ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=bin / mask=hex
+    proc unitSignalVerifyBinHex ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -235,8 +263,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0b10000010001000000100000100000001 0xaaaa5555
     end proc
 
-    -- expected=var / mask=dec
     proc testSignalVerifyVarDec ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyVarDec ()
+        call stm.endStandardTestShell ()    
+    end proc
+        
+    -- expected=var / mask=dec
+    proc unitSignalVerifyVarDec ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -259,8 +293,14 @@ namespace SimStmTest
         signal verify loopback_32bit expected_val 2863289685
     end proc
 
-    -- expected=var / mask=hex
     proc testSignalVerifyVarHex ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyVarHex ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=var / mask=hex
+    proc unitSignalVerifyVarHex ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -282,8 +322,14 @@ namespace SimStmTest
         signal verify loopback_32bit expected_val 0xaaaa5555
     end proc
 
-    -- expected=var / mask=bin
     proc testSignalVerifyVarBin ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyVarBin ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=var / mask=bin
+    proc unitSignalVerifyVarBin ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -305,8 +351,14 @@ namespace SimStmTest
         signal verify loopback_32bit expected_val 0b10101010101010100101010101010101
     end proc
 
-    -- expected=dec / mask=var
     proc testSignalVerifyDecVar ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyDecVar ()
+        call stm.endStandardTestShell ()    
+    end proc
+    
+    -- expected=dec / mask=var
+    proc unitSignalVerifyDecVar ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -328,9 +380,15 @@ namespace SimStmTest
         var    verify read_back      2183151873 mask_val
         signal verify loopback_32bit 2183151873 mask_val
     end proc
+    
+    proc testSignalVerifyHexVar ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyHexVar ()
+        call stm.endStandardTestShell ()    
+    end proc
 
     -- expected=hex / mask=var
-    proc testSignalVerifyHexVar ()
+    proc unitSignalVerifyHexVar ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -352,9 +410,15 @@ namespace SimStmTest
         var    verify read_back      0x87654321 0xffffffff
         signal verify loopback_32bit 0x82204101 mask_val
     end proc
+    
+    proc testSignalVerifyBinVar ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyBinVar ()
+        call stm.endStandardTestShell ()    
+    end proc
 
     -- expected=bin / mask=var
-    proc testSignalVerifyBinVar ()
+    proc unitSignalVerifyBinVar ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0
@@ -376,9 +440,15 @@ namespace SimStmTest
         var    verify read_back      0b10000111011001010100001100100001 0b11111111111111111111111111111111
         signal verify loopback_32bit 0b10000010001000000100000100000001 mask_val
     end proc
+    
+    proc testSignalVerifyVarVar ()
+        call stm.startStandardTestShell ()
+        call unitSignalVerifyVarVar ()
+        call stm.endStandardTestShell ()    
+    end proc
 
     -- expected=var / mask=var
-    proc testSignalVerifyVarVar ()
+    proc unitSignalVerifyVarVar ()
         var read_back    0x12345678
         var expected_val 0
         var mask_val     0

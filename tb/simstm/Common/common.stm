@@ -1,0 +1,15 @@
+include "../../../lib/base.stm"
+
+namespace SimStmTest
+
+var WaitTimeOut 100000 -- ms
+
+proc initDut ()
+    signal write stm.sigOutDutReset 1
+    wait 100
+    signal write stm.sigOutDutReset 0
+    wait 100
+end proc
+
+end namespace
+

@@ -322,7 +322,7 @@ package body tb_interpreter_pkg is
                                     access_inst_par_index(ie, vars, 2, ie.inst_namespace, empty_text_field, ven2);
                                 end if;            
                                 assert ven2 > -1
-                                report "var label not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                                report "var not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
                                 severity failure;                                 
                                 val2 := vars.element_ptrs(ven2).values(0);
                                 ie.inst_args.par_literal_values(2) := val2;

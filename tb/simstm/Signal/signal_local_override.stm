@@ -5,12 +5,12 @@ signal out_signal_local_override 0
 proc testSignalLocalOverride ()
 
     call stm.startStandardTestShell ()
-    signal pointer copy out_signal_local_override out_signal_3000
+    signal pointer copy out_signal_local_override loopback_1bit
     signal write out_signal_local_override 0
     wait 100
     call setSignalToOverwrite ()
     var res 100
-    signal verify in_signal_2000 0 stm.MAX
+    signal verify loopback_1bit 0 stm.MAX
     call checkSignalGlobal ()
     call stm.endStandardTestShell ()
 
@@ -18,7 +18,7 @@ end proc
 
 proc setSignalToOverwrite ()
     signal out_signal_local_override 0 
-    signal pointer copy out_signal_local_override out_signal_3001
+    signal pointer copy out_signal_local_override loopback_32bit
     signal write out_signal_local_override 1
     wait 100
     var res 99
@@ -26,7 +26,7 @@ proc setSignalToOverwrite ()
 end proc
 
 proc checkSignalGlobal ()
-    signal verify in_signal_2000 1 stm.MAX
+    signal verify loopback_1bit 1 stm.MAX
 end proc
 
 end namespace

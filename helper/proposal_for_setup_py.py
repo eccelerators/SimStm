@@ -10,6 +10,8 @@ from jinja2 import FileSystemLoader
 from jinja2 import Template
 from vhdeps import run_cli
 
+from proposal_user_parameters import UserParameters
+
 
 class GenerateProposalForSetupPy:
 
@@ -17,52 +19,70 @@ class GenerateProposalForSetupPy:
 
         project_folder_path = os.path.abspath(indir_project)
         project_folder_name = PurePath(project_folder_path).name
+        print("found project_folder_name {}".format(project_folder_name))
         project_name = self.project_folder_name_to_project_name(project_folder_name)
-
-        src_vhdl_folders = ['src_to_customize',
-                            'src'
-                            ]
-
-        tb_vhdl_folders = ['tb',
-                           ]
-
-        tb_simstm_folders = ['tb/simstm',
-                             ]
-
-        other_folders = {
-            project_folder_name: [{"source_folder": ".", "suffixes": [".md", ".rst"]}]
-        }
-
-        for f in os.listdir(project_folder_path + '/src/vhdl'):
-            if os.path.isfile(project_folder_path + '/src/vhdl' + '/' + f):
-                if Path(project_folder_path + '/src/vhdl' + '/' + f).suffix in ['.vhd', '.vhdl']:
-                    if "tb_simstm" in f:
-                        top_entity_file = f
-
-        for f in os.listdir(project_folder_path + '/tb/hdl'):
-            if os.path.isfile(project_folder_path + '/tb/hdl' + '/' + f):
-                if Path(project_folder_path + '/tb/hdl' + '/' + f).suffix in ['.vhd', '.vhdl']:
-                    if "tbTop" in f:
+        print("found project_name {}".format(project_name))
+        
+        UP = UserParameters(project_folder_name)
+        
+        if UP.search_folder_for_top_entity is not None:
+            for f in os.listdir(project_folder_path + UP.search_folder_for_top_entity):
+                if os.path.isfile(project_folder_path + UP.search_folder_for_top_entity + '/' + f):
+                    if Path(project_folder_path + UP.search_folder_for_top_entity + '/' + f).suffix in ['.vhd', '.vhdl']:
+                        if UP.search_phrase_in_vhdl_files_for_top_entity in f:
+                            top_entity_file = f
+            print("found top_entity_file {}".format(top_entity_file))
+        else:
+            top_entity_file = ""
+            print("no top entity file ".format(top_entity_file))
+            
+        for f in os.listdir(project_folder_path + "/" + UP.search_folder_for_tb_top_entity):
+            if os.path.isfile(project_folder_path + "/" + UP.search_folder_for_tb_top_entity + '/' + f):
+                if Path(project_folder_path + "/" + UP.search_folder_for_tb_top_entity + '/' + f).suffix in ['.vhd', '.vhdl']:
+                    if UP.search_phrase_in_vhdl_files_for_tb_top_entity in f:
                         tb_top_entity_file = f
+        print("found tb_top_entity_file {}".format(tb_top_entity_file))
 
-        f = open(project_folder_path + '/src/vhdl' + '/' + top_entity_file, 'r')
+        for f in os.listdir(project_folder_path + "/" + UP.search_folder_for_simstm_test_main_files_for_entry_namespace):
+            if os.path.isfile(project_folder_path + "/" + UP.search_folder_for_simstm_test_main_files_for_entry_namespace + '/' + f):
+                if Path(project_folder_path + "/" + UP.search_folder_for_simstm_test_main_files_for_entry_namespace + '/' + f).suffix in ['.stm']:
+                    if UP.search_phrase_in_simstm_test_main_files_for_entry_namespace in f:
+                        tb_simstm_entry_file = f
+        print("found tb_simstm_entry_file {}".format(tb_simstm_entry_file))
+
+        f = open(project_folder_path + "/" + UP.search_folder_for_simstm_test_main_files_for_entry_namespace + '/' + tb_simstm_entry_file, 'r')
         f_lines = f.readlines()
         for l in f_lines:
-            if "entity" in l:
-                top_entity = l.split()[1]
+            if l.strip().startswith("namespace"):
+                tb_simstm_entry_namespace = l.split()[1]
                 break
+        print("found tb_simstm_entry_namespace {}".format(tb_simstm_entry_namespace))
 
-        f = open(project_folder_path + '/tb/hdl' + '/' + tb_top_entity_file, 'r')
+        if UP.search_folder_for_top_entity is not None:
+            f = open(project_folder_path + "/" + '/src_dut' + '/' + top_entity_file, 'r')
+            f_lines = f.readlines()
+            for l in f_lines:
+                if "entity" in l:
+                    top_entity = l.split()[1]
+                    break
+            print("found top_entity {}".format(top_entity))
+        else:
+            top_entity = ""
+            print("no top entity ".format(top_entity))
+           
+
+        f = open(project_folder_path + "/" + UP.search_folder_for_tb_top_entity + '/' + tb_top_entity_file, 'r')
         f_lines = f.readlines()
         for l in f_lines:
             if "entity" in l:
                 tb_top_entity = l.split()[1]
                 break
-
+        print("found tb_top_entity {}".format(tb_top_entity))
+            
         hdl_file_list = []
-        for src_vhdl_folder in src_vhdl_folders:
+        for src_vhdl_folder in UP.src_vhdl_folders:
             hdl_file_list += self.get_files_by_suffixes(project_folder_path, None, src_vhdl_folder, ['.vhd', '.vhdl'])
-        for tb_vhdl_folder in tb_vhdl_folders:
+        for tb_vhdl_folder in UP.tb_vhdl_folders:
             hdl_file_list += self.get_files_by_suffixes(project_folder_path, None, tb_vhdl_folder, ['.vhd', '.vhdl'])
 
         package_dict = {}
@@ -100,17 +120,34 @@ class GenerateProposalForSetupPy:
         vhdeps_cmd_args = ["dump", tb_top_entity]
 
         vhof = io.StringIO()
-        for sf in src_vhdl_folders:
+        for sf in UP.src_vhdl_folders:
             vhdeps_cmd_args += ["-x", indir_project + '/' + sf]
-        for tf in tb_vhdl_folders:
+        for tf in UP.tb_vhdl_folders:
             vhdeps_cmd_args += ["-x", indir_project + '/' + tf]
         with redirect_stdout(vhof):
             run_cli(args=vhdeps_cmd_args)
-        vhofs = vhof.getvalue()
-        vhofs = vhofs.replace("dep ", "").replace("top ", "").replace("work ", "").replace(
-            "2008 ", "").replace("\\", "/").replace(project_folder_path.replace("\\", "/") + "/", "")
+                     
+        vhoafs = vhof.getvalue().replace("dep ", "").replace("top ", "").replace("work ", "").replace(
+            "2008 ", "").replace("\\", "/").splitlines()
+                    
+        pfp = project_folder_path.replace("\\", "/")
+        ps = [seg for seg in pfp.strip().split('/') if seg]
+        
+        vhofs = []
+        for v in vhoafs:
+            vs = [seg for seg in v.split('/') if seg]
+            # Find common prefix length
+            segi = 0
+            for a, b in zip(ps, vs):
+                if a == b:
+                    segi += 1
+                else:
+                    break
+            # Build relative path
+            vhof = '../' * (len(ps) - segi) + '/'.join(vs[segi:])
+            vhofs.append(vhof)
 
-        utilized_src_or_tb_files = vhofs.split()
+        utilized_src_or_tb_files = vhofs
         utilized_src_or_tb_files_hdl_order_dict = {}
         hdl_order = 0
         for usf in utilized_src_or_tb_files:
@@ -126,6 +163,11 @@ class GenerateProposalForSetupPy:
                     utilized_src_or_tb_files_hdl_order_dict[additional_utilized_file] = "{:0>5d}".format(
                         int(additional_utilized_file_hdl_order) + 1)
 
+        for e in UP.extra_vhdl_file_dicts:
+            extra_utilized_file = e["file"]
+            utilized_src_or_tb_files.append(extra_utilized_file)
+            utilized_src_or_tb_files_hdl_order_dict[extra_utilized_file]  = e["hdl_order"]
+        
         TestSuiteFileDictList = []
         if os.path.exists(project_folder_path + '/tb/simstm/TestSuites'):
             for f in os.listdir(project_folder_path + '/tb/simstm/TestSuites'):
@@ -147,23 +189,19 @@ class GenerateProposalForSetupPy:
                                             testsuite_name = proc_split[1]
                                             break
                             entry_file = "testMainSuite" + TestSuiteObjectName + ".stm"
-                            entry_label = "testMainSuite" + TestSuiteObjectName
+                            entry_label = tb_simstm_entry_namespace + ".testMainSuite" + TestSuiteObjectName
                             if isIndexedTestSuite:
                                 tsmf = open(project_folder_path + '/tb/simstm/' + entry_file, 'r')
                                 tsmf_lines = tsmf.readlines()
                                 testsuite_indexes = ""
                                 for l in tsmf_lines:
-                                    if "const" in l and "testMainSuite" + TestSuiteObjectName + "MaximumIndex" in l:
+                                    if "const" in l and "testMainSuiteIndexedRangeLength" + TestSuiteObjectName.replace("Indexed", "") in l:
                                         testsuite_indexes = l.split()[2]
                                         break
                                 if testsuite_indexes == "":
                                     print(
-                                        "line: 'const testMainSuite" +
-                                        TestSuiteObjectName +
-                                        "MaximumIndex = ?' is missing in file: " +
-                                        project_folder_path +
-                                        '/tb/simstm/' +
-                                        entry_file)
+                                        "line: const testMainSuiteIndexedRangeLength" + TestSuiteObjectName.replace("Indexed", "") + " = ? is missing in file: " +
+                                        project_folder_path + '/tb/simstm/' + entry_file)
                                     exit()
                                 TestSuiteFileDictList.append({"testsuite-name": testsuite_name,
                                                               "file": "TestSuites/" + f,
@@ -193,20 +231,20 @@ class GenerateProposalForSetupPy:
                                             testlab_name = proc_split[1]
                                             break                                
                             entry_file = "testMainLab" + TestLabObjectName + ".stm"
-                            entry_label = "testMainLab" + TestLabObjectName
+                            entry_label = tb_simstm_entry_namespace + ".testMainLab" + TestLabObjectName
                             TestLabFileDictList.append({"testlab-name": testlab_name,
                                                     "file": "TestLabs/" + f,
                                                     "entry-file": entry_file,
                                                     "entry-label": entry_label})
 
         data_file_lists_str = ""
-        data_file_lists_str += '    "test_suites" : [\n'
+        data_file_lists_str += '"test_suites" : [\n'
         for i, d in enumerate(TestSuiteFileDictList):
             if "testsuite-indexes" in d:
-                data_file_lists_str += '            {{"testsuite-name":"{}", "file":"{}", "testsuite-indexes":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
+                data_file_lists_str += '        {{"testsuite-name":"{}", "file":"{}", "testsuite-indexes":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
                     d["testsuite-name"], d["file"], d["testsuite-indexes"], d["entry-file"], d["entry-label"])
             else:
-                data_file_lists_str += '            {{"testsuite-name":"{}", "file":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
+                data_file_lists_str += '        {{"testsuite-name":"{}", "file":"{}", "entry-file":"{}", "entry-label":"{}"}}'.format(
                     d["testsuite-name"], d["file"], d["entry-file"], d["entry-label"])
             if i < len(TestSuiteFileDictList) - 1:
                 data_file_lists_str += ',\n'
@@ -224,9 +262,12 @@ class GenerateProposalForSetupPy:
                 data_file_lists_str += '\n'
         data_file_lists_str += '    ],\n'
 
-        data_file_lists_str += '    "other_data_files" : [(\n'
         destination_folder_destination_files_dict_tupple_list = []
-        for other_destination_folder, other_source_folder_dict_list in other_folders.items():
+        if len(UP.other_folders) > 0:
+            data_file_lists_str += '    "other_data_files" : [(\n'
+        else:
+            data_file_lists_str += '    "other_data_files" : [\n'
+        for other_destination_folder, other_source_folder_dict_list in UP.other_folders.items():
             files_dict_list = []
             for other_source_folder_dict in other_source_folder_dict_list:
                 files_dict_list += self.get_other_destination_files(
@@ -254,11 +295,15 @@ class GenerateProposalForSetupPy:
                 data_file_lists_str += '        ])\n'
         data_file_lists_str += '    ],\n'
 
-        data_file_lists_str += '    "src_data_files" : [(\n'
+        
 
         destination_folder_destination_files_dict_tupple_list = []
+        if len(UP.src_vhdl_folders) > 0:
+            data_file_lists_str += '    "src_data_files" : [(\n'
+        else:
+            data_file_lists_str += '    "src_data_files" : [\n'
 
-        for vhdl_folder in src_vhdl_folders:
+        for vhdl_folder in UP.src_vhdl_folders:
             destination_folder_destination_files_dict_tupple_list += self.get_vhdl_destination_folder_destination_files_tupples(
                 project_folder_path, project_folder_name, None, vhdl_folder, ['.vhd', '.vhdl'])
         for j, d in enumerate(destination_folder_destination_files_dict_tupple_list):
@@ -281,14 +326,19 @@ class GenerateProposalForSetupPy:
                 data_file_lists_str += '        ])\n'
         data_file_lists_str += '    ],\n'
 
-        data_file_lists_str += '    "tb_data_files" : [(\n'
         destination_folder_destination_files_dict_tupple_list = []
-        for vhdl_folder in tb_vhdl_folders:
+        if len(UP.tb_vhdl_folders) > 0:
+            data_file_lists_str += '    "tb_data_files" : [(\n'
+        else:
+            data_file_lists_str += '    "tb_data_files" : [\n'
+            
+        for vhdl_folder in UP.tb_vhdl_folders:
             destination_folder_destination_files_dict_tupple_list += self.get_vhdl_destination_folder_destination_files_tupples(
                 project_folder_path, project_folder_name, None, vhdl_folder, ['.vhd', '.vhdl'])
         for j, d in enumerate(destination_folder_destination_files_dict_tupple_list):
             data_file_lists_str += '        "{}", [\n'.format(d[0])
             for i, fd in enumerate(d[1]):
+                asf = fd["source_file_path"]
                 if fd["source_file_path"] in utilized_src_or_tb_files:
                     data_file_lists_str += '            {{"file":"{}", "file_type":"{}", "hdl_order":"{}", "ghdl_options":["-frelaxed"]}}'.format(
                         fd["source_file_path"], fd["file_type"], utilized_src_or_tb_files_hdl_order_dict[fd["source_file_path"]])
@@ -301,9 +351,12 @@ class GenerateProposalForSetupPy:
                 data_file_lists_str += '        ])\n'
         data_file_lists_str += '    ],\n'
 
-        data_file_lists_str += '    "src_tb_simstm_data_files" : [(\n'
         destination_folder_destination_files_dict_tupple_list = []
-        for simstm_folder in tb_simstm_folders:
+        if len(UP.tb_simstm_folders) > 0:
+            data_file_lists_str += '    "src_tb_simstm_data_files" : [(\n'
+        else:
+            data_file_lists_str += '    "src_tb_simstm_data_files" : [\n'
+        for simstm_folder in UP.tb_simstm_folders:
             destination_folder_destination_files_dict_tupple_list += self.get_destination_folder_destination_files_tupples(
                 project_folder_path, project_folder_name, None, simstm_folder, ['.stm'])
         for j, d in enumerate(destination_folder_destination_files_dict_tupple_list):
@@ -320,21 +373,36 @@ class GenerateProposalForSetupPy:
                 data_file_lists_str += '        ])\n'
         data_file_lists_str += '    ],\n'
 
-        context = {
-            "data_file_lists": data_file_lists_str,
-            "project_folder_name": project_folder_name,
-            "project_name": project_name,
-            "top_entity": top_entity,
-            "top_entity_file": "src/vhdl/" + top_entity_file,
-            "tb_top_entity": tb_top_entity,
-            "tb_top_entity_file": "/tb/hdl/" + tb_top_entity_file,
-        }
+        if UP.search_folder_for_top_entity is not None:
+            context = {
+                "data_file_lists": data_file_lists_str,
+                "project_folder_name": project_folder_name,
+                "project_name": project_name,
+                "top_entity": top_entity,
+                "top_entity_file": UP.search_folder_for_top_entity + "/" + top_entity_file,
+                "tb_top_entity": tb_top_entity,
+                "tb_top_entity_file": UP.search_folder_for_tb_top_entity + "/" + tb_top_entity_file,
+                "tb_simstm_entry_namespace": tb_simstm_entry_namespace,
+                "tb_simstm_entry_file": tb_simstm_entry_file,
+            }
+        else:
+            context = {
+                "data_file_lists": data_file_lists_str,
+                "project_folder_name": project_folder_name,
+                "project_name": project_name,
+                "top_entity": "",
+                "top_entity_file": "",
+                "tb_top_entity": tb_top_entity,
+                "tb_top_entity_file": "/tb/hdl/" + tb_top_entity_file,
+                "tb_simstm_entry_namespace": tb_simstm_entry_namespace,
+                "tb_simstm_entry_file": tb_simstm_entry_file,
+            }            
 
         print(data_file_lists_str)
 
         template_file = open(infile_setup_template_py, 'r')
-        print("reading {}".format(infile_setup_template_py))
-        print("writing {}".format(outfile_setup_proposal))
+        print("reading {}".format(os.path.abspath(infile_setup_template_py)))
+        print("writing {}".format(os.path.abspath(outfile_setup_proposal)))
         template = Template(template_file.read())
         r = template.render(context)
         f = open(outfile_setup_proposal, 'w')

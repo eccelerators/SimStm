@@ -16,7 +16,7 @@ static_setup_data = {
     "name": "SimStm",
     "author": "Heinrich Diebel, Bernd Roeckert, Denis Vasilik",
     "author_email": "heinrich.diebel@eccelerators.com; bernd.roeckert@eccelerators.com; denis.vasilik@eccelerators.com;",
-    "url": "https://github.com/eccelerators/SimStm/",
+    "url": "https://github.com/eccelerators//simstm/examples/SimStm/",
     "description": "SimStm",
     "long_description_content_type": "text/markdown",
     "classifiers": [
@@ -26,76 +26,75 @@ static_setup_data = {
     "dependency_links": [],
     "package_data": {},
     "project_name": "SimStm",
-    "top_entity": "tb_simstm",
-    "top_entity_file": "src/vhdl/tb_simstm.vhd",
+    "top_entity": "",
+    "top_entity_file": "",
     "tb_top_entity": "tbTop",
     "tb_top_entity_file": "/tb/hdl/tbTop.vhd",
-        "test_suites" : [
-            {"testsuite-name":"testSuiteVariable", "file":"TestSuites/TestSuiteVariable.stm", "entry-file":"testMainSuiteVariable.stm", "entry-label":"testMainSuiteVariable"},
-            {"testsuite-name":"testSuiteSignal", "file":"TestSuites/TestSuiteSignal.stm", "entry-file":"testMainSuiteSignal.stm", "entry-label":"testMainSuiteSignal"},
-            {"testsuite-name":"testSuiteOther", "file":"TestSuites/TestSuiteOther.stm", "entry-file":"testMainSuiteOther.stm", "entry-label":"testMainSuiteOther"},
-            {"testsuite-name":"testSuiteIndexedBus", "file":"TestSuites/TestSuiteIndexedBus.stm", "testsuite-indexes":"32", "entry-file":"testMainSuiteIndexedBus.stm", "entry-label":"testMainSuiteIndexedBus"},
-            {"testsuite-name":"testSuiteSampleCaseOnlyIndex", "file":"TestSuites/TestSuiteSampleCaseOnlyIndex.stm", "entry-file":"testMainSuiteSampleCaseOnlyIndex.stm", "entry-label":"testMainSuiteSampleCaseOnlyIndex"},
-            {"testsuite-name":"testSuiteInterrupt", "file":"TestSuites/TestSuiteInterrupt.stm", "entry-file":"testMainSuiteInterrupt.stm", "entry-label":"testMainSuiteInterrupt"},
-            {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"testMainSuiteArray"},
-            {"testsuite-name":"testSuiteIndexedSampleSuiteAndCaseIndex", "file":"TestSuites/TestSuiteIndexedSampleSuiteAndCaseIndex.stm", "testsuite-indexes":"7", "entry-file":"testMainSuiteIndexedSampleSuiteAndCaseIndex.stm", "entry-label":"testMainSuiteIndexedSampleSuiteAndCaseIndex"},
-            {"testsuite-name":"testSuiteSample", "file":"TestSuites/TestSuiteSample.stm", "entry-file":"testMainSuiteSample.stm", "entry-label":"testMainSuiteSample"},
-            {"testsuite-name":"testSuiteIndexedSampleSuiteOnlyIndex", "file":"TestSuites/TestSuiteIndexedSampleSuiteOnlyIndex.stm", "testsuite-indexes":"4", "entry-file":"testMainSuiteIndexedSampleSuiteOnlyIndex.stm", "entry-label":"testMainSuiteIndexedSampleSuiteOnlyIndex"},
-            {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"testMainSuiteFile"},
-            {"testsuite-name":"testSuiteConstant", "file":"TestSuites/TestSuiteConstant.stm", "entry-file":"testMainSuiteConstant.stm", "entry-label":"testMainSuiteConstant"},
-            {"testsuite-name":"testSuiteLines", "file":"TestSuites/TestSuiteLines.stm", "entry-file":"testMainSuiteLines.stm", "entry-label":"testMainSuiteLines"},
-            {"testsuite-name":"testSuiteBasic", "file":"TestSuites/TestSuiteBasic.stm", "entry-file":"testMainSuiteBasic.stm", "entry-label":"testMainSuiteBasic"}
+    "tb_simstm_entry_namespace": "SimStmTest",
+    "tb_simstm_entry_file": "testMain.stm",
+    "test_suites" : [
+        {"testsuite-name":"testSuiteVariable", "file":"TestSuites/TestSuiteVariable.stm", "entry-file":"testMainSuiteVariable.stm", "entry-label":"SimStmTest.testMainSuiteVariable"},
+        {"testsuite-name":"testSuiteSignal", "file":"TestSuites/TestSuiteSignal.stm", "entry-file":"testMainSuiteSignal.stm", "entry-label":"SimStmTest.testMainSuiteSignal"},
+        {"testsuite-name":"testSuiteOther", "file":"TestSuites/TestSuiteOther.stm", "entry-file":"testMainSuiteOther.stm", "entry-label":"SimStmTest.testMainSuiteOther"},
+        {"testsuite-name":"testSuiteIndexedBus", "file":"TestSuites/TestSuiteIndexedBus.stm", "testsuite-indexes":"32", "entry-file":"testMainSuiteIndexedBus.stm", "entry-label":"SimStmTest.testMainSuiteIndexedBus"},
+        {"testsuite-name":"testSuiteSampleCaseOnlyIndex", "file":"TestSuites/TestSuiteSampleCaseOnlyIndex.stm", "entry-file":"testMainSuiteSampleCaseOnlyIndex.stm", "entry-label":"SimStmTest.testMainSuiteSampleCaseOnlyIndex"},
+        {"testsuite-name":"testSuiteInterrupt", "file":"TestSuites/TestSuiteInterrupt.stm", "entry-file":"testMainSuiteInterrupt.stm", "entry-label":"SimStmTest.testMainSuiteInterrupt"},
+        {"testsuite-name":"testSuiteArray", "file":"TestSuites/TestSuiteArray.stm", "entry-file":"testMainSuiteArray.stm", "entry-label":"SimStmTest.testMainSuiteArray"},
+        {"testsuite-name":"testSuiteIndexedSampleSuiteAndCaseIndex", "file":"TestSuites/TestSuiteIndexedSampleSuiteAndCaseIndex.stm", "testsuite-indexes":"7", "entry-file":"testMainSuiteIndexedSampleSuiteAndCaseIndex.stm", "entry-label":"SimStmTest.testMainSuiteIndexedSampleSuiteAndCaseIndex"},
+        {"testsuite-name":"testSuiteSample", "file":"TestSuites/TestSuiteSample.stm", "entry-file":"testMainSuiteSample.stm", "entry-label":"SimStmTest.testMainSuiteSample"},
+        {"testsuite-name":"testSuiteIndexedSampleSuiteOnlyIndex", "file":"TestSuites/TestSuiteIndexedSampleSuiteOnlyIndex.stm", "testsuite-indexes":"4", "entry-file":"testMainSuiteIndexedSampleSuiteOnlyIndex.stm", "entry-label":"SimStmTest.testMainSuiteIndexedSampleSuiteOnlyIndex"},
+        {"testsuite-name":"testSuiteFile", "file":"TestSuites/TestSuiteFile.stm", "entry-file":"testMainSuiteFile.stm", "entry-label":"SimStmTest.testMainSuiteFile"},
+        {"testsuite-name":"testSuiteConstant", "file":"TestSuites/TestSuiteConstant.stm", "entry-file":"testMainSuiteConstant.stm", "entry-label":"SimStmTest.testMainSuiteConstant"},
+        {"testsuite-name":"testSuiteLines", "file":"TestSuites/TestSuiteLines.stm", "entry-file":"testMainSuiteLines.stm", "entry-label":"SimStmTest.testMainSuiteLines"},
+        {"testsuite-name":"testSuiteBasic", "file":"TestSuites/TestSuiteBasic.stm", "entry-file":"testMainSuiteBasic.stm", "entry-label":"SimStmTest.testMainSuiteBasic"}
     ],
     "test_labs" : [
-            {"testlab-name":"testLabBasicFinish", "file":"TestLabs/TestLabBasicFinish.stm", "entry-file":"testMainLabBasicFinish.stm", "entry-label":"testMainLabBasicFinish"},
-            {"testlab-name":"testLabBasicIncludeNested", "file":"TestLabs/TestLabBasicIncludeNested.stm", "entry-file":"testMainLabBasicIncludeNested.stm", "entry-label":"testMainLabBasicIncludeNested"},
-            {"testlab-name":"testLabArraySetOutPos", "file":"TestLabs/TestLabArraySetOutPos.stm", "entry-file":"testMainLabArraySetOutPos.stm", "entry-label":"testMainLabArraySetOutPos"},
-            {"testlab-name":"testLabConstantAdd", "file":"TestLabs/TestLabConstantAdd.stm", "entry-file":"testMainLabConstantAdd.stm", "entry-label":"testMainLabConstantAdd"},
-            {"testlab-name":"testLabArrayZeroSize", "file":"TestLabs/TestLabArrayZeroSize.stm", "entry-file":"testMainLabArrayZeroSize.stm", "entry-label":"testMainLabArrayZeroSize"},
-            {"testlab-name":"testLabArrayGetOutPos", "file":"TestLabs/TestLabArrayGetOutPos.stm", "entry-file":"testMainLabArrayGetOutPos.stm", "entry-label":"testMainLabArrayGetOutPos"},
-            {"testlab-name":"testLabBasicDoubleConst", "file":"TestLabs/TestLabBasicDoubleConst.stm", "entry-file":"testMainLabBasicDoubleConst.stm", "entry-label":"testMainLabBasicDoubleConst"},
-            {"testlab-name":"testLabBasicIncludeFlat", "file":"TestLabs/TestLabBasicIncludeFlat.stm", "entry-file":"testMainLabBasicIncludeFlat.stm", "entry-label":"testMainLabBasicIncludeFlat"},
-            {"testlab-name":"testLabConstantEqu", "file":"TestLabs/TestLabConstantEqu.stm", "entry-file":"testMainLabConstantEqu.stm", "entry-label":"testMainLabConstantEqu"},
-            {"testlab-name":"testLabBasicAbort", "file":"TestLabs/TestLabBasicAbort.stm", "entry-file":"testMainLabBasicAbort.stm", "entry-label":"testMainLabBasicAbort"},
-            {"testlab-name":"testLabBasicDoubleVar", "file":"TestLabs/TestLabBasicDoubleVar.stm", "entry-file":"testMainLabBasicDoubleVar.stm", "entry-label":"testMainLabBasicDoubleVar"}
+            {"testlab-name":"testLabBasicFinish", "file":"TestLabs/TestLabBasicFinish.stm", "entry-file":"testMainLabBasicFinish.stm", "entry-label":"SimStmTest.testMainLabBasicFinish"},
+            {"testlab-name":"testLabBasicIncludeNested", "file":"TestLabs/TestLabBasicIncludeNested.stm", "entry-file":"testMainLabBasicIncludeNested.stm", "entry-label":"SimStmTest.testMainLabBasicIncludeNested"},
+            {"testlab-name":"testLabArraySetOutPos", "file":"TestLabs/TestLabArraySetOutPos.stm", "entry-file":"testMainLabArraySetOutPos.stm", "entry-label":"SimStmTest.testMainLabArraySetOutPos"},
+            {"testlab-name":"testLabConstantAdd", "file":"TestLabs/TestLabConstantAdd.stm", "entry-file":"testMainLabConstantAdd.stm", "entry-label":"SimStmTest.testMainLabConstantAdd"},
+            {"testlab-name":"testLabArrayZeroSize", "file":"TestLabs/TestLabArrayZeroSize.stm", "entry-file":"testMainLabArrayZeroSize.stm", "entry-label":"SimStmTest.testMainLabArrayZeroSize"},
+            {"testlab-name":"testLabArrayGetOutPos", "file":"TestLabs/TestLabArrayGetOutPos.stm", "entry-file":"testMainLabArrayGetOutPos.stm", "entry-label":"SimStmTest.testMainLabArrayGetOutPos"},
+            {"testlab-name":"testLabBasicDoubleConst", "file":"TestLabs/TestLabBasicDoubleConst.stm", "entry-file":"testMainLabBasicDoubleConst.stm", "entry-label":"SimStmTest.testMainLabBasicDoubleConst"},
+            {"testlab-name":"testLabBasicIncludeFlat", "file":"TestLabs/TestLabBasicIncludeFlat.stm", "entry-file":"testMainLabBasicIncludeFlat.stm", "entry-label":"SimStmTest.testMainLabBasicIncludeFlat"},
+            {"testlab-name":"testLabConstantEqu", "file":"TestLabs/TestLabConstantEqu.stm", "entry-file":"testMainLabConstantEqu.stm", "entry-label":"SimStmTest.testMainLabConstantEqu"},
+            {"testlab-name":"testLabSample", "file":"TestLabs/TestLabSample.stm", "entry-file":"testMainLabSample.stm", "entry-label":"SimStmTest.testMainLabSample"},
+            {"testlab-name":"testLabBasicAbort", "file":"TestLabs/TestLabBasicAbort.stm", "entry-file":"testMainLabBasicAbort.stm", "entry-label":"SimStmTest.testMainLabBasicAbort"},
+            {"testlab-name":"testLabBasicDoubleVar", "file":"TestLabs/TestLabBasicDoubleVar.stm", "entry-file":"testMainLabBasicDoubleVar.stm", "entry-label":"SimStmTest.testMainLabBasicDoubleVar"}
     ],
     "other_data_files" : [(
         "SimStm", [
             {"file":"README.rst"}
         ])
     ],
-    "src_data_files" : [(
-        "SimStm/src_to_customize", [
-            {"file":"src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070"},
-            {"file":"src_to_customize/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050"},
-            {"file":"src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00160"}
-        ]),(
-        "SimStm/src/vhdl", [
-            {"file":"src/vhdl/tb_bus_wishbone_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"},
-            {"file":"src/vhdl/tb_bus_wishbone_256_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100"},
-            {"file":"src/vhdl/tb_instructions_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00171"},
-            {"file":"src/vhdl/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00200"},
-            {"file":"src/vhdl/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060"},
-            {"file":"src/vhdl/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00191"},
-            {"file":"src/vhdl/tb_bus_avalon_64_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00140"},
-            {"file":"src/vhdl/tb_bus_wishbone_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
-            {"file":"src/vhdl/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00170"},
-            {"file":"src/vhdl/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00190"},
-            {"file":"src/vhdl/tb_bus_avalon_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00150"},
-            {"file":"src/vhdl/tb_bus_wishbone_128_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110"},
-            {"file":"src/vhdl/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00180"},
-            {"file":"src/vhdl/tb_interpreter_util_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00181"},
-            {"file":"src/vhdl/tb_bus_axi4lite_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00130"},
-            {"file":"src/vhdl/tb_bus_ram_32_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00120"},
-            {"file":"src/vhdl/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00061"}
-        ])
+    "src_data_files" : [
     ],
     "tb_data_files" : [(
+        "SimStm/src_to_customize", [
+            {"file":"src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00070", "ghdl_options":["-frelaxed"]},
+            {"file":"src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00080", "ghdl_options":["-frelaxed"]}
+        ]),(
+        "SimStm/src", [
+            {"file":"src/tb_bus_wishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00062", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_bus_axi4lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00063", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_bus_ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00064", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_instructions_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00091", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_simstm.vhd", "file_type":"VHDL 2008", "hdl_order":"00120", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_base_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_interpreter_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00111", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_instructions_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00090", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_bus_avalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00065", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00110", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00100", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_interpreter_util_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00101", "ghdl_options":["-frelaxed"]},
+            {"file":"src/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00061", "ghdl_options":["-frelaxed"]}
+        ]),(
         "SimStm/tb/hdl", [
             {"file":"tb/hdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAvalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/Ram.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00210", "ghdl_options":["-frelaxed"]},
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00130", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamWishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00010", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/RamAxi4Lite.vhd", "file_type":"VHDL 2008", "hdl_order":"00020", "ghdl_options":["-frelaxed"]}
         ])
@@ -121,9 +120,13 @@ static_setup_data = {
         ]),(
         "SimStm/tb/simstm/Signal", [
             {"file":"tb/simstm/Signal/signal_pointer.stm"},
+            {"file":"tb/simstm/Signal/signal_extend.stm"},
+            {"file":"tb/simstm/Signal/signal_scoping.stm"},
+            {"file":"tb/simstm/Signal/signal_errors.stm"},
             {"file":"tb/simstm/Signal/signal_local_override.stm"},
             {"file":"tb/simstm/Signal/signal_parameter.stm"},
             {"file":"tb/simstm/Signal/signal.stm"},
+            {"file":"tb/simstm/Signal/signal_base.stm"},
             {"file":"tb/simstm/Signal/signal_local.stm"}
         ]),(
         "SimStm/tb/simstm/Common", [
@@ -165,19 +168,12 @@ static_setup_data = {
             {"file":"tb/simstm/TestLabs/TestLabBasicDoubleConst.stm"},
             {"file":"tb/simstm/TestLabs/TestLabBasicIncludeFlat.stm"},
             {"file":"tb/simstm/TestLabs/TestLabConstantEqu.stm"},
+            {"file":"tb/simstm/TestLabs/TestLabSample.stm"},
             {"file":"tb/simstm/TestLabs/TestLabBasicAbort.stm"},
             {"file":"tb/simstm/TestLabs/TestLabBasicDoubleVar.stm"}
         ]),(
-        "SimStm/tb/simstm/TestCase", [
-            {"file":"tb/simstm/TestCase/TestCase.stm"}
-        ]),(
         "SimStm/tb/simstm/Label", [
             {"file":"tb/simstm/Label/label.stm"}
-        ]),(
-        "SimStm/tb/simstm/Base", [
-            {"file":"tb/simstm/Base/ReadModifyWrite.stm"},
-            {"file":"tb/simstm/Base/Base.stm"},
-            {"file":"tb/simstm/Base/Array.stm"}
         ]),(
         "SimStm/tb/simstm/Variable", [
             {"file":"tb/simstm/Variable/variable_local.stm"},
@@ -186,6 +182,9 @@ static_setup_data = {
             {"file":"tb/simstm/Variable/variable.stm"},
             {"file":"tb/simstm/Variable/variable_default_value.stm"},
             {"file":"tb/simstm/Variable/variable_parameter.stm"}
+        ]),(
+        "SimStm/tb/simstm/Sample", [
+            {"file":"tb/simstm/Sample/sample.stm"}
         ]),(
         "SimStm/tb/simstm/Constant", [
             {"file":"tb/simstm/Constant/constant.stm"},
@@ -223,12 +222,14 @@ static_setup_data = {
             {"file":"tb/simstm/testMainSuiteArray.stm"},
             {"file":"tb/simstm/testMainLabConstantAdd.stm"},
             {"file":"tb/simstm/testMainSuiteSampleCaseOnlyIndex.stm"},
+            {"file":"tb/simstm/testMainLabSample.stm"},
             {"file":"tb/simstm/testMainLabBasicIncludeFlat.stm"},
             {"file":"tb/simstm/testMainSuiteIndexedBus.stm"},
             {"file":"tb/simstm/testMainLabBasicIncludeNested.stm"},
             {"file":"tb/simstm/testMainSuiteBasic.stm"},
             {"file":"tb/simstm/testMainSuiteIndexedSampleSuiteAndCaseIndex.stm"},
             {"file":"tb/simstm/testMainLabArrayGetOutPos.stm"},
+            {"file":"tb/simstm/interface.stm"},
             {"file":"tb/simstm/testMainLabBasicDoubleConst.stm"},
             {"file":"tb/simstm/testMainLabBasicDoubleVar.stm"},
             {"file":"tb/simstm/testMainLabBasicAbort.stm"},
@@ -241,9 +242,11 @@ static_setup_data = {
             {"file":"tb/simstm/testMainSuiteSample.stm"},
             {"file":"tb/simstm/testMainSuiteInterrupt.stm"},
             {"file":"tb/simstm/testMainSuiteOther.stm"},
+            {"file":"tb/simstm/testUnits.stm"},
             {"file":"tb/simstm/testMainSuiteLines.stm"},
             {"file":"tb/simstm/testMainSuiteFile.stm"},
-            {"file":"tb/simstm/testMainLabConstantEqu.stm"}
+            {"file":"tb/simstm/testMainLabConstantEqu.stm"},
+            {"file":"tb/simstm/error_verification.stm"}
         ])
     ],
 

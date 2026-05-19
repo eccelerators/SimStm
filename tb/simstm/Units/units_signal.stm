@@ -1,0 +1,33 @@
+include "../common/interface.stm"
+include "../Signal/signal_base.stm"
+include "../Signal/signal_extend.stm"
+
+
+namespace SimStmTest
+
+    proc unitsSignalBase ()
+        call unitSignalSimpleLoopbackBit ()
+        call unitSignalSimpleLoopbackVector ()
+        call unitSignalSimpleLoopbackCross ()
+    end proc
+    
+    proc unitsSignalExtend ()
+        call unitSignalVerifyDecDec()
+        call unitSignalVerifyHexHex()
+        call unitSignalVerifyBinBin()
+        call unitSignalVerifyDecHex()
+        call unitSignalVerifyDecBin()
+        call unitSignalVerifyHexDec()
+        call unitSignalVerifyHexBin()
+        call unitSignalVerifyBinDec()
+        call unitSignalVerifyBinHex()
+        call unitSignalVerifyVarDec()
+        call unitSignalVerifyVarHex()
+        call unitSignalVerifyVarBin()
+        call unitSignalVerifyDecVar()
+        call unitSignalVerifyHexVar()
+        call unitSignalVerifyBinVar()
+        call unitSignalVerifyVarVar()
+    end proc
+     
+end namespace

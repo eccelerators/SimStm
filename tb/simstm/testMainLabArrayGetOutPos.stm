@@ -1,4 +1,5 @@
-include "Common/CommonLabs.stm"
+include "../../lib/base.stm"
+include "Common/common.stm"
 
 include "Array/array_labs.stm"
 
@@ -15,9 +16,7 @@ proc testMainLabArrayGetOutPos ()
     verbosity stm.INFO_2
     trace 0
     resume 1
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0 
+    call initDut()
     log message stm.INFO "Main test started"
 
     call testLabArrayGetOutPos ()

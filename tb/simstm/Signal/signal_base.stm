@@ -1,21 +1,13 @@
--- This file tests
--- |- signal
--- |- signal write
--- |- signal read
--- |- signal verify
-
-include "interface.stm"
-
 
 namespace SimStmTest
 
-    proc testSignalBase ()
-        call testSignalSimpleLoopbackBit ()
-        call testSignalSimpleLoopbackVector ()
-        call testSignalSimpleLoopbackCross ()
+    proc testSignalSimpleLoopbackBit ()
+        call stm.startStandardTestShell ()
+        call unitSignalSimpleLoopbackBit ()
+        call stm.endStandardTestShell ()    
     end proc
 
-    proc testSignalSimpleLoopbackBit ()
+    proc unitSignalSimpleLoopbackBit ()
         var read_back 0x12345678
 
         signal write loopback_1bit 0
@@ -36,6 +28,12 @@ namespace SimStmTest
     end proc
 
     proc testSignalSimpleLoopbackVector ()
+        call stm.startStandardTestShell ()
+        call unitSignalSimpleLoopbackVector ()
+        call stm.endStandardTestShell ()    
+    end proc
+
+    proc unitSignalSimpleLoopbackVector ()
         var read_back 0x12345678
 
         signal write loopback_32bit 0
@@ -54,8 +52,14 @@ namespace SimStmTest
         signal verify loopback_32bit 0x87654321 0xffffffff
         signal verify loopback_32bit 0x82204101 0xaaaa5555
     end proc
+    
+    proc testSignalSimpleLoopbackVector ()
+        call stm.startStandardTestShell ()
+        call unitSignalSimpleLoopbackCross ()
+        call stm.endStandardTestShell ()    
+    end proc
 
-    proc testSignalSimpleLoopbackCross ()
+    proc unitSignalSimpleLoopbackCross ()
         var read_back 0x12345678
 
         signal write  loopback_16bit_cross 0xffffffff

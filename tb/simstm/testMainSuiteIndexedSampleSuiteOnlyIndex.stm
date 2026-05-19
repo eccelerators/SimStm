@@ -1,21 +1,20 @@
-include "Common/Common.stm"
+include "../../lib/base.stm"
+include "../../lib/testcase.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
 
 include "Other/other.stm"
 
 include "TestSuites/TestSuiteIndexedSampleSuiteOnlyIndex.stm"
 namespace SimStmTest
-const testMainSuiteIndexedSampleSuiteOnlyIndexMaximumIndex 4
+const testMainSuiteIndexedRangeLengthSampleSuiteOnlyIndex 4
 
 proc testMainSuiteIndexedSampleSuiteOnlyIndex ()
-
-    
             
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
     resume stm.RESUME_ON_ALL_FAILURES
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
+    call initDut()
     signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
     log message stm.INFO "Main test main suite indexed SampleSuiteOnlyIndex {:d} started" stm.TestSuiteIndex
                 

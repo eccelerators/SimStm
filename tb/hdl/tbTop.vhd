@@ -68,7 +68,8 @@ begin
     -- base
     signals_in.test_suite_index <= stimulus_test_suite_index;
     signals_in.sim_time <= (now / 1 ns);
-    rst <= signals_out.bus_reset;
+    signals_in.machine_value_width <= machine_value_width;
+    rst <= signals_out.dut_reset;
 
     -- interrupt
 

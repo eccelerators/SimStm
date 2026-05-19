@@ -1,26 +1,30 @@
 namespace SimStmTest
 
 proc testArrayDefaultValue ()
-
-	array default_array 3
-	var pos_0 11
-	var pos_1 12
-	var pos_2 13
 	call stm.startStandardTestShell ()
-	
-	array get default_array 0 pos_0
-	array get default_array 1 pos_1
-	array get default_array 2 pos_2
-	
-	log message stm.INFO_2 "pos 0 of array: {:d}" pos_0
-	log message stm.INFO_2 "pos 1 of array: {:d}" pos_1
-	log message stm.INFO_2 "pos 2 of array: {:d}" pos_2
-	
-	array verify default_array pos_0 0 stm.MAX
-	array verify default_array pos_1 0 stm.MAX
-	array verify default_array pos_2 0 stm.MAX
-	call stm.endStandardTestShell ()
-	
+	call unitArrayDefaultValue ()
+	call stm.endStandardTestShell ()	
+end proc
+
+proc unitArrayDefaultValue ()
+
+    array default_array 3
+    var pos_0 11
+    var pos_1 12
+    var pos_2 13
+   
+    array get default_array 0 pos_0
+    array get default_array 1 pos_1
+    array get default_array 2 pos_2
+    
+    log message stm.INFO_2 "pos 0 of array: {:d}" pos_0
+    log message stm.INFO_2 "pos 1 of array: {:d}" pos_1
+    log message stm.INFO_2 "pos 2 of array: {:d}" pos_2
+    
+    array verify default_array pos_0 0 stm.MAX
+    array verify default_array pos_1 0 stm.MAX
+    array verify default_array pos_2 0 stm.MAX
+    
 end proc
 
 end namespace

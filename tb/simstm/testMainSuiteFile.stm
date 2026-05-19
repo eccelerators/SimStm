@@ -1,6 +1,7 @@
-
-
-include "Common/Common.stm"
+include "../../lib/base.stm"
+include "../../lib/testcase.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
 
 include "File/file.stm"
 include "Base/Array.stm"
@@ -18,9 +19,7 @@ proc testMainSuiteFile ()
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
     resume stm.RESUME_ON_ALL_FAILURES
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
+    call initDut()
     log message stm.INFO "Main test suite File started"
 
     call testSuiteFile ()

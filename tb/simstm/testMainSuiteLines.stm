@@ -1,4 +1,8 @@
-include "Common/Common.stm"
+include "../../lib/base.stm"
+include "../../lib/testcase.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
+
 include "Base/Array.stm"
 
 include "Lines/lines.stm"
@@ -16,9 +20,7 @@ proc testMainSuiteLines ()
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
     resume stm.RESUME_ON_ALL_FAILURES
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
+    call initDut()
     log message stm.INFO "Main test suite Lines started"
 
     call testSuiteLines ()

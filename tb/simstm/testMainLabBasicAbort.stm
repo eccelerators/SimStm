@@ -1,6 +1,5 @@
-
-
-include "Common/CommonLabs.stm"
+include "../../lib/base.stm"
+include "Common/common.stm"
 include "TestLabs/TestLabBasicAbort.stm"
 
 include "Basic/basic_labs.stm"
@@ -17,9 +16,7 @@ lines success_lines
     verbosity stm.INFO_2
     trace 0
     resume 1
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
+    call initDut()
     log message stm.INFO "Main test started"
 
     call testLabBasicAbort ()

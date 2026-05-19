@@ -42,6 +42,8 @@ class GenAntBuildXml:
             "src_data_file_list": src_data_file_list,
             "tb_top_entity": static_setup_data["tb_top_entity"],
             "tb_top_entity_file": static_setup_data["tb_top_entity_file"],
+            "tb_simstm_entry_namespace": static_setup_data["tb_simstm_entry_namespace"],
+            "tb_simstm_entry_file": static_setup_data["tb_simstm_entry_file"],
             "tb_data_file_list": tb_data_file_list,
         }
 
@@ -117,18 +119,19 @@ class GenAntBuildXml:
         dl = ET.SubElement(t, "delete", dir=simulation_dir_prefix + "work")
         dl = ET.SubElement(t, "delete", dir=simulation_dir_prefix + "TimeStamps")
 
-        ET.SubElement(
-            root,
-            "target",
-            name=target_prefix +
-            "all",
-            description="all from scratch until interactive simulation",
-            depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-suites, modelsim-exit-on-junit-errors-or-failures")
+        if test_suite_data_dict:
+            ET.SubElement(
+                root,
+                "target",
+                name=target_prefix +
+                "all",
+                description="all from scratch until interactive simulation",
+                depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-suites, modelsim-exit-on-junit-errors-or-failures")
 
-        ET.SubElement(
-            root, "target",
-            name=target_prefix + "all-gui", description="all from scratch until interactive simulation",
-            depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-gui")
+            ET.SubElement(
+                root, "target",
+                name=target_prefix + "all-gui", description="all from scratch until interactive simulation",
+                depends=" modelsim-clean, modelsim-prepare, modelsim-compile, modelsim-simulate-gui")
 
         s = ' '
         for kohf, shf in ordered_hdl_file_dict.items():
@@ -151,6 +154,8 @@ class GenAntBuildXml:
         ET.SubElement(ex, "arg", value="work." + context['tb_top_entity'])
         ET.SubElement(ex, "arg", value="-batch")
         ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
+        ET.SubElement(ex, "arg", value="-gstimulus_file=" + context["tb_simstm_entry_file"])
+        ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + "." + "testMain")
         ET.SubElement(ex, "arg", value="-do")
         ET.SubElement(ex, "arg", value="run_all.do")
         echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
@@ -167,9 +172,11 @@ class GenAntBuildXml:
         ET.SubElement(ex, "arg", value="work")
         ET.SubElement(ex, "arg", value="work." + context['tb_top_entity'])
         ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
+        ET.SubElement(ex, "arg", value="-gstimulus_file=" + context["tb_simstm_entry_file"])
+        ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + "." + "testMain")
         ET.SubElement(ex, "arg", value="-i")
 
-        if "test_suites" in static_setup_data:
+        if test_suite_data_dict:
             t = ET.SubElement(root, "target", name=target_prefix +
                               "simulate-suites", description="simulate all suites parallel")
             ET.SubElement(t, "delete", dir=simulation_dir_prefix + "../SimulationResults")
@@ -196,7 +203,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="-batch")
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_suite_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_suite_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label="+ test_suite_data["entry-label"])
                 if "index" in test_suite_data:
                     ET.SubElement(ex, "arg", value="-gstimulus_test_suite_index=" + test_suite_data["index"])
                 ET.SubElement(ex, "arg", value="-do")
@@ -236,7 +243,7 @@ class GenAntBuildXml:
                 "echo",
                 message="testSuitesSimulation.xml couldn't be build from artifacts, keeping artifacts")
 
-        if "test_labs" in static_setup_data:
+        if test_lab_data_dict:
             for test_lab, test_lab_data in test_lab_data_dict.items():
                 t = ET.SubElement(
                     root,
@@ -280,7 +287,7 @@ class GenAntBuildXml:
                 ET.SubElement(ex, "arg", value="work." + context['tb_top_entity'])
                 ET.SubElement(ex, "arg", value="-gstimulus_path=${basedir}/tb/simstm/")
                 ET.SubElement(ex, "arg", value="-gstimulus_file=" + test_lab_data["entry-file"])
-                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + test_lab_data["entry-label"])
+                ET.SubElement(ex, "arg", value="-gstimulus_main_entry_label=" + context["tb_simstm_entry_namespace"] + test_lab_data["entry-label"])
                 ET.SubElement(ex, "arg", value="-i")
                 echo = ET.SubElement(t, "echo", file=simulation_dir_prefix + "work/simulation.ended", append="false")
                 echo.text = "ENDED"

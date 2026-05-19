@@ -1309,7 +1309,7 @@ package body tb_interpreter_util_pkg is
                 access_inst_par_index(ie, vars, 1, ie.inst_namespace, empty_text_field, ven);
             end if;            
             assert ven > -1
-            report "var label not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+            report "var not found " & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
             severity failure;                                     
             pn_ptr := vars.element_ptrs(ven).label_proc_ref;
             text_field_ptr_to_text_field(pn_ptr, pn);
