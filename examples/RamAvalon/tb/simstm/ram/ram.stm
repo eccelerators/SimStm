@@ -1,0 +1,25 @@
+include "../../../../../lib/base.stm"
+
+namespace RamAvalonBusExample
+
+bus BusAvalon 1
+
+proc testRam ()
+    var a 0
+    var dw 0
+    var dr 0
+    
+    call stm.startStandardTestShell ()
+    loop 64
+        bus write BusAvalon 32 a dw 
+        bus verify BusAvalon 32 a dw 0xFFFFFFFF
+        add dw 1
+    end loop
+    loop 64
+        bus verify BusAvalon 32 a dr 0xFFFFFFFF
+        add dr 1
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

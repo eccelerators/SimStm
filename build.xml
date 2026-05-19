@@ -13,7 +13,7 @@
     <!-- <property name="python-executable" value="/bin/python38"/> -->
     <import file="build-local-overrides.xml" optional="true"/>
 
-	<import file="ant/build-html.xml" optional="false"/>
+	<import file="docs/build-html.xml" optional="false"/>
 	<import file="helper/build-helper.xml" optional="true"/>
 	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
 	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>

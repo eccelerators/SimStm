@@ -176,7 +176,7 @@ package body tb_signals_pkg is
             when 10003 =>
                 value_mapping(signals.simstm_loopback_bus_timeout_failures, value);
 
-            -- signals unittest mapping
+            -- signals for tests
             when 11000 =>
                 value_mapping(signals.active, value);
             when 11001 =>
@@ -224,7 +224,7 @@ package body tb_signals_pkg is
             when 10001 =>
                 value_mapping(value, signals.simstm_loopback_bus_timeout_failure_expected);
 
-            -- signals unittest mapping
+            -- signals for tests
             when 11000 =>
                 value_mapping(value, signals.step_down);
             when 11001 =>

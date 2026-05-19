@@ -1962,8 +1962,8 @@ begin
 
                 -- bus read  a_bus bus_width  bus_address  bus_read_value
                 -- bus read  a_bus 16 0x00001000  bus_read_value
-                -- bus verify a_bus bus_width  bus_address bus_read_value bus_expected_value bus_mask_value
-                -- bus verify a_bus 32  0x00001004 bus_read_value 0x00050000 0x000FC000
+                -- bus verify a_bus bus_width  bus_address expected_value bus_mask_value
+                -- bus verify a_bus 32  0x00001004 0x00050000 0x000FC000
                 elsif ie.inst(1 to ie.inst_len) = INSTR_BUS_READ or ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
@@ -1991,15 +1991,14 @@ begin
                     update_var_value(vars, ven4, val);
                     if ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
                         get_val_in_called_scope_prefer_local(5, val5);
-                        get_val_in_called_scope_prefer_local(6, val6);
                         verify_assertions_count := verify_assertions_count + 1;
-                        if (val6 and val) /= (val6 and val5) then
+                        if (val5 and val) /= (val5 and val4) then
                             print_instr("exec ");
                             print(" bus      = 0x" & to_hstring(val));
                             print(" address  = 0x" & to_hstring(val3));
                             print(" read     = 0x" & to_hstring(val));
-                            print(" expected = 0x" & to_hstring(val5));
-                            print(" mask     = 0x" & to_hstring(val6));
+                            print(" expected = 0x" & to_hstring(val4));
+                            print(" mask     = 0x" & to_hstring(val5));
                             if resume(0) = '0' then
                                 assert false
                                 report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
