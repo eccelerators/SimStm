@@ -1,0 +1,18 @@
+include "../Other/other.stm"
+
+namespace SimStmTest
+
+proc unitsOther ()
+    call testOtherRandom ()
+    call testOtherSeed ()
+    call testOtherTrace ()
+    call testOtherMarker ()
+    call testOtherWait ()
+    call testOtherLogSubstitutions ()
+    call testOtherLogFormats ()
+    call testOtherLog ()
+    call testOtherHelloWorld ()
+    call testOtherCall ()
+end proc
+
+end namespace

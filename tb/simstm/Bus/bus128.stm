@@ -1,20 +1,29 @@
+include "../../../lib/base.stm"
+include "../../../lib/testcase.stm"
+
 namespace SimStmTest
 
 proc testBus128 (
 	bus busToTest 0
 )
-    var r 0 
-
     call stm.startStandardTestShell ()
-    wait 1000
+    call unitBus128 (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBus128 (
+	bus busToTest 0
+)
+    var r 0 
+    wait 1000
     bus write busToTest 128 0 0x55555555555555555555555555555555
     bus write busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus write busToTest 128 32 0xffffffffffffffffffffffffffffffff
     bus verify busToTest 128 0 0x55555555555555555555555555555555 0x55555555555555555555555555555555
     bus verify busToTest 128 16 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     bus verify busToTest 128 32 0xffffffffffffffffffffffffffffffff 0xffffffffffffffffffffffffffffffff
-
     wait 1000
     bus write busToTest 128 0 0x0
     bus write busToTest  8 0 0x12
@@ -33,7 +42,6 @@ proc testBus128 (
     bus write busToTest  8 13 0xdd
     bus write busToTest  8 14 0xff
     bus write busToTest  8 15 0x0e
-
     bus verify busToTest 8 0 0x12 0xff
     bus verify busToTest 8 1 0x34 0xff
     bus verify busToTest 8 2 0x56 0xff
@@ -50,9 +58,7 @@ proc testBus128 (
     bus verify busToTest 8 13 0xdd 0xff
     bus verify busToTest 8 14 0xff 0xff
     bus verify busToTest 8 15 0x0e 0xff
-
     bus verify busToTest 128 0 0x0effddbb88664422feefcdab78563412 0xffffffffffffffffffffffffffffffff
-
     wait 1000
     bus write busToTest  128 0 0x0
     bus write busToTest  16 0 0x1234
@@ -76,22 +82,18 @@ proc testBus128 (
     bus write busToTest  16 5 0x1234
     bus verify busToTest 16 5 0x1234 0xffff
     bus verify busToTest 128 4 0x00123400 0xffffffffffffffffffffffffffffffff
-
     wait 1000
     bus write busToTest  128 0 0x80000000000000000000000000000000
     bus verify busToTest 128 0 0x80000000000000000000000000000000 0x00000000000000000000000000000000
     bus verify busToTest 128 0 0x00000000000000000000000000000000 0x00000000000000000000000000000000
     bus verify busToTest 128 0 0x80000000000000000000000000000000 0x80000000000000000000000000000000
     bus verify busToTest 128 0 0x80000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
-
     wait 100
     bus write busToTest  128 0 0x00000000000000000000000000000000
     bus verify busToTest 128 0 0x80000000000000000000000000000000 0x00000000000000000000000000000000
     bus verify busToTest 128 0 0x00000000000000000000000000000000 0x00000000000000000000000000000000
     bus verify busToTest 128 0 0x00000000000000000000000000000000 0x80000000000000000000000000000000
     bus verify busToTest 128 0 0x00000000000000000000000000000000 0xffffffffffffffffffffffffffffffff
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testBus128VerifySuccess (
@@ -127,7 +129,7 @@ proc testBus128VerifyFail (
     bus verify busToTest 128 32 0x00000000000000000000000000000000 0x00000000000000000000000000000000
     log message stm.ALWAYS "bus verify intended error on no match"
     bus verify busToTest 128 0 0x000000000000000000000000 0xffffffffffffffffffffffffffffffff
-    call stm.incExpectedStandardTestVerifyFailureCount ()
+    call stm.addExpectedStandardTestVerifyFailureCount ()
 
     call stm.endStandardTestShell ()
 end proc
@@ -144,7 +146,7 @@ proc testBus128TimeOutRead (
     bus timeout get busToTest r
     var verify r 1 stm.MAX
     bus read busToTest 128 0 r
-    call stm.incExpectedStandardTestBusTimeoutFailureCount ()
+    call stm.addExpectedStandardTestVerifyFailureCount ()
 
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
@@ -164,7 +166,7 @@ proc testBus128TimeOutWrite (
     bus timeout get busToTest r
     var verify r 1 stm.MAX
     bus write busToTest 128 0 0x55555555555555555555555555555555
-    call stm.incExpectedStandardTestBusTimeoutFailureCount ()
+    call stm.addExpectedStandardTestVerifyFailureCount ()
 
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r

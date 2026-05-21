@@ -5,6 +5,12 @@ lines test_lines_local_override_a
 proc testLinesLocalOverride ()
 
 	call stm.startStandardTestShell ()
+	call unitLinesLocalOverride ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitLinesLocalOverride ()
+
 	call setLinesToOverwrite ()
 	array b_array 1
 	array set b_array 0 2
@@ -15,14 +21,11 @@ proc testLinesLocalOverride ()
 	var a_var 99
 	var b_var 99
 	log lines stm.INFO_2 test_lines_local_override_a
-	-- lines get array test_lines_local_override_a 1 final_array_a a_var
 	lines get array test_lines_local_override_a 0 final_array_b b_var
-	--array verify final_array_b 0 2 stm.MAX
 	array verify final_array_b 0 2 stm.MAX
 
 	
 	call checkLinesGlobal ()
-	call stm.endStandardTestShell ()
 end proc
 
 proc setLinesToOverwrite ()

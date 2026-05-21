@@ -1,3 +1,5 @@
+include "../Interrupt/interrupt.stm"
+
 namespace SimStmTest
 
 proc testSuiteInterrupt ()

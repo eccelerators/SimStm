@@ -1,10 +1,15 @@
 namespace SimStmTest
 proc testVariableDefaultValue ()
 
+    call stm.startStandardTestShell ()
+    call unitVariableDefaultValue ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitVariableDefaultValue ()
 	var y_val 17
-	call stm.startStandardTestShell ()
+
     call checkVariableParameter ()
-	call stm.endStandardTestShell ()
 end proc
 
 proc checkVariableParameter (

@@ -4,27 +4,32 @@ const test_constant_1 1
 const test_constant_2 2
 
 proc testConstantAdd ()
+    call stm.startStandardTestShell ()
+    call unitConstantAdd ()
+    call stm.endStandardTestShell ()
+end proc
 
-
+proc unitConstantAdd ()
     log message 0 "test_variable_1: {}" test_constant_1
     log message 0 "test_variable_2: {}" test_constant_2
-
-    -- this is intnetionally wrong
+    -- this is intentionally wrong
     add test_constant_1 10
     add test_constant_2 20
-
     finish
-
 end proc
 
 const test_constant_3 1
 
 proc testConstantEqu ()
-    -- this is intnetionally wrong
+    call stm.startStandardTestShell ()
+    call unitConstantEqu ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitConstantEqu ()
+    -- this is intentionally wrong
     equ test_constant_3 10
-
     finish
-
 end proc
 
 end namespace

@@ -1,0 +1,14 @@
+include "../Constant/constant.stm"
+include "../Constant/constant_labs.stm"
+
+namespace SimStmTest
+
+proc unitsConstant ()
+    call testConstantAdd ()
+end proc
+proc unitsConstantLabs ()
+    call testConstantAdd ()
+    call testConstantEqu ()
+end proc
+
+end namespace

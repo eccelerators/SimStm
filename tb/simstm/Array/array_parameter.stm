@@ -1,18 +1,20 @@
 namespace SimStmTest
 
 proc testArrayParameterIn ()
+	call stm.startStandardTestShell ()
+	call unitArrayParameterIn ()
+	call stm.endStandardTestShell ()
+end proc
 
+proc unitArrayParameterIn ()
 	array p_array 2
 	array set p_array 0 99
 	array set p_array 1 100
 	var size_var 100
 	array size p_array size_var
-	call stm.startStandardTestShell ()
-	
 	call checkArrayParameterInput (
 		array pointer copy this_array p_array
 	)
-	call stm.endStandardTestShell ()
 end proc
 
 proc checkArrayParameterInput (
@@ -31,18 +33,20 @@ proc checkArrayParameterInput (
 end proc
 
 proc testArrayParameterOut ()
+	call stm.startStandardTestShell ()
+	call unitArrayParameterOut ()
+	call stm.endStandardTestShell ()
+end proc
 
+proc unitArrayParameterOut ()
 	array p_array 2
 	array set p_array 0 99
 	array set p_array 1 100
 	var size_var 100
 	array size p_array size_var
-	call stm.startStandardTestShell ()
-	
 	call setArrayParameterOutput (
 		array pointer copy this_array p_array
 	)
-	
 	array verify p_array 0 19 stm.MAX
 	array verify p_array 1 20 stm.MAX
 end proc 
@@ -50,7 +54,6 @@ end proc
 proc setArrayParameterOutput (
 	array this_array 1
 	)
-	
 	array set this_array 0 19
 	array set this_array 1 20
 end proc

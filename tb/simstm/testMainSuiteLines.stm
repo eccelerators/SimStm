@@ -1,9 +1,8 @@
 include "../../lib/base.stm"
 include "../../lib/testcase.stm"
+include "../../lib/array.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
-
-include "Base/Array.stm"
 
 include "Lines/lines.stm"
 include "Lines/lines_local.stm"

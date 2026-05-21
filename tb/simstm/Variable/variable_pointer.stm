@@ -2,11 +2,17 @@ namespace SimStmTest
 
 proc testVariablePointer ()
 
+    call stm.startStandardTestShell ()
+    call unitVariablePointer ()
+    call stm.endStandardTestShell ()
+
+end proc
+
+proc unitVariablePointer ()
+
 	var test_variable_pointer_1 1
 	var test_variable_pointer_2 2
 
-    call stm.startStandardTestShell ()
-    
     log message stm.INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
     log message stm.INFO_2 "test_variable_pointer_2: {:d}" test_variable_pointer_2
 
@@ -14,8 +20,6 @@ proc testVariablePointer ()
 
     log message stm.INFO_2 "test_variable_pointer_1: {:d}" test_variable_pointer_1
     var verify test_variable_pointer_1 2 stm.MAX
-
-    call stm.endStandardTestShell ()
 
 end proc
 

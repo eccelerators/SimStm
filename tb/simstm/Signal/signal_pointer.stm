@@ -1,135 +1,127 @@
 
--- This file tests
--- |- signal pointer copy
--- |- signal pointer get
--- |- signal pointer set
-
-include "interface.stm"
-
-
 namespace SimStmTest
 
-    proc testSignalPointer ()
-        call testSignalPointerCopy ()
-        call testSignalPointerGet ()
-        call testSignalPointerSet ()
-    end proc
+proc testSignalPointerCopy ()
+    call stm.startStandardTestShell ()
+    call unitSignalPointerCopy ()
+    call stm.endStandardTestShell ()    
+end proc
 
-    proc testSignalPointerCopy ()
-        var read_back 0x12345678
-        signal copy_dest_1bit        0
-        signal copy_dest_32bit       0
-        signal copy_dest_cross       0
+proc unitSignalPointerCopy ()
+    var read_back 0x12345678
+    signal copy_dest_1bit        0
+    signal copy_dest_32bit       0
+    signal copy_dest_cross       0
 
-        signal pointer copy copy_dest_1bit   loopback_1bit
-        signal write        loopback_1bit    0
-        wait 1000
-        signal read         copy_dest_1bit   read_back
-        var    verify       read_back        0          0xffffffff
-        signal verify       copy_dest_1bit   0          0x1
+    signal pointer copy copy_dest_1bit   loopback_1bit
+    signal write        loopback_1bit    0
+    wait 1000
+    signal read         copy_dest_1bit   read_back
+    var    verify       read_back        0          0xffffffff
+    signal verify       copy_dest_1bit   0          0x1
 
-        signal write        loopback_1bit    0x87654321
-        wait 1000
-        signal read         copy_dest_1bit   read_back
-        var    verify       read_back        0x1        0xffffffff
-        signal verify       copy_dest_1bit   1          0x1
+    signal write        loopback_1bit    0x87654321
+    wait 1000
+    signal read         copy_dest_1bit   read_back
+    var    verify       read_back        0x1        0xffffffff
+    signal verify       copy_dest_1bit   1          0x1
 
-        signal pointer copy copy_dest_32bit  loopback_32bit
-        signal write        loopback_32bit   0
-        wait 1000
-        signal read         copy_dest_32bit  read_back
-        var    verify       read_back        0          0xffffffff
-        signal verify       copy_dest_32bit  0          0xffffffff
+    signal pointer copy copy_dest_32bit  loopback_32bit
+    signal write        loopback_32bit   0
+    wait 1000
+    signal read         copy_dest_32bit  read_back
+    var    verify       read_back        0          0xffffffff
+    signal verify       copy_dest_32bit  0          0xffffffff
 
-        signal write        loopback_32bit   0x87654321
-        wait 1000
-        signal read         copy_dest_32bit  read_back
-        var    verify       read_back        0x87654321 0xffffffff
-        signal verify       copy_dest_32bit  0x87654321 0xffffffff
-        signal verify       copy_dest_32bit  0x82204101 0xaaaa5555
+    signal write        loopback_32bit   0x87654321
+    wait 1000
+    signal read         copy_dest_32bit  read_back
+    var    verify       read_back        0x87654321 0xffffffff
+    signal verify       copy_dest_32bit  0x87654321 0xffffffff
+    signal verify       copy_dest_32bit  0x82204101 0xaaaa5555
 
-        signal pointer copy copy_dest_cross  loopback_16bit_cross
-        signal write        loopback_16bit_cross 0xffffffff
-        wait 1000
-        signal read         copy_dest_cross  read_back
-        var    verify       read_back        0xffff     0xffffffff
-        signal verify       copy_dest_cross  0xffff     0xffffffff
-        signal verify       copy_dest_cross  0x0000     0xffff0000
+    signal pointer copy copy_dest_cross  loopback_16bit_cross
+    signal write        loopback_16bit_cross 0xffffffff
+    wait 1000
+    signal read         copy_dest_cross  read_back
+    var    verify       read_back        0xffff     0xffffffff
+    signal verify       copy_dest_cross  0xffff     0xffffffff
+    signal verify       copy_dest_cross  0x0000     0xffff0000
 
-        signal write        loopback_16bit_cross 0x87654321
-        wait 1000
-        signal read         copy_dest_cross  read_back
-        var    verify       read_back        0x84C2     0xffffffff
-        signal verify       copy_dest_cross  0x84C2     0xffffffff
-        signal verify       copy_dest_cross  0x8040     0xaa55
-    end proc
-
-
-    proc testSignalPointerGet ()
-        var ptr_1bit  0
-        var ptr_32bit 0
-        var ptr_cross 0
-
-        signal pointer get loopback_1bit         ptr_1bit
-        signal pointer get loopback_32bit        ptr_32bit
-        signal pointer get loopback_16bit_cross  ptr_cross
-
-        var    verify      ptr_1bit              11000      0xffffffff
-        var    verify      ptr_32bit             11001      0xffffffff
-        var    verify      ptr_cross             11002      0xffffffff
-    end proc
+    signal write        loopback_16bit_cross 0x87654321
+    wait 1000
+    signal read         copy_dest_cross  read_back
+    var    verify       read_back        0x84C2     0xffffffff
+    signal verify       copy_dest_cross  0x84C2     0xffffffff
+    signal verify       copy_dest_cross  0x8040     0xaa55
+end proc
 
 
-    proc testSignalPointerSet ()
-        var read_back 0x12345678
-        signal set_dest_1bit         0
-        signal set_dest_32bit        0
-        signal set_dest_cross        0
+proc testSignalPointerGet ()
+    var ptr_1bit  0
+    var ptr_32bit 0
+    var ptr_cross 0
 
-        signal pointer set set_dest_1bit         11000
-        signal write       set_dest_1bit         0
-        wait 1000
-        signal read        set_dest_1bit         read_back
-        var    verify      read_back             0          0xffffffff
-        signal verify      set_dest_1bit         0          0xffffffff
-        signal verify      set_dest_1bit         0          0x1
+    signal pointer get loopback_1bit         ptr_1bit
+    signal pointer get loopback_32bit        ptr_32bit
+    signal pointer get loopback_16bit_cross  ptr_cross
 
-        signal write       set_dest_1bit         0x87654321
-        wait 1000
-        signal read        set_dest_1bit         read_back
-        var    verify      read_back             0x1        0xffffffff
-        signal verify      set_dest_1bit         1          0xffffffff
-        signal verify      set_dest_1bit         1          0x1
+    var    verify      ptr_1bit              11000      0xffffffff
+    var    verify      ptr_32bit             11001      0xffffffff
+    var    verify      ptr_cross             11002      0xffffffff
+end proc
 
-        signal pointer set set_dest_32bit        11001
-        signal write       set_dest_32bit        0
-        wait 1000
-        signal read        set_dest_32bit        read_back
-        var    verify      read_back             0          0xffffffff
-        signal verify      set_dest_32bit        0          0xffffffff
-        signal verify      set_dest_32bit        0xfffffffe 0x1
 
-        signal write       set_dest_32bit        0x87654321
-        wait 1000
-        signal read        set_dest_32bit        read_back
-        var    verify      read_back             0x87654321 0xffffffff
-        signal verify      set_dest_32bit        0x87654321 0xffffffff
-        signal verify      set_dest_32bit        0x82204101 0xaaaa5555
+proc testSignalPointerSet ()
+    var read_back 0x12345678
+    signal set_dest_1bit         0
+    signal set_dest_32bit        0
+    signal set_dest_cross        0
 
-        signal pointer set set_dest_cross        11002
-        signal write       set_dest_cross        0xffffffff
-        wait 1000
-        signal read        set_dest_cross        read_back
-        var    verify      read_back             0xffff     0xffffffff
-        signal verify      set_dest_cross        0xffff     0xffffffff
-        signal verify      set_dest_cross        0x0000     0xffff0000
+    signal pointer set set_dest_1bit         11000
+    signal write       set_dest_1bit         0
+    wait 1000
+    signal read        set_dest_1bit         read_back
+    var    verify      read_back             0          0xffffffff
+    signal verify      set_dest_1bit         0          0xffffffff
+    signal verify      set_dest_1bit         0          0x1
 
-        signal write       set_dest_cross        0x87654321
-        wait 1000
-        signal read        set_dest_cross        read_back
-        var    verify      read_back             0x84C2     0xffffffff
-        signal verify      set_dest_cross        0x84C2     0xffffffff
-        signal verify      set_dest_cross        0x8040     0xaa55
-    end proc
+    signal write       set_dest_1bit         0x87654321
+    wait 1000
+    signal read        set_dest_1bit         read_back
+    var    verify      read_back             0x1        0xffffffff
+    signal verify      set_dest_1bit         1          0xffffffff
+    signal verify      set_dest_1bit         1          0x1
+
+    signal pointer set set_dest_32bit        11001
+    signal write       set_dest_32bit        0
+    wait 1000
+    signal read        set_dest_32bit        read_back
+    var    verify      read_back             0          0xffffffff
+    signal verify      set_dest_32bit        0          0xffffffff
+    signal verify      set_dest_32bit        0xfffffffe 0x1
+
+    signal write       set_dest_32bit        0x87654321
+    wait 1000
+    signal read        set_dest_32bit        read_back
+    var    verify      read_back             0x87654321 0xffffffff
+    signal verify      set_dest_32bit        0x87654321 0xffffffff
+    signal verify      set_dest_32bit        0x82204101 0xaaaa5555
+
+    signal pointer set set_dest_cross        11002
+    signal write       set_dest_cross        0xffffffff
+    wait 1000
+    signal read        set_dest_cross        read_back
+    var    verify      read_back             0xffff     0xffffffff
+    signal verify      set_dest_cross        0xffff     0xffffffff
+    signal verify      set_dest_cross        0x0000     0xffff0000
+
+    signal write       set_dest_cross        0x87654321
+    wait 1000
+    signal read        set_dest_cross        read_back
+    var    verify      read_back             0x84C2     0xffffffff
+    signal verify      set_dest_cross        0x84C2     0xffffffff
+    signal verify      set_dest_cross        0x8040     0xaa55
+end proc
 
 end namespace

@@ -1,33 +1,56 @@
 include "../common/interface.stm"
 include "../Signal/signal_base.stm"
 include "../Signal/signal_extend.stm"
+include "../Signal/signal_local_override.stm"
+include "../Signal/signal_parameter.stm"
+include "../Signal/signal_pointer.stm"
+include "../Signal/signal_scoping.stm"
 
 
 namespace SimStmTest
 
-    proc unitsSignalBase ()
-        call unitSignalSimpleLoopbackBit ()
-        call unitSignalSimpleLoopbackVector ()
-        call unitSignalSimpleLoopbackCross ()
-    end proc
+proc unitsSignalBase ()
+    call unitSignalSimpleLoopbackBit ()
+    call unitSignalSimpleLoopbackVector ()
+    call unitSignalSimpleLoopbackCross ()
+end proc
+
+proc unitsSignalExtend ()
+    call unitSignalVerifyDecDec()
+    call unitSignalVerifyHexHex()
+    call unitSignalVerifyBinBin()
+    call unitSignalVerifyDecHex()
+    call unitSignalVerifyDecBin()
+    call unitSignalVerifyHexDec()
+    call unitSignalVerifyHexBin()
+    call unitSignalVerifyBinDec()
+    call unitSignalVerifyBinHex()
+    call unitSignalVerifyVarDec()
+    call unitSignalVerifyVarHex()
+    call unitSignalVerifyVarBin()
+    call unitSignalVerifyDecVar()
+    call unitSignalVerifyHexVar()
+    call unitSignalVerifyBinVar()
+    call unitSignalVerifyVarVar()
+end proc
+
+proc unitsSignalErrors ()
+    call testSignalVerifyFail ()
+end proc
+proc unitsSignalLocalOverride ()
+    call testSignalLocalOverride ()
+end proc
+proc unitsSignalParameter ()
+    call testSignalParameter ()
+end proc
+proc unitsSignalPointer ()
+    call testSignalPointerCopy ()
+    call testSignalPointerGet ()
+    call testSignalPointerSet ()
+end proc
+proc unitsSignalScoping ()
+    call testSignalSimpleScope ()
+end proc
     
-    proc unitsSignalExtend ()
-        call unitSignalVerifyDecDec()
-        call unitSignalVerifyHexHex()
-        call unitSignalVerifyBinBin()
-        call unitSignalVerifyDecHex()
-        call unitSignalVerifyDecBin()
-        call unitSignalVerifyHexDec()
-        call unitSignalVerifyHexBin()
-        call unitSignalVerifyBinDec()
-        call unitSignalVerifyBinHex()
-        call unitSignalVerifyVarDec()
-        call unitSignalVerifyVarHex()
-        call unitSignalVerifyVarBin()
-        call unitSignalVerifyDecVar()
-        call unitSignalVerifyHexVar()
-        call unitSignalVerifyBinVar()
-        call unitSignalVerifyVarVar()
-    end proc
-     
+  
 end namespace

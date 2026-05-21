@@ -8,32 +8,51 @@ include "Basic/lib6.stm"
 namespace SimStmTest
 
 proc testBasicAbort ()
+    call stm.startStandardTestShell ()
+    call unitBasicAbort ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicAbort ()
     abort
 end proc
 
 proc testBasicFinish ()
+    call stm.startStandardTestShell ()
+    call unitBasicFinish ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBasicFinish ()
     finish
 end proc
 
 proc testBasicIncludeFlat ()
+    call stm.startStandardTestShell ()
+    call unitBasicIncludeFlat ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBasicIncludeFlat ()
     log message 0 "load file test.stm"
     call Lib1 ()
     call Lib2 ()
     call Lib3 ()
     finish
-
 end proc
 
-
 proc testBasicIncludeNested ()
+    call stm.startStandardTestShell ()
+    call unitBasicIncludeNested ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicIncludeNested ()
     log message 0 "load file test.stm"
     call Lib4 ()
     call Lib5 ()
     call Lib6 ()
     finish
-
 end proc
 
 end namespace

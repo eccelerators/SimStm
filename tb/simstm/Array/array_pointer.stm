@@ -7,7 +7,11 @@ var test_array_pointer_var 0
 
 proc testArrayPointerCopy ()
     call stm.startStandardTestShell ()
+    call unitArrayPointerCopy ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitArrayPointerCopy ()
     array size test_array_pointer_src_array test_array_pointer_var
     var verify test_array_pointer_var 10 stm.MAX
 
@@ -39,8 +43,6 @@ proc testArrayPointerCopy ()
 
     array get test_array_pointer_src_array 5 test_array_pointer_var
     var verify test_array_pointer_var 55 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 end namespace

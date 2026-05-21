@@ -1,3 +1,5 @@
+include "../Other/other.stm"
+
 namespace SimStmTest
 
 proc testSuiteOther ()

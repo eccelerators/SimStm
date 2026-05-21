@@ -1,14 +1,16 @@
 namespace SimStmTest
     proc testVariableParameterIn ()
-        var in_val 0xBB
         call stm.startStandardTestShell ()
-        
+        call unitVariableParameterIn ()
+        call stm.endStandardTestShell ()
+    end proc
+    
+    proc unitVariableParameterIn ()
+        var in_val 0xBB
         call checkVariableParameterInput ( 
         	equ par_in_1 0xAA
         	equ par_in_2 in_val
         )
-    
-        call stm.endStandardTestShell ()
     end proc
      
     
@@ -24,16 +26,17 @@ namespace SimStmTest
     
     
     proc testVariableParameterOut ()
-        
-        var out_val 0
         call stm.startStandardTestShell ()
-        -- trace TRACE_INSTRUCTIONS
+        call unitVariableParameterOut ()
+        call stm.endStandardTestShell ()
+    end proc
+    
+    proc unitVariableParameterOut ()
+        var out_val 0
         call setParameterOutput ( 
         	var pointer copy par_out out_val
         )
         var verify out_val 0xAB stm.MAX
-    
-        call stm.endStandardTestShell ()
     end proc
     
     

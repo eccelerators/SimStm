@@ -1,15 +1,18 @@
 namespace SimStmTest
 
 proc testArrayLocal ()
+	call stm.startStandardTestShell ()
+	call unitArrayLocal ()
+	call stm.endStandardTestShell ()
+end proc
 
+proc unitArrayLocal ()
 	array test_array_local 3
 	
 	var pos_0 5
 	var pos_1 6
 	var pos_2 7
 	var array_size 100
-	
-	call stm.startStandardTestShell ()
 	
 	array set test_array_local 0 1
 	array set test_array_local 1 2
@@ -28,9 +31,6 @@ proc testArrayLocal ()
 	array verify test_array_local 0 1 stm.MAX
 	array verify test_array_local 1 2 stm.MAX
 	array verify test_array_local 2 3 stm.MAX
-	
-	call stm.endStandardTestShell ()
-	
 end proc
 
 end namespace

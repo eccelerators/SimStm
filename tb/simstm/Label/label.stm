@@ -3,6 +3,11 @@ namespace SimStmTest
 label aLabel aProc 
 
 proc testCallLabelIndirect ()
+    call stm.startStandardTestShell ()
+    call unitCallLabelIndirect ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitCallLabelIndirect ()
 	var v 0
 	
 	call label aLabel (
@@ -13,6 +18,11 @@ proc testCallLabelIndirect ()
 end proc
 
 proc testCallProcDirect ()
+    call stm.startStandardTestShell ()
+    call unitCallProcDirect ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitCallProcDirect ()
 	var v 0
 	
 	call aProc (

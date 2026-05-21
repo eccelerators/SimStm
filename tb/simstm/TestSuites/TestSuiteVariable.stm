@@ -1,69 +1,76 @@
+include "../Variable/variable.stm"
+include "../Variable/variable_default_value.stm"
+include "../Variable/variable_local.stm"
+include "../Variable/variable_local_override.stm"
+include "../Variable/variable_parameter.stm"
+include "../Variable/variable_pointer.stm"
+
 namespace SimStmTest
 
 proc testSuiteVariable ()
 	
     call stm.testCase (
-    	label set testToCall testVariableAdd
+    	label set TestToCall testVariableAdd
     )
     
     call stm.testCase (
-    	label set testToCall testVariableAnd
+    	label set TestToCall testVariableAnd
     )
     
     call stm.testCase (
-    	label set testToCall testVariableDiv
+    	label set TestToCall testVariableDiv
     )
     
     call stm.testCase (
-    	label set testToCall testVariableEqu
+    	label set TestToCall testVariableEqu
     )
     
     call stm.testCase (
-    	label set testToCall testVariableMul
+    	label set TestToCall testVariableMul
     )
     
     call stm.testCase (
-    	label set testToCall testVariableOr
+    	label set TestToCall testVariableOr
     )
 
     call stm.testCase (
-    	label set testToCall testVariableSub
+    	label set TestToCall testVariableSub
     )
     
     call stm.testCase (
-    	label set testToCall testVariableXor
+    	label set TestToCall testVariableXor
     )
     
     call stm.testCase (
-    	label set testToCall testVariableInv
+    	label set TestToCall testVariableInv
     )
     
     call stm.testCase (
-    	label set testToCall testVariableLd
+    	label set TestToCall testVariableLd
     )
     
     call stm.testCase (
-    	label set testToCall testVariableLocal
+    	label set TestToCall testVariableLocal
     )
     
     call stm.testCase (
-    	label set testToCall testVariableLocalOverride
+    	label set TestToCall testVariableLocalOverride
     )
     
     call stm.testCase (
-    	label set testToCall testVariablePointer
+    	label set TestToCall testVariablePointer
     )
 
     call stm.testCase (
-    	label set testToCall testVariableParameterIn
+    	label set TestToCall testVariableParameterIn
     )
  
     call stm.testCase (
-    	label set testToCall testVariableParameterOut
+    	label set TestToCall testVariableParameterOut
     )
 
     call stm.testCase (
-    	label set testToCall testVariableDefaultValue
+    	label set TestToCall testVariableDefaultValue
     	)
 end proc
 

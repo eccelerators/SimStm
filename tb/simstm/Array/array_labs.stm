@@ -4,11 +4,22 @@ array array_name_pos 3
 var var_name_pos 0
 
 proc testArrayGetOutPos ()
+    call stm.startStandardTestShell ()
+    call unitArrayGetOutPos ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitArrayGetOutPos ()
     array get array_name_pos 3 var_name_pos
 end proc
 
-
 proc testArraySetOutPos ()
+    call stm.startStandardTestShell ()
+    call unitArraySetOutPos ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitArraySetOutPos ()
     array set array_name_pos 3 var_name_pos
 end proc
 

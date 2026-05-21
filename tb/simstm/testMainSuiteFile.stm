@@ -1,10 +1,10 @@
 include "../../lib/base.stm"
 include "../../lib/testcase.stm"
+include "../../lib/array.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
 
 include "File/file.stm"
-include "Base/Array.stm"
 include "TestSuites/TestSuiteFile.stm"
 
 include "File/file_local_override.stm"

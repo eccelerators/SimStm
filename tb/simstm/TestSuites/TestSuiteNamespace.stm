@@ -1,0 +1,17 @@
+include "../namespace/namespace.stm"
+
+namespace SimStmTest
+
+proc testSuiteNamespace ()
+
+    call stm.testCase (
+    	label set TestToCall unitNamespaceTwoDifferentOnes
+    )
+
+    call stm.testCase (
+    	label set TestToCall unitNamespaceLocalAndGlobal
+    )
+
+end proc
+
+end namespace

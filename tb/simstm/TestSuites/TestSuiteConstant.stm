@@ -1,3 +1,5 @@
+include "../Constant/constant.stm"
+
 namespace SimStmTest
 
 proc testSuiteConstant ()

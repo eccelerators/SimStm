@@ -192,7 +192,7 @@ proc endStandardTestShell ()
     equ StandardTestFailure 0  
 end proc
 
--- method tto add a value to the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
+-- method to add a value to the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
 proc addExpectedStandardTestVerifyFailureCount (
     var Add 1
 )

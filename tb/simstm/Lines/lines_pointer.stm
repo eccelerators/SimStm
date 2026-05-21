@@ -2,11 +2,16 @@ namespace SimStmTest
 
 proc testLinesPointer ()
 
+	call stm.startStandardTestShell ()
+	call unitLinesPointer ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitLinesPointer ()
+
 	lines a_lines
 	lines b_lines
 	array b_array 1
-	call stm.startStandardTestShell ()
-	
 	array set b_array 0 1
 	lines delete all a_lines
 	lines delete all b_lines
@@ -26,7 +31,6 @@ proc testLinesPointer ()
 	log lines stm.INFO_2 a_lines
 	log lines stm.INFO_2 b_lines
 	
-	call stm.endStandardTestShell ()
 end proc
 
 end namespace

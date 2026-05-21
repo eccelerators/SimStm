@@ -25,9 +25,11 @@ array test_file_c_read_array 8
 var FileTmpResult 0
 
 proc testFileWriteArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitFileWriteArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFileWriteArray ()
     array set test_file_a_array 0 0
     array set test_file_a_array 1 1
     array set test_file_a_array 2 0xA
@@ -51,14 +53,14 @@ proc testFileWriteArray ()
     file read all user_data_out_write_array test_file_b_lines
     lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testFileAppendArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitFileAppendArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFileAppendArray ()
     array set test_file_a_array 0 0
     array set test_file_a_array 1 1
     array set test_file_a_array 2 0xA
@@ -84,15 +86,15 @@ proc testFileAppendArray ()
     file read all user_data_out_append_array test_file_b_lines
     lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 6 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 
 proc testFileReadAllArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitFileReadAllArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFileReadAllArray ()
     array set test_file_a_array 0 0
     array set test_file_a_array 1 1
     array set test_file_a_array 2 0xA
@@ -116,16 +118,16 @@ proc testFileReadAllArray ()
     file read all user_data_out_read_all_array test_file_b_lines
     lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 var read_elements_got 0
 
 proc testFileReadArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitFileReadArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFileReadArray ()
     array set test_file_a_read_array 0 0
     array set test_file_a_read_array 1 0
     array set test_file_a_read_array 2 0
@@ -211,14 +213,14 @@ proc testFileReadArray ()
     array verify test_file_a_read_array 0 0 stm.MAX
     array verify test_file_b_read_array 0 1 stm.MAX
     array verify test_file_c_read_array 0 2 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testFileStatus ()
-
     call stm.startStandardTestShell ()
-
+    call unitFileStatus ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFileStatus ()
     array set test_file_a_array 0 0
     array set test_file_a_array 1 1
     array set test_file_a_array 2 0xA
@@ -235,7 +237,7 @@ proc testFileStatus ()
 
     array set test_file_a_array 0 2
     lines append array test_file_a_lines test_file_a_array
-	var FileStatus 0
+    var FileStatus 0
     log message 0 "Check if file is readable, which doesn't exist"
     file readable user_data_out_not_present FileStatus
     call stm.printFileStatus (
@@ -272,14 +274,14 @@ proc testFileStatus ()
     file readable user_data_out_present FileStatus
     call stm.printFileStatus ()
     var verify FileStatus stm.FILE_STATUS_OK stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testFilePointerCopy ()
-
     call stm.startStandardTestShell ()
-
+    call unitFilePointerCopy ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitFilePointerCopy ()
     array set test_file_a_array 0 0
     array set test_file_a_array 1 1
     array set test_file_a_array 2 0xA
@@ -306,8 +308,6 @@ proc testFilePointerCopy ()
     file read all user_data_out_pointer_copy test_file_b_lines
     lines size test_file_b_lines FileTmpResult
     var verify FileTmpResult 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc WriteFile ()

@@ -9,7 +9,11 @@ var test_variable_add_2 2
 
 proc testConstantAdd ()
     call stm.startStandardTestShell ()
+    call unitConstantAdd ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitConstantAdd ()
     log message 0 "test_variable_1: {}" test_variable_add_1
     log message 0 "test_variable_2: {}" test_variable_add_2
 
@@ -29,8 +33,6 @@ proc testConstantAdd ()
     log message 0 "test_variable_1: {}" test_variable_add_1
     log message 0 "test_variable_2: {}" test_variable_add_2
 
-call stm.endStandardTestShell ()
-
-end proc 
+end proc
 
 end namespace

@@ -1,3 +1,10 @@
+include "../Common/interface.stm"
+include "../Bus/bus32.stm"
+include "../Bus/bus64.stm"
+include "../Bus/bus128.stm"
+include "../Bus/bus256.stm"
+include "../Bus/bus32_parameter.stm"
+
 namespace SimStmTest
 
 var TestCaseBus32Index 0

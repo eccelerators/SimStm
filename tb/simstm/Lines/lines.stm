@@ -12,9 +12,11 @@ var lines_size 0
 lines a_lines_aa
 
 proc testLinesAppendArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesAppendArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesAppendArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -35,16 +37,16 @@ proc testLinesAppendArray ()
 
     lines size a_lines_aa number_of_lines
     var verify number_of_lines 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_at
 
 proc testLinesAppendText ()
-
-     call stm.startStandardTestShell ()
-
+    call stm.startStandardTestShell ()
+    call unitLinesAppendText ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesAppendText ()
     lines append message a_lines_at "line 1"
     lines append message a_lines_at "line 2"
     lines append message a_lines_at "line 3"
@@ -53,16 +55,16 @@ proc testLinesAppendText ()
 
     lines size a_lines_at number_of_lines
     var verify number_of_lines 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_daa
 
 proc testLinesDeleteAllArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesDeleteAllArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesDeleteAllArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -89,16 +91,16 @@ proc testLinesDeleteAllArray ()
 
     lines size a_lines_daa number_of_lines
     var verify number_of_lines 0 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_da
 
 proc testLinesDeleteArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesDeleteArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesDeleteArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -137,16 +139,16 @@ proc testLinesDeleteArray ()
 
     lines size a_lines_da number_of_lines
     var verify number_of_lines 0 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ga
 
 proc testLinesGetArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesGetArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesGetArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -188,16 +190,16 @@ proc testLinesGetArray ()
         array verify another_array 7 0xFFFFFFFF stm.MAX
         add index_of_line 1
     end loop
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ia
 
 proc testLinesInsertArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesInsertArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesInsertArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -205,7 +207,6 @@ proc testLinesInsertArray ()
     array set file_array 4 0xB
     array set file_array 5 0x7FFFFFFF
     array set file_array 6 0x80000000
-
     array set file_array 7 0xFFFFFFFF
 
     lines append array a_lines_ia file_array
@@ -217,7 +218,6 @@ proc testLinesInsertArray ()
 
     array set file_array 0 2
     lines append array a_lines_ia file_array
-
     log lines 0 a_lines_ia
 
     lines size a_lines_ia number_of_lines
@@ -307,16 +307,16 @@ proc testLinesInsertArray ()
             equ index_of_line_offset 5
         end if
     end loop
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_it
 
 proc testLinesInsertText ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesInsertText ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesInsertText ()
     lines append message a_lines_it "line 0"
     lines append message a_lines_it "line 1"
     lines append message a_lines_it "line 2"
@@ -340,17 +340,17 @@ proc testLinesInsertText ()
     log lines 0 a_lines_it
     lines size a_lines_it number_of_lines
     var verify number_of_lines 6 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_pc
 lines b_lines_pc
 
 proc testLinesPointerCopy ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesPointerCopy ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesPointerCopy ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -394,16 +394,16 @@ proc testLinesPointerCopy ()
     var verify number_of_lines 4 stm.MAX
     lines size b_lines_pc number_of_lines
     var verify number_of_lines 4 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_sa
 
 proc testLinesSetArray ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesSetArray ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesSetArray ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -499,16 +499,16 @@ proc testLinesSetArray ()
         end if
         add index_of_line 1
     end loop
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_st
 
 proc testLinesSetText ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesSetText ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesSetText ()
     lines append message a_lines_st "line 1"
     lines append message a_lines_st "line 2"
     lines append message a_lines_st "line 3"
@@ -526,16 +526,16 @@ proc testLinesSetText ()
 
     lines size a_lines_st number_of_lines
     var verify number_of_lines 3 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 lines a_lines_ls
 
 proc testLinesSize ()
-
     call stm.startStandardTestShell ()
-
+    call unitLinesSize ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitLinesSize ()
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -563,8 +563,6 @@ proc testLinesSize ()
     lines size a_lines_ls lines_size
 
     log message 0 "lines size is {}" lines_size
-
-    call stm.endStandardTestShell ()
 end proc
 
 end namespace

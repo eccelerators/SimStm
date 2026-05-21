@@ -5,6 +5,11 @@ file file_local_override_global "file_override_global.dat"
 proc testFileLocalOverride ()
 
 	call stm.startStandardTestShell ()
+	call unitFileLocalOverride ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitFileLocalOverride ()
 	array a_array 1
 	array set a_array 0 1 --initialize a_array with value 1
 	
@@ -28,8 +33,6 @@ proc testFileLocalOverride ()
 	array verify a_array 0 1 stm.MAX
 	--array verify b_array 0 2 stm.MAX
 	call checkGlobalFile ()
-	
-	call stm.endStandardTestShell ()	
 end proc
 
 

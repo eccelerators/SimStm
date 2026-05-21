@@ -2,8 +2,14 @@ namespace SimStmTest
 
 proc testLinesLocal ()
 
-	lines a_lines
 	call stm.startStandardTestShell ()
+	call unitLinesLocal ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitLinesLocal ()
+
+	lines a_lines
 	array a_array 2
 	array set a_array 0 1
 	array set a_array 1 2
@@ -13,7 +19,6 @@ proc testLinesLocal ()
 	lines get array a_lines 0 a_array a_var
 	array verify a_array 0 1 stm.MAX
 	array verify a_array 1 2 stm.MAX
-	call stm.endStandardTestShell ()
 end proc
 
 end namespace

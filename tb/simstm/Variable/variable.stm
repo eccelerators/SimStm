@@ -5,7 +5,10 @@ var test_variable_add_2 2
 
 proc testVariableAdd ()
     call stm.startStandardTestShell ()
-
+    call unitVariableAdd ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableAdd ()
     log message 0 "test_variable_1: {:d}" test_variable_add_1
     log message 0 "test_variable_2: {:d}" test_variable_add_2
 
@@ -24,9 +27,6 @@ proc testVariableAdd ()
     log message 0 "test_variable_2: {:d}" test_variable_add_2
     var verify test_variable_add_1 12356 stm.MAX
     var verify test_variable_add_2 110 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_and_1 0xAAAA
@@ -34,7 +34,10 @@ var test_variable_and_2 0x77777777
 
 proc testVariableAnd ()
     call stm.startStandardTestShell ()
-
+    call unitVariableAnd ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableAnd ()
     log message 0 "test_variable_1: {:x}" test_variable_and_1
     log message 0 "test_variable_2: {:x}" test_variable_and_2
 
@@ -53,9 +56,6 @@ proc testVariableAnd ()
     log message 0 "test_variable_2: {:x}" test_variable_and_2
     var verify test_variable_and_1 0xAA02 stm.MAX
     var verify test_variable_and_2 0x70745607 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_div_1 500
@@ -63,7 +63,10 @@ var test_variable_div_2 5000
 
 proc testVariableDiv ()
     call stm.startStandardTestShell ()
-
+    call unitVariableDiv ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableDiv ()
     log message 0 "test_variable_1: {:d}" test_variable_div_1
     log message 0 "test_variable_2: {:d}" test_variable_div_2
 
@@ -82,9 +85,6 @@ proc testVariableDiv ()
     log message 0 "test_variable_2: {:d}" test_variable_div_2
     var verify test_variable_div_1 10 stm.MAX
     var verify test_variable_div_2 2 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_equ_1 1
@@ -95,7 +95,10 @@ var test_variable_equ_5 5
 
 proc testVariableEqu ()
     call stm.startStandardTestShell ()
-
+    call unitVariableEqu ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableEqu ()
     log message 0 "test_variable_1: {:d}" test_variable_equ_1
     log message 0 "test_variable_2: {:d}" test_variable_equ_2
     log message 0 "test_variable_3: {:d}" test_variable_equ_3
@@ -135,8 +138,6 @@ proc testVariableEqu ()
     var verify test_variable_equ_3 55 stm.MAX
     var verify test_variable_equ_4 11 stm.MAX
     var verify test_variable_equ_5 0 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_mul_1 1
@@ -144,7 +145,10 @@ var test_variable_mul_2 2
 
 proc testVariableMul ()
     call stm.startStandardTestShell ()
-
+    call unitVariableMul ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableMul ()
     log message 0 "test_variable_1: {:d}" test_variable_mul_1
     log message 0 "test_variable_2: {:d}" test_variable_mul_2
 
@@ -163,18 +167,17 @@ proc testVariableMul ()
     log message 0 "test_variable_2: {:d}" test_variable_mul_2
     var verify test_variable_mul_1 123450 stm.MAX
     var verify test_variable_mul_2 3520 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
-
 
 var test_variable_or_1 0x1234
 var test_variable_or_2 0x80000000
 
 proc testVariableOr ()
     call stm.startStandardTestShell ()
-
+    call unitVariableOr ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableOr ()
     log message 0 "test_variable_1: {}" test_variable_or_1
     log message 0 "test_variable_2: {}" test_variable_or_2
 
@@ -193,9 +196,6 @@ proc testVariableOr ()
     log message 0 "test_variable_2: {}" test_variable_or_2
     var verify test_variable_or_1 0x3675 stm.MAX
     var verify test_variable_or_2 0x80000001 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_sub_1 12345
@@ -203,7 +203,10 @@ var test_variable_sub_2 88
 
 proc testVariableSub ()
     call stm.startStandardTestShell ()
-
+    call unitVariableSub ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableSub ()
     log message 0 "test_variable_1: {:d}" test_variable_sub_1
     log message 0 "test_variable_2: {:d}" test_variable_sub_2
 
@@ -222,9 +225,6 @@ proc testVariableSub ()
     log message 0 "test_variable_2: {:d}" test_variable_sub_2
     var verify test_variable_sub_1 12333 stm.MAX
     var verify test_variable_sub_2 67 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_xor_1 0xFFFFFFFF
@@ -232,7 +232,10 @@ var test_variable_xor_2 0x00000000
 
 proc testVariableXor ()
     call stm.startStandardTestShell ()
-
+    call unitVariableXor ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableXor ()
     log message 0 "test_variable_1: {}" test_variable_xor_1
     log message 0 "test_variable_2: {}" test_variable_xor_2
 
@@ -251,9 +254,6 @@ proc testVariableXor ()
     log message 0 "test_variable_2: {}" test_variable_xor_2
     var verify test_variable_xor_1 0 0xFFFFFFFF
     var verify test_variable_xor_2 0xFFFFFFFF 0xFFFFFFFF
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_inv_1 0x12345678
@@ -261,7 +261,10 @@ var test_variable_inv_2 0x0FEDCBA9
 
 proc testVariableInv ()
     call stm.startStandardTestShell ()
-
+    call unitVariableInv ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableInv ()
     log message 0 "test_variable_1: {}" test_variable_inv_1
     log message 0 "test_variable_2: {}" test_variable_inv_2
 
@@ -280,18 +283,17 @@ proc testVariableInv ()
     log message 0 "test_variable_2: {}" test_variable_inv_2
     var verify test_variable_inv_1 0x12345678 0xFFFFFFFF
     var verify test_variable_inv_2 0x0FEDCBA9 0xFFFFFFFF
-
-    call stm.endStandardTestShell ()
-
 end proc
-
 
 var test_variable_ld_1 0x1000
 var test_variable_ld_2 0x80000000
 
 proc testVariableLd ()
     call stm.startStandardTestShell ()
-
+    call unitVariableLd ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitVariableLd ()
     log message 0 "test_variable_1: {}" test_variable_ld_1
     log message 0 "test_variable_2: {}" test_variable_ld_2
 
@@ -302,9 +304,6 @@ proc testVariableLd ()
     log message 0 "test_variable_2: {:d}" test_variable_ld_2
     var verify test_variable_ld_1 12 stm.MAX
     var verify test_variable_ld_2 31 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 end namespace

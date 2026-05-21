@@ -1,0 +1,39 @@
+include "../Variable/variable.stm"
+include "../Variable/variable_default_value.stm"
+include "../Variable/variable_local.stm"
+include "../Variable/variable_local_override.stm"
+include "../Variable/variable_parameter.stm"
+include "../Variable/variable_pointer.stm"
+
+namespace SimStmTest
+
+proc unitsVariable ()
+    call unitVariableAdd ()
+    call unitVariableAnd ()
+    call unitVariableDiv ()
+    call unitVariableEqu ()
+    call unitVariableMul ()
+    call unitVariableOr ()
+    call unitVariableSub ()
+    call unitVariableXor ()
+    call unitVariableInv ()
+    call unitVariableLd ()
+end proc
+proc unitsVariableDefaultValue ()
+    call unitVariableDefaultValue ()
+end proc
+proc unitsVariableLocal ()
+    call unitVariableLocal ()
+end proc
+proc unitsVariableLocalOverride ()
+    call unitVariableLocalOverride ()
+end proc
+proc unitsVariableParameter ()
+    call unitVariableParameterIn ()
+    call unitVariableParameterOut ()
+end proc
+proc unitsVariablePointer ()
+    call unitVariablePointer ()
+end proc
+
+end namespace

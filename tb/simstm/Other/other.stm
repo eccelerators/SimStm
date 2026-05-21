@@ -7,19 +7,23 @@ var random_min 0
 var random_max 10
 
 proc testOtherRandom ()
-
     call stm.startStandardTestShell ()
+    call unitOtherRandom ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherRandom ()
     loop 20
         random random_number 0 10
         log message 0 "random_number: {:d}" random_number
     end loop
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherSeed ()
-
     call stm.startStandardTestShell ()
+    call unitOtherSeed ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherSeed ()
     seed 1
     loop 5
         random random_number 0 10
@@ -31,8 +35,6 @@ proc testOtherSeed ()
         random random_number random_min random_max
         log message 0 "random_number: {:d}" random_number
     end loop
-
-    call stm.endStandardTestShell ()
 end proc
 
 const marker_1 1
@@ -45,8 +47,11 @@ const val_trace_off 0
 const val_trace_on 1
 
 proc testOtherTrace ()
-
     call stm.startStandardTestShell ()
+    call unitOtherTrace ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherTrace ()
     trace 1
     wait 100
     marker 0 1
@@ -63,6 +68,7 @@ proc testOtherTrace ()
     wait 100
     marker 14 0
     marker marker_15 val_marker_low
+
     trace val_trace_off
     wait 100
     marker 14 1
@@ -70,14 +76,14 @@ proc testOtherTrace ()
     wait 100
     marker 14 0
     marker marker_15 val_marker_low
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherMarker ()
-
     call stm.startStandardTestShell ()
-
+    call unitOtherMarker ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherMarker ()
     wait 100
     marker 0 1
     marker marker_1 val_marker_high
@@ -85,7 +91,6 @@ proc testOtherMarker ()
     marker 0 0
     marker marker_1 val_marker_low
 
-
     wait 100
     marker 14 1
     marker marker_15 val_marker_high
@@ -98,19 +103,17 @@ proc testOtherMarker ()
     wait 100
     marker 14 0
     marker marker_15 val_marker_low
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherWait ()
-
     call stm.startStandardTestShell ()
-
+    call unitOtherWait ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherWait ()
     trace 1
     wait 1000
     trace 0
-
-    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_1 0xA1
@@ -120,9 +123,11 @@ var test_variable_4 0xE4
 var test_variable_5 0xF5
 
 proc testOtherLogSubstitutions ()
-
     call stm.startStandardTestShell ()
-
+    call unitOtherLogSubstitutions ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherLogSubstitutions ()
     log message 0 "test_variable_1: {}" test_variable_1
     log message 0 "test_variable_1: {} test_variable_2: {}" test_variable_1 test_variable_2
     log message 0 "test_variable_1: {} test_variable_2: {} test_variable_3: {}" test_variable_1 test_variable_2 test_variable_2
@@ -138,7 +143,6 @@ proc testOtherLogSubstitutions ()
 
     log message stm.INFO "Main test call stm.endStandardTestShell ()ed {}" stm.INFO
     wait 1000
-    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_lf_1 0xA1
@@ -147,20 +151,23 @@ var test_variable_lf_3 0xC3
 var test_variable_lf_4 0xE4
 
 proc testOtherLogFormats ()
-
     call stm.startStandardTestShell ()
-
+    call unitOtherLogFormats ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherLogFormats ()
     call testContent () -- to have a reasonable call stack
 
     log message stm.INFO "Main test call stm.endStandardTestShell ()ed {}" stm.INFO
     wait 1000
-    call stm.endStandardTestShell ()
 end proc
 
 proc testContent ()
-
     call stm.startStandardTestShell ()
-
+    call unitContent ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitContent ()
     log message 0 "test_variable_lf_1: {}" test_variable_lf_1
     log message 0 "test_variable_lf_1: {} test_variable_lf_2: {}" test_variable_lf_1 test_variable_lf_2
     log message 0 "test_variable_lf_1: {} test_variable_lf_2: {} test_variable_lf_3: {}" test_variable_lf_1 test_variable_lf_2 test_variable_lf_2
@@ -178,12 +185,14 @@ proc testContent ()
     log message 0 'file: "{@f1}", line: "{@l1}"'
     log message 0 "file: \"{@f1}\", line: \"{@l1}\""
     log message 0 'file: \'{@f1}\', line: \'{@l1}\''
-
 end proc
 
 proc testOtherLog ()
-
     call stm.startStandardTestShell ()
+    call unitOtherLog ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherLog ()
     log message 0 "log 0"
     log message 1 "log 1"
     log message 2 "log 2"
@@ -212,18 +221,18 @@ proc testOtherLog ()
     log message 0 "log 0"
     log message 1 "log 1"
     log message 2 "log 2"
-
-    call stm.endStandardTestShell ()
 end proc
 
 proc testOtherHelloWorld ()
-
     call stm.startStandardTestShell ()
+    call unitOtherHelloWorld ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherHelloWorld ()
     loop 3
         log message 0 "Hello World"
         wait 1000
     end loop
-    call stm.endStandardTestShell ()
 end proc
 
 var test_variable_call_1 1
@@ -233,9 +242,11 @@ var test_variable_call_4 4
 var test_variable_call_5 5
 
 proc testOtherCall ()
-
     call stm.startStandardTestShell ()
-
+    call unitOtherCall ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitOtherCall ()
     call callLabel1 ()
     call callLabel2 ()
 
@@ -244,9 +255,6 @@ proc testOtherCall ()
     log message 0 "test_variable_call_3: {}" test_variable_call_3
     log message 0 "test_variable_call_4: {}" test_variable_call_4
     log message 0 "test_variable_call_5: {}" test_variable_call_5
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 proc callLabel5 ()

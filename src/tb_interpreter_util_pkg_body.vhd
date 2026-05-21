@@ -1256,6 +1256,8 @@ package body tb_interpreter_util_pkg is
             proc_type := true;
         elsif inst(1 to inst_len) = INSTR_PROC_NOPAR then
             proc_type := true;
+        elsif inst(1 to inst_len) = INSTR_INTERRUPT_NOPAR then
+            proc_type := true;
         end if;
     end procedure;
 

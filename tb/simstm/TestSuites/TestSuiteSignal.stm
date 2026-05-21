@@ -1,22 +1,98 @@
+include "../Common/interface.stm"
+include "../Signal/signal_base.stm"
+include "../Signal/signal_errors.stm"
+include "../Signal/signal_extend.stm"
+include "../Signal/signal_local_override.stm"
+include "../Signal/signal_parameter.stm"
+include "../Signal/signal_pointer.stm"
+include "../Signal/signal_scoping.stm"
+
 namespace SimStmTest
 
 proc testSuiteSignal ()
 
     call stm.testCase (
-    	label set TestToCall testSignalWriteReadVerify
+    	label set TestToCall unitSignalSimpleLoopbackBit
     )
 
     call stm.testCase (
-    	label set TestToCall testSignalVerifyFail
+    	label set TestToCall unitSignalSimpleLoopbackVector
     )
 
     call stm.testCase (
-    	label set TestToCall testSignalPointerCopy
+    	label set TestToCall unitSignalSimpleLoopbackCross
     )
 
     call stm.testCase (
-    	label set TestToCall testSignalPointerGetSet
+        label set TestToCall unitSignalVerifyDecDec
     )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyHexHex
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyBinBin
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyDecHex
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyDecBin
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyHexDec
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyHexBin
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyBinDec
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyBinHex
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyVarDec
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyVarHex
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyVarBin
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyDecVar
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyHexVar
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyBinVar
+    )
+    call stm.testCase (
+        label set TestToCall unitSignalVerifyVarVar
+    )
+    call stm.testCase (
+        label set TestToCall testSignalVerifyFail
+    )
+    call stm.testCase (
+        label set TestToCall testSignalLocalOverride
+    )
+    call stm.testCase (
+        label set TestToCall testSignalParameter
+    )
+    call stm.testCase (
+        label set TestToCall testSignalPointerCopy
+    )
+    call stm.testCase (
+        label set TestToCall testSignalPointerGet
+    )
+    call stm.testCase (
+        label set TestToCall testSignalPointerSet
+    )
+    call stm.testCase (
+        label set TestToCall testSignalSimpleScope
+    )
+
 end proc
 
 end namespace

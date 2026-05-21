@@ -10,7 +10,11 @@ const test_constant_5 5
 
 proc testBasicConst ()
     call stm.startStandardTestShell ()
+    call unitBasicConst ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicConst ()
     log message 0 "test_constant_1: {}" test_constant_1
     equ tmp_variable test_constant_1
     var verify tmp_variable 1 stm.MAX
@@ -26,9 +30,6 @@ proc testBasicConst ()
     log message 0 "test_constant_5: {}" test_constant_5
     equ tmp_variable test_constant_5
     var verify tmp_variable 5 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var test_variable_1 0b1
@@ -39,7 +40,11 @@ var test_variable_5 5
 
 proc testBasicVar ()
     call stm.startStandardTestShell ()
+    call unitBasicVar ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicVar ()
     log message 0 "test_variable_1: {}" test_variable_1
     var verify test_variable_1 0b1 stm.MAX
     log message 0 "test_variable_2: {}" test_variable_2
@@ -50,8 +55,6 @@ proc testBasicVar ()
     var verify test_variable_4 4 stm.MAX
     log message 0 "test_variable_5: {}" test_variable_5
     var verify test_variable_5 5 stm.MAX
-
-    call stm.endStandardTestShell ()
 end proc
 
 var aab 1
@@ -62,7 +65,11 @@ var aba 5
 
 proc testBasicVar3 ()
     call stm.startStandardTestShell ()
+    call unitBasicVar3 ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicVar3 ()
     log message 0 "aab: {}" aab
     var verify test_variable_1 1 stm.MAX
     log message 0 "abb: {}" abb
@@ -73,9 +80,6 @@ proc testBasicVar3 ()
     var verify test_variable_4 4 stm.MAX
     log message 0 "aba: {}" aba
     var verify test_variable_5 5 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var loop_counta 0
@@ -83,6 +87,11 @@ var loop_countb 0
 
 proc testBasicLoop ()
     call stm.startStandardTestShell ()
+    call unitBasicLoop ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBasicLoop ()
     equ loop_counta 0
     loop 4
         log message 0 "log 0"
@@ -104,8 +113,6 @@ proc testBasicLoop ()
     var verify loop_countb 10 stm.MAX
 
     log message 0 "log 2"
-
-    call stm.endStandardTestShell ()
 end proc
 
 var resulta 0
@@ -119,7 +126,12 @@ var resulth 0
 var resulti 0
 
 proc testBasicNestedIfElseElsif ()
+    call stm.startStandardTestShell ()
+    call unitBasicNestedIfElseElsif ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicNestedIfElseElsif ()
     log message 0 "test multiple if (1)"
     equ resulta 0
     equ resultb 0
@@ -304,9 +316,6 @@ proc testBasicNestedIfElseElsif ()
     var verify resultc 0 stm.MAX
     var verify resultd 0 stm.MAX
     var verify resulte 0 stm.MAX
-
-    call stm.endStandardTestShell ()
-
 end proc
 
 var result 0
@@ -315,9 +324,12 @@ var one  1
 
 proc testBasicIfElseElsif ()
     call stm.startStandardTestShell ()
+    call unitBasicIfElseElsif ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBasicIfElseElsif ()
     -- equal
-
     equ result 0
     if 0 = 0
         log message 0 "enter if"
@@ -737,7 +749,6 @@ proc testBasicIfElseElsif ()
         equ result 4
     end if
     var verify result 3 stm.MAX
-
 end proc
 
 end namespace

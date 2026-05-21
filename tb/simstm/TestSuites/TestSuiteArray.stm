@@ -1,3 +1,13 @@
+include "../Array/array.stm"
+include "../Array/array_default_value.stm"
+include "../Array/array_labs.stm"
+include "../Array/array_labs_zero_size.stm"
+include "../Array/array_local.stm"
+include "../Array/array_local_override.stm"
+include "../Array/array_parameter.stm"
+include "../Array/array_pointer.stm"
+include "../Array/array_size.stm"
+
 namespace SimStmTest
 
 proc testSuiteArray ()
@@ -13,34 +23,44 @@ proc testSuiteArray ()
     call stm.testCase (
     	label set TestToCall testArraySet
     )
+    
+    call stm.testCase (
+        label set TestToCall testArrayDefaultValue
+    )
+    
+    call stm.testCase (
+        label set TestToCall testArrayLocal
+    )
+    
+    call stm.testCase (
+        label set TestToCall testArrayLocalOverride
+    )
+
+    call stm.testCase (
+        label set TestToCall testArrayParameterIn
+    )
+
+    call stm.testCase (
+        label set TestToCall testArrayParameterOut
+    )
+
+    call stm.testCase (
+        label set TestToCall testArrayPointerCopy
+    )
 
     call stm.testCase (
     	label set TestToCall testArraySize
     )
 
-    call stm.testCase (
-    	label set TestToCall testArrayPointerCopy
-    )
 
-    call stm.testCase (
-    	label set TestToCall testArrayParameterIn
-    )
 
-    call stm.testCase (
-    	label set TestToCall testArrayParameterOut
-    )
 
-    call stm.testCase (
-    	label set TestToCall testArrayLocal
-    )
 
-    call stm.testCase (
-    	label set TestToCall testArrayLocalOverride
-    )
 
-    call stm.testCase (
-    	label set TestToCall testArrayDefaultValue
-    )
+
+
+
+
 
 end proc
 

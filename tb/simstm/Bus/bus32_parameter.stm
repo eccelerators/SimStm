@@ -3,13 +3,20 @@ namespace SimStmTest
 proc testBus32ParameterIn (
 	bus busToTest 0
 )
-
 	call stm.startStandardTestShell ()
+	call unitBus32ParameterIn (
+	    bus pointer copy busToTest busToTest
+	)
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitBus32ParameterIn (
+	bus busToTest 0
+)
 	bus write busToTest 32 0 0x55555555
 	call checkBus32ParameterInput (
 		bus pointer copy this_bus busToTest
 	)
-	call stm.endStandardTestShell ()
 end proc
 
 proc checkBus32ParameterInput (
@@ -17,19 +24,26 @@ proc checkBus32ParameterInput (
 )
 	var a_var 11
 	bus verify this_bus 32 0 0x55555555 stm.MAX
-
 end proc
 
 proc testBus32ParameterOut (
 	bus busToTest 0
 )
-	var a_var 12
 	call stm.startStandardTestShell ()
+	call unitBus32ParameterOut (
+        bus pointer copy busToTest busToTest
+	)
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitBus32ParameterOut (
+	bus busToTest 0
+)
+	var a_var 12
 	bus write busToTest 32 0 0xaaaaaaaa
 	call checkBus32ParameterOutput (
 		bus pointer copy this_bus busToTest
 	)
-	
 	bus verify busToTest 32 0 0xffffffff stm.MAX
 end proc
 
@@ -37,7 +51,6 @@ proc checkBus32ParameterOutput (
 	bus this_bus 5
 )
 	bus write this_bus 32 0 0xffffffff
-	
 end proc
 
 end namespace

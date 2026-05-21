@@ -6,24 +6,28 @@ proc testArrayDefaultValue ()
 	call stm.endStandardTestShell ()	
 end proc
 
-proc unitArrayDefaultValue ()
-
+proc unitArrayDefaultValue (
     array default_array 3
-    var pos_0 11
-    var pos_1 12
-    var pos_2 13
+) 
+    var val_pos_0 11
+    var val_pos_1 12
+    var val_pos_2 23
+    
+    var cmp_pos_0 0
+    var cmp_pos_1 0
+    var cmp_pos_2 0
+    
+    array set default_array 0 val_pos_0
+    array set default_array 1 val_pos_1
+    array set default_array 2 val_pos_2
    
-    array get default_array 0 pos_0
-    array get default_array 1 pos_1
-    array get default_array 2 pos_2
+    array get default_array 0 cmp_pos_0
+    array get default_array 1 cmp_pos_1
+    array get default_array 2 cmp_pos_2
     
-    log message stm.INFO_2 "pos 0 of array: {:d}" pos_0
-    log message stm.INFO_2 "pos 1 of array: {:d}" pos_1
-    log message stm.INFO_2 "pos 2 of array: {:d}" pos_2
-    
-    array verify default_array pos_0 0 stm.MAX
-    array verify default_array pos_1 0 stm.MAX
-    array verify default_array pos_2 0 stm.MAX
+    array verify default_array 0 cmp_pos_0 stm.MAX
+    array verify default_array 1 cmp_pos_1 stm.MAX
+    array verify default_array 2 cmp_pos_2 stm.MAX
     
 end proc
 

@@ -3,20 +3,18 @@ include "../../lib/testcase.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
 
-include "TestSuites/TestSuiteSample.stm"
+include "TestSuites/TestSuiteSignal.stm"
 namespace SimStmTest
-proc testMainSuiteSample ()
- 
+proc testMainSuiteNamespace ()
     verbosity stm.INFO_2
     trace stm.TRACE_OFF
     resume stm.RESUME_ON_ALL_FAILURES
     call initDut()
-    signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
-    log message stm.INFO "Main test main suite Sample started"
+    log message stm.INFO "Main test suite Signal started"
 
-    call testSuiteSample ()
+    call testSuiteSignal ()
 
-    log message stm.INFO "Main test main suite Sample ended"
+    log message stm.INFO "Main test suite Signal ended"
     wait 1000
     finish
 end proc

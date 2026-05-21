@@ -3,17 +3,21 @@ namespace SimStmTest
 var InterruptHappenedA 0
 var InterruptHappenedB 0
 
- proc testInterrupt ()
+proc testInterrupt ()
+    call stm.startStandardTestShell ()
+    call unitInterrupt ()
+    call stm.endStandardTestShell ()
+end proc
 
-     call stm.startStandardTestShell ()
+proc unitInterrupt ()
 
-     equ InterruptHappenedA 0
-     equ InterruptHappenedB 0
+    equ InterruptHappenedA 0
+    equ InterruptHappenedB 0
 
     wait 1000
-    signal write out_signal_3002 1
+    signal write out_signal_interrupt_a 1
     wait 1000
-    signal write out_signal_3003 1
+    signal write out_signal_interrupt_b 1
 
     loop 1000
     end loop
@@ -21,18 +25,17 @@ var InterruptHappenedB 0
     var verify InterruptHappenedA 1 stm.MAX
     var verify InterruptHappenedB 1 stm.MAX
 
-    call stm.endStandardTestShell ()
 end proc
 
 interrupt InterruptA ()
     log message 0 "InterruptA happened"
-    signal write out_signal_3002 0
+    signal write out_signal_interrupt_a 0
     equ InterruptHappenedA 1
 end interrupt
 
 interrupt InterruptB ()
     log message 0 "InterruptB happened"
-    signal write out_signal_3003 0
+    signal write out_signal_interrupt_b 0
     equ InterruptHappenedB 1
 end interrupt
 
