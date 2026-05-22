@@ -1,6 +1,7 @@
 include "../../lib/base.stm"
 include "Common/common.stm"
-include "Label/label.stm"
+
+include "Signal/signal_verify_failure.stm"
 
 namespace SimStmTest
 
@@ -15,10 +16,11 @@ namespace SimStmTest
 
         log message stm.INFO "Main test started"
 
-        call testArrayParameterIn ()
-        call testInterrupt ()
-        call testLinesGetArray ()
-        call testLinesInsertArray ()
+--        call testArrayParameterIn ()
+--        call testInterrupt ()
+--        call testLinesGetArray ()
+--        call testLinesInsertArray ()
+        call testSignalVerifyFail ()
 		
         log message stm.INFO "Main test finished"
         wait 1000

@@ -121,9 +121,9 @@ static_setup_data = {
             {"file":"tb/simstm/Signal/signal_pointer.stm"},
             {"file":"tb/simstm/Signal/signal_extend.stm"},
             {"file":"tb/simstm/Signal/signal_scoping.stm"},
-            {"file":"tb/simstm/Signal/signal_errors.stm"},
             {"file":"tb/simstm/Signal/signal_local_override.stm"},
             {"file":"tb/simstm/Signal/signal_parameter.stm"},
+            {"file":"tb/simstm/Signal/signal_verify_failure.stm"},
             {"file":"tb/simstm/Signal/signal_base.stm"}
         ]),(
         "SimStm/tb/simstm/Units", [

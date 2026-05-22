@@ -1,3 +1,5 @@
+include "../Common/interface.stm"
+
 namespace SimStmTest
 
 proc testSignalSimpleLoopbackBit ()

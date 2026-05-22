@@ -1,9 +1,13 @@
+include "../Common/interface.stm"
 
 namespace SimStmTest
 
 proc testSignalSimpleScope ()
     call stm.startStandardTestShell ()
     call unitSignalSimpleScope ()
+    call stm.addExpectedStandardTestVerifyFailureCount (
+        equ Add 1
+    )
     call stm.endStandardTestShell ()    
 end proc
 

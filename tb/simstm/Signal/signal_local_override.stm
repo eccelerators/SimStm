@@ -1,3 +1,5 @@
+include "../Common/interface.stm"
+
 namespace SimStmTest
 
 signal out_signal_local_override 0 

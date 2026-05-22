@@ -1,3 +1,4 @@
+include "../Common/interface.stm"
 
 namespace SimStmTest
 
@@ -11,13 +12,6 @@ proc unitSignalParameter ()
     call checkSignalParameterInput (
         signal pointer copy this_signal loopback_32bit
     )
-
-    resume 1
-    -- this will make 5 verify failures
-    call checkSignalParameterInput (
-        signal pointer copy this_signal loopback_1bit
-    )
-    resume 0
 end proc
 
 proc checkSignalParameterInput (

@@ -1,6 +1,6 @@
 include "../Common/interface.stm"
 include "../Signal/signal_base.stm"
-include "../Signal/signal_errors.stm"
+include "../Signal/signal_verify_failure.stm"
 include "../Signal/signal_extend.stm"
 include "../Signal/signal_local_override.stm"
 include "../Signal/signal_parameter.stm"

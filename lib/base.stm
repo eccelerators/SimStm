@@ -195,7 +195,7 @@ end proc
 proc addExpectedStandardTestVerifyFailureCount (
     var Add 1
 )
-    add stm.ExpectedStandardTestVerifyFailureCount 1
+    add ExpectedStandardTestVerifyFailureCount 1
     signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
 end proc
 
@@ -203,7 +203,7 @@ end proc
 proc addExpectedStandardTestBusTimeoutFailureCount (
     var Add 1
 )
-    add stm.ExpectedStandardTestBusTimeoutFailureCount 1
+    add ExpectedStandardTestBusTimeoutFailureCount 1
     signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
 end proc  
 
@@ -211,7 +211,7 @@ end proc
 proc setExpectedStandardTestVerifyFailureCount (
     var Set 1
 )
-    equ stm.ExpectedStandardTestVerifyFailureCount Set
+    equ ExpectedStandardTestVerifyFailureCount Set
     signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
 end proc
 
@@ -219,7 +219,7 @@ end proc
 proc setExpectedStandardTestBusTimeoutFailureCount (
     var Set 1
 )
-    equ stm.ExpectedStandardTestBusTimeoutFailureCount 1
+    equ ExpectedStandardTestBusTimeoutFailureCount 1
     signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
 end proc   
 
