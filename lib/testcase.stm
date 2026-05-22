@@ -210,7 +210,9 @@ proc testCase (
     call beginTestCase (
         label pointer copy TestToCall TestToCall
     )
-    call label TestToCall ()
+    if skipped = 0 
+        call label TestToCall ()
+    end if
     call endTestCase (
         label pointer copy TestToCall TestToCall 
         equ  skipped skipped
@@ -225,7 +227,9 @@ proc testCaseWithCaseIndex (
     call beginTestCaseIndexed (
         label pointer copy TestToCall TestToCall
     )
-    call label TestToCall ()
+    if skipped = 0 
+        call label TestToCall ()
+    end if
     call endTestCase (
         label pointer copy TestToCall TestToCall 
         equ  skipped skipped
@@ -240,7 +244,9 @@ proc testCaseWithSuiteIndex (
     call beginTestCaseSuiteIndexed (
         label pointer copy TestToCall TestToCall
     )
-    call label TestToCall ()
+    if skipped = 0 
+        call label TestToCall ()
+    end if
     call endTestCase (
         label pointer copy TestToCall TestToCall 
         equ  skipped skipped
@@ -255,7 +261,9 @@ proc testCaseWithSuiteAndCaseIndex (
     call beginTestSuiteIndexedAndCaseIndexed (
         label pointer copy TestToCall TestToCall
     )
-    call label TestToCall ()
+    if skipped = 0 
+        call label TestToCall ()
+    end if
     call endTestCase (
         label pointer copy TestToCall TestToCall 
         equ  skipped skipped

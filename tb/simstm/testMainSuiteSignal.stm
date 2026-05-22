@@ -3,9 +3,6 @@ include "../../lib/testcase.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
 
-include "Signal/signal.stm"
-include "Signal/signal_pointer.stm"
-
 include "TestSuites/TestSuiteSignal.stm"
 namespace SimStmTest
 proc testMainSuiteSignal ()

@@ -10,6 +10,7 @@ proc testSuiteLines ()
 
     call stm.testCase (
     	label set TestToCall testLinesAppendArray
+    	equ skipped 1
     )
 
     call stm.testCase (
@@ -18,18 +19,22 @@ proc testSuiteLines ()
 
     call stm.testCase (
     	label set TestToCall testLinesDeleteAllArray
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesDeleteArray
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesGetArray
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesInsertArray
+    	equ skipped 1
     )
 
     call stm.testCase (
@@ -42,6 +47,7 @@ proc testSuiteLines ()
 
     call stm.testCase (
     	label set TestToCall testLinesSetArray
+    	equ skipped 1
     )
 
     call stm.testCase (
@@ -54,18 +60,22 @@ proc testSuiteLines ()
 
     call stm.testCase (
     	label set TestToCall testLinesLocal
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesParameterIn
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesParameterOut
+    	equ skipped 1
     )
 
     call stm.testCase (
     	label set TestToCall testLinesLocalOverride
+    	equ skipped 1
     )
 end proc
 

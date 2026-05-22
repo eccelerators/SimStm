@@ -15,8 +15,10 @@ namespace SimStmTest
 
         log message stm.INFO "Main test started"
 
-        call testCallProcDirect ()
-        call testCallLabelIndirect ()
+        call testArrayParameterIn ()
+        call testInterrupt ()
+        call testLinesGetArray ()
+        call testLinesInsertArray ()
 		
         log message stm.INFO "Main test finished"
         wait 1000

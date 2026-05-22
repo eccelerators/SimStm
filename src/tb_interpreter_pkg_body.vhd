@@ -492,8 +492,11 @@ package body tb_interpreter_pkg is
             if ie.inst(1 to ie.inst_len) /= INSTR_NAMESPACE
                and ie.inst(1 to ie.inst_len) /= INSTR_PROC_PAR_OPEN
                and ie.inst(1 to ie.inst_len) /= INSTR_PROC_NOPAR
+               and ie.inst(1 to ie.inst_len) /= INSTR_INTERRUPT_NOPAR
                and ie.inst(1 to ie.inst_len) /= INSTR_CALL_PAR_OPEN
                and ie.inst(1 to ie.inst_len) /= INSTR_CALL_NOPAR
+               and ie.inst(1 to ie.inst_len) /= INSTR_CALL_LABEL_PAR_OPEN
+               and ie.inst(1 to ie.inst_len) /= INSTR_CALL_LABEL_NOPAR
             then
                 for i in 1 to 6 loop
                     if ie.inst_args.par_text_fields(i)(1) /= nul then

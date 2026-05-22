@@ -1284,11 +1284,13 @@ package body tb_interpreter_util_pkg is
             iic.code_section := PROC_PARAMS;
             iic.proc_name := ts(2);
         end if;
-        if inst(1 to il) = INSTR_PROC_NOPAR then
+        if inst(1 to il) = INSTR_PROC_NOPAR 
+            or inst(1 to il) = INSTR_INTERRUPT_NOPAR then
             iic.code_section := PROC_BODY;
             iic.proc_name := ts(2);
         end if;
-        if inst(1 to il) = INSTR_END_PROC then
+        if inst(1 to il) = INSTR_END_PROC 
+            or inst(1 to il) = INSTR_END_INTERRUPT then
             iic.code_section := NONE;
             iic.proc_name := (others => nul);
             iic.called_proc_name := (others => nul);

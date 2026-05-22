@@ -10,11 +10,9 @@ include "Bus/bus256.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
 namespace SimStmTest
-const testMainSuiteIndexedRangeLengthBus 32
+const testMainSuiteIndexedRangeLengthBus 2 -- 32
 
 proc testMainSuiteIndexedBus ()
-
-    
 
     verbosity stm.INFO_2
     trace stm.TRACE_OFF

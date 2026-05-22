@@ -1575,13 +1575,18 @@ begin
 
                 -- proc
                 elsif ie.inst(1 to ie.inst_len) = INSTR_PROC_PAR_OPEN
-                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR then
+                      or ie.inst(1 to ie.inst_len) = INSTR_PROC_NOPAR 
+                      or ie.inst(1 to ie.inst_len) = INSTR_INTERRUPT_NOPAR                      
+                      then
                     null; -- no action necessary
 
                 -- end proc
                 -- end interrupt
                 -- return
-                elsif ie.inst(1 to ie.inst_len) = INSTR_RETURN or ie.inst(1 to ie.inst_len) = INSTR_END_PROC or ie.inst(1 to ie.inst_len) = INSTR_END_INTERRUPT then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_RETURN 
+                    or ie.inst(1 to ie.inst_len) = INSTR_END_PROC 
+                    or ie.inst(1 to ie.inst_len) = INSTR_END_INTERRUPT 
+                then
                     if trc_on(TRACE_CALLS) then
                         print_instr("exec ");
                     end if;
@@ -1962,9 +1967,7 @@ begin
 
                 -- bus read  a_bus bus_width  bus_address  bus_read_value
                 -- bus read  a_bus 16 0x00001000  bus_read_value
-                -- bus verify a_bus bus_width  bus_address expected_value bus_mask_value
-                -- bus verify a_bus 32  0x00001004 0x00050000 0x000FC000
-                elsif ie.inst(1 to ie.inst_len) = INSTR_BUS_READ or ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
+                elsif ie.inst(1 to ie.inst_len) = INSTR_BUS_READ  then
                     get_val_in_called_scope_prefer_local(1, val1);
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_val_in_called_scope_prefer_local(3, val3);
@@ -1989,26 +1992,52 @@ begin
                         severity error;
                     end if;
                     update_var_value(vars, ven4, val);
-                    if ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
-                        get_val_in_called_scope_prefer_local(5, val5);
-                        verify_assertions_count := verify_assertions_count + 1;
-                        if (val5 and val) /= (val5 and val4) then
-                            print_instr("exec ");
-                            print(" bus      = 0x" & to_hstring(val));
-                            print(" address  = 0x" & to_hstring(val3));
-                            print(" read     = 0x" & to_hstring(val));
-                            print(" expected = 0x" & to_hstring(val4));
-                            print(" mask     = 0x" & to_hstring(val5));
-                            if resume(0) = '0' then
-                                assert false
-                                report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                                severity failure;
-                            else
-                                assert false
-                                report "verify error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
-                                severity error;
-                                verify_failure_count := verify_failure_count + 1;
-                            end if;
+                    wait for 0 ns;
+                    
+                -- bus verify a_bus bus_width  bus_address expected_value bus_mask_value
+                -- bus verify a_bus 32 0x00001004 0x00050000 0x000FC000
+                elsif ie.inst(1 to ie.inst_len) = INSTR_BUS_VERIFY then
+                    get_val_in_called_scope_prefer_local(1, val1);
+                    get_val_in_called_scope_prefer_local(2, val2);
+                    get_val_in_called_scope_prefer_local(3, val3);
+                    get_val_in_called_scope_prefer_local(4, val4);
+                    get_val_in_called_scope_prefer_local(5, val5);
+                    val2_int := to_integer(val2(30 downto 0));
+                    val_int := to_integer(val1(30 downto 0));
+                    bus_read(bus_down, bus_up, val3, val, val2_int, val_int, bus_valid, successfull, bus_timeouts(val_int));
+                    assert bus_valid /= 0
+                    report "trying to read from invalid bus" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                    severity failure;
+                    bus_timeout_assertions_count := bus_timeout_assertions_count + 1;
+                    if resume(1) = '0' then
+                        assert successfull
+                        report "bus read timeout"
+                        severity failure;
+                    else
+                        if not successfull then
+                            bus_timeout_failure_count := bus_timeout_failure_count + 1;
+                        end if;
+                        assert successfull
+                        report "bus read timeout"
+                        severity error;
+                    end if;
+                    verify_assertions_count := verify_assertions_count + 1;
+                    if (val5 and val) /= (val5 and val4) then
+                        print_instr("exec ");
+                        print(" bus      = 0x" & to_hstring(val));
+                        print(" address  = 0x" & to_hstring(val3));
+                        print(" read     = 0x" & to_hstring(val));
+                        print(" expected = 0x" & to_hstring(val4));
+                        print(" mask     = 0x" & to_hstring(val5));
+                        if resume(0) = '0' then
+                            assert false
+                            report "verify failure assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                            severity failure;
+                        else
+                            assert false
+                            report "verify error assertion" & " file name " & crop(ie.slc.file_name) & " file line " & integer'image(ie.slc.file_line)
+                            severity error;
+                            verify_failure_count := verify_failure_count + 1;
                         end if;
                     end if;
                     wait for 0 ns;

@@ -14,7 +14,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+
 use work.tb_base_pkg.all;
+use work.basic.all;
 
 package tb_bus_avalon_pkg is
     generic(
@@ -80,21 +82,6 @@ package body tb_bus_avalon_pkg is
         return true;
     end function;
 
-    function f_make_byteenable(access_width : integer;
-                               byte_offset : integer) return std_logic_vector is
-        variable be : std_logic_vector(C_BE_W - 1 downto 0) := (others => '0');
-        variable num_bytes : integer;
-    begin
-        num_bytes := access_width / 8;
-        for i in 0 to num_bytes - 1 loop
-            be(i) := '1';
-        end loop;
-        if byte_offset > 0 then
-            be := be(C_BE_W - 1 - byte_offset downto 0) & (byte_offset - 1 downto 0 => '0');
-        end if;
-        return be;
-    end function;
-
     function avalonmm_down_init return t_avalonmm_down is
         variable init : t_avalonmm_down;
     begin
@@ -142,7 +129,7 @@ package body tb_bus_avalon_pkg is
                              variable access_width : in integer;
                              variable successfull : out boolean;
                              variable timeout : in time) is
-
+        variable num_of_address_bits_for_bytes : integer;
         variable byte_offset : integer;
         variable be_base : std_logic_vector(C_BE_W - 1 downto 0);
         variable data_temp : std_logic_vector(G_DATA_W - 1 downto 0);
@@ -157,9 +144,10 @@ package body tb_bus_avalon_pkg is
         severity failure;
 
         successfull := false;
-        byte_offset := to_integer(address(C_BE_W - 1 downto 0)) / 1;
-        byte_offset := to_integer(unsigned(std_logic_vector(address(C_BE_W - 1 downto 0))));
+        num_of_address_bits_for_bytes := get_num_bits(C_BE_W);
+        byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
+        
         be_base := (others => '0');
         for i in 0 to num_bytes - 1 loop
             be_base(i) := '1';
@@ -175,14 +163,8 @@ package body tb_bus_avalon_pkg is
         end if;
 
         avalonmm_down.address <= std_logic_vector(address(G_ADDR_W - 1 downto 0));
-
-        if byte_offset = 0 then
-            avalonmm_down.byteenable <= be_base;
-            avalonmm_down.writedata <= data_temp;
-        else
-            avalonmm_down.byteenable <= be_base(C_BE_W - 1 - byte_offset downto 0) & std_logic_vector(to_unsigned(0, byte_offset));
-            avalonmm_down.writedata <= data_temp(G_DATA_W - 1 - byte_offset * 8 downto 0) & std_logic_vector(to_unsigned(0, byte_offset * 8));
-        end if;
+        avalonmm_down.byteenable <= std_logic_vector(shift_left(unsigned(be_base), byte_offset));
+        avalonmm_down.writedata <= std_logic_vector(shift_left(unsigned(data_temp), byte_offset * 8));
 
         avalonmm_down.read <= '0';
         avalonmm_down.write <= '1';
@@ -214,7 +196,7 @@ package body tb_bus_avalon_pkg is
                             variable access_width : in integer;
                             variable successfull : out boolean;
                             variable timeout : in time) is
-
+        variable num_of_address_bits_for_bytes : integer;
         variable byte_offset : integer;
         variable be_base : std_logic_vector(C_BE_W - 1 downto 0);
         variable data_temp : std_logic_vector(G_DATA_W - 1 downto 0);
@@ -229,7 +211,8 @@ package body tb_bus_avalon_pkg is
         severity failure;
 
         successfull := false;
-        byte_offset := to_integer(unsigned(std_logic_vector(address(C_BE_W - 1 downto 0))));
+        num_of_address_bits_for_bytes := get_num_bits(C_BE_W);
+        byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 
         be_base := (others => '0');
@@ -244,12 +227,7 @@ package body tb_bus_avalon_pkg is
         end if;
 
         avalonmm_down.address <= std_logic_vector(address(G_ADDR_W - 1 downto 0));
-
-        if byte_offset = 0 then
-            avalonmm_down.byteenable <= be_base;
-        else
-            avalonmm_down.byteenable <= be_base(C_BE_W - 1 - byte_offset downto 0) & std_logic_vector(to_unsigned(0, byte_offset));
-        end if;
+        avalonmm_down.byteenable <= std_logic_vector(shift_left(unsigned(be_base), byte_offset));
 
         avalonmm_down.writedata <= (others => '0');
         avalonmm_down.read <= '1';
@@ -268,12 +246,7 @@ package body tb_bus_avalon_pkg is
         end if;
 
         avalonmm_down <= avalonmm_down_init;
-
-        if byte_offset = 0 then
-            data_temp := avalonmm_up.readdata;
-        else
-            data_temp := std_logic_vector(to_unsigned(0, byte_offset * 8)) & avalonmm_up.readdata(G_DATA_W - 1 downto byte_offset * 8);
-        end if;
+        data_temp := std_logic_vector(shift_right(unsigned(avalonmm_up.readdata), byte_offset * 8));
 
         data := to_unsigned(0, data'length);
         data(access_width - 1 downto 0) := unsigned(data_temp(access_width - 1 downto 0));

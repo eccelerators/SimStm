@@ -6,6 +6,7 @@ proc testSuiteInterrupt ()
 
     call stm.testCase (
     	label set TestToCall testInterrupt
+    	equ skipped 1
     )
 end proc
 

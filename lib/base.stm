@@ -58,7 +58,6 @@ signal sigInTestSuiteIndex 2
 var TestSuiteIndex 255
 
 signal sigInMachineValueWidth 3
-var MachineValueWidth 0
 
 signal sigOutDutReset 1
 

@@ -12,64 +12,64 @@ namespace SimStmTest
 proc testSuiteSignal ()
 
     call stm.testCase (
-    	label set TestToCall unitSignalSimpleLoopbackBit
+    	label set TestToCall testSignalSimpleLoopbackBit
     )
 
     call stm.testCase (
-    	label set TestToCall unitSignalSimpleLoopbackVector
+    	label set TestToCall testSignalSimpleLoopbackVector
     )
 
     call stm.testCase (
-    	label set TestToCall unitSignalSimpleLoopbackCross
+    	label set TestToCall testSignalSimpleLoopbackCross
     )
 
     call stm.testCase (
-        label set TestToCall unitSignalVerifyDecDec
+        label set TestToCall testSignalVerifyDecDec
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyHexHex
+        label set TestToCall testSignalVerifyHexHex
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyBinBin
+        label set TestToCall testSignalVerifyBinBin
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyDecHex
+        label set TestToCall testSignalVerifyDecHex
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyDecBin
+        label set TestToCall testSignalVerifyDecBin
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyHexDec
+        label set TestToCall testSignalVerifyHexDec
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyHexBin
+        label set TestToCall testSignalVerifyHexBin
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyBinDec
+        label set TestToCall testSignalVerifyBinDec
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyBinHex
+        label set TestToCall testSignalVerifyBinHex
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyVarDec
+        label set TestToCall testSignalVerifyVarDec
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyVarHex
+        label set TestToCall testSignalVerifyVarHex
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyVarBin
+        label set TestToCall testSignalVerifyVarBin
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyDecVar
+        label set TestToCall testSignalVerifyDecVar
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyHexVar
+        label set TestToCall testSignalVerifyHexVar
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyBinVar
+        label set TestToCall testSignalVerifyBinVar
     )
     call stm.testCase (
-        label set TestToCall unitSignalVerifyVarVar
+        label set TestToCall testSignalVerifyVarVar
     )
     call stm.testCase (
         label set TestToCall testSignalVerifyFail

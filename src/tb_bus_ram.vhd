@@ -15,6 +15,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.tb_base_pkg.all;
+use work.basic.all;
 
 package tb_bus_ram_pkg is
     generic(
@@ -110,7 +111,7 @@ package body tb_bus_ram_pkg is
                         variable access_width : in integer;
                         variable successfull : out boolean;
                         variable timeout : in time) is
-
+        variable num_of_address_bits_for_bytes : integer;
         variable byte_offset : integer;
         variable we_base : std_logic_vector(C_WE_W - 1 downto 0);
         variable data_temp : std_logic_vector(G_DATA_W - 1 downto 0);
@@ -123,7 +124,8 @@ package body tb_bus_ram_pkg is
         report "write_ram: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        byte_offset := to_integer(unsigned(std_logic_vector(address(C_WE_W - 1 downto 0))));
+        num_of_address_bits_for_bytes := get_num_bits(C_WE_W);
+        byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 
         we_base := (others => '0');
@@ -141,14 +143,8 @@ package body tb_bus_ram_pkg is
         end if;
 
         ram_down.address <= std_logic_vector(address(G_ADDR_W - 1 downto 0));
-
-        if byte_offset = 0 then
-            ram_down.write_enable <= we_base;
-            ram_down.write_data <= data_temp;
-        else
-            ram_down.write_enable <= we_base(C_WE_W - 1 - byte_offset downto 0) & std_logic_vector(to_unsigned(0, byte_offset));
-            ram_down.write_data <= data_temp(G_DATA_W - 1 - byte_offset * 8 downto 0) & std_logic_vector(to_unsigned(0, byte_offset * 8));
-        end if;
+        ram_down.write_enable <= std_logic_vector(shift_left(unsigned(we_base), byte_offset));
+        ram_down.write_data <= std_logic_vector(shift_left(unsigned(data_temp), byte_offset * 8));
 
         wait until rising_edge(ram_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
@@ -167,7 +163,7 @@ package body tb_bus_ram_pkg is
                        variable access_width : in integer;
                        variable successfull : out boolean;
                        variable timeout : in time) is
-
+        variable num_of_address_bits_for_bytes : integer;
         variable byte_offset : integer;
         variable data_temp : std_logic_vector(G_DATA_W - 1 downto 0);
         constant start_time : time := now;
@@ -178,7 +174,8 @@ package body tb_bus_ram_pkg is
         report "read_ram: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        byte_offset := to_integer(unsigned(std_logic_vector(address(C_WE_W - 1 downto 0))));
+        num_of_address_bits_for_bytes := get_num_bits(C_WE_W);
+        byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
 
         wait until rising_edge(ram_up.clk) or (now > start_time + timeout);
         if now > start_time + timeout then
@@ -202,11 +199,7 @@ package body tb_bus_ram_pkg is
             return;
         end if;
 
-        if byte_offset = 0 then
-            data_temp := ram_up.read_data;
-        else
-            data_temp := std_logic_vector(to_unsigned(0, byte_offset * 8)) & ram_up.read_data(G_DATA_W - 1 downto byte_offset * 8);
-        end if;
+        data_temp := std_logic_vector(shift_right(unsigned(ram_up.read_data), byte_offset * 8));
 
         data := to_unsigned(0, data'length);
         data(access_width - 1 downto 0) := unsigned(data_temp(access_width - 1 downto 0));

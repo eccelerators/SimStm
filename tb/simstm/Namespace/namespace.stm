@@ -23,17 +23,22 @@ end namespace
 
 namespace SimStmTest
 
-proc testCallProcDirect ()
+proc testNamespaceTwoDifferentOnes ()
     call stm.startStandardTestShell ()
     call unitNamespaceTwoDifferentOnes ()
     call stm.endStandardTestShell ()
 end proc 
+
 proc unitNamespaceTwoDifferentOnes ()
  	
  	var a 0
-    call nnn.a_ppp (var pointer copy x a)
+    call nnn.a_ppp (
+        var pointer copy x a
+    )
     var verify a 1 stm.MAX
-    call mmm.a_ppp (var pointer copy x a)
+    call mmm.a_ppp (
+        var pointer copy x a
+    )
     var verify a 3 stm.MAX
     var verify nnn.abc 10 stm.MAX
     var verify mmm.abc 20 stm.MAX
@@ -46,11 +51,12 @@ proc a_ppp (
     add x 3
 end proc
 
-proc testCallProcDirect ()
+proc testNamespaceLocalAndGlobal ()
     call stm.startStandardTestShell ()
     call unitNamespaceLocalAndGlobal ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitNamespaceLocalAndGlobal ()
 	
 	var a 0
