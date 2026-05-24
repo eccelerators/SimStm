@@ -2,7 +2,7 @@ include "../Common/interface.stm"
 
 namespace SimStmTest
 
-signal out_signal_local_override 0 
+signal outSigGlbLclSameName 0 
 
 proc testSignalLocalOverride ()
     call stm.startStandardTestShell ()
@@ -11,26 +11,38 @@ proc testSignalLocalOverride ()
 end proc
 
 proc unitSignalLocalOverride ()
-    signal pointer copy out_signal_local_override loopback_1bit
-    signal write out_signal_local_override 0
+    signal outSigGlbLclSameName 0 
+    -- set local signal pointer to loopback_1bit signal
+    signal pointer copy outSigGlbLclSameName loopback_1bit
+    -- set global signal pointer to loopback_32bit signal
+    call setGlobalSignalPointer ()
+    
+    signal write loopback_1bit 0
     wait 100
-    call setSignalToOverwrite ()
-    var res 100
     signal verify loopback_1bit 0 stm.MAX
-    call checkSignalGlobal ()
-end proc
-
-proc setSignalToOverwrite ()
-    signal out_signal_local_override 0 
-    signal pointer copy out_signal_local_override loopback_32bit
-    signal write out_signal_local_override 1
+    signal write loopback_32bit 0x12345678
     wait 100
-    var res 99
-    signal verify out_signal_local_override 1 stm.MAX
+    signal verify loopback_32bit 0x12345678 stm.MAX
+    call checkSignalGlobal (
+        equ val 0x12345678
+    )
+    signal verify outSigGlbLclSameName 0 stm.MAX
+    signal write loopback_1bit 1
+    wait 100
+    signal verify outSigGlbLclSameName 1 stm.MAX
+    call checkSignalGlobal (
+        equ val 0x12345678
+    )
 end proc
 
-proc checkSignalGlobal ()
-    signal verify loopback_1bit 1 stm.MAX
+proc setGlobalSignalPointer ()
+    signal pointer copy outSigGlbLclSameName loopback_32bit
+end proc
+
+proc checkSignalGlobal (
+    var val 0
+)
+    signal verify outSigGlbLclSameName val stm.MAX
 end proc
 
 end namespace
