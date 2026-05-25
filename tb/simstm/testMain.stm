@@ -1,8 +1,11 @@
 include "../../lib/base.stm"
+include "../../lib/array.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
 
 include "Bus/bus32.stm"
+include "Array/array.stm"
+include "Lines/lines.stm"
 
 namespace SimStmTest
 
@@ -19,12 +22,13 @@ namespace SimStmTest
 
 --        call testArrayParameterIn ()
 --        call testInterrupt ()
---        call testLinesGetArray ()
+        trace stm.TRACE_EXECUTED_LINES
+        call testLinesGetArray ()
 --        call testLinesInsertArray ()
 --        call testSignalVerifyFail ()
-        call unitBus32(
-            bus pointer copy busToTest axi4lite32
-        )
+--        call unitBus32(
+--            bus pointer copy busToTest axi4lite32
+--        )
 		
         log message stm.INFO "Main test finished"
         wait 1000

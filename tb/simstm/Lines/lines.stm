@@ -149,6 +149,7 @@ proc testLinesGetArray ()
     call stm.endStandardTestShell ()
 end proc
 proc unitLinesGetArray ()
+    var as 0
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -175,7 +176,10 @@ proc unitLinesGetArray ()
     equ index_of_line 0
     loop number_of_lines
         lines get array a_lines_ga index_of_line another_array number_of_elements_got
-        log message 0 "number_of_elements_got {}" number_of_elements_got
+        log message 0 "Line {:d} number_of_elements_got {:d}" index_of_line number_of_elements_got
+        array size another_array as
+        log message 0 "Line {:d} size of got array {:d}" index_of_line number_of_elements_got
+        -- stop
         
         call stm.arrayDump (
         	array pointer copy Array another_array
@@ -199,7 +203,9 @@ proc testLinesInsertArray ()
     call unitLinesInsertArray ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesInsertArray ()
+    var as 0
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -227,6 +233,8 @@ proc unitLinesInsertArray ()
     loop number_of_lines
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
+        array size another_array as
+        log message 0 "size of got array {}" number_of_elements_got
         call stm.arrayDump (
         	array pointer copy Array another_array
         )
@@ -269,6 +277,8 @@ proc unitLinesInsertArray ()
     loop 3
         lines get array a_lines_ia index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
+        array size another_array as
+        log message 0 "size of got array {}" number_of_elements_got
         call stm.arrayDump (
         	array pointer copy Array another_array
         )
@@ -316,6 +326,7 @@ proc testLinesInsertText ()
     call unitLinesInsertText ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesInsertText ()
     lines append message a_lines_it "line 0"
     lines append message a_lines_it "line 1"
@@ -350,6 +361,7 @@ proc testLinesPointerCopy ()
     call unitLinesPointerCopy ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesPointerCopy ()
     array set file_array 0 0
     array set file_array 1 1
@@ -403,7 +415,9 @@ proc testLinesSetArray ()
     call unitLinesSetArray ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesSetArray ()
+    var as 0
     array set file_array 0 0
     array set file_array 1 1
     array set file_array 2 0xA
@@ -433,6 +447,8 @@ proc unitLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
+        array size another_array as
+        log message 0 "size of got array {}" number_of_elements_got
         call stm.arrayDump (
         	array pointer copy Array another_array
         )
@@ -462,6 +478,8 @@ proc unitLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
+        array size another_array as
+        log message 0 "size of got array {}" number_of_elements_got
         call stm.arrayDump (
         	array pointer copy Array another_array
         )
@@ -475,6 +493,8 @@ proc unitLinesSetArray ()
     loop number_of_lines
         lines get array a_lines_sa index_of_line another_array number_of_elements_got
         log message 0 "number_of_elements_got {}" number_of_elements_got
+        array size another_array as
+        log message 0 "size of got array {}" number_of_elements_got
         call stm.arrayDump (
         	array pointer copy Array another_array
         )
@@ -508,6 +528,7 @@ proc testLinesSetText ()
     call unitLinesSetText ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesSetText ()
     lines append message a_lines_st "line 1"
     lines append message a_lines_st "line 2"
@@ -535,6 +556,7 @@ proc testLinesSize ()
     call unitLinesSize ()
     call stm.endStandardTestShell ()
 end proc
+
 proc unitLinesSize ()
     array set file_array 0 0
     array set file_array 1 1

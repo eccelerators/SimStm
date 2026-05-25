@@ -793,7 +793,6 @@ package body tb_interpreter_util_pkg is
         assert var_element_num <= vars.last_element_num
         report "init var array, var element number, " & integer'image(var_element_num) & "greater than vars last element number & integer'image(vars.last_element_num)"
         severity failure;
-        deallocate(vars.element_ptrs(var_element_num).arr);
         vars.element_ptrs(var_element_num).arr := new stm_array(0 to to_integer(var_arr_len(30 downto 0) - 1))(machine_value_width - 1 downto 0);
     end procedure;
 

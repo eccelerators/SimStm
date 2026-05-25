@@ -1204,8 +1204,8 @@ begin
                     get_val_in_called_scope_prefer_local(2, val2);
                     get_ven_in_called_scope_prefer_local(3, ven3);
                     get_ven_in_called_scope_prefer_local(4, ven4);
-                    index_var_txt(vars, ven1, txt_unformatted);
-                    index_var_lines(vars, ven3, var_stm_lines);
+                    index_var_lines(vars, ven1, var_stm_lines);
+                    index_var_arr(vars, ven3, var_stm_array);
                     val_int := to_integer(val2(30 downto 0));
                     stm_lines_get(ie.slc, var_stm_lines, val_int, var_stm_array, number_found, machine_value_width);
                     update_var_arr(vars, ven3, var_stm_array);
@@ -1498,7 +1498,7 @@ begin
                         print(" set incremented stack_curr_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_curr_loop_count));
                         print(" stack_term_loop_count(" & integer'image(sp) & ") (" & integer'image(act_loop_num) & ")=" & integer'image(act_term_loop_count));
                     end if;
-                    if (act_curr_loop_count = act_term_loop_count) then
+                    if (act_curr_loop_count >= act_term_loop_count) then
                         act_loop_num := act_loop_num - 1;
                         rcs(sp).loop_num := act_loop_num;
                         if trc_on(TRACE_CALLS) = '1' then

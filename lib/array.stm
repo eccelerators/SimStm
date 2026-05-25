@@ -149,27 +149,32 @@ proc arrayDump (
     mul doneInLoop 8
     equ remaining s
     sub remaining doneInLoop
-    log message Verbosity "array: dump "
+    log message Verbosity "array: dump size {:d} " s
     equ i 0
-    loop loopNumber        
-        array get Array i v0
-        add i 1
-        array get Array i v1
-        add i 1
-        array get Array i v2
-        add i 1
-        array get Array i v3
-        add i 1
-        array get Array i v4
-        add i 1
-        array get Array i v5
-        add i 1
-        array get Array i v6
-        add i 1
-        array get Array i v7
-        add i 1      
-        log message Verbosity " {} {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6 v7
-    end loop  
+    log message 0 "loopNumber {:d} " loopNumber
+    log message 0 "doneInLoop {:d} " doneInLoop
+    log message 0 "remaining {:d} " remaining
+    if remaining > 7
+        loop loopNumber        
+            array get Array i v0
+            add i 1
+            array get Array i v1
+            add i 1
+            array get Array i v2
+            add i 1
+            array get Array i v3
+            add i 1
+            array get Array i v4
+            add i 1
+            array get Array i v5
+            add i 1
+            array get Array i v6
+            add i 1
+            array get Array i v7
+            add i 1      
+            log message Verbosity " {} {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6 v7
+        end loop  
+    end if
     if remaining = 7
         array get Array i v0
         add i 1
