@@ -181,10 +181,10 @@ proc endStandardTestShell ()
         return
     end if
     if ExpectedStandardTestVerifyFailureCountResult > 0
-        log message 0 "Expected {:d} verify failures, ignored" ExpectedStandardTestVerifyFailureCountResult
+        log message 0 "Expected and got {:d} verify failures" ExpectedStandardTestVerifyFailureCountResult
     end if
     if ExpectedStandardTestBusTimeoutFailureCountResult > 0
-        log message 0 "Expected {:d} bus timeout failures, ignored" ExpectedStandardTestBusTimeoutFailureCountResult
+        log message 0 "Expected and got {:d} bus timeout failures" ExpectedStandardTestBusTimeoutFailureCountResult
     end if
     log message 0 "Success"
     log message 0 "{@c2} ended"  

@@ -132,7 +132,7 @@ package body tb_bus_wishbone_pkg is
         report "write_wishbone: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_SEL_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_SEL_W - 1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 
@@ -199,7 +199,7 @@ package body tb_bus_wishbone_pkg is
         report "read_wishbone: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_SEL_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_SEL_W - 1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 

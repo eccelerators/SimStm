@@ -10,7 +10,7 @@ include "Bus/bus256.stm"
 
 include "TestSuites/TestSuiteIndexedBus.stm"
 namespace SimStmTest
-const testMainSuiteIndexedRangeLengthBus 2 -- 32
+const testMainSuiteIndexedRangeLengthBus 32
 
 proc testMainSuiteIndexedBus ()
 

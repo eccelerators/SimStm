@@ -144,7 +144,7 @@ package body tb_bus_avalon_pkg is
         severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_BE_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_BE_W  -1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
         
@@ -211,7 +211,7 @@ package body tb_bus_avalon_pkg is
         severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_BE_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_BE_W  -1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 

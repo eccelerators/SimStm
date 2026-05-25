@@ -48,6 +48,9 @@ proc testSuiteIndexedBus ()
     if RepeatedTestSuiteIndex <= 3
         if machineValueWidth >= 32
             bus pointer copy busToTest wishbone32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -74,6 +77,9 @@ proc testSuiteIndexedBus ()
         end if
         if machineValueWidth >= 64
             bus pointer copy busToTest wishbone64
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus64Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -100,6 +106,9 @@ proc testSuiteIndexedBus ()
        end if
         if machineValueWidth >= 128
             bus pointer copy busToTest wishbone128
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus128Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -126,6 +135,9 @@ proc testSuiteIndexedBus ()
         end if
         if machineValueWidth >= 256
             bus pointer copy busToTest wishbone256
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus256Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -153,6 +165,9 @@ proc testSuiteIndexedBus ()
     elsif RepeatedTestSuiteIndex <= 5
         if machineValueWidth >= 32
             bus pointer copy busToTest avalon32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -179,6 +194,9 @@ proc testSuiteIndexedBus ()
         end if
         if machineValueWidth >= 64
             bus pointer copy busToTest avalon64
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus64Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -206,6 +224,9 @@ proc testSuiteIndexedBus ()
     elsif RepeatedTestSuiteIndex = 6
         if machineValueWidth >= 32
             bus pointer copy busToTest axi4lite32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
             call testCaseWithSuiteAndCaseIndexBus (
@@ -233,6 +254,9 @@ proc testSuiteIndexedBus ()
     elsif RepeatedTestSuiteIndex = 7
         if machineValueWidth >= 32
             bus pointer copy busToTest ram32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
             equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
             call testCaseWithSuiteAndCaseIndexBus (

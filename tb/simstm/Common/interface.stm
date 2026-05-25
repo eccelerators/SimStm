@@ -23,47 +23,47 @@ signal loopback_32bit 11001
 signal loopback_16bit_cross 11002
 
 const NO_BUS 0
-bus wishbone32 1
-bus wishbone64 2
-bus wishbone128 3
-bus wishbone256 4
-bus avalon32 5
-bus avalon64 6
-bus axi4lite32 7
+bus wishbone32 4
+bus wishbone64 5
+bus wishbone128 6
+bus wishbone256 7
+bus avalon32 1
+bus avalon64 2
+bus axi4lite32 3
 bus ram32 8
     
-proc logBusToTest (
-    bus busToTest NO_BUS
+proc logBus (
+    bus busToLog NO_BUS
 )
-    var valBusToTest 0
+    var valBusToLog 0
     var machineValueWidth 0
     var knownBus 0
-    bus pointer get busToTest valBusToTest
+    bus pointer get busToLog valBusToLog
     signal read stm.sigInMachineValueWidth machineValueWidth   
-    if valBusToTest > 0
-        if valBusToTest < 8
+    if valBusToLog > 0
+        if valBusToLog < 9
             equ knownBus 1
         end if
     end if 
     if knownBus = 0 
-        log message stm.ALWAYS "Testing bus({:d}) unknown with machine value width {:d}" valBusToTest machineValueWidth
+        log message stm.ALWAYS "Bus({:d}) unknown, machine value width {:d}" valBusToLog machineValueWidth
     else
-        if valBusToTest = 1
-            log message stm.ALWAYS "Testing bus({:d}) wishbone32 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 1
-            log message stm.ALWAYS "Testing bus({:d}) wishbone64 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 2
-            log message stm.ALWAYS "Testing bus({:d}) wishbone128 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 3
-            log message stm.ALWAYS "Testing bus({:d}) wishbone256 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 4
-            log message stm.ALWAYS "Testing bus({:d}) avalon32 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 5
-            log message stm.ALWAYS "Testing bus({:d}) avalon64 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 6
-            log message stm.ALWAYS "Testing bus({:d}) axi4lite32 with machine value width {:d}" valBusToTest machineValueWidth
-        elsif valBusToTest = 7
-            log message stm.ALWAYS "Testing bus({:d}) ram32 with machine value width {:d}" valBusToTest machineValueWidth
+        if valBusToLog = 4
+            log message stm.ALWAYS "Bus({:d}) wishbone32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 5
+            log message stm.ALWAYS "Bus({:d}) wishbone64, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 6
+            log message stm.ALWAYS "Bus({:d}) wishbone128, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 7
+            log message stm.ALWAYS "Bus({:d}) wishbone256, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 1
+            log message stm.ALWAYS "Bus({:d}) avalon32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 2
+            log message stm.ALWAYS "Bus({:d}) avalon64, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 3
+            log message stm.ALWAYS "Bus({:d}) axi4lite32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 8
+            log message stm.ALWAYS "Bus({:d}) ram32, machine value width {:d}" valBusToLog machineValueWidth
         end if
     end if
 end proc

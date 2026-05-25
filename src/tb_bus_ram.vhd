@@ -124,7 +124,7 @@ package body tb_bus_ram_pkg is
         report "write_ram: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_WE_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_WE_W - 1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
         num_bytes := access_width / 8;
 
@@ -174,7 +174,7 @@ package body tb_bus_ram_pkg is
         report "read_ram: access_width exceeds G_DATA_W" severity failure;
 
         successfull := false;
-        num_of_address_bits_for_bytes := get_num_bits(C_WE_W);
+        num_of_address_bits_for_bytes := get_num_bits(C_WE_W - 1);
         byte_offset := to_integer(address(num_of_address_bits_for_bytes - 1 downto 0));
 
         wait until rising_edge(ram_up.clk) or (now > start_time + timeout);
