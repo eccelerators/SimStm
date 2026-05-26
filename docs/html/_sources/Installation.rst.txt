@@ -34,3 +34,8 @@ Eclipse
 -  Press the “Install” button.
 -  Create or open a “.stm” test script file within a project.
 -  Leverage the plugin's IDE features to enhance your testing workflow.
+
+Restructured text Syntax Highlghting:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+-  The pygments-plugin_simstm package provides syntax highlighting for SimStm language in various editors and tools that support Pygments.
