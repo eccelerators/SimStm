@@ -17,6 +17,7 @@
 	<import file="helper/build-helper.xml" optional="true"/>
 	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
 	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>
+	<import file="simulation/ghdl/build-ghdl-docker.xml" optional="true"/>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	  <classpath>
