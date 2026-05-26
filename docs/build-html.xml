@@ -9,10 +9,10 @@
 			<arg value="-b" />
 			<arg value="html" />
 			<arg value="tmp-gen/source" />
-			<arg value="tmp-gen/build" />
+			<arg value="tmp-gen/html" />
 		</exec>  
-		<copy todir="build/html">
-			<fileset dir="tmp-gen/build">
+		<copy todir="docs/html">
+			<fileset dir="tmp-gen/html">
 				<include name="**/*" />
 			</fileset>
 		</copy>		
@@ -37,20 +37,32 @@
             </fileset>
         </delete>
         <copy todir="tmp-gen/source">
-            <fileset dir="src/sphinx">
-                <include name="**/*" />
+            <fileset dir="docs">
+                <include name="conf.py" />
             </fileset>
         </copy>
+        <copy todir="tmp-gen/source/_static">
+            <fileset dir="docs">
+                <include name="_static/*" />
+                <include name="_templates/*" />
+            </fileset>
+        </copy>
+        <copy todir="tmp-gen/source/_templates">
+            <fileset dir="docs">
+                <include name="_static/*" />
+                <include name="_templates/*" />
+            </fileset>
+        </copy>   
         <copy todir="tmp-gen/source">
-            <fileset dir="src/rst">
+            <fileset dir="docs/rst">
                 <include name="**/*.rst" />
             </fileset>
         </copy>  
         <if> 
-            <available file="src/rst/resources" type="dir"/>
+            <available file="docs/rst/resources" type="dir"/>
             <then>
                 <copy todir="tmp-gen/source/resources" failonerror="false">
-                    <fileset dir="src/rst/resources">
+                    <fileset dir="docs/rst/resources">
                         <include name="**/*.png" />
                     </fileset>
                 </copy>

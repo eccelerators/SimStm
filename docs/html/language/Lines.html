@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Lines &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=e491ac2d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>Lines</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="lines">
+<h1>Lines<a class="headerlink" href="#lines" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2>lines<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">lines</span><span class="w"> </span><span class="nv">a_lines</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span></code> instruction declares a lines object with an ID.</p>
+<p>The lines object contains an arbitrary number of line objects. It is
+defined to have no content when it is declared by default. It can grow
+or shrink dynamically by lines instructions accessing it, e.g.,
+<code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">insert</span> <span class="pre">array</span> <span class="pre">a_lines</span> <span class="pre">9</span> <span class="pre">b_array</span></code>.</p>
+</section>
+<section id="lines-get">
+<h2>lines get<a class="headerlink" href="#lines-get" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
+<span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">get</span> <span class="pre">array</span></code> instruction gets a line from a lines object at a given position and write its content
+into an array. The number of extracted values is stored in a variable.</p>
+<p>In the example, the content of the line at position <code class="docutils literal notranslate"><span class="pre">p_var</span></code> in <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">t_array</span></code> and the number of values is stored
+in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
+<p>The line is expected to hold hex numbers (without 0x
+prefix) separated by spaces (e.g., A123 BCF11 123 E333 would be 4 hex
+numbers). The given array must be able to hold the number of found hex
+numbers. It will not be filled completely if fewer than its size are
+found. Numbers will be skipped if there are more hex numbers found than
+the array can hold. The number of detected hex numbers is reported in a
+result variable. Then the user can decide what action should follow a
+mismatch.</p>
+</section>
+<section id="lines-set">
+<h2>lines set<a class="headerlink" href="#lines-set" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
+<span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
+<span class="k">lines set message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
+<span class="k">lines set message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Value1: {} Value2: {} to be written to a file later&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">set</span></code> instruction sets a line at a given position of a lines object.</p>
+<p>In the example, the content of <code class="docutils literal notranslate"><span class="pre">s_array</span></code> is stored at position <code class="docutils literal notranslate"><span class="pre">p_var</span></code> of <code class="docutils literal notranslate"><span class="pre">a_lines</span></code>.</p>
+<p>The line currently at this position is overwritten. The line can be derived from an array or a
+message.
+The message string can contain {} placeholders, refer to the <a href="#id2"><span class="problematic" id="id3">`log message`_</span></a> instruction,
+which are filled by values of variables given after the message string.</p>
+</section>
+<section id="lines-insert">
+<h2>lines insert<a class="headerlink" href="#lines-insert" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
+<span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
+<span class="k">lines insert message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
+<span class="k">lines insert message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Value1: {} Value2: {} to be written to a file later&quot;</span><span class="w"> </span><span class="nv">mvar1</span><span class="w"> </span><span class="nv">mvar2</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">insert</span></code> instruction inserts a line at a given position of a lines object.</p>
+<p>The line currently at this position is moved to the next position. The line can be derived
+from an array or a message.
+The message string can contain {} placeholders, refer to the <a href="#id4"><span class="problematic" id="id5">`log message`_</span></a> instruction,
+which are filled by values of variables given after the message string.</p>
+</section>
+<section id="lines-append">
+<h2>lines append<a class="headerlink" href="#lines-append" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines append array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">s_array</span>
+<span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
+<span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Value1: {} Value2: {} to be written to a file later&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">append</span></code> instruction appends a line at the end of a lines object.</p>
+<p>In the example, the content of <code class="docutils literal notranslate"><span class="pre">s_array</span></code> is appended to <code class="docutils literal notranslate"><span class="pre">a_lines</span></code>.</p>
+<p>The line can be derived from an array or a message.
+The message string can contain {} placeholders, refer to the <a href="#id6"><span class="problematic" id="id7">`log message`_</span></a> instruction,
+which are filled by values of variables given after the message string.</p>
+</section>
+<section id="lines-delete">
+<h2>lines delete<a class="headerlink" href="#lines-delete" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span>
+<span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">3</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">delete</span></code> instruction deletes a line at a given position of a lines object. The next line is
+moved to the given position if it exists.</p>
+<p>In the example, the line at position <code class="docutils literal notranslate"><span class="pre">p_var</span></code> in <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is deleted.</p>
+</section>
+<section id="lines-size">
+<h2>lines size<a class="headerlink" href="#lines-size" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines size</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">r_var</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">size</span></code> instruction gets the size of a lines object, which is the number of lines it contains
+at that point.</p>
+<p>In the example, the size of <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
+</section>
+<section id="lines-pointer-copy">
+<h2>lines pointer copy<a class="headerlink" href="#lines-pointer-copy" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines pointer copy</span><span class="w"> </span><span class="nv">t_lines</span><span class="w"> </span><span class="nv">s_lines</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">pointer</span> <span class="pre">copy</span></code> instruction copies a lines pointer.</p>
+<p>In the example, <code class="docutils literal notranslate"><span class="pre">t_lines</span></code> points to <code class="docutils literal notranslate"><span class="pre">s_lines</span></code> after the execution of the instruction.</p>
+<p>Used, for instance, to hand over a file to a subroutine. Changes to the source
+object are applied to the target object as well.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

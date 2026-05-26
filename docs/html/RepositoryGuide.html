@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>10. Repository Guide &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="9. Automated Tests" href="AutomatedTests.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>10. Repository Guide</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="AutomatedTests.html"><span class="section-number">9. </span>Automated Tests</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="repository-guide">
+<h1><span class="section-number">10. </span>Repository Guide<a class="headerlink" href="#repository-guide" title="Link to this heading">¶</a></h1>
+<p>The repository content needed by the user:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src</span></code>: The main folder containing the VHDL code of the testbench not to be modified by the user.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/vhdl/tb_simstm</span></code>: The testbench top entity and architecture to be instanciated in the the user testbench.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src_to_customize</span></code>: The folder containing the packages to be customized by the user.</p></li>
+</ul>
+<p>All Eccelerators IP repositories are aimed to be presented as Python Packages in future.
+SimStm though not a synthesizable IP, is presented in the same manner.
+SimStm tests itself by its own means.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">helper</span></code>: The helper folder containing helper scripts only needed for the SimStm selftest.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">helper/proposal_for_setup_py.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> based on Eccelerators conventions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">helper/generate-ghdl-ant-build-xml.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">simulation/ghdl/build-ghdl.xml</span></code> based on <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">helper/generate-modelsim-ant-build-xml.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">simulation/modelsim/build-modelsim.xml</span></code> based on <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">helper/collect-simulation-results.py</span></code>: Generating JUnit test result <code class="docutils literal notranslate"><span class="pre">simulation/SimulationResults/testSuitesSimulation.xml</span></code>
+called by ant controlled test flow.</p></li>
+</ul>
+<p>All Eccelerators IP repositories are build by <strong>ant</strong>. The ant build scripts are organized hierarchically.
+The top build script is build.xml in the repository root. It imports <code class="docutils literal notranslate"><span class="pre">helper/build-helper.xml</span></code>.
+This presents the initial workflow target <strong>_helper-generate-proposal-for-setup-py</strong> to generate <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.
+User adaptions have to be done in <strong>proposal_user_parameters.py</strong> beforehand.</p>
+<p>As a next step the target <strong>_helper-generate-ghdl-ant-build-xml</strong> is called to generate the ghdl build script.
+Once you refresh the list of shown ant targets in your IDE, you will see the new ghdl targets.
+The target <strong>ghdl-all</strong> is the one to be called to run the simulation. It would be similar if you decide for modelsim.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">simulation</span></code>: The simulation folder containing the generated preparations and the simulation results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tb/hdl</span></code>: The (self)test bench hdl sources and tbTop.vhd with the top entity and architecture.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tb/simstm</span></code>: The (self)test bench simstm sources following Eccelerators conventions to produce a selftest result as JUnit test result.</p></li>
+</ul>
+<p>Beneath the simstm selfttest sources in tb/simstm subfolders which of course test every simstm instruction, the <code class="docutils literal notranslate"><span class="pre">command_list.stm</span></code>
+in the repository root  can be used as a comprehensive list for instruction examples.</p>
+<p>The main purpose of this repository is to provide and test SimStm.
+Complex real-world examples of how it is used are found in the Eccelerators group of
+repositories on <a class="reference external" href="https://github.com/eccelerators">GitHub</a>.</p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="AutomatedTests.html"><span class="section-number">9. </span>Automated Tests</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>
