@@ -36,7 +36,7 @@
 <p>The repository content needed by the user:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">src</span></code>: The main folder containing the VHDL code of the testbench not to be modified by the user.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">src/vhdl/tb_simstm</span></code>: The testbench top entity and architecture to be instanciated in the the user testbench.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/tb_simstm</span></code>: The testbench top entity and architecture to be instanciated in the the user testbench.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">src_to_customize</span></code>: The folder containing the packages to be customized by the user.</p></li>
 </ul>
 <p>All Eccelerators IP repositories are aimed to be presented as Python Packages in future.
@@ -46,6 +46,7 @@ SimStm tests itself by its own means.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">helper</span></code>: The helper folder containing helper scripts only needed for the SimStm selftest.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">helper/proposal_for_setup_py.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> based on Eccelerators conventions.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">helper/generate-ghdl-ant-build-xml.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">simulation/ghdl/build-ghdl.xml</span></code> based on <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">helper/generate-ghdl-docker-ant-build-xml.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">simulation/ghdl/build-ghdl.xml</span></code> based on <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">helper/generate-modelsim-ant-build-xml.py</span></code>: Generating <code class="docutils literal notranslate"><span class="pre">simulation/modelsim/build-modelsim.xml</span></code> based on <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">helper/collect-simulation-results.py</span></code>: Generating JUnit test result <code class="docutils literal notranslate"><span class="pre">simulation/SimulationResults/testSuitesSimulation.xml</span></code>
 called by ant controlled test flow.</p></li>
@@ -55,8 +56,10 @@ The top build script is build.xml in the repository root. It imports <code class
 This presents the initial workflow target <strong>_helper-generate-proposal-for-setup-py</strong> to generate <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.
 User adaptions have to be done in <strong>proposal_user_parameters.py</strong> beforehand.</p>
 <p>As a next step the target <strong>_helper-generate-ghdl-ant-build-xml</strong> is called to generate the ghdl build script.
+or the target <strong>_helper-generate-ghdl-docker-ant-build-xml</strong> to generate the ghdl build script for docker usage.
 Once you refresh the list of shown ant targets in your IDE, you will see the new ghdl targets.
-The target <strong>ghdl-all</strong> is the one to be called to run the simulation. It would be similar if you decide for modelsim.</p>
+The target <strong>ghdl-all</strong> or <a href="#id1"><span class="problematic" id="id2">**</span></a>ghdl-docker-all**is the one to be called to run the simulation. It would be similar if you decide for modelsim.
+For the later you need e.g., <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=&quot;ghdl&quot;</span> <span class="pre">-t</span> <span class="pre">-d</span> <span class="pre">-v</span> <span class="pre">$(pwd):$(pwd)</span> <span class="pre">-w</span> <span class="pre">$(pwd)</span> <span class="pre">ghdl/ghdl:5.1.1-llvm-ubuntu-24.04</span></code> .</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">simulation</span></code>: The simulation folder containing the generated preparations and the simulation results.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tb/hdl</span></code>: The (self)test bench hdl sources and tbTop.vhd with the top entity and architecture.</p></li>
@@ -64,6 +67,7 @@ The target <strong>ghdl-all</strong> is the one to be called to run the simulati
 </ul>
 <p>Beneath the simstm selfttest sources in tb/simstm subfolders which of course test every simstm instruction, the <code class="docutils literal notranslate"><span class="pre">command_list.stm</span></code>
 in the repository root  can be used as a comprehensive list for instruction examples.</p>
+<p>Similar scripts are provided for modelsim.</p>
 <p>The main purpose of this repository is to provide and test SimStm.
 Complex real-world examples of how it is used are found in the Eccelerators group of
 repositories on <a class="reference external" href="https://github.com/eccelerators">GitHub</a>.</p>

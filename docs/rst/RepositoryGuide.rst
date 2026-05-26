@@ -26,7 +26,8 @@ User adaptions have to be done in **proposal_user_parameters.py** beforehand.
 As a next step the target **_helper-generate-ghdl-ant-build-xml** is called to generate the ghdl build script.
 or the target **_helper-generate-ghdl-docker-ant-build-xml** to generate the ghdl build script for docker usage.
 Once you refresh the list of shown ant targets in your IDE, you will see the new ghdl targets.
-The target **ghdl-all** is the one to be called to run the simulation. It would be similar if you decide for modelsim.
+The target **ghdl-all** or **ghdl-docker-all**is the one to be called to run the simulation. It would be similar if you decide for modelsim.
+For the later you need e.g., ``docker run --name="ghdl" -t -d -v $(pwd):$(pwd) -w $(pwd) ghdl/ghdl:5.1.1-llvm-ubuntu-24.04`` .
 
 - ``simulation``: The simulation folder containing the generated preparations and the simulation results.
 - ``tb/hdl``: The (self)test bench hdl sources and tbTop.vhd with the top entity and architecture.
