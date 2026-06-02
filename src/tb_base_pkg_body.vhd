@@ -23,6 +23,7 @@ use ieee.math_real.all;
 use ieee.std_logic_textio.all;
 
 use work.tb_limits_pkg.all;
+use work.basic.all;
 
 package body tb_base_pkg is
 

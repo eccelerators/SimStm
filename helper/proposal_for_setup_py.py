@@ -17,7 +17,7 @@ class GenerateProposalForSetupPy:
 
     def generate(self, indir_project, infile_setup_template_py, outfile_setup_proposal):
 
-        project_folder_path = os.path.abspath(indir_project)
+        project_folder_path = os.path.abspath(indir_project).replace("\\", "/")     
         project_folder_name = PurePath(project_folder_path).name
         print("found project_folder_name {}".format(project_folder_name))
         project_name = self.project_folder_name_to_project_name(project_folder_name)
@@ -59,7 +59,7 @@ class GenerateProposalForSetupPy:
         print("found tb_simstm_entry_namespace {}".format(tb_simstm_entry_namespace))
 
         if UP.search_folder_for_top_entity is not None:
-            f = open(project_folder_path + "/" + '/src_dut' + '/' + top_entity_file, 'r')
+            f = open(project_folder_path + "/" + UP.search_folder_for_top_entity + '/' + top_entity_file, 'r')
             f_lines = f.readlines()
             for l in f_lines:
                 if "entity" in l:
