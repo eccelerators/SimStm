@@ -15,7 +15,6 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.tb_base_pkg.all;
-use work.basic.all;
 
 package tb_bus_wishbone_pkg is
     generic(

@@ -608,7 +608,7 @@ begin
             bus_timeout_assertions <= std_logic_vector(to_unsigned(bus_timeout_assertions_count, 32));
             bus_timeout_failures <= std_logic_vector(to_unsigned(bus_timeout_failure_count, 32));
 
-            -- get_interrupt_requests(signals_in, interrupt_requests);
+            get_interrupt_requests(signals_in, interrupt_requests);
             if interrupt_requests > 0 then
                 resolve_interrupt_requests(interrupt_requests, interrupt_in_service, interrupt_number, branch_to_interrupt, branch_to_interrupt_called_proc_name_std_txt_io_line);
             end if;
@@ -656,7 +656,8 @@ begin
                 assert pen > -1
                 report "interrupt procedure not found " & branch_to_interrupt_called_proc_name & " file name " & crop(slc.file_name) & " file line " & integer'image(slc.file_line)
                 severity failure;
-                ien := procs.element_ptrs(pen).pointer_to_ien;
+                rcs(sp).ien_of_call := ien;
+                ien := procs.element_ptrs(pen).pointer_to_ien;           
                 ie := insts.element_ptrs(ien);
                 if trc_on(TRACE_INTERRUPTS) then
                     print_instr("exec interrupt entry ");

@@ -34,7 +34,6 @@ use ieee.numeric_std.all;
 use work.tb_base_pkg.all;
 use work.tb_bus_pkg.all;
 use work.tb_signals_pkg.all;
-use work.basic.all;
 
 entity tbTop is
     generic(
@@ -42,7 +41,6 @@ entity tbTop is
         stimulus_file : string := "testUnits.stm";
         stimulus_main_entry_label : string := "SimStmTest.testMain";
         stimulus_test_suite_index : integer := 255;
-        Ram32InitialCellValues : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
         machine_value_width : integer := 2 ** (stimulus_test_suite_index rem 4) * 32
     );
 end;
@@ -71,10 +69,11 @@ begin
     signals_in.machine_value_width <= machine_value_width;
     rst <= signals_out.dut_reset;
 
-    -- interrupt
+    -- interrupt signal command tests
+    signals_in.interrupt_a <= signals_out.provoke_interrupt_a;
+    signals_in.interrupt_b <= signals_out.provoke_interrupt_b;
 
-
-    -- signal command tests
+    -- I/O port signal command tests
     signals_in.loopback_1bit <= signals_out.loopback_1bit;
     signals_in.loopback_32bit <= signals_out.loopback_32bit;
 
@@ -283,9 +282,6 @@ begin
     bus_up.axi4lite32.clk <= clk;
 
     i_Ram32 : entity work.Ram
-        generic map(
-            InitialCellValues => Ram32InitialCellValues
-        )
         port map(
             Clk => bus_up.ram32.clk,
             WriteEnable => bus_down.ram32.write_enable,

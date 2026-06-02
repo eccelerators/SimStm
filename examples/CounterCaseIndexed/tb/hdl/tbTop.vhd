@@ -6,7 +6,6 @@ use ieee.numeric_std.all;
 use work.tb_base_pkg.all;
 use work.tb_bus_pkg.all;
 use work.tb_signals_pkg.all;
-use work.basic.all;
 
 entity tbTop is
     generic(

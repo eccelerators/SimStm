@@ -1,11 +1,12 @@
 include "../../lib/base.stm"
-include "../../lib/array.stm"
+-- include "../../lib/array.stm"
 include "Common/common.stm"
 include "Common/interface.stm"
 
-include "Bus/bus32.stm"
-include "Array/array.stm"
-include "Lines/lines.stm"
+-- include "Bus/bus32.stm"
+-- include "Array/array.stm"
+-- include "Lines/lines.stm"
+include "Interrupt/interrupt.stm"
 
 namespace SimStmTest
 
@@ -22,8 +23,9 @@ namespace SimStmTest
 
 --        call testArrayParameterIn ()
 --        call testInterrupt ()
-        trace stm.TRACE_EXECUTED_LINES
-        call testLinesGetArray ()
+--        trace stm.TRACE_EXECUTED_LINES
+        call testInterrupt ()
+--        call testLinesGetArray ()
 --        call testLinesInsertArray ()
 --        call testSignalVerifyFail ()
 --        call unitBus32(

@@ -35,10 +35,9 @@ proc testSuiteArray ()
     call stm.testCase (
         label set TestToCall testArrayLocalOverride
     )
-    -- TODO: reactivate
+
     call stm.testCase (
         label set TestToCall testArrayParameterIn
-        equ skipped 1
     )
 
     call stm.testCase (

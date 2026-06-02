@@ -15,12 +15,11 @@ proc unitInterrupt ()
     equ InterruptHappenedB 0
 
     wait 1000
-    signal write out_signal_interrupt_a 1
+    signal write provoke_interrupt_a 1
     wait 1000
-    signal write out_signal_interrupt_b 1
+    signal write provoke_interrupt_b 1
 
-    loop 1000
-    end loop
+    wait 1000
 
     var verify InterruptHappenedA 1 stm.MAX
     var verify InterruptHappenedB 1 stm.MAX
@@ -29,13 +28,13 @@ end proc
 
 interrupt InterruptA ()
     log message 0 "InterruptA happened"
-    signal write out_signal_interrupt_a 0
+    signal write provoke_interrupt_a 0
     equ InterruptHappenedA 1
 end interrupt
 
 interrupt InterruptB ()
     log message 0 "InterruptB happened"
-    signal write out_signal_interrupt_b 0
+    signal write provoke_interrupt_b 0
     equ InterruptHappenedB 1
 end interrupt
 

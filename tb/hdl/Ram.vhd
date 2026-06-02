@@ -32,12 +32,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.Numeric_Std.all;
 
-use work.basic.all;
-
 entity Ram is
-    generic(
-        InitialCellValues : array_of_std_logic_vector
-    );
     port(
         Clk : in std_logic;
         WriteEnable : in std_logic_vector;
@@ -48,8 +43,9 @@ entity Ram is
 end entity;
 
 architecture RTL of Ram is
+    type array_of_std_logic_vector is array (natural range <>) of std_logic_vector;
 
-    signal Ram : array_of_std_logic_vector(0 to 63)(31 downto 0) := InitialCellValues;
+    signal Ram : array_of_std_logic_vector(0 to 63)(31 downto 0) := (others => x"BABABABA");
     signal ReadAddress : std_logic_vector(Address'range);
 
 begin

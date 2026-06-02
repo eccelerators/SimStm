@@ -1,0 +1,3 @@
+Unable to find the license file.  It appears that your license file environment variable (SALT_LICENSE_SERVER) is not set correctly.
+Unable to checkout a license.  Vsim is closing.
+** Error: Invalid license environment. Application closing.

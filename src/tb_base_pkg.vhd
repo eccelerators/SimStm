@@ -24,6 +24,8 @@ use work.tb_limits_pkg.all;
 
 package tb_base_pkg is
 
+    function get_num_bits(arg : natural) return natural;
+
     constant TRACE_EXECUTED_LINES : integer := 0;
     constant TRACE_INSTRUCTIONS : integer := 1;
     constant TRACE_VARIABLES : integer := 2;

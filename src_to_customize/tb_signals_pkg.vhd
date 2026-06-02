@@ -20,10 +20,14 @@ package tb_signals_pkg is
         simstm_loopback_bus_timeout_assertions : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_failures : std_logic_vector(31 downto 0);
 
-        -- signals unittests
+        -- I/O port signals unittests
         loopback_1bit : std_logic;
         loopback_32bit : std_logic_vector(31 downto 0);
         loopback_16bit_cross : std_logic_vector(15 downto 0);
+
+        -- Interrupt signals unittests        
+        interrupt_a : std_logic;
+        interrupt_b : std_logic;
     end record;
 
     type t_signals_out is record
@@ -34,10 +38,13 @@ package tb_signals_pkg is
         simstm_loopback_verify_failure_expected : std_logic_vector(31 downto 0);
         simstm_loopback_bus_timeout_failure_expected : std_logic_vector(31 downto 0);
 
-        -- signals unittests
+        -- I/O port signals unittests
         loopback_1bit : std_logic;
         loopback_32bit : std_logic_vector(31 downto 0);
         loopback_16bit_cross : std_logic_vector(15 downto 0);
+        provoke_interrupt_a : std_logic;
+        provoke_interrupt_b : std_logic;
+        
     end record;
 
     -- TODO: Define here the number of interrupts you want to have
@@ -100,10 +107,14 @@ package body tb_signals_pkg is
         signals.simstm_loopback_bus_timeout_assertions := (others => '0');
         signals.simstm_loopback_bus_timeout_failures := (others => '0');
 
-        -- signals unittest
+        -- I/O port signals unittests
         signals.loopback_1bit := '0';
         signals.loopback_32bit := (others => '0');
         signals.loopback_16bit_cross := (others => '0');
+
+        -- Interrupt signals unittests
+        signals.interrupt_a := '0';
+        signals.interrupt_b := '0';        
 
         return signals;
     end function;
@@ -123,6 +134,9 @@ package body tb_signals_pkg is
         signals.loopback_1bit := '0';
         signals.loopback_32bit := (others => '0');
         signals.loopback_16bit_cross := (others => '0');
+        signals.provoke_interrupt_a := '0';
+        signals.provoke_interrupt_b := '0';                
+                   
         return signals;
     end function;
 
@@ -176,13 +190,19 @@ package body tb_signals_pkg is
             when 10003 =>
                 value_mapping(signals.simstm_loopback_bus_timeout_failures, value);
 
-            -- signals unittest mapping
+            -- IO port signals unittest mapping
             when 11000 =>
                 value_mapping(signals.loopback_1bit, value);
             when 11001 =>
                 value_mapping(signals.loopback_32bit, value);
             when 11002 =>
                 value_mapping(signals.loopback_16bit_cross, value);
+             
+            -- Interrupt signals unittest mapping   
+            when 1000 =>
+                value_mapping(signals.interrupt_a, value);
+            when 1001 =>
+                value_mapping(signals.interrupt_b, value); 
 
             when others =>
                 valid := 0;
@@ -233,6 +253,12 @@ package body tb_signals_pkg is
                 value_mapping(value, signals.loopback_32bit);
             when 11002 =>
                 value_mapping(value, signals.loopback_16bit_cross);
+                
+            -- provoke interrupt signals unittest mapping
+            when 11003 =>
+                value_mapping(value, signals.provoke_interrupt_a);
+            when 11004 =>
+                value_mapping(value, signals.provoke_interrupt_b);
 
             when others =>
                 assert false
@@ -250,8 +276,8 @@ package body tb_signals_pkg is
         variable interrupt_requests : out unsigned
     ) is
     begin
-        interrupt_requests(0) := '0';
-        interrupt_requests(1) := '0';
+        interrupt_requests(0) := signals.interrupt_a;
+        interrupt_requests(1) := signals.interrupt_b;
         wait for 0 ps;
     end procedure;
 
@@ -265,8 +291,8 @@ package body tb_signals_pkg is
         variable empty_label : line := new string'("");
         variable interrupt_labels : t_interrupt_labels := (
             -- TODO: Add here all your simstm interrupt entry procedure labels
-            new string'("InterruptB"),
-            new string'("InterruptA")
+            new string'("SimStmTest.InterruptB"),
+            new string'("SimStmTest.InterruptA")
         );
     begin
         interrupt_number := -1;

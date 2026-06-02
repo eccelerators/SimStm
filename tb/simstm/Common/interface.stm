@@ -10,8 +10,7 @@ signal simstm_loopback_verify_failures 10001
 signal simstm_loopback_bus_timeout_assertions 10002
 signal simstm_loopback_bus_timeout_failures 10003
 
-signal out_signal_interrupt_a 1000
-signal out_signal_interrupt_b 1001
+
 
 -- output signals
 signal simstm_loopback_verify_failure_expected 10000
@@ -21,6 +20,14 @@ signal simstm_loopback_bus_timeout_failure_expected 10001
 signal loopback_1bit 11000
 signal loopback_32bit 11001
 signal loopback_16bit_cross 11002
+
+-- interrupt signals for unittests read as port
+signal interrupt_a 1000
+signal interrupt_b 1001
+
+-- provoke interrupt signals for unittests 
+signal provoke_interrupt_a 11003
+signal provoke_interrupt_b 11004
 
 const NO_BUS 0
 bus wishbone32 4

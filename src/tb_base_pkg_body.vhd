@@ -23,9 +23,21 @@ use ieee.math_real.all;
 use ieee.std_logic_textio.all;
 
 use work.tb_limits_pkg.all;
-use work.basic.all;
 
 package body tb_base_pkg is
+
+    function get_num_bits(arg : natural) return natural is
+        variable nbits : natural;
+        variable n : natural;
+    begin
+        n := arg;
+        nbits := 1;
+        while n > 1 loop
+            nbits := nbits + 1;
+            n := n / 2;
+        end loop;
+        return nbits;
+    end function;
 
     procedure init_inst_def_list(
         variable inst_defs : inout inst_def_list
