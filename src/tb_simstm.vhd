@@ -2025,7 +2025,8 @@ begin
                     verify_assertions_count := verify_assertions_count + 1;
                     if (val5 and val) /= (val5 and val4) then
                         print_instr("exec ");
-                        print(" bus      = 0x" & to_hstring(val));
+                        print(" bus      = 0x" & to_hstring(val1));
+                        print(" width    = 0" & to_string(val2));
                         print(" address  = 0x" & to_hstring(val3));
                         print(" read     = 0x" & to_hstring(val));
                         print(" expected = 0x" & to_hstring(val4));

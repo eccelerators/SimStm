@@ -14,10 +14,13 @@ proc testRam ()
         bus write BusWishbone 32 a dw 
         bus verify BusWishbone 32 a dw 0xFFFFFFFF
         add dw 1
+        add a 4
     end loop
+    equ a 0
     loop 64
         bus verify BusWishbone 32 a dr 0xFFFFFFFF
         add dr 1
+        add a 4
     end loop
     call stm.endStandardTestShell ()
 end proc

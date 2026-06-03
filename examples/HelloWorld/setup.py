@@ -42,17 +42,17 @@ static_setup_data = {
     ],
     "src_data_files" : [(
         "HelloWorld/src/vhdl", [
-            {"file":"src/vhdl/Dut.vhd", "file_type":"VHDL 2008", "hdl_order":"00090"},
-            {"file":"src/vhdl/eccelerators_basic.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"}
+            {"file":"src/vhdl/Dut.vhd", "file_type":"VHDL 2008", "hdl_order":"00080"}
         ])
     ],
     "tb_data_files" : [(
         "HelloWorld/tb/hdl/src_to_customize", [
             {"file":"tb/hdl/src_to_customize/tb_signals_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00050", "ghdl_options":["-frelaxed"]},
+            {"file":"tb/hdl/src_to_customize/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"tb/hdl/src_to_customize/tb_bus_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00060", "ghdl_options":["-frelaxed"]}
         ]),(
         "HelloWorld/tb/hdl", [
-            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00100", "ghdl_options":["-frelaxed"]}
+            {"file":"tb/hdl/tbTop.vhd", "file_type":"VHDL 2008", "hdl_order":"00090", "ghdl_options":["-frelaxed"]}
         ]),(
         "HelloWorld/../../src", [
             {"file":"../../src/tb_bus_wishbone.vhd", "file_type":"VHDL 2008", "hdl_order":"00012", "ghdl_options":["-frelaxed"]},
@@ -66,7 +66,6 @@ static_setup_data = {
             {"file":"../../src/tb_bus_avalon.vhd", "file_type":"VHDL 2008", "hdl_order":"00015", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00040", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_util_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00030", "ghdl_options":["-frelaxed"]},
-            {"file":"../../src/tb_limits_pkg.vhd", "file_type":"VHDL 2008", "hdl_order":"00000", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_interpreter_util_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00031", "ghdl_options":["-frelaxed"]},
             {"file":"../../src/tb_base_pkg_body.vhd", "file_type":"VHDL 2008", "hdl_order":"00011", "ghdl_options":["-frelaxed"]}
         ])

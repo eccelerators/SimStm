@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<testsuites name="testSuitesSimulation" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-05-18T20:36:34.121702" time="5.008926">
-   <testsuite name="testSuiteIndexedCount_0" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-05-18T20:36:37.078659" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+<testsuites name="testSuitesSimulation" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:52:04.108986" time="4.866928">
+   <testsuite name="testSuiteIndexedCount_0" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-06-02T21:52:08.959914" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=0 -do &quot;run_all.do&quot; 
-# Start time: 20:36:34 on May 18,2026
+# Start time: 21:52:04 on Jun 02,2026
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;unknown (empty read)&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 50870&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -46,7 +46,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -66,9 +65,9 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 72 variables
+# 71 variables
 # 27 procedures
-# 416 instructions
+# 424 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -94,18 +93,18 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 20:36:37 on May 18,2026, Elapsed time: 0:00:03
+# End time: 21:52:08 on Jun 02,2026, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 2
 </system-out>
       <system-err/>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -113,125 +112,12 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteIndexedCount_1" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-05-18T20:36:38.058644" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+   <testsuite name="testSuiteIndexedCount_1" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-06-02T21:52:05.840960" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=1 -do &quot;run_all.do&quot; 
-# Start time: 20:36:34 on May 18,2026
+# Start time: 21:52:04 on Jun 02,2026
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;unknown (empty read)&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
-# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
-# Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
-# //  Questa Altera Starter FPGA Edition-64
-# //  Version 2025.2 linux_x86_64 May 31 2025
-# //
-# // Unpublished work. Copyright 2025 Siemens
-# //
-# // This material contains trade secrets or otherwise confidential information
-# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
-# // &quot;SISW&quot;), or its licensors. Access to and use of this information is strictly
-# // limited as set forth in the Customer's applicable agreements with SISW.
-# //
-# // This material may not be copied, distributed, or otherwise disclosed outside
-# // of the Customer's facilities without the express written permission of SISW,
-# // and may not be used in any way not expressly authorized by SISW.
-# //
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading work.tb_limits_pkg
-# Loading ieee.math_real(body)
-# Loading ieee.std_logic_textio(body)
-# Loading work.tb_base_pkg(body)
-# Loading work.tb_bus_wishbone_pkg(body)
-# Loading work.tb_bus_wishbone_32_pkg_inst
-# Loading work.tb_bus_wishbone_64_pkg_inst
-# Loading work.tb_bus_wishbone_128_pkg_inst
-# Loading work.tb_bus_wishbone_256_pkg_inst
-# Loading work.tb_bus_avalon_pkg(body)
-# Loading work.tb_bus_avalon_32_pkg_inst
-# Loading work.tb_bus_avalon_64_pkg_inst
-# Loading work.tb_bus_axi4lite_pkg(body)
-# Loading work.tb_bus_axi4lite_32_pkg_inst
-# Loading work.tb_bus_ram_pkg(body)
-# Loading work.tb_bus_ram_32_pkg_inst
-# Loading work.tb_bus_pkg(body)
-# Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
-# Loading std.env(body)
-# Loading work.tb_instructions_pkg(body)
-# Loading work.tb_interpreter_util_pkg(body)
-# Loading work.tb_interpreter_pkg(body)
-# Loading work.tbtop(behavioural)#1
-# Loading work.tb_simstm(behavioural)#1
-# 
-# do run_all.do
-# collect stimulus code files
-# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/testMainSuiteIndexedCount.stm
-# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/common/common.stm
-# loading codefile /home/heinrich/git/SimStm/lib/base.stm
-# loading codefile /home/heinrich/git/SimStm/lib/testcase.stm
-# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/TestSuites/TestSuiteIndexedCount.stm
-# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/count/count.stm
-# 5 stimulus code files
-# parsing stimulus code files
-# 9 labels
-# 31 constants
-# 72 variables
-# 27 procedures
-# 416 instructions
-# checking if all variables are initially defined for all instructions
-# starting stimuli execution
-# exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
-# Main test main suite indexed Count 1 started
-# **********START*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp**********
-# testCaseWithSuiteIndex started
-# Executed 5 verify assertions
-# Executed 0 timeout monitored bus access assertions
-# Success
-# testCaseWithSuiteIndex ended
-# Ended at simulation time of 0ns
-# **********END*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp**********
-# **********START*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown**********
-# testCaseWithSuiteIndex started
-# Executed 5 verify assertions
-# Executed 0 timeout monitored bus access assertions
-# Success
-# testCaseWithSuiteIndex ended
-# Ended at simulation time of 0ns
-# **********END*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown**********
-# Main test main suite indexed Count 1 ended
-# Verify assertions 10
-# Timeout monitored bus access passes 0
-# SUCCESS
-# Test finished
-# End time: 20:36:38 on May 18,2026, Elapsed time: 0:00:04
-# Errors: 0, Warnings: 2
-</system-out>
-      <system-err/>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
-         <properties>
-            <property name="SimulatedStartTime" value="0"/>
-            <property name="SimulatedEndTime" value="0"/>
-            <property name="SimulatedDuration" value="0"/>
-         </properties>
-      </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.001">
-         <properties>
-            <property name="SimulatedStartTime" value="0"/>
-            <property name="SimulatedEndTime" value="0"/>
-            <property name="SimulatedDuration" value="0"/>
-         </properties>
-      </testcase>
-   </testsuite>
-   <testsuite name="testSuiteIndexedCount_2" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-05-18T20:36:36.003675" time="0.001999" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
-# vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=2 -do &quot;run_all.do&quot; 
-# Start time: 20:36:34 on May 18,2026
-# ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
@@ -271,7 +157,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -291,46 +176,46 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 72 variables
+# 71 variables
 # 27 procedures
-# 416 instructions
+# 424 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
-# Main test main suite indexed Count 2 started
-# **********START*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp**********
+# Main test main suite indexed Count 1 started
+# **********START*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp**********
 # testCaseWithSuiteIndex started
 # Executed 5 verify assertions
 # Executed 0 timeout monitored bus access assertions
 # Success
 # testCaseWithSuiteIndex ended
 # Ended at simulation time of 0ns
-# **********END*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp**********
-# **********START*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown**********
+# **********END*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp**********
+# **********START*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown**********
 # testCaseWithSuiteIndex started
 # Executed 5 verify assertions
 # Executed 0 timeout monitored bus access assertions
 # Success
 # testCaseWithSuiteIndex ended
 # Ended at simulation time of 0ns
-# **********END*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown**********
-# Main test main suite indexed Count 2 ended
+# **********END*TESTCASE*testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown**********
+# Main test main suite indexed Count 1 ended
 # Verify assertions 10
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 20:36:36 on May 18,2026, Elapsed time: 0:00:02
+# End time: 21:52:05 on Jun 02,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 1
 </system-out>
       <system-err/>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.001999">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -338,13 +223,13 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteIndexedCount_3" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-05-18T20:36:39.109628" time="0.002001" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
-# vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=3 -do &quot;run_all.do&quot; 
-# Start time: 20:36:34 on May 18,2026
+   <testsuite name="testSuiteIndexedCount_2" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-06-02T21:52:06.903944" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
+# vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=2 -do &quot;run_all.do&quot; 
+# Start time: 21:52:04 on Jun 02,2026
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
-# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 54482&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;unknown (empty read)&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
@@ -384,7 +269,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -404,9 +288,121 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 72 variables
+# 71 variables
 # 27 procedures
-# 416 instructions
+# 424 instructions
+# checking if all variables are initially defined for all instructions
+# starting stimuli execution
+# exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
+# Main test main suite indexed Count 2 started
+# **********START*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp**********
+# testCaseWithSuiteIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithSuiteIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp**********
+# **********START*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown**********
+# testCaseWithSuiteIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithSuiteIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown**********
+# Main test main suite indexed Count 2 ended
+# Verify assertions 10
+# Timeout monitored bus access passes 0
+# SUCCESS
+# Test finished
+# End time: 21:52:06 on Jun 02,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 2
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+   </testsuite>
+   <testsuite name="testSuiteIndexedCount_3" tests="2" skipped="0" errors="0" failures="0" assertions="10" timestamp="2026-06-02T21:52:07.926929" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
+# vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=3 -do &quot;run_all.do&quot; 
+# Start time: 21:52:04 on Jun 02,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 50870&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuitendexed/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Altera Starter FPGA Edition-64
+# //  Version 2025.2 linux_x86_64 May 31 2025
+# //
+# // Unpublished work. Copyright 2025 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // &quot;SISW&quot;), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.tb_limits_pkg
+# Loading ieee.math_real(body)
+# Loading ieee.std_logic_textio(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_wishbone_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg_inst
+# Loading work.tb_bus_wishbone_64_pkg_inst
+# Loading work.tb_bus_wishbone_128_pkg_inst
+# Loading work.tb_bus_wishbone_256_pkg_inst
+# Loading work.tb_bus_avalon_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg_inst
+# Loading work.tb_bus_avalon_64_pkg_inst
+# Loading work.tb_bus_axi4lite_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg_inst
+# Loading work.tb_bus_ram_pkg(body)
+# Loading work.tb_bus_ram_32_pkg_inst
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_util_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# 
+# do run_all.do
+# collect stimulus code files
+# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/testMainSuiteIndexedCount.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/common/common.stm
+# loading codefile /home/heinrich/git/SimStm/lib/base.stm
+# loading codefile /home/heinrich/git/SimStm/lib/testcase.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/TestSuites/TestSuiteIndexedCount.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterSuitendexed/tb/simstm/count/count.stm
+# 5 stimulus code files
+# parsing stimulus code files
+# 9 labels
+# 31 constants
+# 71 variables
+# 27 procedures
+# 424 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -432,18 +428,18 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 20:36:39 on May 18,2026, Elapsed time: 0:00:05
+# End time: 21:52:07 on Jun 02,2026, Elapsed time: 0:00:03
 # Errors: 0, Warnings: 2
 </system-out>
       <system-err/>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteIndexed.testCountUp" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.001999">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteIndexed.testCountDown" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>

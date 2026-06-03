@@ -1,10 +1,15 @@
 <?xml version="1.0" ?>
-<testsuites name="testSuitesSimulation" tests="32" skipped="0" errors="0" failures="0" assertions="160" timestamp="2026-05-19T07:07:09.987335" time="2.060362">
-   <testsuite name="testSuiteIndexedCount_0" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-05-19T07:07:10.966510" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+<testsuites name="testSuitesSimulation" tests="32" skipped="0" errors="0" failures="0" assertions="160" timestamp="2026-06-02T21:50:41.504208" time="5.109924">
+   <testsuite name="testSuiteIndexedCount_0" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:50:44.326166" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteCaseIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=0 -do &quot;run_all.do&quot; 
-# Start time: 07:07:10 on May 19,2026
-# ** Note: (vsim-8009) Loading existing optimized design _opt2
+# Start time: 21:50:41 on Jun 02,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 49872&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # //  Questa Altera Starter FPGA Edition-64
 # //  Version 2025.2 linux_x86_64 May 31 2025
 # //
@@ -41,7 +46,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -61,9 +65,9 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 74 variables
+# 73 variables
 # 27 procedures
-# 426 instructions
+# 434 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -137,8 +141,8 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 07:07:11 on May 19,2026, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0
+# End time: 21:50:44 on Jun 02,2026, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 2
 </system-out>
       <system-err/>
       <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
@@ -148,49 +152,49 @@
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.091999">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_20" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_0_CounterSuiteCaseIndexed.testCountDown_20" assertions="5" classname="testSuiteIndexedCount_0" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -198,11 +202,16 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteIndexedCount_1" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-05-19T07:07:10.974512" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+   <testsuite name="testSuiteIndexedCount_1" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:50:45.333151" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteCaseIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=1 -do &quot;run_all.do&quot; 
-# Start time: 07:07:10 on May 19,2026
-# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Start time: 21:50:41 on Jun 02,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 49872&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/simulation/modelsim/work/work/_lock&quot;.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # //  Questa Altera Starter FPGA Edition-64
 # //  Version 2025.2 linux_x86_64 May 31 2025
 # //
@@ -239,7 +248,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -259,9 +267,9 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 74 variables
+# 73 variables
 # 27 procedures
-# 426 instructions
+# 434 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -335,8 +343,8 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 07:07:11 on May 19,2026, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0
+# End time: 21:50:45 on Jun 02,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 2
 </system-out>
       <system-err/>
       <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
@@ -346,21 +354,21 @@
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.003">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -374,21 +382,21 @@
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.092016">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_1_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_1" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -396,15 +404,16 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteIndexedCount_2" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-05-19T07:07:11.927676" time="0.002001" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+   <testsuite name="testSuiteIndexedCount_2" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:50:46.400136" time="0.003999" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteCaseIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=2 -do &quot;run_all.do&quot; 
-# Start time: 07:07:10 on May 19,2026
+# Start time: 21:50:41 on Jun 02,2026
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-6) -- Waiting for lock by &quot;heinrich@HeinrichsHm90, pid = 49872&quot;. Lockfile is &quot;/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/simulation/modelsim/work/work/_lock&quot;.
 # ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
 # Use vdir -l command to find such design units.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # //  Questa Altera Starter FPGA Edition-64
 # //  Version 2025.2 linux_x86_64 May 31 2025
 # //
@@ -441,7 +450,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -461,9 +469,9 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 74 variables
+# 73 variables
 # 27 procedures
-# 426 instructions
+# 434 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -537,11 +545,11 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 07:07:12 on May 19,2026, Elapsed time: 0:00:02
-# Errors: 0, Warnings: 1
+# End time: 21:50:46 on Jun 02,2026, Elapsed time: 0:00:05
+# Errors: 0, Warnings: 2
 </system-out>
       <system-err/>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -555,42 +563,42 @@
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.003">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.092015">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.003999">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.091999">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.001">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.091999">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_2_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_2" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -598,11 +606,15 @@
          </properties>
       </testcase>
    </testsuite>
-   <testsuite name="testSuiteIndexedCount_3" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-05-19T07:07:10.981513" time="0.002" file="TestSuites/TestSuiteIndexedCount.stm">
-      <system-out># ** Note: (vsim-220) '/home/heinrich/altera_lite/25.1std/questa_fse/linux_x86_64/../modelsim.ini' is used as the ini file.
+   <testsuite name="testSuiteIndexedCount_3" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:50:43.242182" time="0.001" file="TestSuites/TestSuiteIndexedCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
 # vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterSuiteCaseIndexed/tb/simstm/ -gstimulus_file=testMainSuiteIndexedCount.stm -gstimulus_main_entry_label=CounterSuiteCaseIndexed.testMainSuiteIndexedCount -gstimulus_test_suite_index=3 -do &quot;run_all.do&quot; 
-# Start time: 07:07:10 on May 19,2026
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Start time: 21:50:41 on Jun 02,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Altera Starter FPGA Edition-64
 # //  Version 2025.2 linux_x86_64 May 31 2025
 # //
@@ -639,7 +651,6 @@
 # Loading work.tb_bus_ram_32_pkg_inst
 # Loading work.tb_bus_pkg(body)
 # Loading work.tb_signals_pkg(body)
-# Loading work.basic(body)
 # Loading std.env(body)
 # Loading work.tb_instructions_pkg(body)
 # Loading work.tb_interpreter_util_pkg(body)
@@ -659,9 +670,9 @@
 # parsing stimulus code files
 # 9 labels
 # 31 constants
-# 74 variables
+# 73 variables
 # 27 procedures
-# 426 instructions
+# 434 instructions
 # checking if all variables are initially defined for all instructions
 # starting stimuli execution
 # exec main entry proc_(_) testMainSuiteIndexedCount      #2 sp 1 file name testMainSuiteIndexedCount.stm file line 7
@@ -735,11 +746,11 @@
 # Timeout monitored bus access passes 0
 # SUCCESS
 # Test finished
-# End time: 07:07:11 on May 19,2026, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0
+# End time: 21:50:43 on Jun 02,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 1
 </system-out>
       <system-err/>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.092016">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
@@ -760,35 +771,35 @@
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.092016">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.091999">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002001">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>
             <property name="SimulatedDuration" value="0"/>
          </properties>
       </testcase>
-      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.002">
+      <testcase name="testSuiteIndexedCount_3_CounterSuiteCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteIndexedCount_3" file="testcase.stm" line="testcase.stm" time="0.001">
          <properties>
             <property name="SimulatedStartTime" value="0"/>
             <property name="SimulatedEndTime" value="0"/>

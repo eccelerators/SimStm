@@ -1,0 +1,204 @@
+<?xml version="1.0" ?>
+<testsuites name="testSuitesSimulation" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:49:15.403482" time="1.968971">
+   <testsuite name="testSuiteCount" tests="8" skipped="0" errors="0" failures="0" assertions="40" timestamp="2026-06-02T21:49:17.254454" time="0.002" file="TestSuites/TestSuiteCount.stm">
+      <system-out># ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
+# vsim -t ps -L work work.tbTop -batch -gstimulus_path=/home/heinrich/git/SimStm/examples/CounterCaseIndexed/tb/simstm/ -gstimulus_file=testMainSuiteCount.stm -gstimulus_main_entry_label=CounterCaseIndexed.testMainSuiteCount -do &quot;run_all.do&quot; 
+# Start time: 21:49:15 on Jun 02,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Warning: (vopt-2009) At least one design unit was compiled with optimization level -O0 or -O1.
+# Use vdir -l command to find such design units.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# //  Questa Altera Starter FPGA Edition-64
+# //  Version 2025.2 linux_x86_64 May 31 2025
+# //
+# // Unpublished work. Copyright 2025 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // &quot;SISW&quot;), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.tb_limits_pkg
+# Loading ieee.math_real(body)
+# Loading ieee.std_logic_textio(body)
+# Loading work.tb_base_pkg(body)
+# Loading work.tb_bus_wishbone_pkg(body)
+# Loading work.tb_bus_wishbone_32_pkg_inst
+# Loading work.tb_bus_wishbone_64_pkg_inst
+# Loading work.tb_bus_wishbone_128_pkg_inst
+# Loading work.tb_bus_wishbone_256_pkg_inst
+# Loading work.tb_bus_avalon_pkg(body)
+# Loading work.tb_bus_avalon_32_pkg_inst
+# Loading work.tb_bus_avalon_64_pkg_inst
+# Loading work.tb_bus_axi4lite_pkg(body)
+# Loading work.tb_bus_axi4lite_32_pkg_inst
+# Loading work.tb_bus_ram_pkg(body)
+# Loading work.tb_bus_ram_32_pkg_inst
+# Loading work.tb_bus_pkg(body)
+# Loading work.tb_signals_pkg(body)
+# Loading std.env(body)
+# Loading work.tb_instructions_pkg(body)
+# Loading work.tb_interpreter_util_pkg(body)
+# Loading work.tb_interpreter_pkg(body)
+# Loading work.tbtop(behavioural)#1
+# Loading work.tb_simstm(behavioural)#1
+# 
+# do run_all.do
+# collect stimulus code files
+# loading codefile /home/heinrich/git/SimStm/examples/CounterCaseIndexed/tb/simstm/testMainSuiteCount.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterCaseIndexed/tb/simstm/common/common.stm
+# loading codefile /home/heinrich/git/SimStm/lib/base.stm
+# loading codefile /home/heinrich/git/SimStm/lib/testcase.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterCaseIndexed/tb/simstm/TestSuites/TestSuiteCount.stm
+# loading codefile /home/heinrich/git/SimStm/examples/CounterCaseIndexed/tb/simstm/count/count.stm
+# 5 stimulus code files
+# parsing stimulus code files
+# 9 labels
+# 30 constants
+# 68 variables
+# 26 procedures
+# 416 instructions
+# checking if all variables are initially defined for all instructions
+# starting stimuli execution
+# exec main entry proc_(_) testMainSuiteCount      #2 sp 1 file name testMainSuiteCount.stm file line 4
+# Main test main suite Count started
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_0**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_0**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_1**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_1**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_2**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_2**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_3**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_3**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_4**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountUp_4**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_10**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_10**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_20**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_20**********
+# **********START*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_30**********
+# testCaseWithCaseIndex started
+# Executed 5 verify assertions
+# Executed 0 timeout monitored bus access assertions
+# Success
+# testCaseWithCaseIndex ended
+# Ended at simulation time of 0ns
+# **********END*TESTCASE*testSuiteCount_CounterCaseIndexed.testCountDown_30**********
+# Main test main suite Count ended
+# Verify assertions 40
+# Timeout monitored bus access passes 0
+# SUCCESS
+# Test finished
+# End time: 21:49:17 on Jun 02,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 1
+</system-out>
+      <system-err/>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountUp_4" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.090999">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountDown_30" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountUp_3" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountUp_2" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountUp_1" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountDown_10" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.001">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountDown_20" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+      <testcase name="testSuiteCount_CounterCaseIndexed.testCountUp_0" assertions="5" classname="testSuiteCount" file="testcase.stm" line="testcase.stm" time="0.002">
+         <properties>
+            <property name="SimulatedStartTime" value="0"/>
+            <property name="SimulatedEndTime" value="0"/>
+            <property name="SimulatedDuration" value="0"/>
+         </properties>
+      </testcase>
+   </testsuite>
+</testsuites>
