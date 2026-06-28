@@ -1,5 +1,7 @@
 namespace stm
 
+const SKIP 1    
+
 lines TestCaseStartLines
 lines TestCaseLines
 var TestCaseLinesPosition 0

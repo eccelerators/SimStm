@@ -411,7 +411,7 @@ package body tb_interpreter_util_pkg is
             end if;
 
             if insert_var then
-                while src_tail_i <= c_stm_text_len loop
+                while src_tail_i < c_stm_text_len loop
                     if is_txt_var_first_character(txt_obj_ptr.txt(src_tail_i)) then
                         exit;
                     else

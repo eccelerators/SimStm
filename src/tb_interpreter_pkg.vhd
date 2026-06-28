@@ -74,7 +74,8 @@ package tb_interpreter_pkg is
         variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered;
-        constant machine_value_width : integer
+        constant machine_value_width : integer;
+        constant debug : boolean    
     );
 
 end package;

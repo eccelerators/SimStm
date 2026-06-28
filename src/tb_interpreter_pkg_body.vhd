@@ -443,7 +443,8 @@ package body tb_interpreter_pkg is
         variable insts : inout inst_sequence;
         variable vars : inout var_pool_ordered;
         variable procs : inout proc_pool_ordered;
-        constant machine_value_width : integer       
+        constant machine_value_width : integer;
+        constant debug : boolean    
     ) is
         variable iic : stm_inst_initial_context;
         variable par_scopes : parameter_text_field_array;
@@ -456,7 +457,6 @@ package body tb_interpreter_pkg is
         variable pen : integer;
         variable empty_text_field : text_field := (others => nul);
         variable found : boolean;
-        constant debug : boolean := false;
         
     begin
         init_inst_initial_context(iic);

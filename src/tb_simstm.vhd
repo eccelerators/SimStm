@@ -117,6 +117,7 @@ begin
     read_files : process
         constant DUMP_PARSE_FLOW : boolean := false;
         constant DUMP_PARSE_RESULTS : boolean := false;
+        constant DEBUG_CHECK_INSTRUCTIONS : boolean := false;
         variable inst_defs : inst_def_list;
         variable code_files : file_def_list;
         variable insts : inst_sequence;
@@ -537,6 +538,7 @@ begin
 
         init_inst_def_list(inst_defs);
         define_insts(inst_defs);
+        print(integer'image(inst_defs.last_element_num) & " instructions defined by instruction set");
 
         init_file_def_list(code_files);
         print("collect stimulus code files");
@@ -593,7 +595,7 @@ begin
         end if;
 
         print("checking if all variables are initially defined for all instructions");
-        check_instructions_in_initial_context(insts, vars, procs, machine_value_width);
+        check_instructions_in_initial_context(insts, vars, procs, machine_value_width, DEBUG_CHECK_INSTRUCTIONS);
 
         print("starting stimuli execution");
 
@@ -738,13 +740,15 @@ begin
                 elsif ie.inst(1 to ie.inst_len) = INSTR_SIGNAL then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
-                    index_var_value(vars, ven1, val1);
-
+                    get_val_global(2, val2);
+                    init_var_value(vars, ven1, val2, machine_value_width);
+                    
                 -- bus a_bus
                 elsif ie.inst(1 to ie.inst_len) = INSTR_BUS then
                     -- processed during inital parse for global vars, executed as instruction only for local vars
                     get_ven_in_called_scope_local(1, ven1);
-                    index_var_value(vars, ven1, val1);
+                    get_val_global(2, val2);
+                    init_var_value(vars, ven1, val2, machine_value_width);
 
                 -- lines a_lines
                 elsif ie.inst(1 to ie.inst_len) = INSTR_LINES then
@@ -1897,7 +1901,7 @@ begin
                     verify_assertions_count := verify_assertions_count + 1;
                     if (val3 and val) /= (val3 and val2) then
                         print_instr("exec ");
-                        print(" signal   = 0x" & to_hstring(val1));
+                        print(" signal   = " & to_string(to_integer(val1)));
                         print(" read     = 0x" & to_hstring(val));
                         print(" expected = 0x" & to_hstring(val2));
                         print(" mask     = 0x" & to_hstring(val3));
@@ -2026,7 +2030,7 @@ begin
                     if (val5 and val) /= (val5 and val4) then
                         print_instr("exec ");
                         print(" bus      = 0x" & to_hstring(val1));
-                        print(" width    = 0" & to_string(val2));
+                        print(" width    = " & to_string(to_integer(val2)));
                         print(" address  = 0x" & to_hstring(val3));
                         print(" read     = 0x" & to_hstring(val));
                         print(" expected = 0x" & to_hstring(val4));

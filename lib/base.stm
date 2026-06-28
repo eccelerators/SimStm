@@ -135,7 +135,7 @@ proc startStandardTestShell ()
     signal read sigInStandardTestVerifyAssertionsCount StandardTestVerifyAssertionsCountStartSnapShot
     signal read sigInStandardTestBusTimeoutAssertionsCount StandardTestBusTimeoutAssertionsCountStartSnapShot   
     
-    log message 0 "{@c2} started" 
+    log message 0 "{@c1} started" 
 end proc   
 
 proc endStandardTestShell ()
@@ -161,7 +161,7 @@ proc endStandardTestShell ()
             log message 0 "Expected {:d} verify failures, got {:d}" ExpectedStandardTestVerifyFailureCountResult StandardTestVerifyFailureCountResult
             log message 0 "Expected {:d} bus timeout failures, got {:d}" ExpectedStandardTestBusTimeoutFailureCountResult StandardTestBusTimeoutFailureCountResult
             log message 0 "Failures"
-            log message 0 "{@c2} ended" 
+            log message 0 "{@c1} ended" 
             equ StandardTestFailure 1
             return 
         end if
@@ -169,14 +169,14 @@ proc endStandardTestShell ()
     if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult    
         log message 0 "Expected {:d} verify failures, got {:d}" ExpectedStandardTestVerifyFailureCountResult StandardTestVerifyFailureCountResult
         log message 0 "Failures"
-        log message 0 "{@c2} ended" 
+        log message 0 "{@c1} ended" 
         equ StandardTestFailure 1
         return
     end if  
     if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult
         log message 0 "Expected {:d} bus timeout failures, got {:d}" ExpectedStandardTestBusTimeoutFailureCountResult StandardTestBusTimeoutFailureCountResult
         log message 0 "Failures"
-        log message 0 "{@c2} ended" 
+        log message 0 "{@c1} ended" 
         equ StandardTestFailure 1
         return
     end if
@@ -187,7 +187,7 @@ proc endStandardTestShell ()
         log message 0 "Expected and got {:d} bus timeout failures" ExpectedStandardTestBusTimeoutFailureCountResult
     end if
     log message 0 "Success"
-    log message 0 "{@c2} ended"  
+    log message 0 "{@c1} ended"  
     equ StandardTestFailure 0  
 end proc
 
