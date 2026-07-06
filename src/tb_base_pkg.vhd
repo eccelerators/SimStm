@@ -417,8 +417,8 @@ package tb_base_pkg is
     ) return text_field;
 
     function fld_equal(
-        s1 : in string;
-        s2 : in string
+        s1 : string;
+        s2 : string
     ) return boolean;
 
     procedure fld_order(
@@ -524,7 +524,7 @@ package tb_base_pkg is
     );
 
     function std_vec2c(
-        vec : in std_logic_vector(3 downto 0)
+        vec : std_logic_vector(3 downto 0)
     ) return character;
 
     function stim_to_integer(

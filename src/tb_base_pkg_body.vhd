@@ -415,7 +415,7 @@ package body tb_base_pkg is
 
     function bin2integer(
         slc : src_locator;
-        bin_number : in text_field
+        bin_number : text_field
     ) return integer is
         variable len : integer;
         variable temp_int : integer;
