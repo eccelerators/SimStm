@@ -1,0 +1,29 @@
+include "common/common.stm"
+
+namespace CounterPlain
+
+    lines success_lines
+    file simulation_success "simulation.success"
+
+    proc testMain ()
+        var trc stm.TRACE_OFF          
+        -- or trc stm.TRACE_EXECUTED_LINES 
+        -- or trc stm.TRACE_STACK  
+        trace trc  
+        
+        log message stm.INFO "Main test started"
+
+        call testCountDown ()
+
+        call testCountUp ()
+        
+        log message stm.INFO "Main test finished"
+        wait 1000
+        lines append message success_lines "SUCCESS"
+        log lines stm.INFO success_lines
+        file write simulation_success success_lines
+        wait 1000
+        finish
+    end proc
+
+end namespace

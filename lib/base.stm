@@ -1,0 +1,226 @@
+-------------------------------------------------------------------------------
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+-- Copyright: 
+--   Eccelerators
+-- 
+-- Description:
+--   Basic constants, variables and procedures for SimStm.
+-- 
+-- SPDX-License-Identifier: Apache-2.0
+-------------------------------------------------------------------------------
+namespace stm
+
+-- parameter
+const ALWAYS 0
+const FAILURE 0
+const ERROR 10
+const WARNING 20
+const INFO 30
+const INFO_1 31
+const INFO_2 32
+const INFO_3 33
+const INFO_4 34
+const INFO_5 35
+
+const RESUME_NEVER 0b00
+const RESUME_ON_VERIFY_FAILURE 0b01
+const RESUME_ON_BUS_TIMEOUT_FAILURE 0b10
+const RESUME_ON_ALL_FAILURES 0b11
+
+const TRACE_OFF 0
+const TRACE_EXECUTED_LINES 0x1
+const TRACE_INSTRUCTIONS 0x2
+const TRACE_VARIABLES 0x4
+const TRACE_FILES 0x8
+const TRACE_IF_TREES 0x10
+const TRACE_CALLS 0x20
+const TRACE_INTERRUPTS 0x40
+const TRACE_STACK 0x80
+const TRACE_ALL 0xFFFF
+
+const FILE_STATUS_OK 0
+const FILE_STATUS_ERROR 1
+const FILE_STATUS_NAME_ERROR 2
+const FILE_STATUS_MODE_ERROR 3
+
+const TIME_OUT_100MS 100000000
+
+const NO_SIGNAL 0
+
+signal sigInSimulatedTimeNow 1
+var SimulatedTimeNow 0
+
+signal sigInTestSuiteIndex 2
+var TestSuiteIndex 255
+
+signal sigInMachineValueWidth 3
+
+signal sigOutDutReset 1
+
+const MAX 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  
+proc printFileStatus (
+    var FileStatus 0
+)
+    if FileStatus = FILE_STATUS_OK
+        log message 0 "STATUS_OK"
+    elsif FileStatus = FILE_STATUS_ERROR
+        log message 0 "STATUS_ERROR"
+    elsif FileStatus = FILE_STATUS_NAME_ERROR
+        log message 0 "STATUS_NAME_ERROR"
+    elsif FileStatus = FILE_STATUS_MODE_ERROR
+        log message 0 "STATUS_MODE_ERROR"
+    else
+        log message 0 "Other status: {}" FileStatus
+    end if
+end proc
+
+signal sigInStandardTestVerifyAssertionsCount 10000
+signal sigInStandardTestVerifyFailureCount 10001
+signal sigOutExpectedStandardTestVerifyFailureCount 10000
+
+signal sigInStandardTestBusTimeoutAssertionsCount 10002
+signal sigInStandardTestBusTimeoutFailureCount 10003
+signal sigOutExpectedStandardTestBusTimeoutFailureCount 10001
+
+var StandardTestVerifyFailureCountStartSnapShot 0
+var StandardTestVerifyFailureCountResult 0
+
+var StandardTestBusTimeoutFailureCountStartSnapShot 0
+var StandardTestBusTimeoutFailureCountResult 0
+
+var ExpectedStandardTestVerifyFailureCountStartSnapShot 0
+var ExpectedStandardTestVerifyFailureCount 0
+var ExpectedStandardTestVerifyFailureCountResult 0
+
+var ExpectedStandardTestBusTimeoutFailureCountStartSnapShot 0
+var ExpectedStandardTestBusTimeoutFailureCount 0
+var ExpectedStandardTestBusTimeoutFailureCountResult 0
+
+var StandardTestFailure 0
+
+var StandardTestVerifyAssertionsCountStartSnapShot 0
+var StandardTestVerifyAssertionsCountResult 0
+
+var StandardTestBusTimeoutAssertionsCountStartSnapShot 0
+var StandardTestBusTimeoutAssertionsCountResult 0
+
+-- A standard test is usually wrapped by a 
+--
+--  call stm.startStandardTestShell at its begin
+--   producing a standard message that the test has been started
+--   and recording the standard verify and but timeout failure counters state before the test
+--
+--  call stm.endStandardTestShell at its end
+--   producing a standard message that the test has ended successfully or with failures
+--   returning the StandardTestVerifyFailureCountResult and StandardTestBusTimeoutFailureCountResult 
+--   the number of respective failures occurred within the test shell
+--
+--  Each verify instruction with non success increments the StandardTestVerifyFailure count automatically.
+--  Each bus access instruction with non success increments the StandardTestBusTimeoutFailure count automatically.
+-- 
+--  In case a failure is intended the respective expected failure count may be incremented to tolerate the failure
+
+
+proc startStandardTestShell ()
+    signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountStartSnapShot
+    equ ExpectedStandardTestVerifyFailureCountStartSnapShot ExpectedStandardTestVerifyFailureCount
+    equ ExpectedStandardTestBusTimeoutFailureCountStartSnapShot ExpectedStandardTestBusTimeoutFailureCount
+
+    signal read sigInStandardTestVerifyAssertionsCount StandardTestVerifyAssertionsCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutAssertionsCount StandardTestBusTimeoutAssertionsCountStartSnapShot   
+    
+    log message 0 "{@c1} started" 
+end proc   
+
+proc endStandardTestShell ()
+    signal read sigInStandardTestVerifyFailureCount StandardTestVerifyFailureCountResult
+    sub StandardTestVerifyFailureCountResult StandardTestVerifyFailureCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutFailureCount StandardTestBusTimeoutFailureCountResult
+    sub StandardTestBusTimeoutFailureCountResult StandardTestBusTimeoutFailureCountStartSnapShot   
+    equ ExpectedStandardTestVerifyFailureCountResult ExpectedStandardTestVerifyFailureCount
+    sub ExpectedStandardTestVerifyFailureCountResult ExpectedStandardTestVerifyFailureCountStartSnapShot
+    equ ExpectedStandardTestBusTimeoutFailureCountResult ExpectedStandardTestBusTimeoutFailureCount
+    sub ExpectedStandardTestBusTimeoutFailureCountResult ExpectedStandardTestBusTimeoutFailureCountStartSnapShot   
+    
+    signal read sigInStandardTestVerifyAssertionsCount StandardTestVerifyAssertionsCountResult
+    sub StandardTestVerifyAssertionsCountResult StandardTestVerifyAssertionsCountStartSnapShot
+    signal read sigInStandardTestBusTimeoutAssertionsCount StandardTestBusTimeoutAssertionsCountResult
+    sub StandardTestBusTimeoutAssertionsCountResult StandardTestBusTimeoutAssertionsCountStartSnapShot 
+    
+    log message 0 "Executed {:d} verify assertions" StandardTestVerifyAssertionsCountResult
+    log message 0 "Executed {:d} timeout monitored bus access assertions" StandardTestBusTimeoutAssertionsCountResult
+
+    if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult
+        if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult            
+            log message 0 "Expected {:d} verify failures, got {:d}" ExpectedStandardTestVerifyFailureCountResult StandardTestVerifyFailureCountResult
+            log message 0 "Expected {:d} bus timeout failures, got {:d}" ExpectedStandardTestBusTimeoutFailureCountResult StandardTestBusTimeoutFailureCountResult
+            log message 0 "Failures"
+            log message 0 "{@c1} ended" 
+            equ StandardTestFailure 1
+            return 
+        end if
+    end if  
+    if StandardTestVerifyFailureCountResult > ExpectedStandardTestVerifyFailureCountResult    
+        log message 0 "Expected {:d} verify failures, got {:d}" ExpectedStandardTestVerifyFailureCountResult StandardTestVerifyFailureCountResult
+        log message 0 "Failures"
+        log message 0 "{@c1} ended" 
+        equ StandardTestFailure 1
+        return
+    end if  
+    if StandardTestBusTimeoutFailureCountResult > ExpectedStandardTestBusTimeoutFailureCountResult
+        log message 0 "Expected {:d} bus timeout failures, got {:d}" ExpectedStandardTestBusTimeoutFailureCountResult StandardTestBusTimeoutFailureCountResult
+        log message 0 "Failures"
+        log message 0 "{@c1} ended" 
+        equ StandardTestFailure 1
+        return
+    end if
+    if ExpectedStandardTestVerifyFailureCountResult > 0
+        log message 0 "Expected and got {:d} verify failures" ExpectedStandardTestVerifyFailureCountResult
+    end if
+    if ExpectedStandardTestBusTimeoutFailureCountResult > 0
+        log message 0 "Expected and got {:d} bus timeout failures" ExpectedStandardTestBusTimeoutFailureCountResult
+    end if
+    log message 0 "Success"
+    log message 0 "{@c1} ended"  
+    equ StandardTestFailure 0  
+end proc
+
+-- method to add a value to the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
+proc addExpectedStandardTestVerifyFailureCount (
+    var Add 1
+)
+    add ExpectedStandardTestVerifyFailureCount 1
+    signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
+end proc
+
+-- method to add a value to the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
+proc addExpectedStandardTestBusTimeoutFailureCount (
+    var Add 1
+)
+    add ExpectedStandardTestBusTimeoutFailureCount 1
+    signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
+end proc  
+
+-- method to set the ExpectedStandardTestVerifyFailureCount to allow tests to fail intentionally  
+proc setExpectedStandardTestVerifyFailureCount (
+    var Set 1
+)
+    equ ExpectedStandardTestVerifyFailureCount Set
+    signal write stm.sigOutExpectedStandardTestVerifyFailureCount ExpectedStandardTestVerifyFailureCount
+end proc
+
+-- method to set the ExpectedStandardTestBusTimeoutFailureCount to allow tests to fail intentionally  
+proc setExpectedStandardTestBusTimeoutFailureCount (
+    var Set 1
+)
+    equ ExpectedStandardTestBusTimeoutFailureCount 1
+    signal write stm.sigOutExpectedStandardTestBusTimeoutFailureCount ExpectedStandardTestBusTimeoutFailureCount
+end proc   
+
+end namespace

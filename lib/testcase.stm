@@ -1,0 +1,276 @@
+namespace stm
+
+const SKIP 1    
+
+lines TestCaseStartLines
+lines TestCaseLines
+var TestCaseLinesPosition 0
+var TestCaseAssertionsInsertionPoint 0
+var TestCasePropertiesInsertionPoint 0
+
+var TestCaseIndex 0xFFFFFFFF
+var TestCaseHasIndex 0
+var TestSuiteHasIndex 0
+
+var TestCaseSimulatedStartTime 0
+var TestCaseSimulatedEndTime 0
+var TestCaseSimulatedDurationTime 0
+
+proc beginTestSuiteIndexedAndCaseIndexed (
+    label TestToCall testTemplate
+)
+    log message stm.ALWAYS "**********START*TESTCASE*{@c2}_{:d}_{:s}_{:d}**********" stm.TestSuiteIndex lb>TestToCall TestCaseIndex
+    equ TestSuiteHasIndex 1
+    equ TestCaseHasIndex 1
+    lines delete all TestCaseLines
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime 
+    lines append message TestCaseStartLines "test case started"
+
+    file TestCaseStartFile "../../SimulationResults/{@c2}_{:d}_{:s}_{:d}.start" stm.TestSuiteIndex lb>TestToCall TestCaseIndex   
+    file write TestCaseStartFile TestCaseStartLines
+
+    lines append message TestCaseLines '<testcase'
+    lines append message TestCaseLines ' name="{@c2}_{:d}_{:s}_{:d}"' stm.TestSuiteIndex lb>TestToCall TestCaseIndex
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
+
+    lines append message TestCaseLines ' classname="{@c2}_{:d}"' stm.TestSuiteIndex
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"'
+    lines append message TestCaseLines '>'
+
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+proc beginTestCaseSuiteIndexed (
+    label TestToCall testTemplate
+)
+    log message stm.ALWAYS "**********START*TESTCASE*{@c2}_{:d}_{:s}**********" stm.TestSuiteIndex lb>TestToCall
+    equ TestSuiteHasIndex 1
+    equ TestCaseHasIndex 0
+    lines delete all TestCaseLines
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"
+	file TestCaseStartFile "../../SimulationResults/{@c2}_{:d}_{:s}.start" stm.TestSuiteIndex lb>TestToCall
+    file write TestCaseStartFile TestCaseStartLines
+
+    lines append message TestCaseLines '<testcase'
+    lines append message TestCaseLines ' name="{@c2}_{:d}_{:s}"' stm.TestSuiteIndex lb>TestToCall
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
+
+    lines append message TestCaseLines ' classname="{@c2}_{:d}"' stm.TestSuiteIndex
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"'
+    lines append message TestCaseLines '>'
+
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+
+proc beginTestCaseIndexed (
+    label TestToCall testTemplate
+)
+    log message stm.ALWAYS "**********START*TESTCASE*{@c2}_{:s}_{:d}**********" lb>TestToCall TestCaseIndex
+    equ TestSuiteHasIndex 0
+    equ TestCaseHasIndex 1
+    lines delete all TestCaseLines
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"
+
+    file TestCaseStartFile "../../SimulationResults/{@c2}_{:s}_{:d}.start" lb>TestToCall TestCaseIndex
+    file write TestCaseStartFile TestCaseStartLines
+
+    lines append message TestCaseLines '<testcase'
+    lines append message TestCaseLines ' name="{@c2}_{:s}_{:d}"' lb>TestToCall TestCaseIndex
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
+
+    lines append message TestCaseLines ' classname="{@c2}"'
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"'
+    lines append message TestCaseLines '>'
+
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+
+proc beginTestCase (
+    label TestToCall testTemplate
+)
+    log message stm.ALWAYS "**********START*TESTCASE*{@c2}_{:s}**********" lb>TestToCall
+    equ TestSuiteHasIndex 0
+    equ TestCaseHasIndex 0
+    lines delete all TestCaseLines
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedStartTime
+    log message stm.ALWAYS "Started at simulation time of {:d}ns" TestCaseSimulatedStartTime
+    lines append message TestCaseStartLines "test case started"
+    file TestCaseStartFile "../../SimulationResults/{@c2}_{:s}.start" lb>TestToCall
+    file write TestCaseStartFile TestCaseStartLines
+
+    lines append message TestCaseLines '<testcase'
+    lines append message TestCaseLines ' name="{@c2}_{:s}"' lb>TestToCall
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCaseAssertionsInsertionPoint TestCaseLinesPosition
+
+    lines append message TestCaseLines ' classname="{@c2}"'
+    lines append message TestCaseLines ' file="{@f1}"'
+    lines append message TestCaseLines ' line="{@l1}"'
+    lines append message TestCaseLines '>'
+
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+
+proc endTestCase (
+    label TestToCall testTemplate
+	var skipped 0
+	var error 0
+	var failure 0
+)
+    if skipped != 0
+        call skipTestCase ()
+    elsif error != 0
+        call errorTestCase ()
+    elsif failure != 0
+        call failureTestCase ()
+    end if
+    signal read stm.sigInSimulatedTimeNow TestCaseSimulatedEndTime
+    log message stm.ALWAYS "Ended at simulation time of {:d}ns" TestCaseSimulatedEndTime lb>TestToCall
+    equ TestCaseSimulatedDurationTime TestCaseSimulatedEndTime
+    sub TestCaseSimulatedDurationTime TestCaseSimulatedStartTime
+    
+    lines insert message TestCaseLines TestCaseAssertionsInsertionPoint ' assertions="{:d}"' stm.StandardTestVerifyAssertionsCountResult
+    add TestCasePropertiesInsertionPoint 1
+    lines append message TestCaseLines '</testcase>'
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '</properties>'
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedDuration" value="{:d}"/>' TestCaseSimulatedDurationTime
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedEndTime" value="{:d}"/>' TestCaseSimulatedEndTime
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<property name="SimulatedStartTime" value="{:d}"/>' TestCaseSimulatedStartTime
+    lines insert message TestCaseLines TestCasePropertiesInsertionPoint '<properties>'
+    -- file last modified time is test case end real time
+
+    if TestSuiteHasIndex = 1
+        if TestCaseHasIndex = 1
+            file TestCaseIndexedSuiteIndexedFile "../../SimulationResults/{@c2}_{:d}_{:s}_{:d}.xml" stm.TestSuiteIndex lb>TestToCall TestCaseIndex
+            file append TestCaseIndexedSuiteIndexedFile TestCaseLines
+            log message stm.ALWAYS "**********END*TESTCASE*{@c2}_{:d}_{:s}_{:d}**********" stm.TestSuiteIndex lb>TestToCall TestCaseIndex
+        else
+            file TestSuiteIndexedFile "../../SimulationResults/{@c2}_{:d}_{:s}.xml" stm.TestSuiteIndex lb>TestToCall
+            file append TestSuiteIndexedFile TestCaseLines
+            log message stm.ALWAYS "**********END*TESTCASE*{@c2}_{:d}_{:s}**********" stm.TestSuiteIndex lb>TestToCall
+        end if
+     else
+        if TestCaseHasIndex = 1
+            file TestCaseIndexedFile "../../SimulationResults/{@c2}_{:s}_{:d}.xml" lb>TestToCall TestCaseIndex
+            file append TestCaseIndexedFile TestCaseLines
+            log message stm.ALWAYS "**********END*TESTCASE*{@c2}_{:s}_{:d}**********" lb>TestToCall TestCaseIndex
+        else
+            file TestCaseFile "../../SimulationResults/{@c2}_{:s}.xml" lb>TestToCall
+            file append TestCaseFile TestCaseLines
+            log message stm.ALWAYS "**********END*TESTCASE*{@c2}_{:s}**********" lb>TestToCall
+        end if
+     end if
+end proc
+
+proc skipTestCase ()
+    lines append message TestCaseLines "<skipped message=\""
+    lines append message TestCaseLines "\"/>"
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+
+proc errorTestCase ()
+    lines append message TestCaseLines "<error message=\""
+    lines append message TestCaseLines "\"/>"
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+proc failureTestCase ()
+    lines append message TestCaseLines "<failure message=\""
+    lines append message TestCaseLines "\"/>"
+    lines size TestCaseLines TestCaseLinesPosition
+    equ TestCasePropertiesInsertionPoint TestCaseLinesPosition
+end proc
+
+proc testTemplate ()
+    call stm.startStandardTestShell ()
+    log message 0 "testTemplate shall never be called directly, it shall be overridden in any case"
+    call stm.endStandardTestShell ()
+end proc
+
+proc testCase (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCase (
+        label pointer copy TestToCall TestToCall
+    )
+    if skipped = 0 
+        call label TestToCall ()
+    end if
+    call endTestCase (
+        label pointer copy TestToCall TestToCall 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithCaseIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCaseIndexed (
+        label pointer copy TestToCall TestToCall
+    )
+    if skipped = 0 
+        call label TestToCall ()
+    end if
+    call endTestCase (
+        label pointer copy TestToCall TestToCall 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithSuiteIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestCaseSuiteIndexed (
+        label pointer copy TestToCall TestToCall
+    )
+    if skipped = 0 
+        call label TestToCall ()
+    end if
+    call endTestCase (
+        label pointer copy TestToCall TestToCall 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+proc testCaseWithSuiteAndCaseIndex (
+    label TestToCall testTemplate
+    var skipped 0
+)
+    call beginTestSuiteIndexedAndCaseIndexed (
+        label pointer copy TestToCall TestToCall
+    )
+    if skipped = 0 
+        call label TestToCall ()
+    end if
+    call endTestCase (
+        label pointer copy TestToCall TestToCall 
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+end namespace

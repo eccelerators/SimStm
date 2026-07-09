@@ -1,28 +1,31 @@
-include "Common/CommonLabs.stm"
+include "../../lib/base.stm"
+include "Common/common.stm"
 include "TestLabs/TestLabBasicAbort.stm"
 
 include "Basic/basic_labs.stm"
+
+namespace SimStmTest
 
 file simulation_success "simulation.success"
 lines success_lines
 
  proc testMainLabBasicAbort ()
 
-    call initBase ()
+    
 
-    verbosity INFO_2
+    verbosity stm.INFO_2
     trace 0
     resume 1
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
-    log message INFO "Main test started"
+    call initDut()
+    log message stm.INFO "Main test started"
 
     call testLabBasicAbort ()
 
-    log message INFO "Main test finished"
+    log message stm.INFO "Main test finished"
     wait 1000
     lines append message success_lines "SUCCESS"
     file write simulation_success success_lines
     finish
 end proc
+
+end namespace

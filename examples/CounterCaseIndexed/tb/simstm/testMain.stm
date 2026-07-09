@@ -1,0 +1,43 @@
+include "common/common.stm"
+
+namespace CounterCaseIndexed
+
+    lines success_lines
+    file simulation_success "simulation.success"
+
+    proc testMain ()
+        var trc stm.TRACE_OFF          
+        -- or trc stm.TRACE_EXECUTED_LINES 
+        -- or trc stm.TRACE_STACK  
+        trace trc  
+                
+        log message stm.INFO "Main test started"
+
+--        equ stm.TestCaseIndex 1
+--        call testCountUp ()
+--        
+--        equ stm.TestCaseIndex 3
+--        call testCountUp ()
+        
+        call emuTestSuite ()
+        
+        log message stm.INFO "Main test finished"
+        wait 1000
+        lines append message success_lines "SUCCESS"
+        log lines stm.INFO success_lines
+        file write simulation_success success_lines
+        wait 1000
+        finish
+    end proc
+    
+    proc emuTestSuite ()
+        equ stm.TestCaseIndex 0
+        loop 5
+            call stm.testCaseWithCaseIndex (
+                label set TestToCall testCountUp
+            )
+            add stm.TestCaseIndex 1
+        end loop    
+    end proc
+
+end namespace

@@ -13,14 +13,15 @@
     <!-- <property name="python-executable" value="/bin/python38"/> -->
     <import file="build-local-overrides.xml" optional="true"/>
 
-	<import file="ant/build-html.xml" optional="false"/>
+	<import file="docs/build-html.xml" optional="false"/>
 	<import file="helper/build-helper.xml" optional="true"/>
 	<import file="simulation/modelsim/build-modelsim.xml" optional="true"/>
 	<import file="simulation/ghdl/build-ghdl.xml" optional="true"/>
+	<import file="simulation/ghdl/build-ghdl-docker.xml" optional="true"/>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	  <classpath>
-	    <pathelement location="${basedir}/ant/ant-contrib-0.6.jar"/>
+	    <pathelement location="${basedir}/helper/ant-contrib-0.6.jar"/>
 	  </classpath>
 	</taskdef>
 	

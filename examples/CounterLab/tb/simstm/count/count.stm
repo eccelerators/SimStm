@@ -1,0 +1,35 @@
+include "../common/common.stm"
+
+namespace CounterLab
+
+proc testCountUp ()
+    var expextedCount 0
+    
+    call stm.startStandardTestShell ()
+    call initDut ()    
+    signal verify sigInCount expextedCount 0xFF
+    loop 4
+        call countUp ()    
+        add expextedCount 1  
+        signal verify sigInCount expextedCount 0xFF
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+proc testCountDown ()
+    var expextedCount 0
+    
+    call stm.startStandardTestShell ()
+    call initDut ()    
+    signal verify sigInCount expextedCount 0xFF
+    loop 4
+        call countDown ()    
+        sub expextedCount 1  
+        signal verify sigInCount expextedCount 0xFF
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

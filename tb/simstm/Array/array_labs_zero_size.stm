@@ -1,12 +1,18 @@
+namespace SimStmTest
+
 array array_name_zsz 0
 var var_name_zsz 10
 
-testArrayZeroSize:
-proc
-    call startStandardTestShell ()
 
-    array size array_name_zsz var_name_zsz
-    var verify var_name_zsz 0 MAX
-
-    call endStandardTestShell ()
+proc testArrayZeroSize ()
+    call stm.startStandardTestShell ()
+    call unitArrayZeroSize ()
+    call stm.endStandardTestShell ()
 end proc
+
+proc unitArrayZeroSize ()
+    array size array_name_zsz var_name_zsz
+    var verify var_name_zsz 0 stm.MAX
+end proc
+
+end namespace

@@ -1,44 +1,52 @@
+namespace SimStmTest
+
 var test_variable_scope_add_1 5
 var test_variable_scope_add_2 6
 
 proc testVariableLocalOverride ()
 
+    call stm.startStandardTestShell ()
+    call unitVariableLocalOverride ()
+    call stm.endStandardTestShell ()
+
+end proc
+
+proc unitVariableLocalOverride ()
+
 	var test_variable_scope_add_1 1
 	var test_variable_scope_add_2 2
 
-    call startStandardTestShell ()
-    
     call checkVariableScopeGlobal ()
 
-    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
-    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
+    log message stm.INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message stm.INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
 
     add test_variable_scope_add_1 10
     add test_variable_scope_add_2 20
 
-    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
-    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
-    var verify test_variable_scope_add_1 11 MAX
-    var verify test_variable_scope_add_2 22 MAX
+    log message stm.INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message stm.INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 11 stm.MAX
+    var verify test_variable_scope_add_2 22 stm.MAX
 
     add test_variable_scope_add_1 12345
     add test_variable_scope_add_2 88
 
-    log message INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
-    log message INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
-    var verify test_variable_scope_add_1 12356 MAX
-    var verify test_variable_scope_add_2 110 MAX
+    log message stm.INFO_2 "test_variable_scope_add_1 local: {:d}" test_variable_scope_add_1
+    log message stm.INFO_2 "test_variable_scope_add_2 local: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 12356 stm.MAX
+    var verify test_variable_scope_add_2 110 stm.MAX
     
     call checkVariableScopeGlobal ()
-
-    call endStandardTestShell ()
 
 end proc
 
 proc checkVariableScopeGlobal ()
 
-    log message INFO_2 "test_variable_scope_add_1 global: {:d}" test_variable_scope_add_1
-    log message INFO_2 "test_variable_scope_add_2 global: {:d}" test_variable_scope_add_2
-    var verify test_variable_scope_add_1 5 MAX
-    var verify test_variable_scope_add_2 6 MAX
+    log message stm.INFO_2 "test_variable_scope_add_1 global: {:d}" test_variable_scope_add_1
+    log message stm.INFO_2 "test_variable_scope_add_2 global: {:d}" test_variable_scope_add_2
+    var verify test_variable_scope_add_1 5 stm.MAX
+    var verify test_variable_scope_add_2 6 stm.MAX
 end proc
+
+end namespace

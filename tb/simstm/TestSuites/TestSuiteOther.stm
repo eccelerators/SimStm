@@ -1,123 +1,48 @@
+include "../Other/other.stm"
+
+namespace SimStmTest
 
 proc testSuiteOther ()
-    call testCaseOtherRandom ()
-    call testCaseOtherSeed ()
-    call testCaseOtherTrace ()
-    call testCaseOtherMarker ()
-    call testCaseOtherWait ()
-    call testCaseOtherLogSubstitutions ()
-    call testCaseOtherLogFormats ()
-    call testCaseOtherLog ()
-    call testCaseOtherHelloWorld ()
-    call testCaseOtherCall ()
-end proc
 
-proc testCaseOtherRandom (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherRandom ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+    	label set TestToCall testOtherRandom
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherSeed
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherTrace
+    )
+    
+    call stm.testCase (
+    	label set TestToCall testOtherMarker
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherWait
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherLogSubstitutions
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherLogFormats
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherLog
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherHelloWorld
+    )
+
+    call stm.testCase (
+    	label set TestToCall testOtherCall
     )
 end proc
 
-proc testCaseOtherSeed (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherSeed ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherTrace (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherTrace ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherMarker (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherMarker ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherWait (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherWait ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherLogSubstitutions (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLogSubstitutions ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherLogFormats (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLogFormats ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherLog (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherLog ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherHelloWorld (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherHelloWorld ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseOtherCall (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testOtherHelloWorld ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
+end namespace

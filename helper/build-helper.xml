@@ -38,6 +38,18 @@
 			<arg value="simulation/ghdl" />
 		</exec>
 	</target>
+	
+    <target name="_helper-generate-ghdl-docker-ant-build-xml" description="generate ant build file for ghdl axi4lite case">
+        <delete dir="simulation/ghdl"/>
+        <mkdir dir="simulation/ghdl"/>
+        <exec executable="${python-executable}">
+            <arg value="helper/generate-ghdl-docker-ant-build-xml.py" />
+            <arg value="--infile" />
+            <arg value="setup.py" />
+            <arg value="--outdir_simulation_subdir" />
+            <arg value="simulation/ghdl" />
+        </exec>
+    </target>
 
 	<target name="_helper-generate-proposal-for-setup-py" description="generate a proposal for setup.py">
 	    <delete dir="setup_proposal.py"/>
@@ -52,10 +64,4 @@
 		</exec>
 	</target>
 	
-	<target name="_helper-run-junit-sample-transformation" description="run junit sample transformation">
-		<xslt in="helper/junit-support/xml/testSuitesSimulation-Corrected.xml" out="helper/junit-support/html/testSuitesSimulation-Corrected.html"
-		      style="helper/junit-support/styles/junit-frames.xsl">
-		</xslt>
-	</target>
-
 </project>

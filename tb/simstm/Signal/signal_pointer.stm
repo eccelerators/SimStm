@@ -1,203 +1,128 @@
+include "../Common/interface.stm"
 
-var val_signal_pointer_read_back 0xffff
-signal a_in_signal_pointer 0
-signal b_in_signal_pointer 0
-signal a_out_signal_pointer 0
-signal b_out_signal_pointer 0
+namespace SimStmTest
 
 proc testSignalPointerCopy ()
-
-    call startStandardTestShell ()
-
-    signal pointer copy a_in_signal_pointer in_signal_2000
-    signal pointer copy b_in_signal_pointer in_signal_2001
-    signal pointer copy in_signal_2001 a_in_signal_pointer
-    signal pointer copy in_signal_2000 b_in_signal_pointer
-
-    signal pointer copy a_out_signal_pointer out_signal_3000
-    signal pointer copy b_out_signal_pointer out_signal_3001
-    signal pointer copy out_signal_3001 a_out_signal_pointer
-    signal pointer copy out_signal_3000 b_out_signal_pointer
-
-    signal write out_signal_3001 0
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3001 1
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3001 0xffff
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 MAX
-
-    signal write out_signal_3000 0
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3000 1
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3000 0xffff
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0xff MAX
-
-    signal pointer copy in_signal_2000 a_in_signal_pointer
-    signal pointer copy in_signal_2001 b_in_signal_pointer
-
-    signal pointer copy out_signal_3000 a_out_signal_pointer
-    signal pointer copy out_signal_3001 b_out_signal_pointer
-
-    signal write out_signal_3000 0
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3000 1
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3000 0xffff
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 MAX
-
-    signal write out_signal_3001 0
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3001 1
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3001 0xffff
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0xff MAX
-
-    call endStandardTestShell ()
-
+    call stm.startStandardTestShell ()
+    call unitSignalPointerCopy ()
+    call stm.endStandardTestShell ()    
 end proc
 
-var a_in_signal_pointer_value_absolut 0
-var b_in_signal_pointer_value_absolut 0
-var a_out_signal_pointer_value_absolut 0
-var b_out_signal_pointer_value_absolut 0
+proc unitSignalPointerCopy ()
+    var read_back 0x12345678
+    signal copy_dest_1bit        0
+    signal copy_dest_32bit       0
+    signal copy_dest_cross       0
 
-proc testSignalPointerGetSet ()
+    signal pointer copy copy_dest_1bit   loopback_1bit
+    signal write        loopback_1bit    0
+    wait 1000
+    signal read         copy_dest_1bit   read_back
+    var    verify       read_back        0          0xffffffff
+    signal verify       copy_dest_1bit   0          0x1
 
-    call startStandardTestShell ()
+    signal write        loopback_1bit    0x87654321
+    wait 1000
+    signal read         copy_dest_1bit   read_back
+    var    verify       read_back        0x1        0xffffffff
+    signal verify       copy_dest_1bit   1          0x1
 
-    signal pointer get in_signal_2000 a_in_signal_pointer_value_absolut
-    signal pointer get in_signal_2001 b_in_signal_pointer_value_absolut
-    signal pointer set in_signal_2000 b_in_signal_pointer_value_absolut
-    signal pointer set in_signal_2001 a_in_signal_pointer_value_absolut
+    signal pointer copy copy_dest_32bit  loopback_32bit
+    signal write        loopback_32bit   0
+    wait 1000
+    signal read         copy_dest_32bit  read_back
+    var    verify       read_back        0          0xffffffff
+    signal verify       copy_dest_32bit  0          0xffffffff
 
-    signal pointer get out_signal_3000 a_out_signal_pointer_value_absolut
-    signal pointer get out_signal_3001 b_out_signal_pointer_value_absolut
-    signal pointer set out_signal_3000 b_out_signal_pointer_value_absolut
-    signal pointer set out_signal_3001 a_out_signal_pointer_value_absolut
+    signal write        loopback_32bit   0x87654321
+    wait 1000
+    signal read         copy_dest_32bit  read_back
+    var    verify       read_back        0x87654321 0xffffffff
+    signal verify       copy_dest_32bit  0x87654321 0xffffffff
+    signal verify       copy_dest_32bit  0x82204101 0xaaaa5555
 
-    signal write out_signal_3001 0
-    signal read in_signal_2001 val_signal_pointer_read_back
+    signal pointer copy copy_dest_cross  loopback_16bit_cross
+    signal write        loopback_16bit_cross 0xffffffff
+    wait 1000
+    signal read         copy_dest_cross  read_back
+    var    verify       read_back        0xffff     0xffffffff
+    signal verify       copy_dest_cross  0xffff     0xffffffff
+    signal verify       copy_dest_cross  0x0000     0xffff0000
 
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3001 1
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3001 0xffff
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 MAX
-
-    signal write out_signal_3000 0
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3000 1
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3000 0xffff
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0xff MAX
-
-    signal pointer set in_signal_2000 a_in_signal_pointer_value_absolut
-    signal pointer set in_signal_2001 b_in_signal_pointer_value_absolut
-
-    signal pointer set out_signal_3000 a_out_signal_pointer_value_absolut
-    signal pointer set out_signal_3001 b_out_signal_pointer_value_absolut
-
-    signal write out_signal_3000 0
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3000 1
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3000 0xffff
-    signal read in_signal_2000 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2000 val_signal_pointer_read_back 1 MAX
-
-    signal write out_signal_3001 0
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0 1
-
-    signal write out_signal_3001 1
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 1 MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 1 1
-
-    signal write out_signal_3001 0xffff
-    signal read in_signal_2001 val_signal_pointer_read_back
-
-    var verify val_signal_pointer_read_back 0xff MAX
-    signal verify in_signal_2001 val_signal_pointer_read_back 0xff MAX
-
-    call endStandardTestShell ()
-
+    signal write        loopback_16bit_cross 0x87654321
+    wait 1000
+    signal read         copy_dest_cross  read_back
+    var    verify       read_back        0x84C2     0xffffffff
+    signal verify       copy_dest_cross  0x84C2     0xffffffff
+    signal verify       copy_dest_cross  0x8040     0xaa55
 end proc
+
+
+proc testSignalPointerGet ()
+    var ptr_1bit  0
+    var ptr_32bit 0
+    var ptr_cross 0
+
+    signal pointer get loopback_1bit         ptr_1bit
+    signal pointer get loopback_32bit        ptr_32bit
+    signal pointer get loopback_16bit_cross  ptr_cross
+
+    var    verify      ptr_1bit              11000      0xffffffff
+    var    verify      ptr_32bit             11001      0xffffffff
+    var    verify      ptr_cross             11002      0xffffffff
+end proc
+
+
+proc testSignalPointerSet ()
+    var read_back 0x12345678
+    signal set_dest_1bit         0
+    signal set_dest_32bit        0
+    signal set_dest_cross        0
+
+    signal pointer set set_dest_1bit         11000
+    signal write       set_dest_1bit         0
+    wait 1000
+    signal read        set_dest_1bit         read_back
+    var    verify      read_back             0          0xffffffff
+    signal verify      set_dest_1bit         0          0xffffffff
+    signal verify      set_dest_1bit         0          0x1
+
+    signal write       set_dest_1bit         0x87654321
+    wait 1000
+    signal read        set_dest_1bit         read_back
+    var    verify      read_back             0x1        0xffffffff
+    signal verify      set_dest_1bit         1          0xffffffff
+    signal verify      set_dest_1bit         1          0x1
+
+    signal pointer set set_dest_32bit        11001
+    signal write       set_dest_32bit        0
+    wait 1000
+    signal read        set_dest_32bit        read_back
+    var    verify      read_back             0          0xffffffff
+    signal verify      set_dest_32bit        0          0xffffffff
+    signal verify      set_dest_32bit        0xfffffffe 0x1
+
+    signal write       set_dest_32bit        0x87654321
+    wait 1000
+    signal read        set_dest_32bit        read_back
+    var    verify      read_back             0x87654321 0xffffffff
+    signal verify      set_dest_32bit        0x87654321 0xffffffff
+    signal verify      set_dest_32bit        0x82204101 0xaaaa5555
+
+    signal pointer set set_dest_cross        11002
+    signal write       set_dest_cross        0xffffffff
+    wait 1000
+    signal read        set_dest_cross        read_back
+    var    verify      read_back             0xffff     0xffffffff
+    signal verify      set_dest_cross        0xffff     0xffffffff
+    signal verify      set_dest_cross        0x0000     0xffff0000
+
+    signal write       set_dest_cross        0x87654321
+    wait 1000
+    signal read        set_dest_cross        read_back
+    var    verify      read_back             0x84C2     0xffffffff
+    signal verify      set_dest_cross        0x84C2     0xffffffff
+    signal verify      set_dest_cross        0x8040     0xaa55
+end proc
+
+end namespace

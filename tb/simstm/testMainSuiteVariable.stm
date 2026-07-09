@@ -1,4 +1,7 @@
-include "Common/Common.stm"
+include "../../lib/base.stm"
+include "../../lib/testcase.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
 
 include "Variable/variable.stm"
 include "Variable/variable_local.stm"
@@ -8,22 +11,22 @@ include "Variable/variable_local_override.stm"
 include "Variable/variable_default_value.stm"
 
 include "TestSuites/TestSuiteVariable.stm"
-
+namespace SimStmTest
 proc testMainSuiteVariable ()
 
-    call initBase ()
+    
 
-    verbosity INFO_2
-    trace TRACE_OFF
-    resume RESUME_ON_ALL_ERRORS
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
-    log message INFO "Main test suite Variable started"
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_FAILURES
+    call initDut()
+    log message stm.INFO "Main test suite Variable started"
 
     call testSuiteVariable ()
 
-    log message INFO "Main test suite Variable ended"
+    log message stm.INFO "Main test suite Variable ended"
     wait 1000
     finish
 end proc
+
+end namespace

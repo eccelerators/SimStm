@@ -1,0 +1,10 @@
+include "../namespace/namespace.stm"
+
+namespace SimStmTest
+
+proc unitsNamespace ()
+    call unitNamespaceTwoDifferentOnes ()
+    call unitNamespaceLocalAndGlobal ()
+end proc
+
+end namespace

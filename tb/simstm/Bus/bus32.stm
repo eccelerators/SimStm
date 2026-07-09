@@ -1,136 +1,160 @@
+namespace SimStmTest
 
 proc testBus32 (
 	bus busToTest 0
 )
-    var r 0   
-    
-    call startStandardTestShell ()
-    wait 1000
+    call stm.startStandardTestShell ()
+    call unitBus32 (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitBus32 (
+	bus busToTest 0
+)
+    var r 0   
+    wait 1000
     bus write busToTest 32 0 0x55555555
     bus write busToTest 32 4 0xaaaaaaaa
     bus write busToTest 32 8 0xffffffff
-    bus verify busToTest 32 0 r 0x55555555 0x55555555
-    bus verify busToTest 32 4 r 0xaaaaaaaa 0xaaaaaaaa
-    bus verify busToTest 32 8 r 0xffffffff 0xffffffff
-
+    bus verify busToTest 32 0 0x55555555 0x55555555
+    bus verify busToTest 32 4 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 0xffffffff 0xffffffff
     wait 1000
     bus write busToTest 32 0 0x0
     bus write busToTest  8 0 0x12
     bus write busToTest  8 1 0x34
     bus write busToTest  8 2 0x56
     bus write busToTest  8 3 0x78
-    bus verify busToTest 8 0 r 0x12 0xff
-    bus verify busToTest 8 1 r 0x34 0xff
-    bus verify busToTest 8 2 r 0x56 0xff
-    bus verify busToTest 8 3 r 0x78 0xff
-    bus verify busToTest 32 0 r 0x78563412 0xffffffff
-
+    bus verify busToTest 8 0 0x12 0xff
+    bus verify busToTest 8 1 0x34 0xff
+    bus verify busToTest 8 2 0x56 0xff
+    bus verify busToTest 8 3 0x78 0xff
+    bus verify busToTest 32 0 0x78563412 0xffffffff
     wait 1000
     bus write busToTest  32 0 0x0
     bus write busToTest  16 0 0x1234
     bus write busToTest  16 2 0x4567
-    bus verify busToTest 16 0 r 0x1234 0xffff
-    bus verify busToTest 16 2 r 0x4567 0xffff
-    bus verify busToTest 32 0 r 0x45671234 0xffffffff
+    bus verify busToTest 16 0 0x1234 0xffff
+    bus verify busToTest 16 2 0x4567 0xffff
+    bus verify busToTest 32 0 0x45671234 0xffffffff
     bus write busToTest  32 4 0x0
     bus write busToTest  16 5 0x1234
-    bus verify busToTest 16 5 r 0x1234 0xffff
-    bus verify busToTest 32 4 r 0x00123400 0xffffffff
-
+    bus verify busToTest 16 5 0x1234 0xffff
+    bus verify busToTest 32 4 0x00123400 0xffffffff
     wait 1000
     bus write busToTest  32 0 0x80000000
-    bus verify busToTest 32 0 r 0x80000000 0x00000000
-    bus verify busToTest 32 0 r 0x00000000 0x00000000
-    bus verify busToTest 32 0 r 0x80000000 0x80000000
-    bus verify busToTest 32 0 r 0x80000000 0xffffffff
-
+    bus verify busToTest 32 0 0x80000000 0x00000000
+    bus verify busToTest 32 0 0x00000000 0x00000000
+    bus verify busToTest 32 0 0x80000000 0x80000000
+    bus verify busToTest 32 0 0x80000000 0xffffffff
     wait 100
     bus write busToTest  32 0 0x00000000
-    bus verify busToTest 32 0 r 0x80000000 0x00000000
-    bus verify busToTest 32 0 r 0x00000000 0x00000000
-    bus verify busToTest 32 0 r 0x00000000 0x80000000
-    bus verify busToTest 32 0 r 0x00000000 0xffffffff
-
-    call endStandardTestShell ()
+    bus verify busToTest 32 0 0x80000000 0x00000000
+    bus verify busToTest 32 0 0x00000000 0x00000000
+    bus verify busToTest 32 0 0x00000000 0x80000000
+    bus verify busToTest 32 0 0x00000000 0xffffffff
 end proc
 
 proc testBus32VerifySuccess (
 	bus busToTest 0
 )
+    call stm.startStandardTestShell ()
+    call unitBus32VerifySuccess (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBus32VerifySuccess (
+	bus busToTest 0
+)
     var r 0
-    
-    call startStandardTestShell ()
     wait 1000
     bus write busToTest  32 0 0x55555555
     bus write busToTest  32 4 0xaaaaaaaa
     bus write busToTest  32 8 0xffffffff
-
-    bus verify busToTest 32 0 r 0x55555555 0xffffffff
-    bus verify busToTest 32 4 r 0xaaaaaaaa 0xaaaaaaaa
-    bus verify busToTest 32 8 r 0x00000000 0x00000000
-
-    call endStandardTestShell ()
+    bus verify busToTest 32 0 0x55555555 0xffffffff
+    bus verify busToTest 32 4 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 0x00000000 0x00000000
 end proc
 
 proc testBus32VerifyFail (
 	bus busToTest 0
 )
-    var r 0
+    call stm.startStandardTestShell ()
+    call unitBus32VerifyFail (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus32VerifyFail (
+	bus busToTest 0
+)
+    var r 0
     wait 1000
     bus write busToTest 32 0 0x55555555
     bus write busToTest 32 4 0xaaaaaaaa
     bus write busToTest 32 8 0xffffffff
-    bus verify busToTest 32 0 r 0x55555555 0xffffffff
-    bus verify busToTest 32 4 r 0xaaaaaaaa 0xaaaaaaaa
-    bus verify busToTest 32 8 r 0x00000000 0x00000000
-    log message ALWAYS "bus verify intended error on no match"
-    bus verify busToTest 32 0 r 0x00000000 0xffffffff
-    call incExpectedStandardTestVerifyFailureCount ()
-
-    call endStandardTestShell ()
+    bus verify busToTest 32 0 0x55555555 0xffffffff
+    bus verify busToTest 32 4 0xaaaaaaaa 0xaaaaaaaa
+    bus verify busToTest 32 8 0x00000000 0x00000000
+    log message stm.ALWAYS "bus verify intended error on no match"
+    bus verify busToTest 32 0 0x00000000 0xffffffff
+    call stm.addExpectedStandardTestVerifyFailureCount ()
 end proc
-
 
 proc testBus32TimeOutRead (
 	bus busToTest 0
 )
-    var r 0
+    call stm.startStandardTestShell ()
+    call unitBus32TimeOutRead (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus32TimeOutRead (
+	bus busToTest 0
+)
+    var r 0
     wait 1000
     bus write busToTest 32 0 0x55555555
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus read busToTest 32 0 r
-    call incExpectedStandardTestBusTimeoutFailureCount ()
-
+    call stm.addExpectedStandardTestBusTimeoutFailureCount ()
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
-
-    call endStandardTestShell ()
+    var verify r 1000000000 stm.MAX
 end proc
 
 proc testBus32TimeOutWrite (
 	bus busToTest 0
 )
-    var r 0
+    call stm.startStandardTestShell ()
+    call unitBus32TimeOutWrite (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus32TimeOutWrite (
+	bus busToTest 0
+)
+    var r 0
     wait 1000
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus write busToTest 32 0 0x55555555
-    call incExpectedStandardTestBusTimeoutFailureCount ()
-
+    call stm.addExpectedStandardTestBusTimeoutFailureCount ()
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
-
-    call endStandardTestShell ()
+    var verify r 1000000000 stm.MAX
 end proc
+
+end namespace

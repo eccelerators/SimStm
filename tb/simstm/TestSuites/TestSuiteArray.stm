@@ -1,148 +1,67 @@
+include "../Array/array.stm"
+include "../Array/array_default_value.stm"
+include "../Array/array_labs.stm"
+include "../Array/array_labs_zero_size.stm"
+include "../Array/array_local.stm"
+include "../Array/array_local_override.stm"
+include "../Array/array_parameter.stm"
+include "../Array/array_pointer.stm"
+include "../Array/array_size.stm"
+
+namespace SimStmTest
+
 proc testSuiteArray ()
 
-    call testCaseArray ()
+    call stm.testCase (
+    	label set TestToCall testArray
+    )
     
---    call testCase (
---    	label equ Test testArray
---    )
-    call testCaseArrayGet ()
-    call testCaseArraySet ()
-    call testCaseArraySize ()
-    call testCaseArrayPointerCopy ()
-    call testCaseArrayParameterIn ()
-    call testCaseArrayParameterOut ()
-    call testCaseArrayLocal ()
-    call testCaseArrayLocalOverride ()
-    call testCaseArrayDefaultValue ()
-end proc
-
---proc NULL ()
---end proc
---
---proc testCase (
---	label Test NULL
---	var skipped 0
---)
---    call beginTestCase ()
---    call label Test ()
---    call endTestCase ( 
---    	equ  skipped skipped
---    	equ failure StandardTestFailure
---    )
---end proc
-
-proc testCaseArrayDefaultValue (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayDefaultValue ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+        label set TestToCall testArrayGet
     )
-end proc
-
-
-proc testCaseArrayLocalOverride (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayLocalOverride ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call stm.testCase (
+    	label set TestToCall testArraySet
     )
-end proc
-
-proc testCaseArrayLocal (
-	var skipped 0
-)
-    call beginTestCase ()
-	call testArrayParameterIn ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call stm.testCase (
+        label set TestToCall testArrayDefaultValue
     )
-end proc
-
-proc testCaseArrayParameterIn (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayParameterIn ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call stm.testCase (
+        label set TestToCall testArrayLocal
     )
-end proc
-
-proc testCaseArrayParameterOut (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayParameterOut ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    
+    call stm.testCase (
+        label set TestToCall testArrayLocalOverride
     )
-end proc
 
-
-proc testCaseArray (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArray ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+        label set TestToCall testArrayParameterIn
     )
-end proc
 
-
-proc testCaseArrayGet (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayGet ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+        label set TestToCall testArrayParameterOut
     )
-end proc
 
-
-proc testCaseArraySet (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArraySet ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+        label set TestToCall testArrayPointerCopy
     )
-end proc
 
-
-proc testCaseArraySize (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArraySize ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+    call stm.testCase (
+    	label set TestToCall testArraySize
     )
-end proc
 
 
-proc testCaseArrayPointerCopy (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testArrayPointerCopy
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
+
+
+
+
+
+
+
+
+
 end proc
+
+end namespace

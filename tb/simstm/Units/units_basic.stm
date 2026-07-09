@@ -1,0 +1,29 @@
+include "../Basic/basic.stm"
+include "../Basic/basic_labs.stm"
+include "../Basic/basic_labs_double_const.stm"
+include "../Basic/basic_labs_double_var.stm"
+
+namespace SimStmTest
+
+proc unitsBasic ()
+    call testBasicConst ()
+    call testBasicVar ()
+    call testBasicVar3 ()
+    call testBasicLoop ()
+    call testBasicNestedIfElseElsif ()
+    call testBasicIfElseElsif ()
+end proc
+proc unitsBasicLabs ()
+    call testBasicAbort ()
+    call testBasicFinish ()
+    call testBasicIncludeFlat ()
+    call testBasicIncludeNested ()
+end proc
+proc unitsBasicLabsDoubleConst ()
+    call testBasicDoubleConst ()
+end proc
+proc unitsBasicLabsDoubleVar ()
+    call testBasicDoubleVar ()
+end proc
+
+end namespace

@@ -1,0 +1,45 @@
+include "../Array/array.stm"
+include "../Array/array_default_value.stm"
+include "../Array/array_labs.stm"
+include "../Array/array_labs_zero_size.stm"
+include "../Array/array_local.stm"
+include "../Array/array_local_override.stm"
+include "../Array/array_parameter.stm"
+include "../Array/array_pointer.stm"
+include "../Array/array_size.stm"
+
+namespace SimStmTest
+
+proc unitsArray ()
+    call testArray ()
+    call testArrayGet ()
+    call testArraySet ()
+end proc
+proc unitsArrayDefaultValue ()
+    call testArrayDefaultValue ()
+end proc
+proc unitsArrayLabs ()
+    call testArrayGetOutPos ()
+    call testArraySetOutPos ()
+end proc
+proc unitsArrayLabsZeroSize ()
+    call testArrayZeroSize ()
+end proc
+proc unitsArrayLocal ()
+    call testArrayLocal ()
+end proc
+proc unitsArrayLocalOverride ()
+    call testArrayLocalOverride ()
+end proc
+proc unitsArrayParameter ()
+    call testArrayParameterIn ()
+    call testArrayParameterOut ()
+end proc
+proc unitsArrayPointer ()
+    call testArrayPointerCopy ()
+end proc
+proc unitsArraySize ()
+    call testArraySize ()
+end proc
+
+end namespace

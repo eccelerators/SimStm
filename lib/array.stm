@@ -1,0 +1,750 @@
+-------------------------------------------------------------------------------
+-- 
+--                   /------o
+--             eccelerators
+--          o------/
+-- 
+-- Copyright: 
+--   Eccelerators
+-- 
+-- Description:
+--   Array procedures for SimStm.
+-- 
+-- SPDX-License-Identifier: Apache-2.0
+-------------------------------------------------------------------------------
+namespace stm
+
+proc arrayFill (
+	array Array 1
+	var Fill 0
+	var FillIncrement 0	
+	var FillMaximum 0	
+)
+	var i 0
+	var s 0
+	var v 0
+
+    equ i 0
+    equ v Fill   
+    array size Array s
+    loop s
+        array set Array i v
+        add v FillIncrement
+        if v > FillMaximum
+        	equ v 0
+        end if
+        add i 1    
+    end loop        
+end proc
+
+proc arrayFillSlice (
+	array Array 1
+	var Fill 0
+	var FillIncrement 0	
+	var FillMaximum 0
+	var StartIndex 0
+	var Count 0	
+)
+	var i 0
+	var s 0
+	var v 0
+
+    equ i StartIndex
+    equ v Fill
+    loop Count
+        array set Array i v
+        add v FillIncrement
+        if v > FillMaximum
+        	equ v 0
+        end if
+        add i 1    
+    end loop        
+end proc
+
+proc arrayCompare (
+	array Array0 1
+	array Array1 1
+	var Verbosity 20
+	var Equality 0
+)
+	var i 0
+	var s0 0
+	var s1 0
+	var v0 0
+	var v1 0
+
+    equ i 0
+    equ Equality 1
+    array size Array0 s0
+    array size Array1 s1
+    if s0 != s1
+    	log message Verbosity "arrayCompare: arrays differ in size, size0:{}, size1{}" s0 s1
+    	equ Equality 0
+	else
+	    loop s0
+	        array get Array0 i v0
+	        array get Array1 i v1
+		    if v0 != v1
+		    	log message Verbosity "arrayCompare: arrays differ at index:{}, value0:{}, value1:{}" i v0 v1
+		    	equ Equality 0
+		    end if
+	        add i 1    
+	    end loop
+    end if
+end proc
+
+proc arrayCompareSlice (
+	array Array0 1
+	array Array1 1
+	var Verbosity 20
+	var StartIndex0 0
+	var StartIndex1 0
+	var Count 0
+	var Equality 0
+)
+	var i0 0
+	var i1 0
+	var s0 0
+	var s1 0
+	var v0 0
+	var v1 0
+    equ i0 StartIndex0
+    equ i1 StartIndex1
+    equ Equality 1
+    loop Count
+        array get Array0 i0 v0
+        array get Array1 i1 v1
+	    if v0 != v1
+	    	log message Verbosity "arrayCompare: arrays differ at index0:{}, value0:{}, index1:{}, value1:{}" i0 v0 i1 v1
+	    	equ Equality 0
+	    end if
+        add i0 1
+        add i1 1    
+    end loop
+end proc
+
+proc arrayDump (
+	array Array 1
+	var Verbosity 20	
+)
+	var i 0
+	var s 0
+	var v0 0
+	var v1 0
+	var v2 0
+	var v3 0
+	var v4 0
+	var v5 0
+	var v6 0
+	var v7 0
+	var loopNumber 0
+	var remaining 0
+	var doneInLoop 0
+	
+    equ i 0
+    array size Array s 
+    equ loopNumber s
+    div loopNumber 8
+    equ doneInLoop loopNumber
+    mul doneInLoop 8
+    equ remaining s
+    sub remaining doneInLoop
+    log message Verbosity "array: dump" 
+    equ i 0
+    loop loopNumber        
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6
+        add i 1
+        array get Array i v7
+        add i 1      
+        log message Verbosity " {} {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6 v7
+    end loop  
+    if remaining > 7
+        loop loopNumber        
+            array get Array i v0
+            add i 1
+            array get Array i v1
+            add i 1
+            array get Array i v2
+            add i 1
+            array get Array i v3
+            add i 1
+            array get Array i v4
+            add i 1
+            array get Array i v5
+            add i 1
+            array get Array i v6
+            add i 1
+            array get Array i v7
+            add i 1      
+            log message Verbosity " {} {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6 v7
+        end loop  
+    end if
+    if remaining = 7
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6 
+        log message Verbosity " {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6
+    end if
+    if remaining = 6
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        log message Verbosity " {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5    
+    end if
+    if remaining = 5
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        log message Verbosity " {} {} {} {} {}" v0 v1 v2 v3 v4
+    end if    
+    if remaining = 4
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        log message Verbosity " {} {} {} {}" v0 v1 v2 v3
+    end if
+    if remaining = 3
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        log message Verbosity " {} {} {}" v0 v1 v2
+    end if
+    if remaining = 2
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        log message Verbosity " {} {}" v0 v1
+    end if
+    if remaining = 1
+        array get Array i v0
+        log message Verbosity " {}" v0
+    end if             
+end proc
+
+proc arrayDumpSlice (
+	array Array 1
+	var Verbosity 20
+	var StartIndex 0
+	var Count 0
+)
+	var i 0
+	var s 0
+	var v0 0
+	var v1 0
+	var v2 0
+	var v3 0
+	var v4 0
+	var v5 0
+	var v6 0
+	var v7 0
+	var loopNumber 0
+	var remaining 0
+	var doneInLoop 0
+	
+    equ i 0
+    array size Array s 
+    equ loopNumber Count
+    div loopNumber 8
+    equ doneInLoop loopNumber
+    mul doneInLoop 8
+    equ remaining Count
+    sub remaining doneInLoop
+    log message Verbosity "array: dump "
+    equ i StartIndex
+    loop loopNumber        
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6
+        add i 1
+        array get Array i v7
+        add i 1      
+        log message Verbosity " {} {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6 v7
+    end loop  
+    if remaining = 7
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6 
+        log message Verbosity " {} {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5 v6
+    end if
+    if remaining = 6
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        log message Verbosity " {} {} {} {} {} {}" v0 v1 v2 v3 v4 v5    
+    end if
+    if remaining = 5
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        log message Verbosity " {} {} {} {} {}" v0 v1 v2 v3 v4
+    end if    
+    if remaining = 4
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        log message Verbosity " {} {} {} {}" v0 v1 v2 v3
+    end if
+    if remaining = 3
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        log message Verbosity " {} {} {}" v0 v1 v2
+    end if
+    if remaining = 2
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        log message Verbosity " {} {}" v0 v1
+    end if
+    if remaining = 1
+        array get Array i v0
+        log message Verbosity " {}" v0
+    end if             
+end proc
+
+proc arrayDumpSliceDec (
+	array Array 1
+	var Verbosity 20
+	var StartIndex 0
+	var Count 0
+)
+	var i 0
+	var s 0
+	var v0 0
+	var v1 0
+	var v2 0
+	var v3 0
+	var v4 0
+	var v5 0
+	var v6 0
+	var v7 0
+	var loopNumber 0
+	var remaining 0
+	var doneInLoop 0
+	
+    equ i 0
+    array size Array s 
+    equ loopNumber Count
+    div loopNumber 8
+    equ doneInLoop loopNumber
+    mul doneInLoop 8
+    equ remaining Count
+    sub remaining doneInLoop
+    log message Verbosity "array: dump "
+    equ i StartIndex
+    loop loopNumber        
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6
+        add i 1
+        array get Array i v7
+        add i 1      
+        log message Verbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d} {:d}" v0 v1 v2 v3 v4 v5 v6 v7
+    end loop  
+    if remaining = 7
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6 
+        log message Verbosity " {:d} {:d} {:d} {:d} {:d} {:d} {:d}" v0 v1 v2 v3 v4 v5 v6
+    end if
+    if remaining = 6
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        log message Verbosity " {:d} {:d} {:d} {:d} {:d} {:d}" v0 v1 v2 v3 v4 v5    
+    end if
+    if remaining = 5
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        log message Verbosity " {:d} {:d} {:d} {:d} {:d}" v0 v1 v2 v3 v4
+    end if    
+    if remaining = 4
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        log message Verbosity " {:d} {:d} {:d} {:d}" v0 v1 v2 v3
+    end if
+    if remaining = 3
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        log message Verbosity " {:d} {:d} {:d}" v0 v1 v2
+    end if
+    if remaining = 2
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        log message Verbosity " {:d} {:d}" v0 v1
+    end if
+    if remaining = 1
+        array get Array i v0
+        log message Verbosity " {:d}" v0
+    end if             
+end proc
+
+proc arrayDumpSliceBin (
+	array Array 1
+	var Verbosity 20
+	var StartIndex 0
+	var Count 0
+)
+	var i 0
+	var s 0
+	var v0 0
+	var v1 0
+	var v2 0
+	var v3 0
+	var v4 0
+	var v5 0
+	var v6 0
+	var v7 0
+	var loopNumber 0
+	var remaining 0
+	var doneInLoop 0
+	
+    equ i 0
+    array size Array s 
+    equ loopNumber Count
+    div loopNumber 8
+    equ doneInLoop loopNumber
+    mul doneInLoop 8
+    equ remaining Count
+    sub remaining doneInLoop
+    log message Verbosity "array: dump "
+    equ i StartIndex
+    loop loopNumber        
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6
+        add i 1
+        array get Array i v7
+        add i 1      
+        log message Verbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b} {:b}" v0 v1 v2 v3 v4 v5 v6 v7
+    end loop  
+    if remaining = 7
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6 
+        log message Verbosity " {:b} {:b} {:b} {:b} {:b} {:b} {:b}" v0 v1 v2 v3 v4 v5 v6
+    end if
+    if remaining = 6
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        log message Verbosity " {:b} {:b} {:b} {:b} {:b} {:b}" v0 v1 v2 v3 v4 v5    
+    end if
+    if remaining = 5
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        log message Verbosity " {:b} {:b} {:b} {:b} {:b}" v0 v1 v2 v3 v4
+    end if    
+    if remaining = 4
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        log message Verbosity " {:b} {:b} {:b} {:b}" v0 v1 v2 v3
+    end if
+    if remaining = 3
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        log message Verbosity " {:b} {:b} {:b}" v0 v1 v2
+    end if
+    if remaining = 2
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        log message Verbosity " {:b} {:b}" v0 v1
+    end if
+    if remaining = 1
+        array get Array i v0
+        log message Verbosity " {:b}" v0
+    end if             
+end proc
+
+proc arrayDumpSliceOct (
+	array Array 1
+	var Verbosity 20
+	var StartIndex 0
+	var Count 0
+)
+	var i 0
+	var s 0
+	var v0 0
+	var v1 0
+	var v2 0
+	var v3 0
+	var v4 0
+	var v5 0
+	var v6 0
+	var v7 0
+	var loopNumber 0
+	var remaining 0
+	var doneInLoop 0
+	
+    equ i 0
+    array size Array s 
+    equ loopNumber Count
+    div loopNumber 8
+    equ doneInLoop loopNumber
+    mul doneInLoop 8
+    equ remaining Count
+    sub remaining doneInLoop
+    log message Verbosity "array: dump "
+    equ i StartIndex
+    loop loopNumber        
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6
+        add i 1
+        array get Array i v7
+        add i 1      
+        log message Verbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o} {:o}" v0 v1 v2 v3 v4 v5 v6 v7
+    end loop  
+    if remaining = 7
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        add i 1
+        array get Array i v6 
+        log message Verbosity " {:o} {:o} {:o} {:o} {:o} {:o} {:o}" v0 v1 v2 v3 v4 v5 v6
+    end if
+    if remaining = 6
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        add i 1
+        array get Array i v5
+        log message Verbosity " {:o} {:o} {:o} {:o} {:o} {:o}" v0 v1 v2 v3 v4 v5    
+    end if
+    if remaining = 5
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        add i 1
+        array get Array i v4
+        log message Verbosity " {:o} {:o} {:o} {:o} {:o}" v0 v1 v2 v3 v4
+    end if    
+    if remaining = 4
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        add i 1
+        array get Array i v3
+        log message Verbosity " {:o} {:o} {:o} {:o}" v0 v1 v2 v3
+    end if
+    if remaining = 3
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        add i 1
+        array get Array i v2
+        log message Verbosity " {:o} {:o} {:o}" v0 v1 v2
+    end if
+    if remaining = 2
+        array get Array i v0
+        add i 1
+        array get Array i v1
+        log message Verbosity " {:o} {:o}" v0 v1
+    end if
+    if remaining = 1
+        array get Array i v0
+        log message Verbosity " {:o}" v0
+    end if             
+end proc
+
+end namespace

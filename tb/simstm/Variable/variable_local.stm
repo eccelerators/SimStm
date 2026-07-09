@@ -1,22 +1,26 @@
+namespace SimStmTest
 
-proc testVariableLocal ()
+proc testVariableLocal () 
+    call stm.startStandardTestShell ()
+    call unitVariableLocal ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitVariableLocal ()
 	var test_variable_local_add_1 1
 	var test_variable_local_add_2 2
 
-    call startStandardTestShell ()
-    
-    log message INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_local_add_1
-    log message INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_local_add_2
+    log message stm.INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_local_add_1
+    log message stm.INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_local_add_2
 
     add test_variable_local_add_1 10
     add test_variable_local_add_2 20
 
-    log message INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_local_add_1
-    log message INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_local_add_2
-    var verify test_variable_local_add_1 11 MAX
-    var verify test_variable_local_add_2 22 MAX
-
-    call endStandardTestShell ()
+    log message stm.INFO_2 "test_variable_local_add_1 local: {:d}" test_variable_local_add_1
+    log message stm.INFO_2 "test_variable_local_add_2 local: {:d}" test_variable_local_add_2
+    var verify test_variable_local_add_1 11 stm.MAX
+    var verify test_variable_local_add_2 22 stm.MAX
 
 end proc
+
+end namespace

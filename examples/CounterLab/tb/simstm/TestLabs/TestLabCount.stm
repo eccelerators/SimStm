@@ -1,0 +1,12 @@
+namespace CounterLab
+
+proc testLabCount ()
+
+    -- the test lab simply calls the test directly
+    call testCountUp ()
+    
+    call testCountDown ()
+    
+end proc
+
+end namespace

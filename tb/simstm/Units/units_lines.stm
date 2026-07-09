@@ -1,0 +1,36 @@
+include "../Lines/lines.stm"
+include "../Lines/lines_local.stm"
+include "../Lines/lines_local_override.stm"
+include "../Lines/lines_parameter.stm"
+include "../Lines/lines_pointer.stm"
+
+namespace SimStmTest
+
+proc unitsLines ()
+    call testLinesAppendArray ()
+    call testLinesAppendText ()
+    call testLinesDeleteAllArray ()
+    call testLinesDeleteArray ()
+    call testLinesGetArray ()
+    call testLinesInsertArray ()
+    call testLinesInsertText ()
+    call testLinesPointerCopy ()
+    call testLinesSetArray ()
+    call testLinesSetText ()
+    call testLinesSize ()
+end proc
+proc unitsLinesLocal ()
+    call testLinesLocal ()
+end proc
+proc unitsLinesLocalOverride ()
+    call testLinesLocalOverride ()
+end proc
+proc unitsLinesParameter ()
+    call testLinesParameterIn ()
+    call testLinesParameterOut ()
+end proc
+proc unitsLinesPointer ()
+    call testLinesPointer ()
+end proc
+
+end namespace

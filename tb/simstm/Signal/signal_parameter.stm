@@ -1,22 +1,41 @@
+include "../Common/interface.stm"
 
-proc testSignalParameterIn ()
+namespace SimStmTest
 
-	call startStandardTestShell ()
-	--trace TRACE_INSTRUCTIONS
-	signal write out_signal_3000 0
-	call checkSignalParameterInput (
-		signal pointer copy this_signal out_signal_3000
-	)
-	
-	call endStandardTestShell ()
+proc testSignalParameter ()
+    call stm.startStandardTestShell ()
+    call unitSignalParameter ()
+    call stm.endStandardTestShell ()   
+end proc
 
+proc unitSignalParameter ()
+    call checkSignalParameterInput (
+        signal pointer copy this_signal loopback_32bit
+    )
 end proc
 
 proc checkSignalParameterInput (
-	signal this_signal 1
+	signal this_signal 0
 )
-	var res 0
-	signal read this_signal res
-	log message INFO_2 "signal: {:d}" res
-	signal verify this_signal res 1 MAX
+    var read_back    0x12345678
+    var expected_val 0
+    var mask_val     0
+    var write_val    0
+
+    equ write_val    0xdeadbeef
+
+    signal write  this_signal write_val
+    wait 1000
+    signal read   this_signal read_back
+    var    verify read_back   0xdeadbeef 0xffffffff
+    signal verify this_signal 0xdeadbeef 0xffffffff
+
+    signal write  this_signal 0x87654321
+    wait 1000
+    signal read   this_signal read_back
+    var    verify read_back   0x87654321 0xffffffff
+    signal verify this_signal 0x87654321 0xffffffff
+    signal verify this_signal 0x82204101 0xaaaa5555
 end proc
+
+end namespace

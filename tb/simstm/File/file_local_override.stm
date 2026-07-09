@@ -1,9 +1,15 @@
+namespace SimStmTest
 
 file file_local_override_global "file_override_global.dat"
 
 proc testFileLocalOverride ()
 
-	call startStandardTestShell ()
+	call stm.startStandardTestShell ()
+	call unitFileLocalOverride ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitFileLocalOverride ()
 	array a_array 1
 	array set a_array 0 1 --initialize a_array with value 1
 	
@@ -16,19 +22,17 @@ proc testFileLocalOverride ()
 	
 	lines lines_result
 	file read all file_local_override_global lines_result 
-	log message INFO_2 "global:"
-	log lines INFO_2 lines_result
-	log message INFO_2 "end global"
+	log message stm.INFO_2 "global:"
+	log lines stm.INFO_2 lines_result
+	log message stm.INFO_2 "end global"
 	var a_var 99
 	var b_var 99
 	array b_array 1
 	lines get array lines_result 0 a_array a_var
 	--lines get array lines_result 1 b_array b_var -- read lines from file back into array
-	array verify a_array 0 1 MAX
-	--array verify b_array 0 2 MAX
+	array verify a_array 0 1 stm.MAX
+	--array verify b_array 0 2 stm.MAX
 	call checkGlobalFile ()
-	
-	call endStandardTestShell ()	
 end proc
 
 
@@ -41,9 +45,9 @@ proc setLocalOverrideFile ()
 
 	lines delete all b_lines
 	lines append array b_lines b_array
-	log message INFO_2 "local:"
-	log lines INFO_2 b_lines
-	log message INFO_2 "end local"
+	log message stm.INFO_2 "local:"
+	log lines stm.INFO_2 b_lines
+	log message stm.INFO_2 "end local"
 	file append file_local_override_global b_lines
 end proc
 
@@ -57,9 +61,11 @@ proc checkGlobalFile ()
 	file read all file_local_override_global final_lines
 	lines get array final_lines 0 a_array a_var
 	--lines get array final_lines 1 b_array b_var
-	array verify a_array 0 1 MAX
-	--array verify b_array 0 2 MAX --supposed to fail ?
+	array verify a_array 0 1 stm.MAX
+	--array verify b_array 0 2 stm.MAX --supposed to fail ?
 	array get b_array 0 b_var
-	log message INFO_2 "check global:"
-	log lines INFO_2 final_lines
+	log message stm.INFO_2 "check global:"
+	log lines stm.INFO_2 final_lines
 end proc
+
+end namespace

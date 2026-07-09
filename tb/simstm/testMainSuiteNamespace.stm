@@ -1,0 +1,21 @@
+include "../../lib/base.stm"
+include "../../lib/testcase.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
+
+include "TestSuites/TestSuiteNamespace.stm"
+namespace SimStmTest
+proc testMainSuiteNamespace ()
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_FAILURES
+    call initDut()
+    log message stm.INFO "Main test suite Namespace started"
+
+    call testSuiteNamespace ()
+
+    log message stm.INFO "Main test suite Namespace ended"
+    wait 1000
+    finish
+end proc
+end namespace

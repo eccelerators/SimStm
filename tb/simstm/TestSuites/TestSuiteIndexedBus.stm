@@ -1,543 +1,287 @@
-var TestCaseBus32Index 0
-var TestCaseBus64Index 0
-var TestCaseBus128Index 0
-var TestCaseBus256Index 0
+include "../Common/interface.stm"
+include "../Bus/bus32.stm"
+include "../Bus/bus64.stm"
+include "../Bus/bus128.stm"
+include "../Bus/bus256.stm"
+include "../Bus/bus32_parameter.stm"
+
+namespace SimStmTest
+
+var testCaseWithSuiteAndCaseIndexBus32Index 0
+var testCaseWithSuiteAndCaseIndexBus64Index 0
+var testCaseWithSuiteAndCaseIndexBus128Index 0
+var testCaseWithSuiteAndCaseIndexBus256Index 0
 var RepeatedTestSuiteIndex 0
 
+proc testCaseWithSuiteAndCaseIndexBusTemplate (
+    bus busToTest 0
+)
+    log message stm.ALWAYS "testTemplate shall never be called directly, it shall be overridden in any case"
+end proc
+
+proc testCaseWithSuiteAndCaseIndexBus (
+    label TestToCall testCaseWithSuiteAndCaseIndexBusTemplate
+    bus busToTest 0
+    var skipped 0
+)
+    call stm.beginTestSuiteIndexedAndCaseIndexed (
+        label pointer copy TestToCall TestToCall
+    )
+    log message stm.ALWAYS "TestToCall {:s}" lb>TestToCall
+    call label TestToCall (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endTestCase ( 
+        label pointer copy TestToCall TestToCall
+        equ  skipped skipped
+        equ failure stm.StandardTestFailure
+    )
+end proc
+
+
 proc testSuiteIndexedBus ()
+    var machineValueWidth 0
+    signal read stm.sigInMachineValueWidth machineValueWidth
     bus busToTest NO_BUS
-    equ RepeatedTestSuiteIndex TestSuiteIndex
+    equ RepeatedTestSuiteIndex stm.TestSuiteIndex
     rem RepeatedTestSuiteIndex 8
     if RepeatedTestSuiteIndex <= 3
-        if MachineValueWidth >= 32
+        if machineValueWidth >= 32
             bus pointer copy busToTest wishbone32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
-            call testCaseBus32 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus32Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32 
+			    bus pointer copy busToTest busToTest
+		    )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus32Index 1
         end if
-        if MachineValueWidth >= 64
+        if machineValueWidth >= 64
             bus pointer copy busToTest wishbone64
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus64Index
-            call testCaseBus64 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus64Index 1
-        end if
-        if MachineValueWidth >= 128
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus64Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus64Index 1
+       end if
+        if machineValueWidth >= 128
             bus pointer copy busToTest wishbone128
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus128Index
-            call testCaseBus128 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus128VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus128VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus128TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus128TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus128Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus128Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus128 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus128VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus128VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus128TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus128TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus128Index 1
         end if
-        if MachineValueWidth >= 256
+        if machineValueWidth >= 256
             bus pointer copy busToTest wishbone256
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus256Index
-            call testCaseBus256 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus256VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus256VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus256TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus256TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus256Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus256Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus256 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus256VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus256VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus256TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus256TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus256Index 1
         end if
     elsif RepeatedTestSuiteIndex <= 5
-        if MachineValueWidth >= 32
+        if machineValueWidth >= 32
             bus pointer copy busToTest avalon32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
-            call testCaseBus32 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus32Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus32Index 1
         end if
-        if MachineValueWidth >= 64
+        if machineValueWidth >= 64
             bus pointer copy busToTest avalon64
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus64Index
-            call testCaseBus64 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus64TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus64Index 1
-        end if
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus64Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus64TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus64Index 1
+       end if
     elsif RepeatedTestSuiteIndex = 6
-        if MachineValueWidth >= 32
+        if machineValueWidth >= 32
             bus pointer copy busToTest axi4lite32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
-            call testCaseBus32 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus32Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus32Index 1
         end if
     elsif RepeatedTestSuiteIndex = 7
-        if MachineValueWidth >= 32
+        if machineValueWidth >= 32
             bus pointer copy busToTest ram32
+            call logBus (
+                bus pointer copy busToLog busToTest
+            )
             bus timeout set busToTest 1000
-            equ TestCaseIndex TestCaseBus32Index
-            call testCaseBus32 (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifySuccess (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32VerifyFail (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutRead (
-			bus pointer copy busToTest busToTest
-		)
-            call testCaseBus32TimeOutWrite (
-			bus pointer copy busToTest busToTest
-		)
-            add TestCaseBus32Index 1
+            equ stm.TestCaseIndex testCaseWithSuiteAndCaseIndexBus32Index
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifySuccess 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32VerifyFail 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutRead 
+                bus pointer copy busToTest busToTest
+            )
+            call testCaseWithSuiteAndCaseIndexBus (
+                label set TestToCall testBus32TimeOutWrite 
+                bus pointer copy busToTest busToTest
+            )
+            add testCaseWithSuiteAndCaseIndexBus32Index 1
         end if
     end if
 end proc
 
-
-proc testCaseBus32 (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus32 (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBus32VerifySuccess (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus32VerifySuccess (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus32VerifyFail (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus32VerifyFail (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus32TimeOutRead (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus32TimeOutRead (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus32TimeOutWrite (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus32TimeOutWrite (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus64 (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus64 (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus64VerifySuccess (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus64VerifySuccess (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus64VerifyFail (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus64VerifyFail (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus64TimeOutRead (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus64TimeOutRead (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus64TimeOutWrite (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus64TimeOutWrite (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus128 (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus128 (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus128VerifySuccess (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus128VerifySuccess (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus128VerifyFail (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus128VerifyFail (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus128TimeOutRead (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus128TimeOutRead (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus128TimeOutWrite (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus128TimeOutWrite (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus256 (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus256 (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus256VerifySuccess (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus256VerifySuccess (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus256VerifyFail (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus256VerifyFail (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus256TimeOutRead (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus256TimeOutRead (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-
-proc testCaseBus256TimeOutWrite (
-	bus busToTest 0
-	var skipped 0
-)
-    call beginTestCaseIndexedSuiteIndexed ()
-    call logBusToTest (
-    	bus pointer copy busToTest busToTest
-    )
-    call testBus256TimeOutWrite (
-    	bus pointer copy busToTest busToTest
-    )
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
+end namespace

@@ -1,11 +1,17 @@
+namespace SimStmTest
 
 proc testLinesPointer ()
+
+	call stm.startStandardTestShell ()
+	call unitLinesPointer ()
+	call stm.endStandardTestShell ()
+end proc
+
+proc unitLinesPointer ()
 
 	lines a_lines
 	lines b_lines
 	array b_array 1
-	call startStandardTestShell ()
-	
 	array set b_array 0 1
 	lines delete all a_lines
 	lines delete all b_lines
@@ -18,12 +24,13 @@ proc testLinesPointer ()
 	var a_var 99
 	--verifies a_lines
 	lines get array a_lines 0 final_array a_var
-	array verify final_array 0 1 MAX
+	array verify final_array 0 1 stm.MAX
 	-- verifies b_lines
 	lines get array b_lines 0 final_array a_var
-	array verify final_array 0 1 MAX
-	log lines INFO_2 a_lines
-	log lines INFO_2 b_lines
+	array verify final_array 0 1 stm.MAX
+	log lines stm.INFO_2 a_lines
+	log lines stm.INFO_2 b_lines
 	
-	call endStandardTestShell ()
 end proc
+
+end namespace

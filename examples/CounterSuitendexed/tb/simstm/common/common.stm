@@ -1,0 +1,46 @@
+include "../../../../../lib/base.stm"
+include "../../../../../lib/testcase.stm"
+include "../TestSuites/TestSuiteIndexedCount.stm"
+include "../count/count.stm"
+
+namespace CounterSuiteIndexed
+
+var WaitTimeOut 100000 -- ms
+
+signal sigInActive 11000
+signal sigInCount 11001
+
+signal sigOutStepDown 11000
+signal sigOutStepUp 11001
+signal sigOutLoad 11002
+signal sigOutLoadStepValue 11003
+
+proc countDown ()
+    signal write sigOutStepDown 1
+    wait 100
+    signal write sigOutStepDown 0
+    wait 100 
+end proc
+
+proc countUp ()
+    signal write sigOutStepUp 1
+    wait 100
+    signal write sigOutStepUp 0
+    wait 100 
+end proc
+
+proc countLoad ()
+    signal write sigOutLoad 1
+    wait 100
+    signal write sigOutLoad 0
+    wait 100 
+end proc
+
+proc initDut ()
+    signal write stm.sigOutDutReset 1
+    wait 100
+    signal write stm.sigOutDutReset 0
+    wait 100
+end proc
+
+end namespace

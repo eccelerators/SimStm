@@ -1,8 +1,16 @@
+namespace SimStmTest
 
 var test_variable_1 1
 var test_variable_1 1
-
 
 proc testBasicDoubleVar ()
+    call stm.startStandardTestShell ()
+    call unitBasicDoubleVar ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBasicDoubleVar ()
     finish
 end proc
+
+end namespace

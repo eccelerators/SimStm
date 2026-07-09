@@ -1,0 +1,42 @@
+include "../Bus/bus32.stm"
+include "../Bus/bus64.stm"
+include "../Bus/bus128.stm"
+include "../Bus/bus256.stm"
+include "../Bus/bus32_parameter.stm"
+
+namespace SimStmTest
+
+proc unitsBus32 ()
+    call testBus32 ()
+    call testBus32VerifySuccess ()
+    call testBus32VerifyFail ()
+    call testBus32TimeOutRead ()
+    call testBus32TimeOutWrite ()
+end proc
+proc unitsBus64 ()
+    call testBus64 ()
+    call testBus64VerifySuccess ()
+    call testBus64VerifyFail ()
+    call testBus64TimeOutRead ()
+    call testBus64TimeOutWrite ()
+end proc
+proc unitsBus128 ()
+    call testBus128 ()
+    call testBus128VerifySuccess ()
+    call testBus128VerifyFail ()
+    call testBus128TimeOutRead ()
+    call testBus128TimeOutWrite ()
+end proc
+proc unitsBus256 ()
+    call testBus256 ()
+    call testBus256VerifySuccess ()
+    call testBus256VerifyFail ()
+    call testBus256TimeOutRead ()
+    call testBus256TimeOutWrite ()
+end proc
+proc unitsBus32Parameter ()
+    call testBus32ParameterIn ()
+    call testBus32ParameterOut ()
+end proc
+
+end namespace

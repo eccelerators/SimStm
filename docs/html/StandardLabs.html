@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. Standard Labs &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="9. Automated Tests" href="AutomatedTests.html" />
+    <link rel="prev" title="7. JUnit Tests" href="JUnitTests.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>8. Standard Labs</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="JUnitTests.html"><span class="section-number">7. </span>JUnit Tests</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="AutomatedTests.html"><span class="section-number">9. </span>Automated Tests</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="standard-labs">
+<h1><span class="section-number">8. </span>Standard Labs<a class="headerlink" href="#standard-labs" title="Link to this heading">¶</a></h1>
+<p>The testMain entry point <a class="reference external" href="./tb/simstm/testMain.stm">tb/simstm/testMain.stm</a> can be used to run
+and debug tests e.g., by a list of calls to standard test procedures.</p>
+<p>During progress of work tests can be enabled or disabled by simply commenting or uncommenting the respective call in the testMain procedure.</p>
+<p>At some point of time this practice grows annoying since one has to comment and uncomment the respective
+includes too since unused includes prolong the startup time.</p>
+<p>When working on more than one problem at the same time, it may be a good practice to split the test stimulus files into several
+files and include only those files in the testMain procedure that are relevant for the current work.</p>
+<p>The different testMain procedures are called testLabs. Different testLabs can be used to run different sets of tests in different experimental state.</p>
+<p>The helper scripts generate similar ANT targets as for testMain to run the simulator.</p>
+<p>To obtain a test lab, follow the steps as described below.</p>
+<ol class="arabic simple">
+<li><p>Create or have standard test procedures containing assertions for behaviors to test as describe in chapter Standard Tests.</p></li>
+<li><p>Write a procedure <strong>testLab</strong>MyName in a <strong>TestLab</strong>MyName.stm file representing the test lab.</p></li>
+</ol>
+<p>The bold parts in the procedure and file name are mandatory by policy.</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kn">include</span><span class="w"> </span><span class="nn">&quot;Other/other.stm&quot;</span>
+
+<span class="kn">namespace</span><span class="w"> </span><span class="nn">SimStmTest</span>
+
+<span class="k">proc</span><span class="w"> </span><span class="nf">testLabSample</span><span class="w"> </span><span class="p">()</span>
+
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testOtherRandom</span><span class="w"> </span><span class="p">()</span>
+<span class="k">end proc</span>
+
+<span class="k">end</span><span class="w"> </span><span class="kn">namespace</span>
+</pre></div>
+</div>
+<p>This snippet is present in <a class="reference external" href="./tb/simstm/TestLabs/TestLabSample.stm">tb/simstm/TestLabs/TestLabSample.stm</a>.</p>
+<ol class="arabic simple" start="3">
+<li><p>Write a procedure <strong>testMainLab</strong>MyName in a <strong>testMainLab</strong>MyName.stm file as entry point to launch the test suite.</p></li>
+</ol>
+<p>The bold parts in the procedure, file name are mandatory by policy.</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kn">include</span><span class="w"> </span><span class="nn">&quot;Common/Common.stm&quot;</span>
+
+<span class="kn">include</span><span class="w"> </span><span class="nn">&quot;TestLabs/TestlabSample.stm&quot;</span>
+<span class="kn">namespace</span><span class="w"> </span><span class="nn">SimStmTest</span>
+<span class="k">proc</span><span class="w"> </span><span class="nf">testMainLabSample</span><span class="w"> </span><span class="p">()</span>
+
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">initBase</span><span class="w"> </span><span class="p">()</span>
+
+<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO_2</span>
+<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">TRACE_OFF</span>
+<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">RESUME_ON_ALL_ERRORS</span>
+<span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
+<span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">sigInTestSuiteIndex</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
+<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main lab Sample started&quot;</span>
+
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testLabSample</span><span class="w"> </span><span class="p">()</span>
+
+<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main lab Sample ended&quot;</span>
+<span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
+<span class="w">    </span><span class="fm">finish</span>
+<span class="k">end proc</span>
+<span class="k">end</span><span class="w"> </span><span class="kn">namespace</span>
+</pre></div>
+</div>
+<p>This snippet is present in <a class="reference external" href="./tb/simstm/testMainLabSample.stm">tb/simstm/testMainLabSample.stm</a>.</p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="JUnitTests.html"><span class="section-number">7. </span>JUnit Tests</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="AutomatedTests.html"><span class="section-number">9. </span>Automated Tests</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

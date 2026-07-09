@@ -1,0 +1,78 @@
+
+namespace SimStmTest
+
+const NO_SIGNAL 0
+
+-- general
+-- input signals
+signal simstm_loopback_verify_assertions 10000
+signal simstm_loopback_verify_failures 10001
+signal simstm_loopback_bus_timeout_assertions 10002
+signal simstm_loopback_bus_timeout_failures 10003
+
+
+
+-- output signals
+signal simstm_loopback_verify_failure_expected 10000
+signal simstm_loopback_bus_timeout_failure_expected 10001
+
+-- in / out signals for unittests
+signal loopback_1bit 11000
+signal loopback_32bit 11001
+signal loopback_16bit_cross 11002
+
+-- interrupt signals for unittests read as port
+signal interrupt_a 1000
+signal interrupt_b 1001
+
+-- provoke interrupt signals for unittests 
+signal provoke_interrupt_a 11003
+signal provoke_interrupt_b 11004
+
+const NO_BUS 0
+bus wishbone32 4
+bus wishbone64 5
+bus wishbone128 6
+bus wishbone256 7
+bus avalon32 1
+bus avalon64 2
+bus axi4lite32 3
+bus ram32 8
+    
+proc logBus (
+    bus busToLog NO_BUS
+)
+    var valBusToLog 0
+    var machineValueWidth 0
+    var knownBus 0
+    bus pointer get busToLog valBusToLog
+    signal read stm.sigInMachineValueWidth machineValueWidth   
+    if valBusToLog > 0
+        if valBusToLog < 9
+            equ knownBus 1
+        end if
+    end if 
+    if knownBus = 0 
+        log message stm.ALWAYS "Bus({:d}) unknown, machine value width {:d}" valBusToLog machineValueWidth
+    else
+        if valBusToLog = 4
+            log message stm.ALWAYS "Bus({:d}) wishbone32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 5
+            log message stm.ALWAYS "Bus({:d}) wishbone64, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 6
+            log message stm.ALWAYS "Bus({:d}) wishbone128, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 7
+            log message stm.ALWAYS "Bus({:d}) wishbone256, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 1
+            log message stm.ALWAYS "Bus({:d}) avalon32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 2
+            log message stm.ALWAYS "Bus({:d}) avalon64, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 3
+            log message stm.ALWAYS "Bus({:d}) axi4lite32, machine value width {:d}" valBusToLog machineValueWidth
+        elsif valBusToLog = 8
+            log message stm.ALWAYS "Bus({:d}) ram32, machine value width {:d}" valBusToLog machineValueWidth
+        end if
+    end if
+end proc
+
+end namespace

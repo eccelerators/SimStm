@@ -1,14 +1,12 @@
-proc testSuiteInterrupt ()
-    call testCaseInterrupt ()
-end proc
+include "../Interrupt/interrupt.stm"
 
-proc testCaseInterrupt (
-	var skipped 0
-)
-    call beginTestCase ()
-	call testInterrupt ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
+namespace SimStmTest
+
+proc testSuiteInterrupt ()
+
+    call stm.testCase (
+    	label set TestToCall testInterrupt
     )
 end proc
+
+end namespace

@@ -1,0 +1,25 @@
+include "../../../../../lib/base.stm"
+
+namespace HelloWorld
+
+signal sigInActive 11000
+signal sigInCount 11001
+
+proc testHelloWorld ()
+    call stm.startStandardTestShell ()
+    loop 3
+        log message stm.ALWAYS "Hello World"
+        wait 1000
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+proc testActivation ()
+    call stm.startStandardTestShell ()
+    signal write stm.sigOutDutReset 0
+    wait 20
+    signal verify sigInActive 1 1
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

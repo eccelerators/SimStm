@@ -1,0 +1,22 @@
+include "common/common.stm"
+
+namespace CounterSuiteIndexed
+
+const testMainSuiteIndexedRangeLengthCount 4
+
+proc testMainSuiteIndexedCount ()
+ 
+    verbosity stm.INFO_2
+    trace stm.TRACE_OFF
+    resume stm.RESUME_ON_ALL_FAILURES
+    call initDut()
+    signal read stm.sigInTestSuiteIndex stm.TestSuiteIndex
+    log message stm.INFO "Main test main suite indexed Count {:d} started" stm.TestSuiteIndex
+
+    call testSuiteIndexedCount ()
+
+    log message stm.INFO "Main test main suite indexed Count {:d} ended" stm.TestSuiteIndex
+    wait 1000
+    finish
+end proc
+end namespace

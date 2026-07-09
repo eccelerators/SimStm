@@ -1,5 +1,8 @@
+namespace SimStmTest
 
 proc testLabBasicAbort ()
 
     call testBasicAbort ()
 end proc
+
+end namespace

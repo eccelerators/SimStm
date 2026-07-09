@@ -1,0 +1,45 @@
+namespace SimStmTest
+
+label aLabel aProc 
+
+proc testCallLabelIndirect ()
+    call stm.startStandardTestShell ()
+    call unitCallLabelIndirect ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitCallLabelIndirect ()
+	var v 0
+	
+	call label aLabel (
+		equ p 7
+		var pointer copy r v
+	)
+	var verify v 8 stm.MAX	
+end proc
+
+proc testCallProcDirect ()
+    call stm.startStandardTestShell ()
+    call unitCallProcDirect ()
+    call stm.endStandardTestShell ()
+end proc
+proc unitCallProcDirect ()
+	var v 0
+	
+	call aProc (
+		equ p 5
+		var pointer copy r v
+	)
+	var verify v 6 stm.MAX
+end proc
+
+proc aProc (
+    var p 0
+    var r 0
+)
+    log message 0 "aProc has been called with p={}" p
+    equ r p
+    add r 1
+    log message 0 "aProc returns r={}" r
+end proc
+
+end namespace

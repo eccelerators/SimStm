@@ -1,0 +1,9 @@
+include "../Interrupt/interrupt.stm"
+
+namespace SimStmTest
+
+    proc unitsInterrupt ()
+        call unitInterrupt ()
+    end proc
+
+end namespace

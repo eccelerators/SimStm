@@ -1,4 +1,7 @@
+namespace SimStmTest
 
 proc testLabArraySetOutPos ()
-    call testArraySetOutPos
+    call testArraySetOutPos ()
 end proc
+
+end namespace

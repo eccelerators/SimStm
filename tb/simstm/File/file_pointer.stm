@@ -1,5 +1,14 @@
+namespace SimStmTest
 
 proc testFilePointer ()
+
+	call stm.startStandardTestShell ()
+	call unitFilePointer ()
+	call stm.endStandardTestShell ()
+
+end proc
+
+proc unitFilePointer ()
 
 	file file_a "file_a.dat"
 	file file_b "file_b.dat"
@@ -10,40 +19,26 @@ proc testFilePointer ()
 	array an_array 2
 	var is_readable_a 0
 	var is_readable_b 0
-	call startStandardTestShell ()
-	
 	array set an_array 0 7
 	array set an_array 1 8
-	
 	lines delete all a_lines
 	lines append array a_lines an_array
 	file write file_a a_lines
-	
-	--lines delete all b_lines
 	lines append message b_lines "this is the expected output"
 	file write file_b b_lines
-	
 	file pointer copy file_b file_a
-	
 	file readable file_a is_readable_a
 	file readable file_a is_readable_b
-	
 	lines delete all a_lines_result
 	lines delete all b_lines_result
 	file read all file_a a_lines_result
 	file read all file_b b_lines_result
 	array final_array 2
 	var a_var 99
-	-- verifies file_a content
 	lines get array a_lines_result 0 final_array a_var
-	array verify final_array 0 7 MAX
-	array verify final_array 1 8 MAX
+	array verify final_array 0 7 stm.MAX
+	array verify final_array 1 8 stm.MAX
 
-	-- verifies file_b content
-	lines get array b_lines_result 0 final_array a_var
-	array verify final_array 0 7 MAX
-	array verify final_array 1 8 MAX
-	
-	call endStandardTestShell ()
-	
 end proc
+
+end namespace

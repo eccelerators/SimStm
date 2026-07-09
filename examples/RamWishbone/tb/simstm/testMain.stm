@@ -1,0 +1,23 @@
+include "../../../../lib/base.stm"
+include "ram/ram.stm"
+
+namespace RamWishboneBusExample
+
+    lines success_lines
+    file simulation_success "simulation.success"
+
+    proc testMain ()
+        log message stm.INFO "Main test started"
+
+        call testRam ()
+        
+        log message stm.INFO "Main test finished"
+        wait 1000
+        lines append message success_lines "SUCCESS"
+        log lines stm.INFO success_lines
+        file write simulation_success success_lines
+        wait 1000
+        finish
+    end proc
+
+end namespace

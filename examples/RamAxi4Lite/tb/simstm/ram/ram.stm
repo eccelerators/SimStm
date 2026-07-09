@@ -1,0 +1,28 @@
+include "../../../../../lib/base.stm"
+
+namespace RamAxi4LiteBusExample
+
+bus BusAxi4Lite 3
+
+proc testRam ()
+    var a 0
+    var dw 0
+    var dr 0
+    
+    call stm.startStandardTestShell ()
+    loop 64
+        bus write BusAxi4Lite 32 a dw 
+        bus verify BusAxi4Lite 32 a dw 0xFFFFFFFF
+        add dw 1
+        add a 4
+    end loop
+    equ a 0
+    loop 64
+        bus verify BusAxi4Lite 32 a dr 0xFFFFFFFF
+        add dr 1
+        add a 4
+    end loop
+    call stm.endStandardTestShell ()
+end proc
+
+end namespace

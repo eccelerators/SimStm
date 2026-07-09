@@ -1,19 +1,29 @@
+include "../../../lib/base.stm"
+include "../../../lib/testcase.stm"
+
+namespace SimStmTest
 
 proc testBus64 (
 	bus busToTest 0
 )
+    call stm.startStandardTestShell ()
+    call unitBus64 (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBus64 (
+	bus busToTest 0
+)
     var r 0   
-
-    call startStandardTestShell ()
     wait 1000
-
     bus write busToTest 64 0 0x5555555555555555
     bus write busToTest 64 8 0xaaaaaaaaaaaaaaaa
     bus write busToTest 64 16 0xffffffffffffffff
-    bus verify busToTest 64 0 r 0x5555555555555555 0x5555555555555555
-    bus verify busToTest 64 8 r 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
-    bus verify busToTest 64 16 r 0xffffffffffffffff 0xffffffffffffffff
-
+    bus verify busToTest 64 0 0x5555555555555555 0x5555555555555555
+    bus verify busToTest 64 8 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
+    bus verify busToTest 64 16 0xffffffffffffffff 0xffffffffffffffff
     wait 1000
     bus write busToTest 64 0 0x0
     bus write busToTest  8 0 0x12
@@ -24,125 +34,142 @@ proc testBus64 (
     bus write busToTest  8 5 0xcd
     bus write busToTest  8 6 0xef
     bus write busToTest  8 7 0xfe
-    bus verify busToTest 8 0 r 0x12 0xff
-    bus verify busToTest 8 1 r 0x34 0xff
-    bus verify busToTest 8 2 r 0x56 0xff
-    bus verify busToTest 8 3 r 0x78 0xff
-    bus verify busToTest 8 4 r 0xab 0xff
-    bus verify busToTest 8 5 r 0xcd 0xff
-    bus verify busToTest 8 6 r 0xef 0xff
-    bus verify busToTest 8 7 r 0xfe 0xff
-    bus verify busToTest 64 0 r 0xfeefcdab78563412 0xffffffffffffffff
-
+    bus verify busToTest 8 0 0x12 0xff
+    bus verify busToTest 8 1 0x34 0xff
+    bus verify busToTest 8 2 0x56 0xff
+    bus verify busToTest 8 3 0x78 0xff
+    bus verify busToTest 8 4 0xab 0xff
+    bus verify busToTest 8 5 0xcd 0xff
+    bus verify busToTest 8 6 0xef 0xff
+    bus verify busToTest 8 7 0xfe 0xff
+    bus verify busToTest 64 0 0xfeefcdab78563412 0xffffffffffffffff
     wait 1000
     bus write busToTest  64 0 0x0
     bus write busToTest  16 0 0x1234
     bus write busToTest  16 2 0x4567
     bus write busToTest  16 4 0x89ab
     bus write busToTest  16 6 0xcdef
-    bus verify busToTest 16 0 r 0x1234 0xffff
-    bus verify busToTest 16 2 r 0x4567 0xffff
-    bus verify busToTest 16 4 r 0x89ab 0xffff
-    bus verify busToTest 16 6 r 0xcdef 0xffff
-    bus verify busToTest 64 0 r 0xcdef89ab45671234 0xffffffffffffffff
+    bus verify busToTest 16 0 0x1234 0xffff
+    bus verify busToTest 16 2 0x4567 0xffff
+    bus verify busToTest 16 4 0x89ab 0xffff
+    bus verify busToTest 16 6 0xcdef 0xffff
+    bus verify busToTest 64 0 0xcdef89ab45671234 0xffffffffffffffff
     bus write busToTest  64 4 0x0
     bus write busToTest  16 5 0x1234
-    bus verify busToTest 16 5 r 0x1234 0xffff
-    bus verify busToTest 64 4 r 0x00123400 0xffffffffffffffff
-
+    bus verify busToTest 16 5 0x1234 0xffff
+    bus verify busToTest 64 4 0x00123400 0xffffffffffffffff
     wait 1000
     bus write busToTest  64 0 0x8000000000000000
-    bus verify busToTest 64 0 r 0x8000000000000000 0x0000000000000000
-    bus verify busToTest 64 0 r 0x0000000000000000 0x0000000000000000
-    bus verify busToTest 64 0 r 0x8000000000000000 0x8000000000000000
-    bus verify busToTest 64 0 r 0x8000000000000000 0xffffffffffffffff
-
+    bus verify busToTest 64 0 0x8000000000000000 0x0000000000000000
+    bus verify busToTest 64 0 0x0000000000000000 0x0000000000000000
+    bus verify busToTest 64 0 0x8000000000000000 0x8000000000000000
+    bus verify busToTest 64 0 0x8000000000000000 0xffffffffffffffff
     wait 100
     bus write busToTest  64 0 0x0000000000000000
-    bus verify busToTest 64 0 r 0x8000000000000000 0x0000000000000000
-    bus verify busToTest 64 0 r 0x0000000000000000 0x0000000000000000
-    bus verify busToTest 64 0 r 0x0000000000000000 0x8000000000000000
-    bus verify busToTest 64 0 r 0x0000000000000000 0xffffffffffffffff
-
-    call endStandardTestShell ()
+    bus verify busToTest 64 0 0x8000000000000000 0x0000000000000000
+    bus verify busToTest 64 0 0x0000000000000000 0x0000000000000000
+    bus verify busToTest 64 0 0x0000000000000000 0x8000000000000000
+    bus verify busToTest 64 0 0x0000000000000000 0xffffffffffffffff
 end proc
 
 proc testBus64VerifySuccess (
 	bus busToTest 0
 )
-    var r 0   
+    call stm.startStandardTestShell ()
+    call unitBus64VerifySuccess (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus64VerifySuccess (
+	bus busToTest 0
+)
+    var r 0   
     wait 1000
     bus write busToTest  64 0 0x5555555555555555
     bus write busToTest  64 8 0xaaaaaaaaaaaaaaaa
     bus write busToTest  64 16 0xffffffffffffffff
-
-    bus verify busToTest 64 0 r 0x5555555555555555 0xffffffffffffffff
-    bus verify busToTest 64 8 r 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
-    bus verify busToTest 64 16 r 0x0000000000000000 0x0000000000000000
-
-    call endStandardTestShell ()
+    bus verify busToTest 64 0 0x5555555555555555 0xffffffffffffffff
+    bus verify busToTest 64 8 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
+    bus verify busToTest 64 16 0x0000000000000000 0x0000000000000000
 end proc
 
 proc testBus64VerifyFail (
 	bus busToTest 0
 )
-    var r 0   
+    call stm.startStandardTestShell ()
+    call unitBus64VerifyFail (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus64VerifyFail (
+	bus busToTest 0
+)
+    var r 0   
     wait 1000
     bus write busToTest 64 0 0x5555555555555555
     bus write busToTest 64 8 0xaaaaaaaaaaaaaaaa
     bus write busToTest 64 16 0xffffffffffffffff
-    bus verify busToTest 64 0 r 0x5555555555555555 0xffffffffffffffff
-    bus verify busToTest 64 8 r 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
-    bus verify busToTest 64 16 r 0x0000000000000000 0x0000000000000000
-    log message ALWAYS "bus verify intended error on no match"
-    bus verify busToTest 64 0 r 0x00000000 0xffffffff
-    call incExpectedStandardTestVerifyFailureCount ()
-
-    call endStandardTestShell ()
+    bus verify busToTest 64 0 0x5555555555555555 0xffffffffffffffff
+    bus verify busToTest 64 8 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
+    bus verify busToTest 64 16 0x0000000000000000 0x0000000000000000
+    log message stm.ALWAYS "bus verify intended error on no match"
+    bus verify busToTest 64 0 0x00000000 0xffffffff
+    call stm.addExpectedStandardTestVerifyFailureCount ()
 end proc
-
 
 proc testBus64TimeOutRead (
 	bus busToTest 0
 )
-    var r 0   
+    call stm.startStandardTestShell ()
+    call unitBus64TimeOutRead (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus64TimeOutRead (
+	bus busToTest 0
+)
+    var r 0   
     wait 1000
     bus write busToTest 64 0 0x5555555555555555
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus read busToTest 64 0 r
-    call incExpectedStandardTestBusTimeoutFailureCount ()
-
+    call stm.addExpectedStandardTestBusTimeoutFailureCount ()
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
-
-    call endStandardTestShell ()
+    var verify r 1000000000 stm.MAX
 end proc
 
 proc testBus64TimeOutWrite (
 	bus busToTest 0
 )
-    var r 0   
+    call stm.startStandardTestShell ()
+    call unitBus64TimeOutWrite (
+        bus pointer copy busToTest busToTest
+    )
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
+proc unitBus64TimeOutWrite (
+	bus busToTest 0
+)
+    var r 0   
     wait 1000
     bus timeout set busToTest 1
     bus timeout get busToTest r
-    var verify r 1 MAX
+    var verify r 1 stm.MAX
     bus write busToTest 64 0 0x5555555555555555
-    call incExpectedStandardTestBusTimeoutFailureCount ()
-
+    call stm.addExpectedStandardTestBusTimeoutFailureCount ()
     bus timeout set busToTest 1000000000
     bus timeout get busToTest r
-    var verify r 1000000000 MAX
-
-    call endStandardTestShell ()
+    var verify r 1000000000 stm.MAX
 end proc
+
+end namespace

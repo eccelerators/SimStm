@@ -1,75 +1,33 @@
+include "../Basic/basic.stm"
+
+namespace SimStmTest
 
 proc testSuiteBasic ()
-    call testCaseBasicConst ()
-    call testCaseBasicIfElseElsif ()
-    call testCaseBasicNestedIfElseElsif ()
-    call testCaseBasicLoop ()
-    call testCaseBasicVar ()
-    call testCaseBasicVar3 ()
+
+    call stm.testCase (
+    	label set TestToCall testBasicConst
+    )
+
+    call stm.testCase (
+        label set TestToCall testBasicVar
+    )
+
+    call stm.testCase (
+        label set TestToCall testBasicVar3
+    )
+
+    call stm.testCase (
+        label set TestToCall testBasicLoop
+    )
+ 
+     call stm.testCase (
+        label set TestToCall testBasicNestedIfElseElsif
+    )
+        
+    call stm.testCase (
+    	label set TestToCall testBasicIfElseElsif
+    )
+
 end proc
 
-proc testCaseBasicLoop (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicLoop ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBasicVar (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicVar ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBasicVar3 (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicVar3 ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBasicIfElseElsif (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicIfElseElsif ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBasicNestedIfElseElsif (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicNestedIfElseElsif ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
-
-proc testCaseBasicConst (
-	var skipped 0
-)
-    call beginTestCase ()
-    call testBasicConst ()
-    call endTestCase ( 
-    	equ  skipped skipped
-    	equ failure StandardTestFailure
-    )
-end proc
+end namespace

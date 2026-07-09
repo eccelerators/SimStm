@@ -1,62 +1,70 @@
+namespace SimStmTest
+
 array test_array_name 3
 
 var test_array_var 10
 
 proc testArray ()
+    call stm.startStandardTestShell ()
+    call unitArray ()
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
-
+proc unitArray ()
     array set test_array_name 0 3
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
-    array verify test_array_name 0 3 MAX
+    var verify test_array_var 3 stm.MAX
+    array verify test_array_name 0 3 stm.MAX
 
     equ test_array_var 1234
     array set test_array_name 1 test_array_var
     array get test_array_name 1 test_array_var
-    var verify test_array_var 1234 MAX
-    array verify test_array_name 1 1234 MAX
+    var verify test_array_var 1234 stm.MAX
+    array verify test_array_name 1 1234 stm.MAX
 
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
-    array verify test_array_name 0 3 MAX
-
-    call endStandardTestShell ()
+    var verify test_array_var 3 stm.MAX
+    array verify test_array_name 0 3 stm.MAX
 end proc
 
 proc testArrayGet ()
-    call startStandardTestShell ()
+    call stm.startStandardTestShell ()
+    call unitArrayGet ()
+    call stm.endStandardTestShell ()
+end proc
 
+proc unitArrayGet ()
     array set test_array_name 0 3
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
+    var verify test_array_var 3 stm.MAX
 
     equ test_array_var 1234
     array set test_array_name 1 test_array_var
     array get test_array_name 1 test_array_var
-    var verify test_array_var 1234 MAX
+    var verify test_array_var 1234 stm.MAX
 
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
-
-    call endStandardTestShell ()
+    var verify test_array_var 3 stm.MAX
 end proc
 
 proc testArraySet ()
+    call stm.startStandardTestShell ()
+    call unitArraySet ()
+    call stm.endStandardTestShell ()
+end proc
 
-    call startStandardTestShell ()
-
+proc unitArraySet ()
     array set test_array_name 0 3
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
+    var verify test_array_var 3 stm.MAX
 
     equ test_array_var 1234
     array set test_array_name 1 test_array_var
     array get test_array_name 1 test_array_var
-    var verify test_array_var 1234 MAX
+    var verify test_array_var 1234 stm.MAX
 
     array get test_array_name 0 test_array_var
-    var verify test_array_var 3 MAX
-
-    call endStandardTestShell ()
+    var verify test_array_var 3 stm.MAX
 end proc
+
+end namespace

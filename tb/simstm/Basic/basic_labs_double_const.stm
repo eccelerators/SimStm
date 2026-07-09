@@ -1,6 +1,16 @@
+namespace SimStmTest
+
 const test_double_constant_1 1
 const test_double_constant_1 1
 
 proc testBasicDoubleConst ()
+    call stm.startStandardTestShell ()
+    call unitBasicDoubleConst ()
+    call stm.endStandardTestShell ()
+end proc
+
+proc unitBasicDoubleConst ()
     finish
 end proc
+
+end namespace

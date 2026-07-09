@@ -1,119 +1,45 @@
-include "Variable/variable_parameter.stm"
+include "../../lib/base.stm"
+-- include "../../lib/array.stm"
+include "Common/common.stm"
+include "Common/interface.stm"
 
-include "Common/Common.stm"
-include "Signal/signal.stm"
---include "Signal/signal_pointer.stm"
---include "Signal/signal_parameter.stm"
---include "Signal/signal_local_override.stm"
+-- include "Bus/bus32.stm"
+-- include "Array/array.stm"
+-- include "Lines/lines.stm"
+include "Interrupt/interrupt.stm"
 
-include "Bus/bus32.stm"
-include "Bus/bus64.stm"
-include "Bus/bus128.stm"
-include "Bus/bus256.stm"
---include "Bus/bus32_parameter.stm"
---include "Bus/bus32_pointer.stm"
-include "Base/Array.stm"
+namespace SimStmTest
 
-include "Other/other.stm"
-include "Variable/variable.stm"
-include "Variable/variable_local.stm"
-include "Variable/variable_local_override.stm"
-include "Variable/variable_pointer.stm"
-include "Variable/variable_default_value.stm"
+    lines success_lines
+    file simulation_success "simulation.success"
 
+    proc testMain ()
 
-include "Array/array.stm"
-include "Array/array_local.stm"
-include "Array/array_local_override.stm"
-include "Array/array_parameter.stm"
-include "Array/array_default_value.stm"
-include "Array/array_size.stm"
-include "Array/array_pointer.stm"
+        resume stm.RESUME_ON_ALL_FAILURES
+        verbosity stm.INFO_2
+        call initDut()
 
-include "Lines/lines.stm"
---include "Lines/lines_local_override.stm"
---include "Lines/lines_local.stm"
---include "Lines/lines_parameter.stm"
-include "Lines/lines_pointer.stm"
+        log message stm.INFO "Main test started"
 
-include "File/file.stm"
-include "File/file_pointer.stm"
-include "File/file_parameter.stm"
-include "File/file_local.stm"
-include "File/file_local_override.stm"
+--        call testArrayParameterIn ()
+--        call testInterrupt ()
+--        trace stm.TRACE_EXECUTED_LINES
+        call testInterrupt ()
+--        call testLinesGetArray ()
+--        call testLinesInsertArray ()
+--        call testSignalVerifyFail ()
+--        call unitBus32(
+--            bus pointer copy busToTest axi4lite32
+--        )
+		
+        log message stm.INFO "Main test finished"
+        wait 1000
+        lines append message success_lines "SUCCESS"
+        -- stop
+        log lines stm.INFO success_lines
+        file write simulation_success success_lines
+        wait 1000
+        finish
+    end proc
 
-include "TestSuites/TestSuiteIndexedBus.stm"
-
-include "TestSuites/TestSuiteArray.stm"
-include "TestSuites/TestSuiteVariable.stm"
-
-file simulation_success "simulation.success"
-lines success_lines
-
-testMain:
-proc
-    call initBase ()
-
-    verbosity INFO_2
-    trace TRACE_OFF
-    -- trace TRACE_EXECUTED_LINES
-    -- trace TRACE_INSTRUCTIONS
-    -- trace TRACE_CALLS
-    resume RESUME_ON_ALL_ERRORS
-    signal write out_signal_init_dut 1
-    wait 1000
-    signal write out_signal_init_dut 0
-    log message INFO "Main test started"
-
-    -- call testSignalWriteReadVerify ()
-    -- call testSignalVerifyFail
-    -- call testSignalLocal ()
-    -- call testSignalParameterIn ()
-    -- call testSignalLocalOverride ()
-    
-    --call testFileAppendArray ()
-    -- call testFileWriteArray ()
-    -- call testFileReadArray ()
-    -- call testFilePointer ()
-    -- call testFileLocal ()
-    -- call testFileLocalOverride ()
-    -- call testFileParameterIn ()
-    -- call testFileParameterOut ()
-    -- call testVariableInv ()
-    -- call testOtherRandom ()
-
-    -- bus pointer copy busToTest wishbone256
-    -- bus timeout set busToTest 1000
-    -- call testVariableLocalOverride ()
-    -- call testVariableLocal ()
-    -- call testVariableScope ()
-    -- call testVariablePointer ()
-    -- call testVariableParameterIn ()
-    -- call testVariableParameterOut ()
-    -- call testVariableDefaultValue ()
-    
-
-    -- call testLinesSize  ()
-    -- call testLinesLocalOverride ()
-	-- call testLinesLocal ()
-	-- call testLinesParameterIn ()
-	-- call testLinesParameterOut ()
-	-- call testLinesPointer ()
-    
-    -- call testArrayLocalOverride ()
-    -- call testArrayLocal ()
-    -- call testArrayParameterIn ()
-    -- call testArrayDefaultValue ()
-    
-    call testSuiteArray ()
-    call testSuiteVariable ()
-	
-    log message INFO "Main test finished"
-    wait 1000
-    lines append message success_lines "SUCCESS"
-    -- stop
-    log lines INFO success_lines
-    file write simulation_success success_lines
-    wait 1000
-    finish
-end proc
+end namespace
