@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Debug &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>Debug</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="debug">
+<h1>Debug<a class="headerlink" href="#debug" title="Link to this heading">¶</a></h1>
+<section id="trace">
+<h2>trace<a class="headerlink" href="#trace" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">trace</span><span class="w"> </span><span class="nv">t_var</span>
+<span class="fm">trace</span><span class="w"> </span><span class="mb">0b111</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">trace</span></code> instruction enables or disables the output of trace
+information when it is set at some point during the SimStm code
+execution. Thus, e.g., the flow through complex if, elsif … trees can be
+shown.</p>
+<p>Predifined constants can be used to set the trace variable. The following bits are defined:</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="no">TRACE_OFF</span><span class="w"> </span><span class="mi">0</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_EXECUTED_LINES</span><span class="w"> </span><span class="mh">0x1</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_INSTRUCTIONS</span><span class="w"> </span><span class="mh">0x2</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_VARIABLES</span><span class="w"> </span><span class="mh">0x4</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_FILES</span><span class="w"> </span><span class="mh">0x8</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_IF_TREES</span><span class="w"> </span><span class="mh">0x10</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_CALLS</span><span class="w"> </span><span class="mh">0x20</span>
+<span class="kd">const</span><span class="w"> </span><span class="no">TRACE_ALL</span><span class="w"> </span><span class="mh">0xFFFF</span>
+</pre></div>
+</div>
+</section>
+<section id="marker">
+<h2>marker<a class="headerlink" href="#marker" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">marker</span><span class="w"> </span><span class="nv">n_var</span><span class="w"> </span><span class="nv">m_var</span>
+<span class="fm">marker</span><span class="w"> </span><span class="mh">0xF</span><span class="w"> </span><span class="mb">0b1</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">marker</span></code> instruction sets a marker at a given number used to mark
+interesting points of time in the simulation wavefrom.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tb_simstm</span></code> entity has an output signal marker which is a
+<code class="docutils literal notranslate"><span class="pre">std_logic_vector(15</span> <span class="pre">downto</span> <span class="pre">0)</span></code>. Thus there are 16 markers which can
+be set <code class="docutils literal notranslate"><span class="pre">0b1</span></code> or <code class="docutils literal notranslate"><span class="pre">0b0</span></code>. This should be used to mark occurrences
+during the execution of the SimStm code so they can be found easily in
+the waveform display. Beneath this, the intern variables <code class="docutils literal notranslate"><span class="pre">Executing_Line</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Executing_File</span></code> in the <code class="docutils literal notranslate"><span class="pre">tb_simstm.vhd</span></code> module are always present and
+show the currently executed line of code.</p>
+</section>
+<section id="stop">
+<h2>stop<a class="headerlink" href="#stop" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">stop</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">stop</span></code> instruction stops the simulation with the severity error. The simulation can be continued by pressing continue in the simulator.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>
