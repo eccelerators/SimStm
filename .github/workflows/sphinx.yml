@@ -21,3 +21,9 @@ jobs:
 
       - name: Generate HTML documentation
         run: ant sphinx-rst2html
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghdl-test-results
+          path: docs/html/
