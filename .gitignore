@@ -24,5 +24,7 @@ test/**/tb_top
 *.pyc
 
 simulation/SimulationResults/*
+/docs/html/*
+!/docs/html/.gitkeep
 /build
 /tmp-gen
