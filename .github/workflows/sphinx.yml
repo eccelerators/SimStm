@@ -28,6 +28,16 @@ jobs:
       - name: Generate HTML documentation
         run: ant sphinx-rst2html
 
+      - name: Diagnose workspace and git state
+        if: github.event_name == 'push' && github.ref_type == 'branch' && github.actor != 'github-actions[bot]'
+        working-directory: ${{ github.workspace }}
+        run: |
+          pwd
+          ls -la
+          git rev-parse --show-toplevel || true
+          git branch --show-current || true
+          git status || true
+
       - name: Commit generated HTML documentation
         if: github.event_name == 'push' && github.ref_type == 'branch' && github.actor != 'github-actions[bot]'
         working-directory: ${{ github.workspace }}
