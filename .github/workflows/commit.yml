@@ -1,22 +1,44 @@
 name: commit
+
 on:
-  # Runs after sphinx-build.yml workflow completes successfully
+  # Runs after sphinx workflow completes successfully
   workflow_run:
     workflows: ["sphinx"]
     types:
       - completed
+
+permissions:
+  contents: write
+
 jobs:
-  change-and-push:
+  commit_docs:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch != '' }}
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Change something
-        run: |
-          find . -type f -name "*.md" -print0 | xargs -0 sed -i "s/foo/bar/g"
-
-      - name: Commit and push changes
-        uses: devops-infra/action-commit-push@v1.5.0
+        uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_message: "Replace foo with bar"
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download sphinx HTML artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sphinx_html
+          path: docs/html/
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit generated HTML documentation
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/html
+          if git diff --cached --quiet; then
+            echo "No generated documentation changes to commit."
+            exit 0
+          fi
+          git commit -m "Update generated HTML docs [skip ci]"
+          git push origin HEAD:${{ github.event.workflow_run.head_branch }}
