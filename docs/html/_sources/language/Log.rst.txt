@@ -21,6 +21,15 @@ variables given after the message string.
 {:b} prints the value of the variable in binary format
 {:o}  prints the value of the variable in octal format
 {:s} prints the value of the variable as a string (only for label variables, prefix with lb>)
+{@c0} prints the called procedure name of the current call stack, 
+{@c1} prints the called procedure name of the caller, 
+{@c2} prints the called procedure name of the caller's caller, etc.
+{@f0} prints the file name containing the called procedure name of the current call stack, 
+{@f1} prints the file name containing the called procedure name of the caller, 
+{@f2} prints the file name containing the called procedure name of the caller's caller, etc.
+{@l0} prints the line number in the file containing the called procedure name of the current call stack, 
+{@l1} prints the line number in the file containing the called procedure name of the caller, 
+{@l2} prints the line number in the file containing the called procedure name of the caller's caller, etc.
 
 log lines
 ^^^^^^^^^

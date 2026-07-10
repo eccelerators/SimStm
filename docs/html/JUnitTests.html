@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>7. JUnit Tests &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="8. Standard Labs" href="StandardLabs.html" />
@@ -35,7 +35,7 @@
         
         
   <section id="junit-tests">
-<h1><span class="section-number">7. </span>JUnit Tests<a class="headerlink" href="#junit-tests" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">7. </span>JUnit Tests<a class="headerlink" href="#junit-tests" title="Permalink to this heading">¶</a></h1>
 <p>Test results can be generated in JUnit XML format. This allows for easy integration with CI/CD pipelines
 and test reporting tools that support JUnit format.</p>
 <p>To be able to use the helper scripts please follow the naming policies.</p>
@@ -51,7 +51,7 @@ collect the result in a SimulationResult.xml which is a JUnit XML file.</p>
 <p>To obtain SimStm testbench results in JUnit XML format, follow the steps for each type of test suite
 as described in the respective sections below.</p>
 <section id="plain">
-<h2><span class="section-number">7.1. </span>Plain<a class="headerlink" href="#plain" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">7.1. </span>Plain<a class="headerlink" href="#plain" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Create standard test procedures containing assertions for behaviors to test as describe in chapter Standard Tests.</p></li>
 </ol>
@@ -60,13 +60,13 @@ They can be called from any testSuite and testMain by including this files.</p>
 <p>This has the advantage that they can be used in as standard tests and as test cases in test suites for JUnit tests.
 Standard tests can be easily debugged and prepared via the entry point testMain or an individually named test lab.
 Once judged to be ready, they can be called from a test suite and thus be part of the JUnit test results.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSampleA</span><span class="w"> </span><span class="p">()</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">startStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSampleA</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.startStandardTestShell ()
 <span class="w">    </span><span class="c1">-- enter your test code here</span>
 <span class="w">    </span><span class="c1">-- use verify instructions here as assertions</span>
 <span class="w">    </span><span class="c1">-- verify and bus timeouts are monitored between startStandardTestShell and endStandardTestShell</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleA has been run&quot;</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">endStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleA has been run&quot;</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.endStandardTestShell ()
 <span class="k">end proc</span>
 </pre></div>
 </div>
@@ -84,17 +84,17 @@ The original standard test is given as a label parameter to the wrapper.
 The wrapper accepts the parameter <em>skipped</em> to skip the test case if needed.
 This is useful to skip tests that are not ready yet or to skip tests intentionally
 e.g., because they are expected to fail due to a not yet fixed bug.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSuiteSample</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSuiteSample</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCase</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCase (
 <span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleA</span>
-<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span>)
 
 <span class="w">    </span><span class="c1">-- this test is skipped to present an example to skip tests</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCase</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCase (
 <span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleB</span>
 <span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">skipped</span><span class="w"> </span><span class="mi">1</span>
-<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span>)
 <span class="k">end proc</span>
 </pre></div>
 </div>
@@ -103,22 +103,22 @@ e.g., because they are expected to fail due to a not yet fixed bug.</p>
 <li><p>Write a procedure <strong>testMainSuite</strong>MyName in a <strong>testMainSuite</strong>MyName.stm file as entry point to launch the test suite.</p></li>
 </ol>
 <p>The bold parts in the procedure, file name are mandatory by policy.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testMainSuiteSample</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testMainSuiteSample</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">initBase</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.initBase ()
 
-<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO_2</span>
-<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">TRACE_OFF</span>
-<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">RESUME_ON_ALL_ERRORS</span>
+<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nv">stm</span>.INFO_2
+<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nv">stm</span>.TRACE_OFF
+<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nv">stm</span>.RESUME_ON_ALL_ERRORS
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">1</span>
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">sigInTestSuiteIndex</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite Sample started&quot;</span>
+<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nv">stm</span>.sigInTestSuiteIndex stm.TestSuiteIndex
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite Sample started&quot;
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteSample</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteSample</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite Sample ended&quot;</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite Sample ended&quot;
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="fm">finish</span>
 <span class="k">end proc</span>
@@ -127,44 +127,44 @@ e.g., because they are expected to fail due to a not yet fixed bug.</p>
 <p>This snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSample.stm">tb/simstm/testMainSuiteSample.stm</a>.</p>
 </section>
 <section id="case-indexed">
-<h2><span class="section-number">7.2. </span>Case indexed<a class="headerlink" href="#case-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">7.2. </span>Case indexed<a class="headerlink" href="#case-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior based on
 the value of the variable <em>stm.TestCaseIndex</em>.</p>
 <p>E.g., the test procedure can use <em>stm.TestCaseIndex</em> variable to run a test with different delays.
 The test <em>stm.TestCaseIndex</em> variable can have any value but must be unique for each called test
 e.g., 20, 40, 60 … for delays 20ns, 40ns, 60ns … .</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSampleWithCaseIndexA</span><span class="w"> </span><span class="p">()</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">startStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSampleWithCaseIndexA</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.startStandardTestShell ()
 <span class="w">    </span><span class="c1">-- enter your test code here</span>
 <span class="w">    </span><span class="c1">-- use verify instructions here as assertions</span>
 <span class="w">    </span><span class="c1">-- verify and bus timeouts are monitored between startStandardTestShell and endStandardTestShell</span>
 <span class="w">    </span><span class="c1">-- stm.TestCaseIndex is controlled by the respective TestSuite to iterate over all Case Indexes and run them</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with case index {}&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">endStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with case index {}&quot;</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.endStandardTestShell ()
 <span class="k">end proc</span>
 </pre></div>
 </div>
 <p>This snippet is present in <a class="reference external" href="./tb/simstm/Sample/Sample.stm">tb/simstm/Sample/Sample.stm</a>.</p>
 <p>2. Same as for plain test suites but with the difference that the standard test calls are
 wrapped by a <em>call stm.testCaseWithCaseIndex</em> instruction.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSuiteSampleCaseOnlyIndex</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSuiteSampleCaseOnlyIndex</span><span class="w"> </span>()
 
 <span class="w">    </span><span class="c1">-- use stm.TestCaseIndex to run testSampleWithCaseIndexA with different parameters</span>
 <span class="w">    </span><span class="c1">-- the individual runs appear automatically as test cases in the generated test suites</span>
 <span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="mi">5</span>
-<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithCaseIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 0
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithCaseIndex (
 <span class="w">            </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithCaseIndexA</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span>)
+<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 1
 <span class="w">    </span><span class="k">end loop</span>
 
 <span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="mi">3</span>
-<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">10</span>
-<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithCaseIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 10
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithCaseIndex (
 <span class="w">            </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithCaseIndexB</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">        </span>)
+<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 10
 <span class="w">    </span><span class="k">end loop</span>
 
 <span class="k">end proc</span>
@@ -179,7 +179,7 @@ The presence of indexed test cases does not affect the test suite procedure or f
 <p>A snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSampleCaseOnly.stm">tb/simstm/testMainSuiteSampleCaseOnly.stm</a>.</p>
 </section>
 <section id="suite-indexed">
-<h2><span class="section-number">7.3. </span>Suite indexed<a class="headerlink" href="#suite-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">7.3. </span>Suite indexed<a class="headerlink" href="#suite-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior
 based on the value of the variable <em>stm.TestSuiteIndex</em>.</p>
 <p>Test suites and in fact each index may run in parallel threads controlled by the outer e.g., ANT script thus speeding up
@@ -189,15 +189,15 @@ the simulation of a whole project with many suites dramatically.</p>
 The test <em>stm.TestSuiteIndex</em> variable is given by the outer e.g., ANT script to run the same test suite with different
 parameters. E.g., the test suite is run 3 times with <em>stm.TestSuiteIndex</em> values 0, 1, 2 for bus0, bus1, bus2.</p>
 <p>The range of <em>stm.TestSuiteIndex</em> values is <em>const testMainSuiteIndexedRangeLengthMyName</em> defined in the respective testMainSuiteIndexedMyName.stm file.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSampleWithSuiteIndexA</span><span class="w"> </span><span class="p">()</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">startStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSampleWithSuiteIndexA</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.startStandardTestShell ()
 <span class="w">    </span><span class="c1">-- enter your test code here</span>
 <span class="w">    </span><span class="c1">-- use verify instructions here as assertions</span>
 <span class="w">    </span><span class="c1">-- verify and bus timeouts are monitored between startStandardTestShell and endStandardTestShell</span>
 <span class="w">    </span><span class="c1">-- stm.TestSuiteIndex is controlled by the respective TestSuite to iterate over all Suite Indexes and run them</span>
 <span class="w">    </span><span class="c1">-- the Suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with suite index {}&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">endStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with suite index {}&quot;</span><span class="w"> </span><span class="nv">stm</span>.TestSuiteIndex
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.endStandardTestShell ()
 <span class="k">end proc</span>
 </pre></div>
 </div>
@@ -208,18 +208,18 @@ parameters. E.g., the test suite is run 3 times with <em>stm.TestSuiteIndex</em>
 <p>The bold parts in the procedure and file name are mandatory by policy.</p>
 <p>The standard test are wrapped by a <em>call stm.testCaseWithSuiteIndex</em> instruction.
 This allows to set a label for the called standard test and to skip it if needed.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSuiteIndexedSampleSuiteOnlyIndex</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteOnlyIndex</span><span class="w"> </span>()
 
 <span class="w">    </span><span class="c1">-- the suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel</span>
 <span class="w">    </span><span class="c1">-- the tests take respect to the suite index them self</span>
 <span class="w">    </span><span class="c1">-- the individual runs appear automatically as test suites in the generated test junits</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithSuiteIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithSuiteIndex (
 <span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithSuiteIndexA</span>
-<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span>)
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithSuiteIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithSuiteIndex (
 <span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithSuiteIndexB</span>
-<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span>)
 
 <span class="k">end proc</span>
 </pre></div>
@@ -233,22 +233,22 @@ This allows to set a label for the called standard test and to skip it if needed
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="no">testMainSuiteIndexedMyNameIndexRangeLength</span><span class="w"> </span><span class="mi">4</span>
 
 
-<span class="k">proc</span><span class="w"> </span><span class="nf">testMainSuiteIndexedSample</span><span class="w"> </span><span class="p">()</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">testMainSuiteIndexedSample</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">initBase</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.initBase ()
 
-<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO_2</span>
-<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">TRACE_OFF</span>
-<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">RESUME_ON_ALL_ERRORS</span>
+<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nv">stm</span>.INFO_2
+<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nv">stm</span>.TRACE_OFF
+<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nv">stm</span>.RESUME_ON_ALL_ERRORS
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">1</span>
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">sigInTestSuiteIndex</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite Sample started with suite index {}&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
+<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nv">stm</span>.sigInTestSuiteIndex stm.TestSuiteIndex
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite Sample started with suite index {}&quot; stm.TestSuiteIndex
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteOnlyIndex</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteOnlyIndex</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite Sample ended with suite index {}&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite Sample ended with suite index {}&quot; stm.TestSuiteIndex
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="fm">finish</span>
 <span class="k">end proc</span>
@@ -257,7 +257,7 @@ This allows to set a label for the called standard test and to skip it if needed
 <p>This snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSampleSuiteOnly.stm">tb/simstm/testMainSuiteSampleSuiteOnly.stm</a>.</p>
 </section>
 <section id="suite-and-case-indexed">
-<h2><span class="section-number">7.4. </span>Suite and Case indexed<a class="headerlink" href="#suite-and-case-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">7.4. </span>Suite and Case indexed<a class="headerlink" href="#suite-and-case-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior
 based on the value of the variable <em>stm.TestSuiteIndex</em> and the value of the variable <em>stm.TestCaseIndex</em>..</p>
 <p>Test suites and in fact each suite index may run in parallel threads controlled by the outer e.g., ANT script thus speeding up
@@ -270,15 +270,15 @@ parameters. E.g., the test suite is run 3 times with <em>stm.TestSuiteIndex</em>
 The test <em>stm.TestCaseIndex</em> variable can have any value but must be unique for each called test
 e.g., 20, 40, 60 … for delays 20ns, 40ns, 60ns … .</p>
 <p>The range of <em>stm.TestSuiteIndex</em> values is <em>const testMainSuiteIndexedRangeLengthMyName</em> defined in the respective testMainSuiteIndexedMyName.stm file.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSampleWithSuiteIndexA</span><span class="w"> </span><span class="p">()</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">startStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSampleWithSuiteIndexA</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.startStandardTestShell ()
 <span class="w">    </span><span class="c1">-- enter your test code here</span>
 <span class="w">    </span><span class="c1">-- use verify instructions here as assertions</span>
 <span class="w">    </span><span class="c1">-- verify and bus timeouts are monitored between startStandardTestShell and endStandardTestShell</span>
 <span class="w">    </span><span class="c1">-- stm.TestSuiteIndex is controlled by the respective TestSuite to iterate over all Suite Indexes and run them</span>
 <span class="w">    </span><span class="c1">-- the Suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with suite index {}&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">endStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleWithCaseIndexA has been run with suite index {}&quot;</span><span class="w"> </span><span class="nv">stm</span>.TestSuiteIndex
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.endStandardTestShell ()
 <span class="k">end proc</span>
 </pre></div>
 </div>
@@ -289,25 +289,25 @@ e.g., 20, 40, 60 … for delays 20ns, 40ns, 60ns … .</p>
 <p>The bold parts in the procedure and file name are mandatory by policy.</p>
 <p>The standard test are wrapped by a <em>call stm.testCaseWithSuiteIndex</em> instruction.
 This allows to set a label for the called standard test and to skip it if needed.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span>()
 <span class="w">    </span><span class="c1">-- the suite index is controlled by the external e.g, ANT script, thus the suite simulations can be run in parallel</span>
 <span class="w">    </span><span class="c1">-- the tests take respect to the suite index them self</span>
 <span class="w">    </span><span class="c1">-- the individual suite runs appear automatically as test suites in the generated test junits</span>
 <span class="w">    </span><span class="c1">-- the individual case runs appear automatically as test cases in the generated test suites</span>
 <span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="mi">5</span>
-<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithSuiteAndCaseIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 0
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithSuiteAndCaseIndex (
 <span class="w">            </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithSuiteAndCaseIndexA</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span>)
+<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 1
 <span class="w">    </span><span class="k">end loop</span>
 
 <span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="mi">3</span>
-<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">10</span>
-<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">testCaseWithSuiteAndCaseIndex</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 10
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.testCaseWithSuiteAndCaseIndex (
 <span class="w">            </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">TestToCall</span><span class="w"> </span><span class="nv">testSampleWithSuiteAndCaseIndexB</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestCaseIndex</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">        </span>)
+<span class="w">        </span><span class="o">add</span><span class="w"> </span><span class="nv">stm</span>.TestCaseIndex 10
 <span class="w">    </span><span class="k">end loop</span>
 <span class="k">end proc</span>
 </pre></div>
@@ -320,22 +320,22 @@ This allows to set a label for the called standard test and to skip it if needed
 <p>The bold parts in the procedure, file name and constant are mandatory by policy.</p>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="no">testMainSuiteIndexedSampleSuiteAndCaseIndexMaximumIndex</span><span class="w"> </span><span class="mi">7</span>
 
-<span class="k">proc</span><span class="w"> </span><span class="nf">testMainSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span><span class="p">()</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">testMainSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">initBase</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.initBase ()
 
-<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO_2</span>
-<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">TRACE_OFF</span>
-<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">RESUME_ON_ALL_ERRORS</span>
+<span class="w">    </span><span class="fm">verbosity</span><span class="w"> </span><span class="nv">stm</span>.INFO_2
+<span class="w">    </span><span class="fm">trace</span><span class="w"> </span><span class="nv">stm</span>.TRACE_OFF
+<span class="w">    </span><span class="fm">resume</span><span class="w"> </span><span class="nv">stm</span>.RESUME_ON_ALL_ERRORS
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">1</span>
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="k">signal write</span><span class="w"> </span><span class="nv">out_signal_init_dut</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">sigInTestSuiteIndex</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite indexed SampleSuiteSuiteAndCase {:d} started&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
+<span class="w">    </span><span class="k">signal read</span><span class="w"> </span><span class="nv">stm</span>.sigInTestSuiteIndex stm.TestSuiteIndex
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite indexed SampleSuiteSuiteAndCase {:d} started&quot; stm.TestSuiteIndex
 
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">testSuiteIndexedSampleSuiteAndCaseIndex</span><span class="w"> </span>()
 
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="no">INFO</span><span class="w"> </span><span class="s">&quot;Main test main suite indexed SampleSuiteSuiteAndCase {:d} ended&quot;</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">TestSuiteIndex</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.INFO &quot;Main test main suite indexed SampleSuiteSuiteAndCase {:d} ended&quot; stm.TestSuiteIndex
 <span class="w">    </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1000</span>
 <span class="w">    </span><span class="fm">finish</span>
 <span class="k">end proc</span>
@@ -361,7 +361,7 @@ This allows to set a label for the called standard test and to skip it if needed
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

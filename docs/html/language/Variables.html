@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Variables &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=e491ac2d" />
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
@@ -29,9 +29,9 @@
         
         
   <section id="variables">
-<h1>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h1>
+<h1>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">¶</a></h1>
 <section id="var">
-<h2>var<a class="headerlink" href="#var" title="Link to this heading">¶</a></h2>
+<h2>var<a class="headerlink" href="#var" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0x03</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">b_var</span><span class="w"> </span><span class="mb">0b011</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">c_var</span><span class="w"> </span><span class="mi">3</span>
@@ -44,7 +44,7 @@ variable or constant yet. The <code class="docutils literal notranslate"><span c
 instruction must be used within a procedure for this purpose.</p>
 </section>
 <section id="equ">
-<h2>equ<a class="headerlink" href="#equ" title="Link to this heading">¶</a></h2>
+<h2>equ<a class="headerlink" href="#equ" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">equ</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">equ</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -53,7 +53,7 @@ instruction must be used within a procedure for this purpose.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">operand1</span></code> is set to <code class="docutils literal notranslate"><span class="pre">operand2</span></code>.</p>
 </section>
 <section id="var-verify">
-<h2>var verify<a class="headerlink" href="#var-verify" title="Link to this heading">¶</a></h2>
+<h2>var verify<a class="headerlink" href="#var-verify" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">var verify</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">var verify</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -69,8 +69,8 @@ counts up the SimStm testbench internal verify_failure_count variable.</p>
 simulation error occurs or not.</p>
 </section>
 <section id="var-pointer-copy">
-<h2>var pointer copy<a class="headerlink" href="#var-pointer-copy" title="Link to this heading">¶</a></h2>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">var pointer copy</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="nv">b_var</span>
+<h2>var pointer copy<a class="headerlink" href="#var-pointer-copy" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="nv">b_var</span>
 </pre></div>
 </div>
 <p>The instruction <code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">pointer</span> <span class="pre">copy</span></code> creates a variable pointer.</p>
@@ -90,7 +90,7 @@ simulation error occurs or not.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>6. Standard Tests &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="7. JUnit Tests" href="JUnitTests.html" />
@@ -35,7 +35,7 @@
         
         
   <section id="standard-tests">
-<h1><span class="section-number">6. </span>Standard Tests<a class="headerlink" href="#standard-tests" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">6. </span>Standard Tests<a class="headerlink" href="#standard-tests" title="Permalink to this heading">¶</a></h1>
 <p>SimStm provides standard methods to report test results in the simulator console.
 They can be called in the standard testMain entry point <a class="reference external" href="./tb/simstm/testMain.stm">tb/simstm/testMain.stm</a> directly or
 in any other procedure called from the testMain entry point.</p>
@@ -44,13 +44,13 @@ However, for more formal test reporting, SimStm can generate test results in JUn
 <p>To use the standard test result reporting in the simulator console, simply follow these steps:</p>
 <p>Write pieces of SimStm code in your test stimulus files (.stm) that represent a test.
 An example is shown in <a class="reference external" href="./tb/simstm/sample/sample.stm">tb/simstm/sample/sample.stm</a>.</p>
-<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nf">testSampleA</span><span class="w"> </span><span class="p">()</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">startStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">testSampleA</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.startStandardTestShell ()
 <span class="w">    </span><span class="c1">-- enter your test code here</span>
 <span class="w">    </span><span class="c1">-- use verify instructions here as assertions</span>
 <span class="w">    </span><span class="c1">-- verify and bus timeouts are monitored between startStandardTestShell and endStandardTestShell</span>
-<span class="w">    </span><span class="k">log message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleA has been run&quot;</span>
-<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nn">stm</span><span class="p">.</span><span class="nv">endStandardTestShell</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="s">&quot;testSampleA has been run&quot;</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">stm</span>.endStandardTestShell ()
 <span class="k">end proc</span>
 </pre></div>
 </div>
@@ -89,7 +89,7 @@ An example is shown in <a class="reference external" href="./tb/simstm/testMain.
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>
