@@ -1,0 +1,22 @@
+name: commit
+on:
+  # Runs after sphinx-build.yml workflow completes successfully
+  workflow_run:
+    workflows: ["sphinx"]
+    types:
+      - completed
+jobs:
+  change-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Change something
+        run: |
+          find . -type f -name "*.md" -print0 | xargs -0 sed -i "s/foo/bar/g"
+
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@v1.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "Replace foo with bar"

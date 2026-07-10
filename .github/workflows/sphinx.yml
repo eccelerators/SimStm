@@ -1,4 +1,4 @@
-name: SPHINX
+name: sphinx
 
 on:
   push:
@@ -28,27 +28,4 @@ jobs:
       - name: Generate HTML documentation
         run: ant sphinx-rst2html
 
-      - name: Diagnose workspace and git state
-        if: github.event_name == 'push' && github.ref_type == 'branch' && github.actor != 'github-actions[bot]'
-        working-directory: ${{ github.workspace }}
-        run: |
-          pwd
-          ls -la
-          git rev-parse --show-toplevel || true
-          git branch --show-current || true
-          git status || true
-
-      - name: Commit generated HTML documentation
-        if: github.event_name == 'push' && github.ref_type == 'branch' && github.actor != 'github-actions[bot]'
-        working-directory: ${{ github.workspace }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f docs/html
-          if git diff --cached --quiet; then
-            echo "No generated documentation changes to commit."
-            exit 0
-          fi
-          git commit -m "Update generated HTML docs [skip ci]"
-          git push origin HEAD:${GITHUB_REF#refs/heads/}
 

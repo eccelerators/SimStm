@@ -2,9 +2,9 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs after sphinx-build.yml workflow completes successfully
+  # Runs after commit workflow completes successfully
   workflow_run:
-    workflows: ["Build"]
+    workflows: ["commit"]
     types:
       - completed
 
