@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Subroutines, Branches, and Loops &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>Subroutines, Branches, and Loops</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="subroutines-branches-and-loops">
+<h1>Subroutines, Branches, and Loops<a class="headerlink" href="#subroutines-branches-and-loops" title="Link to this heading">¶</a></h1>
+<section id="proc">
+<h2>proc<a class="headerlink" href="#proc" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">a_proc</span><span class="w"> </span>()
+<span class="w">    </span><span class="c1">--...</span>
+<span class="w">    </span><span class="c1">--... local variable , array, files, lines, bus, signals, label declarations</span>
+<span class="w">    </span><span class="c1">--...</span>
+<span class="w">    </span><span class="c1">-- subroutine code</span>
+<span class="w">    </span><span class="c1">--...</span>
+<span class="k">end proc</span>
+
+<span class="k">proc</span><span class="w"> </span><span class="nv">p_proc</span><span class="w"> </span>(
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w">   </span><span class="c1">--... parameter variable , array, file, lines, bus, signal, label declarations</span>
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w"> </span>)
+<span class="w">    </span><span class="c1">--...</span>
+<span class="w">    </span><span class="c1">--... local variable , array, file, lines, bus, signal, label declarations</span>
+<span class="w">    </span><span class="c1">--...</span>
+<span class="w">    </span><span class="c1">-- subroutine code</span>
+<span class="w">    </span><span class="c1">--...</span>
+<span class="k">end proc</span>
+</pre></div>
+</div>
+<p>Code of a subroutine is placed between  <code class="docutils literal notranslate"><span class="pre">proc</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">proc</span></code> instructions.</p>
+<p>A procedure can have parameters. The parameters are declared as usually with variables, arrays, files, lines, buses, signals, or labels
+between the parentheses after the procedure name. If the parameters are passed by reference or by value is decided by the
+assignments within the parentheses when calling the procedures.</p>
+<p>The value given with the parameter declaration is the default value, which is used when the parameter is not assigned when calling the procedure.
+The default value can be any global variable, array, file, line, bus, signal, or label.
+It can also be a constant or a numeric value in case of variables, busses, signals.</p>
+<p>This mechanism allows to have optional parameters, which can be used when the same procedure is called with different parameters in different places.
+In case of suitable default values, the calls can be very lean.</p>
+<p>Parameter objects mustn’t have the same name as any <strong>local</strong> variable, array, file, line, bus, signal, or label within the same procedure.
+However, they can have the same name as global variables, arrays, files, lines, buses, signals, or labels.</p>
+</section>
+<section id="call">
+<h2>call<a class="headerlink" href="#call" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">call</span><span class="w"> </span><span class="nv">a_proc</span><span class="w"> </span>()
+
+<span class="fm">call</span><span class="w"> </span><span class="nv">p_proc</span><span class="w"> </span>(
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w">   </span><span class="c1">--... parameter variable , array, file, lines, bus, signal, label assignments</span>
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w"> </span>)
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">call</span></code> instruction branches execution to the subroutine with the given procedure name. Code execution proceeds
+until an <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">proc</span></code> or a <code class="docutils literal notranslate"><span class="pre">return</span></code> statement.</p>
+<ul class="simple">
+<li><p>Parameter variable assignments of a source variable to destination parameter variable can be passed by</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">equ</span> <span class="pre">d_var</span> <span class="pre">s_var</span></code> to pass by value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_var</span> <span class="pre">s_var</span></code> to pass by reference</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Parameter label assignments of a source label or direct procedure name to destination parameter label can be passed by</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">equ</span> <span class="pre">d_label</span> <span class="pre">s_label</span></code> to pass by value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">a_par</span> <span class="pre">a_var</span></code> to pass by reference</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">set</span> <span class="pre">d_label</span> <span class="pre">proc_name</span></code> to set it to a procedure directly</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Parameter array assignments of a source array to destination parameter array can be passed by</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">array</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_array</span> <span class="pre">s_array</span></code> to pass by reference only</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Parameter file assignments of a source file to destination parameter file can be passed by</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_file</span> <span class="pre">s_file</span></code> to pass by reference only</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Parameter lines assignments of a source lines to destination parameter lines can be passed by</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_lines</span> <span class="pre">s_lines</span></code> to pass by reference only</p></li>
+<li><p>Parameter bus assignments of a source bus to destination parameter bus can be passed by</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bus</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_bus</span> <span class="pre">s_bus</span></code> to pass by reference only</p></li>
+<li><p>Parameter signal assignments of a source signal to destination parameter signal can be passed by</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">signal</span> <span class="pre">pointer</span> <span class="pre">copy</span> <span class="pre">d_signal</span> <span class="pre">s_signal</span></code> to pass by reference only</p></li>
+</ul>
+<p>Source variables, labels, arrays, files, lines, buses, or signals are taken with preceedence from
+the calling subroutine when present as locals there, otherwise from the global scope.</p>
+</div></blockquote>
+</section>
+<section id="call-label">
+<h2>call label<a class="headerlink" href="#call-label" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">a_label</span><span class="w"> </span>()
+
+<span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">p_label</span><span class="w"> </span>(
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w">   </span><span class="c1">--... parameter variable , array, file, lines, bus, signal, label assignments</span>
+<span class="w">   </span><span class="c1">--...</span>
+<span class="w"> </span>)
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">call</span> <span class="pre">label</span></code> instruction branches execution to the label given after the <code class="docutils literal notranslate"><span class="pre">label</span></code> keyword.</p>
+<p>Thus a label must be declared in the same procedure or globally.
+The label can be passed as a parameter to the procedure as well, which allows to call different labels within the same procedure.</p>
+<p>A label declaration especially when used in parameters must always point to a existing procedure,
+at least a dummy procedure in case it is always overridden.</p>
+</section>
+<section id="return">
+<h2>return<a class="headerlink" href="#return" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">return</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">return</span></code> instruction returns to calling code from a subroutine.</p>
+</section>
+<section id="interrupt">
+<h2>interrupt<a class="headerlink" href="#interrupt" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">interrupt</span><span class="w"> </span><span class="nv">an_interrupt</span><span class="w"> </span>()
+<span class="w">    </span><span class="c1">--...</span>
+<span class="w">    </span><span class="c1">-- interrupt subroutine code</span>
+<span class="w">    </span><span class="c1">--...</span>
+<span class="k">end interrupt</span>
+</pre></div>
+</div>
+<p>Code of an interrupt subroutine is placed between <code class="docutils literal notranslate"><span class="pre">interrupt</span></code>
+and <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">interrupt</span></code> instructions.  The label <code class="docutils literal notranslate"><span class="pre">an_interrupt</span></code> must be given in the
+tb_signal package by customization and attached to a signal triggering
+the interrupt. If necessary, the handling of nested interrupts must be
+resolved there too.</p>
+</section>
+<section id="if">
+<h2>if<a class="headerlink" href="#if" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">b_var</span>
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">elsif</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0xABC</span>
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">elsif</span><span class="w"> </span><span class="mh">0x123</span>} b_var
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">end if</span>
+</pre></div>
+</div>
+<p>Possible comparison operators are:
+<code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">&lt;=</span> <span class="pre">&gt;</span> <span class="pre">&lt;</span> <span class="pre">!=</span> <span class="pre">=</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">if</span></code> or <code class="docutils literal notranslate"><span class="pre">elsif</span></code> instructions compares two variables, constants, or numeric values and branches
+execution to the next line after the <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">if</span></code> if it resolves to true. Otherwise, it branches
+to the next <code class="docutils literal notranslate"><span class="pre">elsif</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span></code> or <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">if</span></code> instruction.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">if</span></code> <code class="docutils literal notranslate"><span class="pre">elsif</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span></code> instructions can be nested.</p>
+</section>
+<section id="loop">
+<h2>loop<a class="headerlink" href="#loop" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">loop</span><span class="w"> </span><span class="nv">l_var</span>
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">end loop</span>
+
+<span class="k">loop</span><span class="w"> </span><span class="mi">32</span>
+<span class="w">    </span><span class="c1">-- ... some code</span>
+<span class="k">end loop</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">loop</span></code> instruction executes a loop of the code between the <code class="docutils literal notranslate"><span class="pre">loop</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">loop</span></code> instruction.</p>
+<p>The number of times the loop should be executed is given after the <code class="docutils literal notranslate"><span class="pre">loop</span></code>
+keyword. It can be a numeric value, a variable, or a constant.</p>
+<p>In case of a variable, this number can be changed by code within the loop, e.g.,
+to skip loops or end the loop earlier, due to the global nature of all
+variables. No break or continue instructions are supported therefore.</p>
+<p>The loop can be terminated by a <code class="docutils literal notranslate"><span class="pre">return</span></code> instruction too at any time,
+which is a good practice.</p>
+</section>
+<section id="abort">
+<h2>abort<a class="headerlink" href="#abort" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">abort</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">abort</span></code> instruction aborts the simulation with severity Failure.</p>
+</section>
+<section id="finish">
+<h2>finish<a class="headerlink" href="#finish" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">finish</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">finish</span></code> instruction exits the simulation.</p>
+</section>
+<section id="stop">
+<h2>stop<a class="headerlink" href="#stop" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">stop</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">stop</span></code> instruction stops the simulation with the severity Failure. The simulation can be resumed.</p>
+</section>
+<section id="resume">
+<h2>resume<a class="headerlink" href="#resume" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">resume</span><span class="w"> </span><span class="nv">EXIT_ON_VERIFY_ERROR</span>
+<span class="fm">resume</span><span class="w"> </span><span class="mi">0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">Usual practice is to use the following constants to set verbosity:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">RESUME_ON_VERIFY_ERROR</span> <span class="pre">1</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">EXIT_ON_VERIFY_ERROR</span> <span class="pre">0</span></code></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">resume</span></code> instruction sets the global resume behavior for verify instructions. On a verify
+mismatch, the simulation stops with severity Failure if the global
+resume is set to 0; otherwise, it continues and reports an error.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

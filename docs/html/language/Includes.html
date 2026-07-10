@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Includes &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
+        <h2 class="heading"><span>Includes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="includes">
+<h1>Includes<a class="headerlink" href="#includes" title="Link to this heading">¶</a></h1>
+<section id="include">
+<h2>include<a class="headerlink" href="#include" title="Link to this heading">¶</a></h2>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kn">include</span><span class="w"> </span><span class="nn">&quot;aninclude.stm&quot;</span>
+</pre></div>
+</div>
+<p>Include another child <code class="docutils literal notranslate"><span class="pre">\*.stm</span> <span class="pre">file</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">include</span></code> instructions should be the first instructions of a <code class="docutils literal notranslate"><span class="pre">\*.stm</span> <span class="pre">file</span></code>
+as they are not allowed inside a namespace.
+An included file can include further <code class="docutils literal notranslate"><span class="pre">\*.stm</span> <span class="pre">files</span></code>, thus nested includes
+are possible. The file path to be given either is prefixed with the generic stimulus_path given via the tb_simstm entity or
+is relative to the file with the respective include instruction if it contains <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code> elements.
+Later nested relative includes of files from the same folder or into child folders are predictable; nested includes to files in
+parent folders may not be a good practice.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Eccelerators GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

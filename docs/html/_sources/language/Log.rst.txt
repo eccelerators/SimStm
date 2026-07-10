@@ -1,0 +1,62 @@
+Logs
+~~~~
+
+log message
+^^^^^^^^^^^
+
+.. code-block:: simstm
+
+ log message v_var "A message to the console"
+ log message v_var "A message to the console{}{}" m_var1 m_var2
+ log message v_var "A message to the console{:d}{:b}" m_var1 m_var2
+ log message v_var "A message to the console{:s}{:b}" lb>m_var1 
+
+The ``log message`` instruction prints a message at a given verbosity level to the console.
+
+The message string can contain {} placeholders which are filled by values of
+variables given after the message string.
+
+{} prints the value of the variable in hex format
+{:d} prints the value of the variable in decimal format
+{:b} prints the value of the variable in binary format
+{:o}  prints the value of the variable in octal format
+{:s} prints the value of the variable as a string (only for label variables, prefix with lb>)
+{@c0} prints the called procedure name of the current call stack, 
+{@c1} prints the called procedure name of the caller, 
+{@c2} prints the called procedure name of the caller's caller, etc.
+{@f0} prints the file name containing the called procedure name of the current call stack, 
+{@f1} prints the file name containing the called procedure name of the caller, 
+{@f2} prints the file name containing the called procedure name of the caller's caller, etc.
+{@l0} prints the line number in the file containing the called procedure name of the current call stack, 
+{@l1} prints the line number in the file containing the called procedure name of the caller, 
+{@l2} prints the line number in the file containing the called procedure name of the caller's caller, etc.
+
+log lines
+^^^^^^^^^
+
+.. code-block:: simstm
+
+ log lines v_var s_lines
+
+The ``log lines`` instruction dumps a lines object at a given verbosity level to the console.
+
+verbosity
+^^^^^^^^^
+
+.. code-block:: simstm
+
+ verbosity v_var
+ verbosity 20
+
+Usual practice is to use the following constants to set verbosity:
+
+.. code-block:: simstm
+
+ const FAILURE 0
+ const WARNING 10
+ const INFO 20
+
+The ``verbosity`` instruction sets the global verbosity for log messages. Log messages with a
+verbosity level greater than the globally set verbosity are not printed
+to the console. Of course, the global verbosity can be changed at any
+point in the execution flow.
