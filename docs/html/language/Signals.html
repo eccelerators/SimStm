@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Signals &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=d31ea6cb" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
@@ -18,7 +18,7 @@
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
         <h2 class="heading"><span>Signals</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -29,9 +29,9 @@
         
         
   <section id="signals">
-<h1>Signals<a class="headerlink" href="#signals" title="Permalink to this heading">¶</a></h1>
+<h1>Signals<a class="headerlink" href="#signals" title="Link to this heading">¶</a></h1>
 <section id="signal">
-<h2>signal<a class="headerlink" href="#signal" title="Permalink to this heading">¶</a></h2>
+<h2>signal<a class="headerlink" href="#signal" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mi">10</span>
 <span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">a_const</span>
 <span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">a_global_var</span>
@@ -43,7 +43,7 @@ This signal number must be given in the tb_signal package by
 customization and be attached to a signal.</p>
 </section>
 <section id="signal-write">
-<h2>signal write<a class="headerlink" href="#signal-write" title="Permalink to this heading">¶</a></h2>
+<h2>signal write<a class="headerlink" href="#signal-write" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal write</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">s_var</span>
 <span class="k">signal write</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mb">0b11</span>
 </pre></div>
@@ -52,7 +52,7 @@ customization and be attached to a signal.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">s_var</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">a_signal</span></code>.</p>
 </section>
 <section id="signal-read">
-<h2>signal read<a class="headerlink" href="#signal-read" title="Permalink to this heading">¶</a></h2>
+<h2>signal read<a class="headerlink" href="#signal-read" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal read</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">t_var</span>
 </pre></div>
 </div>
@@ -60,7 +60,7 @@ customization and be attached to a signal.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">a_signal</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">t_var</span></code>.</p>
 </section>
 <section id="signal-verify">
-<h2>signal verify<a class="headerlink" href="#signal-verify" title="Permalink to this heading">¶</a></h2>
+<h2>signal verify<a class="headerlink" href="#signal-verify" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal verify</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">signal verify</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -77,7 +77,7 @@ counts up the SimStm testbench internal verify_failure_count variable.</p>
 simulation error occurs or not.</p>
 </section>
 <section id="signal-pointer-copy">
-<h2>signal pointer copy<a class="headerlink" href="#signal-pointer-copy" title="Permalink to this heading">¶</a></h2>
+<h2>signal pointer copy<a class="headerlink" href="#signal-pointer-copy" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer copy</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="nv">s_signal</span>
 </pre></div>
 </div>
@@ -87,7 +87,7 @@ simulation error occurs or not.</p>
 object are applied to the target object as well.</p>
 </section>
 <section id="signal-pointer-set">
-<h2>signal pointer set<a class="headerlink" href="#signal-pointer-set" title="Permalink to this heading">¶</a></h2>
+<h2>signal pointer set<a class="headerlink" href="#signal-pointer-set" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer set</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="mi">5</span>
 <span class="k">signal pointer set</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
@@ -96,7 +96,7 @@ object are applied to the target object as well.</p>
 <p>In the example, the pointer <code class="docutils literal notranslate"><span class="pre">t_signal</span></code> is set to 5.</p>
 </section>
 <section id="signal-pointer-get">
-<h2>signal pointer get<a class="headerlink" href="#signal-pointer-get" title="Permalink to this heading">¶</a></h2>
+<h2>signal pointer get<a class="headerlink" href="#signal-pointer-get" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer get</span><span class="w"> </span><span class="nv">s_signal</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
 </div>
@@ -107,7 +107,7 @@ object are applied to the target object as well.</p>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -117,7 +117,7 @@ object are applied to the target object as well.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>
