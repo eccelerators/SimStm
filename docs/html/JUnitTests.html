@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>7. JUnit Tests &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <title>8. JUnit Tests &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. Standard Labs" href="StandardLabs.html" />
-    <link rel="prev" title="6. Standard Tests" href="StandardTests.html" /> 
+    <link rel="next" title="9. Standard Labs" href="StandardLabs.html" />
+    <link rel="prev" title="7. Standard Tests" href="StandardTests.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
-        <h2 class="heading"><span>7. JUnit Tests</span></h2>
+        <h2 class="heading"><span>8. JUnit Tests</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="Top">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        «&#160;&#160;<a href="StandardTests.html"><span class="section-number">6. </span>Standard Tests</a>
+        «&#160;&#160;<a href="StandardTests.html"><span class="section-number">7. </span>Standard Tests</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="StandardLabs.html"><span class="section-number">8. </span>Standard Labs</a>&#160;&#160;»
+        <a href="StandardLabs.html"><span class="section-number">9. </span>Standard Labs</a>&#160;&#160;»
         </p>
 
       </div>
@@ -35,7 +35,7 @@
         
         
   <section id="junit-tests">
-<h1><span class="section-number">7. </span>JUnit Tests<a class="headerlink" href="#junit-tests" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">8. </span>JUnit Tests<a class="headerlink" href="#junit-tests" title="Permalink to this heading">¶</a></h1>
 <p>Test results can be generated in JUnit XML format. This allows for easy integration with CI/CD pipelines
 and test reporting tools that support JUnit format.</p>
 <p>To be able to use the helper scripts please follow the naming policies.</p>
@@ -51,7 +51,7 @@ collect the result in a SimulationResult.xml which is a JUnit XML file.</p>
 <p>To obtain SimStm testbench results in JUnit XML format, follow the steps for each type of test suite
 as described in the respective sections below.</p>
 <section id="plain">
-<h2><span class="section-number">7.1. </span>Plain<a class="headerlink" href="#plain" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.1. </span>Plain<a class="headerlink" href="#plain" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Create standard test procedures containing assertions for behaviors to test as describe in chapter Standard Tests.</p></li>
 </ol>
@@ -127,7 +127,7 @@ e.g., because they are expected to fail due to a not yet fixed bug.</p>
 <p>This snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSample.stm">tb/simstm/testMainSuiteSample.stm</a>.</p>
 </section>
 <section id="case-indexed">
-<h2><span class="section-number">7.2. </span>Case indexed<a class="headerlink" href="#case-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.2. </span>Case indexed<a class="headerlink" href="#case-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior based on
 the value of the variable <em>stm.TestCaseIndex</em>.</p>
 <p>E.g., the test procedure can use <em>stm.TestCaseIndex</em> variable to run a test with different delays.
@@ -179,7 +179,7 @@ The presence of indexed test cases does not affect the test suite procedure or f
 <p>A snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSampleCaseOnly.stm">tb/simstm/testMainSuiteSampleCaseOnly.stm</a>.</p>
 </section>
 <section id="suite-indexed">
-<h2><span class="section-number">7.3. </span>Suite indexed<a class="headerlink" href="#suite-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.3. </span>Suite indexed<a class="headerlink" href="#suite-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior
 based on the value of the variable <em>stm.TestSuiteIndex</em>.</p>
 <p>Test suites and in fact each index may run in parallel threads controlled by the outer e.g., ANT script thus speeding up
@@ -257,7 +257,7 @@ This allows to set a label for the called standard test and to skip it if needed
 <p>This snippet is present in <a class="reference external" href="./tb/simstm/testMainSuiteSampleSuiteOnly.stm">tb/simstm/testMainSuiteSampleSuiteOnly.stm</a>.</p>
 </section>
 <section id="suite-and-case-indexed">
-<h2><span class="section-number">7.4. </span>Suite and Case indexed<a class="headerlink" href="#suite-and-case-indexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.4. </span>Suite and Case indexed<a class="headerlink" href="#suite-and-case-indexed" title="Permalink to this heading">¶</a></h2>
 <p>1. Same as for plain test suites but with the addition that the test must change its behavior
 based on the value of the variable <em>stm.TestSuiteIndex</em> and the value of the variable <em>stm.TestCaseIndex</em>..</p>
 <p>Test suites and in fact each suite index may run in parallel threads controlled by the outer e.g., ANT script thus speeding up
@@ -347,21 +347,21 @@ This allows to set a label for the called standard test and to skip it if needed
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        «&#160;&#160;<a href="StandardTests.html"><span class="section-number">6. </span>Standard Tests</a>
+        «&#160;&#160;<a href="StandardTests.html"><span class="section-number">7. </span>Standard Tests</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="StandardLabs.html"><span class="section-number">8. </span>Standard Labs</a>&#160;&#160;»
+        <a href="StandardLabs.html"><span class="section-number">9. </span>Standard Labs</a>&#160;&#160;»
         </p>
 
       </div>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

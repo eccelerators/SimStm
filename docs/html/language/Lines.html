@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Lines &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
-    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
@@ -18,7 +18,7 @@
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
         <h2 class="heading"><span>Lines</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="Top">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -29,9 +29,9 @@
         
         
   <section id="lines">
-<h1>Lines<a class="headerlink" href="#lines" title="Link to this heading">¶</a></h1>
+<h1>Lines<a class="headerlink" href="#lines" title="Permalink to this heading">¶</a></h1>
 <section id="id1">
-<h2>lines<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<h2>lines<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">lines</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -42,7 +42,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">insert</span> <span class="pre">array</span> <span class="pre">a_lines</span> <span class="pre">9</span> <span class="pre">b_array</span></code>.</p>
 </section>
 <section id="lines-get">
-<h2>lines get<a class="headerlink" href="#lines-get" title="Link to this heading">¶</a></h2>
+<h2>lines get<a class="headerlink" href="#lines-get" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
 <span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
@@ -61,7 +61,7 @@ result variable. Then the user can decide what action should follow a
 mismatch.</p>
 </section>
 <section id="lines-set">
-<h2>lines set<a class="headerlink" href="#lines-set" title="Link to this heading">¶</a></h2>
+<h2>lines set<a class="headerlink" href="#lines-set" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines set message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
@@ -76,7 +76,7 @@ The message string can contain {} placeholders, refer to the <a href="#id2"><spa
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-insert">
-<h2>lines insert<a class="headerlink" href="#lines-insert" title="Link to this heading">¶</a></h2>
+<h2>lines insert<a class="headerlink" href="#lines-insert" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines insert message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
@@ -90,7 +90,7 @@ The message string can contain {} placeholders, refer to the <a href="#id4"><spa
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-append">
-<h2>lines append<a class="headerlink" href="#lines-append" title="Link to this heading">¶</a></h2>
+<h2>lines append<a class="headerlink" href="#lines-append" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines append array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
 <span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Value1: {} Value2: {} to be written to a file later&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
@@ -103,7 +103,7 @@ The message string can contain {} placeholders, refer to the <a href="#id6"><spa
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-delete">
-<h2>lines delete<a class="headerlink" href="#lines-delete" title="Link to this heading">¶</a></h2>
+<h2>lines delete<a class="headerlink" href="#lines-delete" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span>
 <span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">3</span>
 </pre></div>
@@ -113,7 +113,7 @@ moved to the given position if it exists.</p>
 <p>In the example, the line at position <code class="docutils literal notranslate"><span class="pre">p_var</span></code> in <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is deleted.</p>
 </section>
 <section id="lines-size">
-<h2>lines size<a class="headerlink" href="#lines-size" title="Link to this heading">¶</a></h2>
+<h2>lines size<a class="headerlink" href="#lines-size" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines size</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
 </div>
@@ -122,7 +122,7 @@ at that point.</p>
 <p>In the example, the size of <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
 </section>
 <section id="lines-pointer-copy">
-<h2>lines pointer copy<a class="headerlink" href="#lines-pointer-copy" title="Link to this heading">¶</a></h2>
+<h2>lines pointer copy<a class="headerlink" href="#lines-pointer-copy" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines pointer copy</span><span class="w"> </span><span class="nv">t_lines</span><span class="w"> </span><span class="nv">s_lines</span>
 </pre></div>
 </div>
@@ -135,7 +135,7 @@ object are applied to the target object as well.</p>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -145,7 +145,7 @@ object are applied to the target object as well.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

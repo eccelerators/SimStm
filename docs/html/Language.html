@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>4. Language &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <title>5. Language &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Examples" href="Examples.html" />
-    <link rel="prev" title="3. Installation" href="Installation.html" /> 
+    <link rel="next" title="6. Examples" href="Examples.html" />
+    <link rel="prev" title="4. Installation" href="Installation.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
-        <h2 class="heading"><span>4. Language</span></h2>
+        <h2 class="heading"><span>5. Language</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="Top">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        «&#160;&#160;<a href="Installation.html"><span class="section-number">3. </span>Installation</a>
+        «&#160;&#160;<a href="Installation.html"><span class="section-number">4. </span>Installation</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="Examples.html"><span class="section-number">5. </span>Examples</a>&#160;&#160;»
+        <a href="Examples.html"><span class="section-number">6. </span>Examples</a>&#160;&#160;»
         </p>
 
       </div>
@@ -35,12 +35,12 @@
         
         
   <section id="language">
-<h1><span class="section-number">4. </span>Language<a class="headerlink" href="#language" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">5. </span>Language<a class="headerlink" href="#language" title="Permalink to this heading">¶</a></h1>
 <p>THe SimStm language is a high-level, domain-specific language designed for modeling and simulating complex systems.
 It provides a simple but powerful set of constructs and features that allow users to define and manipulate various aspects of their simulations,
 including variables, operations, control flow, and more.</p>
 <section id="general">
-<h2><span class="section-number">4.1. </span>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.1. </span>General<a class="headerlink" href="#general" title="Permalink to this heading">¶</a></h2>
 <p>In SimStm instructions a line is a instruction, except empty lines or
 comment only lines. Subroutine labels are considered as instruction in
 this manner too.</p>
@@ -58,7 +58,7 @@ debugging it.</p>
 SimStm code for the simulator.</p>
 </section>
 <section id="comments">
-<h2><span class="section-number">4.2. </span>Comments<a class="headerlink" href="#comments" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.2. </span>Comments<a class="headerlink" href="#comments" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="c1">-- This is a full line comment</span>
 <span class="kd">const</span><span class="w"> </span><span class="no">aconst</span><span class="w"> </span><span class="mh">0x03</span><span class="w"> </span><span class="c1">-- This is an appended line comment</span>
 </pre></div>
@@ -69,9 +69,9 @@ SimStm code for the simulator.</p>
 </div>
 </section>
 <section id="namespaces">
-<h2><span class="section-number">4.3. </span>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.3. </span>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this heading">¶</a></h2>
 <section id="namespace">
-<h3><span class="section-number">4.3.1. </span>namespace<a class="headerlink" href="#namespace" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.3.1. </span>namespace<a class="headerlink" href="#namespace" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">namespace</span><span class="w"> </span><span class="nv">a_namespace</span>
 <span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mi">0</span>
 <span class="nv">end</span><span class="w"> </span><span class="nv">a_namespace</span>
@@ -86,9 +86,9 @@ and <code class="docutils literal notranslate"><span class="pre">end</span> <spa
 </section>
 </section>
 <section id="includes">
-<h2><span class="section-number">4.4. </span>Includes<a class="headerlink" href="#includes" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.4. </span>Includes<a class="headerlink" href="#includes" title="Permalink to this heading">¶</a></h2>
 <section id="include">
-<h3><span class="section-number">4.4.1. </span>include<a class="headerlink" href="#include" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.4.1. </span>include<a class="headerlink" href="#include" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kn">include</span><span class="w"> </span><span class="nn">&quot;aninclude.stm&quot;</span>
 </pre></div>
 </div>
@@ -103,9 +103,9 @@ parent folders may not be a good practice.</p>
 </section>
 </section>
 <section id="arrays">
-<h2><span class="section-number">4.5. </span>Arrays<a class="headerlink" href="#arrays" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.5. </span>Arrays<a class="headerlink" href="#arrays" title="Permalink to this heading">¶</a></h2>
 <section id="array">
-<h3><span class="section-number">4.5.1. </span>array<a class="headerlink" href="#array" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.1. </span>array<a class="headerlink" href="#array" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">array</span><span class="w"> </span><span class="nv">a_array</span><span class="w"> </span><span class="mi">16</span>
 </pre></div>
 </div>
@@ -113,7 +113,7 @@ parent folders may not be a good practice.</p>
 <p>Only arrays with one dimension are possible; the length is fixed.</p>
 </section>
 <section id="array-set">
-<h3><span class="section-number">4.5.2. </span>array set<a class="headerlink" href="#array-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.2. </span>array set<a class="headerlink" href="#array-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">array set</span><span class="w"> </span><span class="nv">a_array</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">a_var</span>
 <span class="k">array set</span><span class="w"> </span><span class="nv">a_array</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="mi">5</span>
 <span class="k">array set</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nv">b_var</span>
@@ -126,7 +126,7 @@ a certain value.</p>
 value of <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
 <section id="array-get">
-<h3><span class="section-number">4.5.3. </span>array get<a class="headerlink" href="#array-get" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.3. </span>array get<a class="headerlink" href="#array-get" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">array get</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">t_var</span>
 <span class="k">array get</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="mi">5</span><span class="w">  </span><span class="nv">t_var</span>
 </pre></div>
@@ -136,7 +136,7 @@ value of <code class="docutils literal notranslate"><span class="pre">a_var</spa
 <code class="docutils literal notranslate"><span class="pre">p_var</span></code> and stores it in <code class="docutils literal notranslate"><span class="pre">t_var</span></code>.</p>
 </section>
 <section id="array-verify">
-<h3><span class="section-number">4.5.4. </span>array verify<a class="headerlink" href="#array-verify" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.4. </span>array verify<a class="headerlink" href="#array-verify" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">array verify</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">array verify</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -153,7 +153,7 @@ simulation error occurs or not.</p>
 is the same as the value of <code class="docutils literal notranslate"><span class="pre">e_var</span></code>, with the mask <code class="docutils literal notranslate"><span class="pre">m_var</span></code>.</p>
 </section>
 <section id="array-size">
-<h3><span class="section-number">4.5.5. </span>array size<a class="headerlink" href="#array-size" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.5. </span>array size<a class="headerlink" href="#array-size" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">array size</span><span class="w"> </span><span class="nv">b_array</span><span class="w"> </span><span class="nv">t_var</span>
 </pre></div>
 </div>
@@ -161,7 +161,7 @@ is the same as the value of <code class="docutils literal notranslate"><span cla
 <p>For example, <code class="docutils literal notranslate"><span class="pre">array</span> <span class="pre">size</span> <span class="pre">b_array</span> <span class="pre">t_var</span></code> stores the size of <code class="docutils literal notranslate"><span class="pre">b_array</span></code> in <code class="docutils literal notranslate"><span class="pre">t_var</span></code>.</p>
 </section>
 <section id="array-pointer-copy">
-<h3><span class="section-number">4.5.6. </span>array pointer copy<a class="headerlink" href="#array-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.5.6. </span>array pointer copy<a class="headerlink" href="#array-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">array pointer copy</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">s_array</span>
 </pre></div>
 </div>
@@ -172,9 +172,9 @@ array also apply to the target array.</p>
 </section>
 </section>
 <section id="busses">
-<h2><span class="section-number">4.6. </span>Busses<a class="headerlink" href="#busses" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.6. </span>Busses<a class="headerlink" href="#busses" title="Permalink to this heading">¶</a></h2>
 <section id="bus">
-<h3><span class="section-number">4.6.1. </span>bus<a class="headerlink" href="#bus" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.1. </span>bus<a class="headerlink" href="#bus" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">bus</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="mi">10</span>
 <span class="kd">bus</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_const</span>
 <span class="kd">bus</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_global_var</span>
@@ -186,7 +186,7 @@ bus number must be given in the tb_bus package by customization and
 attached to a bus.</p>
 </section>
 <section id="bus-write">
-<h3><span class="section-number">4.6.2. </span>bus write<a class="headerlink" href="#bus-write" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.2. </span>bus write<a class="headerlink" href="#bus-write" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus write</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_width</span><span class="w"> </span><span class="nv">an_address</span><span class="w"> </span><span class="nv">a_var</span>
 <span class="k">bus write</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="mh">0x0004</span><span class="w"> </span><span class="mh">0x12345678</span>
 </pre></div>
@@ -195,7 +195,7 @@ attached to a bus.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">a_var</span></code> is being stored in <code class="docutils literal notranslate"><span class="pre">a_bus</span></code>.</p>
 </section>
 <section id="bus-read">
-<h3><span class="section-number">4.6.3. </span>bus read<a class="headerlink" href="#bus-read" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.3. </span>bus read<a class="headerlink" href="#bus-read" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus read</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_width</span><span class="w"> </span><span class="nv">an_address</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
@@ -203,7 +203,7 @@ attached to a bus.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">a_bus</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
 <section id="bus-verify">
-<h3><span class="section-number">4.6.4. </span>bus verify<a class="headerlink" href="#bus-verify" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.4. </span>bus verify<a class="headerlink" href="#bus-verify" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus verify</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_width</span><span class="w"> </span><span class="nv">an_address</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">bus verify</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">a_width</span><span class="w"> </span><span class="nv">an_address</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -219,7 +219,7 @@ simulation error occurs or not.</p>
 with the mask <code class="docutils literal notranslate"><span class="pre">m_var</span></code>.</p>
 </section>
 <section id="bus-pointer-copy">
-<h3><span class="section-number">4.6.5. </span>bus pointer copy<a class="headerlink" href="#bus-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.5. </span>bus pointer copy<a class="headerlink" href="#bus-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus pointer copy</span><span class="w"> </span><span class="nv">t_bus</span><span class="w"> </span><span class="nv">s_bus</span>
 </pre></div>
 </div>
@@ -229,7 +229,7 @@ Used, for instance, to hand over a bus to a subroutine. Changes to the source
 bus are applied to the target bus as well.</p>
 </section>
 <section id="bus-pointer-set">
-<h3><span class="section-number">4.6.6. </span>bus pointer set<a class="headerlink" href="#bus-pointer-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.6. </span>bus pointer set<a class="headerlink" href="#bus-pointer-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus pointer set</span><span class="w"> </span><span class="nv">t_bus</span><span class="w"> </span><span class="mi">5</span>
 <span class="k">bus pointer set</span><span class="w"> </span><span class="nv">t_bus</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
@@ -238,7 +238,7 @@ bus are applied to the target bus as well.</p>
 <p>In the example, the pointer <code class="docutils literal notranslate"><span class="pre">t_bus</span></code> is set to 5.</p>
 </section>
 <section id="bus-pointer-get">
-<h3><span class="section-number">4.6.7. </span>bus pointer get<a class="headerlink" href="#bus-pointer-get" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.7. </span>bus pointer get<a class="headerlink" href="#bus-pointer-get" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus pointer get</span><span class="w"> </span><span class="nv">s_bus</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
 </div>
@@ -246,7 +246,7 @@ bus are applied to the target bus as well.</p>
 <p>In the example, the pointer <code class="docutils literal notranslate"><span class="pre">s_bus</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">ptr_var</span></code>.</p>
 </section>
 <section id="bus-timeout-set">
-<h3><span class="section-number">4.6.8. </span>bus timeout set<a class="headerlink" href="#bus-timeout-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.8. </span>bus timeout set<a class="headerlink" href="#bus-timeout-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus timeout set</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="nv">s_var</span>
 <span class="k">bus timeout set</span><span class="w"> </span><span class="nv">a_bus</span><span class="w"> </span><span class="mi">1000</span>
 </pre></div>
@@ -257,7 +257,7 @@ counts up the simstm testbench internal bus_timeout_failure_count variable.</p>
 <p>The simstm testbench internal bus_timeout_passes_count variable counts up the number of bus accesses at all regardless if a timeout occurs or not.</p>
 </section>
 <section id="bus-timeout-get">
-<h3><span class="section-number">4.6.9. </span>bus timeout get<a class="headerlink" href="#bus-timeout-get" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.6.9. </span>bus timeout get<a class="headerlink" href="#bus-timeout-get" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">bus timeout get</span><span class="w"> </span><span class="nv">s_bus</span><span class="w"> </span><span class="nv">to_var</span>
 </pre></div>
 </div>
@@ -266,9 +266,9 @@ counts up the simstm testbench internal bus_timeout_failure_count variable.</p>
 </section>
 </section>
 <section id="debug">
-<h2><span class="section-number">4.7. </span>Debug<a class="headerlink" href="#debug" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.7. </span>Debug<a class="headerlink" href="#debug" title="Permalink to this heading">¶</a></h2>
 <section id="trace">
-<h3><span class="section-number">4.7.1. </span>trace<a class="headerlink" href="#trace" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.7.1. </span>trace<a class="headerlink" href="#trace" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">trace</span><span class="w"> </span><span class="nv">t_var</span>
 <span class="fm">trace</span><span class="w"> </span><span class="mb">0b111</span>
 </pre></div>
@@ -290,7 +290,7 @@ shown.</p>
 </div>
 </section>
 <section id="marker">
-<h3><span class="section-number">4.7.2. </span>marker<a class="headerlink" href="#marker" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.7.2. </span>marker<a class="headerlink" href="#marker" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">marker</span><span class="w"> </span><span class="nv">n_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="fm">marker</span><span class="w"> </span><span class="mh">0xF</span><span class="w"> </span><span class="mb">0b1</span>
 </pre></div>
@@ -306,7 +306,7 @@ the waveform display. Beneath this, the intern variables <code class="docutils l
 show the currently executed line of code.</p>
 </section>
 <section id="stop">
-<h3><span class="section-number">4.7.3. </span>stop<a class="headerlink" href="#stop" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.7.3. </span>stop<a class="headerlink" href="#stop" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">stop</span>
 </pre></div>
 </div>
@@ -314,9 +314,9 @@ show the currently executed line of code.</p>
 </section>
 </section>
 <section id="files">
-<h2><span class="section-number">4.8. </span>Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.8. </span>Files<a class="headerlink" href="#files" title="Permalink to this heading">¶</a></h2>
 <section id="file">
-<h3><span class="section-number">4.8.1. </span>file<a class="headerlink" href="#file" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.1. </span>file<a class="headerlink" href="#file" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">file</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="s">&quot;filename.stm&quot;</span>
 <span class="kd">file</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="s">&quot;filename{:d}{:d}.stm&quot;</span><span class="w"> </span><span class="nv">index1</span><span class="w"> </span><span class="nv">index2</span>
 </pre></div>
@@ -329,7 +329,7 @@ a reference to a file is used in another instruction accessing a
 file, e.g., <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">read</span> <span class="pre">all</span> <span class="pre">a_file</span> <span class="pre">a_lines</span></code>.</p>
 </section>
 <section id="file-writable">
-<h3><span class="section-number">4.8.2. </span>file writable<a class="headerlink" href="#file-writable" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.2. </span>file writable<a class="headerlink" href="#file-writable" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">file</span><span class="w"> </span><span class="nv">writable</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
 </div>
@@ -340,7 +340,7 @@ on the operating system.</p>
 <p>In the example, the value of the test for <code class="docutils literal notranslate"><span class="pre">a_file</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
 </section>
 <section id="file-readable">
-<h3><span class="section-number">4.8.3. </span>file readable<a class="headerlink" href="#file-readable" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.3. </span>file readable<a class="headerlink" href="#file-readable" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file readable</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
 </div>
@@ -350,7 +350,7 @@ on the operating system.</p>
 <p>In the example, the value of the test for <code class="docutils literal notranslate"><span class="pre">a_file</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
 </section>
 <section id="file-appendable">
-<h3><span class="section-number">4.8.4. </span>file appendable<a class="headerlink" href="#file-appendable" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.4. </span>file appendable<a class="headerlink" href="#file-appendable" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file appendable</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
 </div>
@@ -360,7 +360,7 @@ depend on the operating system.</p>
 <p>In the example, the value of the test for <code class="docutils literal notranslate"><span class="pre">a_file</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
 </section>
 <section id="file-write">
-<h3><span class="section-number">4.8.5. </span>file write<a class="headerlink" href="#file-write" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.5. </span>file write<a class="headerlink" href="#file-write" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file write</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -369,7 +369,7 @@ overwritten if it exists.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is written into <code class="docutils literal notranslate"><span class="pre">a_file</span></code>.</p>
 </section>
 <section id="file-append">
-<h3><span class="section-number">4.8.6. </span>file append<a class="headerlink" href="#file-append" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.6. </span>file append<a class="headerlink" href="#file-append" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file append</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -378,7 +378,7 @@ if the file doesn’t exist.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is appended to <code class="docutils literal notranslate"><span class="pre">a_file</span></code>.</p>
 </section>
 <section id="file-read-all">
-<h3><span class="section-number">4.8.7. </span>file read all<a class="headerlink" href="#file-read-all" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.7. </span>file read all<a class="headerlink" href="#file-read-all" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file read all</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -386,7 +386,7 @@ if the file doesn’t exist.</p>
 <p>In the example, the content of <code class="docutils literal notranslate"><span class="pre">a_file</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">a_lines</span></code>.</p>
 </section>
 <section id="file-read">
-<h3><span class="section-number">4.8.8. </span>file read<a class="headerlink" href="#file-read" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.8. </span>file read<a class="headerlink" href="#file-read" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file read</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">n_var</span>
 <span class="k">file read</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">10</span>
 </pre></div>
@@ -401,14 +401,14 @@ end instruction always. The number of concurrent file read processes is
 limited to 4.</p>
 </section>
 <section id="file-read-end">
-<h3><span class="section-number">4.8.9. </span>file read end<a class="headerlink" href="#file-read-end" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.9. </span>file read end<a class="headerlink" href="#file-read-end" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file read end</span><span class="w"> </span><span class="nv">a_file</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">read</span> <span class="pre">end</span></code> instruction ends the piecewise read process of a file.</p>
 </section>
 <section id="file-pointer-copy">
-<h3><span class="section-number">4.8.10. </span>file pointer copy<a class="headerlink" href="#file-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.8.10. </span>file pointer copy<a class="headerlink" href="#file-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">file pointer copy</span><span class="w"> </span><span class="nv">t_file</span><span class="w"> </span><span class="nv">s_file</span>
 </pre></div>
 </div>
@@ -420,9 +420,9 @@ file are applied in the target file as well.</p>
 </section>
 </section>
 <section id="labels">
-<h2><span class="section-number">4.9. </span>Labels<a class="headerlink" href="#labels" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.9. </span>Labels<a class="headerlink" href="#labels" title="Permalink to this heading">¶</a></h2>
 <section id="label">
-<h3><span class="section-number">4.9.1. </span>label<a class="headerlink" href="#label" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.9.1. </span>label<a class="headerlink" href="#label" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
@@ -430,7 +430,7 @@ file are applied in the target file as well.</p>
 <p>A label can act as a placeholder for actual values which are modifiable through <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">equ</span></code>, <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">set</span></code> or <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">pointer</span> <span class="pre">copy</span></code>.</p>
 </section>
 <section id="label-equ">
-<h3><span class="section-number">4.9.2. </span>label equ<a class="headerlink" href="#label-equ" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.9.2. </span>label equ<a class="headerlink" href="#label-equ" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="o">equ</span><span class="w"> </span><span class="nv">lbl_varA</span><span class="w"> </span><span class="nv">lbl_varB</span>
 </pre></div>
 </div>
@@ -438,24 +438,170 @@ file are applied in the target file as well.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">lbl_var</span></code> is set to the value of <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
 <section id="label-set">
-<h3><span class="section-number">4.9.3. </span>label set<a class="headerlink" href="#label-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.9.3. </span>label set<a class="headerlink" href="#label-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
 </section>
 <section id="label-pointer-copy">
-<h3><span class="section-number">4.9.4. </span>label pointer copy<a class="headerlink" href="#label-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.9.4. </span>label pointer copy<a class="headerlink" href="#label-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
 <p>The instruction <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">pointer</span> <span class="pre">copy</span></code> creates a label pointer.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">lbl_var</span></code> points to <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
+<section id="powerful-usage-patterns">
+<h3><span class="section-number">5.9.5. </span>Powerful Usage Patterns<a class="headerlink" href="#powerful-usage-patterns" title="Permalink to this heading">¶</a></h3>
+<p>Labels become most powerful when used to decouple generic behaviour from concrete implementations.
+The following patterns demonstrate how labels enable dynamic dispatch, reusable templates, and
+shared configuration — all without recompiling HDL.</p>
+<p><strong>Pattern 1: Dynamic Dispatch — one generic poller, thousands of concrete bits</strong></p>
+<p>A single <code class="docutils literal notranslate"><span class="pre">waitForBit</span></code> wrapper can poll any status bit in the design.
+The concrete procedure to call is injected at the call site via <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">set</span></code>.
+This avoids duplicating the polling logic for every single bit.</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Generic poller: calls whatever procedure is injected via ToCall</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">waitForBit</span><span class="w"> </span>(
+<span class="w">    </span><span class="nv">label</span><span class="w"> </span><span class="nv">ToCall</span><span class="w"> </span><span class="nv">waitForBit_ToCall_template</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">TimeoutCycles</span><span class="w"> </span><span class="mi">1000</span>
+)
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">loop</span>
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">ToCall</span><span class="w"> </span>(
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="nv">IsExpectedValue</span>
+<span class="w">        </span>)
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="nv">then</span>
+<span class="w">            </span><span class="fm">return</span>
+<span class="w">        </span><span class="k">end if</span>
+<span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span>+ 1
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nv">TimeoutCycles</span><span class="w"> </span><span class="nv">then</span>
+<span class="w">            </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;waitForBit: timeout waiting for bit&quot;
+<span class="w">            </span><span class="fm">return</span>
+<span class="w">        </span><span class="k">end if</span>
+<span class="w">        </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">end loop</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Concrete bit reader for DMA done flag</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">isDmaDone</span><span class="w"> </span>(
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mi">0</span>
+)
+<span class="w">    </span><span class="k">bus read</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="mh">0x4000_0010</span><span class="w"> </span><span class="nv">IsExpectedValue</span>
+<span class="w">    </span><span class="o">and</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mh">0x1</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Concrete bit reader for FIFO not full flag</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">isFifoNotFull</span><span class="w"> </span>(
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mi">0</span>
+)
+<span class="w">    </span><span class="k">bus read</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="mh">0x4000_0020</span><span class="w"> </span><span class="nv">IsExpectedValue</span>
+<span class="w">    </span><span class="o">shr</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="o">and</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="mh">0x1</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Test: wait for DMA, then wait for FIFO ready</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">testDmaAndFifo</span><span class="w"> </span>()
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">result</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">waitForBit</span><span class="w"> </span>(
+<span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">ToCall</span><span class="w"> </span><span class="nv">isDmaDone</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="nv">result</span>
+<span class="w">    </span>)
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">waitForBit</span><span class="w"> </span>(
+<span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">ToCall</span><span class="w"> </span><span class="nv">isFifoNotFull</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">IsExpectedValue</span><span class="w"> </span><span class="nv">result</span>
+<span class="w">    </span>)
+<span class="k">end proc</span>
+</pre></div>
+</div>
+<p><strong>Pattern 2: Policy Injection — swap error-handling strategy at the call site</strong></p>
+<p>Use a label to inject a different error-handling procedure without modifying the
+generic test procedure. This is the equivalent of a strategy or policy pattern.</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Generic register write with injected error policy</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">writeRegChecked</span><span class="w"> </span>(
+<span class="w">    </span><span class="nv">label</span><span class="w"> </span><span class="nv">OnError</span><span class="w"> </span><span class="nv">errorPolicy_template</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mi">0</span>
+)
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">bus write</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="nv">Value</span>
+<span class="w">    </span><span class="k">bus read</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="nv">readback</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="nv">then</span>
+<span class="w">        </span><span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">OnError</span><span class="w"> </span>(
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="nv">Address</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="nv">Value</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="nv">readback</span>
+<span class="w">        </span>)
+<span class="w">    </span><span class="k">end if</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Policy: log and continue</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">errorPolicy_logOnly</span><span class="w"> </span>(
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="mi">0</span>
+)
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;Write verify failed at address&quot;
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS Address
+<span class="k">end proc</span>
+
+<span class="c1">-- Policy: log and stop the simulation</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">errorPolicy_fatal</span><span class="w"> </span>(
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="mi">0</span>
+)
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;Fatal: Write verify failed — stopping&quot;
+<span class="w">    </span><span class="nv">stop</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Smoke test uses soft policy; production test uses fatal policy</span>
+<span class="k">proc</span><span class="w"> </span><span class="nv">smokeTest</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">writeRegChecked</span><span class="w"> </span>(
+<span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">OnError</span><span class="w"> </span><span class="nv">errorPolicy_logOnly</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="mh">0x4000_0000</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mh">0xDEAD</span>
+<span class="w">    </span>)
+<span class="k">end proc</span>
+
+<span class="k">proc</span><span class="w"> </span><span class="nv">productionTest</span><span class="w"> </span>()
+<span class="w">    </span><span class="fm">call</span><span class="w"> </span><span class="nv">writeRegChecked</span><span class="w"> </span>(
+<span class="w">        </span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">OnError</span><span class="w"> </span><span class="nv">errorPolicy_fatal</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">Address</span><span class="w"> </span><span class="mh">0x4000_0000</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mh">0xDEAD</span>
+<span class="w">    </span>)
+<span class="k">end proc</span>
+</pre></div>
+</div>
+<p><strong>Pattern 3: Shared Configuration Label — one place to change, everywhere updated</strong></p>
+<p>Declare a single label for a base address or constant once and reference it everywhere.
+Changing the one declaration updates every use without touching the rest of the test.</p>
+<div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Declare the DMA controller base address once</span>
+<span class="nv">label</span><span class="w"> </span><span class="nv">DMA_BASE</span><span class="w"> </span><span class="mh">0x4000_0000</span>
+
+<span class="k">proc</span><span class="w"> </span><span class="nv">startDma</span><span class="w"> </span>()
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">ctrl</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="nv">label</span><span class="w"> </span><span class="o">equ</span><span class="w"> </span><span class="nv">ctrl</span><span class="w"> </span><span class="nv">DMA_BASE</span>
+<span class="w">    </span><span class="o">add</span><span class="w"> </span><span class="nv">ctrl</span><span class="w"> </span><span class="mh">0x00</span>
+<span class="w">    </span><span class="k">bus write</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="nv">ctrl</span><span class="w"> </span><span class="mh">0x1</span>
+<span class="k">end proc</span>
+
+<span class="k">proc</span><span class="w"> </span><span class="nv">resetDma</span><span class="w"> </span>()
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">rst</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="nv">label</span><span class="w"> </span><span class="o">equ</span><span class="w"> </span><span class="nv">rst</span><span class="w"> </span><span class="nv">DMA_BASE</span>
+<span class="w">    </span><span class="o">add</span><span class="w"> </span><span class="nv">rst</span><span class="w"> </span><span class="mh">0x04</span>
+<span class="w">    </span><span class="k">bus write</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="nv">rst</span><span class="w"> </span><span class="mh">0xFF</span>
+<span class="k">end proc</span>
+
+<span class="c1">-- Moving the peripheral to a new address only requires changing DMA_BASE above</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="subroutines-branches-and-loops">
-<h2><span class="section-number">4.10. </span>Subroutines, Branches, and Loops<a class="headerlink" href="#subroutines-branches-and-loops" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.10. </span>Subroutines, Branches, and Loops<a class="headerlink" href="#subroutines-branches-and-loops" title="Permalink to this heading">¶</a></h2>
 <section id="proc">
-<h3><span class="section-number">4.10.1. </span>proc<a class="headerlink" href="#proc" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.1. </span>proc<a class="headerlink" href="#proc" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span><span class="nv">a_proc</span><span class="w"> </span>()
 <span class="w">    </span><span class="c1">--...</span>
 <span class="w">    </span><span class="c1">--... local variable , array, files, lines, bus, signals, label declarations</span>
@@ -490,7 +636,7 @@ In case of suitable default values, the calls can be very lean.</p>
 However, they can have the same name as global variables, arrays, files, lines, buses, signals, or labels.</p>
 </section>
 <section id="call">
-<h3><span class="section-number">4.10.2. </span>call<a class="headerlink" href="#call" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.2. </span>call<a class="headerlink" href="#call" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">call</span><span class="w"> </span><span class="nv">a_proc</span><span class="w"> </span>()
 
 <span class="fm">call</span><span class="w"> </span><span class="nv">p_proc</span><span class="w"> </span>(
@@ -553,7 +699,7 @@ the calling subroutine when present as locals there, otherwise from the global s
 </div></blockquote>
 </section>
 <section id="call-label">
-<h3><span class="section-number">4.10.3. </span>call label<a class="headerlink" href="#call-label" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.3. </span>call label<a class="headerlink" href="#call-label" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">a_label</span><span class="w"> </span>()
 
 <span class="fm">call</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">p_label</span><span class="w"> </span>(
@@ -570,14 +716,14 @@ The label can be passed as a parameter to the procedure as well, which allows to
 at least a dummy procedure in case it is always overridden.</p>
 </section>
 <section id="return">
-<h3><span class="section-number">4.10.4. </span>return<a class="headerlink" href="#return" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.4. </span>return<a class="headerlink" href="#return" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">return</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">return</span></code> instruction returns to calling code from a subroutine.</p>
 </section>
 <section id="interrupt">
-<h3><span class="section-number">4.10.5. </span>interrupt<a class="headerlink" href="#interrupt" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.5. </span>interrupt<a class="headerlink" href="#interrupt" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">interrupt</span><span class="w"> </span><span class="nv">an_interrupt</span><span class="w"> </span>()
 <span class="w">    </span><span class="c1">--...</span>
 <span class="w">    </span><span class="c1">-- interrupt subroutine code</span>
@@ -592,7 +738,7 @@ the interrupt. If necessary, the handling of nested interrupts must be
 resolved there too.</p>
 </section>
 <section id="if">
-<h3><span class="section-number">4.10.6. </span>if<a class="headerlink" href="#if" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.6. </span>if<a class="headerlink" href="#if" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">b_var</span>
 <span class="w">    </span><span class="c1">-- ... some code</span>
 <span class="k">elsif</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0xABC</span>
@@ -612,7 +758,7 @@ to the next <code class="docutils literal notranslate"><span class="pre">elsif</
 <p>The <code class="docutils literal notranslate"><span class="pre">if</span></code> <code class="docutils literal notranslate"><span class="pre">elsif</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span></code> instructions can be nested.</p>
 </section>
 <section id="loop">
-<h3><span class="section-number">4.10.7. </span>loop<a class="headerlink" href="#loop" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.7. </span>loop<a class="headerlink" href="#loop" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">loop</span><span class="w"> </span><span class="nv">l_var</span>
 <span class="w">    </span><span class="c1">-- ... some code</span>
 <span class="k">end loop</span>
@@ -632,28 +778,28 @@ variables. No break or continue instructions are supported therefore.</p>
 which is a good practice.</p>
 </section>
 <section id="abort">
-<h3><span class="section-number">4.10.8. </span>abort<a class="headerlink" href="#abort" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.8. </span>abort<a class="headerlink" href="#abort" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">abort</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">abort</span></code> instruction aborts the simulation with severity Failure.</p>
 </section>
 <section id="finish">
-<h3><span class="section-number">4.10.9. </span>finish<a class="headerlink" href="#finish" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.9. </span>finish<a class="headerlink" href="#finish" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">finish</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">finish</span></code> instruction exits the simulation.</p>
 </section>
 <section id="id1">
-<h3><span class="section-number">4.10.10. </span>stop<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.10. </span>stop<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">stop</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">stop</span></code> instruction stops the simulation with the severity Failure. The simulation can be resumed.</p>
 </section>
 <section id="resume">
-<h3><span class="section-number">4.10.11. </span>resume<a class="headerlink" href="#resume" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.10.11. </span>resume<a class="headerlink" href="#resume" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">resume</span><span class="w"> </span><span class="nv">EXIT_ON_VERIFY_ERROR</span>
 <span class="fm">resume</span><span class="w"> </span><span class="mi">0</span>
 </pre></div>
@@ -669,9 +815,9 @@ resume is set to 0; otherwise, it continues and reports an error.</p>
 </section>
 </section>
 <section id="lines">
-<h2><span class="section-number">4.11. </span>Lines<a class="headerlink" href="#lines" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.11. </span>Lines<a class="headerlink" href="#lines" title="Permalink to this heading">¶</a></h2>
 <section id="id2">
-<h3><span class="section-number">4.11.1. </span>lines<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.1. </span>lines<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">lines</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -682,7 +828,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">insert</span> <span class="pre">array</span> <span class="pre">a_lines</span> <span class="pre">9</span> <span class="pre">b_array</span></code>.</p>
 </section>
 <section id="lines-get">
-<h3><span class="section-number">4.11.2. </span>lines get<a class="headerlink" href="#lines-get" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.2. </span>lines get<a class="headerlink" href="#lines-get" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
 <span class="k">lines get array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">t_array</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
@@ -701,7 +847,7 @@ result variable. Then the user can decide what action should follow a
 mismatch.</p>
 </section>
 <section id="lines-set">
-<h3><span class="section-number">4.11.3. </span>lines set<a class="headerlink" href="#lines-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.3. </span>lines set<a class="headerlink" href="#lines-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines set array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines set message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
@@ -716,7 +862,7 @@ The message string can contain {} placeholders, refer to the <a class="reference
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-insert">
-<h3><span class="section-number">4.11.4. </span>lines insert<a class="headerlink" href="#lines-insert" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.4. </span>lines insert<a class="headerlink" href="#lines-insert" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines insert array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines insert message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
@@ -730,7 +876,7 @@ The message string can contain {} placeholders, refer to the <a class="reference
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-append">
-<h3><span class="section-number">4.11.5. </span>lines append<a class="headerlink" href="#lines-append" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.5. </span>lines append<a class="headerlink" href="#lines-append" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines append array</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">s_array</span>
 <span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Some message to be written to a file later&quot;</span>
 <span class="k">lines append message</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="s">&quot;Value1: {} Value2: {} to be written to a file later&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
@@ -743,7 +889,7 @@ The message string can contain {} placeholders, refer to the <a class="reference
 which are filled by values of variables given after the message string.</p>
 </section>
 <section id="lines-delete">
-<h3><span class="section-number">4.11.6. </span>lines delete<a class="headerlink" href="#lines-delete" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.6. </span>lines delete<a class="headerlink" href="#lines-delete" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">p_var</span>
 <span class="k">lines delete</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="mi">3</span>
 </pre></div>
@@ -753,7 +899,7 @@ moved to the given position if it exists.</p>
 <p>In the example, the line at position <code class="docutils literal notranslate"><span class="pre">p_var</span></code> in <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is deleted.</p>
 </section>
 <section id="lines-size">
-<h3><span class="section-number">4.11.7. </span>lines size<a class="headerlink" href="#lines-size" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.7. </span>lines size<a class="headerlink" href="#lines-size" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines size</span><span class="w"> </span><span class="nv">a_lines</span><span class="w"> </span><span class="nv">r_var</span>
 </pre></div>
 </div>
@@ -762,7 +908,7 @@ at that point.</p>
 <p>In the example, the size of <code class="docutils literal notranslate"><span class="pre">a_lines</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">r_var</span></code>.</p>
 </section>
 <section id="lines-pointer-copy">
-<h3><span class="section-number">4.11.8. </span>lines pointer copy<a class="headerlink" href="#lines-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.11.8. </span>lines pointer copy<a class="headerlink" href="#lines-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">lines pointer copy</span><span class="w"> </span><span class="nv">t_lines</span><span class="w"> </span><span class="nv">s_lines</span>
 </pre></div>
 </div>
@@ -773,9 +919,9 @@ object are applied to the target object as well.</p>
 </section>
 </section>
 <section id="logs">
-<h2><span class="section-number">4.12. </span>Logs<a class="headerlink" href="#logs" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.12. </span>Logs<a class="headerlink" href="#logs" title="Permalink to this heading">¶</a></h2>
 <section id="log-message">
-<h3><span class="section-number">4.12.1. </span>log message<a class="headerlink" href="#log-message" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.12.1. </span>log message<a class="headerlink" href="#log-message" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">v_var</span><span class="w"> </span><span class="s">&quot;A message to the console&quot;</span>
 <span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">v_var</span><span class="w"> </span><span class="s">&quot;A message to the console{}{}&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
 <span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">v_var</span><span class="w"> </span><span class="s">&quot;A message to the console{:d}{:b}&quot;</span><span class="w"> </span><span class="nv">m_var1</span><span class="w"> </span><span class="nv">m_var2</span>
@@ -801,14 +947,14 @@ variables given after the message string.</p>
 <a class="reference external" href="mailto:{&#37;&#52;&#48;l2">{<span>&#64;</span>l2</a>} prints the line number in the file containing the called procedure name of the caller’s caller, etc.</p>
 </section>
 <section id="log-lines">
-<h3><span class="section-number">4.12.2. </span>log lines<a class="headerlink" href="#log-lines" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.12.2. </span>log lines<a class="headerlink" href="#log-lines" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">log</span><span class="w"> </span><span class="kd">lines</span><span class="w"> </span><span class="nv">v_var</span><span class="w"> </span><span class="nv">s_lines</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">lines</span></code> instruction dumps a lines object at a given verbosity level to the console.</p>
 </section>
 <section id="verbosity">
-<h3><span class="section-number">4.12.3. </span>verbosity<a class="headerlink" href="#verbosity" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.12.3. </span>verbosity<a class="headerlink" href="#verbosity" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">verbosity</span><span class="w"> </span><span class="nv">v_var</span>
 <span class="fm">verbosity</span><span class="w"> </span><span class="mi">20</span>
 </pre></div>
@@ -826,9 +972,9 @@ point in the execution flow.</p>
 </section>
 </section>
 <section id="objects">
-<h2><span class="section-number">4.13. </span>Objects<a class="headerlink" href="#objects" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.13. </span>Objects<a class="headerlink" href="#objects" title="Permalink to this heading">¶</a></h2>
 <section id="const">
-<h3><span class="section-number">4.13.1. </span>const<a class="headerlink" href="#const" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.1. </span>const<a class="headerlink" href="#const" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="no">a_const</span><span class="w"> </span><span class="mh">0x03</span>
 <span class="kd">const</span><span class="w"> </span><span class="no">b_const</span><span class="w"> </span><span class="mb">0b011</span>
 <span class="kd">const</span><span class="w"> </span><span class="no">c_const</span><span class="w"> </span><span class="mi">3</span>
@@ -840,7 +986,7 @@ decimal unsigned value.</p>
 constant.</p>
 </section>
 <section id="var">
-<h3><span class="section-number">4.13.2. </span>var<a class="headerlink" href="#var" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.2. </span>var<a class="headerlink" href="#var" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0x03</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">b_var</span><span class="w"> </span><span class="mb">0b011</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">c_var</span><span class="w"> </span><span class="mi">3</span>
@@ -853,7 +999,7 @@ variable or constant yet. The <code class="docutils literal notranslate"><span c
 instruction must be used within a procedure for this purpose.</p>
 </section>
 <section id="id3">
-<h3><span class="section-number">4.13.3. </span>array<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.3. </span>array<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">a_array</span><span class="w"> </span><span class="mi">16</span>
 </pre></div>
 </div>
@@ -861,7 +1007,7 @@ instruction must be used within a procedure for this purpose.</p>
 <p>Only arrays with one dimension are possible; the length is fixed.</p>
 </section>
 <section id="id4">
-<h3><span class="section-number">4.13.4. </span>file<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.4. </span>file<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">file</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="s">&quot;filename.stm&quot;</span>
 <span class="kd">file</span><span class="w"> </span><span class="nv">a_file</span><span class="w"> </span><span class="s">&quot;filename{:d}{:d}.stm&quot;</span><span class="w"> </span><span class="nv">index1</span><span class="w"> </span><span class="nv">index2</span>
 </pre></div>
@@ -874,7 +1020,7 @@ a reference to a file is used in another instruction accessing a
 file, e.g., <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">read</span> <span class="pre">all</span> <span class="pre">a_file</span> <span class="pre">a_lines</span></code>.</p>
 </section>
 <section id="id5">
-<h3><span class="section-number">4.13.5. </span>lines<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.5. </span>lines<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">lines</span><span class="w"> </span><span class="nv">a_lines</span>
 </pre></div>
 </div>
@@ -885,7 +1031,7 @@ or shrink dynamically by lines instructions accessing it, e.g.,
 <code class="docutils literal notranslate"><span class="pre">lines</span> <span class="pre">insert</span> <span class="pre">array</span> <span class="pre">a_lines</span> <span class="pre">9</span> <span class="pre">b_array</span></code>.</p>
 </section>
 <section id="signal">
-<h3><span class="section-number">4.13.6. </span>signal<a class="headerlink" href="#signal" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.6. </span>signal<a class="headerlink" href="#signal" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span>
 </pre></div>
 </div>
@@ -895,7 +1041,7 @@ This signal number must be given in the tb_signal package by
 customization and attached to a signal.</p>
 </section>
 <section id="id6">
-<h3><span class="section-number">4.13.7. </span>bus<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.7. </span>bus<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">bus</span><span class="w"> </span><span class="nv">a_bus</span>
 </pre></div>
 </div>
@@ -905,7 +1051,7 @@ bus number must be given in the tb_bus package by customization and
 attached to a bus.</p>
 </section>
 <section id="id7">
-<h3><span class="section-number">4.13.8. </span>namespace<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.8. </span>namespace<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">namespace</span><span class="w"> </span><span class="nv">a</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">l_var</span><span class="w"> </span><span class="mi">0</span>
 <span class="nv">end</span><span class="w"> </span><span class="nv">namespace</span>
@@ -916,7 +1062,7 @@ These are defined only inside the namespace and therefore help organizing code a
 In the given example, the variable <code class="docutils literal notranslate"><span class="pre">l_var</span></code> is only defined inside the namespace <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
 </section>
 <section id="id8">
-<h3><span class="section-number">4.13.9. </span>label<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.13.9. </span>label<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
@@ -925,9 +1071,9 @@ In the given example, the variable <code class="docutils literal notranslate"><s
 </section>
 </section>
 <section id="equations-and-arithmetic-operations">
-<h2><span class="section-number">4.14. </span>Equations and Arithmetic Operations<a class="headerlink" href="#equations-and-arithmetic-operations" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.14. </span>Equations and Arithmetic Operations<a class="headerlink" href="#equations-and-arithmetic-operations" title="Permalink to this heading">¶</a></h2>
 <section id="add">
-<h3><span class="section-number">4.14.1. </span>add<a class="headerlink" href="#add" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.1. </span>add<a class="headerlink" href="#add" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">add</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">add</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -937,7 +1083,7 @@ adds the value 0xF0 to the value of operand1. The resulting value of the
 addition is stored in operand1 after the operation.</p>
 </section>
 <section id="sub">
-<h3><span class="section-number">4.14.2. </span>sub<a class="headerlink" href="#sub" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.2. </span>sub<a class="headerlink" href="#sub" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">sub</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">sub</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>`
 </pre></div>
@@ -947,7 +1093,7 @@ addition is stored in operand1 after the operation.</p>
 value of the subtraction is stored in operand1 after the operation.</p>
 </section>
 <section id="mul">
-<h3><span class="section-number">4.14.3. </span>mul<a class="headerlink" href="#mul" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.3. </span>mul<a class="headerlink" href="#mul" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">mul</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">mul</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -957,7 +1103,7 @@ value of the subtraction is stored in operand1 after the operation.</p>
 value of the multiplication is stored in operand1 after the operation.</p>
 </section>
 <section id="div">
-<h3><span class="section-number">4.14.4. </span>div<a class="headerlink" href="#div" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.4. </span>div<a class="headerlink" href="#div" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">div</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">div</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -967,7 +1113,7 @@ divides the value of operand1 by the value 0xF0. The resulting value of the
 division is stored in operand1  after the operation.</p>
 </section>
 <section id="rem">
-<h3><span class="section-number">4.14.5. </span>rem<a class="headerlink" href="#rem" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.5. </span>rem<a class="headerlink" href="#rem" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">rem</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="nv">rem</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -977,7 +1123,7 @@ divides the value of operand1 by the value 0xF0. The resulting remainder of the
 division is stored in operand1  after the operation.</p>
 </section>
 <section id="and">
-<h3><span class="section-number">4.14.6. </span>and<a class="headerlink" href="#and" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.6. </span>and<a class="headerlink" href="#and" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">and</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">and</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -987,7 +1133,7 @@ the value of operand1 (variable) or a bitwise <code class="docutils literal notr
 resulting value of the bitwise <code class="docutils literal notranslate"><span class="pre">and</span></code> is stored in operand1 after the operation.</p>
 </section>
 <section id="or">
-<h3><span class="section-number">4.14.7. </span>or<a class="headerlink" href="#or" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.7. </span>or<a class="headerlink" href="#or" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">or</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">or</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -997,7 +1143,7 @@ the value of operand1 (variable) or a bitwise <code class="docutils literal notr
 resulting value of the bitwise <code class="docutils literal notranslate"><span class="pre">or</span></code> is stored in operand1 after the operation.</p>
 </section>
 <section id="xor">
-<h3><span class="section-number">4.14.8. </span>xor<a class="headerlink" href="#xor" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.8. </span>xor<a class="headerlink" href="#xor" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">xor</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">xor</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -1007,7 +1153,7 @@ the value of operand1 (variable) or a bitwise <code class="docutils literal notr
 resulting value of the bitwise <code class="docutils literal notranslate"><span class="pre">xor</span></code> is stored in operand1 after the operation.</p>
 </section>
 <section id="shl">
-<h3><span class="section-number">4.14.9. </span>shl<a class="headerlink" href="#shl" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.9. </span>shl<a class="headerlink" href="#shl" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">shl</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">shl</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -1017,7 +1163,7 @@ the value of operand1 (variable) or a bitwise left shift of value 0xF0 with the 
 The resulting value of the bitwise left shift is stored in operand1 after the operation.</p>
 </section>
 <section id="shr">
-<h3><span class="section-number">4.14.10. </span>shr<a class="headerlink" href="#shr" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.10. </span>shr<a class="headerlink" href="#shr" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">shr</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">shr</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -1027,7 +1173,7 @@ the value ofoperand1 (variable) or a bitwise variable shift of value 0xF0 with t
 The resulting value of the bitwise right shift is stored in operand1 after the operation.</p>
 </section>
 <section id="inv">
-<h3><span class="section-number">4.14.11. </span>inv<a class="headerlink" href="#inv" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.11. </span>inv<a class="headerlink" href="#inv" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">inv</span><span class="w"> </span><span class="nv">operand1</span>
 </pre></div>
 </div>
@@ -1035,7 +1181,7 @@ The resulting value of the bitwise right shift is stored in operand1 after the o
 of the bitwise inversion is stored in operand1 after the operation.</p>
 </section>
 <section id="ld">
-<h3><span class="section-number">4.14.12. </span>ld<a class="headerlink" href="#ld" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.14.12. </span>ld<a class="headerlink" href="#ld" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">ld</span><span class="w"> </span><span class="nv">operand1</span>
 </pre></div>
 </div>
@@ -1047,9 +1193,9 @@ another result or an error is expected.</p>
 </section>
 </section>
 <section id="random-numbers">
-<h2><span class="section-number">4.15. </span>Random Numbers<a class="headerlink" href="#random-numbers" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.15. </span>Random Numbers<a class="headerlink" href="#random-numbers" title="Permalink to this heading">¶</a></h2>
 <section id="random">
-<h3><span class="section-number">4.15.1. </span>random<a class="headerlink" href="#random" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.15.1. </span>random<a class="headerlink" href="#random" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">random</span><span class="w"> </span><span class="nv">t_var</span><span class="w"> </span><span class="nv">min_var</span><span class="w"> </span><span class="nv">max_var</span>
 <span class="fm">random</span><span class="w"> </span><span class="nv">t_var</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span>
 </pre></div>
@@ -1058,7 +1204,7 @@ another result or an error is expected.</p>
 less than the maximum number given.</p>
 </section>
 <section id="seed">
-<h3><span class="section-number">4.15.2. </span>seed<a class="headerlink" href="#seed" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.15.2. </span>seed<a class="headerlink" href="#seed" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">seed</span><span class="w"> </span><span class="nv">s_var</span>
 <span class="fm">seed</span><span class="w"> </span><span class="mi">10</span>
 </pre></div>
@@ -1067,9 +1213,9 @@ less than the maximum number given.</p>
 </section>
 </section>
 <section id="signals">
-<h2><span class="section-number">4.16. </span>Signals<a class="headerlink" href="#signals" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.16. </span>Signals<a class="headerlink" href="#signals" title="Permalink to this heading">¶</a></h2>
 <section id="id9">
-<h3><span class="section-number">4.16.1. </span>signal<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.1. </span>signal<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mi">10</span>
 <span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">a_const</span>
 <span class="kd">signal</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">a_global_var</span>
@@ -1081,7 +1227,7 @@ This signal number must be given in the tb_signal package by
 customization and be attached to a signal.</p>
 </section>
 <section id="signal-write">
-<h3><span class="section-number">4.16.2. </span>signal write<a class="headerlink" href="#signal-write" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.2. </span>signal write<a class="headerlink" href="#signal-write" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal write</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">s_var</span>
 <span class="k">signal write</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mb">0b11</span>
 </pre></div>
@@ -1090,7 +1236,7 @@ customization and be attached to a signal.</p>
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">s_var</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">a_signal</span></code>.</p>
 </section>
 <section id="signal-read">
-<h3><span class="section-number">4.16.3. </span>signal read<a class="headerlink" href="#signal-read" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.3. </span>signal read<a class="headerlink" href="#signal-read" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal read</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">t_var</span>
 </pre></div>
 </div>
@@ -1098,7 +1244,7 @@ customization and be attached to a signal.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">a_signal</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">t_var</span></code>.</p>
 </section>
 <section id="signal-verify">
-<h3><span class="section-number">4.16.4. </span>signal verify<a class="headerlink" href="#signal-verify" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.4. </span>signal verify<a class="headerlink" href="#signal-verify" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal verify</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">signal verify</span><span class="w"> </span><span class="nv">a_signal</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -1115,7 +1261,7 @@ counts up the SimStm testbench internal verify_failure_count variable.</p>
 simulation error occurs or not.</p>
 </section>
 <section id="signal-pointer-copy">
-<h3><span class="section-number">4.16.5. </span>signal pointer copy<a class="headerlink" href="#signal-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.5. </span>signal pointer copy<a class="headerlink" href="#signal-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer copy</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="nv">s_signal</span>
 </pre></div>
 </div>
@@ -1125,7 +1271,7 @@ simulation error occurs or not.</p>
 object are applied to the target object as well.</p>
 </section>
 <section id="signal-pointer-set">
-<h3><span class="section-number">4.16.6. </span>signal pointer set<a class="headerlink" href="#signal-pointer-set" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.6. </span>signal pointer set<a class="headerlink" href="#signal-pointer-set" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer set</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="mi">5</span>
 <span class="k">signal pointer set</span><span class="w"> </span><span class="nv">t_signal</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
@@ -1134,7 +1280,7 @@ object are applied to the target object as well.</p>
 <p>In the example, the pointer <code class="docutils literal notranslate"><span class="pre">t_signal</span></code> is set to 5.</p>
 </section>
 <section id="signal-pointer-get">
-<h3><span class="section-number">4.16.7. </span>signal pointer get<a class="headerlink" href="#signal-pointer-get" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.16.7. </span>signal pointer get<a class="headerlink" href="#signal-pointer-get" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">signal pointer get</span><span class="w"> </span><span class="nv">s_signal</span><span class="w"> </span><span class="nv">ptr_var</span>
 </pre></div>
 </div>
@@ -1143,9 +1289,9 @@ object are applied to the target object as well.</p>
 </section>
 </section>
 <section id="variables">
-<h2><span class="section-number">4.17. </span>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.17. </span>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">¶</a></h2>
 <section id="id10">
-<h3><span class="section-number">4.17.1. </span>var<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.17.1. </span>var<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0x03</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">b_var</span><span class="w"> </span><span class="mb">0b011</span>
 <span class="kd">var</span><span class="w"> </span><span class="nv">c_var</span><span class="w"> </span><span class="mi">3</span>
@@ -1158,7 +1304,7 @@ variable or constant yet. The <code class="docutils literal notranslate"><span c
 instruction must be used within a procedure for this purpose.</p>
 </section>
 <section id="equ">
-<h3><span class="section-number">4.17.2. </span>equ<a class="headerlink" href="#equ" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.17.2. </span>equ<a class="headerlink" href="#equ" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="o">equ</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="nv">operand2</span>
 <span class="o">equ</span><span class="w"> </span><span class="nv">operand1</span><span class="w"> </span><span class="mh">0xF0</span>
 </pre></div>
@@ -1167,7 +1313,7 @@ instruction must be used within a procedure for this purpose.</p>
 <p>In the example, the value of <code class="docutils literal notranslate"><span class="pre">operand1</span></code> is set to <code class="docutils literal notranslate"><span class="pre">operand2</span></code>.</p>
 </section>
 <section id="var-verify">
-<h3><span class="section-number">4.17.3. </span>var verify<a class="headerlink" href="#var-verify" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.17.3. </span>var verify<a class="headerlink" href="#var-verify" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="k">var verify</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="nv">e_var</span><span class="w"> </span><span class="nv">m_var</span>
 <span class="k">var verify</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="mh">0x01</span><span class="w"> </span><span class="mh">0x0F</span>
 </pre></div>
@@ -1183,7 +1329,7 @@ counts up the SimStm testbench internal verify_failure_count variable.</p>
 simulation error occurs or not.</p>
 </section>
 <section id="var-pointer-copy">
-<h3><span class="section-number">4.17.4. </span>var pointer copy<a class="headerlink" href="#var-pointer-copy" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.17.4. </span>var pointer copy<a class="headerlink" href="#var-pointer-copy" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">a_var</span><span class="w"> </span><span class="nv">b_var</span>
 </pre></div>
 </div>
@@ -1192,9 +1338,9 @@ simulation error occurs or not.</p>
 </section>
 </section>
 <section id="waits">
-<h2><span class="section-number">4.18. </span>Waits<a class="headerlink" href="#waits" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">5.18. </span>Waits<a class="headerlink" href="#waits" title="Permalink to this heading">¶</a></h2>
 <section id="wait">
-<h3><span class="section-number">4.18.1. </span>wait<a class="headerlink" href="#wait" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">5.18.1. </span>wait<a class="headerlink" href="#wait" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="fm">wait</span><span class="w"> </span><span class="nv">w_var</span>
 <span class="fm">wait</span><span class="w"> </span><span class="mi">10000</span>
 </pre></div>
@@ -1206,21 +1352,21 @@ simulation error occurs or not.</p>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        «&#160;&#160;<a href="Installation.html"><span class="section-number">3. </span>Installation</a>
+        «&#160;&#160;<a href="Installation.html"><span class="section-number">4. </span>Installation</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="Examples.html"><span class="section-number">5. </span>Examples</a>&#160;&#160;»
+        <a href="Examples.html"><span class="section-number">6. </span>Examples</a>&#160;&#160;»
         </p>
 
       </div>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

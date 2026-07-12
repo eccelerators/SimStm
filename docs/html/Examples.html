@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>5. Examples &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <title>6. Examples &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Standard Tests" href="StandardTests.html" />
-    <link rel="prev" title="4. Language" href="Language.html" /> 
+    <link rel="next" title="7. Standard Tests" href="StandardTests.html" />
+    <link rel="prev" title="5. Language" href="Language.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
-        <h2 class="heading"><span>5. Examples</span></h2>
+        <h2 class="heading"><span>6. Examples</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="Top">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        «&#160;&#160;<a href="Language.html"><span class="section-number">4. </span>Language</a>
+        «&#160;&#160;<a href="Language.html"><span class="section-number">5. </span>Language</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="StandardTests.html"><span class="section-number">6. </span>Standard Tests</a>&#160;&#160;»
+        <a href="StandardTests.html"><span class="section-number">7. </span>Standard Tests</a>&#160;&#160;»
         </p>
 
       </div>
@@ -35,9 +35,9 @@
         
         
   <section id="examples">
-<h1><span class="section-number">5. </span>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">6. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h1>
 <section id="how-to-run-the-examples">
-<h2><span class="section-number">5.1. </span>How to run the examples<a class="headerlink" href="#how-to-run-the-examples" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.1. </span>How to run the examples<a class="headerlink" href="#how-to-run-the-examples" title="Permalink to this heading">¶</a></h2>
 <p>The examples are found in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository. Each example has its own subfolder. Use this folder as current folder to run the examples.
 Install java, ant and python set the environment variables JAVA_HOME and ANT_HOME. Then you can run the examples by calling the respective ant target.
 Install the simulators you want to use and set the environment variables for the simulators.
@@ -50,7 +50,7 @@ It is usually not under version control but kept here for the user to adapt it t
 <p>The simulation results are generated as JUnit test result in the file <a class="reference external" href=".simulation/SimulationResults/testSuitesSimulation.xml">simulation/SimulationResults/testSuitesSimulation.xml</a>.</p>
 </section>
 <section id="hello-world">
-<h2><span class="section-number">5.2. </span>Hello World<a class="headerlink" href="#hello-world" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.2. </span>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this heading">¶</a></h2>
 <p>The Hello World example is the most basic example to demonstrate the usage of SimStm.
 It uses no JUnit test result features, but only the logging feature of SimStm.</p>
 <p>The device under test in file <a class="reference external" href=".examples/HelloWorld/tb/src/vhdl/Dut.vhd">examples/HelloWorld/tb/src/vhdl/Dut.vhd</a>  is very simple;
@@ -83,7 +83,7 @@ The testActivation test subroutine is the one which waits 20 ns and verifies the
 </div>
 </section>
 <section id="counterlab">
-<h2><span class="section-number">5.3. </span>CounterLab<a class="headerlink" href="#counterlab" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.3. </span>CounterLab<a class="headerlink" href="#counterlab" title="Permalink to this heading">¶</a></h2>
 <p>The Counter Lab example is the basic example to demonstrate the usage of SimStm to provide
 Labs for different invesitgations at the same time in one project.</p>
 <p>The device under test in file <a class="reference external" href=".examples/HelloWorld/tb/src/vhdl/Dut.vhd">examples/HelloWorld/tb/src/vhdl/Dut.vhd</a>
@@ -118,7 +118,7 @@ The test lab TestLabCount is for example used to run the same standard tests as 
 </div>
 </section>
 <section id="counterplain">
-<h2><span class="section-number">5.4. </span>CounterPlain<a class="headerlink" href="#counterplain" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.4. </span>CounterPlain<a class="headerlink" href="#counterplain" title="Permalink to this heading">¶</a></h2>
 <p>The Counter Plain example is the basic example to demonstrate the usage of SimStm with JUnit test result features.</p>
 <p>The device under test in file <a class="reference external" href=".examples/HelloWorld/tb/src/vhdl/Dut.vhd">examples/HelloWorld/tb/src/vhdl/Dut.vhd</a>
 is a counter with up and down count capability.
@@ -153,7 +153,7 @@ but it also calls some additional test subroutines by decorating the standard te
 </div>
 </section>
 <section id="countercaseindexed">
-<h2><span class="section-number">5.5. </span>CounterCaseIndexed<a class="headerlink" href="#countercaseindexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.5. </span>CounterCaseIndexed<a class="headerlink" href="#countercaseindexed" title="Permalink to this heading">¶</a></h2>
 <p>The Counter Case Indexed example is an advanced example to demonstrate the usage of SimStm with JUnit test result features.</p>
 <p>The device under test and the testbench are similar as in the Counter Plain example. The increment or decrement is now done by a StepValue
 rather than up or down by 1. The test subroutines are also similar, but they are now indexed by the StepValue. Notice the changed decorations of the test subroutines
@@ -186,7 +186,7 @@ The test case suffixes will be 0, 1, 2, 3, 4 for the first 5 tests and 10, 20, 3
 </div>
 </section>
 <section id="countersuitendexed">
-<h2><span class="section-number">5.6. </span>CounterSuitendexed<a class="headerlink" href="#countersuitendexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.6. </span>CounterSuitendexed<a class="headerlink" href="#countersuitendexed" title="Permalink to this heading">¶</a></h2>
 <p>The Counter Case Indexed example is another advanced example to demonstrate the usage of SimStm with JUnit test result features.</p>
 <p>Rather than using the test case index to run the same test subroutine with different parameters,
 the test suite index is now used to run different test subroutines.</p>
@@ -269,7 +269,7 @@ an example of a test subroutine which is called by both the standard test entry 
 </div>
 </section>
 <section id="countersuitecaseindexed">
-<h2><span class="section-number">5.7. </span>CounterSuiteCaseIndexed<a class="headerlink" href="#countersuitecaseindexed" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.7. </span>CounterSuiteCaseIndexed<a class="headerlink" href="#countersuitecaseindexed" title="Permalink to this heading">¶</a></h2>
 <p>The Counter Case Indexed example is a further advanced example to demonstrate the usage of SimStm with JUnit test result features.</p>
 <p>Both, the test suite and test case index to run the same test subroutine with different parameters.</p>
 <p>Thus it isa a combination of the Counter Case Indexed and the Counter Suite Indexed examples.
@@ -310,33 +310,33 @@ The test case suffixes shown will be 0_0, 0_1, 0_2 … 3_6, 3_7.</p>
 </div>
 </section>
 <section id="real-world-examples">
-<h2><span class="section-number">5.8. </span>Real-World Examples<a class="headerlink" href="#real-world-examples" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.8. </span>Real-World Examples<a class="headerlink" href="#real-world-examples" title="Permalink to this heading">¶</a></h2>
 <p>Complex real-world example are found in the eccelerators group of
 repositories on <a class="reference external" href="https://github.com/eccelerators">GitHub</a>.</p>
 </section>
 <section id="example-modification-workflow">
-<h2><span class="section-number">5.9. </span>Example modification workflow<a class="headerlink" href="#example-modification-workflow" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.9. </span>Example modification workflow<a class="headerlink" href="#example-modification-workflow" title="Permalink to this heading">¶</a></h2>
 <p>For detailed instructions on how to extensively modify the examples e.g. add vhdl or simstm files, see the <a class="reference external" href="RepositoryGuide.rst">Repository Guide</a>.</p>
 </section>
 </section>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        «&#160;&#160;<a href="Language.html"><span class="section-number">4. </span>Language</a>
+        «&#160;&#160;<a href="Language.html"><span class="section-number">5. </span>Language</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="StandardTests.html"><span class="section-number">6. </span>Standard Tests</a>&#160;&#160;»
+        <a href="StandardTests.html"><span class="section-number">7. </span>Standard Tests</a>&#160;&#160;»
         </p>
 
       </div>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

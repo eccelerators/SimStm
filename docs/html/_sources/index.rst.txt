@@ -6,6 +6,7 @@ SimStm
    :maxdepth: 3
    :caption: Contents:
 
+   Motivation
    Introduction
    Integration
    Installation
