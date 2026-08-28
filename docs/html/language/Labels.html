@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Labels &#8212; eccelerators-sphinx-sample-configuration  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=d31ea6cb" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
@@ -18,7 +18,7 @@
           <span>eccelerators-sphinx-sample-configuration  documentation</span></a></h1>
         <h2 class="heading"><span>Labels</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -29,9 +29,9 @@
         
         
   <section id="labels">
-<h1>Labels<a class="headerlink" href="#labels" title="Permalink to this heading">¶</a></h1>
+<h1>Labels<a class="headerlink" href="#labels" title="Link to this heading">¶</a></h1>
 <section id="label">
-<h2>label<a class="headerlink" href="#label" title="Permalink to this heading">¶</a></h2>
+<h2>label<a class="headerlink" href="#label" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
@@ -39,7 +39,7 @@
 <p>A label can act as a placeholder for actual values which are modifiable through <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">equ</span></code>, <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">set</span></code> or <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">pointer</span> <span class="pre">copy</span></code>.</p>
 </section>
 <section id="label-equ">
-<h2>label equ<a class="headerlink" href="#label-equ" title="Permalink to this heading">¶</a></h2>
+<h2>label equ<a class="headerlink" href="#label-equ" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="o">equ</span><span class="w"> </span><span class="nv">lbl_varA</span><span class="w"> </span><span class="nv">lbl_varB</span>
 </pre></div>
 </div>
@@ -47,13 +47,13 @@
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">lbl_var</span></code> is set to the value of <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
 <section id="label-set">
-<h2>label set<a class="headerlink" href="#label-set" title="Permalink to this heading">¶</a></h2>
+<h2>label set<a class="headerlink" href="#label-set" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
 </section>
 <section id="label-pointer-copy">
-<h2>label pointer copy<a class="headerlink" href="#label-pointer-copy" title="Permalink to this heading">¶</a></h2>
+<h2>label pointer copy<a class="headerlink" href="#label-pointer-copy" title="Link to this heading">¶</a></h2>
 <div class="highlight-simstm notranslate"><div class="highlight"><pre><span></span><span class="nv">label</span><span class="w"> </span><span class="nv">pointer</span><span class="w"> </span><span class="nv">copy</span><span class="w"> </span><span class="nv">lbl_var</span><span class="w"> </span><span class="nv">a_var</span>
 </pre></div>
 </div>
@@ -61,7 +61,7 @@
 <p>In the example, <code class="docutils literal notranslate"><span class="pre">lbl_var</span></code> points to <code class="docutils literal notranslate"><span class="pre">a_var</span></code>.</p>
 </section>
 <section id="powerful-usage-patterns">
-<h2>Powerful Usage Patterns<a class="headerlink" href="#powerful-usage-patterns" title="Permalink to this heading">¶</a></h2>
+<h2>Powerful Usage Patterns<a class="headerlink" href="#powerful-usage-patterns" title="Link to this heading">¶</a></h2>
 <p>Labels become most powerful when used to decouple generic behaviour from concrete implementations.
 The following patterns demonstrate how labels enable dynamic dispatch, reusable templates, and
 shared configuration — all without recompiling HDL.</p>
@@ -85,7 +85,7 @@ This avoids duplicating the polling logic for every single bit.</p>
 <span class="w">        </span><span class="k">end if</span>
 <span class="w">        </span><span class="o">equ</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span>+ 1
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nv">cycles</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nv">TimeoutCycles</span><span class="w"> </span><span class="nv">then</span>
-<span class="w">            </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;waitForBit: timeout waiting for bit&quot;
+<span class="w">            </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS "waitForBit: timeout waiting for bit"
 <span class="w">            </span><span class="fm">return</span>
 <span class="w">        </span><span class="k">end if</span>
 <span class="w">        </span><span class="fm">wait</span><span class="w"> </span><span class="mi">1</span>
@@ -150,7 +150,7 @@ generic test procedure. This is the equivalent of a strategy or policy pattern.<
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="mi">0</span>
 )
-<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;Write verify failed at address&quot;
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS "Write verify failed at address"
 <span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS Address
 <span class="k">end proc</span>
 
@@ -160,7 +160,7 @@ generic test procedure. This is the equivalent of a strategy or policy pattern.<
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">Value</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">readback</span><span class="w"> </span><span class="mi">0</span>
 )
-<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS &quot;Fatal: Write verify failed — stopping&quot;
+<span class="w">    </span><span class="k">log</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">stm</span>.ALWAYS "Fatal: Write verify failed — stopping"
 <span class="w">    </span><span class="nv">stop</span>
 <span class="k">end proc</span>
 
@@ -210,7 +210,7 @@ Changing the one declaration updates every use without touching the rest of the 
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../index.html">Contents</a>
@@ -220,7 +220,7 @@ Changing the one declaration updates every use without touching the rest of the 
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Eccelerators GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>
